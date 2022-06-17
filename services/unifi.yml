@@ -1,0 +1,40 @@
+version: '3'
+
+networks:
+  default:
+    name: traefik
+
+services:
+  unifi:
+    image: ghcr.io/goofball222/unifi:latest-ubuntu
+    container_name: unifi-controller
+    restart: unless-stopped
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - DB_MONGO_LOCAL=true
+    ports:
+      - 3478:3478/udp # stun port
+      - 10001:10001/udp # AP discovery
+      - 8080:8080 # required for device communication
+      #- 8443:8443 # web admin
+      #- 1900:1900/udp # l2 discovery
+      #- 8843:8843 # guest portal redirect
+      #- 8880:8880 # guest portal redirect
+      - 6789:6789 # mobile throughput test
+      #- 5514:5514/udp # remote syslog port
+    volumes:
+      - ./data/unifi/data:/usr/lib/unifi/data
+      - ./data/unifi/cert:/usr/lib/unifi/cert
+      - ./data/unifi/logs:/usr/lib/unifi/logs
+      - /etc/localtime:/etc/localtime:ro
+    labels:
+      - joyride.host.name=unifi.${HOST_DOMAIN}
+      - com.centurylinklabs.watchtower.enable=true
+      - traefik.enable=true
+      - traefik.http.routers.unifi.entrypoints=websecure
+      - traefik.http.routers.unifi.rule=Host(`unifi.${HOST_DOMAIN}`)
+      - traefik.http.services.unifi.loadbalancer.server.scheme=https
+      - traefik.http.services.unifi.loadbalancer.server.port=8443
+      

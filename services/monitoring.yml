@@ -1,0 +1,145 @@
+version: '3'
+
+networks:
+  default:
+    name: traefik
+
+# https://grafana.com/docs/grafana/next/setup-grafana/installation/docker/
+# https://github.com/prometheus/prometheus
+# https://hub.docker.com/r/google/cadvisor/
+# https://github.com/prometheus-pve/prometheus-pve-exporter 
+# https://github.com/ilude/prometheus-pve-exporter
+# https://github.com/prometheus/blackbox_exporter
+# https://github.com/prometheus/alertmanager
+# https://github.com/prometheus/node_exporter
+
+services:
+  grafana:
+    container_name: grafana
+    image: grafana/grafana
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - ./etc/grafana/provisioning:/etc/grafana/provisioning
+      - ./etc/grafana/dashboards:/etc/grafana/dashboards
+      - grafana:/var/lib/grafana
+    labels:
+      - joyride.host.name=grafana.${HOST_DOMAIN}
+      - com.centurylinklabs.watchtower.enable=true
+      - traefik.enable=true
+      - traefik.http.routers.grafana.rule=Host(`grafana.${HOST_DOMAIN}`)
+      - traefik.http.routers.grafana.entrypoints=websecure
+      - traefik.http.services.grafana.loadbalancer.server.scheme=http
+      - traefik.http.services.grafana.loadbalancer.server.port=3000
+  
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:latest
+    restart: unless-stopped
+    links:
+      - prometheus-alertmanager
+      - prometheus-blackbox
+    command: 
+      - '--config.file=/etc/prometheus/conf/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus/data'
+      - '--log.level=debug'
+      - '--web.enable-admin-api'
+      # - '--web.external-url=http://prometheus:9090/' 
+      # - '--web.route-prefix=/' 
+    # ports:
+    #   - 9090:9090
+    volumes:
+      - ./data/prometheus/conf:/etc/prometheus/conf:ro
+      - prometheus:/prometheus
+    labels:
+      - joyride.host.name=prometheus.${HOST_DOMAIN}
+      - com.centurylinklabs.watchtower.enable=true
+      - traefik.enable=true
+      - traefik.http.routers.prometheus.rule=Host(`prometheus.${HOST_DOMAIN}`)
+      - traefik.http.routers.prometheus.entrypoints=websecure
+      - traefik.http.services.prometheus.loadbalancer.server.scheme=http
+      - traefik.http.services.prometheus.loadbalancer.server.port=9090
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
+    restart: unless-stopped
+    # ports:
+    #   - 8080:8080
+    privileged: true
+    devices:
+      - /dev/kmsg:/dev/kmsg
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /cgroup:/cgroup:ro
+    labels:
+      - org.label-schema.group=monitoring
+      - traefik.enable=false
+  
+  proxmox-exporter:
+    container_name: proxmox-exporter
+    image: ghcr.io/ilude/prometheus-pve-exporter
+    restart: unless-stopped
+    env_file: 
+      - .env
+    # ports:
+    #   - 9221:9221
+    labels:
+      - traefik.enable=false
+
+  prometheus-blackbox:
+    container_name: prometheus-blackbox
+    image: prom/blackbox-exporter:latest
+    restart: unless-stopped
+    command: 
+      - '--config.file=/etc/prometheus/conf/blackbox.yml'
+    privileged: true
+    cap_add: 
+      - CAP_NET_RAW
+    # ports:
+    #   - 9115:9115
+    volumes:
+      - ./data/prometheus/conf:/etc/prometheus/conf:ro
+    labels:
+      - joyride.host.name=blackbox.${HOST_DOMAIN}
+      - com.centurylinklabs.watchtower.enable=true
+      - traefik.enable=true
+      - traefik.http.routers.blackbox.rule=Host(`blackbox.${HOST_DOMAIN}`)
+      - traefik.http.routers.blackbox.entrypoints=websecure
+      - traefik.http.routers.blackbox.tls=true
+      - traefik.http.routers.blackbox.tls.certresolver=letsencrypt
+      - traefik.http.services.blackbox.loadbalancer.server.scheme=http
+      - traefik.http.services.blackbox.loadbalancer.server.port=9115
+
+  prometheus-alertmanager:
+    container_name: prometheus-alertmanager
+    image: prom/alertmanager:latest
+    restart: unless-stopped
+    command:
+      - '--config.file=/etc/alertmanager/alertmanager.yml'
+      - '--log.level=debug'
+    # ports:
+    #   - 9093:9093
+    volumes:
+      - ./data/prometheus/conf:/etc/alertmanager:rw
+      - prometheus:/alertmanager:rw
+    labels:
+      - joyride.host.name=alertmanager.${HOST_DOMAIN}
+      - com.centurylinklabs.watchtower.enable=true
+      - traefik.enable=true
+      - traefik.http.routers.alertmanager.rule=Host(`alertmanager.${HOST_DOMAIN}`)
+      - traefik.http.routers.alertmanager.entrypoints=websecure
+      - traefik.http.routers.alertmanager.tls=true
+      - traefik.http.routers.alertmanager.tls.certresolver=letsencrypt
+      - traefik.http.services.alertmanager.loadbalancer.server.scheme=http
+      - traefik.http.services.alertmanager.loadbalancer.server.port=9093
+
+volumes:
+  prometheus:
+    external: false
+  grafana:
+    external: false

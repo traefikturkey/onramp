@@ -1,0 +1,16 @@
+version: '3'
+
+# https://github.com/oznu/docker-cloudflare-ddns
+
+services:
+  cloudflare-ddns:
+    image: oznu/cloudflare-ddns:latest # change 'latest' to 'armhf' or 'aarch64' if running on an arm device
+    restart: unless-stopped
+    environment:
+      - EMAIL=${CF_API_EMAIL}
+      - API_KEY=${CF_DNS_API_TOKEN}
+      - ZONE=${HOST_DOMAIN}
+      - SUBDOMAIN=${CLOUDFLARE_DDNS_HOSTNAME}
+      - PROXIED=false
+    labels:
+      - traefik.enable=false

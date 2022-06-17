@@ -1,0 +1,38 @@
+version: '3'
+
+networks:
+  default:
+    name: samba
+
+# https://github.com/dperson/samba
+
+services:
+  samba:  
+    image: dperson/samba  
+    container_name: samba  
+    ports:  
+      - 137:137/udp  
+      - 138:138/udp  
+      - 139:139/tcp  
+      - 445:445/tcp  
+    restart: unless-stopped  
+    environment:  
+      - TZ=${TZ}  
+      - USERID=${PUID:-1000}  
+      - GROUPID=${PGID:-1000}  
+      - WORKGROUP=workgroup  
+      - USER=${USER};${SAMBA_PASSWORD}
+      #- USER2=${SAMBA_USER2};${SAMBA_PASSWORD2}
+      #- USER3=${SAMBA_USER3};${SAMBA_PASSWORD3}
+      - NMBD=True
+      - RECYCLE=false  # disable recycle bin
+      # SHARE=share_name;share_path_in_container;browsable;readonly;allow_guest;allowed_users;admin_users;write_users;comment
+      - SHARE=apps;/apps;yes;no;no;${USER};${USER};;Apps
+      #- SHARE2=foo;/foo;yes;no;no;${USER};${USER};;Foo
+      #- SHARE3=bar;/bar;yes;no;no;${USER};${USER};;Bar
+    volumes:  
+      - /apps:/apps 
+      #- /host/foo:/container/foo 
+      #- /host/bar:/container/bar 
+    labels:
+      - traefik.enable=false 

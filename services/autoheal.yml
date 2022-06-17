@@ -1,0 +1,16 @@
+version: '3'
+
+# https://github.com/willfarrell/docker-autoheal
+
+services:  
+  autoheal:
+    image: willfarrell/autoheal:latest
+    container_name: autoheal
+    restart: unless-stopped
+    environment: 
+      - AUTOHEAL_CONTAINER_LABEL=all
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    labels:
+      - traefik.enable=false 
+

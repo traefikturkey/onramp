@@ -1,0 +1,78 @@
+version: '3'
+
+networks:
+  default:
+    name: traefik
+
+# https://hub.docker.com/r/linuxserver/sonarr
+# https://hub.docker.com/r/linuxserver/radarr
+# https://hub.docker.com/r/linuxserver/sabnzbd
+
+services:
+  sonarr:
+    image: linuxserver/sonarr
+    restart: unless-stopped
+    container_name: sonarr
+    volumes:
+      - /dev/rtc:/dev/rtc:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /media/Shows:/tv
+      - /config/sonarr:/config
+      - ./data/downloads:/downloads
+    environment: 
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000} 
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=sonarr.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.sonarr.entrypoints=websecure
+      - traefik.http.routers.sonarr.rule=Host(`sonarr.${HOST_DOMAIN}`)
+      - traefik.http.services.sonarr.loadbalancer.server.scheme=http
+      - traefik.http.services.sonarr.loadbalancer.server.port=8989
+
+  radarr:
+    image: linuxserver/radarr
+    restart: unless-stopped
+    container_name: radarr
+    volumes:
+      - /dev/rtc:/dev/rtc:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /media/Movies:/movies
+      - /config/radarr:/config
+      - ./data/downloads:/downloads
+    environment: 
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=radarr.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.radarr.entrypoints=websecure
+      - traefik.http.routers.radarr.rule=Host(`radarr.${HOST_DOMAIN}`)
+      - traefik.http.services.radarr.loadbalancer.server.scheme=http
+      - traefik.http.services.radarr.loadbalancer.server.port=7878
+
+  sabnzbd: 
+    image: linuxserver/sabnzbd
+    restart: unless-stopped
+    container_name: sabnzbd
+    hostname: sabnzbd.${HOST_DOMAIN}
+    volumes:
+      - /dev/rtc:/dev/rtc:ro
+      - /etc/localtime:/etc/localtime:ro 
+      - ./etc/sabnzbd:/config
+      - ./data/downloads:/downloads
+    #ports:
+      # - 8181:8080 needed to do a fresh setup because of hostname whitelist
+    environment: 
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=sabnzbd.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.sabnzbd.entrypoints=websecure
+      - traefik.http.routers.sabnzbd.rule=Host(`sabnzbd.${HOST_DOMAIN}`)
+      - traefik.http.services.sabnzbd.loadbalancer.server.scheme=http
+      - traefik.http.services.sabnzbd.loadbalancer.server.port=8080

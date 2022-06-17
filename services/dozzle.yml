@@ -1,0 +1,27 @@
+version: '3'
+
+networks:
+  default:
+    name: traefik
+
+# https://github.com/amir20/dozzle
+
+services:
+  dozzle:
+    image: amir20/dozzle:latest
+    container_name: dozzle
+    environment:
+      - DOZZLE_LEVEL=debug
+      - DOZZLE_BASE=/logs  # only needed for PathPrefix, comment if using Host rule
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    labels:
+      - autoheal=true
+      - com.centurylinklabs.watchtower.enable=true
+      - traefik.enable=true
+      # - joyride.host.name=dozzle.${HOST_DOMAIN}
+      # - traefik.http.routers.dozzle.rule=Host(`logs.${HOST_DOMAIN}`)
+      - traefik.http.routers.dozzle.rule=PathPrefix(`/logs`) # comment if using Host rule
+      - traefik.http.routers.dozzle.entrypoints=websecure
+      - traefik.http.services.dozzle.loadbalancer.server.scheme=http
+      - traefik.http.services.dozzle.loadbalancer.server.port=8080

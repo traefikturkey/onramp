@@ -1,0 +1,20 @@
+version: '3'
+networks:
+  default:
+    name: joyride
+
+# https://github.com/ilude/joyride
+
+services:
+  joyride:
+    image: ghcr.io/ilude/joyride:latest
+    container_name: joyride
+    restart: unless-stopped
+    environment:
+      - HOSTIP=${HOSTIP}
+    ports:
+      - 54:54/udp
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    labels:
+      - traefik.enable=false 

@@ -1,0 +1,56 @@
+version: '3'
+
+networks:
+  default:
+    name: traefik
+
+# https://hub.docker.com/_/traefik
+
+services:
+  traefik:
+    image: traefik:2.7 # replace with traefik:latest if you are feeling frisky
+    container_name: traefik
+    restart: unless-stopped
+    ports:
+      - 80:80
+      - 443:443
+    env_file: 
+      - .env
+    volumes:
+      - ./etc/letsencrypt:/letsencrypt
+      - /etc/localtime:/etc/localtime:ro 
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    command:
+      - --log.level=DEBUG
+      - --metrics.prometheus=true
+      - --entryPoints.metrics.address=:8082
+      - --metrics.prometheus.entryPoint=metrics
+      - --api
+      - --accesslog
+      - --providers.docker
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      - --entrypoints.web.http.redirections.entrypoint.to=websecure
+      - --entrypoints.web.http.redirections.entrypoint.scheme=https
+      - --entrypoints.websecure.http.tls=true
+      - --entrypoints.websecure.http.tls.certResolver=letsencrypt
+      - --entrypoints.websecure.http.tls.domains[0].main=${HOST_DOMAIN}
+      - --entrypoints.websecure.http.tls.domains[0].sans=*.${HOST_DOMAIN}
+      - --serverstransport.insecureskipverify=true
+      - --certificatesresolvers.letsencrypt.acme.dnschallenge=true
+      - --certificatesresolvers.letsencrypt.acme.dnschallenge.provider=cloudflare
+      - --certificatesresolvers.letsencrypt.acme.email=${CF_API_EMAIL}
+      - --certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json
+      - --certificatesresolvers.letsencrypt.acme.dnschallenge.resolvers=1.1.1.1:53,1.0.0.1:53
+      - --certificatesresolvers.letsencrypt.acme.caserver=${ACME_CASERVER:-https://acme-v02.api.letsencrypt.org/directory}
+    labels:
+      - joyride.host.name=games.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.docker.network=traefik
+      - traefik.http.routers.traefik.entrypoints=websecure
+      - traefik.http.routers.traefik.service=api@internal
+      #- traefik.http.routers.traefik.rule=Host(`traefik.${HOST_DOMAIN}`)
+      # comment the following three(3) lines if using the rule=Host line above
+      - traefik.http.routers.traefik.rule=HostRegexp(`{subdomain:.+}.${HOST_DOMAIN}`) && (PathPrefix(`/traefik`) || PathPrefix(`/api`))
+      - traefik.http.routers.traefik.middlewares=traefik_strip 
+      - traefik.http.middlewares.traefik_strip.stripprefix.prefixes=/traefik
