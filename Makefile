@@ -15,6 +15,7 @@ args := $(foreach file, $(compose_files), -f $(file))
 export HOSTIP := $(shell ip route get 1.1.1.1 | grep -oP 'src \K\S+')
 export PUID 	:= $(shell id -u)
 export PGID 	:= $(shell id -g)
+export HOST_NAME := $(or $(HOST_NAME), $(shell hostname)))
 
 # check if we should use docker-compose or docker compose
 ifeq (, $(shell which docker-compose))
@@ -26,7 +27,8 @@ endif
 # use letsencrypt staging url if we run commands like:
 # make up staging
 ifeq (staging, $(word 2,$(MAKECMDGOALS)))
-	export ACME_CASERVER := https://acme-staging-v02.api.letsencrypt.org/directory
+	
+
 endif
 
 # this is the default target run if no other targets are passed to make
@@ -35,10 +37,24 @@ start:
 	$(DOCKER_COMPOSE) $(args) up -d --force-recreate
 
 up: 
-	$(DOCKER_COMPOSE)$(args) up
+	$(DOCKER_COMPOSE)$(args) up --force-recreate
 
 down: 
 	$(DOCKER_COMPOSE) $(args) down
+
+up-staging:
+	-export ACME_CASERVER=https://acme-staging-v02.api.letsencrypt.org/directory
+	$(DOCKER_COMPOSE) $(args) up -d --force-recreate
+	-echo "open https://$(HOST_NAME).$(HOST_DOMAIN)/traefik in a browser"
+	-echo "and check that you have a staging cert from LetsEncrypt!"
+	-echo "if you don't get the write cert run the following command:"
+	-echo "$(DOCKER_COMPOSE) logs | grep acme"
+	-echo "and look for error messages"
+
+down-staging:
+	$(DOCKER_COMPOSE) $(args) down
+	-echo "cleaning up staging certificates"
+	sudo rm etc/letsencrypt/acme.json
 
 echo:
 	@echo $(args)
@@ -52,9 +68,6 @@ logs:
 restart: down start
 
 update: down pull start
-
-clear-certs:
-	rm etc/letsencrypt/acme.json
 
 env:
 	env | sort

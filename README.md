@@ -11,14 +11,30 @@ and an API token created like so
 if you need to you can run the following to do the basic setup automagically
 
 ```
-sudo mkdir -p /apps/traefik
+sudo apt install git unzip -y
+
+sudo mkdir /apps
 sudo chown -R $USER:$USER /apps
-cd /apps/traefik
-curl https://gist.githubusercontent.com/ilude/4814e69adc188020b964e8b45dd0a00f/raw/.env?$(date +%s) --output .env
-curl https://gist.githubusercontent.com/ilude/4814e69adc188020b964e8b45dd0a00f/raw/Makefile?$(date +%s) --output Makefile
-curl https://gist.githubusercontent.com/ilude/4814e69adc188020b964e8b45dd0a00f/raw/docker-compose.yml?$(date +%s) --output docker-compose.yml
+git clone https://github.com/ilude/traefik-setup-docker-compose.git traefik-setup
+cd traefik-setup
+cp .env.sample .env
 
 nano .env
+
+# edit the .env file to include cloudflare credenitals
+# your domain and the hostname of the current machine
+
+make start-staging
+
+# follow the on screen directions
+# if everything worked then proceed
+
+make down-staging
+
+# you are now ready to bring things up with the production certificates
+
+make
+
 ```
 
 Then you can run any of the following:
@@ -31,7 +47,13 @@ make restart  # does a docker compose down followed by an up -d
 make logs     # does a docker compose logs -f
 make update   # does a docker compose down, pull (to get the latest docker images) and up -d
 
-# personally I like to run
+# you can run multiple commands at once like this
 make; make logs
 ```
- other services are included in the files below, they can be added to the /apps/traefik directory and will start up the next time you down and up again
+
+other services are included in the services directory, they can be copied down into the
+main project directory and then things can be restarted using the command:
+
+```
+ make restart
+```
