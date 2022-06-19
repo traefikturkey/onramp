@@ -15,20 +15,13 @@ args := $(foreach file, $(compose_files), -f $(file))
 export HOSTIP := $(shell ip route get 1.1.1.1 | grep -oP 'src \K\S+')
 export PUID 	:= $(shell id -u)
 export PGID 	:= $(shell id -g)
-export HOST_NAME := $(or $(HOST_NAME), $(shell hostname)))
+export HOST_NAME := $(or $(HOST_NAME), $(shell hostname))
 
 # check if we should use docker-compose or docker compose
 ifeq (, $(shell which docker-compose))
 	DOCKER_COMPOSE := docker compose
 else
 	DOCKER_COMPOSE := docker-compose
-endif
-
-# use letsencrypt staging url if we run commands like:
-# make up staging
-ifeq (staging, $(word 2,$(MAKECMDGOALS)))
-	
-
 endif
 
 # this is the default target run if no other targets are passed to make

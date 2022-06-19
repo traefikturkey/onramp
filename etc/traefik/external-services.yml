@@ -1,0 +1,97 @@
+http:
+  routers:
+    proxmox:
+      rule: "Host(`proxmox.{{env "HOST_DOMAIN"}}`)"
+      middlewares:
+        - default-headers
+      entryPoints:
+        - websecure
+      tls: {}
+      service: proxmox
+
+    pihole:
+      entryPoints:
+        - websecure
+      rule: "Host(`pihole.{{env "HOST_DOMAIN"}}`)"
+      middlewares:
+        - default-headers
+        - addprefix-pihole
+        - https-redirectscheme
+      tls: {}
+      service: pihole
+
+    idrac:
+      entryPoints:
+        - websecure
+      rule: "Host(`idrac.{{env "HOST_DOMAIN"}}`)"
+      middlewares:
+        - idrac
+        - https-redirectscheme
+      tls: {}
+      service: idrac
+    idrac-console:
+      entryPoints:
+        - "idrac" # REQUIRED for iDRAC virtual console: Create a new TCP entry point in traefik on port 5900
+      rule: "Host(`idrac.{{env "HOST_DOMAIN"}}`)"
+      middlewares:
+        - idrac
+        - https-redirectscheme
+      tls: {}
+      service: idrac-console
+
+  services:
+    proxmox:
+      loadBalancer:
+        servers:
+          - url: "https://{{env "PROXMOX_ADDRESS"}}:8006/"
+        passHostHeader: true
+    pihole:
+      loadBalancer:
+        servers:
+          - url: "http://{{env "PIHOLE_ADDRESS"}}:80"
+        passHostHeader: true
+    idrac:
+      loadBalancer:
+        servers:
+          - url: "https://{{env "IDRAC_ADDRESS"}}"
+        passHostHeader: true
+    idrac-console:
+      loadBalancer:
+        servers:
+          - url: "https://{{env "IDRAC_ADDRESS"}}:5900"
+        passHostHeader: true
+    
+  middlewares:
+    addprefix-pihole:
+      addPrefix:
+        prefix: "/admin"
+    https-redirectscheme:
+      redirectScheme:
+        scheme: https
+        permanent: true
+
+    default-headers:
+      headers:
+        frameDeny: true
+        sslRedirect: true
+        browserXssFilter: true
+        contentTypeNosniff: true
+        forceSTSHeader: true
+        stsIncludeSubdomains: true
+        stsPreload: true
+        stsSeconds: 15552000
+        customFrameOptionsValue: SAMEORIGIN
+        customRequestHeaders:
+          X-Forwarded-Proto: https
+
+    idrac:
+      headers:
+        frameDeny: true
+        sslRedirect: true
+        browserXssFilter: true
+        forceSTSHeader: true
+        stsIncludeSubdomains: true
+        stsSeconds: 15552000
+        customFrameOptionsValue: SAMEORIGIN
+        customRequestHeaders:
+          X-Forwarded-Proto: https

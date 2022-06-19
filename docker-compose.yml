@@ -18,6 +18,7 @@ services:
       - .env
     volumes:
       - ./etc/letsencrypt:/letsencrypt
+      - ./etc/traefik/external-services.yml:/external-services.yml
       - /etc/localtime:/etc/localtime:ro 
       - /var/run/docker.sock:/var/run/docker.sock:ro
     command:
@@ -28,6 +29,8 @@ services:
       - --api
       - --accesslog
       - --providers.docker
+      - --providers.file.watch=true
+      - --providers.file.filename=/external-services.yml
       - --entrypoints.web.address=:80
       - --entrypoints.websecure.address=:443
       - --entrypoints.web.http.redirections.entrypoint.to=websecure
@@ -51,6 +54,6 @@ services:
       - traefik.http.routers.traefik.service=api@internal
       #- traefik.http.routers.traefik.rule=Host(`traefik.${HOST_DOMAIN}`)
       # comment the following three(3) lines if using the rule=Host line above
-      - traefik.http.routers.traefik.rule=HostRegexp(`{subdomain:.+}.${HOST_DOMAIN}`) && (PathPrefix(`/traefik`) || PathPrefix(`/api`))
+      - traefik.http.routers.traefik.rule=Host(`${HOST_NAME}.${HOST_DOMAIN}`)  && (PathPrefix(`/traefik`) || PathPrefix(`/api`))
       - traefik.http.routers.traefik.middlewares=traefik_strip 
       - traefik.http.middlewares.traefik_strip.stripprefix.prefixes=/traefik
