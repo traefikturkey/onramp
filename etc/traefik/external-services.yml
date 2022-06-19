@@ -16,7 +16,6 @@ http:
       middlewares:
         - default-headers
         - addprefix-pihole
-        - https-redirectscheme
       tls: {}
       service: pihole
 
@@ -26,7 +25,6 @@ http:
       rule: "Host(`idrac.{{env "HOST_DOMAIN"}}`)"
       middlewares:
         - idrac
-        - https-redirectscheme
       tls: {}
       service: idrac
     idrac-console:
@@ -65,10 +63,6 @@ http:
     addprefix-pihole:
       addPrefix:
         prefix: "/admin"
-    https-redirectscheme:
-      redirectScheme:
-        scheme: https
-        permanent: true
 
     default-headers:
       headers:
