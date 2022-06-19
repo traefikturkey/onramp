@@ -38,11 +38,11 @@ down:
 start-staging:
 	-export ACME_CASERVER=https://acme-staging-v02.api.letsencrypt.org/directory
 	$(DOCKER_COMPOSE) $(args) up -d --force-recreate
-	-echo "open https://$(HOST_NAME).$(HOST_DOMAIN)/traefik in a browser"
-	-echo "and check that you have a staging cert from LetsEncrypt!"
-	-echo "if you don't get the write cert run the following command:"
-	-echo "$(DOCKER_COMPOSE) logs | grep acme"
-	-echo "and look for error messages"
+	@echo "open https://$(HOST_NAME).$(HOST_DOMAIN)/traefik in a browser"
+	@echo "and check that you have a staging cert from LetsEncrypt!"
+	@echo "if you don't get the write cert run the following command:"
+	@echo "$(DOCKER_COMPOSE) logs | grep acme"
+	@echo "and look for error messages"
 
 down-staging:
 	$(DOCKER_COMPOSE) $(args) down
