@@ -44,7 +44,7 @@ services:
       - --certificatesresolvers.letsencrypt.acme.dnschallenge.resolvers=1.1.1.1:53,1.0.0.1:53
       - --certificatesresolvers.letsencrypt.acme.caserver=${ACME_CASERVER:-https://acme-v02.api.letsencrypt.org/directory}
     labels:
-      - joyride.host.name=games.${HOST_DOMAIN}
+      - joyride.host.name=${HOST_NAME}.${HOST_DOMAIN}
       - traefik.enable=true
       - traefik.docker.network=traefik
       - traefik.http.routers.traefik.entrypoints=websecure
