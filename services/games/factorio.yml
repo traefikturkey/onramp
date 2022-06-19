@@ -1,0 +1,15 @@
+version: '3'
+# https://hub.docker.com/r/goofball222/factorio
+services:
+  factorio:
+    image: goofball222/factorio
+    container_name: factorio
+    restart: unless-stopped
+    ports:
+      - 27015:27015
+      - 34197:34197/udp
+    volumes:
+      - ./etc/factorio:/factorio
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - TZ=${TZ}
