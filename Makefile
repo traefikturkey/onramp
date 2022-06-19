@@ -35,7 +35,7 @@ up:
 down: 
 	$(DOCKER_COMPOSE) $(args) down
 
-up-staging:
+start-staging:
 	-export ACME_CASERVER=https://acme-staging-v02.api.letsencrypt.org/directory
 	$(DOCKER_COMPOSE) $(args) up -d --force-recreate
 	-echo "open https://$(HOST_NAME).$(HOST_DOMAIN)/traefik in a browser"
