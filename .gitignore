@@ -1,5 +1,6 @@
 .env
 etc/letsencrypt/acme.json
 services-enabled/*.yml
-etc/traefik/config/
-!etc/traefik/config/external-services.yml
+etc/traefik/enabled/*.yml
+etc/grafana/*.db
+etc/grafana/alerting

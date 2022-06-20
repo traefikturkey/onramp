@@ -18,20 +18,20 @@ services:
       - .env
     volumes:
       - ./etc/letsencrypt:/letsencrypt
-      - ./etc/traefik/config:/config
+      - ./etc/traefik/enabled:/enabled
       - /etc/localtime:/etc/localtime:ro
       - /usr/share/zoneinfo:/usr/share/zoneinfo:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
     command:
-      - --log.level=DEBUG
+      - --log.level=${TRAEFIK_LOG_LEVEL:-DEBUG}
+      #- --accesslog
       - --metrics.prometheus=true
       - --entryPoints.metrics.address=:8082
       - --metrics.prometheus.entryPoint=metrics
       - --api
-      - --accesslog
       - --providers.docker
       - --providers.file.watch=true
-      - --providers.file.directory=/config
+      - --providers.file.directory=/enabled
       - --entrypoints.web.address=:80
       - --entrypoints.websecure.address=:443
       #- --entryPoints.idrac.address=:5900
