@@ -5,11 +5,11 @@ ifneq (,$(wildcard ./.env))
 endif
 
 # any disabled-*.yml docker-compose files will be ignored
-disabled_files := $(wildcard disabled-*.yml)
+disabled_files := $(wildcard services-enabled/disabled-*.yml)
 # all other *.yml files in the current directory will be included 
 # when running make commands that call docker compose
-compose_files := $(filter-out $(disabled_files), $(wildcard *.yml))
-args := $(foreach file, $(compose_files), -f $(file))
+compose_files := $(filter-out $(disabled_files), $(wildcard services-enabled/*.yml)) 
+args := -f docker-compose.yml $(foreach file, $(compose_files), -f $(file))
 
 # get the boxes ip address and the current users id and group id
 export HOSTIP := $(shell ip route get 1.1.1.1 | grep -oP 'src \K\S+')
@@ -52,9 +52,6 @@ down-staging:
 clean:
 	sudo rm etc/letsencrypt/acme.json
 
-echo:
-	@echo $(args)
-
 pull:
 	$(DOCKER_COMPOSE) $(args) pull
 
@@ -64,6 +61,9 @@ logs:
 restart: down start
 
 update: down pull start
+
+echo:
+	@echo $(args)
 
 env:
 	env | sort
