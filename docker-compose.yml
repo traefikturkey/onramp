@@ -18,7 +18,7 @@ services:
       - .env
     volumes:
       - ./etc/letsencrypt:/letsencrypt
-      - ./etc/traefik/external-services.yml:/external-services.yml
+      - ./etc/traefik/config:/config
       - /etc/localtime:/etc/localtime:ro
       - /usr/share/zoneinfo:/usr/share/zoneinfo:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -31,9 +31,10 @@ services:
       - --accesslog
       - --providers.docker
       - --providers.file.watch=true
-      - --providers.file.filename=/external-services.yml
+      - --providers.file.directory=/config
       - --entrypoints.web.address=:80
       - --entrypoints.websecure.address=:443
+      #- --entryPoints.idrac.address=:5900
       - --entrypoints.web.http.redirections.entrypoint.to=websecure
       - --entrypoints.web.http.redirections.entrypoint.scheme=https
       - --entrypoints.websecure.http.tls=true

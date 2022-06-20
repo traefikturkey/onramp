@@ -1,0 +1,24 @@
+http:
+  routers:
+
+    pihole:
+      entryPoints:
+        - websecure
+      rule: "Host(`pihole.{{env "HOST_DOMAIN"}}`)"
+      middlewares:
+        - default-headers
+        - addprefix-pihole
+      tls: {}
+      service: pihole
+
+  services:
+    pihole:
+      loadBalancer:
+        servers:
+          - url: "http://{{env "PIHOLE_ADDRESS"}}:80"
+        passHostHeader: true
+
+  middlewares:
+    addprefix-pihole:
+      addPrefix:
+        prefix: "/admin"

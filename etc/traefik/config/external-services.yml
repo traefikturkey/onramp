@@ -1,0 +1,34 @@
+http:
+  routers:
+    # proxmox:
+    #   rule: "Host(`proxmox.{{env "HOST_DOMAIN"}}`)"
+    #   middlewares:
+    #     - default-headers
+    #   entryPoints:
+    #     - websecure
+    #   tls: {}
+    #   service: proxmox
+
+  services:
+    # proxmox:
+    #   loadBalancer:
+    #     servers:
+    #       - url: "https://{{env "PROXMOX_ADDRESS"}}:8006/"
+    #     passHostHeader: true
+   
+    
+  middlewares:
+
+    default-headers:
+      headers:
+        frameDeny: true
+        sslRedirect: true
+        browserXssFilter: true
+        contentTypeNosniff: true
+        forceSTSHeader: true
+        stsIncludeSubdomains: true
+        stsPreload: true
+        stsSeconds: 15552000
+        customFrameOptionsValue: SAMEORIGIN
+        customRequestHeaders:
+          X-Forwarded-Proto: https
