@@ -1,3 +1,4 @@
 .env
 etc/letsencrypt/acme.json
 services-enabled/*.yml
+etc/traefik/enabled/*.yml
