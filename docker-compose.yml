@@ -19,7 +19,8 @@ services:
     volumes:
       - ./etc/letsencrypt:/letsencrypt
       - ./etc/traefik/external-services.yml:/external-services.yml
-      - /etc/localtime:/etc/localtime:ro 
+      - /etc/localtime:/etc/localtime:ro
+      - /usr/share/zoneinfo:/usr/share/zoneinfo:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
     command:
       - --log.level=DEBUG

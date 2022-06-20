@@ -37,15 +37,19 @@ down:
 
 start-staging:
 	ACME_CASERVER=https://acme-staging-v02.api.letsencrypt.org/directory $(DOCKER_COMPOSE) $(args) up -d --force-recreate
+	@echo "waiting 30 seconds for cert DNS propogation..."
+	@sleep 30
 	@echo "open https://$(HOST_NAME).$(HOST_DOMAIN)/traefik in a browser"
 	@echo "and check that you have a staging cert from LetsEncrypt!"
-	@echo "if you don't get the write cert run the following command:"
+	@echo "if you don't get the write cert run the following command and look for error messages:"
 	@echo "$(DOCKER_COMPOSE) logs | grep acme"
-	@echo "and look for error messages"
 
 down-staging:
 	$(DOCKER_COMPOSE) $(args) down
 	@echo "cleaning up staging certificates"
+	sudo rm etc/letsencrypt/acme.json
+
+clean:
 	sudo rm etc/letsencrypt/acme.json
 
 echo:
