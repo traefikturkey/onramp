@@ -24,10 +24,12 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     command:
       - --log.level=${TRAEFIK_LOG_LEVEL:-DEBUG}
-      #- --accesslog
-      - --metrics.prometheus=true
-      - --entryPoints.metrics.address=:8082
-      - --metrics.prometheus.entryPoint=metrics
+      # comment line below for less noise
+      - --accesslog
+      # uncomment to enable prometheus metrics
+      # - --metrics.prometheus=true
+      # - --entryPoints.metrics.address=:8082
+      # - --metrics.prometheus.entryPoint=metrics
       - --api
       - --providers.docker
       - --providers.file.watch=true
