@@ -10,3 +10,4 @@ jobs:
         uses: Ilshidur/action-discord@master
         with:
           args: '@Mafen {{ EVENT_PAYLOAD.repository.full_name }} has been deployed, please start MafenCI now!'
+
