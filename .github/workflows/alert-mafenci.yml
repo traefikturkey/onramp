@@ -9,5 +9,4 @@ jobs:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         uses: Ilshidur/action-discord@master
         with:
-          args: '<@Mafen> {{ EVENT_PAYLOAD.repository.full_name }} has been deployed, please start MafenCI now!'
-
+          args: '<@${{ secrets.MAFEN_ID }}> {{ EVENT_PAYLOAD.repository.full_name }} has been deployed, please start MafenCI now!'
