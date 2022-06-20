@@ -23,12 +23,12 @@ services:
       - /usr/share/zoneinfo:/usr/share/zoneinfo:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
     command:
-      - --log.level=DEBUG
+      - --log.level=${TRAEFIK_LOG_LEVEL:-DEBUG}
+      #- --accesslog
       - --metrics.prometheus=true
       - --entryPoints.metrics.address=:8082
       - --metrics.prometheus.entryPoint=metrics
       - --api
-      - --accesslog
       - --providers.docker
       - --providers.file.watch=true
       - --providers.file.directory=/enabled
