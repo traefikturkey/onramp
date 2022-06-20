@@ -2,3 +2,5 @@
 etc/letsencrypt/acme.json
 services-enabled/*.yml
 etc/traefik/enabled/*.yml
+etc/grafana/*.db
+etc/grafana/alerting
