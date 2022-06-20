@@ -1,3 +1,6 @@
 .env
 etc/letsencrypt/acme.json
 services-enabled/*.yml
+
+etc/grafana/*.db
+etc/grafana/alerting

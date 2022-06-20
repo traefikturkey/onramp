@@ -41,22 +41,22 @@ http:
     proxmox:
       loadBalancer:
         servers:
-          - url: "https://{{env "PROXMOX_ADDRESS"}}:8006/"
+          - url: "https://{{env "PROXMOX_ADDRESS" "127.0.0.1"}}:8006/"
         passHostHeader: true
     pihole:
       loadBalancer:
         servers:
-          - url: "http://{{env "PIHOLE_ADDRESS"}}:80"
+          - url: "http://{{env "PIHOLE_ADDRESS" "127.0.0.1"}}:80"
         passHostHeader: true
     idrac:
       loadBalancer:
         servers:
-          - url: "https://{{env "IDRAC_ADDRESS"}}"
+          - url: "https://{{env "IDRAC_ADDRESS" "127.0.0.1"}}"
         passHostHeader: true
     idrac-console:
       loadBalancer:
         servers:
-          - url: "https://{{env "IDRAC_ADDRESS"}}:5900"
+          - url: "https://{{env "IDRAC_ADDRESS" "127.0.0.1"}}:5900"
         passHostHeader: true
     
   middlewares:
@@ -67,7 +67,6 @@ http:
     default-headers:
       headers:
         frameDeny: true
-        sslRedirect: true
         browserXssFilter: true
         contentTypeNosniff: true
         forceSTSHeader: true
@@ -81,7 +80,6 @@ http:
     idrac:
       headers:
         frameDeny: true
-        sslRedirect: true
         browserXssFilter: true
         forceSTSHeader: true
         stsIncludeSubdomains: true
