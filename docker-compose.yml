@@ -34,6 +34,7 @@ services:
       - --providers.file.directory=/config
       - --entrypoints.web.address=:80
       - --entrypoints.websecure.address=:443
+      #- --entryPoints.idrac.address=:5900
       - --entrypoints.web.http.redirections.entrypoint.to=websecure
       - --entrypoints.web.http.redirections.entrypoint.scheme=https
       - --entrypoints.websecure.http.tls=true
