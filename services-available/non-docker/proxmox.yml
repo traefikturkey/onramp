@@ -1,0 +1,18 @@
+http:
+ #region routers 
+  routers:
+    proxmox:
+      entryPoints:
+        - "websecure"
+      rule: "Host(`pve.{{env "HOST_DOMAIN"}}`)"
+      middlewares:
+        - default-headers
+      tls: {}
+      service: proxmox
+
+  services:
+    proxmox:
+      loadBalancer:
+        servers:
+          - url: "https://{{env "PROXMOX_ADDRESS"}}:8006/"
+        passHostHeader: true
