@@ -36,8 +36,6 @@ services:
       - --providers.file.directory=/enabled
       - --entrypoints.web.address=:80
       - --entrypoints.websecure.address=:443
-      # uncomment to enable idrac console 
-      #- --entryPoints.idrac.address=:5900
       - --entrypoints.web.http.redirections.entrypoint.to=websecure
       - --entrypoints.web.http.redirections.entrypoint.scheme=https
       - --entrypoints.websecure.http.tls=true
