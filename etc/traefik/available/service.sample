@@ -1,0 +1,19 @@
+# This file serves as an example on how to make your own external services
+# http:
+#   routers:
+#     servicename:
+#       entryPoints:
+#         - websecure
+#       rule: "Host(`service.{{env "HOST_DOMAIN"}}`)"
+#       middlewares:
+#         - default-headers
+#       tls: {}
+#       service: service
+
+# Service address will need to be added to the .env file and replaced here with that value here
+#   services:
+#     service:
+#       loadBalancer:
+#         servers:
+#           - url: "http://{{env "SERVICE_ADDRESS"}}:80"
+#         passHostHeader: true
