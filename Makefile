@@ -24,43 +24,90 @@ else
 	DOCKER_COMPOSE := docker-compose
 endif
 
+# look for the second target word passed to make
+PASSED_SERVICE := $(word 2,$(MAKECMDGOALS))
+
+# use the rest as arguments as empty targets aka: MAGIC
+EMPTY_TARGETS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+$(eval $(EMPTY_TARGETS):;@:)
+
 # this is the default target run if no other targets are passed to make
 # i.e. if you just type: make
-start: 
+start: build
 	$(DOCKER_COMPOSE) $(args) up -d --force-recreate
 
-up: 
-	$(DOCKER_COMPOSE)$(args) up --force-recreate
+up: build
+	$(DOCKER_COMPOSE) $(args) up --force-recreate
 
 down: 
 	$(DOCKER_COMPOSE) $(args) down
 
-start-staging:
+start-staging: build
 	ACME_CASERVER=https://acme-staging-v02.api.letsencrypt.org/directory $(DOCKER_COMPOSE) $(args) up -d --force-recreate
 	@echo "waiting 30 seconds for cert DNS propogation..."
 	@sleep 30
 	@echo "open https://$(HOST_NAME).$(HOST_DOMAIN)/traefik in a browser"
 	@echo "and check that you have a staging cert from LetsEncrypt!"
+	@echo ""
 	@echo "if you don't get the write cert run the following command and look for error messages:"
 	@echo "$(DOCKER_COMPOSE) logs | grep acme"
+	@echo ""
+	@echo "otherwise run the following command if you successfully got a staging certificate:"
+	@echo "make down-staging"
 
 down-staging:
 	$(DOCKER_COMPOSE) $(args) down
-	@echo "cleaning up staging certificates"
-	sudo rm etc/letsencrypt/acme.json
+	$(MAKE) clean-acme
 
-clean:
+clean-acme:
+	@echo "cleaning up staging certificates"
 	sudo rm etc/letsencrypt/acme.json
 
 pull:
 	$(DOCKER_COMPOSE) $(args) pull
 
 logs:
-	$(DOCKER_COMPOSE)  $(args) logs -f
+	$(DOCKER_COMPOSE) $(args) logs -f
 
 restart: down start
 
 update: down pull start
+
+build: .env etc/prometheus/conf
+
+.env:
+	cp .env.sample .env
+	nano .env
+
+etc/prometheus/conf:
+	mkdir -p etc/prometheus/conf
+	cp --no-clobber --recursive	etc/prometheus/conf-originals/* etc/prometheus/conf
+
+list-games:
+	@ls -1 ./services-available/games | sed -n 's/\.yml$ //p'
+
+list-services:
+	@ls -1 ./services-available/ | sed -e 's/\.yml$ //'
+
+list-external:
+	@ls -1 ./etc/traefik/available/ | sed -e 's/\.yml$ //'
+
+enable-game:
+	@ln -s ../services-available/games/$(PASSED_SERVICE).yml ./services-enabled/$(PASSED_SERVICE).yml || true
+
+enable-service:
+	@ln -s ../services-available/$(PASSED_SERVICE).yml ./services-enabled/$(PASSED_SERVICE).yml || true
+
+enable-external:
+	@ln -s ../available/$(PASSED_SERVICE).yml ./etc/traefik/enabled/$(PASSED_SERVICE).yml || true
+
+disable-game: disable-service
+
+disable-service:
+	rm ./services-enabled/$(PASSED_SERVICE).yml
+
+disable-external:
+	rm ./etc/traefik/enabled/$(PASSED_SERVICE).yml
 
 echo:
 	@echo $(args)

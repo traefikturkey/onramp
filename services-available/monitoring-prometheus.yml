@@ -4,9 +4,7 @@ networks:
   default:
     name: traefik
 
-# https://grafana.com/docs/grafana/next/setup-grafana/installation/docker/
 # https://github.com/prometheus/prometheus
-# https://hub.docker.com/r/google/cadvisor/
 # https://github.com/prometheus-pve/prometheus-pve-exporter 
 # https://github.com/ilude/prometheus-pve-exporter
 # https://github.com/prometheus/blackbox_exporter
@@ -14,25 +12,6 @@ networks:
 # https://github.com/prometheus/node_exporter
 
 services:
-  grafana:
-    container_name: grafana
-    image: grafana/grafana
-    restart: unless-stopped
-    env_file:
-      - .env
-    volumes:
-      - ./etc/grafana/provisioning:/etc/grafana/provisioning
-      - ./etc/grafana/dashboards:/etc/grafana/dashboards
-      - grafana:/var/lib/grafana
-    labels:
-      - joyride.host.name=grafana.${HOST_DOMAIN}
-      - com.centurylinklabs.watchtower.enable=true
-      - traefik.enable=true
-      - traefik.http.routers.grafana.rule=Host(`grafana.${HOST_DOMAIN}`)
-      - traefik.http.routers.grafana.entrypoints=websecure
-      - traefik.http.services.grafana.loadbalancer.server.scheme=http
-      - traefik.http.services.grafana.loadbalancer.server.port=3000
-  
   prometheus:
     container_name: prometheus
     image: prom/prometheus:latest
@@ -50,8 +29,8 @@ services:
     # ports:
     #   - 9090:9090
     volumes:
-      - ./data/prometheus/conf:/etc/prometheus/conf:ro
-      - prometheus:/prometheus
+      - ./etc/prometheus/conf:/etc/prometheus/conf:ro
+      - ./etc/prometheus/data:/prometheus
     labels:
       - joyride.host.name=prometheus.${HOST_DOMAIN}
       - com.centurylinklabs.watchtower.enable=true
@@ -61,25 +40,6 @@ services:
       - traefik.http.services.prometheus.loadbalancer.server.scheme=http
       - traefik.http.services.prometheus.loadbalancer.server.port=9090
 
-  cadvisor:
-    image: gcr.io/cadvisor/cadvisor:latest
-    container_name: cadvisor
-    restart: unless-stopped
-    # ports:
-    #   - 8080:8080
-    privileged: true
-    devices:
-      - /dev/kmsg:/dev/kmsg
-    volumes:
-      - /:/rootfs:ro
-      - /var/run:/var/run:ro
-      - /sys:/sys:ro
-      - /var/lib/docker/:/var/lib/docker:ro
-      - /cgroup:/cgroup:ro
-    labels:
-      - org.label-schema.group=monitoring
-      - traefik.enable=false
-  
   proxmox-exporter:
     container_name: proxmox-exporter
     image: ghcr.io/ilude/prometheus-pve-exporter
@@ -103,7 +63,7 @@ services:
     # ports:
     #   - 9115:9115
     volumes:
-      - ./data/prometheus/conf:/etc/prometheus/conf:ro
+      - ./etc/prometheus/conf:/etc/prometheus/conf:ro
     labels:
       - joyride.host.name=blackbox.${HOST_DOMAIN}
       - com.centurylinklabs.watchtower.enable=true
@@ -125,7 +85,7 @@ services:
     # ports:
     #   - 9093:9093
     volumes:
-      - ./data/prometheus/conf:/etc/alertmanager:rw
+      - ./etc/prometheus/conf:/etc/alertmanager:rw
       - prometheus:/alertmanager:rw
     labels:
       - joyride.host.name=alertmanager.${HOST_DOMAIN}
@@ -140,6 +100,4 @@ services:
 
 volumes:
   prometheus:
-    external: false
-  grafana:
     external: false

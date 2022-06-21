@@ -37,25 +37,4 @@ services:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=false
 
-  grafana:
-    container_name: grafana
-    image: grafana/grafana
-    restart: unless-stopped
-    user: ${PUID:-1000}
-    ports:
-      - 3000:3000
-    networks:
-      - default
-      - loki
-    env_file:
-      - .env
-    volumes:
-      - ./etc/grafana:/var/lib/grafana
-    labels:
-      - joyride.host.name=logs.ilude.com
-      - com.centurylinklabs.watchtower.enable=true
-      - traefik.enable=true
-      - traefik.http.routers.grafana.rule=Host(`logs.ilude.com`)
-      - traefik.http.routers.grafana.entrypoints=websecure
-      - traefik.http.services.grafana.loadbalancer.server.scheme=http
-      - traefik.http.services.grafana.loadbalancer.server.port=3000
+  

@@ -1,0 +1,80 @@
+global:
+  scrape_interval:     15s
+  evaluation_interval: 15s
+  scrape_timeout: 10s
+ 
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+  - scheme: http
+    static_configs:
+    - targets:
+      - prometheus-alertmanager:9093
+
+rule_files:
+  - "alert-rules-enabled/*.yaml"
+
+
+scrape_configs:
+  - job_name: 'prometheus'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'alertmanager'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['prometheus-alertmanager:9093']
+
+  - job_name: 'grafana'
+    static_configs:
+      - targets: ['grafana:3000']
+
+  - job_name: 'traefik'
+    static_configs:
+      - targets: ['traefik:8082']
+
+
+  # - job_name: 'node-exporters'
+  #   file_sd_configs:
+  #     - files:
+  #       - exporter-lin-servers.json
+  
+  # - job_name: 'win-exporter'
+  #   file_sd_configs:
+  #     - files:
+  #       - exporter-win-servers.json
+
+  # - job_name: 'cadvisor'
+  #   static_configs:
+  #     - targets: ['cadvisor:8080']
+
+  # - job_name: 'proxmox'
+  #   static_configs:
+  #     - targets:
+  #       - proxmox.${HOST_DOMAIN}  # Proxmox VE node.
+  #   metrics_path: /pve
+  #   params:
+  #     module: [default]
+  #   relabel_configs:
+  #     - source_labels: [__address__]
+  #       target_label: __param_target
+  #     - source_labels: [__param_target]
+  #       target_label: instance
+  #     - target_label: __address__
+  #       replacement: proxmox-exporter:9221  # proxmox exporter.
+
+  # - job_name: 'cameras'
+  #   metrics_path: /probe
+  #   params:
+  #     module: [icmp_ipv4]
+  #   file_sd_configs:
+  #     - files:
+  #       - blackbox-cameras.json
+  #   relabel_configs:
+  #     - source_labels: [__address__]
+  #       target_label: __param_target
+  #     - source_labels: [__param_target]
+  #       target_label: instance
+  #     - target_label: __address__
+  #       replacement: prometheus-blackbox:9115  # This is your blackbox exporter.

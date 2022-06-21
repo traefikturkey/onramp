@@ -1,0 +1,33 @@
+version: '3'
+
+networks:
+  default:
+    name: traefik
+
+# https://hub.docker.com/r/google/cadvisor/
+
+services:
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
+    restart: unless-stopped
+    privileged: true
+    devices:
+      - /dev/kmsg:/dev/kmsg
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /cgroup:/cgroup:ro
+    labels:
+      - org.label-schema.group=monitoring
+      - joyride.host.name=cadvisor.${HOST_DOMAIN}
+      - com.centurylinklabs.watchtower.enable=true
+      - traefik.enable=true
+      - traefik.http.routers.cadvisor.rule=Host(`cadvisor.${HOST_DOMAIN}`)
+      - traefik.http.routers.cadvisor.entrypoints=websecure
+      - traefik.http.routers.cadvisor.tls=true
+      - traefik.http.routers.cadvisor.tls.certresolver=letsencrypt
+      - traefik.http.services.cadvisor.loadbalancer.server.scheme=http
+      - traefik.http.services.cadvisor.loadbalancer.server.port=8080
