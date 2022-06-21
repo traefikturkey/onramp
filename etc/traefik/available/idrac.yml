@@ -1,3 +1,7 @@
+entryPoints:
+  idrac-console-entrypoint:
+    address: 5900
+
 http:
   routers:
     idrac:
@@ -5,21 +9,20 @@ http:
         - websecure
       rule: "Host(`idrac.{{env "HOST_DOMAIN"}}`)"
       middlewares:
-        - idrac
+        - idrac-middlewares
       tls: {}
-      service: idrac
+      service: idrac-service
     idrac-console:
       entryPoints:
-        - "idrac" # REQUIRED for iDRAC virtual console: Create a new TCP entry point in traefik on port 5900
+        - idrac-console-entrypoint 
       rule: "Host(`idrac.{{env "HOST_DOMAIN"}}`)"
       middlewares:
-        - idrac
-        #- https-redirectscheme
+        - idrac-middlewares
       tls: {}
       service: idrac-console
 
   services:
-    idrac:
+    idrac-service:
       loadBalancer:
         servers:
           - url: "https://{{env "IDRAC_ADDRESS"}}"
@@ -31,11 +34,10 @@ http:
         passHostHeader: true
   
   middlewares:
-
-    idrac:
+    idrac-middlewares:
       headers:
         frameDeny: true
-        sslRedirect: true
+        # sslRedirect: true # depercated
         browserXssFilter: true
         forceSTSHeader: true
         stsIncludeSubdomains: true
