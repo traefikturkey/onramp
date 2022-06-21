@@ -14,5 +14,5 @@ http:
     proxmox:
       loadBalancer:
         servers:
-          - url: "https://{{env "PROXMOX_ADDRESS" "127.0.01"}}:8006/"
+          - url: "https://{{env "PROXMOX_ADDRESS"}}:8006/"
         passHostHeader: true

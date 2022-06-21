@@ -22,12 +22,12 @@ http:
     idrac:
       loadBalancer:
         servers:
-          - url: "https://{{env "IDRAC_ADDRESS" "127.0.01"}}"
+          - url: "https://{{env "IDRAC_ADDRESS"}}"
         passHostHeader: true
     idrac-console:
       loadBalancer:
         servers:
-          - url: "https://{{env "IDRAC_ADDRESS" "127.0.01"}}:5900"
+          - url: "https://{{env "IDRAC_ADDRESS"}}:5900"
         passHostHeader: true
   
   middlewares:
