@@ -2,5 +2,11 @@
 etc/letsencrypt/acme.json
 services-enabled/*.yml
 etc/traefik/enabled/*.yml
+!etc/traefik/enabled/middleware.yml
+
 etc/grafana/*.db
 etc/grafana/alerting
+etc/prometheus/conf
+
+etc/prometheus/data/*
+!etc/prometheus/data/.keep
