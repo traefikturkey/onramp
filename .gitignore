@@ -12,3 +12,5 @@ etc/prometheus/conf
 
 etc/prometheus/data/*
 !etc/prometheus/data/.keep
+
+*.log
