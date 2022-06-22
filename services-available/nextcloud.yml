@@ -1,0 +1,24 @@
+version: '3'
+
+networks:
+  default:
+    name: traefik
+
+
+services:
+  nextcloud:
+    image: lscr.io/linuxserver/nextcloud
+    container_name: nextcloud
+    volumes:
+      - ./etc/nextcloud:/config
+      - ./data/nextcloud:/data
+    env_file: 
+      - .env
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nextcloud.entrypoints=websecure"
+      - "traefik.http.routers.nextcloud.rule=Host(`nextcloud.${HOST_DOMAIN}`)"
+      - "traefik.http.routers.nextcloud.tls=true"
+      - "traefik.http.routers.nextcloud.service=nextcloud"
+      - "traefik.http.services.nextcloud.loadbalancer.server.port=443"

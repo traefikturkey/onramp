@@ -19,6 +19,11 @@ etc/heimdall/
 etc/yacht/
 !etc/yacht/.keep
 
+etc/nextcloud/
+!etc/nextcloud/.keep
+etc/nextcloud/data/
+!etc/nextcloud/data/.keep
+
 etc/prometheus/data/*
 !etc/prometheus/data/.keep
 
