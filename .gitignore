@@ -10,6 +10,9 @@ etc/grafana/alerting
 etc/grafana/plugins
 etc/prometheus/conf
 
+etc/portainer/
+!etc/portainer/.keep
+
 etc/prometheus/data/*
 !etc/prometheus/data/.keep
 
