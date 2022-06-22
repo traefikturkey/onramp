@@ -1,0 +1,32 @@
+version: '3'
+
+networks:
+  default:
+    name: games
+
+# https://github.com/wolveix/satisfactory-server
+
+services:
+  satisfactory-server:
+    container_name: satisfactory
+    hostname: satisfactory
+    image: wolveix/satisfactory-server:latest
+    ports:
+      - 7777:7777/udp
+      - 15000:15000/udp
+      - 15777:15777/udp
+    volumes:
+      - /mnt/data/config/satisfactory:/config
+    environment:
+      - MAXPLAYERS=4
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000} 
+      - STEAMBETA=true # enable experimental branch
+      - AUTOPAUSE=true # should server world run when no one logged in
+      - AUTOSAVEINTERVAL=3600 # in seconds
+      - AUTOSAVENUM=72 # number of saves to keep
+      - AUTOSAVEONDISCONNECT=true
+      - DISABLESEASONALEVENTS=false
+      - SKIPUPDATE=false # on container restart
+    restart: unless-stopped
+
