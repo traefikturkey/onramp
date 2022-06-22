@@ -46,10 +46,10 @@ scrape_configs:
     static_configs:
       - targets: ['cadvisor:8080']
 
-  # - job_name: 'node-exporters'
-  #   file_sd_configs:
-  #     - files:
-  #       - exporter-lin-servers.json
+  - job_name: 'node-exporters'
+    file_sd_configs:
+      - files:
+        - exporter-lin-servers.json
   
   # - job_name: 'win-exporter'
   #   file_sd_configs:
