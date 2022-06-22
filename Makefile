@@ -73,6 +73,9 @@ restart: down start
 
 update: down pull start
 
+exec:
+	$(DOCKER_COMPOSE) $(args) exec $(PASSED_SERVICE) sh
+
 build: .env etc/prometheus/conf
 
 .env:
@@ -108,6 +111,9 @@ disable-service:
 
 disable-external:
 	rm ./etc/traefik/enabled/$(PASSED_SERVICE).yml
+
+install-node-exporter:
+	curl -s https://gist.githubusercontent.com/ilude/2cf7a3b7712378c6b9bcf1e1585bf70f/raw/setup_node_exporter.sh?$(date +%s) | /bin/bash -s | tee build.log
 
 echo:
 	@echo $(args)

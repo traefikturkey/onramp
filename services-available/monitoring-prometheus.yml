@@ -31,6 +31,8 @@ services:
     volumes:
       - ./etc/prometheus/conf:/etc/prometheus/conf:ro
       - prometheus:/prometheus
+    extra_hosts:
+      - host.docker.internal:host-gateway
     networks:
       - default
       - loki
