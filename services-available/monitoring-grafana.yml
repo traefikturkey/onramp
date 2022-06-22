@@ -19,6 +19,10 @@ services:
       - loki
     env_file:
       - .env
+    environment:
+      - GF_INSTALL_PLUGINS=camptocamp-prometheus-alertmanager-datasource
+    ports:
+      - 3000:3000
     volumes:
       - ./etc/grafana:/var/lib/grafana
       - ./etc/grafana/provisioning:/etc/grafana/provisioning
@@ -26,6 +30,7 @@ services:
       - joyride.host.name=grafana.${HOST_DOMAIN}
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=true
+      - traefik.docker.network=traefik
       - traefik.http.routers.grafana.rule=Host(`grafana.${HOST_DOMAIN}`)
       - traefik.http.routers.grafana.entrypoints=websecure
       - traefik.http.services.grafana.loadbalancer.server.scheme=http

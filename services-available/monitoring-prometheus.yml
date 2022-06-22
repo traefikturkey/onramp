@@ -31,10 +31,14 @@ services:
     volumes:
       - ./etc/prometheus/conf:/etc/prometheus/conf:ro
       - prometheus:/prometheus
+    networks:
+      - default
+      - loki
     labels:
       - joyride.host.name=prometheus.${HOST_DOMAIN}
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=true
+      - traefik.docker.network=traefik
       - traefik.http.routers.prometheus.rule=Host(`prometheus.${HOST_DOMAIN}`)
       - traefik.http.routers.prometheus.entrypoints=websecure
       - traefik.http.services.prometheus.loadbalancer.server.scheme=http
