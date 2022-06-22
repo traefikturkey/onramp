@@ -26,10 +26,6 @@ services:
       - --log.level=${TRAEFIK_LOG_LEVEL:-DEBUG}
       # comment line below for less noise
       - --accesslog
-      # uncomment to enable prometheus metrics
-      # - --metrics.prometheus=true
-      # - --entryPoints.metrics.address=:8082
-      # - --metrics.prometheus.entryPoint=metrics
       - --api
       - --providers.docker
       - --providers.file.watch=true

@@ -30,7 +30,7 @@ services:
     #   - 9090:9090
     volumes:
       - ./etc/prometheus/conf:/etc/prometheus/conf:ro
-      - ./etc/prometheus/data:/prometheus
+      - prometheus:/prometheus
     labels:
       - joyride.host.name=prometheus.${HOST_DOMAIN}
       - com.centurylinklabs.watchtower.enable=true
