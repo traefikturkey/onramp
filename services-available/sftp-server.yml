@@ -1,0 +1,22 @@
+version: '3'
+
+networks:
+  default:
+    name: sftp-server
+
+# https://github.com/drakkan/sftpgo
+
+services:
+  sftp-server:
+    image: drakkan/sftpgo
+    container_name: sftp-server
+    ports:
+      - 7022:2022
+      - 8282:8080
+    volumes:
+      - ./etc/sftp-server/config:/var/lib/sftpgo
+      - ./etc/sftp-server/data:/srv/sftpgo
+      - ./etc/satisfactory:/mnt/satisfactory
+    restart: unless-stopped
+
+
