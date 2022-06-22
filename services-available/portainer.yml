@@ -1,0 +1,23 @@
+version: '3'
+
+networks:
+  default:
+    name: traefik
+
+
+services:
+  portainer:
+    image: portainer/portainer-ce:2.13.1
+    container_name: portainer
+    volumes:
+      - ./etc/portainer:/app/data
+    env_file: 
+      - .env
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.portainer.entrypoints=websecure"
+      - "traefik.http.routers.portainer.rule=Host(`portainer.${HOST_DOMAIN}`)"
+      - "traefik.http.routers.portainer.tls=true"
+      - "traefik.http.routers.portainer.service=portainer"
+      - "traefik.http.services.portainer.loadbalancer.server.port=9000"
