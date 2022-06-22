@@ -13,6 +13,9 @@ etc/prometheus/conf
 etc/portainer/
 !etc/portainer/.keep
 
+etc/heimdall/
+!etc/heimdall/.keep
+
 etc/yacht/
 !etc/yacht/.keep
 
