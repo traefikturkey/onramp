@@ -3,7 +3,7 @@ http:
     default-headers:
       headers:
         frameDeny: true
-        #sslRedirect: true depercated
+        #sslRedirect: true # depercated
         browserXssFilter: true
         contentTypeNosniff: true
         forceSTSHeader: true
