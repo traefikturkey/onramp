@@ -21,6 +21,7 @@ services:
       - .env
     volumes:
       - ./etc/grafana:/var/lib/grafana
+      - ./etc/grafana/provisioning:/etc/grafana/provisioning
     labels:
       - joyride.host.name=grafana.${HOST_DOMAIN}
       - com.centurylinklabs.watchtower.enable=true
