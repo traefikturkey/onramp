@@ -4,6 +4,7 @@ networks:
   default:
     name: traefik
 
+# https://github.com/linuxserver/docker-nextcloud
 
 services:
   nextcloud:

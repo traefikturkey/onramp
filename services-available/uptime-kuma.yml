@@ -4,22 +4,23 @@ networks:
   default:
     name: traefik
 
+# https://github.com/louislam/uptime-kuma
 
 services:
   uptime-kuma:
     image: louislam/uptime-kuma:1
     container_name: uptimekuma
+    restart: unless-stopped
     volumes:
       - ./etc/uptime-kuma:/app/data
     env_file: 
       - .env
-    restart: unless-stopped
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.uptimekuma.entrypoints=websecure"
-      - "traefik.http.routers.uptimekuma.rule=Host(`uptimekuma.${HOST_DOMAIN}`)"
-      - "traefik.http.routers.uptimekuma.tls=true"
-      - "traefik.http.routers.uptimekuma.service=uptimekuma"
-      - "traefik.http.services.uptimekuma.loadbalancer.server.port=3001"
-      - "traefik.docker.network=traefik"   
-
+      - joyride.host.name=uptimekuma.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.uptimekuma.entrypoints=websecure
+      - traefik.http.routers.uptimekuma.rule=Host(`uptimekuma.${HOST_DOMAIN}`)
+      - traefik.http.routers.uptimekuma.tls=true
+      - traefik.http.routers.uptimekuma.service=uptimekuma
+      - traefik.http.services.uptimekuma.loadbalancer.server.port=3001
+      - traefik.docker.network=traefik
