@@ -1,0 +1,19 @@
+# Remember to add the host name to the pfsense admin page so that you wont get a DNS rebind error
+http:
+ #region routers 
+  routers:
+    pfsense:
+      entryPoints:
+        - "websecure"
+      rule: "Host(`pfsense.{{env "HOST_DOMAIN"}}`)"
+      middlewares:
+        - default-headers
+      tls: {}
+      service: pfsense
+
+  services:
+    pfsense:
+      loadBalancer:
+        servers:
+          - url: "https://{{env "PFSENSE_ADDRESS"}}/"
+        passHostHeader: true

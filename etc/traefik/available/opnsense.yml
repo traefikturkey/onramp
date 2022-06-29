@@ -1,0 +1,18 @@
+http:
+ #region routers 
+  routers:
+    opnsense:
+      entryPoints:
+        - "websecure"
+      rule: "Host(`opnsense.{{env "HOST_DOMAIN"}}`)"
+      middlewares:
+        - default-headers
+      tls: {}
+      service: opnsense
+
+  services:
+    opnsense:
+      loadBalancer:
+        servers:
+          - url: "https://{{env "OPNSENSE_ADDRESS"}}"
+        passHostHeader: true
