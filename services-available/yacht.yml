@@ -4,6 +4,7 @@ networks:
   default:
     name: traefik
 
+# https://github.com/SelfhostedPro/Yacht
 
 services:
   yacht:
@@ -16,9 +17,10 @@ services:
       - .env
     restart: unless-stopped
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.yacht.entrypoints=websecure"
-      - "traefik.http.routers.yacht.rule=Host(`yacht.${HOST_DOMAIN}`)"
-      - "traefik.http.routers.yacht.tls=true"
-      - "traefik.http.routers.yacht.service=yacht"
-      - "traefik.http.services.yacht.loadbalancer.server.port=8000"
+      - joyride.host.name=yacht.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.yacht.entrypoints=websecure
+      - traefik.http.routers.yacht.rule=Host(`yacht.${HOST_DOMAIN}`)
+      - traefik.http.routers.yacht.tls=true
+      - traefik.http.routers.yacht.service=yacht
+      - traefik.http.services.yacht.loadbalancer.server.port=8000
