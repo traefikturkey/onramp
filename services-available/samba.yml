@@ -9,13 +9,13 @@ networks:
 services:
   samba:  
     image: dperson/samba  
-    container_name: samba  
+    container_name: samba
+    restart: unless-stopped
     ports:  
       - 137:137/udp  
       - 138:138/udp  
       - 139:139/tcp  
       - 445:445/tcp  
-    restart: unless-stopped  
     environment:  
       - TZ=${TZ}  
       - USERID=${PUID:-1000}  

@@ -10,11 +10,9 @@ services:
   heimdall:
     image: lscr.io/linuxserver/heimdall:latest
     container_name: heimdall
+    restart: unless-stopped
     volumes:
       - ./etc/heimdall:/config
-    env_file: 
-      - .env
-    restart: unless-stopped
     labels:
       - joyride.host.name=heimdall.${HOST_DOMAIN}
       - traefik.enable=true

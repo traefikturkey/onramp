@@ -11,8 +11,8 @@ networks:
 services:
   sonarr:
     image: linuxserver/sonarr
-    restart: unless-stopped
     container_name: sonarr
+    restart: unless-stopped
     volumes:
       - /dev/rtc:/dev/rtc:ro
       - /etc/localtime:/etc/localtime:ro
