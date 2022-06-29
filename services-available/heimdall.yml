@@ -11,11 +11,11 @@ services:
     container_name: heimdall
     volumes:
       - ./etc/heimdall:/config
-      - /var/run/docker.sock:/var/run/docker.sock
     env_file: 
       - .env
     restart: unless-stopped
     labels:
+      - joyride.host.name=heimdall.${HOST_DOMAIN}
       - traefik.enable=true
       - traefik.http.routers.heimdall.entrypoints=websecure
       - traefik.http.routers.heimdall.rule=Host(`heimdall.${HOST_DOMAIN}`)
