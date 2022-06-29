@@ -10,12 +10,12 @@ services:
   nextcloud:
     image: lscr.io/linuxserver/nextcloud
     container_name: nextcloud
+    restart: unless-stopped
     volumes:
       - ./etc/nextcloud:/config
       - /set/this/to/your/host/directory/that/you/want/to/share:/data
     env_file: 
       - .env
-    restart: unless-stopped
     labels:
       - joyride.host.name=nextcloud.${HOST_DOMAIN}
       - traefik.enable=true

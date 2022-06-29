@@ -10,6 +10,7 @@ services:
   sftp-server:
     image: drakkan/sftpgo
     container_name: sftp-server
+    restart: unless-stopped  
     ports:
       - 7022:2022
       - 8282:8080
@@ -17,6 +18,5 @@ services:
       - ./etc/sftp-server/config:/var/lib/sftpgo
       - ./etc/sftp-server/data:/srv/sftpgo
       - ./etc/satisfactory:/mnt/satisfactory
-    restart: unless-stopped
 
 

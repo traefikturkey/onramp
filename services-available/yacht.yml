@@ -10,12 +10,12 @@ services:
   yacht:
     image: selfhostedpro/yacht
     container_name: yacht
+    restart: unless-stopped
     volumes:
       - ./etc/yacht:/config
       - /var/run/docker.sock:/var/run/docker.sock
     env_file: 
       - .env
-    restart: unless-stopped
     labels:
       - joyride.host.name=yacht.${HOST_DOMAIN}
       - traefik.enable=true

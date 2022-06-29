@@ -10,15 +10,15 @@ services:
   portainer:
     image: portainer/portainer-ce:2.13.1
     container_name: portainer
+    restart: unless-stopped
     volumes:
       - ./etc/portainer:/app/data
     env_file: 
       - .env
-    restart: unless-stopped
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.portainer.entrypoints=websecure"
-      - "traefik.http.routers.portainer.rule=Host(`portainer.${HOST_DOMAIN}`)"
-      - "traefik.http.routers.portainer.tls=true"
-      - "traefik.http.routers.portainer.service=portainer"
-      - "traefik.http.services.portainer.loadbalancer.server.port=9000"
+      - traefik.enable=true
+      - traefik.http.routers.portainer.entrypoints=websecure
+      - traefik.http.routers.portainer.rule=Host(`portainer.${HOST_DOMAIN}`)
+      - traefik.http.routers.portainer.tls=true
+      - traefik.http.routers.portainer.service=portainer
+      - traefik.http.services.portainer.loadbalancer.server.port=9000

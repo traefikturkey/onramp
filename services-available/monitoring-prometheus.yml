@@ -13,8 +13,8 @@ networks:
 
 services:
   prometheus:
-    container_name: prometheus
     image: prom/prometheus:latest
+    container_name: prometheus
     restart: unless-stopped
     links:
       - prometheus-alertmanager
@@ -47,8 +47,8 @@ services:
       - traefik.http.services.prometheus.loadbalancer.server.port=9090
 
   proxmox-exporter:
-    container_name: proxmox-exporter
     image: ghcr.io/ilude/prometheus-pve-exporter
+    container_name: proxmox-exporter
     restart: unless-stopped
     env_file: 
       - .env
@@ -58,8 +58,8 @@ services:
       - traefik.enable=false
 
   prometheus-blackbox:
-    container_name: prometheus-blackbox
     image: prom/blackbox-exporter:latest
+    container_name: prometheus-blackbox
     restart: unless-stopped
     command: 
       - '--config.file=/etc/prometheus/conf/blackbox.yml'
@@ -82,8 +82,8 @@ services:
       - traefik.http.services.blackbox.loadbalancer.server.port=9115
 
   prometheus-alertmanager:
-    container_name: prometheus-alertmanager
     image: prom/alertmanager:latest
+    container_name: prometheus-alertmanager
     restart: unless-stopped
     command:
       - '--config.file=/etc/alertmanager/alertmanager.yml'

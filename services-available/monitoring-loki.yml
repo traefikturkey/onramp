@@ -7,13 +7,13 @@ networks:
 
 services:
   loki:
-    container_name: loki
     image: grafana/loki:latest
+    container_name: loki
+    restart: unless-stopped
     volumes:
       - ./etc/loki:/etc/loki
     ports:
       - 3100:3100
-    restart: unless-stopped
     command: -config.file=/etc/loki/loki-config.yml
     networks:
       - loki
@@ -22,14 +22,14 @@ services:
       - traefik.enable=false
 
   promtail:
-    container_name: promtail
     image: grafana/promtail:latest
+    container_name: promtail
+    restart: unless-stopped
     volumes:
       - /var/log:/var/log
       - ./etc/promtail:/etc/promtail
     # ports:
     #   - 1514:1514 # this is only needed if you are going to send syslogs
-    restart: unless-stopped
     command: -config.file=/etc/promtail/promtail-config.yml
     networks:
       - loki
