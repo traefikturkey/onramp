@@ -1,6 +1,9 @@
 #### A docker-compose setup of common services with traefik using cloudflare dns-01 for letsencrypt certificates
 
-if you haven't already install docker, you can use the script [here](https://gist.github.com/ilude/52b775682ec6ea5cc31933f81cef49f6)
+This repo assumes that you are running a debian linux disto like ubuntu, so a few of the scripted commands below may need to be adjusted if you are running using a different distro or package management. You will need to install docker on your linux host, you can do this by following the steps here:
+[Docker Linux Installation steps](https://docs.docker.com/desktop/linux/install/#generic-installation-steps)
+
+or using this bash script on ubuntu available [here](https://gist.github.com/ilude/52b775682ec6ea5cc31933f81cef49f6)
 
 you'll need a personal domain that's setup with Cloudflare
 and an API token created like so
