@@ -27,4 +27,7 @@ etc/nextcloud/data/
 etc/prometheus/data/*
 !etc/prometheus/data/.keep
 
+etc/nodered/*
+!etc/nodered/.keep
+
 *.log
