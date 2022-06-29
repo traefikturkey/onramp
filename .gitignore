@@ -30,4 +30,11 @@ etc/prometheus/data/*
 etc/nodered/*
 !etc/nodered/.keep
 
+etc/mosquitto/config/*
+!etc/mosquitto/config/.keep
+etc/mosquitto/data/*
+!etc/mosquitto/data/.keep
+etc/mosquitto/log/*
+!etc/mosquitto/log/.keep
+
 *.log
