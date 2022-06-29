@@ -1,0 +1,29 @@
+version: '3'
+
+networks:
+  default:
+    name: traefik
+
+# https://hub.docker.com/r/nodered/node-red/
+
+services:
+  nodered:
+    image: nodered/node-red
+    container_name: nodered
+    restart: unless-stopped
+    # uncomment the network_mode: host line if nodered needs  
+    # to be auto discovered by Amazon Alexa or Google Home
+    # network_mode: host
+    user: ${PUID:-1000}:${PGID:-1000}
+    environment:
+      - TZ=${TZ}
+    volumes:
+      - ./etc/nodered:/data
+    labels:
+      - joyride.host.name=nodered.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.nodered.rule=Host(`nodered.${HOST_DOMAIN}`)
+      - traefik.http.routers.nodered.entrypoints=websecure
+      - traefik.http.services.nodered.loadbalancer.server.port=1880
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
