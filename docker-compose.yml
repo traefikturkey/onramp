@@ -8,9 +8,11 @@ networks:
 
 services:
   traefik:
-    image: traefik:2.7 # replace with traefik:latest if you are feeling frisky
+    image: traefik:2.8 # replace with traefik:latest if you are feeling frisky
     container_name: traefik
     restart: unless-stopped
+    extra_hosts:
+      - host.docker.internal:172.17.0.1
     ports:
       - 80:80
       - 443:443
