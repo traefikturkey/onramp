@@ -10,6 +10,7 @@ disabled_files := $(wildcard services-enabled/disabled-*.yml)
 # when running make commands that call docker compose
 compose_files := $(filter-out $(disabled_files), $(wildcard services-enabled/*.yml)) 
 args := -f docker-compose.yml $(foreach file, $(compose_files), -f $(file))
+args_service := --project-directory ./ -f 
 
 # get the boxes ip address and the current users id and group id
 export HOSTIP := $(shell ip route get 1.1.1.1 | grep -oP 'src \K\S+')
@@ -27,6 +28,9 @@ endif
 # look for the second target word passed to make
 PASSED_SERVICE := $(word 2,$(MAKECMDGOALS))
 
+# used to look for the file in the services-enabled folder when start-service is used 
+SERVICE_FILE = ./services-enabled/$(PASSED_SERVICE).yml
+
 # use the rest as arguments as empty targets aka: MAGIC
 EMPTY_TARGETS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
 $(eval $(EMPTY_TARGETS):;@:)
@@ -35,6 +39,9 @@ $(eval $(EMPTY_TARGETS):;@:)
 # i.e. if you just type: make
 start: build
 	$(DOCKER_COMPOSE) $(args) up -d --force-recreate
+
+start-service: build
+	$(DOCKER_COMPOSE) $(args_service) $(SERVICE_FILE) up -d --force-recreate
 
 up: build
 	$(DOCKER_COMPOSE) $(args) up --force-recreate
@@ -117,6 +124,9 @@ install-node-exporter:
 
 echo:
 	@echo $(args)
+
+echo-service:
+	@echo $(args_service) $(SERVICE_FILE)
 
 env:
 	env | sort
