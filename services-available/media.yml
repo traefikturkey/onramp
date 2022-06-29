@@ -33,8 +33,8 @@ services:
 
   radarr:
     image: linuxserver/radarr
-    restart: unless-stopped
     container_name: radarr
+    restart: unless-stopped
     volumes:
       - /dev/rtc:/dev/rtc:ro
       - /etc/localtime:/etc/localtime:ro
@@ -55,8 +55,8 @@ services:
 
   sabnzbd: 
     image: linuxserver/sabnzbd
-    restart: unless-stopped
     container_name: sabnzbd
+    restart: unless-stopped
     hostname: sabnzbd.${HOST_DOMAIN}
     volumes:
       - /dev/rtc:/dev/rtc:ro
