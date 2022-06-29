@@ -8,9 +8,10 @@ networks:
 
 services:
   satisfactory-server:
+    image: wolveix/satisfactory-server:latest
     container_name: satisfactory
     hostname: satisfactory
-    image: wolveix/satisfactory-server:latest
+    restart: unless-stopped
     ports:
       - 7777:7777/udp
       - 15000:15000/udp
@@ -28,5 +29,4 @@ services:
       - AUTOSAVEONDISCONNECT=true
       - DISABLESEASONALEVENTS=false
       - SKIPUPDATE=false # on container restart
-    restart: unless-stopped
 
