@@ -1,7 +1,7 @@
 version: '3'
 
 networks:
-  default:
+  traefik:
     name: traefik
 
 # https://hub.docker.com/_/traefik
@@ -11,6 +11,8 @@ services:
     image: traefik:2.8 # replace with traefik:latest if you are feeling frisky
     container_name: traefik
     restart: unless-stopped
+    networks:
+      - traefik
     extra_hosts:
       - host.docker.internal:172.17.0.1
     ports:
@@ -52,7 +54,7 @@ services:
     labels:
       - joyride.host.name=${HOST_NAME}.${HOST_DOMAIN}
       - traefik.enable=true
-      - traefik.docker.network=traefik
+      #- traefik.docker.network=traefik
       - traefik.http.routers.traefik.entrypoints=websecure
       - traefik.http.routers.traefik.service=api@internal
       #- traefik.http.routers.traefik.rule=Host(`traefik.${HOST_DOMAIN}`)
