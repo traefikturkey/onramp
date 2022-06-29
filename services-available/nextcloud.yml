@@ -11,14 +11,16 @@ services:
     container_name: nextcloud
     volumes:
       - ./etc/nextcloud:/config
-      - ./data/nextcloud:/data
+      - /set/this/to/your/host/directory/that/you/want/to/share:/data
     env_file: 
       - .env
     restart: unless-stopped
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.nextcloud.entrypoints=websecure"
-      - "traefik.http.routers.nextcloud.rule=Host(`nextcloud.${HOST_DOMAIN}`)"
-      - "traefik.http.routers.nextcloud.tls=true"
-      - "traefik.http.routers.nextcloud.service=nextcloud"
-      - "traefik.http.services.nextcloud.loadbalancer.server.port=443"
+      - joyride.host.name=nextcloud.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.nextcloud.entrypoints=websecure
+      - traefik.http.routers.nextcloud.rule=Host(`nextcloud.${HOST_DOMAIN}`)
+      - traefik.http.routers.nextcloud.tls=true
+      - traefik.http.routers.nextcloud.service=nextcloud
+      - traefik.http.services.nextcloud.loadbalancer.server.scheme=https
+      - traefik.http.services.nextcloud.loadbalancer.server.port=443
