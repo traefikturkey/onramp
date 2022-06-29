@@ -19,9 +19,7 @@ services:
       - autoheal=true
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=true
-      # - joyride.host.name=dozzle.${HOST_DOMAIN}
-      # - traefik.http.routers.dozzle.rule=Host(`logs.${HOST_DOMAIN}`)
-      - traefik.http.routers.dozzle.rule=PathPrefix(`/logs`) # comment if using Host rule
+      - traefik.http.routers.dozzle.rule=PathPrefix(`/logs`) 
       - traefik.http.routers.dozzle.entrypoints=websecure
       - traefik.http.services.dozzle.loadbalancer.server.scheme=http
       - traefik.http.services.dozzle.loadbalancer.server.port=8080
