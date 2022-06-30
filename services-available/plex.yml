@@ -11,6 +11,9 @@ services:
     image: plexinc/pms-docker
     container_name: plex
     restart: unless-stopped
+    # uncomment if you have intel quick sync on your cpu
+    # device:
+    #   - /dev/dri:/dev/dri
     volumes:
       - ./etc/plex:/config
       - ./media:/data
