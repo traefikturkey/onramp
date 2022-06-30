@@ -12,6 +12,8 @@ services:
     restart: unless-stopped
     volumes:
       - ./etc/loki:/etc/loki
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
     ports:
       - 3100:3100
     command: -config.file=/etc/loki/loki-config.yml

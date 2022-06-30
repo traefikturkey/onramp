@@ -16,7 +16,8 @@ services:
       - ./etc/sabnzbd:/config
       - ./media/downloads:/downloads
       - /dev/rtc:/dev/rtc:ro
-      - /etc/localtime:/etc/localtime:ro 
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
     #ports:
       # - 8181:8080 needed to do a fresh setup because of hostname whitelist
     environment: 

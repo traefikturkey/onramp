@@ -15,6 +15,8 @@ services:
       - DOZZLE_LEVEL=debug
       - DOZZLE_BASE=/logs  # only needed for PathPrefix, comment if using Host rule
     volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
     labels:
       - autoheal=true

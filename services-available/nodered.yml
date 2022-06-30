@@ -19,11 +19,13 @@ services:
       - TZ=${TZ}
     volumes:
       - ./etc/nodered:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
     labels:
       - joyride.host.name=nodered.${HOST_DOMAIN}
       - traefik.enable=true
-      - traefik.http.routers.nodered.rule=Host(`nodered.${HOST_DOMAIN}`)
       - traefik.http.routers.nodered.entrypoints=websecure
+      - traefik.http.routers.nodered.rule=Host(`nodered.${HOST_DOMAIN}`)
       - traefik.http.services.nodered.loadbalancer.server.port=1880
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true

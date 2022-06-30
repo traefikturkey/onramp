@@ -15,16 +15,17 @@ services:
       - TZ=${TZ}
       - UMASK=022
     volumes:
-      - ./data/syncthing:/config
-      - /sync:/sync
+      - ./etc/syncthing:/config
+      - ./media/sync:/sync
     ports:
       #- 8384:8384
       - 22000:22000
       - 21027:21027/udp
     labels:
       - joyride.host.name=sync.${HOST_DOMAIN}
-      - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=true
       - traefik.http.routers.sync.entrypoints=websecure
       - traefik.http.routers.sync.rule=Host(`sync.${HOST_DOMAIN}`)
       - traefik.http.services.sync.loadbalancer.server.port=8384
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true

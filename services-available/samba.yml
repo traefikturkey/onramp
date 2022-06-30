@@ -34,5 +34,7 @@ services:
       - /apps:/apps 
       #- /host/foo:/container/foo 
       #- /host/bar:/container/bar 
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
     labels:
       - traefik.enable=false 

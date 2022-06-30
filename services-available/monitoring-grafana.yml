@@ -26,6 +26,8 @@ services:
     volumes:
       - ./etc/grafana:/var/lib/grafana
       - ./etc/grafana/provisioning:/etc/grafana/provisioning
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
     labels:
       - joyride.host.name=grafana.${HOST_DOMAIN}
       - com.centurylinklabs.watchtower.enable=true
