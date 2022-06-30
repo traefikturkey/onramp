@@ -1,0 +1,35 @@
+version: '3'
+
+networks:
+  default:
+    name: traefik
+    
+# https://hub.docker.com/r/linuxserver/jellyfin
+
+services:
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:latest
+    container_name: jellyfin
+    restart: unless-stopped
+    environment: 
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - JELLYFIN_PublishedServerUrl=jellyfin.${HOST_DOMAIN}
+    volumes:
+      - ./etc/jellyfin:/config
+      - ./media/shows:/data/tvshows
+      - ./media/movies:/data/movies
+    ports:
+      # - 8096:8096 # http web gui
+      # - 8920:8920 # https web gui
+      - 7359:7359/udp # Jellyfin client discovery
+      - 1900:1900/udp # DNLA discovery
+    labels:
+      - joyride.host.name=jellyfin.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.jellyfin.entrypoints=websecure
+      - traefik.http.routers.jellyfin.rule=Host(`jellyfin.${HOST_DOMAIN}`)
+      - traefik.http.services.jellyfin.loadbalancer.server.port=8096
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true

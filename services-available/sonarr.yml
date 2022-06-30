@@ -27,5 +27,6 @@ services:
       - traefik.enable=true
       - traefik.http.routers.sonarr.entrypoints=websecure
       - traefik.http.routers.sonarr.rule=Host(`sonarr.${HOST_DOMAIN}`)
-      - traefik.http.services.sonarr.loadbalancer.server.scheme=http
       - traefik.http.services.sonarr.loadbalancer.server.port=8989
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
