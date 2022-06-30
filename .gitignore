@@ -28,6 +28,9 @@ etc/yacht/*
 etc/pwndrop/*
 !etc/pwndrop/.keep
 
+etc/snapdrop/*
+!etc/snapdrop/.keep
+
 etc/nextcloud/*
 !etc/nextcloud/.keep
 etc/nextcloud/data/
