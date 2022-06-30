@@ -26,7 +26,7 @@ else
 endif
 
 # look for the second target word passed to make
-PASSED_SERVICE := $(word 2,$(MAKECMDGOALS))
+export PASSED_SERVICE := $(word 2,$(MAKECMDGOALS))
 
 # used to look for the file in the services-enabled folder when start-service is used 
 SERVICE_FILE = ./services-enabled/$(PASSED_SERVICE).yml
@@ -122,7 +122,12 @@ disable-external:
 create-service:
 	mkdir -p ./etc/$(PASSED_SERVICE)
 	touch ./etc/$(PASSED_SERVICE)/.keep
-	touch ./services-available/$(PASSED_SERVICE).yml
+	envsubst '$PASSED_SERVICE' < ./services-available/.service.template > ./services-available/$(PASSED_SERVICE).yml
+
+create-game:
+	mkdir -p ./etc/$(PASSED_SERVICE)
+	touch ./etc/$(PASSED_SERVICE)/.keep
+	envsubst '$PASSED_SERVICE' < ./services-available/.service.template > ./services-available/games/$(PASSED_SERVICE).yml
 
 install-node-exporter:
 	curl -s https://gist.githubusercontent.com/ilude/2cf7a3b7712378c6b9bcf1e1585bf70f/raw/setup_node_exporter.sh?$(date +%s) | /bin/bash -s | tee build.log
