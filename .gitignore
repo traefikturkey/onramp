@@ -25,6 +25,9 @@ etc/droneci/*
 etc/yacht/*
 !etc/yacht/.keep
 
+etc/pwndrop/*
+!etc/pwndrop/.keep
+
 etc/nextcloud/*
 !etc/nextcloud/.keep
 etc/nextcloud/data/
