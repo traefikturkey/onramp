@@ -1,0 +1,32 @@
+version: '3'
+
+networks:
+  default:
+    name: traefik
+
+# https://hub.docker.com/r/linuxserver/sabnzbd
+
+services:
+  sabnzbd: 
+    image: linuxserver/sabnzbd
+    container_name: sabnzbd
+    restart: unless-stopped
+    hostname: sabnzbd.${HOST_DOMAIN}
+    volumes:
+      - ./etc/sabnzbd:/config
+      - ./media/downloads:/downloads
+      - /dev/rtc:/dev/rtc:ro
+      - /etc/localtime:/etc/localtime:ro 
+    #ports:
+      # - 8181:8080 needed to do a fresh setup because of hostname whitelist
+    environment: 
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=sabnzbd.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.sabnzbd.entrypoints=websecure
+      - traefik.http.routers.sabnzbd.rule=Host(`sabnzbd.${HOST_DOMAIN}`)
+      - traefik.http.services.sabnzbd.loadbalancer.server.scheme=http
+      - traefik.http.services.sabnzbd.loadbalancer.server.port=8080
