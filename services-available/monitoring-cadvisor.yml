@@ -16,10 +16,13 @@ services:
       - /dev/kmsg:/dev/kmsg
     volumes:
       - /:/rootfs:ro
-      - /var/run:/var/run:ro
       - /sys:/sys:ro
-      - /var/lib/docker/:/var/lib/docker:ro
       - /cgroup:/cgroup:ro
+      - /var/run:/var/run:ro
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      
     labels:
       - org.label-schema.group=monitoring
       - joyride.host.name=cadvisor.${HOST_DOMAIN}

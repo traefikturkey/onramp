@@ -12,8 +12,10 @@ services:
     container_name: plex
     restart: unless-stopped
     volumes:
-      - /config/plex:/config
-      - /media:/data
+      - ./etc/plex:/config
+      - ./media:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
     ports:
       # - 32400:32400/tcp
       # - 32400:32400/udp
