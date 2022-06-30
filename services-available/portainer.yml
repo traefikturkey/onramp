@@ -22,6 +22,6 @@ services:
       - traefik.enable=true
       - traefik.http.routers.portainer.entrypoints=websecure
       - traefik.http.routers.portainer.rule=Host(`portainer.${HOST_DOMAIN}`)
-      - traefik.http.routers.portainer.tls=true
-      - traefik.http.routers.portainer.service=portainer
       - traefik.http.services.portainer.loadbalancer.server.port=9000
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true

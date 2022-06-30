@@ -25,3 +25,5 @@ services:
       - traefik.http.routers.nextcloud.service=nextcloud
       - traefik.http.services.nextcloud.loadbalancer.server.scheme=https
       - traefik.http.services.nextcloud.loadbalancer.server.port=443
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true

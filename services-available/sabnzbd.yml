@@ -29,5 +29,6 @@ services:
       - traefik.enable=true
       - traefik.http.routers.sabnzbd.entrypoints=websecure
       - traefik.http.routers.sabnzbd.rule=Host(`sabnzbd.${HOST_DOMAIN}`)
-      - traefik.http.services.sabnzbd.loadbalancer.server.scheme=http
       - traefik.http.services.sabnzbd.loadbalancer.server.port=8080
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true

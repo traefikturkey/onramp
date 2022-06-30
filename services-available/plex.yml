@@ -39,5 +39,6 @@ services:
       - traefik.enable=true
       - traefik.http.routers.plex.entrypoints=websecure
       - traefik.http.routers.plex.rule=Host(`plex.${HOST_DOMAIN}`)
-      - traefik.http.services.plex.loadbalancer.server.scheme=http
       - traefik.http.services.plex.loadbalancer.server.port=32400
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
