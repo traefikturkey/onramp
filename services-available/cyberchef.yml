@@ -4,7 +4,7 @@ networks:
   default:
     name: traefik
     
-# <add links to documentation here>
+# https://github.com/gchq/CyberChef/
 
 services:
   cyberchef:
