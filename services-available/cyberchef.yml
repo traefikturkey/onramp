@@ -1,0 +1,21 @@
+version: '3'
+
+networks:
+  default:
+    name: traefik
+    
+# <add links to documentation here>
+
+services:
+  cyberchef:
+    image: mpepping/cyberchef
+    container_name: cyberchef
+    restart: unless-stopped
+    labels:
+      - joyride.host.name=cyberchef.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.cyberchef.entrypoints=websecure
+      - traefik.http.routers.cyberchef.rule=Host(`cyberchef.${HOST_DOMAIN}`)
+      - traefik.http.services.cyberchef.loadbalancer.server.port=8000
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
