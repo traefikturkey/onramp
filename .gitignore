@@ -10,16 +10,22 @@ etc/grafana/alerting
 etc/grafana/plugins
 etc/prometheus/conf
 
-etc/portainer/
+etc/portainer/*
 !etc/portainer/.keep
 
-etc/heimdall/
+etc/heimdall/*
 !etc/heimdall/.keep
 
-etc/yacht/
+etc/gitea/*
+!etc/gitea/.keep
+
+etc/droneci/*
+!etc/droneci/.keep
+
+etc/yacht/*
 !etc/yacht/.keep
 
-etc/nextcloud/
+etc/nextcloud/*
 !etc/nextcloud/.keep
 etc/nextcloud/data/
 !etc/nextcloud/data/.keep

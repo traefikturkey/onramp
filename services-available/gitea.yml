@@ -1,0 +1,43 @@
+version: '3'
+
+networks:
+  default:
+    name: traefik
+
+# https://hub.docker.com/r/nodered/node-red/
+
+services:
+  gitea:
+    container_name: gitea
+    image: gitea/gitea
+    restart: unless-stopped
+    environment:
+      # https://docs.gitea.io/en-us/install-with-docker/#environments-variables
+      - APP_NAME="Gitea"
+      - USER_UID=${PUID:-1000}
+      - USER_GID=${PGID:-1000}
+      - RUN_MODE=prod
+      - DOMAIN=git.${HOST_DOMAIN}
+      - SSH_DOMAIN=git.${HOST_DOMAIN}
+      - HTTP_PORT=4000
+      - ROOT_URL=https://git.${HOST_DOMAIN}
+      - SSH_PORT=222
+      - SSH_LISTEN_PORT=22
+      - DB_TYPE=sqlite3
+    ports:
+      #- 4000:4000
+      - 222:22
+    volumes:
+      - ./etc/gitea:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    labels:
+      - joyride.host.name=git.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.docker.network=traefik
+      - traefik.http.routers.git.rule=Host(`git.${HOST_DOMAIN}`)
+      - traefik.http.routers.git.entrypoints=websecure
+      - traefik.http.services.git.loadbalancer.server.port=4000
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
+
