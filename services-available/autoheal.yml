@@ -10,7 +10,7 @@ services:
     environment: 
       - AUTOHEAL_CONTAINER_LABEL=all
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /var/run/docker.sock:/var/run/docker.sock
     labels:
       - traefik.enable=false 
 
