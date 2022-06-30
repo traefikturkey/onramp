@@ -1,7 +1,4 @@
 version: '3'
-networks:
-  default:
-    name: joyride
 
 # https://github.com/ilude/joyride
 
