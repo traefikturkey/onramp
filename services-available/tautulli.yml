@@ -1,0 +1,27 @@
+version: '3'
+
+networks:
+  default:
+    name: traefik
+
+# https://hub.docker.com/r/linuxserver/tautulli
+
+services:
+  tautulli:
+    image: lscr.io/linuxserver/tautulli:latest
+    container_name: tautulli
+    restart: unless-stopped
+    volumes:
+      - ./etc/tautulli:/config
+    environment: 
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=tautulli.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.tautulli.entrypoints=websecure
+      - traefik.http.routers.tautulli.rule=Host(`tautulli.${HOST_DOMAIN}`)
+      - traefik.http.services.tautulli.loadbalancer.server.port=8181
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true

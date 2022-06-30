@@ -1,0 +1,27 @@
+version: '3'
+
+networks:
+  default:
+    name: traefik
+
+# https://hub.docker.com/r/linuxserver/overseerr
+
+services:
+  radarr:
+    image: linuxserver/overseerr
+    container_name: overseerr
+    restart: unless-stopped
+    volumes:
+      - ./etc/overseerr:/config
+    environment: 
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=overseerr.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.overseerr.entrypoints=websecure
+      - traefik.http.routers.radarr.rule=Host(`overseerr.${HOST_DOMAIN}`)
+      - traefik.http.services.overseerr.loadbalancer.server.port=5055
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
