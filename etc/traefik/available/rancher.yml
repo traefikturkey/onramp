@@ -1,0 +1,18 @@
+http:
+ #region routers 
+  routers:
+    rancher:
+      entryPoints:
+        - "websecure"
+      rule: "Host(`rancher.{{env "HOST_DOMAIN"}}`)"
+      middlewares:
+        - default-headers
+      tls: {}
+      service: rancher
+
+  services:
+    rancher:
+      loadBalancer:
+        servers:
+          - url: "https://{{env "RANCHER_ADDRESS"}}"
+        passHostHeader: true
