@@ -4,15 +4,15 @@ networks:
   default:
     name: traefik
     
-# <add links to documentation here>
+# <================= add links to documentation here =================>
 
 services:
   ${PASSED_SERVICE}:
-    image: <container_image>
+    image: <==== container_image ====>
     container_name: ${PASSED_SERVICE}
     restart: unless-stopped
     volumes:
-      - ./etc/${PASSED_SERVICE}:/config
+      - ./etc/${PASSED_SERVICE}:/config # <==== this probably needs changed ====>
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
