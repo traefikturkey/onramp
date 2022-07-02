@@ -20,6 +20,7 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
+      - ADMIN_TOKEN=${VAULT_ADMIN_SECRET}
     labels:
       - joyride.host.name=vaultwarden.${HOST_DOMAIN}
       - traefik.enable=true
