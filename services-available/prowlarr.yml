@@ -1,0 +1,29 @@
+version: '3'
+
+networks:
+  default:
+    name: traefik
+    
+# https://hub.docker.com/r/linuxserver/prowlarr
+
+services:
+  prowlarr:
+    image: linuxserver/prowlarr
+    container_name: prowlarr
+    restart: unless-stopped
+    volumes:
+      - ./etc/prowlarr:/config
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=prowlarr.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.prowlarr.entrypoints=websecure
+      - traefik.http.routers.prowlarr.rule=Host(`prowlarr.${HOST_DOMAIN}`)
+      - traefik.http.services.prowlarr.loadbalancer.server.port=9696
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
