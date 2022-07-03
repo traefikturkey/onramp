@@ -1,0 +1,31 @@
+version: '3'
+
+networks:
+  default:
+    name: traefik
+    
+# https://hub.docker.com/r/linuxserver/bazarr
+
+services:
+  bazarr:
+    image: linuxserver/bazarr
+    container_name: bazarr
+    restart: unless-stopped
+    volumes:
+      - ./etc/bazarr:/config
+      - ./media/movies:/movies
+      - ./media/shows:/tv
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=bazarr.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.bazarr.entrypoints=websecure
+      - traefik.http.routers.bazarr.rule=Host(`bazarr.${HOST_DOMAIN}`)
+      - traefik.http.services.bazarr.loadbalancer.server.port=6767
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
