@@ -6,6 +6,10 @@ services:
 
   traefik-certs-dumper:
     image: ldez/traefik-certs-dumper:v2.8.1
+    container_name: traefik-certs-dumper
+    restart: unless-stopped
+    volumes:
+      - ./etc/letsencrypt:/data
     entrypoint: sh -c '
       apk add jq
       ; while ! [ -e /data/acme.json ]
@@ -14,5 +18,7 @@ services:
       ; done
       && traefik-certs-dumper file --version v2 --watch
       --source /data/acme.json --dest /data/certs'
-    volumes:
-      - ./etc/letsencrypt:/data
+    labels:
+      - traefik.enable=false
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
