@@ -2,6 +2,8 @@
 *.log
 services-enabled/*.yml
 
+# https://theapache64.github.io/git-do-not-ignore/
+
 !media/
 media/*
 !media/*/
