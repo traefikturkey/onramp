@@ -21,7 +21,7 @@ services:
     env_file: 
       - .env
     volumes:
-      - ./etc/letsencrypt:/letsencrypt
+      - ./etc/traefik/letsencrypt:/letsencrypt
       - ./etc/traefik/enabled:/enabled
       - /etc/localtime:/etc/localtime:ro
       - /usr/share/zoneinfo:/usr/share/zoneinfo:ro

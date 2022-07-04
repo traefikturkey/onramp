@@ -25,9 +25,9 @@ services:
       - 6789:6789 # mobile throughput test
       #- 5514:5514/udp # remote syslog port
     volumes:
-      - ./data/unifi/data:/usr/lib/unifi/data
-      - ./data/unifi/cert:/usr/lib/unifi/cert
-      - ./data/unifi/logs:/usr/lib/unifi/logs
+      - ./etc/unifi/data:/usr/lib/unifi/data
+      - ./etc/unifi/cert:/usr/lib/unifi/cert
+      - ./etc/unifi/logs:/usr/lib/unifi/logs
       - /etc/localtime:/etc/localtime:ro
     labels:
       - joyride.host.name=unifi.${HOST_DOMAIN}
