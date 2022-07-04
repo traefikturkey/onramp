@@ -2,6 +2,12 @@
 *.log
 services-enabled/*.yml
 
+!media/
+media/*
+!media/*/
+media/*/*
+!media/*/.keep
+
 !etc/
 etc/*
 !etc/*/
@@ -11,15 +17,8 @@ etc/*/*
 etc/*/*/*
 !etc/*/*/.keep
 
-!media/
-media/*
-!media/*/
-media/*/*
-!media/*/.keep
-
+!etc/grafana/provisioning/*
 !etc/loki/loki-config.yml
+!etc/prometheus/conf-originals/*
 !etc/traefik/available/*
 !etc/traefik/enabled/middleware.yml
-
-!etc/prometheus/conf-originals/*
-!etc/grafana/provisioning/*
