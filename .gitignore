@@ -24,4 +24,4 @@ etc/*/*/*
 !etc/prometheus/conf-originals/*
 !etc/traefik/available/*
 !etc/traefik/enabled/middleware.yml
-!etc/authelia/configuration.yml
+!etc/authelia/configuration.template
