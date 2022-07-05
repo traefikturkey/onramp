@@ -30,7 +30,7 @@ services:
       - --log.level=${TRAEFIK_LOG_LEVEL:-DEBUG}
       - --api
       # comment line below for less noise
-      - --accesslog
+      # - --accesslog
       - --entryPoints.metrics.address=:8082
       - --metrics.prometheus.entryPoint=metrics
       - --providers.docker

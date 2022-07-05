@@ -25,7 +25,7 @@ services:
       - PGID=${PGID:-1000}
       - TZ=${TZ}
     healthcheck:
-      test: curl --fail http://localhost:8080 || exit 1
+      test: curl --fail http://sabnzbd.${HOST_DOMAIN}:8080 || exit 1
       interval: 60s
       retries: 5
       start_period: 20s
