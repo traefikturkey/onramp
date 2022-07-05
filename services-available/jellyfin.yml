@@ -21,8 +21,7 @@ services:
       - JELLYFIN_PublishedServerUrl=jellyfin.${HOST_DOMAIN}
     volumes:
       - ./etc/jellyfin:/config
-      - ./media/shows:/data/tvshows
-      - ./media/movies:/data/movies
+      - ${JOYRIDE_MEDIA_DIR:-./media}:${JOYRIDE_CONTAINER_MEDIA_DIR:-/data}
     ports:
       # - 8096:8096 # http web gui
       # - 8920:8920 # https web gui
