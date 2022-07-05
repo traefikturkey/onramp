@@ -13,8 +13,8 @@ services:
     restart: unless-stopped
     volumes:
       - ./etc/lidarr:/config
-      - ./media/music:/music
-      - ./media/downloads:/downloads
+      - ${MEDIA_MUSIC_DIR:-./media/music}:/music
+      - ${MEDIA_DOWNLOADS_DIR:-./media/downloads}:/downloads
       - /dev/rtc:/dev/rtc:ro
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro

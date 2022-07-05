@@ -16,7 +16,7 @@ services:
     #   - /dev/dri:/dev/dri
     volumes:
       - ./etc/plex:/config
-      - ./media:/data
+      - ${PLEX_MEDIA_DIR:-./media}:${PLEX_CONTAINER_MEDIA_DIR:-/data}
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     ports:
