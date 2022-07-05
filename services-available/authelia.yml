@@ -3,7 +3,6 @@ version: '3'
 networks:
   default:
     name: traefik
-    external: true
     
 # https://github.com/authelia/authelia
 
@@ -12,9 +11,6 @@ services:
     image: authelia/authelia
     container_name: authelia
     restart: unless-stopped
-    networks:
-      traefik:
-        aliases: []
     volumes:
       - ./etc/authelia:/config
       - /etc/timezone:/etc/timezone:ro
@@ -25,28 +21,20 @@ services:
       - TZ=${TZ}
       - AUTHELIA_LOG_LEVEL=trace
       #- AUTHELIA_THEME=dark
-      - AUTHELIA_DEFAULT_REDIRECTION_URL=${AUTHELIA_AUTH_DOMAIN}
+      - AUTHELIA_DEFAULT_REDIRECTION_URL=${AUTH_DOMAIN}
       - AUTHELIA_JWT_SECRET=${AUTHELIA_JWT_SECRET}
       - AUTHELIA_SESSION_DOMAIN=${HOST_DOMAIN}
     env_file: 
       - .env
-    # I am able to the to the local interface from this but not thru the domain it self, just throws a 404
-    # ports:
-    #   - "9091:9091"
     labels:
-      - joyride.host.name=${AUTHELIA_AUTH_DOMAIN}
+      - joyride.host.name=auth.${HOST_DOMAIN}
       - traefik.enable=true
+      - traefik.http.routers.authelia.rule=Host(`auth.${HOST_DOMAIN}`)
       - traefik.http.routers.authelia.entrypoints=websecure
-      - traefik.http.routers.authelia.rule=Host(`auth.{HOST_DOMAIN}`)
-      #- traefik.http.routers.authelia.tls=true
-      #- traefik.http.services.authelia.loadbalancer.server.port=80
-      - traefik.http.middlewares.authelia.forwardauth.address=http://authelia:9091/api/verify?rd=$AUTHELIA_AUTH_DOMAIN
-      #- traefik.http.routers.authelia.service=authelia
-      #- traefik.http.services.authelia.loadbalancer.server.scheme=https
-      #- traefik.http.services.authelia.loadbalancer.server.port=9091
-      - traefik.http.middlewares.authelia.forwardauth.trustForwardHeader=true'
+      - traefik.http.middlewares.authelia.forwardauth.address=http://authelia:9091/api/verify?rd=${AUTH_DOMAIN}
+      - traefik.http.middlewares.authelia.forwardauth.trustForwardHeader=true
       - traefik.http.middlewares.authelia.forwardauth.authResponseHeaders=Remote-User,Remote-Groups,Remote-Name,Remote-Email
-      #- com.centurylinklabs.watchtower.enable=true
-      #- autoheal=true
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true 
     expose:
       - 9091
