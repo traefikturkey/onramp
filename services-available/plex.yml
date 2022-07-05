@@ -34,7 +34,7 @@ services:
       - TZ=${TZ}
       - ADVERTISE_IP=https://plex.${HOST_DOMAIN}
       - ALLOWED_NETWORKS=${HOSTIP}/24
-      #- PLEX_CLAIM=${PLEX_CLAIM}
+      - PLEX_CLAIM=${PLEX_CLAIM}
       - PLEX_UID=${PUID:-1000}
       - PLEX_GID=${PGID:-1000}
       - VERSION=docker
