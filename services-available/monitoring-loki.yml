@@ -23,6 +23,23 @@ services:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=false
 
+  logsprout:
+    image: gliderlabs/logspout
+    container_name: logspout
+    restart: unless-stopped
+    command: syslog+tls://promtail:1514
+    networks:
+      - loki
+    depends_on:
+      - promtail
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+      - traefik.enable=false
+
   promtail:
     image: grafana/promtail:latest
     container_name: promtail
@@ -30,8 +47,10 @@ services:
     volumes:
       - /var/log:/var/log
       - ./etc/promtail:/etc/promtail
+    # this is only needed if you are going to send syslogs
+    # from an external source
     # ports:
-    #   - 1514:1514 # this is only needed if you are going to send syslogs
+    #   - 1514:1514 
     command: -config.file=/etc/promtail/promtail-config.yml
     networks:
       - loki

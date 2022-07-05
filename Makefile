@@ -38,7 +38,7 @@ $(eval $(EMPTY_TARGETS):;@:)
 # this is the default target run if no other targets are passed to make
 # i.e. if you just type: make
 start: build
-	$(DOCKER_COMPOSE) $(args) up -d --force-recreate
+	$(DOCKER_COMPOSE) $(args) up -d --force-recreate --remove-orphans
 
 start-service: build
 	$(DOCKER_COMPOSE) $(args_service) $(SERVICE_FILE) up -d --force-recreate
