@@ -13,8 +13,8 @@ services:
     restart: unless-stopped
     volumes:
       - ./etc/bazarr:/config
-      - ./media/movies:/movies
-      - ./media/shows:/tv
+      - ${MEDIA_MOVIES_DIR:-./media/movies}:/movies
+      - ${MEDIA_SHOWS_DIR:-./media/shows}:/tv
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
