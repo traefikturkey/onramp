@@ -1,16 +1,6 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
-# <================= add links to documentation here =================>
-
-docker run \
-  --name barotrauma-server-dockerful \
-
-  -v "baro-data:/persistence" \
-  yanwk/barotrauma-server:dockerful
+# https://hub.docker.com/r/yanwk/barotrauma-server
 
 volumes:
   barotrauma:
