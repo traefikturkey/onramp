@@ -27,11 +27,11 @@ services:
       - NMBD=True
       - RECYCLE=false  # disable recycle bin
       # SHARE=share_name;share_path_in_container;browsable;readonly;allow_guest;allowed_users;admin_users;write_users;comment
-      - SHARE=apps;/apps;yes;no;no;${USER};${USER};;Apps
+      - SHARE=${SAMBA_SHARE1_NAME:-media};/${SAMBA_SHARE1_NAME:-media};yes;no;no;${USER};${USER};;${SAMBA_SHARE1_NAME:-media}
       #- SHARE2=foo;/foo;yes;no;no;${USER};${USER};;Foo
       #- SHARE3=bar;/bar;yes;no;no;${USER};${USER};;Bar
     volumes:  
-      - /apps:/apps 
+      - ${SAMBA_SHARE1_DIR:-./media}:/${SAMBA_SHARE1_NAME:-media} 
       #- /host/foo:/container/foo 
       #- /host/bar:/container/bar 
       - /etc/timezone:/etc/timezone:ro
