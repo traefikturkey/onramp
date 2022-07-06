@@ -45,7 +45,10 @@ $(eval $(EMPTY_TARGETS):;@:)
 # this is the default target run if no other targets are passed to make
 # i.e. if you just type: make
 start: build
-	$(DOCKER_COMPOSE) $(args) up -d --remove-orphans
+	$(DOCKER_COMPOSE) $(args) up -d
+	
+remove-orphans: build
+	$(DOCKER_COMPOSE) $(args) up -d --remove-orphans	
 
 up: build
 	$(DOCKER_COMPOSE) $(args) up --force-recreate --remove-orphans --abort-on-container-exit
