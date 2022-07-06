@@ -1,0 +1,5 @@
+http:
+  middlewares:
+    authelia:
+      forwardAuth:
+        address: "http://authelia:9091/api/verify?rd={{env "AUTHELIA_AUTH_DOMAIN"}}"
