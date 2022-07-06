@@ -25,6 +25,13 @@ else
 	DOCKER_COMPOSE := docker-compose
 endif
 
+# check what editor is available
+ifeq (, $(shell which code))
+	EDITOR := code
+else
+	EDITOR := nano
+endif
+
 # look for the second target word passed to make
 export PASSED_SERVICE := $(word 2,$(MAKECMDGOALS))
 
@@ -100,7 +107,7 @@ build: .env etc/prometheus/conf
 
 .env:
 	cp .env.sample .env
-	nano .env
+	$(EDITOR) .env
 
 etc/prometheus/conf:
 	mkdir -p etc/prometheus/conf
@@ -115,16 +122,19 @@ list-services:
 list-external:
 	@ls -1 ./etc/traefik/available/ | sed -e 's/\.yml$ //'
 
-enable-game:
+etc/$(PASSED_SERVICE):
+	@mkdir -p ./etc/$(PASSED_SERVICE)
+
+enable-game: etc/$(PASSED_SERVICE)
 	@ln -s ../services-available/games/$(PASSED_SERVICE).yml ./services-enabled/$(PASSED_SERVICE).yml || true
 
-enable-service:
+enable-service: etc/$(PASSED_SERVICE)
 	@ln -s ../services-available/$(PASSED_SERVICE).yml ./services-enabled/$(PASSED_SERVICE).yml || true
 
-enable-game-copy:
+enable-game-copy: etc/$(PASSED_SERVICE)
 	@cp ./services-available/games/$(PASSED_SERVICE).yml ./services-enabled/$(PASSED_SERVICE).yml || true
 
-enable-service-copy:
+enable-service-copy: etc/$(PASSED_SERVICE)
 	@cp ./services-available/$(PASSED_SERVICE).yml ./services-enabled/$(PASSED_SERVICE).yml || true
 
 enable-external:
@@ -139,13 +149,9 @@ disable-external:
 	rm ./etc/traefik/enabled/$(PASSED_SERVICE).yml
 
 create-service:
-	mkdir -p ./etc/$(PASSED_SERVICE)
-	touch ./etc/$(PASSED_SERVICE)/.keep
 	envsubst '$${PASSED_SERVICE}' < ./services-available/.service.template > ./services-available/$(PASSED_SERVICE).yml
 
 create-game:
-	mkdir -p ./etc/$(PASSED_SERVICE)
-	touch ./etc/$(PASSED_SERVICE)/.keep
 	envsubst '$${PASSED_SERVICE}' < ./services-available/.service.template > ./services-available/games/$(PASSED_SERVICE).yml
 
 install-node-exporter:

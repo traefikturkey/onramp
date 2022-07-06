@@ -15,7 +15,7 @@ services:
     container_name: mssql
     restart: unless-stopped
     volumes:
-      - ./etc/mssql/db:/var/opt/mssql
+      - ./media/database:/var/opt/mssql
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:

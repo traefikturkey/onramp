@@ -9,6 +9,10 @@ media/*
 !media/*/
 media/*/*
 !media/*/.keep
+!media/*/*/
+media/*/*/*
+!media/*/*/.keep
+
 
 !etc/
 etc/*
