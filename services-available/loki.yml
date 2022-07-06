@@ -23,15 +23,17 @@ services:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=false
 
-  logsprout:
+  logspout:
     image: gliderlabs/logspout
     container_name: logspout
     restart: unless-stopped
-    command: syslog+tls://promtail:1514
+    command: syslog+tcp://promtail:1514
     networks:
       - loki
     depends_on:
       - promtail
+    environment:
+      - SYSLOG_HOSTNAME={{.ContainerName}}
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro

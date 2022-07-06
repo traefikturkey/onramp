@@ -27,6 +27,7 @@ services:
       - /usr/share/zoneinfo:/usr/share/zoneinfo:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
     command:
+      - --api
       - --entryPoints.metrics.address=:8082
       - --metrics.prometheus.entryPoint=metrics
       - --providers.docker
