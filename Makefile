@@ -168,4 +168,4 @@ env:
 
 # super secret mafen clean up command that might work
 # but might destroy all life in the universe
-# rm -rf $(find ./etc -maxdepth 1  -name ".keep")
+# find ./etc -maxdepth 1 -type d -empty -delete
