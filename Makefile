@@ -96,9 +96,7 @@ update: down pull start
 exec:
 	$(DOCKER_COMPOSE) $(args) exec $(PASSED_SERVICE) sh
 
-
-
-build: .env etc/prometheus/conf
+build: .env etc/prometheus/conf 
 
 .env:
 	cp .env.sample .env
