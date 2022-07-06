@@ -128,7 +128,7 @@ enable-service-copy:
 	@cp ./services-available/$(PASSED_SERVICE).yml ./services-enabled/$(PASSED_SERVICE).yml || true
 
 enable-external:
-	@ln -s ../available/$(PASSED_SERVICE).yml ./etc/traefik/enabled/$(PASSED_SERVICE).yml || true
+	@cp ./etc/traefik/enabled/$(PASSED_SERVICE).yml ./etc/traefik/available/$(PASSED_SERVICE).yml || true
 
 disable-game: disable-service
 
