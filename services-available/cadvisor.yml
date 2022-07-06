@@ -11,18 +11,24 @@ services:
     image: gcr.io/cadvisor/cadvisor:latest
     container_name: cadvisor
     restart: unless-stopped
-    privileged: true
+    command:
+      - -allow_dynamic_housekeeping=false
+      - -housekeeping_interval=30s
+      - -storage_duration=1m0s
+      - -docker_only=true
+      #- -disable_metrics=accelerator,cpu_topology,disk,memory_numa,hugetlb,cpuset,advtcp,memory_numa
+    #privileged: true
     devices:
       - /dev/kmsg:/dev/kmsg
     volumes:
       - /:/rootfs:ro
       - /sys:/sys:ro
-      - /cgroup:/cgroup:ro
+      - /sys/fs/cgroup:/cgroup:ro
+      - /dev/disk/:/dev/disk:ro
       - /var/run:/var/run:ro
+      - /var/lib/docker/:/var/lib/docker:ro
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-      - /var/lib/docker/:/var/lib/docker:ro
-      
     labels:
       - org.label-schema.group=monitoring
       - joyride.host.name=cadvisor.${HOST_DOMAIN}
