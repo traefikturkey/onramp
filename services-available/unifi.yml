@@ -15,15 +15,14 @@ services:
       - TZ=${TZ}
       - DB_MONGO_LOCAL=true
     ports:
-      - 3478:3478/udp # stun port
-      - 10001:10001/udp # AP discovery
-      - 8080:8080 # required for device communication
       #- 8443:8443 # web admin
-      #- 1900:1900/udp # l2 discovery
-      #- 8843:8843 # guest portal redirect
       #- 8880:8880 # guest portal redirect
+      - 1900:1900/udp # l2 discovery
+      - 3478:3478/udp # stun port
+      - 5514:5514/udp # remote syslog port
       - 6789:6789 # mobile throughput test
-      #- 5514:5514/udp # remote syslog port
+      - 8080:8080 # required for device communication
+      - 10001:10001/udp # AP discovery
     volumes:
       - ./etc/unifi/data:/usr/lib/unifi/data
       - ./etc/unifi/cert:/usr/lib/unifi/cert
