@@ -17,7 +17,7 @@ services:
     ports:
       #- 8443:8443 # web admin
       #- 8880:8880 # guest portal redirect
-      - 1900:1900/udp # l2 discovery
+      #- 1900:1900/udp # l2 discovery
       - 3478:3478/udp # stun port
       - 5514:5514/udp # remote syslog port
       - 6789:6789 # mobile throughput test
@@ -36,4 +36,5 @@ services:
       - traefik.http.routers.unifi.rule=Host(`unifi.${HOST_DOMAIN}`)
       - traefik.http.services.unifi.loadbalancer.server.scheme=https
       - traefik.http.services.unifi.loadbalancer.server.port=8443
+      - autoheal.stop.timeout=180
       
