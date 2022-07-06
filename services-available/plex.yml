@@ -15,8 +15,8 @@ services:
     # device:
     #   - /dev/dri:/dev/dri
     volumes:
-      - ./etc/plex:/config
-      - ./media:/data
+      - ${PLEX_CONFIG_DIR:-./etc/plex}:/config
+      - ${PLEX_MEDIA_DIR:-./media}:${PLEX_CONTAINER_MEDIA_DIR:-/data}
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     ports:
@@ -33,6 +33,7 @@ services:
     environment:
       - TZ=${TZ}
       - ADVERTISE_IP=https://plex.${HOST_DOMAIN}
+      - ALLOWED_NETWORKS=${HOSTIP}/24
       - PLEX_CLAIM=${PLEX_CLAIM}
       - PLEX_UID=${PUID:-1000}
       - PLEX_GID=${PGID:-1000}

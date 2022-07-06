@@ -11,6 +11,6 @@ services:
       - API_KEY=${CF_DNS_API_TOKEN}
       - ZONE=${HOST_DOMAIN}
       - SUBDOMAIN=${CLOUDFLARE_DDNS_HOSTNAME}
-      - PROXIED=false
+      - PROXIED=${CLOUDFLARE_DDNS_PROXIED:-false}
     labels:
       - traefik.enable=false

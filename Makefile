@@ -10,7 +10,7 @@ disabled_files := $(wildcard services-enabled/disabled-*.yml)
 # when running make commands that call docker compose
 compose_files := $(filter-out $(disabled_files), $(wildcard services-enabled/*.yml)) 
 args := -f docker-compose.yml $(foreach file, $(compose_files), -f $(file))
-args_service := --project-directory ./ -f 
+
 
 # get the boxes ip address and the current users id and group id
 export HOSTIP := $(shell ip route get 1.1.1.1 | grep -oP 'src \K\S+')
@@ -28,8 +28,8 @@ endif
 # look for the second target word passed to make
 export PASSED_SERVICE := $(word 2,$(MAKECMDGOALS))
 
-# used to look for the file in the services-enabled folder when start-service is used 
-SERVICE_FILE = ./services-enabled/$(PASSED_SERVICE).yml
+# used to look for the file in the services-enabled folder when [start|stop|pull]-service is used  
+SERVICE_FILE = --project-directory ./ -f ./services-enabled/$(PASSED_SERVICE).yml
 
 # use the rest as arguments as empty targets aka: MAGIC
 EMPTY_TARGETS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
@@ -40,14 +40,27 @@ $(eval $(EMPTY_TARGETS):;@:)
 start: build
 	$(DOCKER_COMPOSE) $(args) up -d --force-recreate
 
-start-service: build
-	$(DOCKER_COMPOSE) $(args_service) $(SERVICE_FILE) up -d --force-recreate
-
 up: build
 	$(DOCKER_COMPOSE) $(args) up --force-recreate
 
 down: 
 	$(DOCKER_COMPOSE) $(args) down
+
+start-service: COMPOSE_IGNORE_ORPHANS = true 
+start-service: build 
+	$(DOCKER_COMPOSE) $(SERVICE_FILE) up -d --force-recreate $(PASSED_SERVICE)
+ 
+down-service: 
+	$(DOCKER_COMPOSE) $(SERVICE_FILE) stop $(PASSED_SERVICE)
+
+pull-service: 
+	$(DOCKER_COMPOSE) $(SERVICE_FILE) pull $(PASSED_SERVICE)
+
+stop-service: down-service
+
+restart-service: down-service build start-service
+
+update-service: down-service build pull-service start-service
 
 start-staging: build
 	ACME_CASERVER=https://acme-staging-v02.api.letsencrypt.org/directory $(DOCKER_COMPOSE) $(args) up -d --force-recreate
@@ -118,7 +131,7 @@ enable-service-copy:
 	@cp ./services-available/$(PASSED_SERVICE).yml ./services-enabled/$(PASSED_SERVICE).yml || true
 
 enable-external:
-	@ln -s ../available/$(PASSED_SERVICE).yml ./etc/traefik/enabled/$(PASSED_SERVICE).yml || true
+	@cp ./etc/traefik/enabled/$(PASSED_SERVICE).yml ./etc/traefik/available/$(PASSED_SERVICE).yml || true
 
 disable-game: disable-service
 
