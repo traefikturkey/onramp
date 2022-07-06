@@ -165,3 +165,7 @@ echo-service:
 
 env:
 	env | sort
+
+# super secret mafen clean up command that might work
+# but might destroy all life in the universe
+# rm -rf $(find ./etc -maxdepth 1  -name ".keep")
