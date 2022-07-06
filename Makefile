@@ -103,7 +103,10 @@ update: down pull start
 exec:
 	$(DOCKER_COMPOSE) $(args) exec $(PASSED_SERVICE) sh
 
-build: .env etc/prometheus/conf 
+build: .env etc/prometheus/conf etc/authelia/configuration.yml
+
+etc/authelia/configuration.yml:
+	envsubst '$${HOST_DOMAIN}' < ./etc/authelia/configuration.template > ./etc/authelia/configuration.yml
 
 .env:
 	cp .env.sample .env

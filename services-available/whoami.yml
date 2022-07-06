@@ -1,0 +1,30 @@
+version: '3'
+
+networks:
+  default:
+    name: traefik
+    
+# https://hub.docker.com/r/traefik/whoami
+
+services:
+  whoami:
+    image: traefik/whoami
+    container_name: whoami
+    restart: unless-stopped
+    volumes:
+      #- ./etc/whoami:/config # <==== this probably needs changed ====>
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=whoami.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.whoami.entrypoints=websecure
+      - traefik.http.routers.whoami.rule=Host(`whoami.${HOST_DOMAIN}`)
+      - traefik.http.services.whoami.loadbalancer.server.port=80
+      - traefik.http.routers.whoami.middlewares=authelia@docker
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
