@@ -16,7 +16,7 @@ services:
       - UMASK=022
     volumes:
       - ./etc/syncthing:/config
-      - ./media/sync:/sync
+      - ${MEDIA_SYNC_DIR:-./media/sync}:/sync
     ports:
       #- 8384:8384
       - 22000:22000

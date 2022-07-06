@@ -21,8 +21,8 @@ services:
       - .env
     environment:
       - GF_INSTALL_PLUGINS=camptocamp-prometheus-alertmanager-datasource
-    ports:
-      - 3000:3000
+    # ports:
+    #   - 3000:3000
     volumes:
       - ./etc/grafana:/var/lib/grafana
       - ./etc/grafana/provisioning:/etc/grafana/provisioning

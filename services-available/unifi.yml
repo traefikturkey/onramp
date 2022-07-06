@@ -6,7 +6,7 @@ networks:
 
 services:
   unifi:
-    image: ghcr.io/goofball222/unifi:latest-ubuntu
+    image: ghcr.io/goofball222/unifi:${UNIFI_DOCKER_TAG:-latest-ubuntu}
     container_name: unifi-controller
     restart: unless-stopped
     environment:
