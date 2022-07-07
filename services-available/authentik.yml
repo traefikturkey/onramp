@@ -4,35 +4,51 @@ networks:
   default:
     name: traefik
 
+# https://goauthentik.io/docs/installation/docker-compose
+# https://github.com/goauthentik/authentik
+# https://goauthentik.io/docs/
+# https://www.postgresql.org/
 
 services:
   postgresql:
     image: postgres
+    container_name: authentik_postgresql
     restart: unless-stopped
-    container_name: postgres
+    healthcheck:
+      test: [ "CMD", "pg_isready" ]
+      start_period: 20s
+      interval: 30s
+      retries: 5
+      timeout: 5s
     volumes:
-      - ./media/databases/postgres:/var/lib/postgresql/data
+      - ./etc/authentik/postgresql:/var/lib/postgresql/data
     environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
-      - POSTGRES_PASSWORD=${PG_PASS:?database password required}
+      - POSTGRES_PASSWORD=${PG_PASS_AUTHENTIK:?database password required}
       - POSTGRES_USER=${PG_USER:-authentik}
       - POSTGRES_DB=${PG_DB:-authentik}
     env_file:
       - .env
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true    
   redis:
     image: redis:alpine
+    container_name: authentik_redis
     restart: unless-stopped
-    container_name: redis
     healthcheck:
       test: [ "CMD-SHELL", "redis-cli ping | grep PONG" ]
       start_period: 20s
       interval: 30s
       retries: 5
       timeout: 3s
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true  
   server:
-    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2022.6.2}
-    container_name: server
+    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2022.7.2}
+    container_name: authentik_server
     restart: unless-stopped
     command: server
     environment:
@@ -42,52 +58,57 @@ services:
       - AUTHENTIK_POSTGRESQL__HOST=postgresql
       - AUTHENTIK_POSTGRESQL__USER=${PG_USER:-authentik}
       - AUTHENTIK_POSTGRESQL__NAME=${PG_DB:-authentik}
-      - AUTHENTIK_POSTGRESQL__PASSWORD= ${PG_PASS}
-      - AUTHENTIK_LOG_LEVEL= debug
-      # AUTHENTIK_ERROR_REPORTING__ENABLED= "true"
+      - AUTHENTIK_POSTGRESQL__PASSWORD=${PG_PASS_AUTHENTIK}
+      - AUTHENTIK_LOG_LEVEL=debug
+      # AUTHENTIK_ERROR_REPORTING__ENABLED: "true"
       # WORKERS: 2
+    user: authentik
     volumes:
-      - ./media:/media
-      - ./custom-templates:/templates
-    #  - geoip:/geoip
+      - ./etc/authentik/media:/media
+      - ./etc/authentik/certs:/certs
+      - /var/run/docker.sock:/var/run/docker.sock:ro
     env_file:
       - .env
     labels:
-      - joyride.host.name=authentik.${HOST_DOMAIN}
-      - "traefik.enable=true"
-      - "traefik.http.routers.authentik.entrypoints=websecure"
-      - "traefik.http.routers.authentik.rule=Host(`authentik.${HOST_DOMAIN}`) || HostRegexp(`{subdomain:[a-z]+}.${HOST_DOMAIN}`) && PathPrefix(`/outpost.goauthentik.io/`)"
-      - "traefik.http.routers.authentik.service=authentik"
-      - "traefik.http.services.authentik.loadbalancer.server.port=9000"
-      - "traefik.http.middlewares.authentik.forwardauth.address=http://server:9000/outpost.goauthentik.io/auth/traefik"
-      - "traefik.http.middlewares.authentik.forwardauth.trustForwardHeader=true"
-      - "traefik.http.middlewares.authentik.forwardauth.authResponseHeaders=X-authentik-username,X-authentik-groups,X-authentik-email,X-authentik-name,X-authentik-uid,X-authentik-jwt,X-authentik-meta-jwks,X-authentik-meta-outpost,X-authentik-meta-provider,X-authentik-meta-app,X-authentik-meta-version"
+      - joyride.host.name=auth.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.authentik.entrypoints=websecure
+      - traefik.http.routers.authentik.rule=Host(`auth.${HOST_DOMAIN}`) || HostRegexp(`{subdomain:[a-z]+}.${HOST_DOMAIN}`) && PathPrefix(`/outpost.goauthentik.io/`)
+      - traefik.http.services.authentik.loadbalancer.server.port=9000
+      - traefik.http.middlewares.authentik.forwardauth.address=http://server:9000/outpost.goauthentik.io/auth/traefik
+      - traefik.http.middlewares.authentik.forwardauth.trustForwardHeader=true
+      - traefik.http.middlewares.authentik.forwardauth.authResponseHeaders=X-authentik-username,X-authentik-groups,X-authentik-email,X-authentik-name,X-authentik-uid,X-authentik-jwt,X-authentik-meta-jwks,X-authentik-meta-outpost,X-authentik-meta-provider,X-authentik-meta-app,X-authentik-meta-version
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
   worker:
-    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2022.6.2}
-    container_name: worker
+    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2022.7.2}
+    container_name: authentik_worker
     restart: unless-stopped
     command: worker
     environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
-      - AUTHENTIK_REDIS__HOST="redis"
-      - AUTHENTIK_POSTGRESQL__HOST="postgresql"
+      - AUTHENTIK_REDIS__HOST=redis
+      - AUTHENTIK_POSTGRESQL__HOST=postgresql
       - AUTHENTIK_POSTGRESQL__USER=${PG_USER:-authentik}
       - AUTHENTIK_POSTGRESQL__NAME=${PG_DB:-authentik}
-      - AUTHENTIK_POSTGRESQL__PASSWORD=${PG_PASS}
+      - AUTHENTIK_POSTGRESQL__PASSWORD=${PG_PASS_AUTHENTIK}
       # AUTHENTIK_ERROR_REPORTING__ENABLED: "true"
       # This is optional, and can be removed. If you remove this, the following will happen
       # - The permissions for the /media folders aren't fixed, so make sure they are 1000:1000
       # - The docker socket can't be accessed anymore
-    user: root
+    user: authentik
     volumes:
-      - ./media:/media
-      - ./certs:/certs
+      - ./etc/authentik/media:/media
+      - ./etc/authentik/certs:/certs
       - /var/run/docker.sock:/var/run/docker.sock
-      #- ./custom-templates:/templates
-      #- geoip:/geoip
+      - ./etc/authentik/custom-templates:/templates
+      #- ./etc/authentik/geoip:/geoip
     env_file:
-      - .env
+      - .env  
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true  
   # geoipupdate:
   #   image: "maxmindinc/geoipupdate:latest"
   #   volumes:
@@ -100,4 +121,6 @@ services:
   #   env_file:
   #     - .env
 
-
+# volumes:
+#   geoip:
+#     driver: local
