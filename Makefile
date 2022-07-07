@@ -59,12 +59,22 @@ down:
 start-service: COMPOSE_IGNORE_ORPHANS = true 
 start-service: build 
 	$(DOCKER_COMPOSE) $(SERVICE_FILE) up -d --force-recreate $(PASSED_SERVICE)
- 
+
+start-compose: COMPOSE_IGNORE_ORPHANS = true 
+start-compose: build 
+	$(DOCKER_COMPOSE) $(SERVICE_FILE) up -d --force-recreate
+
 down-service: 
 	$(DOCKER_COMPOSE) $(SERVICE_FILE) stop $(PASSED_SERVICE)
 
+down-compose: 
+	$(DOCKER_COMPOSE) $(SERVICE_FILE) stop
+
 pull-service: 
 	$(DOCKER_COMPOSE) $(SERVICE_FILE) pull $(PASSED_SERVICE)
+
+pull-compose: 
+	$(DOCKER_COMPOSE) $(SERVICE_FILE) pull
 
 stop-service: down-service
 
