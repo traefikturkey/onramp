@@ -1,0 +1,34 @@
+version: '3'
+
+networks:
+  default:
+    name: traefik
+    
+https://hub.docker.com/_/postgres
+
+services:
+  postgres:
+    image: postgres/postgres
+    container_name: postgres
+    restart: unless-stopped
+    volumes:
+      - ./etc/postgres:/var/lib/postgresql/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - POSTGRES_PASSWORD=${PG_PASS:?database password required}
+      - POSTGRES_USER=${PG_USER:-admin}
+      - POSTGRES_DB=${PG_DB:-admin}
+    ports:
+    - 55432:5432
+    labels:
+      - joyride.host.name=postgres.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.postgres.entrypoints=websecure
+      - traefik.http.routers.postgres.rule=Host(`postgres.${HOST_DOMAIN}`)
+      - traefik.http.services.postgres.loadbalancer.server.port=8096
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
