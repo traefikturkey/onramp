@@ -12,7 +12,7 @@ services:
     container_name: portainer
     restart: unless-stopped
     volumes:
-      - ./etc/portainer:/app/data
+      - ./etc/portainer:/data
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock
