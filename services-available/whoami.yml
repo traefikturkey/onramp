@@ -25,6 +25,7 @@ services:
       - traefik.http.routers.whoami.entrypoints=websecure
       - traefik.http.routers.whoami.rule=Host(`whoami.${HOST_DOMAIN}`)
       - traefik.http.services.whoami.loadbalancer.server.port=80
-      - traefik.http.routers.whoami.middlewares=authelia@docker
+      - traefik.http.routers.whoami.middlewares=authentik@docker
+      #- traefik.http.routers.whoami.middlewares=authelia@docker
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
