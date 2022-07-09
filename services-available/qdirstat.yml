@@ -1,0 +1,34 @@
+version: '3'
+
+networks:
+  default:
+    name: traefik
+    
+# https://github.com/jlesage/docker-qdirstat
+
+services:
+  qdirstat:
+    image: jlesage/qdirstat
+    container_name: qdirstat
+    restart: unless-stopped
+    cap_add:
+      - SYS_NICE
+    environment:
+      - USER_ID=${PUID:-1000}
+      - GROUP_ID=${PGID:-1000}
+      - TZ=${TZ}
+      - KEEP_APP_RUNNING=1
+      - APP_NICENESS=10
+    volumes:
+      - ./etc/qdirstat:/config 
+      - /media:/media
+      - /apps:/apps
+      - /sync:/sync
+    labels:
+      - joyride.host.name=qdirstat.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.qdirstat.entrypoints=websecure
+      - traefik.http.routers.qdirstat.rule=Host(`qdirstat.${HOST_DOMAIN}`)
+      - traefik.http.services.qdirstat.loadbalancer.server.port=5800
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
