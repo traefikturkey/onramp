@@ -25,12 +25,9 @@ services:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=${MSSQL_SA_PASSWORD}
     ports:
-      - 14333:1433
+      - 1433:1433
     labels:
       - joyride.host.name=mssql.${HOST_DOMAIN}
-      - traefik.enable=true
-      - traefik.http.routers.mssql.entrypoints=websecure
-      - traefik.http.routers.mssql.rule=Host(`mssql.${HOST_DOMAIN}`)
-      - traefik.http.services.mssql.loadbalancer.server.port=1433
+      - traefik.enable=false
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
