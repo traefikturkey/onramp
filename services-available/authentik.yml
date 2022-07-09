@@ -14,6 +14,7 @@ services:
     image: postgres
     container_name: authentik_postgresql
     restart: unless-stopped
+    user: "1000:1000"
     healthcheck:
       test: [ "CMD", "pg_isready" ]
       start_period: 20s
