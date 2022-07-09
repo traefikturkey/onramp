@@ -21,9 +21,7 @@ services:
       - APP_NICENESS=10
     volumes:
       - ./etc/qdirstat:/config 
-      - /media:/media
-      - /apps:/apps
-      - /sync:/sync
+      - ${PLEX_MEDIA_DIR:-./media}:/storage
     labels:
       - joyride.host.name=qdirstat.${HOST_DOMAIN}
       - traefik.enable=true
