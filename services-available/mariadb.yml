@@ -23,12 +23,9 @@ services:
       - MYSQL_PASSWORD=admin
       - MYSQL_ROOT_PASSWORD=admin
     ports:
-      - 33306:3306
+      - 3306:3306
     labels:
       - joyride.host.name=mariadb.${HOST_DOMAIN}
-      - traefik.enable=true
-      - traefik.http.routers.mariadb.entrypoints=websecure
-      - traefik.http.routers.mariadb.rule=Host(`mariadb.${HOST_DOMAIN}`)
-      - traefik.http.services.mariadb.loadbalancer.server.port=8096
+      - traefik.enable=false
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
