@@ -65,10 +65,10 @@ start-compose: build
 	$(DOCKER_COMPOSE) $(SERVICE_FILE) up -d --force-recreate
 
 down-service: 
-	$(DOCKER_COMPOSE) $(SERVICE_FILE) stop $(PASSED_SERVICE)
+	-$(DOCKER_COMPOSE) $(SERVICE_FILE) stop $(PASSED_SERVICE)
 
 down-compose: 
-	$(DOCKER_COMPOSE) $(SERVICE_FILE) stop
+	-$(DOCKER_COMPOSE) $(SERVICE_FILE) stop
 
 pull-service: 
 	$(DOCKER_COMPOSE) $(SERVICE_FILE) pull $(PASSED_SERVICE)
