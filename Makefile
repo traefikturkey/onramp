@@ -101,7 +101,7 @@ down-staging:
 
 clean-acme:
 	@echo "cleaning up staging certificates"
-	sudo rm etc/letsencrypt/acme.json
+	sudo rm etc/traefik/letsencrypt/acme.json
 
 pull:
 	$(DOCKER_COMPOSE) $(args) pull
