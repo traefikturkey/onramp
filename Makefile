@@ -173,6 +173,12 @@ create-game:
 install-node-exporter:
 	curl -s https://gist.githubusercontent.com/ilude/2cf7a3b7712378c6b9bcf1e1585bf70f/raw/setup_node_exporter.sh?$(date +%s) | /bin/bash -s | tee build.log
 
+export-backup:
+	sudo tar -cvzf traefik-config-backup.tar.gz ./etc ./services-enabled .env
+
+import-backup:
+	sudo bar -xvf traefik-config-backup.tar.gz
+
 echo:
 	@echo $(args)
 

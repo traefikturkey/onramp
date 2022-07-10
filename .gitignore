@@ -1,5 +1,8 @@
 .env
 *.log
+*.code-workspace
+*.tar
+*.tar.gz
 services-enabled/*.yml
 
 # https://theapache64.github.io/git-do-not-ignore/
