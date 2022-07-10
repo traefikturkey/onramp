@@ -104,6 +104,24 @@ and disabled with the following:
 make disable-external proxmox
 make restart
 ```
+## Backing up Configuration
+
+### create backup file
+```
+make export-backup
+```
+this will create a traefik-config-backup.tar.gz in the project directory
+
+### copy backup file to another machine
+```
+scp traefik-config-backup.tar.gz <user>@<other_host>:/apps/traefik-setup
+```
+
+### restore backup file on the other machine
+```
+make import-backup
+```
+
 ## Other make commands
 
 Then you can run any of the following:
