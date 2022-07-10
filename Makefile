@@ -177,7 +177,7 @@ export-backup:
 	sudo tar -cvzf traefik-config-backup.tar.gz ./etc ./services-enabled .env
 
 import-backup:
-	sudo bar -xvf traefik-config-backup.tar.gz
+	sudo tar -xvf traefik-config-backup.tar.gz
 
 echo:
 	@echo $(args)
