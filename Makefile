@@ -191,7 +191,3 @@ echo-service:
 
 env:
 	env | sort
-
-# super secret mafen clean up command that might work
-# but might destroy all life in the universe
-# find ./etc -maxdepth 1 -type d -empty -delete
