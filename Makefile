@@ -34,6 +34,7 @@ endif
 
 # look for the second target word passed to make
 export PASSED_SERVICE := $(word 2,$(MAKECMDGOALS))
+export ETC_SERVICE := $(subst nfs-,,$(PASSED_SERVICE))
 
 # used to look for the file in the services-enabled folder when [start|stop|pull]-service is used  
 SERVICE_FILE = --project-directory ./ -f ./services-enabled/$(PASSED_SERVICE).yml
@@ -139,10 +140,10 @@ list-services:
 list-external:
 	@ls -1 ./etc/traefik/available/ | sed -e 's/\.yml$ //'
 
-etc/$(PASSED_SERVICE):
-	@mkdir -p ./etc/$(PASSED_SERVICE)
+etc/$(ETC_SERVICE):
+	@mkdir -p ./etc/$(ETC_SERVICE)
 
-enable-game: etc/$(PASSED_SERVICE)
+enable-game: etc/$(ETC_SERVICE)
 	@ln -s ../services-available/games/$(PASSED_SERVICE).yml ./services-enabled/$(PASSED_SERVICE).yml || true
 
 enable-service: etc/$(PASSED_SERVICE) services-enabled/$(PASSED_SERVICE).yml
@@ -177,7 +178,7 @@ install-node-exporter:
 	curl -s https://gist.githubusercontent.com/ilude/2cf7a3b7712378c6b9bcf1e1585bf70f/raw/setup_node_exporter.sh?$(date +%s) | /bin/bash -s | tee build.log
 
 export-backup:
-	sudo tar -cvzf traefik-config-backup.tar.gz ./etc ./services-enabled .env
+	sudo tar -cvzf traefik-config-backup.tar.gz ./etc ./services-enabled .env || true
 
 import-backup:
 	sudo tar -xvf traefik-config-backup.tar.gz

@@ -11,16 +11,8 @@ volumes:
       - traefik-repo-volume-type=nfs
     driver_opts:
       type: nfs
-      o: "addr=${PLEX_NFS_SERVER},nolock,noatime,soft,rw"
+      o: "addr=${PLEX_MEDIA_NFS_SERVER},nolock,noatime,soft,rw"
       device: ":${PLEX_MEDIA_NFS_SERVER_PATH}"
-  plex-nfs-config:
-    name: plex-nfs-config
-    labels:
-      - traefik-repo-volume-type=nfs
-    driver_opts:
-      type: nfs
-      o: "addr=${PLEX_NFS_SERVER},nolock,noatime,soft,rw"
-      device: ":${PLEX_CONFIG_NFS_SERVER_PATH}"
     
 # https://github.com/plexinc/pms-docker
 
@@ -33,7 +25,7 @@ services:
     # device:
     #   - /dev/dri:/dev/dri
     volumes:
-      - ${PLEX_CONFIG_NFS_VOLUME:-plex-nfs-config}:/config
+      - ${PLEX_CONFIG_VOLUME:-./etc/plex}:/config
       - ${PLEX_MEDIA_NFS_VOLUME:-plex-nfs-media}:${PLEX_CONTAINER_MEDIA_DIR:-/data}
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
