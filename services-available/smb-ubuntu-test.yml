@@ -14,7 +14,7 @@ volumes:
       device: "//${SMB_SERVER}/share/path"
 
 services:
-  ubuntu-smb-test:
+  ubuntu-test:
     image: ubuntu-smb-test
     container_name: ubuntu-smb-test
     restart: on-failure
