@@ -8,7 +8,7 @@ volumes:
   plex-nfs-media:
     name: plex-nfs-media
     labels:
-      - traefik-repo-volume-type=nfs
+      - remove_volume_on=down
     driver_opts:
       type: nfs
       o: "addr=${PLEX_MEDIA_NFS_SERVER},nolock,noatime,soft,rw"

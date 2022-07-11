@@ -8,7 +8,7 @@ volumes:
   qdirstat-nfs-volume:
     name: qdirstat-nfs-volume
     labels:
-      - traefik-repo-volume-type=nfs
+      - remove_volume_on=down
     driver_opts:
       type: nfs
       o: "addr=${QDIRSTAT_NFS_SERVER},nolock,noatime,soft,rw"

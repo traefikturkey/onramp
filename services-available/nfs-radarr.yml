@@ -8,7 +8,7 @@ volumes:
   radarr-nfs-media:
     name: radarr-nfs-media
     labels:
-      - traefik-repo-volume-type=nfs
+      - remove_volume_on=down
     driver_opts:
       type: nfs
       o: "addr=${RADARR_MEDIA_NFS_SERVER},nolock,noatime,soft,rw"
