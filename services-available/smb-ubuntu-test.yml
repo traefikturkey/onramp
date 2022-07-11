@@ -1,0 +1,22 @@
+version: "3"
+
+# an smb mount example
+
+volumes:
+  ubuntu-smb-volume:
+    name: ubuntu-smb-volume
+    labels:
+      - project_volume_cleanup=down
+    driver: local
+    driver_opts:
+      type: "cifs"
+      o: "addr=${SMB_SERVER},user=${SMB_USERNAME},password=${SMB_PASSWORD},domain=${SMB_DOMAIN_NAME}"
+      device: "//${SMB_SERVER}/share/path"
+
+services:
+  ubuntu-smb-test:
+    image: ubuntu-smb-test
+    container_name: ubuntu-smb-test
+    restart: on-failure
+    volumes:
+      - ubuntu-smb-volume:/mnt

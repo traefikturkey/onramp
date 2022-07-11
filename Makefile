@@ -56,7 +56,7 @@ up: build
 
 down: 
 	-$(DOCKER_COMPOSE) $(args) down --remove-orphans
-	-docker volume ls --quiet --filter "label=traefik-repo-volume-type=nfs" | xargs -r docker volume rm
+	-docker volume ls --quiet --filter "label=remove_volume_on=down" | xargs -r docker volume rm
 
 start-service: COMPOSE_IGNORE_ORPHANS = true 
 start-service: build enable-service

@@ -8,7 +8,7 @@ volumes:
   sonarr-nfs-media:
     name: sonarr-nfs-media
     labels:
-      - traefik-repo-volume-type=nfs
+      - remove_volume_on=down
     driver_opts:
       type: nfs
       o: "addr=${SONARR_MEDIA_NFS_SERVER},nolock,noatime,soft,rw"
