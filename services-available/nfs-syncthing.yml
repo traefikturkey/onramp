@@ -1,0 +1,41 @@
+version: '3'
+
+networks:
+  default:
+    name: traefik
+
+volumes:
+  syncthing-nfs-media:
+    name: syncthing-nfs-media
+    labels:
+      - traefik-repo-volume-type=nfs
+    driver_opts:
+      type: nfs
+      o: "addr=${SYNCTHING_MEDIA_NFS_SERVER},nolock,noatime,soft,rw"
+      device: ":${SYNCTHING_MEDIA_NFS_SERVER_PATH}"
+
+services:
+  nfs-syncthing:
+    image: linuxserver/syncthing:latest
+    container_name: syncthing
+    restart: unless-stopped
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - UMASK=022
+    volumes:
+      - ./etc/syncthing:/config
+      - ${SYNCTHING_MEDIA_NFS_VOLUME:-syncthing-nfs-media}:/sync
+    ports:
+      #- 8384:8384
+      - 22000:22000
+      - 21027:21027/udp
+    labels:
+      - joyride.host.name=sync.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.sync.entrypoints=websecure
+      - traefik.http.routers.sync.rule=Host(`sync.${HOST_DOMAIN}`)
+      - traefik.http.services.sync.loadbalancer.server.port=8384
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true

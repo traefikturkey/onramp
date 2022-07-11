@@ -54,10 +54,11 @@ up: build
 	$(DOCKER_COMPOSE) $(args) up --force-recreate --remove-orphans --abort-on-container-exit
 
 down: 
-	$(DOCKER_COMPOSE) $(args) down --remove-orphans
+	-$(DOCKER_COMPOSE) $(args) down --remove-orphans
+	-docker volume ls --quiet --filter "label=traefik-repo-volume-type=nfs" | xargs -r docker volume rm
 
 start-service: COMPOSE_IGNORE_ORPHANS = true 
-start-service: build 
+start-service: build enable-service
 	$(DOCKER_COMPOSE) $(SERVICE_FILE) up -d --force-recreate $(PASSED_SERVICE)
 
 start-compose: COMPOSE_IGNORE_ORPHANS = true 
@@ -144,7 +145,9 @@ etc/$(PASSED_SERVICE):
 enable-game: etc/$(PASSED_SERVICE)
 	@ln -s ../services-available/games/$(PASSED_SERVICE).yml ./services-enabled/$(PASSED_SERVICE).yml || true
 
-enable-service: etc/$(PASSED_SERVICE)
+enable-service: etc/$(PASSED_SERVICE) services-enabled/$(PASSED_SERVICE).yml
+
+services-enabled/$(PASSED_SERVICE).yml:
 	@ln -s ../services-available/$(PASSED_SERVICE).yml ./services-enabled/$(PASSED_SERVICE).yml || true
 
 enable-game-copy: etc/$(PASSED_SERVICE)
