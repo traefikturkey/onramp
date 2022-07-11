@@ -1,0 +1,18 @@
+version: "3"
+
+volumes:
+  nfs-ubuntu-volume:
+    name: nfs-ubuntu-volume
+    driver_opts:
+      type: nfs
+      o: "addr=${NFS_SERVER},nolock,noatime,soft,rw"
+      device: ":${NFS_SERVER_PATH}"
+
+
+services:
+  nfs-ubuntu-test:
+    image: ubuntu
+    container_name: nfs-ubuntu-test
+    restart: on-failure
+    volumes:
+      - ${UBUNTU_NFS_VOLUME:-nfs-ubuntu-volume}:/mnt

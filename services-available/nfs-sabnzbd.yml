@@ -1,0 +1,50 @@
+version: '3'
+
+networks:
+  default:
+    name: traefik
+
+volumes:
+  sabnzbd-nfs-download:
+    name: sabnzbd-nfs-download
+    labels:
+      - traefik-repo-volume-type=nfs
+    driver_opts:
+      type: nfs
+      o: "addr=${SABNZBD_DOWNLOAD_NFS_SERVER},nolock,noatime,soft,rw"
+      device: ":${SABNZBD_DOWNLOAD_NFS_SERVER_PATH}"
+
+# https://hub.docker.com/r/linuxserver/sabnzbd
+
+services:
+  nfs-sabnzbd: 
+    image: linuxserver/sabnzbd
+    container_name: sabnzbd
+    restart: unless-stopped
+    hostname: sabnzbd.${HOST_DOMAIN}
+    volumes:
+      - ./etc/sabnzbd:/config
+      - ${SABNZBD_DOWNLOAD_NFS_VOLUME:-sabnzbd-nfs-download}:/downloads
+      - /dev/rtc:/dev/rtc:ro
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    #ports:
+      # - 8181:8080 needed to do a fresh setup because of hostname whitelist
+    environment: 
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    healthcheck:
+      test: curl --fail http://localhost:8080 || exit 1
+      interval: 60s
+      retries: 5
+      start_period: 20s
+      timeout: 10s
+    labels:
+      - joyride.host.name=sabnzbd.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.sabnzbd.entrypoints=websecure
+      - traefik.http.routers.sabnzbd.rule=Host(`sabnzbd.${HOST_DOMAIN}`)
+      - traefik.http.services.sabnzbd.loadbalancer.server.port=8080
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
