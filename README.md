@@ -14,7 +14,7 @@ and an API token created like so
 if you need to you can run the following to do the basic setup automagically
 
 ```
-sudo apt install git make -y
+sudo apt install git make nano -y
 
 sudo mkdir /apps
 sudo chown -R $USER:$USER /apps
