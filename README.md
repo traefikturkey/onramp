@@ -14,12 +14,12 @@ and an API token created like so
 if you need to you can run the following to do the basic setup automagically
 
 ```
-sudo apt install git -y
+sudo apt install git make -y
 
 sudo mkdir /apps
 sudo chown -R $USER:$USER /apps
 git clone https://github.com/ilude/traefik-setup-docker-compose.git traefik-setup
-cd traefik-setup
+cd /apps/traefik-setup
 
 make start-staging
 
