@@ -18,8 +18,9 @@ sudo apt install git make nano -y
 
 sudo mkdir /apps
 sudo chown -R $USER:$USER /apps
+cd /apps
 git clone https://github.com/ilude/traefik-setup-docker-compose.git traefik-setup
-cd /apps/traefik-setup
+cd traefik-setup
 
 make start-staging
 ```
