@@ -8,20 +8,18 @@ networks:
 
 services:
   mindustry:
-    image: ich777/mindustry-server
-    container_name: mindustry
-    restart: unless-stopped
+    image: ich777/mindustry-server:${MINDUSTRY_VERSION:-latest}
+    container_name: ${MINDUSTRY_CONTAINER_NAME:-mindustry}
+    hostname: ${MINDUSTRY_HOSTNAME:-mindustry}
+    restart: ${MINDUSTRY_RESTART_POLICY:-unless-stopped}
     environment:
-      - SRV_NAME="MindustryServer"
+      - SRV_NAME="${MINDUSTRY_SRV_NAME:-MindustryServer}"
       - UID=${PUID:-1000}
       - GID=${PGID:-1000}
     volumes:
-      - ./etc/mindustry:/config
+      - ./etc/games/${MINDUSTRY_HOSTNAME:-mindustry}:/config
     labels:
-      - joyride.host.name=mindustry.${HOST_DOMAIN}
-      - traefik.enable=true
-      - traefik.http.routers.mindustry.entrypoints=websecure
-      - traefik.http.routers.mindustry.rule=Host(`mindustry.${HOST_DOMAIN}`)
-      - traefik.http.services.mindustry.loadbalancer.server.port=8096
+      - joyride.host.name=${MINDUSTRY_HOSTNAME:-mindustry}.${HOST_DOMAIN}
+      - traefik.enable=false
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true

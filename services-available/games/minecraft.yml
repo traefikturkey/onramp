@@ -1,0 +1,31 @@
+version: '3.8'
+
+networks:
+  default:
+    name: ${FACTORIO_NETWORK:-games}
+
+# https://hub.docker.com/r/itzg/minecraft-server
+
+services:
+  minecraft:
+    image: itzg/minecraft-server:${MINCRAFT_VERSION:-latest}
+    container_name: ${MINCRAFT_CONTAINER_NAME:-minecraft-paper}
+    hostname: ${MINECRAFT_HOSTNAME:-minecraft}
+    restart: ${MINCRAFT_RESTART_POLICY:-unless-stopped}
+    environment:
+      EULA: true
+      ENABLE_RCON: ${MINCRAFT_ENABLE_RCON:-true}
+      TYPE: ${MINCRAFT_TYPE:-PAPER}
+      VIEW_DISTANCE: ${MINCRAFT_VIEW_DISTANCE:-10}
+      MEMORY: ${MINCRAFT_MEMORY:-2G}
+      CONSOLE: ${MINCRAFT_CONSOLE:-false}
+      VANILLATWEAKS_SHARECODE: ${MINCRAFT_VANILLATWEAKS_SHARECODE:-jjOJob,o85sA9,lJvdCt}
+    ports:
+      - ${MINCRAFT_PORT:-25565}:25565
+    volumes:
+      - ./etc/games/${MINECRAFT_HOSTNAME:-minecraft}:/data
+    labels:
+      - joyride.host.name=${MINECRAFT_HOSTNAME:-minecraft}.${HOST_DOMAIN}
+      - traefik.enable=false
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
