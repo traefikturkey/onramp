@@ -14,27 +14,26 @@ and an API token created like so
 if you need to you can run the following to do the basic setup automagically
 
 ```
-sudo apt install git -y
+sudo apt install git make nano -y
 
 sudo mkdir /apps
 sudo chown -R $USER:$USER /apps
+cd /apps
 git clone https://github.com/ilude/traefik-setup-docker-compose.git traefik-setup
 cd traefik-setup
 
 make start-staging
+```
 
-# edit the .env file to include cloudflare credenitals
-# your domain and the hostname of the current machine
-# save the file by typing ctrl-x followed by the letter y
-# traefik will start and attempt to obtain a staging certificate
-# wait and then follow the on screen directions
+edit the .env file to include cloudflare credenitals your domain and the hostname of the current machine save the file by typing ctrl-x followed by the letter  traefik will start and attempt to obtain a staging certificate wait and then follow the on screen directions
 
+```
 make down-staging
+```
+you are now ready to bring things up with the production certificates
 
-# you are now ready to bring things up with the production certificates
-
+```
 make
-
 ```
 
 ## Docker Services
