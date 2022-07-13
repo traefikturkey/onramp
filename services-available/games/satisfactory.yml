@@ -29,3 +29,8 @@ services:
       - AUTOSAVEONDISCONNECT=${SATISFACTORY_AUTOSAVEONDISCONNECT:-true}
       - DISABLESEASONALEVENTS=${SATISFACTORY_DISABLESEASONALEVENTS:-false}
       - SKIPUPDATE=${SATISFACTORY_SKIPUPDATE:-false} # on container restart
+    labels:
+      - joyride.host.name=${SATISFACTORY_HOSTNAME:-satisfactory}.${HOST_DOMAIN}
+      - traefik.enable=false
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
