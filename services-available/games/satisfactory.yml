@@ -2,31 +2,30 @@ version: '3'
 
 networks:
   default:
-    name: games
+    name: ${SATISFACTORY_NETWORK:-games}
 
 # https://github.com/wolveix/satisfactory-server
 
 services:
-  satisfactory-server:
-    image: wolveix/satisfactory-server:latest
-    container_name: satisfactory
-    hostname: satisfactory
-    restart: unless-stopped
+  satisfactory:
+    image: wolveix/satisfactory-server:${SATISFACTORY_VERSION:-latest}
+    container_name: ${SATISFACTORY_CONTAINER_NAME:-satisfactory}
+    hostname: ${SATISFACTORY_HOSTNAME:-satisfactory}
+    restart: ${SATISFACTORY_RESTART_POLICY:-unless-stopped}
     ports:
-      - 7777:7777/udp
-      - 15000:15000/udp
-      - 15777:15777/udp
+      - ${SATISFACTORY_PORT_7777:-7777}:7777/udp
+      - ${SATISFACTORY_PORT_15000:-15000}:15000/udp
+      - ${SATISFACTORY_PORT_15777:-15777}:15777/udp
     volumes:
-      - /mnt/data/config/satisfactory:/config
+      - ./etc/games/satisfactory:/config
     environment:
-      - MAXPLAYERS=4
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000} 
-      - STEAMBETA=true # enable experimental branch
-      - AUTOPAUSE=true # should server world run when no one logged in
-      - AUTOSAVEINTERVAL=3600 # in seconds
-      - AUTOSAVENUM=72 # number of saves to keep
-      - AUTOSAVEONDISCONNECT=true
-      - DISABLESEASONALEVENTS=false
-      - SKIPUPDATE=false # on container restart
-
+      - MAXPLAYERS=${SATISFACTORY_MAXPLAYERS:-4}
+      - STEAMBETA=${SATISFACTORY_STEAMBETA:-true} # enable experimental branch
+      - AUTOPAUSE=${SATISFACTORY_AUTOPAUSE:-true} # should server world run when no one logged in
+      - AUTOSAVEINTERVAL=${SATISFACTORY_AUTOSAVEINTERVAL:-3600} # in seconds
+      - AUTOSAVENUM=${SATISFACTORY_AUTOSAVENUM:-72} # number of saves to keep
+      - AUTOSAVEONDISCONNECT=${SATISFACTORY_AUTOSAVEONDISCONNECT:-true}
+      - DISABLESEASONALEVENTS=${SATISFACTORY_DISABLESEASONALEVENTS:-false}
+      - SKIPUPDATE=${SATISFACTORY_SKIPUPDATE:-false} # on container restart
