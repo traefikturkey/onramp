@@ -5,6 +5,7 @@ networks:
     name: traefik
     
 # https://github.com/plexinc/pms-docker
+# https://www.plex.tv/claim
 
 services:
   plex:

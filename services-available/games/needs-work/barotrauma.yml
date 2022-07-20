@@ -24,9 +24,6 @@ services:
       - DEFAULT_OWNER_STEAMID=5566778899 
     labels:
       - joyride.host.name=barotrauma.${HOST_DOMAIN}
-      - traefik.enable=true
-      - traefik.http.routers.barotrauma.entrypoints=websecure
-      - traefik.http.routers.barotrauma.rule=Host(`barotrauma.${HOST_DOMAIN}`)
-      - traefik.http.services.barotrauma.loadbalancer.server.port=8096
+      - traefik.enable=false
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true

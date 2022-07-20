@@ -1,0 +1,38 @@
+version: '3'
+
+networks:
+  default:
+    name: games
+    
+# https://richardpricejones.medium.com/how-to-create-your-own-rust-server-c37c49d22919
+
+services:
+  rust:
+    image: didstopia/rust-server
+    container_name: rust
+    restart: unless-stopped
+    volumes:
+      - ./etc/games/rust:/steamcmd/rust
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 28015:28015 
+      - 28015:28015/udp 
+      - 28016:28016 
+      - 8080:8080
+    environment:
+      - RUST_SERVER_NAME=Rusties Rustorama 
+      - RUST_SERVER_WORLDSIZE=3500 
+      - RUST_RCON_PASSWORD=Gooqu0oo
+      - RUST_OXIDE_ENABLED=1 
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=rust.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.rust.entrypoints=websecure
+      - traefik.http.routers.rust.rule=Host(`rust.${HOST_DOMAIN}`)
+      - traefik.http.services.rust.loadbalancer.server.port=8096
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true

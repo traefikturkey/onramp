@@ -17,7 +17,7 @@ services:
       - ${SATISFACTORY_PORT_15000:-15000}:15000/udp
       - ${SATISFACTORY_PORT_15777:-15777}:15777/udp
     volumes:
-      - ./etc/games/satisfactory:/config
+      - ./etc/games/${SATISFACTORY_HOSTNAME:-satisfactory}:/config
     environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000} 
