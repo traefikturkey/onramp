@@ -146,7 +146,7 @@ etc/$(ETC_SERVICE):
 enable-game: etc/$(ETC_SERVICE)
 	@ln -s ../services-available/games/$(PASSED_SERVICE).yml ./services-enabled/$(PASSED_SERVICE).yml || true
 
-enable-service: etc/$(PASSED_SERVICE) services-enabled/$(PASSED_SERVICE).yml
+enable-service: etc/$(ETC_SERVICE) services-enabled/$(PASSED_SERVICE).yml
 
 services-enabled/$(PASSED_SERVICE).yml:
 	@ln -s ../services-available/$(PASSED_SERVICE).yml ./services-enabled/$(PASSED_SERVICE).yml || true
