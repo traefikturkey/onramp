@@ -16,7 +16,7 @@ services:
       - ${FACTORIO_PORT_27015:-27015}:27015
       - ${FACTORIO_PORT_34197:-34197}:34197/udp
     volumes:
-      - ./etc/factorio:/factorio
+      - ./etc/games/${FACTORIO_HOSTNAME:-factorio}:/factorio
     environment:
       - TZ=${TZ}
     labels:
