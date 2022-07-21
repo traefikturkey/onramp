@@ -8,11 +8,11 @@ networks:
 
 services:
   webmap:
-    image: secureforest/webmap
-    container_name: webmap
+    image: secureforest/webmap:${WEBMAP_DOCKER_VERSION:-latest}
+    container_name: ${WEBMAP_CONTAINER_NAME:-webmap}
     restart: unless-stopped
     volumes:
-      - ./etc/webmap:/opt/xml
+      - ${WEBMAP_CONFIG_PATH:-./etc/webmap}:/opt/xml
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
@@ -20,10 +20,10 @@ services:
       - PGID=${PGID:-1000}
       - TZ=${TZ}
     labels:
-      - joyride.host.name=webmap.${HOST_DOMAIN}
+      - joyride.host.name=${WEBMAP_CONTAINER_NAME:-webmap}.${HOST_DOMAIN}
       - traefik.enable=true
       - traefik.http.routers.webmap.entrypoints=websecure
-      - traefik.http.routers.webmap.rule=Host(`webmap.${HOST_DOMAIN}`)
+      - traefik.http.routers.webmap.rule=Host(`${WEBMAP_CONTAINER_NAME:-webmap}.${HOST_DOMAIN}`)
       - traefik.http.services.webmap.loadbalancer.server.port=8000
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true

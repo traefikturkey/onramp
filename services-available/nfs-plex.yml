@@ -18,8 +18,8 @@ volumes:
 
 services:
   nfs-plex:
-    image: plexinc/pms-docker
-    container_name: plex
+    image: plexinc/pms-docker:${PLEX_DOCKER_VERSION:-latest}
+    container_name: ${PLEX_CONTAINER_NAME:-plex}
     restart: unless-stopped
     # uncomment if you have intel quick sync on your cpu
     # device:
@@ -49,10 +49,10 @@ services:
       - PLEX_GID=${PGID:-1000}
       - VERSION=docker
     labels:
-      - joyride.host.name=plex.${HOST_DOMAIN}
+      - joyride.host.name=${PLEX_CONTAINER_NAME:-plex}.${HOST_DOMAIN}
       - traefik.enable=true
       - traefik.http.routers.plex.entrypoints=websecure
-      - traefik.http.routers.plex.rule=Host(`plex.${HOST_DOMAIN}`)
+      - traefik.http.routers.plex.rule=Host(`${PLEX_CONTAINER_NAME:-plex}.${HOST_DOMAIN}`)
       - traefik.http.services.plex.loadbalancer.server.port=32400
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
