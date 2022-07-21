@@ -4,6 +4,7 @@
 *.tar
 *.tar.gz
 services-enabled/*.yml
+docker-compose.override.yml
 
 # https://theapache64.github.io/git-do-not-ignore/
 

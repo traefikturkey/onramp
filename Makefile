@@ -4,12 +4,8 @@ ifneq (,$(wildcard ./.env))
     export
 endif
 
-# any disabled-*.yml docker-compose files will be ignored
-disabled_files := $(wildcard services-enabled/disabled-*.yml)
-# all other *.yml files in the current directory will be included 
-# when running make commands that call docker compose
-compose_files := $(filter-out $(disabled_files), $(wildcard services-enabled/*.yml)) 
-args := -f docker-compose.yml $(foreach file, $(compose_files), -f $(file))
+export DOCKER_COMPOSE_FILES := $(wildcard docker-compose.*.yml) $(wildcard services-enabled/*.yml)
+export DOCKER_COMPOSE_FLAGS := -f docker-compose.yml $(foreach file, $(DOCKER_COMPOSE_FILES), -f $(file))
 
 
 # get the boxes ip address and the current users id and group id
@@ -46,17 +42,17 @@ $(eval $(EMPTY_TARGETS):;@:)
 # this is the default target run if no other targets are passed to make
 # i.e. if you just type: make
 start: build
-	$(DOCKER_COMPOSE) $(args) up -d
+	$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) up -d
 	
 remove-orphans: build
-	$(DOCKER_COMPOSE) $(args) up -d --remove-orphans	
+	$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) up -d --remove-orphans	
 
 up: build
-	$(DOCKER_COMPOSE) $(args) up --force-recreate --remove-orphans --abort-on-container-exit
+	$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) up --force-recreate --remove-orphans --abort-on-container-exit
 
 down: 
-	-$(DOCKER_COMPOSE) $(args) down --remove-orphans
-	-docker volume ls --quiet --filter "label=remove_volume_on=down" | xargs -r docker volume rm
+	-$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) down --remove-orphans
+	-docker volume ls --quiet --filter "label=remove_volume_on=down" | xDOCKER_COMPOSE_FLAGS -r docker volume rm
 
 start-service: COMPOSE_IGNORE_ORPHANS = true 
 start-service: build enable-service
@@ -85,7 +81,7 @@ restart-service: down-service build start-service
 update-service: down-service build pull-service start-service
 
 start-staging: build
-	ACME_CASERVER=https://acme-staging-v02.api.letsencrypt.org/directory $(DOCKER_COMPOSE) $(args) up -d --force-recreate
+	ACME_CASERVER=https://acme-staging-v02.api.letsencrypt.org/directory $(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) up -d --force-recreate
 	@echo "waiting 30 seconds for cert DNS propogation..."
 	@sleep 30
 	@echo "open https://$(HOST_NAME).$(HOST_DOMAIN)/traefik in a browser"
@@ -98,7 +94,7 @@ start-staging: build
 	@echo "make down-staging"
 
 down-staging:
-	$(DOCKER_COMPOSE) $(args) down
+	$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) down
 	$(MAKE) clean-acme
 
 clean-acme:
@@ -106,17 +102,17 @@ clean-acme:
 	sudo rm etc/traefik/letsencrypt/acme.json
 
 pull:
-	$(DOCKER_COMPOSE) $(args) pull
+	$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) pull
 
 logs:
-	$(DOCKER_COMPOSE) $(args) logs -f
+	$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) logs -f
 
 restart: down start
 
 update: down pull start
 
 exec:
-	$(DOCKER_COMPOSE) $(args) exec $(PASSED_SERVICE) sh
+	$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) exec $(PASSED_SERVICE) sh
 
 build: .env etc/prometheus/conf etc/authelia/configuration.yml
 
@@ -184,10 +180,10 @@ import-backup:
 	sudo tar -xvf traefik-config-backup.tar.gz
 
 echo:
-	@echo $(args)
+	@echo $(DOCKER_COMPOSE_FLAGS)
 
 echo-service:
-	@echo $(args_service) $(SERVICE_FILE)
+	@echo $(DOCKER_COMPOSE_FLAGS_service) $(SERVICE_FILE)
 
 env:
 	env | sort
