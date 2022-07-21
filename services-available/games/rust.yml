@@ -13,8 +13,6 @@ services:
     restart: unless-stopped
     volumes:
       - ./etc/games/rust:/steamcmd/rust
-      - /etc/timezone:/etc/timezone:ro
-      - /etc/localtime:/etc/localtime:ro
     ports:
       - 28015:28015 
       - 28015:28015/udp 
@@ -33,6 +31,8 @@ services:
       - traefik.enable=true
       - traefik.http.routers.rust.entrypoints=websecure
       - traefik.http.routers.rust.rule=Host(`rust.${HOST_DOMAIN}`)
-      - traefik.http.services.rust.loadbalancer.server.port=8096
+      - traefik.http.services.rust.loadbalancer.server.port=8080
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
+# TODO 
+# Fix the web rcon panel with traefik / figure out if it is worth it 
