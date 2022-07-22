@@ -16,5 +16,5 @@ jobs:
           description: ${{ github.event.head_commit.message }}
           details: ${{ github.event.head_commit.url }}
           footer: MafenBot became self aware
-          text: ${{ github.event.pusher.name }} pushed to ${{ github.event.repository.name }} on branch ${{ GITHUB_REF_NAME }}
+          text: ${{ github.event.pusher.name }} pushed to ${{ github.event.repository.name }} on branch $GITHUB_REF_NAME
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
