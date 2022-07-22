@@ -8,7 +8,7 @@ jobs:
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         uses: rjstone/discord-webhook-notify@v1
-          with:
+        with:
           severity: info
           username: MafenBot
           color: '#ff00aa'
