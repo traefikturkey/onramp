@@ -1,0 +1,22 @@
+https://discord.com/api/webhooks/999871467053395988/Hem_v32fd2eE1TA6kdy5YHNXXi7mwzo1YIyGQv4NItLQTxJhnK7PUpRwLo9qRBrwjXGI
+
+name: GitHub MafenCI Actions
+on: [push]
+jobs:
+  DiscordNotification:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Discord notification
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        uses: rjstone/discord-webhook-notify@v1
+          with:
+          severity: info
+          username: MafenBot
+          color: '#ff00aa'
+          avatarUrl: https://github.githubassets.com/images/modules/logos_page/Octocat.png
+          description: ${{ github.event.head_commit.message }}
+          details: ${{ github.event.head_commit.url }}
+          footer: MafenBot became self aware
+          text: ${{ github.event.pusher.name }} pushed to ${{ github.event.repository.name }} on branch ${GITHUB_REF##*/}
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
