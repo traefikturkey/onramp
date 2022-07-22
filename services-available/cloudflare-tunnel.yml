@@ -1,0 +1,22 @@
+version: '3'
+
+networks:
+  default:
+    name: traefik
+    
+# <================= add links to documentation here =================>
+
+services:
+  cloudflare-tunnel:
+    image: cloudflare/cloudflared:${CLOUDFLARE_TUNNEL_DOCKER_VERSION:-latest}
+    container_name: cloudflare-tunnel
+    restart: unless-stopped
+    command: tunnel --url traefik:443 --hostname ${HOST_NAME}.${HOST_DOMAIN} run ${CLOUDFLARE_TUNNEL_NAME}
+    volumes:
+      - ./etc/cloudflare-tunnel:/etc/cloudflared
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    labels:
+      - traefik.enable=false
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
