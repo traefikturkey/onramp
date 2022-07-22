@@ -179,11 +179,19 @@ export-backup:
 import-backup:
 	sudo tar -xvf traefik-config-backup.tar.gz
 
-echo:
-	@echo $(DOCKER_COMPOSE_FLAGS)
+cloudflare-login:
+	$(DOCKER_COMPOSE) run --rm cloudflared login
 
-echo-service:
-	@echo $(DOCKER_COMPOSE_FLAGS_service) $(SERVICE_FILE)
+create-tunnel:
+	$(DOCKER_COMPOSE) run --rm cloudflared tunnel create $(CLOUDFLARE_TUNNEL_NAME)
+	$(DOCKER_COMPOSE) run --rm cloudflared tunnel route dns $(CLOUDFLARE_TUNNEL_NAME) $(CLOUDFLARE_TUNNEL_HOSTNAME)
+
+delete-tunnel:
+	$(DOCKER_COMPOSE) run --rm cloudflared tunnel cleanup $(CLOUDFLARE_TUNNEL_NAME)
+	$(DOCKER_COMPOSE) run --rm cloudflared tunnel delete $(CLOUDFLARE_TUNNEL_NAME)
+
+show-tunnel:
+	$(DOCKER_COMPOSE) run --rm cloudflared tunnel info $(CLOUDFLARE_TUNNEL_NAME)
 
 env:
 	env | sort
