@@ -1,6 +1,4 @@
-https://discord.com/api/webhooks/999871467053395988/Hem_v32fd2eE1TA6kdy5YHNXXi7mwzo1YIyGQv4NItLQTxJhnK7PUpRwLo9qRBrwjXGI
-
-name: GitHub MafenCI Actions
+name: Discord notification Action
 on: [push]
 jobs:
   DiscordNotification:
