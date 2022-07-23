@@ -1,0 +1,61 @@
+version: '3'
+
+networks:
+  default:
+    name: traefik
+    
+# https://hub.docker.com/r/mbentley/omada-controller
+
+services:
+  omada:
+    image: mbentley/omada-controller:${OMADA_DOCKER_TAG:-latest}
+    container_name: ${OMADA_CONTAINER_NAME:-omada} 
+    restart: unless-stopped
+    volumes:
+      - ${OMADA_CONFIG_DIR:-./etc/omada}/data:/opt/tplink/EAPController/data
+      - ${OMADA_CONFIG_DIR:-./etc/omada}/work:/opt/tplink/EAPController/work
+      - ${OMADA_CONFIG_DIR:-./etc/omada}/logs:/opt/tplink/EAPController/logs
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - MANAGE_HTTP_PORT=${OMADA_MANAGE_HTTP_PORT:-8088}
+      - MANAGE_HTTPS_PORT=${OMADA_MANAGE_HTTPS_PORT:-8043}
+      - PORTAL_HTTP_PORT=${OMADA_PORTAL_HTTP_PORT:-8088}
+      - PORTAL_HTTPS_PORT=${OMADA_PORTAL_HTTPS_PORT:-8043}
+      - SHOW_SERVER_LOGS=true
+      - SHOW_MONGODB_LOGS=false
+      - SSL_CERT_NAME="tls.crt"
+      - SSL_KEY_NAME="tls.key"
+
+    ports:
+      - '8088:8088'
+      - '8043:8043'
+      - '27001:27001/udp'
+      - '27002:27002'
+      - '27017:27017'
+      - '29810:29810/udp'
+      - '29811:29811'
+      - '29812:29812'
+      - '29813:29813'
+
+# Redirects not working right. Requires further research.
+
+    labels:
+      - joyride.host.name=${OMADA_CONTAINER_NAME:-omada}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.omada.entrypoints=websecure
+      - traefik.http.routers.omada.rule=Host(`${OMADA_CONTAINER_NAME:-omada}.${HOST_DOMAIN}`)
+      - traefik.http.services.omada.loadbalancer.server.scheme=https
+      - traefik.http.services.omada.loadbalancer.server.port=8043
+      - traefik.http.services.omada.loadbalancer.passhostheader=true
+      - traefik.http.routers.omada.middlewares=omada-middlewares
+      - traefik.http.middlewares.omada-middlewares.chain.middlewares=omada-redirect,omada-headers
+      - traefik.http.middlewares.omada-headers.headers.customrequestheaders.Host=${OMADA_CONTAINER_NAME:-omada}.${HOST_DOMAIN}:8043
+      - traefik.http.middlewares.omada-headers.headers.customresponseheaders.Host=${OMADA_CONTAINER_NAME:-omada}.${HOST_DOMAIN}
+      - traefik.http.middlewares.omada-redirect.redirectregex.regex=^https:\\/\\/([^\\/]+)\\/?$$
+      - traefik.http.middlewares.omada-redirect.redirectregex.replacement=https://$$1/login
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
