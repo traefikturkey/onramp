@@ -11,6 +11,7 @@ services:
     image: lscr.io/linuxserver/jellyfin:latest
     container_name: jellyfin
     restart: unless-stopped
+    #runtime: nvidia
     # uncomment if you have intel quick sync on your cpu
     #devices:
     #  - /dev/dri:/dev/dri
@@ -19,10 +20,17 @@ services:
       - PGID=${PGID:-1000}
       - TZ=${TZ}
       - JELLYFIN_PublishedServerUrl=jellyfin.${HOST_DOMAIN}
+    #  - NVIDIA_DRIVER_CAPABILITIES=all
+    #  - NVIDIA_VISIBLE_DEVICES=all
     volumes:
       - ./etc/jellyfin:/config
       #- /tmp:/transcode # If you want to use in memory 
       - ${JOYRIDE_MEDIA_DIR:-./media}:${JOYRIDE_CONTAINER_MEDIA_DIR:-/data}
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - capabilities: [ gpu ]
     ports:
       # - 8096:8096 # http web gui
       # - 8920:8920 # https web gui
