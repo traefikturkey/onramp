@@ -8,11 +8,11 @@ networks:
 
 services:
   homer:
-    image: b4bz/homer:latest
+    image: b4bz/homer:${HOMER_DOCKER_TAG:-latest}
     container_name: homer
     restart: unless-stopped
     volumes:
-      - ./etc/homer/assets/:/www/assets
+      - ${HOMER_ASSETS_DIR:-./etc/homer}:/www/assets
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
