@@ -8,7 +8,7 @@ networks:
 
 services:
   uptime-kuma:
-    image: louislam/uptime-kuma:1
+    image: louislam/uptime-kuma:${UPTIMEKUMA_DOCKER_TAG:-latest}
     container_name: uptimekuma
     restart: unless-stopped
     volumes:

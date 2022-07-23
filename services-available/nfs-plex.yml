@@ -18,7 +18,7 @@ volumes:
 
 services:
   nfs-plex:
-    image: plexinc/pms-docker:${PLEX_DOCKER_VERSION:-latest}
+    image: plexinc/pms-docker:${PLEX_DOCKER_TAG:-latest}
     container_name: ${PLEX_CONTAINER_NAME:-plex}
     restart: unless-stopped
     # uncomment if you have intel quick sync on your cpu
