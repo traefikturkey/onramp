@@ -12,8 +12,8 @@ services:
     container_name: jellyfin
     restart: unless-stopped
     # uncomment if you have intel quick sync on your cpu
-    # device:
-    #   - /dev/dri:/dev/dri
+    #devices:
+    #  - /dev/dri:/dev/dri
     environment: 
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
