@@ -4,8 +4,10 @@ networks:
   default:
     name: traefik
 
+# https://github.com/prometheus/alertmanager
+
   prometheus-alertmanager:
-    image: prom/alertmanager:latest
+    image: prom/alertmanager:${ALERTMANAGER_DOCKER_TAG:-latest}
     container_name: prometheus-alertmanager
     restart: unless-stopped
     command:
