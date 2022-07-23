@@ -8,7 +8,7 @@ networks:
 
 services:
   cloudflare-tunnel:
-    image: cloudflare/cloudflared:${CLOUDFLARE_TUNNEL_DOCKER_VERSION:-latest}
+    image: cloudflare/cloudflared:${CLOUDFLARE_TUNNEL_DOCKER_TAG:-latest}
     container_name: cloudflare-tunnel
     restart: unless-stopped
     command: tunnel --url traefik:443 --hostname ${HOST_NAME}.${HOST_DOMAIN} run ${CLOUDFLARE_TUNNEL_NAME}

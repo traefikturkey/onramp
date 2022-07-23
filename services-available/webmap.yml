@@ -8,7 +8,7 @@ networks:
 
 services:
   webmap:
-    image: secureforest/webmap:${WEBMAP_DOCKER_VERSION:-latest}
+    image: secureforest/webmap:${WEBMAP_DOCKER_TAG:-latest}
     container_name: ${WEBMAP_CONTAINER_NAME:-webmap}
     restart: unless-stopped
     volumes:
