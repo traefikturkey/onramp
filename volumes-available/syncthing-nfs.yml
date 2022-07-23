@@ -1,0 +1,19 @@
+version: '3'
+
+volumes:
+  syncthing-nfs-media:
+    labels:
+      - remove_volume_on=down
+    driver_opts:
+      type: nfs
+      o: "addr=${SYNCTHING_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
+      device: ":${SYNCTHING_NFS_SERVER_PATH:-${NFS_SYNC_PATH}}"
+
+services:
+  syncthing:
+    volumes:
+      - ./etc/syncthing:/config
+      - ${SYNCTHING_VOLUME:-syncthing-nfs-media}:/sync
+      - /dev/rtc:/dev/rtc:ro
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro

@@ -5,15 +5,10 @@ networks:
     name: traefik
 
 # https://github.com/prometheus/prometheus
-# https://github.com/prometheus-pve/prometheus-pve-exporter 
-# https://github.com/ilude/prometheus-pve-exporter
-# https://github.com/prometheus/blackbox_exporter
-# https://github.com/prometheus/alertmanager
-# https://github.com/prometheus/node_exporter
 
 services:
   prometheus:
-    image: prom/prometheus:latest
+    image: prom/prometheus:${PROMETHEUS_DOCKER_TAG:-latest}
     container_name: prometheus
     restart: unless-stopped
     links:

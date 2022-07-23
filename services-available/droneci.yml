@@ -11,8 +11,8 @@ networks:
 
 services:
   drone:
+    image: drone/drone:${DRONE_DOCKER_TAG:-latest}
     container_name: drone
-    image: drone/drone
     restart: unless-stopped
     depends_on:
       - gitea

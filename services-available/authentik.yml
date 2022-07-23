@@ -47,8 +47,9 @@ services:
     labels:
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true  
+
   authentik-server:
-    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2022.7.2}
+    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_DOCKER_TAG:-2022.7.2}
     container_name: authentik_server
     restart: unless-stopped
     command: server
@@ -82,7 +83,7 @@ services:
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
   worker:
-    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_TAG:-2022.7.2}
+    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_DOCKER_TAG:-2022.7.2}
     container_name: authentik_worker
     restart: unless-stopped
     command: worker

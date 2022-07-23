@@ -9,7 +9,7 @@ networks:
 services:
   dashy:
     image: ghcr.io/lissy93/dashy:${DASHY_DOCKER_TAG:-latest}
-    container_name: dashy
+    container_name: ${DASHY_CONTAINER_NAME:-dashy}
     restart: unless-stopped
     volumes:
       - ./etc/dashy/dashy-config.yml:/app/public/conf.yml
@@ -22,10 +22,10 @@ services:
       - GID=${PGID:-1000}
       - TZ=${TZ}
     labels:
-      - joyride.host.name=dashy.${HOST_DOMAIN}
+      - joyride.host.name=${DASHY_CONTAINER_NAME:-dashy}.${HOST_DOMAIN}
       - traefik.enable=true
       - traefik.http.routers.dashy.entrypoints=websecure
-      - traefik.http.routers.dashy.rule=Host(`dashy.${HOST_DOMAIN}`)
+      - traefik.http.routers.dashy.rule=Host(`${DASHY_CONTAINER_NAME:-dashy}.${HOST_DOMAIN}`)
       - traefik.http.services.dashy.loadbalancer.server.port=80
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true

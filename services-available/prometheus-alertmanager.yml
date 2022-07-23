@@ -1,0 +1,28 @@
+version: '3'
+
+networks:
+  default:
+    name: traefik
+
+  prometheus-alertmanager:
+    image: prom/alertmanager:latest
+    container_name: prometheus-alertmanager
+    restart: unless-stopped
+    command:
+      - '--config.file=/etc/alertmanager/alertmanager.yml'
+      - '--log.level=debug'
+    # ports:
+    #   - 9093:9093
+    volumes:
+      - ./etc/prometheus/conf:/etc/alertmanager:rw
+      - prometheus:/alertmanager:rw
+    labels:
+      - joyride.host.name=alertmanager.${HOST_DOMAIN}
+      - com.centurylinklabs.watchtower.enable=true
+      - traefik.enable=true
+      - traefik.http.routers.alertmanager.rule=Host(`alertmanager.${HOST_DOMAIN}`)
+      - traefik.http.routers.alertmanager.entrypoints=websecure
+      - traefik.http.routers.alertmanager.tls=true
+      - traefik.http.routers.alertmanager.tls.certresolver=letsencrypt
+      - traefik.http.services.alertmanager.loadbalancer.server.scheme=http
+      - traefik.http.services.alertmanager.loadbalancer.server.port=9093

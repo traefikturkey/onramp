@@ -8,13 +8,13 @@ networks:
 
 services:
   radarr:
-    image: linuxserver/radarr
-    container_name: radarr
+    image: linuxserver/radarr:${RADARR_DOCKER_TAG:-latest}
+    container_name: ${RADAR_CONTAINER_NAME:-radarr}
     restart: unless-stopped
     volumes:
-      - ${RADARR_CONFIG_DIR:-./etc/radarr}:/config
-      - ${MEDIA_MOVIES_DIR:-./media/movies}:/movies
-      - ${MEDIA_DOWNLOADS_DIR:-./media/downloads}:/downloads
+      - ${RADARR_CONFIG_VOLUME:-./etc/radarr}:/config
+      - ${MEDIA_MOVIES_VOLUME:-./media/movies}:/movies
+      - ${MEDIA_DOWNLOADS_VOLUME:-./media/downloads}:/downloads
       - /dev/rtc:/dev/rtc:ro
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
@@ -29,10 +29,10 @@ services:
       start_period: 20s
       timeout: 10s
     labels:
-      - joyride.host.name=radarr.${HOST_DOMAIN}
+      - joyride.host.name=${RADAR_CONTAINER_NAME:-radarr}.${HOST_DOMAIN}
       - traefik.enable=true
       - traefik.http.routers.radarr.entrypoints=websecure
-      - traefik.http.routers.radarr.rule=Host(`radarr.${HOST_DOMAIN}`)
+      - traefik.http.routers.radarr.rule=Host(`${RADAR_CONTAINER_NAME:-radarr}.${HOST_DOMAIN}`)
       - traefik.http.services.radarr.loadbalancer.server.port=7878
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true

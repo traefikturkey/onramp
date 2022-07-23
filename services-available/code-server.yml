@@ -10,7 +10,7 @@ https://docs.linuxserver.io/images/docker-code-server
 
 services:
   code-server:
-    image: lscr.io/linuxserver/code-server:latest
+    image: lscr.io/linuxserver/code-server:${CODE_SERVER_DOCKER_TAG:-latest}
     container_name: code-server
     restart: unless-stopped
     volumes:

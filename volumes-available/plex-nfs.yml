@@ -1,0 +1,19 @@
+version: '3'
+
+volumes:
+  plex-nfs-media:
+    labels:
+      - remove_volume_on=down
+    driver_opts:
+      type: nfs
+      o: "addr=${PLEX_MEDIA_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
+      device: ":${PLEX_MEDIA_NFS_SERVER_PATH:-${NFS_MEDIA_PATH}}"
+
+services:
+  plex:
+    volumes:
+      # you should not put plex config directory on nfs, there are serious performance issues
+      - ${PLEX_CONFIG_VOLUME:-./etc/plex}:/config
+      - ${PLEX_MEDIA_VOLUME:-plex-nfs-media}:${PLEX_MEDIA_PATH:-/data}
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro

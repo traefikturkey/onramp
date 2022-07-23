@@ -1,0 +1,16 @@
+version: '3'
+
+volumes:
+  jellyfin-nfs-media:
+    labels:
+      - remove_volume_on=down
+    driver_opts:
+      type: nfs
+      o: "addr=${JELLYFIN_MEDIA_NFS_SERVER-${NFS_SERVER}},nolock,noatime,soft,rw"
+      device: ":${JELLYFIN_MEDIA_NFS_SERVER_PATH:-${NFS_SERVER_PATH}}"
+
+services:
+  jellyfin:
+    volumes:
+      - ${JOYRIDE_CONFIG_VOLUME:-./etc/jellyfin}:/config
+      - ${JOYRIDE_MEDIA_VOLUME:-jellyfin-nfs-media}:${JOYRIDE_MEDIA_PATH:-/data}

@@ -9,7 +9,7 @@ networks:
 services:
   gitea:
     container_name: gitea
-    image: gitea/gitea
+    image: gitea/gitea:${GITEA_DOCKER_TAG:-latest}
     restart: unless-stopped
     environment:
       # https://docs.gitea.io/en-us/install-with-docker/#environments-variables

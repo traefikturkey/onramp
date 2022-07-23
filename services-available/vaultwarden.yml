@@ -8,7 +8,7 @@ networks:
 
 services:
   vaultwarden:
-    image: vaultwarden/server:latest
+    image: vaultwarden/server:${VAULTWARDEN_DOCKER_TAG:-latest}
     container_name: vaultwarden
     restart: unless-stopped
     volumes:

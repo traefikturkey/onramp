@@ -7,7 +7,7 @@ networks:
 
 services:
   loki:
-    image: grafana/loki:latest
+    image: grafana/loki:${LOKI_DOCKER_TAG:-latest}
     container_name: loki
     restart: unless-stopped
     volumes:
@@ -24,7 +24,7 @@ services:
       - traefik.enable=false
 
   logspout:
-    image: gliderlabs/logspout
+    image: gliderlabs/logspout:${LOGSPOUT_DOCKER_TAG:-latest}
     container_name: logspout
     restart: unless-stopped
     command: syslog+tcp://promtail:1514
@@ -43,7 +43,7 @@ services:
       - traefik.enable=false
 
   promtail:
-    image: grafana/promtail:latest
+    image: grafana/promtail:${PROMTAIL_DOCKER_TAG:-latest}
     container_name: promtail
     restart: unless-stopped
     volumes:

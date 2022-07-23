@@ -8,7 +8,7 @@ networks:
 
 services:
   tautulli:
-    image: lscr.io/linuxserver/tautulli:latest
+    image: lscr.io/linuxserver/tautulli:${TAUTULLI_DOCKER_TAG:-latest}
     container_name: tautulli
     restart: unless-stopped
     volumes:

@@ -9,15 +9,12 @@ networks:
 
 services:
   plex:
-    image: plexinc/pms-docker
-    container_name: plex
+    image: plexinc/pms-docker:${PLEX_DOCKER_TAG:-latest}
+    container_name: ${PLEX_CONTAINER_NAME:-plex}
     restart: unless-stopped
-    # uncomment if you have intel quick sync on your cpu
-    # device:
-    #   - /dev/dri:/dev/dri
     volumes:
-      - ${PLEX_CONFIG_DIR:-./etc/plex}:/config
-      - ${PLEX_MEDIA_DIR:-./media}:${PLEX_CONTAINER_MEDIA_DIR:-/data}
+      - ${PLEX_CONFIG_VOLUME:-./etc/plex}:/config
+      - ${PLEX_MEDIA_VOLUME:-./media}:${PLEX_MEDIA_PATH:-/data}
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     ports:
@@ -33,17 +30,19 @@ services:
       - 32414:32414/udp
     environment:
       - TZ=${TZ}
-      - ADVERTISE_IP=https://plex.${HOST_DOMAIN}
+      - ADVERTISE_IP=https://${PLEX_CONTAINER_NAME:-plex}.${HOST_DOMAIN}
       - ALLOWED_NETWORKS=${HOSTIP}/24
       - PLEX_CLAIM=${PLEX_CLAIM}
       - PLEX_UID=${PUID:-1000}
       - PLEX_GID=${PGID:-1000}
       - VERSION=docker
+    env_file:
+      - .env
     labels:
-      - joyride.host.name=plex.${HOST_DOMAIN}
+      - joyride.host.name=${PLEX_CONTAINER_NAME:-plex}.${HOST_DOMAIN}
       - traefik.enable=true
       - traefik.http.routers.plex.entrypoints=websecure
-      - traefik.http.routers.plex.rule=Host(`plex.${HOST_DOMAIN}`)
+      - traefik.http.routers.plex.rule=Host(`${PLEX_CONTAINER_NAME:-plex}.${HOST_DOMAIN}`)
       - traefik.http.services.plex.loadbalancer.server.port=32400
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true

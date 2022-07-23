@@ -8,21 +8,21 @@ networks:
 
 services:
   dozzle:
-    image: amir20/dozzle:latest
-    container_name: dozzle
+    image: amir20/dozzle:${DOZZLE_DOCKER_TAG:-latest}
+    container_name: ${DOZZLE_CONTAINER_NAME:-dozzle}
     restart: unless-stopped
     environment:
       - DOZZLE_LEVEL=${DOZZLE_LEVEL:-debug}
-      - DOZZLE_BASE=/logs  # only needed for PathPrefix, comment if using Host rule
+      - DOZZLE_BASE=${DOZZLE_BASE:-/logs}  
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
     labels:
-      - autoheal=true
-      - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=true
-      - traefik.http.routers.dozzle.rule=PathPrefix(`/logs`) 
+      - traefik.http.routers.dozzle.rule=PathPrefix(`${DOZZLE_BASE:-/logs}`) 
       - traefik.http.routers.dozzle.entrypoints=websecure
       - traefik.http.services.dozzle.loadbalancer.server.scheme=http
       - traefik.http.services.dozzle.loadbalancer.server.port=8080
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true

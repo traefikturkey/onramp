@@ -8,7 +8,7 @@ networks:
 
 services:
   portainer:
-    image: portainer/portainer-ce:2.13.1
+    image: portainer/portainer-ce:${PORTAINER_DOCKER_TAG:-latest}
     container_name: portainer
     restart: unless-stopped
     volumes:

@@ -8,7 +8,7 @@ networks:
 
 services:
   snapdrop:
-    image: lscr.io/linuxserver/snapdrop:latest
+    image: lscr.io/linuxserver/snapdrop:${SNAPDROP_DOCKER_TAG:-latest}
     container_name: snapdrop
     restart: unless-stopped
     environment:

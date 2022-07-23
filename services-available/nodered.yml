@@ -8,7 +8,7 @@ networks:
 
 services:
   nodered:
-    image: nodered/node-red
+    image: nodered/node-red:${NODERED_DOCKER_TAG:-latest}
     container_name: nodered
     restart: unless-stopped
     # uncomment the network_mode: host line if nodered needs  

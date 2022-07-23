@@ -1,0 +1,20 @@
+  version: '3'
+
+networks:
+  default:
+    name: traefik
+
+# https://github.com/ilude/prometheus-pve-exporter
+# https://github.com/prometheus-pve/prometheus-pve-exporter 
+
+services:  
+  proxmox-exporter:
+    image: ghcr.io/ilude/prometheus-pve-exporter
+    container_name: proxmox-exporter
+    restart: unless-stopped
+    env_file: 
+      - .env
+    # ports:
+    #   - 9221:9221
+    labels:
+      - traefik.enable=false

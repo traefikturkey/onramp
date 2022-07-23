@@ -9,7 +9,7 @@ networks:
 
 services:
   librespeed:
-    image: lscr.io/linuxserver/librespeed:latest
+    image: lscr.io/linuxserver/librespeed:${LIBRESPEED_DOCKER_TAG:-latest}
     container_name: librespeed
     restart: unless-stopped
     volumes:

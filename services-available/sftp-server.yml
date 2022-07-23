@@ -8,7 +8,7 @@ networks:
 
 services:
   sftp-server:
-    image: drakkan/sftpgo
+    image: drakkan/sftpgo:${SFTPGO_DOCKER_TAG:-latest}
     container_name: sftp-server
     restart: unless-stopped  
     ports:
@@ -16,4 +16,4 @@ services:
       - 7272:8080
     volumes:
       - ./etc/sftp-server:/var/lib/sftpgo
-      - ${SFTP_DATA_DIR:-./media}:/srv/sftpgo
+      - ${SFTP_DATA_VOLUME:-./media}:/srv/sftpgo

@@ -4,8 +4,8 @@ version: '3'
 
 services:
   joyride:
-    image: ghcr.io/ilude/joyride:latest
-    container_name: joyride
+    image: ghcr.io/ilude/joyride:${JOYRIDE_DOCKER_TAG:-latest}
+    container_name: ${JOYRIDE_CONTAINER_NAME:-joyride}
     restart: unless-stopped
     environment:
       - HOSTIP=${HOSTIP}

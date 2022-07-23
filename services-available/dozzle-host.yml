@@ -8,8 +8,8 @@ networks:
 
 services:
   dozzle:
-    image: amir20/dozzle:latest
-    container_name: dozzle
+    image: amir20/dozzle:${DOZZLE_DOCKER_TAG:-latest}
+    container_name: ${DOZZLE_CONTAINER_NAME:-dozzle}
     restart: unless-stopped
     environment:
       - DOZZLE_LEVEL=${DOZZLE_LEVEL:-debug}
@@ -18,11 +18,11 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
     labels:
-      - autoheal=true
-      - com.centurylinklabs.watchtower.enable=true
+      - joyride.host.name=${DOZZLE_CONTAINER_NAME:-dozzle}.${HOST_DOMAIN}
       - traefik.enable=true
-      - joyride.host.name=dozzle.${HOST_DOMAIN}
-      - traefik.http.routers.dozzle.rule=Host(`dozzle.${HOST_DOMAIN}`)
+      - traefik.http.routers.dozzle.rule=Host(`${DOZZLE_CONTAINER_NAME:-dozzle}.${HOST_DOMAIN}`)
       - traefik.http.routers.dozzle.entrypoints=websecure
       - traefik.http.services.dozzle.loadbalancer.server.scheme=http
       - traefik.http.services.dozzle.loadbalancer.server.port=8080
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
