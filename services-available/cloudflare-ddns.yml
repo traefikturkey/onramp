@@ -4,7 +4,7 @@ version: '3'
 
 services:
   cloudflare-ddns:
-    image: oznu/cloudflare-ddns:latest # change 'latest' to 'armhf' or 'aarch64' if running on an arm device
+    image: oznu/cloudflare-ddns:${CLOUDFLARE_DDNS_DOCKER_TAG:-latest} 
     restart: unless-stopped
     environment:
       - EMAIL=${CF_API_EMAIL}

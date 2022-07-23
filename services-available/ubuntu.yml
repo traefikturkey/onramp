@@ -1,0 +1,9 @@
+version: "3"
+
+services:
+  ubuntu:
+    image: ubuntu
+    container_name: ubuntu
+    restart: on-failure
+    volumes:
+      - ${UBUNTU_TEST_VOLUME:-.}:/mnt

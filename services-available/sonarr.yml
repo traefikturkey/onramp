@@ -8,13 +8,13 @@ networks:
 
 services:
   sonarr:
-    image: linuxserver/sonarr
-    container_name: sonarr
+    image: linuxserver/sonarr:${SONAR_DOCKER_TAG:-latest}
+    container_name: ${SONAR_CONTAINER_NAME:-sonarr}
     restart: unless-stopped
     volumes:
-      - ${SONARR_CONFIG_DIR:-./etc/sonarr}:/config
-      - ${MEDIA_SHOWS_DIR:-./media/shows}:/tv
-      - ${MEDIA_DOWNLOADS_DIR:-./media/downloads}:/downloads
+      - ${SONARR_CONFIG_VOLUME:-./etc/sonarr}:/config
+      - ${MEDIA_SHOWS_VOLUME:-./media/shows}:/tv
+      - ${MEDIA_DOWNLOADS_VOLUME:-./media/downloads}:/downloads
       - /dev/rtc:/dev/rtc:ro
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
@@ -29,10 +29,10 @@ services:
       start_period: 20s
       timeout: 10s
     labels:
-      - joyride.host.name=sonarr.${HOST_DOMAIN}
+      - joyride.host.name=${SONAR_CONTAINER_NAME:-sonarr}.${HOST_DOMAIN}
       - traefik.enable=true
       - traefik.http.routers.sonarr.entrypoints=websecure
-      - traefik.http.routers.sonarr.rule=Host(`sonarr.${HOST_DOMAIN}`)
+      - traefik.http.routers.sonarr.rule=Host(`${SONAR_CONTAINER_NAME:-sonarr}.${HOST_DOMAIN}`)
       - traefik.http.services.sonarr.loadbalancer.server.port=8989
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true

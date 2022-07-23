@@ -8,7 +8,7 @@ networks:
 
 services:
   radarr:
-    image: linuxserver/overseerr
+    image: linuxserver/overseerr:${OVERSEERR_DOCKER_TAG:-latest}
     container_name: overseerr
     restart: unless-stopped
     volumes:

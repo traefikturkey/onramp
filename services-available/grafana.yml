@@ -10,8 +10,8 @@ networks:
 
 services:    
   grafana:
+    image: grafana/grafana:${GRAFANA_DOCKER_TAG:-latest}
     container_name: grafana
-    image: grafana/grafana
     restart: unless-stopped
     user: ${PUID:-1000}
     networks:
@@ -35,6 +35,5 @@ services:
       - traefik.docker.network=traefik
       - traefik.http.routers.grafana.rule=Host(`grafana.${HOST_DOMAIN}`)
       - traefik.http.routers.grafana.entrypoints=websecure
-      - traefik.http.services.grafana.loadbalancer.server.scheme=http
       - traefik.http.services.grafana.loadbalancer.server.port=3000
 

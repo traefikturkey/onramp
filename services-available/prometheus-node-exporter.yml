@@ -4,15 +4,14 @@ networks:
   default:
     name: traefik
 
-  # Please see Makefile install-node-exporter: to install node-export directly on the host
-  # by running: 'make install-node-exporter' as an alternative to using this container
-  # 
-  # https://github.com/prometheus/node_exporter
-  # https://hub.docker.com/r/prom/node-exporter
+# Please see Makefile install-node-exporter: to install node-export directly on the host
+# by running: 'make install-node-exporter' as an alternative to using this container
+# 
+# https://github.com/prometheus/node_exporter
 
   nodeexporter:
-    image: prom/node-exporter
-    container_name: nodeexporter
+    image: prom/node-exporter:${NODE_EXPORTER_DOCKER_TAG:-latest}
+    container_name: node-exporter
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro

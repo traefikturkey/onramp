@@ -8,7 +8,7 @@ networks:
 
 services:
   heimdall:
-    image: lscr.io/linuxserver/heimdall:latest
+    image: lscr.io/linuxserver/heimdall:${HEIMDALL_DOCKER_TAG:-latest}
     container_name: heimdall
     restart: unless-stopped
     volumes:

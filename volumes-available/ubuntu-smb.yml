@@ -1,0 +1,16 @@
+version: '3'
+
+volumes:
+  ubuntu-test-smb-volume:
+    labels:
+      - project_volume_cleanup=down
+    driver: local
+    driver_opts:
+      type: "cifs"
+      o: "addr=${UBUNTU_TEST_SMB_SERVER:-${SMB_SERVER}},user=${UBUNTU_TEST_SMB_USERNAME:-${SMB_USERNAME}},password=${UBUNTU_TEST_SMB_PASSWORD:-${SMB_PASSWORD}},domain=${UBUNTU_TEST_SMB_DOMAIN_NAME:-${SMB_DOMAIN_NAME}}"
+      device: "//${UBUNTU_TEST_SMB_SERVER:-${SMB_SERVER}}/share/path"
+
+services:
+  ubuntu-test:
+    volumes:
+      - ${UBUNTU_TEST_VOLUME:-ubuntu-test-nfs-volume}:/mnt

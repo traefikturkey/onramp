@@ -9,7 +9,7 @@ networks:
 services:
   olivetin:
     container_name: olivetin
-    image: jamesread/olivetin
+    image: jamesread/olivetin:${OLIVETIN_DOCKER_TAG:-latest}
     restart: unless-stopped
     volumes:
       - ./etc/olivetin:/config # replace host path or volume as needed

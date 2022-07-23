@@ -8,7 +8,7 @@ networks:
 
 services:
   mariadb:
-    image: mariadb:latest
+    image: mariadb:${MARIADB_DOCKER_TAG:-latest}
     container_name: mariadb
     restart: unless-stopped
     volumes:

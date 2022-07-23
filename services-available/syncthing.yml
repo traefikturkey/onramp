@@ -6,8 +6,8 @@ networks:
 
 services:
   syncthing:
-    image: linuxserver/syncthing:latest
-    container_name: syncthing
+    image: linuxserver/syncthing:${SYNCTHING_DOCKER_TAG:-latest}
+    container_name: ${SYNCTHING_CONTAINER_NAME:-syncthing}
     restart: unless-stopped
     environment:
       - PUID=${PUID:-1000}
@@ -16,16 +16,19 @@ services:
       - UMASK=022
     volumes:
       - ./etc/syncthing:/config
-      - ${MEDIA_SYNC_DIR:-./media/sync}:/sync
+      - ${SYNCTHING_VOLUME:-./media/sync}:/sync
+      - /dev/rtc:/dev/rtc:ro
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
     ports:
       #- 8384:8384
       - 22000:22000
       - 21027:21027/udp
     labels:
-      - joyride.host.name=sync.${HOST_DOMAIN}
+      - joyride.host.name=${SYNCTHING_CONTAINER_NAME:-syncthing}.${HOST_DOMAIN}
       - traefik.enable=true
       - traefik.http.routers.sync.entrypoints=websecure
-      - traefik.http.routers.sync.rule=Host(`sync.${HOST_DOMAIN}`)
+      - traefik.http.routers.sync.rule=Host(`${SYNCTHING_CONTAINER_NAME:-syncthing}.${HOST_DOMAIN}`)
       - traefik.http.services.sync.loadbalancer.server.port=8384
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true

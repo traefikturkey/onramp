@@ -4,8 +4,8 @@ version: '3'
 
 services:
   traefik-certs-dumper:
-    image: ldez/traefik-certs-dumper:v2.8.1
-    container_name: traefik-certs-dumper
+    image: ldez/traefik-certs-dumper:${TRAEFIK_CERT_DUMPER_DOCKER_TAG:-v2.8.1}
+    container_name: ${TRAEFIK_CERT_DUMPER_CONTAINER_NAME:-traefik-certs-dumper}
     restart: unless-stopped
     volumes:
       - ./etc/traefik/letsencrypt:/data
@@ -19,5 +19,5 @@ services:
       --source /data/acme.json --dest /data/certs'
     labels:
       - traefik.enable=false
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${TRAEFIK_CERT_DUMPER_WATCHTOWER_ENABLED:-false}
       - autoheal=true

@@ -22,7 +22,7 @@ services:
       - TZ=${TZ}
       - PGADMIN_DEFAULT_EMAIL=${CF_API_EMAIL}
       - PGADMIN_DEFAULT_PASSWORD=${PG_ADMIN_PASSWORD}
-      - PGADMIN_DEFAULR_SEVER=
+      - PGADMIN_DEFAULT_SERVER=${PGADMIN_DEFAULT_SERVER:-postgresql}
     labels:
       - joyride.host.name=pgadmin.${HOST_DOMAIN}
       - traefik.enable=true

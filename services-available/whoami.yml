@@ -8,7 +8,7 @@ networks:
 
 services:
   whoami:
-    image: traefik/whoami
+    image: traefik/whoami:${WHOAMI_DOCKER_TAG:-latest}
     container_name: whoami
     restart: unless-stopped
     volumes:

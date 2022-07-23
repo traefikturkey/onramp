@@ -8,7 +8,7 @@ networks:
 
 services:
   samba:  
-    image: dperson/samba  
+    image: dperson/samba:${SAMBA_DOCKER_TAG:-latest}
     container_name: samba
     restart: unless-stopped
     ports:  
@@ -31,7 +31,7 @@ services:
       #- SHARE2=foo;/foo;yes;no;no;${USER};${USER};;Foo
       #- SHARE3=bar;/bar;yes;no;no;${USER};${USER};;Bar
     volumes:  
-      - ${SAMBA_SHARE1_DIR:-./media}:/${SAMBA_SHARE1_NAME:-media} 
+      - ${SAMBA_SHARE1_VOLUME:-./media}:/${SAMBA_SHARE1_NAME:-media} 
       #- /host/foo:/container/foo 
       #- /host/bar:/container/bar 
       - /etc/timezone:/etc/timezone:ro

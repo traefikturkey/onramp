@@ -4,7 +4,7 @@ ifneq (,$(wildcard ./.env))
     export
 endif
 
-export DOCKER_COMPOSE_FILES := $(wildcard docker-compose.*.yml) $(wildcard services-enabled/*.yml)
+export DOCKER_COMPOSE_FILES :=  $(wildcard services-enabled/*.yml) $(wildcard volumes-enabled/*.yml) $(wildcard docker-compose.*.yml) 
 export DOCKER_COMPOSE_FLAGS := -f docker-compose.yml $(foreach file, $(DOCKER_COMPOSE_FILES), -f $(file))
 
 # look for the second target word passed to make
@@ -33,8 +33,9 @@ else
 	EDITOR := nano
 endif
 
-# used to look for the file in the services-enabled folder when [start|stop|pull]-service is used  
-SERVICE_FILE = --project-directory ./ -f ./services-enabled/$(SERVICE_PASSED_DNCASED).yml
+# used to look for the file in the services-enabled folder when [start|stop|pull]-service is used 
+SERVICE_FILES := $(wildcard services-enabled/$(SERVICE_PASSED_DNCASED).yml) $(wildcard volumes-enabled/$(SERVICE_PASSED_DNCASED)-*.yml)
+SERVICE_FLAGS := --project-directory ./ $(foreach file, $(SERVICE_FILES), -f $(file))
 
 # use the rest as arguments as empty targets aka: MAGIC
 EMPTY_TARGETS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
@@ -53,33 +54,36 @@ up: build
 
 down: 
 	-$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) down --remove-orphans
-	-docker volume ls --quiet --filter "label=remove_volume_on=down" | xDOCKER_COMPOSE_FLAGS -r docker volume rm
+	-docker volume ls --quiet --filter "label=remove_volume_on=down" | xargs -r docker volume rm 
 
 start-service: COMPOSE_IGNORE_ORPHANS = true 
 start-service: build enable-service
-	$(DOCKER_COMPOSE) $(SERVICE_FILE) up -d --force-recreate $(SERVICE_PASSED_DNCASED)
+	$(DOCKER_COMPOSE) $(SERVICE_FLAGS) up -d --force-recreate $(SERVICE_PASSED_DNCASED)
+
+down-service: stop-service
+stop-service: 
+	-$(DOCKER_COMPOSE) $(SERVICE_FLAGS) stop $(SERVICE_PASSED_DNCASED)
+
+restart-service: down-service start-service
+
+update-service: down-service pull-service start-service
+pull-service: 
+	$(DOCKER_COMPOSE) $(SERVICE_FLAGS) pull $(SERVICE_PASSED_DNCASED)
+
+run-service:
+	$(DOCKER_COMPOSE) $(SERVICE_FLAGS) run -it --rm $(SERVICE_PASSED_DNCASED) bash -l
 
 start-compose: COMPOSE_IGNORE_ORPHANS = true 
 start-compose: build 
-	$(DOCKER_COMPOSE) $(SERVICE_FILE) up -d --force-recreate
+	$(DOCKER_COMPOSE) $(SERVICE_FLAGS) up -d --force-recreate
 
-down-service: 
-	-$(DOCKER_COMPOSE) $(SERVICE_FILE) stop $(SERVICE_PASSED_DNCASED)
+down-compose: stop-compose
+stop-compose: 
+	-$(DOCKER_COMPOSE) $(SERVICE_FLAGS) stop
 
-down-compose: 
-	-$(DOCKER_COMPOSE) $(SERVICE_FILE) stop
-
-pull-service: 
-	$(DOCKER_COMPOSE) $(SERVICE_FILE) pull $(SERVICE_PASSED_DNCASED)
-
+update-compose: down-compose pull-compose start-compose
 pull-compose: 
-	$(DOCKER_COMPOSE) $(SERVICE_FILE) pull
-
-stop-service: down-service
-
-restart-service: down-service build start-service
-
-update-service: down-service build pull-service start-service
+	$(DOCKER_COMPOSE) $(SERVICE_FLAGS) pull
 
 start-staging: build
 	ACME_CASERVER=https://acme-staging-v02.api.letsencrypt.org/directory $(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) up -d --force-recreate
@@ -115,14 +119,18 @@ update: down pull start
 exec:
 	$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) exec $(SERVICE_PASSED_DNCASED) sh
 
-build: .env etc/prometheus/conf etc/authelia/configuration.yml
-
-etc/authelia/configuration.yml:
-	envsubst '$${HOST_DOMAIN}' < ./etc/authelia/configuration.template > ./etc/authelia/configuration.yml
+build: .env etc/authelia/configuration.yml etc/dashy/dashy-config.yml etc/prometheus/conf
 
 .env:
 	cp .env.sample .env
 	$(EDITOR) .env
+
+etc/authelia/configuration.yml:
+	envsubst '$${HOST_DOMAIN}' < ./etc/authelia/configuration.template > ./etc/authelia/configuration.yml
+
+etc/dashy/dashy-config.yml:
+	mkdir -p ./etc/dashy
+	touch ./etc/dashy/dashy-config.yml
 
 etc/prometheus/conf:
 	mkdir -p etc/prometheus/conf
@@ -148,11 +156,12 @@ enable-service: etc/$(ETC_SERVICE) services-enabled/$(SERVICE_PASSED_DNCASED).ym
 services-enabled/$(SERVICE_PASSED_DNCASED).yml:
 	@ln -s ../services-available/$(SERVICE_PASSED_DNCASED).yml ./services-enabled/$(SERVICE_PASSED_DNCASED).yml || true
 
-enable-game-copy: etc/$(SERVICE_PASSED_DNCASED)
-	@cp ./services-available/games/$(SERVICE_PASSED_DNCASED).yml ./services-enabled/$(SERVICE_PASSED_DNCASED).yml || true
+enable-volume: volumes-enabled/$(SERVICE_PASSED_DNCASED).yml
+disable-volume:
+	rm ./volumes-enabled/$(SERVICE_PASSED_DNCASED).yml
 
-enable-service-copy: etc/$(SERVICE_PASSED_DNCASED)
-	@cp ./services-available/$(SERVICE_PASSED_DNCASED).yml ./services-enabled/$(SERVICE_PASSED_DNCASED).yml || true
+volumes-enabled/$(SERVICE_PASSED_DNCASED).yml:
+	@ln -s ../volumes-available/$(SERVICE_PASSED_DNCASED).yml ./volumes-enabled/$(SERVICE_PASSED_DNCASED).yml || true
 
 enable-external:
 	@cp ./etc/traefik/available/$(SERVICE_PASSED_DNCASED).yml ./etc/traefik/enabled/$(SERVICE_PASSED_DNCASED).yml || true
@@ -161,6 +170,7 @@ disable-game: disable-service
 
 disable-service:
 	rm ./services-enabled/$(SERVICE_PASSED_DNCASED).yml
+	rm ./volumes-enabled/$(SERVICE_PASSED_DNCASED)-*.yml
 
 disable-external:
 	rm ./etc/traefik/enabled/$(SERVICE_PASSED_DNCASED).yml
@@ -177,7 +187,7 @@ install-node-exporter:
 	curl -s https://gist.githubusercontent.com/ilude/2cf7a3b7712378c6b9bcf1e1585bf70f/raw/setup_node_exporter.sh?$(date +%s) | /bin/bash -s | tee build.log
 
 export-backup:
-	sudo tar -cvzf traefik-config-backup.tar.gz ./etc ./services-enabled .env docker-compose.*.yml || true
+	sudo tar -cvzf traefik-config-backup.tar.gz ./etc ./services-enabled ./volumes-enabled .env docker-compose.*.yml || true
 
 import-backup:
 	sudo tar -xvf traefik-config-backup.tar.gz

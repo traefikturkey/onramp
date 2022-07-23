@@ -8,7 +8,7 @@ networks:
 
 services:
   cadvisor:
-    image: gcr.io/cadvisor/cadvisor:latest
+    image: gcr.io/cadvisor/cadvisor:${CADVISOR_DOCKER_TAG:-latest}
     container_name: cadvisor
     restart: unless-stopped
     command:

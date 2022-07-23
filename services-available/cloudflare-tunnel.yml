@@ -4,7 +4,9 @@ networks:
   default:
     name: traefik
     
-# <================= add links to documentation here =================>
+# https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/
+# https://hub.docker.com/r/cloudflare/cloudflared
+# https://github.com/cloudflare/cloudflared
 
 services:
   cloudflare-tunnel:

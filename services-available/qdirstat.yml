@@ -8,8 +8,8 @@ networks:
 
 services:
   qdirstat:
-    image: jlesage/qdirstat
-    container_name: qdirstat
+    image: jlesage/qdirstat:${QDIRSTAT_DOCKER_TAG:-latest}
+    container_name: ${QDIRSTAT_CONTAINER_NAME:-qdirstat}
     restart: unless-stopped
     cap_add:
       - SYS_NICE
@@ -21,12 +21,12 @@ services:
       - APP_NICENESS=10
     volumes:
       - ./etc/qdirstat:/config 
-      - ${PLEX_MEDIA_DIR:-./media}:/storage
+      - ${QDIRSTAT_MEDIA_VOLUME:-./media}:/storage
     labels:
-      - joyride.host.name=qdirstat.${HOST_DOMAIN}
+      - joyride.host.name=${QDIRSTAT_CONTAINER_NAME:-qdirstat}.${HOST_DOMAIN}
       - traefik.enable=true
       - traefik.http.routers.qdirstat.entrypoints=websecure
-      - traefik.http.routers.qdirstat.rule=Host(`qdirstat.${HOST_DOMAIN}`)
+      - traefik.http.routers.qdirstat.rule=Host(`${QDIRSTAT_CONTAINER_NAME:-qdirstat}.${HOST_DOMAIN}`)
       - traefik.http.services.qdirstat.loadbalancer.server.port=5800
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true

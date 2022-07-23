@@ -4,8 +4,8 @@ version: '3'
 
 services:  
   autoheal:
-    image: willfarrell/autoheal:latest
-    container_name: autoheal
+    image: willfarrell/autoheal:${AUTOHEAL_DOCKER_TAG:-latest}
+    container_name: ${AUTOHEAL_CONTAINER_NAME:-autoheal}
     restart: unless-stopped
     environment: 
       - AUTOHEAL_CONTAINER_LABEL=all

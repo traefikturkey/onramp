@@ -8,7 +8,7 @@ networks:
 
 services:
   lychee:
-    image: kdelfour/lychee-docker
+    image: kdelfour/lychee-docker:${LYCHEE_DOCKER_TAG:-latest}
     container_name: lychee
     restart: unless-stopped
     volumes:

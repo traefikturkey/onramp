@@ -8,7 +8,7 @@ networks:
 
 services:
   requestrr:
-    image: darkalfx/requestrr
+    image: darkalfx/requestrr:${REQUESTRR_DOCKER_TAG:-latest}
     container_name: requestrr
     restart: unless-stopped
     volumes:

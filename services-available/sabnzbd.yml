@@ -8,13 +8,13 @@ networks:
 
 services:
   sabnzbd: 
-    image: linuxserver/sabnzbd
+    image: linuxserver/sabnzbd:${SABNZBD_DOCKER_TAG:-latest}
     container_name: sabnzbd
     restart: unless-stopped
     hostname: sabnzbd.${HOST_DOMAIN}
     volumes:
       - ./etc/sabnzbd:/config
-      - ${MEDIA_DOWNLOADS_DIR:-./media/downloads}:/downloads
+      - ${SABNZBD_DOWNLOADS_DIR:-./media/downloads}:/downloads
       - /dev/rtc:/dev/rtc:ro
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro

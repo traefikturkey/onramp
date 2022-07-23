@@ -8,14 +8,14 @@ networks:
 
 services:
   cyberchef:
-    image: mpepping/cyberchef
-    container_name: cyberchef
+    image: mpepping/cyberchef:${CYBERCHEF_DOCKER_TAG:-latest}
+    container_name: ${CYBERCHEF_CONTAINER_NAME:-cyberchef}
     restart: unless-stopped
     labels:
-      - joyride.host.name=cyberchef.${HOST_DOMAIN}
+      - joyride.host.name=${CYBERCHEF_CONTAINER_NAME:-cyberchef}.${HOST_DOMAIN}
       - traefik.enable=true
       - traefik.http.routers.cyberchef.entrypoints=websecure
-      - traefik.http.routers.cyberchef.rule=Host(`cyberchef.${HOST_DOMAIN}`)
+      - traefik.http.routers.cyberchef.rule=Host(`${CYBERCHEF_CONTAINER_NAME:-cyberchef}.${HOST_DOMAIN}`)
       - traefik.http.services.cyberchef.loadbalancer.server.port=8000
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
