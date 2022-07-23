@@ -21,6 +21,7 @@ services:
       - JELLYFIN_PublishedServerUrl=jellyfin.${HOST_DOMAIN}
     volumes:
       - ./etc/jellyfin:/config
+      #- /tmp:/transcode # If you want to use in memory 
       - ${JOYRIDE_MEDIA_DIR:-./media}:${JOYRIDE_CONTAINER_MEDIA_DIR:-/data}
     ports:
       # - 8096:8096 # http web gui
