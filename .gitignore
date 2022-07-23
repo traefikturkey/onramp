@@ -5,6 +5,7 @@
 *.tar.gz
 services-enabled/*.yml
 docker-compose.override.yml
+.vscode
 
 # https://theapache64.github.io/git-do-not-ignore/
 
@@ -33,3 +34,4 @@ etc/*/*/*
 !etc/traefik/available/*
 !etc/traefik/enabled/middleware.yml
 !etc/authelia/configuration.template
+
