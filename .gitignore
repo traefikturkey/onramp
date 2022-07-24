@@ -1,16 +1,17 @@
-.env
 *.log
 *.code-workspace
 *.tar
 *.tar.gz
+backups/*
 services-enabled/*.yml
 volumes-enabled/*.yml
 docker-compose.*.yml
 .vscode
-test.txt
+
+.env
+envs/*
 
 # https://theapache64.github.io/git-do-not-ignore/
-
 !media/
 media/*
 !media/*/

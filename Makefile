@@ -4,6 +4,12 @@ ifneq (,$(wildcard ./.env))
     export
 endif
 
+# check for and include .envs/*.env files into the current environment
+ifneq (,$(wildcard ./envs/*.env))
+    include $(wildcard ./envs/*.env)
+    export
+endif
+
 export DOCKER_COMPOSE_FILES :=  $(wildcard services-enabled/*.yml) $(wildcard volumes-enabled/*.yml) $(wildcard docker-compose.*.yml) 
 export DOCKER_COMPOSE_FLAGS := -f docker-compose.yml $(foreach file, $(DOCKER_COMPOSE_FILES), -f $(file))
 
@@ -125,11 +131,14 @@ update: down pull start
 exec:
 	$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) exec $(SERVICE_PASSED_DNCASED) sh
 
-build: .env etc/authelia/configuration.yml etc/dashy/dashy-config.yml etc/prometheus/conf
+build: .env envs etc/authelia/configuration.yml etc/dashy/dashy-config.yml etc/prometheus/conf
 
 .env:
 	cp .template/env.sample .env
 	$(EDITOR) .env
+
+envs:
+	@mkdir -p envs
 
 etc/authelia/configuration.yml:
 	envsubst '$${HOST_DOMAIN}' < ./etc/authelia/configuration.template > ./etc/authelia/configuration.yml
@@ -192,11 +201,19 @@ create-game:
 install-node-exporter:
 	curl -s https://gist.githubusercontent.com/ilude/2cf7a3b7712378c6b9bcf1e1585bf70f/raw/setup_node_exporter.sh?$(date +%s) | /bin/bash -s | tee build.log
 
-export-backup:
-	sudo tar -cvzf traefik-config-backup.tar.gz ./etc ./services-enabled ./volumes-enabled .env docker-compose.*yml || true
 
-import-backup:
-	sudo tar -xvf traefik-config-backup.tar.gz
+export-backup: create-backup
+	@echo "export-backup is depercated and will be removed in the future, please use make create-backup"
+
+import-backup: restore-backup
+	@echo "import-backup is depercated and will be removed in the future, please use make restore-backup"
+
+create-backup:
+	mkdir -p ./backups/
+	sudo tar -cvzf ./backups/traefik-config-backup.tar.gz ./envs ./etc ./services-enabled ./volumes-enabled .env || true
+
+restore-backup:
+	sudo tar -xvf ./backups/traefik-config-backup.tar.gz
 
 cloudflare-login:
 	$(DOCKER_COMPOSE) run --rm cloudflared login
