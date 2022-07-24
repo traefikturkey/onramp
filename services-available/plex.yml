@@ -31,7 +31,7 @@ services:
     environment:
       - TZ=${TZ}
       - ADVERTISE_IP=https://${PLEX_CONTAINER_NAME:-plex}.${HOST_DOMAIN}
-      - ALLOWED_NETWORKS=${HOSTIP}/24
+      - ALLOWED_NETWORKS=${PLEX_ALLOWED_NETWORKS}
       - PLEX_CLAIM=${PLEX_CLAIM}
       - PLEX_UID=${PUID:-1000}
       - PLEX_GID=${PGID:-1000}
