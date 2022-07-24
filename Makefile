@@ -10,14 +10,12 @@ ifneq (,$(wildcard ./envs/*.env))
     export
 endif
 
-export DOCKER_COMPOSE_FILES :=  $(wildcard services-enabled/*.yml) $(wildcard volumes-enabled/*.yml) $(wildcard docker-compose.*.yml) 
+export DOCKER_COMPOSE_FILES :=  $(wildcard services-enabled/*.yml) $(wildcard overrides-enabled/*.yml) $(wildcard docker-compose.*.yml) 
 export DOCKER_COMPOSE_FLAGS := -f docker-compose.yml $(foreach file, $(DOCKER_COMPOSE_FILES), -f $(file))
 
 # look for the second target word passed to make
 export SERVICE_PASSED_DNCASED := $(strip $(word 2,$(MAKECMDGOALS)))
 export SERVICE_PASSED_UPCASED := $(strip $(subst -,_,$(shell echo $(SERVICE_PASSED_DNCASED) | tr a-z A-Z )))
-export ETC_SERVICE := $(subst nfs-,,$(SERVICE_PASSED_DNCASED))
-
 
 # get the boxes ip address and the current users id and group id
 export HOSTIP := $(shell ip route get 1.1.1.1 | grep -oP 'src \K\S+')
@@ -46,7 +44,7 @@ else
 endif
 
 # used to look for the file in the services-enabled folder when [start|stop|pull]-service is used 
-SERVICE_FILES := $(wildcard services-enabled/$(SERVICE_PASSED_DNCASED).yml) $(wildcard volumes-enabled/$(SERVICE_PASSED_DNCASED)-*.yml)
+SERVICE_FILES := $(wildcard services-enabled/$(SERVICE_PASSED_DNCASED).yml) $(wildcard overrides-enabled/$(SERVICE_PASSED_DNCASED)-*.yml)
 SERVICE_FLAGS := --project-directory ./ $(foreach file, $(SERVICE_FILES), -f $(file))
 
 # use the rest as arguments as empty targets aka: MAGIC
@@ -157,26 +155,29 @@ list-games:
 list-services:
 	@ls -1 ./services-available/ | sed -e 's/\.yml$ //'
 
+list-overrides:
+	@ls -1 ./overrides-available/ | sed -e 's/\.yml$ //'
+
 list-external:
 	@ls -1 ./etc/traefik/available/ | sed -e 's/\.yml$ //'
 
-etc/$(ETC_SERVICE):
-	@mkdir -p ./etc/$(ETC_SERVICE)
+etc/$(SERVICE_PASSED_DNCASED):
+	@mkdir -p ./etc/$(SERVICE_PASSED_DNCASED)
 
-enable-game: etc/$(ETC_SERVICE)
+enable-game: etc/$(SERVICE_PASSED_DNCASED)
 	@ln -s ../services-available/games/$(SERVICE_PASSED_DNCASED).yml ./services-enabled/$(SERVICE_PASSED_DNCASED).yml || true
 
-enable-service: etc/$(ETC_SERVICE) services-enabled/$(SERVICE_PASSED_DNCASED).yml
+enable-service: etc/$(SERVICE_PASSED_DNCASED) services-enabled/$(SERVICE_PASSED_DNCASED).yml
 
 services-enabled/$(SERVICE_PASSED_DNCASED).yml:
 	@ln -s ../services-available/$(SERVICE_PASSED_DNCASED).yml ./services-enabled/$(SERVICE_PASSED_DNCASED).yml || true
 
-enable-volume: volumes-enabled/$(SERVICE_PASSED_DNCASED).yml
-disable-volume:
-	rm ./volumes-enabled/$(SERVICE_PASSED_DNCASED).yml 
+enable-override: overrides-enabled/$(SERVICE_PASSED_DNCASED).yml
+disable-override:
+	rm ./overrides-enabled/$(SERVICE_PASSED_DNCASED).yml 
 
-volumes-enabled/$(SERVICE_PASSED_DNCASED).yml:
-	@ln -s ../volumes-available/$(SERVICE_PASSED_DNCASED).yml ./volumes-enabled/$(SERVICE_PASSED_DNCASED).yml || true
+overrides-enabled/$(SERVICE_PASSED_DNCASED).yml:
+	@ln -s ../overrides-available/$(SERVICE_PASSED_DNCASED).yml ./overrides-enabled/$(SERVICE_PASSED_DNCASED).yml || true
 
 enable-external:
 	@cp ./etc/traefik/available/$(SERVICE_PASSED_DNCASED).yml ./etc/traefik/enabled/$(SERVICE_PASSED_DNCASED).yml || true
@@ -185,7 +186,7 @@ disable-game: disable-service
 
 disable-service:
 	rm ./services-enabled/$(SERVICE_PASSED_DNCASED).yml
-	rm ./volumes-enabled/$(SERVICE_PASSED_DNCASED)-*.yml 2> /dev/null || true
+	rm ./overrides-enabled/$(SERVICE_PASSED_DNCASED)-*.yml 2> /dev/null || true
 
 disable-external:
 	rm ./etc/traefik/enabled/$(SERVICE_PASSED_DNCASED).yml
@@ -210,7 +211,7 @@ import-backup: restore-backup
 
 create-backup:
 	mkdir -p ./backups/
-	sudo tar -cvzf ./backups/traefik-config-backup.tar.gz ./envs ./etc ./services-enabled ./volumes-enabled .env || true
+	sudo tar -cvzf ./backups/traefik-config-backup.tar.gz ./envs ./etc ./services-enabled ./overrides-enabled .env || true
 
 restore-backup:
 	sudo tar -xvf ./backups/traefik-config-backup.tar.gz
