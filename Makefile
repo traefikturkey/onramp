@@ -27,6 +27,7 @@ else
 	DOCKER_COMPOSE := docker-compose
 endif
 
+# setup PLEX_ALLOWED_NETWORKS defaults if they are not already in the .env file
 ifndef PLEX_ALLOWED_NETWORKS
 	export PLEX_ALLOWED_NETWORKS := $(HOSTIP/24)
 endif
@@ -127,7 +128,7 @@ exec:
 build: .env etc/authelia/configuration.yml etc/dashy/dashy-config.yml etc/prometheus/conf
 
 .env:
-	cp .env.sample .env
+	cp .template/env.sample .env
 	$(EDITOR) .env
 
 etc/authelia/configuration.yml:
@@ -163,7 +164,7 @@ services-enabled/$(SERVICE_PASSED_DNCASED).yml:
 
 enable-volume: volumes-enabled/$(SERVICE_PASSED_DNCASED).yml
 disable-volume:
-	rm ./volumes-enabled/$(SERVICE_PASSED_DNCASED).yml
+	rm ./volumes-enabled/$(SERVICE_PASSED_DNCASED).yml 
 
 volumes-enabled/$(SERVICE_PASSED_DNCASED).yml:
 	@ln -s ../volumes-available/$(SERVICE_PASSED_DNCASED).yml ./volumes-enabled/$(SERVICE_PASSED_DNCASED).yml || true
@@ -175,7 +176,7 @@ disable-game: disable-service
 
 disable-service:
 	rm ./services-enabled/$(SERVICE_PASSED_DNCASED).yml
-	rm ./volumes-enabled/$(SERVICE_PASSED_DNCASED)-*.yml
+	rm ./volumes-enabled/$(SERVICE_PASSED_DNCASED)-*.yml 2> /dev/null || true
 
 disable-external:
 	rm ./etc/traefik/enabled/$(SERVICE_PASSED_DNCASED).yml
@@ -210,6 +211,9 @@ delete-tunnel:
 
 show-tunnel:
 	$(DOCKER_COMPOSE) run --rm cloudflared tunnel info $(CLOUDFLARE_TUNNEL_NAME)
+
+test-smtp:
+	envsubst .template/smtp.template | nc localhost 25
 
 # https://stackoverflow.com/questions/7117978/gnu-make-list-the-values-of-all-variables-or-macros-in-a-particular-run
 echo:
