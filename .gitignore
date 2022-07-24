@@ -4,7 +4,7 @@
 *.tar.gz
 backups/*
 services-enabled/*.yml
-volumes-enabled/*.yml
+overrides-enabled/*.yml
 docker-compose.*.yml
 .vscode
 
