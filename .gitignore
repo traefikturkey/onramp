@@ -6,6 +6,7 @@
 services-enabled/*.yml
 volumes-enabled/*.yml
 docker-compose.*.yml
+.vscode
 
 # https://theapache64.github.io/git-do-not-ignore/
 
@@ -33,3 +34,4 @@ etc/*/*/*
 !etc/traefik/available/*
 !etc/traefik/enabled/middleware.yml
 !etc/authelia/configuration.template
+
