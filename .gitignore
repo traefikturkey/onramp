@@ -7,6 +7,7 @@ services-enabled/*.yml
 volumes-enabled/*.yml
 docker-compose.*.yml
 .vscode
+test.txt
 
 # https://theapache64.github.io/git-do-not-ignore/
 
