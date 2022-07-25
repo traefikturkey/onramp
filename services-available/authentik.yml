@@ -40,6 +40,8 @@ services:
     image: redis:alpine
     container_name: authentik_redis
     restart: unless-stopped
+    volumes:
+    - ./etc/authentik/redis:/data
     healthcheck:
       test: [ "CMD-SHELL", "redis-cli ping | grep PONG" ]
       start_period: 20s
