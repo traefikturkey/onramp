@@ -11,6 +11,7 @@ services:
     image: postgres/postgres:${POSTGRESS_DOCKER_TAG:-latest}
     container_name: postgres
     restart: unless-stopped
+    user: "1000:1000"
     volumes:
       - ${POSTGRESQL_DIR:-./media/databases/postgressql}:/var/lib/postgresql/data
     environment:
@@ -21,7 +22,7 @@ services:
       - POSTGRES_USER=${PG_USER:-admin}
       - POSTGRES_DB=${PG_DB:-admin}
     ports:
-    - 55432:5432
+    - 5432:5432
     labels:
       - joyride.host.name=postgres.${HOST_DOMAIN}
       - traefik.enable=false
