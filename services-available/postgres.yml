@@ -13,7 +13,7 @@ services:
     restart: unless-stopped
     user: "1000:1000"
     volumes:
-      - ${POSTGRESQL_DIR:-./media/databases/postgressql}:/var/lib/postgresql/data
+      - ${POSTGRES_DIR:-./media/databases/postgres}:/var/lib/postgresql/data
     environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
