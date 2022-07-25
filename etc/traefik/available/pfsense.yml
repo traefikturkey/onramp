@@ -1,4 +1,6 @@
 # Remember to add the host name to the pfsense admin page so that you wont get a DNS rebind error
+# Perhaps a little more detail needed here on implementation.
+
 http:
  #region routers 
   routers:
