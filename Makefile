@@ -219,6 +219,12 @@ restore-backup:
 remove-etc: 
 	rm -rf ./etc/$(SERVICE_PASSED_DNCASED)/
 
+reset-database-folder:
+	rm -rf ./media/databases/$(SERVICE_PASSED_DNCASED)/
+	git checkout ./media/databases/$(SERVICE_PASSED_DNCASED)/.keep
+
+reset-database: remove-etc reset-database-folder	
+
 cloudflare-login:
 	$(DOCKER_COMPOSE) run --rm cloudflared login
 
