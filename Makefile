@@ -216,6 +216,9 @@ create-backup:
 restore-backup:
 	sudo tar -xvf ./backups/traefik-config-backup.tar.gz
 
+remove-etc: 
+	rm -rf ./etc/$(SERVICE_PASSED_DNCASED)/
+
 cloudflare-login:
 	$(DOCKER_COMPOSE) run --rm cloudflared login
 
