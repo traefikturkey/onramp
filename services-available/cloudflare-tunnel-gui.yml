@@ -26,5 +26,6 @@ services:
     #- --no-autoupdate
     #- --hello-world
     labels:
+      - traefik.enable=false
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true

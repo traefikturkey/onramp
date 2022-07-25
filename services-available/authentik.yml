@@ -33,6 +33,7 @@ services:
       - .env
     labels:
       - com.centurylinklabs.watchtower.enable=true
+      - traefik.enable=false
       - autoheal=true   
        
   redis:
@@ -47,6 +48,7 @@ services:
       timeout: 3s
     labels:
       - com.centurylinklabs.watchtower.enable=true
+      - traefik.enable=false
       - autoheal=true  
 
   authentik-server:
@@ -112,6 +114,7 @@ services:
       - .env  
     labels:
       - com.centurylinklabs.watchtower.enable=true
+      - traefik.enable=false
       - autoheal=true  
 
   # geoipupdate:
