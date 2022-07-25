@@ -13,7 +13,7 @@ services:
     container_name: ${INFLUXDB_CONTAINER_NAME:-influxdb} 
     restart: unless-stopped
     volumes:
-      - ./etc/influxdb:/etc/influxdb2 # <==== this probably needs changed 
+      - ./etc/influxdb:/etc/influxdb2
       - ${INFLUXDB_DIR:-./media/databases/influxdb}:/var/lib/influxdb2
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
