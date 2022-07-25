@@ -24,7 +24,6 @@ services:
     ports:
     - 5432:5432
     labels:
-      - joyride.host.name=postgres.${HOST_DOMAIN}
       - traefik.enable=false
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
