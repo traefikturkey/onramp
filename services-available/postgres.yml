@@ -26,9 +26,6 @@ services:
     - 55432:5432
     labels:
       - joyride.host.name=postgres.${HOST_DOMAIN}
-      - traefik.enable=true
-      - traefik.http.routers.postgres.entrypoints=websecure
-      - traefik.http.routers.postgres.rule=Host(`postgres.${HOST_DOMAIN}`)
-      - traefik.http.services.postgres.loadbalancer.server.port=8096
+      - traefik.enable=false
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
