@@ -4,7 +4,7 @@ networks:
   default:
     name: traefik
     
-https://hub.docker.com/_/postgres
+# https://hub.docker.com/_/postgres
 
 services:
   postgres:
