@@ -134,18 +134,18 @@ make restart
 
 ### create backup file
 ```
-make export-backup
+make create-backup
 ```
 this will create a traefik-config-backup.tar.gz in the project directory
 
 ### copy backup file to another machine
 ```
-scp traefik-config-backup.tar.gz <user>@<other_host>:/apps/traefik-setup
+scp ./backups/traefik-config-backup.tar.gz <user>@<other_host>:/apps/onramp/backups/
 ```
 
 ### restore backup file on the other machine
 ```
-make import-backup
+make restore-backup
 ```
 
 ## Other make commands
