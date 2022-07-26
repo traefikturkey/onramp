@@ -1,0 +1,28 @@
+version: '3'
+
+networks:
+  default:
+    name: traefik
+
+# https://github.com/portainer/portainer
+
+services:
+  portainer-ee:
+    image: portainer/portainer-ee:${PORTAINER_DOCKER_TAG:-latest}
+    container_name: portainer-ee
+    restart: unless-stopped
+    volumes:
+      - ./etc/portainer-ee:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    env_file: 
+      - .env
+    labels:
+      - joyride.host.name=portainer-ee.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.portainer.entrypoints=websecure
+      - traefik.http.routers.portainer.rule=Host(`portainer-ee.${HOST_DOMAIN}`)
+      - traefik.http.services.portainer.loadbalancer.server.port=9000
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
