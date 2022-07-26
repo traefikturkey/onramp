@@ -77,10 +77,10 @@ services:
     env_file:
       - .env
     labels:
-      - joyride.host.name=auth.${HOST_DOMAIN}
+      - joyride.host.name=${AUTHENTIK_AUTH_DOMAIN}
       - traefik.enable=true
       - traefik.http.routers.authentik.entrypoints=websecure
-      - traefik.http.routers.authentik.rule=Host(`auth.${HOST_DOMAIN}`) || HostRegexp(`{subdomain:[a-z]+}.${HOST_DOMAIN}`) && PathPrefix(`/outpost.goauthentik.io/`)
+      - traefik.http.routers.authentik.rule=Host(`${AUTHENTIK_AUTH_DOMAIN}`) || HostRegexp(`{subdomain:[a-z]+}.${HOST_DOMAIN}`) && PathPrefix(`/outpost.goauthentik.io/`)
       - traefik.http.services.authentik.loadbalancer.server.port=9000
       - traefik.http.middlewares.authentik.forwardauth.address=http://authentik-server:9000/outpost.goauthentik.io/auth/traefik
       - traefik.http.middlewares.authentik.forwardauth.trustForwardHeader=true
