@@ -70,6 +70,9 @@ start-service: COMPOSE_IGNORE_ORPHANS = true
 start-service: build enable-service
 	$(DOCKER_COMPOSE) $(SERVICE_FLAGS) up -d --force-recreate $(SERVICE_PASSED_DNCASED)
 
+remove-service:
+	$(DOCKER_COMPOSE) $(SERVICE_FLAGS) rm $(SERVICE_PASSED_DNCASED)
+
 down-service: stop-service
 stop-service: 
 	-$(DOCKER_COMPOSE) $(SERVICE_FLAGS) stop $(SERVICE_PASSED_DNCASED)
