@@ -51,15 +51,41 @@ make list-services
 they can be enabled by running the following commands:
 
 ```
-make enable-service samba
+make enable-service uptime-kuma
 make restart
 ```
 
 and disabled with the following:
 ```
-make disable-service samba
+make disable-service uptime-kuma
 make restart
 ```
+
+> Note: this creates a symlink file in ./services-enabled to the service.yml file in ./services-available
+
+## Docker Overrides
+
+Several docker overrides are included that allow extending the functionallity of existing services to add features like NFS mounted media directories and Intel Quicksync or Nvidia GPU support to the Plex and Jellyfin containers
+
+to list avaliable overrides:
+```
+make list-overrides
+```
+
+to enable an override:
+```
+make enable-override plex-nfs
+make restart
+```
+
+to disable and override:
+```
+make disable-override plex-nfs
+make
+```
+> Note: this creates a symlink file in ./overrides-enabled to the override.yml file in ./overrides-available
+> In addition users can place there own custom docker compose files into ./overrides-enabled and they will be included on normal start up 
+> as well as included in the backup file created when running make create-backup
 
 ## Docker Game servers
 
@@ -67,21 +93,20 @@ Docker based Game servers are included in the ./services-available/games directo
 The configuration files include links to the web page for the services which has 
 the available documentation
 
-to list them:
+to list available games:
 ```
 make list-games
 ```
 
-they can be enabled by running the following commands:
-
+to enable a game:
 ```
-make enable-games samba
+make enable-games factorio
 make restart
 ```
 
-and disabled with the following:
+and disabled a game:
 ```
-make disable-games samba
+make disable-games factorio
 make restart
 ```
 
@@ -137,3 +162,18 @@ make update   # does a docker compose down, pull (to get the latest docker image
 # you can run multiple commands at once like this
 make; make logs
 ```
+## Environment Variables
+
+Many parts of the available services, overrides and games can be customized using variables set in your .env file
+If you open an available file and view it you will likely see many variables such as ${UNIFI_DOCKER_TAG:-latest-ubuntu}
+
+UNIFI_DOCKER_TAG is the variable name 
+latest-ubuntu is the default value
+
+You can override this value by placing the following line in your .env file
+```
+UNIFI_DOCKER_TAG=latest-ubuntu-beta
+```
+this will enable pulling the latest-ubuntu-beta version of the unifi container instead of the default stable version
+
+Please see https://docs.docker.com/compose/environment-variables/ for more information about environment variable in docker compose
