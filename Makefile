@@ -135,7 +135,7 @@ exec:
 build: .env envs etc/authelia/configuration.yml etc/dashy/dashy-config.yml etc/prometheus/conf
 
 .env:
-	cp .template/env.sample .env
+	cp .templates/env.template .env
 	$(EDITOR) .env
 
 envs:
