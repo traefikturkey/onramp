@@ -243,7 +243,7 @@ show-tunnel:
 	$(DOCKER_COMPOSE) run --rm cloudflared tunnel info $(CLOUDFLARE_TUNNEL_NAME)
 
 test-smtp:
-	envsubst .template/smtp.template | nc localhost 25
+	envsubst .templates/smtp.template | nc localhost 25
 
 # https://stackoverflow.com/questions/7117978/gnu-make-list-the-values-of-all-variables-or-macros-in-a-particular-run
 echo:
