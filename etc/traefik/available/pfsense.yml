@@ -1,5 +1,5 @@
 # Remember to add the host name to the pfsense admin page so that you wont get a DNS rebind error
-# Perhaps a little more detail needed here on implementation.
+# See https://github.com/traefikturkey/guides/blob/master/pfsense-configuration-traefik.md for tips 
 
 http:
  #region routers 
