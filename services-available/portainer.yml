@@ -19,6 +19,7 @@ services:
     env_file: 
       - .env
     labels:
+      - joyride.host.name=portainer.${HOST_DOMAIN}
       - traefik.enable=true
       - traefik.http.routers.portainer.entrypoints=websecure
       - traefik.http.routers.portainer.rule=Host(`portainer.${HOST_DOMAIN}`)
