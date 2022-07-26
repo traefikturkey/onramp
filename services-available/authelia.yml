@@ -21,17 +21,17 @@ services:
       - TZ=${TZ}
       - AUTHELIA_LOG_LEVEL=trace
       #- AUTHELIA_THEME=dark
-      - AUTHELIA_DEFAULT_REDIRECTION_URL=${AUTH_DOMAIN}
+      - AUTHELIA_DEFAULT_REDIRECTION_URL=${AUTHELIA_REDIR_DOMAIN}
       - AUTHELIA_JWT_SECRET=${AUTHELIA_JWT_SECRET}
       - AUTHELIA_SESSION_DOMAIN=${HOST_DOMAIN}
     env_file: 
       - .env
     labels:
-      - joyride.host.name=auth.${HOST_DOMAIN}
+      - joyride.host.name=${AUTHELIA_AUTH_DOMAIN}
       - traefik.enable=true
-      - traefik.http.routers.authelia.rule=Host(`auth.${HOST_DOMAIN}`)
+      - traefik.http.routers.authelia.rule=Host(`${AUTHELIA_AUTH_DOMAIN}`)
       - traefik.http.routers.authelia.entrypoints=websecure
-      - traefik.http.middlewares.authelia.forwardauth.address=http://authelia:9091/api/verify?rd=${AUTH_DOMAIN}
+      - traefik.http.middlewares.authelia.forwardauth.address=http://authelia:9091/api/verify?rd=${AUTHELIA_REDIR_DOMAIN}
       - traefik.http.middlewares.authelia.forwardauth.trustForwardHeader=true
       - traefik.http.middlewares.authelia.forwardauth.authResponseHeaders=Remote-User,Remote-Groups,Remote-Name,Remote-Email
       - com.centurylinklabs.watchtower.enable=true
