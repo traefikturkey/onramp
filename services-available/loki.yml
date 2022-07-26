@@ -5,6 +5,10 @@ networks:
   loki:
     name: loki
 
+# https://grafana.com/docs/loki/latest/installation/docker/
+# https://github.com/gliderlabs/logspout
+# https://grafana.com/docs/loki/latest/clients/promtail/
+
 services:
   loki:
     image: grafana/loki:${LOKI_DOCKER_TAG:-latest}
@@ -37,7 +41,7 @@ services:
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/run/docker.sock:/var/run/docker.sock:ro
     labels:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=false
