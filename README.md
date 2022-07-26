@@ -81,11 +81,12 @@ make restart
 to disable and override:
 ```
 make disable-override plex-nfs
-make
+make restart
 ```
 > Note: this creates a symlink file in ./overrides-enabled to the override.yml file in ./overrides-available
 > In addition users can place there own custom docker compose files into ./overrides-enabled and they will be included on normal start up 
 > as well as included in the backup file created when running make create-backup
+> for more info on docker compose overrides see: https://docs.docker.com/compose/extends/#adding-and-overriding-configuration
 
 ## Docker Game servers
 
@@ -153,7 +154,7 @@ Then you can run any of the following:
 
 ```
 make          # does a docker compose up -d
-make up       # does a docker compose up
+make up       # does a docker compose up (this will show you the log output of the containers, but will not stay running if you hit ctrl-c or log out)
 make down     # does a docker compose down
 make restart  # does a docker compose down followed by an up -d
 make logs     # does a docker compose logs -f
