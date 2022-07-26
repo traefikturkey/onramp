@@ -20,8 +20,8 @@ sudo apt install git make nano -y
 sudo mkdir /apps
 sudo chown -R $USER:$USER /apps
 cd /apps
-git clone https://github.com/ilude/traefik-setup-docker-compose.git traefik-setup
-cd traefik-setup
+https://github.com/traefikturkey/onramp.git 
+cd onramp
 
 make start-staging
 ```
