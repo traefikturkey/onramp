@@ -9,7 +9,7 @@ networks:
 services:
   samba:  
     image: dperson/samba:${SAMBA_DOCKER_TAG:-latest}
-    container_name: samba
+    container_name: ${SAMBA_CONTAINER_NAME:-samba}
     restart: unless-stopped
     ports:  
       - 137:137/udp  
@@ -20,7 +20,7 @@ services:
       - TZ=${TZ}  
       - USERID=${PUID:-1000}  
       - GROUPID=${PGID:-1000}  
-      - WORKGROUP=workgroup  
+      - WORKGROUP=${SAMBA_WORKGROUP:-workgroup}
       - USER=${USER};${SAMBA_PASSWORD}
       #- USER2=${SAMBA_USER2};${SAMBA_PASSWORD2}
       #- USER3=${SAMBA_USER3};${SAMBA_PASSWORD3}

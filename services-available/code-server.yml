@@ -11,7 +11,7 @@ https://docs.linuxserver.io/images/docker-code-server
 services:
   code-server:
     image: lscr.io/linuxserver/code-server:${CODE_SERVER_DOCKER_TAG:-latest}
-    container_name: code-server
+    container_name: ${CODE_SERVER_CONTAINER_NAME:-code-server}
     restart: unless-stopped
     volumes:
       - ./etc/code-server:/config
@@ -22,12 +22,12 @@ services:
       - PGID=${PGID:-1000}
       - TZ=${TZ}
       - PROXY_DOMAIN=code-server.${HOST_DOMAIN}
-      #- SUDO_PASSWORD=password
+      - SUDO_PASSWORD=${CODE_SERVER_SUDO_PASSWORD}
     labels:
-      - joyride.host.name=code-server.${HOST_DOMAIN}
+      - joyride.host.name=${CODE_SERVER_CONTAINER_NAME:-code-server}.${HOST_DOMAIN}
       - traefik.enable=true
       - traefik.http.routers.code-server.entrypoints=websecure
-      - traefik.http.routers.code-server.rule=Host(`code-server.${HOST_DOMAIN}`)
+      - traefik.http.routers.code-server.rule=Host(`${CODE_SERVER_CONTAINER_NAME:-code-server}.${HOST_DOMAIN}`)
       - traefik.http.services.code-server.loadbalancer.server.port=8443
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
