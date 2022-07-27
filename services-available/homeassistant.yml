@@ -5,7 +5,7 @@ version: '3'
 services:
   homeassistant:
     image: lscr.io/linuxserver/homeassistant:${HOMEASSISTANT_DOCKER_TAG:-latest}
-    container_name: homeassistant
+    container_name: ${HOMEASSISTANT_CONTAINER_NAME:-homeassistant}
     restart: unless-stopped
     network_mode: host
     volumes:
@@ -17,9 +17,9 @@ services:
       - PGID=${PGID:-1000} 
       - TZ=${TZ}
     labels:
-      - joyride.host.name=home.${HOST_DOMAIN}
+      - joyride.host.name=${HOMEASSISTANT_CONTAINER_NAME:-homeassistant}.${HOST_DOMAIN}
       - traefik.enable=true
-      - traefik.http.routers.homeassistant.rule=Host(`home.${HOST_DOMAIN}`)
+      - traefik.http.routers.homeassistant.rule=Host(`${HOMEASSISTANT_CONTAINER_NAME:-homeassistant}.${HOST_DOMAIN}`)
       - traefik.http.routers.homeassistant.entrypoints=websecure
       - traefik.http.services.homeassistant.loadbalancer.server.port=8123
       - com.centurylinklabs.watchtower.enable=true

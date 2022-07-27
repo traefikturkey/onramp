@@ -9,7 +9,7 @@ networks:
 services:
   vaultwarden:
     image: vaultwarden/server:${VAULTWARDEN_DOCKER_TAG:-latest}
-    container_name: vaultwarden
+    container_name: ${VAULTWARDEN_CONTAINER_NAME:-vaultwarden}
     restart: unless-stopped
     volumes:
       - ./etc/vaultwarden:/data
@@ -22,10 +22,10 @@ services:
       - TZ=${TZ}
       - ADMIN_TOKEN=${VAULT_ADMIN_SECRET}
     labels:
-      - joyride.host.name=vaultwarden.${HOST_DOMAIN}
+      - joyride.host.name=${VAULTWARDEN_CONTAINER_NAME:-vaultwarden}.${HOST_DOMAIN}
       - traefik.enable=true
       - traefik.http.routers.vaultwarden.entrypoints=websecure
-      - traefik.http.routers.vaultwarden.rule=Host(`vaultwarden.${HOST_DOMAIN}`)
+      - traefik.http.routers.vaultwarden.rule=Host(`${VAULTWARDEN_CONTAINER_NAME:-vaultwarden}.${HOST_DOMAIN}`)
       - traefik.http.services.vaultwarden.loadbalancer.server.port=80
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true

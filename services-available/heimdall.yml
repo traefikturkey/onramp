@@ -9,15 +9,15 @@ networks:
 services:
   heimdall:
     image: lscr.io/linuxserver/heimdall:${HEIMDALL_DOCKER_TAG:-latest}
-    container_name: heimdall
+    container_name: ${HEIMDALL_CONTAINER_NAME:-heimdall}
     restart: unless-stopped
     volumes:
       - ./etc/heimdall:/config
     labels:
-      - joyride.host.name=heimdall.${HOST_DOMAIN}
+      - joyride.host.name=${HEIMDALL_CONTAINER_NAME:-heimdall}.${HOST_DOMAIN}
       - traefik.enable=true
       - traefik.http.routers.heimdall.entrypoints=websecure
-      - traefik.http.routers.heimdall.rule=Host(`heimdall.${HOST_DOMAIN}`)
+      - traefik.http.routers.heimdall.rule=Host(`${HEIMDALL_CONTAINER_NAME:-heimdall}.${HOST_DOMAIN}`)
       - traefik.http.routers.heimdall.tls=true
       - traefik.http.routers.heimdall.service=heimdall
       - traefik.http.services.heimdall.loadbalancer.server.port=80
