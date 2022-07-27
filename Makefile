@@ -17,7 +17,6 @@ export PUID 	:= $(shell id -u)
 export PGID 	:= $(shell id -g)
 export HOST_NAME := $(or $(HOST_NAME), $(shell hostname))
 
-
 # check if we should use docker-compose or docker compose
 ifeq (, $(shell which docker-compose))
 	DOCKER_COMPOSE := docker compose
