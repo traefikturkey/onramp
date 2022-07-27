@@ -4,15 +4,16 @@ networks:
   default:
     name: traefik
     
-# <================= add links to documentation here =================>
+# https://hub.docker.com/r/linuxserver/wikijs
 
 services:
   wikijs:
-    image: <==== container_image ====>:${WIKIJS_DOCKER_TAG:-latest}
+    image: linuxserver/wikijs:${WIKIJS_DOCKER_TAG:-latest}
     container_name: ${WIKIJS_CONTAINER_NAME:-wikijs} 
     restart: unless-stopped
     volumes:
-      - ./etc/wikijs:/config # <==== this probably needs changed 
+      - ./etc/wikijs:/config
+      - ./etc/wikijs:/data
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
@@ -24,7 +25,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.wikijs.entrypoints=websecure
       - traefik.http.routers.wikijs.rule=Host(`${WIKIJS_CONTAINER_NAME:-wikijs}.${HOST_DOMAIN}`)
-      - traefik.http.services.wikijs.loadbalancer.server.port=8096
+      - traefik.http.services.wikijs.loadbalancer.server.port=3000
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
 
