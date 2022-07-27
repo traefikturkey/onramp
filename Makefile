@@ -195,11 +195,11 @@ disable-external:
 	rm ./etc/traefik/enabled/$(SERVICE_PASSED_DNCASED).yml
 
 create-service:
-	envsubst '$${SERVICE_PASSED_DNCASED},$${SERVICE_PASSED_UPCASED}' < ./services-available/.service.template > ./services-available/$(SERVICE_PASSED_DNCASED).yml
+	envsubst '$${SERVICE_PASSED_DNCASED},$${SERVICE_PASSED_UPCASED}' < ./.templates/service.template > ./services-available/$(SERVICE_PASSED_DNCASED).yml
 	$(EDITOR) ./services-available/$(SERVICE_PASSED_DNCASED).yml
 
 create-game:
-	envsubst '$${SERVICE_PASSED_DNCASED},$${SERVICE_PASSED_UPCASED}' < ./services-available/.service.template > ./services-available/games/$(SERVICE_PASSED_DNCASED).yml
+	envsubst '$${SERVICE_PASSED_DNCASED},$${SERVICE_PASSED_UPCASED}' < ./.templates/service.template > ./services-available/games/$(SERVICE_PASSED_DNCASED).yml
 	$(EDITOR) ./services-available/games/$(SERVICE_PASSED_DNCASED).yml
 
 install-node-exporter:
