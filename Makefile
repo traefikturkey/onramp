@@ -4,12 +4,6 @@ ifneq (,$(wildcard ./.env))
     export
 endif
 
-# check for and include .envs/*.env files into the current environment
-ifneq (,$(wildcard ./envs/*.env))
-    include $(wildcard ./envs/*.env)
-    export
-endif
-
 export DOCKER_COMPOSE_FILES :=  $(wildcard services-enabled/*.yml) $(wildcard overrides-enabled/*.yml) $(wildcard docker-compose.*.yml) 
 export DOCKER_COMPOSE_FLAGS := -f docker-compose.yml $(foreach file, $(DOCKER_COMPOSE_FILES), -f $(file))
 
@@ -66,12 +60,31 @@ down:
 	-$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) down --remove-orphans
 	-docker volume ls --quiet --filter "label=remove_volume_on=down" | xargs -r docker volume rm 
 
+pull:
+	$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) pull
+
+logs:
+	$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) logs -f
+
+restart: down start
+
+update: down pull start
+
+bash-run:
+	$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) run -it --rm $(SERVICE_PASSED_DNCASED) sh
+
+bash-exec:
+	$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) exec $(SERVICE_PASSED_DNCASED) sh
+
+#########################################################
+#
+# service commands
+#
+#########################################################
+
 start-service: COMPOSE_IGNORE_ORPHANS = true 
 start-service: build enable-service
 	$(DOCKER_COMPOSE) $(SERVICE_FLAGS) up -d --force-recreate $(SERVICE_PASSED_DNCASED)
-
-remove-service:
-	$(DOCKER_COMPOSE) $(SERVICE_FLAGS) rm $(SERVICE_PASSED_DNCASED)
 
 down-service: stop-service
 stop-service: 
@@ -83,8 +96,37 @@ update-service: down-service pull-service start-service
 pull-service: 
 	$(DOCKER_COMPOSE) $(SERVICE_FLAGS) pull $(SERVICE_PASSED_DNCASED)
 
-run-service:
-	$(DOCKER_COMPOSE) $(SERVICE_FLAGS) run -it --rm $(SERVICE_PASSED_DNCASED) bash -l
+enable-game: etc/$(SERVICE_PASSED_DNCASED)
+	@ln -s ../services-available/games/$(SERVICE_PASSED_DNCASED).yml ./services-enabled/$(SERVICE_PASSED_DNCASED).yml || true
+
+enable-service: etc/$(SERVICE_PASSED_DNCASED) services-enabled/$(SERVICE_PASSED_DNCASED).yml
+
+etc/$(SERVICE_PASSED_DNCASED):
+	@mkdir -p ./etc/$(SERVICE_PASSED_DNCASED)
+
+services-enabled/$(SERVICE_PASSED_DNCASED).yml:
+	@ln -s ../services-available/$(SERVICE_PASSED_DNCASED).yml ./services-enabled/$(SERVICE_PASSED_DNCASED).yml || true
+
+remove-game: disable-service
+disable-game: disable-service
+remove-service: disable-service
+disable-service: stop-service
+	rm ./services-enabled/$(SERVICE_PASSED_DNCASED).yml
+	rm ./overrides-enabled/$(SERVICE_PASSED_DNCASED)-*.yml 2> /dev/null || true
+
+create-service:
+	envsubst '$${SERVICE_PASSED_DNCASED},$${SERVICE_PASSED_UPCASED}' < ./.templates/service.template > ./services-available/$(SERVICE_PASSED_DNCASED).yml
+	$(EDITOR) ./services-available/$(SERVICE_PASSED_DNCASED).yml
+
+create-game:
+	envsubst '$${SERVICE_PASSED_DNCASED},$${SERVICE_PASSED_UPCASED}' < ./.templates/service.template > ./services-available/games/$(SERVICE_PASSED_DNCASED).yml
+	$(EDITOR) ./services-available/games/$(SERVICE_PASSED_DNCASED).yml
+
+#########################################################
+#
+# compose commands
+#
+#########################################################
 
 start-compose: COMPOSE_IGNORE_ORPHANS = true 
 start-compose: build 
@@ -97,6 +139,12 @@ stop-compose:
 update-compose: down-compose pull-compose start-compose
 pull-compose: 
 	$(DOCKER_COMPOSE) $(SERVICE_FLAGS) pull
+
+#########################################################
+#
+# staging commands
+#
+#########################################################
 
 start-staging: build
 	ACME_CASERVER=https://acme-staging-v02.api.letsencrypt.org/directory $(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) up -d --force-recreate
@@ -115,42 +163,11 @@ down-staging:
 	$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) down
 	$(MAKE) clean-acme
 
-clean-acme:
-	@echo "cleaning up staging certificates"
-	sudo rm etc/traefik/letsencrypt/acme.json
-
-pull:
-	$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) pull
-
-logs:
-	$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) logs -f
-
-restart: down start
-
-update: down pull start
-
-exec:
-	$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) exec $(SERVICE_PASSED_DNCASED) sh
-
-build: .env envs etc/authelia/configuration.yml etc/dashy/dashy-config.yml etc/prometheus/conf
-
-.env:
-	cp .templates/env.template .env
-	$(EDITOR) .env
-
-envs:
-	@mkdir -p envs
-
-etc/authelia/configuration.yml:
-	envsubst '$${HOST_DOMAIN}' < ./etc/authelia/configuration.template > ./etc/authelia/configuration.yml
-
-etc/dashy/dashy-config.yml:
-	mkdir -p ./etc/dashy
-	touch ./etc/dashy/dashy-config.yml
-
-etc/prometheus/conf:
-	mkdir -p etc/prometheus/conf
-	cp --no-clobber --recursive	etc/prometheus/conf-originals/* etc/prometheus/conf
+#########################################################
+#
+# list commands
+#
+#########################################################
 
 list-games:
 	@ls -1 ./services-available/games | sed -n 's/\.yml$ //p'
@@ -164,47 +181,72 @@ list-overrides:
 list-external:
 	@ls -1 ./etc/traefik/available/ | sed -e 's/\.yml$ //'
 
-etc/$(SERVICE_PASSED_DNCASED):
-	@mkdir -p ./etc/$(SERVICE_PASSED_DNCASED)
+#########################################################
+#
+# build related commands
+#
+#########################################################
 
-enable-game: etc/$(SERVICE_PASSED_DNCASED)
-	@ln -s ../services-available/games/$(SERVICE_PASSED_DNCASED).yml ./services-enabled/$(SERVICE_PASSED_DNCASED).yml || true
+build: .env etc/authelia/configuration.yml etc/dashy/dashy-config.yml etc/prometheus/conf 
 
-enable-service: etc/$(SERVICE_PASSED_DNCASED) services-enabled/$(SERVICE_PASSED_DNCASED).yml
+.env:
+	cp .templates/env.template .env
+	$(EDITOR) .env
 
-services-enabled/$(SERVICE_PASSED_DNCASED).yml:
-	@ln -s ../services-available/$(SERVICE_PASSED_DNCASED).yml ./services-enabled/$(SERVICE_PASSED_DNCASED).yml || true
+etc/authelia/configuration.yml:
+	envsubst '$${HOST_DOMAIN}' < ./etc/authelia/configuration.template > ./etc/authelia/configuration.yml
+
+etc/dashy/dashy-config.yml:
+	mkdir -p ./etc/dashy
+	touch ./etc/dashy/dashy-config.yml
+
+etc/prometheus/conf:
+	mkdir -p etc/prometheus/conf
+	cp --no-clobber --recursive	etc/prometheus/conf-originals/* etc/prometheus/conf
+
+#########################################################
+#
+# override commands
+#
+#########################################################
 
 enable-override: overrides-enabled/$(SERVICE_PASSED_DNCASED).yml
-disable-override:
-	rm ./overrides-enabled/$(SERVICE_PASSED_DNCASED).yml 
-
 overrides-enabled/$(SERVICE_PASSED_DNCASED).yml:
 	@ln -s ../overrides-available/$(SERVICE_PASSED_DNCASED).yml ./overrides-enabled/$(SERVICE_PASSED_DNCASED).yml || true
 
-enable-external:
-	@cp ./etc/traefik/available/$(SERVICE_PASSED_DNCASED).yml ./etc/traefik/enabled/$(SERVICE_PASSED_DNCASED).yml || true
+remove-override: disable-override
+disable-override:
+	rm ./overrides-enabled/$(SERVICE_PASSED_DNCASED).yml 
 
-disable-game: disable-service
-
-disable-service:
-	rm ./services-enabled/$(SERVICE_PASSED_DNCASED).yml
-	rm ./overrides-enabled/$(SERVICE_PASSED_DNCASED)-*.yml 2> /dev/null || true
+#########################################################
+#
+# external commands
+#
+#########################################################
 
 disable-external:
 	rm ./etc/traefik/enabled/$(SERVICE_PASSED_DNCASED).yml
 
-create-service:
-	envsubst '$${SERVICE_PASSED_DNCASED},$${SERVICE_PASSED_UPCASED}' < ./.templates/service.template > ./services-available/$(SERVICE_PASSED_DNCASED).yml
-	$(EDITOR) ./services-available/$(SERVICE_PASSED_DNCASED).yml
+enable-external:
+	@cp ./etc/traefik/available/$(SERVICE_PASSED_DNCASED).yml ./etc/traefik/enabled/$(SERVICE_PASSED_DNCASED).yml || true
 
-create-game:
-	envsubst '$${SERVICE_PASSED_DNCASED},$${SERVICE_PASSED_UPCASED}' < ./.templates/service.template > ./services-available/games/$(SERVICE_PASSED_DNCASED).yml
-	$(EDITOR) ./services-available/games/$(SERVICE_PASSED_DNCASED).yml
+#########################################################
+#
+# helper commands
+#
+#########################################################
+
+edit-env:
+	$(EDITOR) .env
 
 install-node-exporter:
 	curl -s https://gist.githubusercontent.com/ilude/2cf7a3b7712378c6b9bcf1e1585bf70f/raw/setup_node_exporter.sh?$(date +%s) | /bin/bash -s | tee build.log
 
+#########################################################
+#
+# backup and restore up commands
+#
+#########################################################
 
 export-backup: create-backup
 	@echo "export-backup is depercated and will be removed in the future, please use make create-backup"
@@ -219,14 +261,30 @@ create-backup:
 restore-backup:
 	sudo tar -xvf ./backups/traefik-config-backup.tar.gz
 
+#########################################################
+#
+# clean up commands
+#
+#########################################################
+
+clean-acme:
+	@echo "removing acme certificate file"
+	sudo rm etc/traefik/letsencrypt/acme.json
+
 remove-etc: 
-	rm -rf ./etc/$(SERVICE_PASSED_DNCASED)/
+	rm -rf ./etc/$(or $(SERVICE_PASSED_DNCASED),no_service_passed)/
 
 reset-database-folder:
-	rm -rf ./media/databases/$(SERVICE_PASSED_DNCASED)/
-	git checkout ./media/databases/$(SERVICE_PASSED_DNCASED)/.keep
+	rm -rf ./media/databases/$(or $(SERVICE_PASSED_DNCASED),no_service_passed)/
+	git checkout ./media/databases/$(or $(SERVICE_PASSED_DNCASED),no_service_passed)/.keep
 
 reset-database: remove-etc reset-database-folder	
+
+#########################################################
+#
+# cloudflare tunnel commands
+#
+#########################################################
 
 cloudflare-login:
 	$(DOCKER_COMPOSE) run --rm cloudflared login
@@ -241,6 +299,12 @@ delete-tunnel:
 
 show-tunnel:
 	$(DOCKER_COMPOSE) run --rm cloudflared tunnel info $(CLOUDFLARE_TUNNEL_NAME)
+
+#########################################################
+#
+# test and debugging commands
+#
+#########################################################
 
 test-smtp:
 	envsubst .templates/smtp.template | nc localhost 25
