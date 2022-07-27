@@ -9,17 +9,17 @@ networks:
 services:
   uptime-kuma:
     image: louislam/uptime-kuma:${UPTIMEKUMA_DOCKER_TAG:-latest}
-    container_name: uptimekuma
+    container_name: ${UPTIMEKUMA_CONTAINER_NAME:-uptimekuma}
     restart: unless-stopped
     volumes:
       - ./etc/uptime-kuma:/app/data
     env_file: 
       - .env
     labels:
-      - joyride.host.name=uptimekuma.${HOST_DOMAIN}
+      - joyride.host.name=${UPTIMEKUMA_CONTAINER_NAME:-uptimekuma}.${HOST_DOMAIN}
       - traefik.enable=true
       - traefik.http.routers.uptimekuma.entrypoints=websecure
-      - traefik.http.routers.uptimekuma.rule=Host(`uptimekuma.${HOST_DOMAIN}`)
+      - traefik.http.routers.uptimekuma.rule=Host(`${UPTIMEKUMA_CONTAINER_NAME:-uptimekuma}.${HOST_DOMAIN}`)
       - traefik.http.routers.uptimekuma.tls=true
       - traefik.http.routers.uptimekuma.service=uptimekuma
       - traefik.http.services.uptimekuma.loadbalancer.server.port=3001
