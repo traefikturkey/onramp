@@ -27,3 +27,11 @@ services:
       - traefik.http.services.${SERVICE_PASSED_DNCASED}.loadbalancer.server.port=8096
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
+
+      # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${${SERVICE_PASSED_UPCASED}_FLAME_NAME:-${SERVICE_PASSED_DNCASED}} 
+      - flame.url=${${SERVICE_PASSED_UPCASED}_CONTAINER_NAME:-${SERVICE_PASSED_DNCASED}}.${HOST_DOMAIN}
+      - flame.icon=${${SERVICE_PASSED_UPCASED}_FLAME_ICON:-docker} # optional, default is "docker"
+
