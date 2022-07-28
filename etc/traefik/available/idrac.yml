@@ -1,7 +1,3 @@
-entryPoints:
-  idrac-console-entrypoint:
-    address: 5900
-
 http:
   routers:
     idrac:
