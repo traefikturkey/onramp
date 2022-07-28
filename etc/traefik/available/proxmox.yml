@@ -4,7 +4,7 @@ http:
     proxmox:
       entryPoints:
         - "websecure"
-      rule: "Host(`pve.{{env "HOST_DOMAIN"}}`)"
+      rule: "Host(`{{env "PROXMOX_HOST_NAME"}}.{{env "HOST_DOMAIN"}}`)"
       middlewares:
         - default-headers
       tls: {}
