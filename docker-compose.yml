@@ -18,8 +18,6 @@ services:
     ports:
       - 80:80
       - 443:443
-      # 5900 Required if you wish to launch the idrac console.
-      - 5900:5900
     env_file: 
       - .env
     volumes:
@@ -43,8 +41,6 @@ services:
       - --entrypoints.websecure.http.tls.certResolver=letsencrypt
       - --entrypoints.websecure.http.tls.domains[0].main=${HOST_DOMAIN}
       - --entrypoints.websecure.http.tls.domains[0].sans=*.${HOST_DOMAIN}
-      # Below line required for idrac console redirection
-      - --entryPoints.idrac-console-entrypoint.address=:5900
       - --serverstransport.insecureskipverify=true
       - --certificatesresolvers.letsencrypt.acme.dnschallenge=true
       - --certificatesresolvers.letsencrypt.acme.dnschallenge.provider=cloudflare
