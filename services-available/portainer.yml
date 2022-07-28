@@ -8,21 +8,23 @@ networks:
 
 services:
   portainer:
-    image: portainer/portainer-ce:${PORTAINER_DOCKER_TAG:-latest}
-    container_name: portainer
+    image: portainer/portainer-${PORTAINER_VERSION:-ce}:${PORTAINER_DOCKER_TAG:-latest}
+    container_name: ${PORTAINER_CONTAINER_NAME:-portainer}
     restart: unless-stopped
     volumes:
       - ./etc/portainer:/data
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - PORTAINER_LICENSE_KEY=${PORTAINER_LICENSE_KEY}
     env_file: 
       - .env
     labels:
-      - joyride.host.name=portainer.${HOST_DOMAIN}
+      - joyride.host.name=${PORTAINER_CONTAINER_NAME:-portainer}.${HOST_DOMAIN}
       - traefik.enable=true
       - traefik.http.routers.portainer.entrypoints=websecure
-      - traefik.http.routers.portainer.rule=Host(`portainer.${HOST_DOMAIN}`)
+      - traefik.http.routers.portainer.rule=Host(`${PORTAINER_CONTAINER_NAME:-portainer}.${HOST_DOMAIN}`)
       - traefik.http.services.portainer.loadbalancer.server.port=9000
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
