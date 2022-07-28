@@ -257,9 +257,11 @@ export-backup: create-backup
 import-backup: restore-backup
 	@echo "import-backup is depercated and will be removed in the future, please use make restore-backup"
 
-create-backup:
+create-backup: backups
+	sudo tar --exclude=.keep -cvzf ./backups/traefik-config-backup.tar.gz ./etc ./services-enabled ./overrides-enabled .env || true
+
+backups:
 	mkdir -p ./backups/
-	sudo tar -cvzf ./backups/traefik-config-backup.tar.gz ./envs ./etc ./services-enabled ./overrides-enabled .env || true
 
 restore-backup:
 	sudo tar -xvf ./backups/traefik-config-backup.tar.gz
