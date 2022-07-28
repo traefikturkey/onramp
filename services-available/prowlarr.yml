@@ -9,7 +9,7 @@ networks:
 services:
   prowlarr:
     image: linuxserver/prowlarr:${PROWLARR_DOCKER_TAG:-latest}
-    container_name: prowlarr
+    container_name: ${PROWLARR_CONTAINER_NAME:-prowlarr}
     restart: unless-stopped
     volumes:
       - ./etc/prowlarr:/config
@@ -20,10 +20,15 @@ services:
       - PGID=${PGID:-1000}
       - TZ=${TZ}
     labels:
-      - joyride.host.name=prowlarr.${HOST_DOMAIN}
+      - joyride.host.name=${PROWLARR_CONTAINER_NAME:-prowlarr}.${HOST_DOMAIN}
       - traefik.enable=true
       - traefik.http.routers.prowlarr.entrypoints=websecure
-      - traefik.http.routers.prowlarr.rule=Host(`prowlarr.${HOST_DOMAIN}`)
+      - traefik.http.routers.prowlarr.rule=Host(`${PROWLARR_CONTAINER_NAME:-prowlarr}.${HOST_DOMAIN}`)
       - traefik.http.services.prowlarr.loadbalancer.server.port=9696
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
+      # Flame dashboard labels
+      - flame.type=application # "app" works too
+      - flame.name=${PROWLARR_FLAME_NAME:-traefik} 
+      - flame.url=${PROWLARR_CONTAINER_NAME:-prowlarr}.${HOST_DOMAIN}
+      - flame.icon=${PROWLARR_FLAME_ICON:-docker} # optional, default is "docker"
