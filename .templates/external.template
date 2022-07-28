@@ -1,0 +1,17 @@
+http:
+  routers:
+    ${SERVICE_PASSED_DNCASED}:
+      entryPoints:
+        - websecure
+      rule: "Host(`{{env "${SERVICE_PASSED_UPCASED}_HOST_NAME:-${SERVICE_PASSED_DNCASED}"}}.{{env "HOST_DOMAIN"}}`)"
+      middlewares:
+        - default-headers
+      tls: {}
+      service: ${SERVICE_PASSED_DNCASED}
+
+  services:
+    ${SERVICE_PASSED_DNCASED}:
+      loadBalancer:
+        servers:
+          - url: "https://{{env "${SERVICE_PASSED_UPCASED}_ADDRESS"}}"
+        passHostHeader: true

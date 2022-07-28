@@ -229,6 +229,10 @@ disable-external:
 enable-external:
 	@cp ./etc/traefik/available/$(SERVICE_PASSED_DNCASED).yml ./etc/traefik/enabled/$(SERVICE_PASSED_DNCASED).yml || true
 
+create-external:
+	envsubst '$${SERVICE_PASSED_DNCASED},$${SERVICE_PASSED_UPCASED}' < ./.templates/external.template > ./etc/traefik/available/$(SERVICE_PASSED_DNCASED).yml
+	$(EDITOR) ./etc/traefik/available/$(SERVICE_PASSED_DNCASED).yml
+
 #########################################################
 #
 # helper commands
