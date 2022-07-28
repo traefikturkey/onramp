@@ -5,6 +5,7 @@ networks:
     name: traefik
     
 # https://hub.docker.com/r/linuxserver/wikijs
+# https://docs.requarks.io/
 
 services:
   wikijs:
