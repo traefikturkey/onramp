@@ -9,6 +9,8 @@ services:
     restart: unless-stopped
     environment: 
       - AUTOHEAL_CONTAINER_LABEL=all
+      - AUTOHEAL_INTERVAL=${AUTOHEAL_INTERVAL_VALUE:-5}
+      - AUTOHEAL_DEFAULT_STOP_TIMEOUT=${AUTOHEAL_STOP_TIMEOUT:-10}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     labels:
