@@ -18,3 +18,4 @@ http:
         servers:
           - url: "https://{{env "${SERVICE_PASSED_UPCASED}_ADDRESS"}}"
         passHostHeader: true
+        
