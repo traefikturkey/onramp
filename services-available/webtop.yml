@@ -27,3 +27,10 @@ services:
       - traefik.http.services.webtop.loadbalancer.server.port=3000
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
+
+      # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${WEBTOP_FLAME_NAME:-webtop} 
+      - flame.url=${WEBTOP_CONTAINER_NAME:-webtop}.${HOST_DOMAIN}
+      - flame.icon=${WEBTOP_FLAME_ICON:-docker} # optional, default is "docker"

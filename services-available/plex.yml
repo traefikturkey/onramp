@@ -46,3 +46,10 @@ services:
       - traefik.http.services.plex.loadbalancer.server.port=32400
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
+
+      # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${PLEX_FLAME_NAME:-plex} 
+      - flame.url=${PLEX_CONTAINER_NAME:-plex}.${HOST_DOMAIN}
+      - flame.icon=${PLEX_FLAME_ICON:-docker} # optional, default is "docker"

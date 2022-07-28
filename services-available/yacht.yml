@@ -24,3 +24,11 @@ services:
       - traefik.http.routers.yacht.tls=true
       - traefik.http.routers.yacht.service=yacht
       - traefik.http.services.yacht.loadbalancer.server.port=8000
+
+
+      # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${YACHT_FLAME_NAME:-yacht} 
+      - flame.url=${YACHT_CONTAINER_NAME:-yacht}.${HOST_DOMAIN}
+      - flame.icon=${YACHT_FLAME_ICON:-docker} # optional, default is "docker"
