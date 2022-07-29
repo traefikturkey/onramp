@@ -1,0 +1,17 @@
+http:
+  routers:
+    ome:
+      entryPoints:
+        - websecure
+      rule: "Host(`ome.{{env "HOST_DOMAIN"}}`)"
+      middlewares:
+        - default-headers
+      tls: {}
+      service: ome
+
+  services:
+    ome:
+      loadBalancer:
+        servers:
+          - url: "https://{{env "OME_ADDRESS"}}"
+        passHostHeader: true
