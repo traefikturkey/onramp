@@ -20,7 +20,7 @@ sudo apt install git make nano -y
 sudo mkdir /apps
 sudo chown -R $USER:$USER /apps
 cd /apps
-https://github.com/traefikturkey/onramp.git 
+git clone https://github.com/traefikturkey/onramp.git onramp
 cd onramp
 
 make start-staging
