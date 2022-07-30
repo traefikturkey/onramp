@@ -1,0 +1,17 @@
+http:
+  routers:
+    truenas:
+      entryPoints:
+        - websecure
+      rule: "Host(`{{env "TRUENAS_HOST_NAME"}}.{{env "HOST_DOMAIN"}}`)"
+      middlewares:
+        - default-headers
+      tls: {}
+      service: truenas
+
+  services:
+    truenas:
+      loadBalancer:
+        servers:
+          - url: "https://{{env "TRUENAS_ADDRESS"}}"
+        passHostHeader: true
