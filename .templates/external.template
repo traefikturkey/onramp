@@ -3,7 +3,10 @@ http:
     ${SERVICE_PASSED_DNCASED}:
       entryPoints:
         - websecure
-      rule: "Host(`{{env "${SERVICE_PASSED_UPCASED}_HOST_NAME:-${SERVICE_PASSED_DNCASED}"}}.{{env "HOST_DOMAIN"}}`)"
+      rule: "Host(`{{env "${SERVICE_PASSED_UPCASED}_HOST_NAME"}}.{{env "HOST_DOMAIN"}}`)"
+      
+# Default variable subsitution is not occuring. Results of below line are:  ".domain.tld"
+#      rule: "Host(`{{env "${SERVICE_PASSED_UPCASED}_HOST_NAME:-${SERVICE_PASSED_DNCASED}"}}.{{env "HOST_DOMAIN"}}`)"
       middlewares:
         - default-headers
       tls: {}
