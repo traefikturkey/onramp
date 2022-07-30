@@ -1,0 +1,17 @@
+http:
+  routers:
+    synology:
+      entryPoints:
+        - websecure
+      rule: "Host(`{{env "SYNOLOGY_HOST_NAME"}}.{{env "HOST_DOMAIN"}}`)"
+      middlewares:
+        - default-headers
+      tls: {}
+      service: synology
+
+  services:
+    synology:
+      loadBalancer:
+        servers:
+          - url: "https://{{env "SYNOLOGY_ADDRESS"}}:5001"
+        passHostHeader: true
