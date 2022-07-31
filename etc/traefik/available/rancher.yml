@@ -4,7 +4,7 @@ http:
     rancher:
       entryPoints:
         - "websecure"
-      rule: "Host(`rancher.{{env "HOST_DOMAIN"}}`)"
+      rule: "Host(`{{env "RANCHER_HOST_NAME"}}.{{env "HOST_DOMAIN"}}`)"
       middlewares:
         - default-headers
       tls: {}

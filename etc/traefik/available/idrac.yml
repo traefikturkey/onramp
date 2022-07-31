@@ -3,7 +3,7 @@ http:
     idrac:
       entryPoints:
         - websecure
-      rule: "Host(`idrac.{{env "HOST_DOMAIN"}}`)"
+      rule: "Host(`{{env "IDRAC_HOST_NAME"}}.{{env "HOST_DOMAIN"}}`)"
       middlewares:
         - idrac-middlewares
       tls: {}
@@ -11,7 +11,7 @@ http:
     idrac-console:
       entryPoints:
         - idrac-console-entrypoint 
-      rule: "Host(`idrac.{{env "HOST_DOMAIN"}}`)"
+      rule: "Host(`{{env "IDRAC_HOST_NAME"}}.{{env "HOST_DOMAIN"}}`)"
       middlewares:
         - idrac-middlewares
       tls: {}
