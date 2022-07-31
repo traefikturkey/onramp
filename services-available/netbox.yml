@@ -1,0 +1,81 @@
+version: '3'
+
+networks:
+  default:
+    name: traefik
+    
+# https://docs.linuxserver.io/images/docker-netbox
+
+services:
+  netbox:
+    image: lscr.io/linuxserver/netbox:${NETBOX_DOCKER_TAG:-latest}
+    container_name: ${NETBOX_CONTAINER_NAME:-netbox} 
+    restart: unless-stopped
+    volumes:
+      - ./etc/netbox:/config # <==== this probably needs changed 
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - SKIP_SUPERUSER=false
+      - SUPERUSER_EMAIL=${NETBOX_SUPERUSER_EMAIL:-$CF_API_EMAIL}
+      - SUPERUSER_PASSWORD=test
+      - ALLOWED_HOST=${NETBOX_CONTAINER_NAME:-netbox}.${HOST_DOMAIN}
+      - DB_NAME=${PG_DB_NETBOX:-netbox}
+      - DB_USER=${PG_USER_NETBOX:-netbox}
+      - DB_PASSWORD=${PG_PASS_NETBOX}
+      - DB_HOST=netbox-postgresql
+      #- DB_PORT=5432
+      - REDIS_HOST=netbox_redis
+      #- REDIS_PORT=<REDIS_PORT>
+      #- REDIS_PASSWORD=<REDIS_PASSWORD>
+      #- REDIS_DB_TASK=<REDIS_DB_TASK>
+      #- REDIS_DB_CACHE=<REDIS_DB_CACHE>
+    labels:
+      - joyride.host.name=${NETBOX_CONTAINER_NAME:-netbox}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.netbox.entrypoints=websecure
+      - traefik.http.routers.netbox.rule=Host(`${NETBOX_CONTAINER_NAME:-netbox}.${HOST_DOMAIN}`)
+      - traefik.http.services.netbox.loadbalancer.server.port=8000
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
+
+      # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${NETBOX_FLAME_NAME:-netbox} 
+      - flame.url=${NETBOX_CONTAINER_NAME:-netbox}.${HOST_DOMAIN}
+      - flame.icon=${NETBOX_FLAME_ICON:-docker} # optional, default is "docker"
+
+  netbox-postgresql:
+    image: postgres
+    container_name: netbox_postgresql
+    restart: unless-stopped
+    user: "1000:1000"
+    volumes:
+      - ./etc/netbox/postgresql:/var/lib/postgresql/data
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - POSTGRES_PASSWORD=${PG_PASS_NETBOX:?database password required}
+      - POSTGRES_USER=${PG_USER:-netbox}
+      - POSTGRES_DB=${PG_DB:-netbox}
+    env_file:
+      - .env
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+      - traefik.enable=false
+      - autoheal=true   
+
+  netbox-redis:
+    image: redis:alpine
+    container_name: netbox_redis
+    restart: unless-stopped
+    volumes:
+    - ./etc/netbox/redis:/data
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+      - traefik.enable=false
+      - autoheal=true  
