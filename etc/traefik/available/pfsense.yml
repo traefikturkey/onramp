@@ -7,7 +7,7 @@ http:
     pfsense:
       entryPoints:
         - "websecure"
-      rule: "Host(`pfsense.{{env "HOST_DOMAIN"}}`)"
+      rule: "Host(`{{env "PFSENSE_HOST_NAME"}}.{{env "HOST_DOMAIN"}}`)"
       middlewares:
         - default-headers
       tls: {}
