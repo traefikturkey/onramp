@@ -7,7 +7,7 @@ http:
     opnsense:
       entryPoints:
         - "websecure"
-      rule: "Host(`opnsense.{{env "HOST_DOMAIN"}}`)"
+      rule: "Host(`{{env "OPNSENSE_HOST_NAME"}}.{{env "HOST_DOMAIN"}}`)"
       middlewares:
         - default-headers
       tls: {}

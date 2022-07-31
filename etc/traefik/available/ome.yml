@@ -3,7 +3,7 @@ http:
     ome:
       entryPoints:
         - websecure
-      rule: "Host(`ome.{{env "HOST_DOMAIN"}}`)"
+      rule: "Host(`{{env "OME_HOST_NAME"}}.{{env "HOST_DOMAIN"}}`)"
       middlewares:
         - default-headers
       tls: {}

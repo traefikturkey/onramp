@@ -4,7 +4,7 @@ http:
     pihole:
       entryPoints:
         - websecure
-      rule: "Host(`pihole.{{env "HOST_DOMAIN"}}`)"
+      rule: "Host(`{{env "PIHOLE_HOST_NAME"}}.{{env "HOST_DOMAIN"}}`)"
       middlewares:
         - default-headers
         - addprefix-pihole
