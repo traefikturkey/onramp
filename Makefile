@@ -311,6 +311,9 @@ show-tunnel:
 #
 #########################################################
 
+excuse:
+	@curl -s programmingexcuses.com | egrep -o "<a[^<>]+>[^<>]+</a>" | egrep -o "[^<>]+" | sed -n 2p
+
 test-smtp:
 	envsubst .templates/smtp.template | nc localhost 25
 
