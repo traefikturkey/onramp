@@ -28,6 +28,8 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     command:
       - --api
+      - --log.level=${TRAEFIK_LOG_LEVEL:-ERROR}
+      - --accesslog=${TRAEFIK_ACCESSLOG:-false}
       - --entryPoints.metrics.address=:8082
       - --metrics.prometheus.entryPoint=metrics
       - --providers.docker
