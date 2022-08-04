@@ -283,6 +283,9 @@ reset-database-folder:
 	rm -rf ./media/databases/$(or $(SERVICE_PASSED_DNCASED),no_service_passed)/
 	git checkout ./media/databases/$(or $(SERVICE_PASSED_DNCASED),no_service_passed)/.keep
 
+reset-etc: remove-etc
+	git checkout ./etc/$(or $(SERVICE_PASSED_DNCASED),no_service_passed)/*
+
 reset-database: remove-etc reset-database-folder	
 
 #########################################################
