@@ -9,12 +9,20 @@ volumes:
       o: "addr=${RADARR_MEDIA_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
       device: ":${RADARR_MEDIA_NFS_SERVER_PATH:-${NFS_MOVIES_PATH}}"
 
+  radarr-nfs-downloads:
+    labels:
+      - remove_volume_on=down
+    driver_opts:
+      type: nfs
+      o: "addr=${RADARR_MEDIA_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
+      device: ":${RADARR_MEDIA_NFS_DOWNLOADS_PATH:-${NFS_DOWNLOADS_PATH}}"
+
 services:
   radarr:
     volumes:
       - ${RADARR_CONFIG_VOLUME:-./etc/radarr}:/config
       - ${MEDIA_MOVIES_VOLUME:-radarr-nfs-media}:/movies
-      - ${MEDIA_DOWNLOADS_VOLUME:-./media/downloads}:/downloads
+      - ${MEDIA_DOWNLOADS_VOLUME:-radarr-nfs-downloads}:/downloads
       - /dev/rtc:/dev/rtc:ro
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
