@@ -1,0 +1,20 @@
+version: '3'
+
+networks:
+  default:
+    name: traefik
+  
+services:
+  bouncer-traefik:
+    image: docker.io/fbonalair/traefik-crowdsec-bouncer:${CROWDSEC_TRAEFIK_DOCKER_TAG:-latest}
+    container_name: bouncer-traefik
+    environment:
+     - CROWDSEC_AGENT_HOST=crowdsec:8080
+     - CROWDSEC_BOUNCER_API_KEY=${TRARFIK_BOUNCER_API_KEY}
+    depends_on:
+      - crowdsec
+    restart: unless-stopped  
+    labels:
+      - traefik.enable=false
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
