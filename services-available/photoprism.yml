@@ -1,0 +1,47 @@
+version: '3'
+
+networks:
+  default:
+    name: traefik
+    
+# https://github.com/photoprism/photoprism
+# https://hub.docker.com/r/photoprism/photoprism
+
+services:
+  photoprism:
+    image: photoprism/photoprism:${PHOTOPRISM_DOCKER_TAG:-latest}
+    container_name: ${PHOTOPRISM_CONTAINER_NAME:-photoprism} 
+    restart: unless-stopped
+    volumes:
+      - ./etc/photoprism/:/photoprism/config
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - ${PHOTOPRISM_MEDIA_PHOTOS:-./media/photos}:/photoprism/originals/photos
+      - ${PHOTOPRISM_MEDIA_VIDEOS:-./media/videos}:/photoprism/originals/videos
+      - ./etc/photoprism/storage:/photoprism/storage
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - PHOTOPRISM_UID=${PUID:-1000}
+      - PHOTOPRISM_GID=${PGID:-1000}
+      - TZ=${TZ}
+      - PHOTOPRISM_CONFIG_PATH=/photoprism/config
+      - PHOTOPRISM_AUTH_MODE=password
+      - PHOTOPRISM_ORIGINALS_PATH=/photoprism/originals
+      - PHOTOPRISM_SITE_URL=https://${PHOTOPRISM_CONTAINER_NAME:-photoprism}.${HOST_DOMAIN}
+    labels:
+      - joyride.host.name=${PHOTOPRISM_CONTAINER_NAME:-photoprism}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.photoprism.entrypoints=websecure
+      - traefik.http.routers.photoprism.rule=Host(`${PHOTOPRISM_CONTAINER_NAME:-photoprism}.${HOST_DOMAIN}`)
+      - traefik.http.services.photoprism.loadbalancer.server.port=2342
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
+
+      # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${PHOTOPRISM_FLAME_NAME:-photoprism} 
+      - flame.url=${PHOTOPRISM_CONTAINER_NAME:-photoprism}.${HOST_DOMAIN}
+      - flame.icon=${PHOTOPRISM_FLAME_ICON:-docker} # optional, default is "docker"
+      
