@@ -7,9 +7,9 @@ networks:
 # https://hub.docker.com/r/linuxserver/overseerr
 
 services:
-  radarr:
+  overseerr:
     image: linuxserver/overseerr:${OVERSEERR_DOCKER_TAG:-latest}
-    container_name: overseerr
+    container_name: ${OVERSEERR_CONTAINER_NAME:-overseerr}
     restart: unless-stopped
     volumes:
       - ./etc/overseerr:/config
@@ -18,10 +18,10 @@ services:
       - PGID=${PGID:-1000}
       - TZ=${TZ}
     labels:
-      - joyride.host.name=overseerr.${HOST_DOMAIN}
+      - joyride.host.name=${OVERSEERR_CONTAINER_NAME:-overseerr}.${HOST_DOMAIN}
       - traefik.enable=true
       - traefik.http.routers.overseerr.entrypoints=websecure
-      - traefik.http.routers.overseerr.rule=Host(`overseerr.${HOST_DOMAIN}`)
+      - traefik.http.routers.radarr.rule=Host(`${OVERSEERR_CONTAINER_NAME:-overseerr}.${HOST_DOMAIN}`)
       - traefik.http.services.overseerr.loadbalancer.server.port=5055
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
