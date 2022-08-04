@@ -17,6 +17,8 @@ services:
       - ${BAZARR_SHOWS_VOLUME:-./media/shows}:/tv
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 6767:6767
     environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
