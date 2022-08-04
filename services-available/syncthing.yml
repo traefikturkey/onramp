@@ -4,6 +4,9 @@ networks:
   default:
     name: traefik
 
+# https://hub.docker.com/r/linuxserver/syncthing
+# https://docs.linuxserver.io/images/docker-syncthing
+
 services:
   syncthing:
     image: linuxserver/syncthing:${SYNCTHING_DOCKER_TAG:-latest}

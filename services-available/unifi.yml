@@ -4,6 +4,8 @@ networks:
   default:
     name: traefik
 
+# https://github.com/goofball222/unifi
+
 services:
   unifi:
     image: ghcr.io/goofball222/unifi:${UNIFI_DOCKER_TAG:-latest-ubuntu}
