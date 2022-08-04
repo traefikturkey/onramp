@@ -4,7 +4,8 @@ networks:
   default:
     name: traefik
     
-# <================= add links to documentation here =================>
+# https://www.pgadmin.org/
+# https://hub.docker.com/r/dpage/pgadmin4/
 
 services:
   pgadmin:
