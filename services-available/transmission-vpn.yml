@@ -16,6 +16,8 @@ services:
       - ./etc/transmission-vpn:/data
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 9091:9091
     cap_add:
       - NET_ADMIN
     environment:

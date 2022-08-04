@@ -15,6 +15,8 @@ services:
       - ./etc/prowlarr:/config
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 9696:9696
     environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
