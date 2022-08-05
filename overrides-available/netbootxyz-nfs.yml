@@ -10,7 +10,7 @@ volumes:
       device: ":${NETBOOTXYZ_MEDIA_NFS_SERVER_PATH:-${NFS_MEDIA_PATH}}"
 
 services:
-  plex:
+  netbootxyz:
     volumes:
       - ${NETBOOTXYZ_CONFIG_VOLUME:-./etc/netbootxyz:/config}:/config
       - ${NETBOOTXYZ_ASSETS_VOLUME:-netbootxyz-nfs-assets}:${NETBOOTXYZ_ASSETS_PATH:-/assets}
