@@ -1,0 +1,50 @@
+version: '3'
+
+networks:
+  default:
+    name: traefik
+    
+# https://github.com/chuckcharlie/cups-avahi-airprint
+
+services:
+  airprint:
+    image: chuckcharlie/cups-avahi-airprint:${AIRPRINT_DOCKER_TAG:-latest}
+    container_name: ${AIRPRINT_CONTAINER_NAME:-airprint} 
+    restart: unless-stopped
+    # Host mode is needed for AirPrint © Apple TM to work 
+    # This is required to support multicasting which is needed for AirPrint © Apple TM.
+    # Can be disabled an replaced with the port for manual operation
+    network_mode: "host" 
+    volumes:
+      - ./etc/airprint:/config
+      - ./etc/airprint/services:/services
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    # ports:
+    #   - 631:631  
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - CUPSADMIN=${AIRPRINT_ADMIN_USER}
+      - CUPSPASSWORD=${AIRPRINT_ADMIN_PASS}
+    labels:
+      - joyride.host.name=${AIRPRINT_CONTAINER_NAME:-airprint}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.airprint.entrypoints=websecure
+      - traefik.http.routers.airprint.rule=Host(`${AIRPRINT_CONTAINER_NAME:-airprint}.${HOST_DOMAIN}`)
+      - traefik.http.services.airprint.loadbalancer.server.port=631
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
+
+      # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${AIRPRINT_FLAME_NAME:-airprint} 
+      - flame.url=${AIRPRINT_CONTAINER_NAME:-airprint}.${HOST_DOMAIN}
+      - flame.icon=${AIRPRINT_FLAME_ICON:-docker} # optional, default is "docker"
+
+    devices: 
+      # your usb device forwarding to the docker image 
+      # Here you will need to passthru the USB of your printer to the VM
+      - /dev/bus/usb:/dev/bus/usb
