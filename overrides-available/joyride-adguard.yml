@@ -1,0 +1,9 @@
+version: '3'
+
+networks:
+  default:
+    name: traefik
+
+
+services:
+  joyride:

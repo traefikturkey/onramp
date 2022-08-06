@@ -37,3 +37,4 @@ etc/*/*/*
 !etc/traefik/enabled/middleware.yml
 !etc/authelia/configuration.template
 !etc/crowdsec/acquis.yaml
+!etc/adguard/conf/AdGuardHome.template

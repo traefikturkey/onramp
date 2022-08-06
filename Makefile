@@ -186,7 +186,7 @@ list-external:
 #
 #########################################################
 
-build: .env etc/authelia/configuration.yml etc/dashy/dashy-config.yml etc/prometheus/conf 
+build: .env etc/authelia/configuration.yml etc/dashy/dashy-config.yml etc/prometheus/conf etc/adguard/conf/AdGuardHome.yaml
 
 .env:
 	cp .templates/env.template .env
@@ -194,6 +194,9 @@ build: .env etc/authelia/configuration.yml etc/dashy/dashy-config.yml etc/promet
 
 etc/authelia/configuration.yml:
 	envsubst '$${HOST_DOMAIN}' < ./etc/authelia/configuration.template > ./etc/authelia/configuration.yml
+
+etc/adguard/conf/AdGuardHome.yaml:
+	envsubst '$${ADGUARD_PASSWORD}, $${ADGUARD_USER}, $${HOST_DOMAIN}' < ./etc/adguard/conf/AdGuardHome.template > ./etc/adguard/conf/AdGuardHome.yaml
 
 etc/dashy/dashy-config.yml:
 	mkdir -p ./etc/dashy
