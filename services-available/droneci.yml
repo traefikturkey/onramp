@@ -19,7 +19,7 @@ services:
     environment:
       - DRONE_DATABASE_DRIVER=sqlite3
       - DRONE_DATABASE_DATASOURCE=/data/database.sqlite
-      - DRONE_GITEA_SERVER=http://git.${HOST_DOMAIN}/
+      - DRONE_GITEA_SERVER=http://gitea.${HOST_DOMAIN}/
       - DRONE_GIT_ALWAYS_AUTH=false
       - DRONE_SERVER_PROTO=https
       - DRONE_SERVER_HOST=drone.${HOST_DOMAIN}
