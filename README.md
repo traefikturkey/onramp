@@ -54,6 +54,7 @@ they can be enabled by running the following commands:
 make enable-service uptime-kuma
 make restart
 ```
+> Note: this creates a symlink file in ./services-enabled to the service.yml file in ./services-available
 
 and disabled with the following:
 ```
@@ -61,7 +62,14 @@ make disable-service uptime-kuma
 make restart
 ```
 
-> Note: this creates a symlink file in ./services-enabled to the service.yml file in ./services-available
+to create a new service:
+```
+make create-service name-of-service
+```
+
+this will create a file in /services-available that is built using the service.template
+
+
 
 ## Docker Overrides
 
