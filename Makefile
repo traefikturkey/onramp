@@ -186,7 +186,7 @@ list-external:
 #
 #########################################################
 
-build: .env etc/authelia/configuration.yml etc/dashy/dashy-config.yml etc/prometheus/conf etc/adguard/conf/AdGuardHome.yaml etc/pihole/dnsmasq/03-custom-dns-names.conf
+build: .env etc/authelia/configuration.yml etc/dashy/dashy-config.yml etc/prometheus/conf etc/adguard/conf/AdGuardHome.yaml
 
 .env:
 	cp .templates/env.template .env
