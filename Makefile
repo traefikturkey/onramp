@@ -186,7 +186,7 @@ list-external:
 #
 #########################################################
 
-build: .env etc/authelia/configuration.yml etc/dashy/dashy-config.yml etc/prometheus/conf etc/adguard/conf/AdGuardHome.yaml
+build: .env etc/authelia/configuration.yml etc/dashy/dashy-config.yml etc/prometheus/conf etc/adguard/conf/AdGuardHome.yaml etc/pihole/dnsmasq/03-custom-dns-names.conf
 
 .env:
 	cp .templates/env.template .env
@@ -197,6 +197,9 @@ etc/authelia/configuration.yml:
 
 etc/adguard/conf/AdGuardHome.yaml:
 	envsubst '$${ADGUARD_PASSWORD}, $${ADGUARD_USER}, $${HOST_DOMAIN}' < ./etc/adguard/conf/AdGuardHome.template > ./etc/adguard/conf/AdGuardHome.yaml
+
+etc/pihole/dnsmasq/03-custom-dns-names.conf:
+	envsubst '$${HOST_DOMAIN}, $${HOSTIP} ' < ./etc/pihole/dns.template > ./etc/pihole/dnsmasq/03-custom-dns-names.conf
 
 etc/dashy/dashy-config.yml:
 	mkdir -p ./etc/dashy

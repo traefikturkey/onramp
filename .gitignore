@@ -38,3 +38,4 @@ etc/*/*/*
 !etc/authelia/configuration.template
 !etc/crowdsec/acquis.yaml
 !etc/adguard/conf/AdGuardHome.template
+!etc/pihole/dns.template
