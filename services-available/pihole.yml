@@ -1,0 +1,46 @@
+version: '3'
+
+networks:
+  default:
+    name: traefik
+    
+# https://github.com/pi-hole/docker-pi-hole/blob/master/README.md
+
+services:
+  pihole:
+    image: pihole/pihole:${PIHOLE_DOCKER_TAG:-latest}
+    container_name: ${PIHOLE_CONTAINER_NAME:-pihole} 
+    restart: unless-stopped
+    #network_mode: "host"
+    # cap_add:
+    #   - NET_ADMIN
+    volumes:
+      - ./etc/pihole:/etc/pihole 
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - ./etc/pihole/dnsmasq:/etc/dnsmasq.d
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - WEBPASSWORD=${PIHOLE_WEBPASSWORD}
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+    #   - "67:67/udp"
+    #   - "8080:80/tcp"  
+    labels:
+      - joyride.host.name=${PIHOLE_CONTAINER_NAME:-pihole}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.pihole.entrypoints=websecure
+      - traefik.http.routers.pihole.rule=Host(`${PIHOLE_CONTAINER_NAME:-pihole}.${HOST_DOMAIN}`)
+      - traefik.http.services.pihole.loadbalancer.server.port=80
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
+
+      # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${PIHOLE_FLAME_NAME:-pihole} 
+      - flame.url=${PIHOLE_CONTAINER_NAME:-pihole}.${HOST_DOMAIN}
+      - flame.icon=${PIHOLE_FLAME_ICON:-docker} # optional, default is "docker"
