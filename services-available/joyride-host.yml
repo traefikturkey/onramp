@@ -1,0 +1,21 @@
+version: '3'
+
+# https://github.com/ilude/joyride
+# use this if combined with pihole
+
+services:
+  joyride-host:
+    image: ghcr.io/ilude/joyride:${JOYRIDE_DOCKER_TAG:-latest}
+    container_name: ${JOYRIDE_CONTAINER_NAME:-joyride}
+    restart: unless-stopped
+    network_mode: "host"
+    environment:
+      - HOSTIP=${HOSTIP}
+    # ports:
+    #   - 54:54/udp
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    labels:
+      - traefik.enable=false 
