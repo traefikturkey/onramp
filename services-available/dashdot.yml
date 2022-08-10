@@ -1,0 +1,40 @@
+version: '3'
+
+networks:
+  default:
+    name: traefik
+    
+# https://github.com/MauriceNino/dashdot
+# https://getdashdot.com/
+
+
+services:
+  dashdot:
+    image: mauricenino/dashdot:${DASHDOT_DOCKER_TAG:-latest}
+    container_name: ${DASHDOT_CONTAINER_NAME:-dashdot} 
+    restart: unless-stopped
+    #privileged: false
+    volumes:
+      #- ./etc/dashdot:/config # <==== this probably needs changed 
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      #- /:/mnt/host:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=${DASHDOT_CONTAINER_NAME:-dashdot}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.dashdot.entrypoints=websecure
+      - traefik.http.routers.dashdot.rule=Host(`${DASHDOT_CONTAINER_NAME:-dashdot}.${HOST_DOMAIN}`)
+      - traefik.http.services.dashdot.loadbalancer.server.port=3001
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
+
+      # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${DASHDOT_FLAME_NAME:-dashdot} 
+      - flame.url=${DASHDOT_CONTAINER_NAME:-dashdot}.${HOST_DOMAIN}
+      - flame.icon=${DASHDOT_FLAME_ICON:-docker} # optional, default is "docker"
