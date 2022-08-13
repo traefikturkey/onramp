@@ -19,18 +19,19 @@ services:
     environment:
       - DRONE_DATABASE_DRIVER=sqlite3
       - DRONE_DATABASE_DATASOURCE=/data/database.sqlite
-      - DRONE_GITEA_SERVER=http://${GITEA_CONTAINER_NAME:-gitea}.${HOST_DOMAIN}/
+      - DRONE_GITEA_CLIENT_ID=${DRONE_GITEA_CLIENT_ID}
+      - DRONE_GITEA_CLIENT_SECRET=${DRONE_GITEA_CLIENT_SECRET}
+      - DRONE_GITEA_SERVER=https://${GITEA_CONTAINER_NAME:-gitea}.${HOST_DOMAIN}/
       - DRONE_GIT_ALWAYS_AUTH=false
       - DRONE_SERVER_PROTO=https
       - DRONE_SERVER_HOST=${DRONE_CONTAINER_NAME:-drone}.${HOST_DOMAIN}
       - DRONE_TLS_AUTOCERT=false
       - DRONE_RPC_SECRET=${DRONE_RPC_SECRET}
       - DRONE_USER_CREATE=username:${DRONE_ADMIN_USER_CREATE},machine:false,admin:true,token:${DRONE_RPC_SECRET}
-      - DRONE_GITEA_CLIENT_ID=${DRONE_GITEA_CLIENT_ID}
-      - DRONE_GITEA_CLIENT_SECRET=${DRONE_GITEA_CLIENT_SECRET}
-    # ports:
-    #   - 4001:80
-    #   - 4002:9000
+      - DRONE_LOGS_DEBUG=true
+    ports:
+      - 4001:80
+      - 4002:9000
     volumes:
       - ./etc/droneci:/data
       - /etc/timezone:/etc/timezone:ro
@@ -60,8 +61,8 @@ services:
       - DRONE_RUNNER_NETWORKS=traefik
       - DRONE_DEBUG=false
       - DRONE_TRACE=false
-    # ports:
-    #   - 4003:3000
+    ports:
+      - 4003:3000
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
