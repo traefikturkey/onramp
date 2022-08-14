@@ -29,9 +29,9 @@ services:
       - DRONE_RPC_SECRET=${DRONE_RPC_SECRET}
       - DRONE_USER_CREATE=username:${DRONE_ADMIN_USER_CREATE},machine:false,admin:true,token:${DRONE_RPC_SECRET}
       - DRONE_LOGS_DEBUG=true
-    ports:
-      - 4001:80
-      - 4002:9000
+    # ports:
+    #   - 4001:80
+    #   - 4002:9000
     volumes:
       - ./etc/droneci:/data
       - /etc/timezone:/etc/timezone:ro
@@ -40,7 +40,6 @@ services:
     labels:
       - joyride.host.name=${DRONE_CONTAINER_NAME:-drone}.${HOST_DOMAIN}
       - traefik.enable=true
-      - traefik.docker.network=traefik
       - traefik.http.routers.drone.rule=Host(`${DRONE_CONTAINER_NAME:-drone}.${HOST_DOMAIN}`)
       - traefik.http.routers.drone.entrypoints=websecure
       - traefik.http.services.drone.loadbalancer.server.port=80

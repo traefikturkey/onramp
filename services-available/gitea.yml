@@ -25,7 +25,7 @@ services:
       - SSH_LISTEN_PORT=22
       - DB_TYPE=sqlite3
     ports:
-      - 4000:4000
+      # - 4000:4000
       - "2222:22"
     volumes:
       - ./etc/gitea:/data
@@ -34,7 +34,6 @@ services:
     labels:
       - joyride.host.name=${GITEA_CONTAINER_NAME:-gitea}.${HOST_DOMAIN}
       - traefik.enable=true
-      - traefik.docker.network=traefik
       - traefik.http.routers.gitea.rule=Host(`${GITEA_CONTAINER_NAME:-gitea}.${HOST_DOMAIN}`)
       - traefik.http.routers.gitea.entrypoints=websecure
       - traefik.http.services.gitea.loadbalancer.server.port=4000
