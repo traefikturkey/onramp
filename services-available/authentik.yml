@@ -29,8 +29,6 @@ services:
       - POSTGRES_PASSWORD=${PG_PASS_AUTHENTIK:?database password required}
       - POSTGRES_USER=${PG_USER:-authentik}
       - POSTGRES_DB=${PG_DB:-authentik}
-    env_file:
-      - .env
     labels:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=false
@@ -67,6 +65,8 @@ services:
       - AUTHENTIK_POSTGRESQL__NAME=${PG_DB:-authentik}
       - AUTHENTIK_POSTGRESQL__PASSWORD=${PG_PASS_AUTHENTIK}
       - AUTHENTIK_LOG_LEVEL=debug
+      - AUTHENTIK_SECRET_KEY=${AUTHENTIK_SECRET_KEY}
+      - AUTHENTIK_BOOTSTRAP_PASSWORD=${AUTHENTIK_BOOTSTRAP_PASSWORD}
       # AUTHENTIK_ERROR_REPORTING__ENABLED: "true"
       # WORKERS: 2
     user: authentik
@@ -74,8 +74,6 @@ services:
       - ./etc/authentik/media:/media
       - ./etc/authentik/certs:/certs
       - /var/run/docker.sock:/var/run/docker.sock:ro
-    env_file:
-      - .env
     labels:
       - joyride.host.name=${AUTHENTIK_AUTH_DOMAIN}
       - traefik.enable=true
@@ -101,6 +99,7 @@ services:
       - AUTHENTIK_POSTGRESQL__USER=${PG_USER:-authentik}
       - AUTHENTIK_POSTGRESQL__NAME=${PG_DB:-authentik}
       - AUTHENTIK_POSTGRESQL__PASSWORD=${PG_PASS_AUTHENTIK}
+      - AUTHENTIK_SECRET_KEY=${AUTHENTIK_SECRET_KEY}
       # AUTHENTIK_ERROR_REPORTING__ENABLED: "true"
       # This is optional, and can be removed. If you remove this, the following will happen
       # - The permissions for the /media folders aren't fixed, so make sure they are 1000:1000
@@ -112,8 +111,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./etc/authentik/custom-templates:/templates
       #- ./etc/authentik/geoip:/geoip
-    env_file:
-      - .env  
     labels:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=false
