@@ -1,0 +1,21 @@
+http:
+  routers:
+    nextcloud:
+      entryPoints:
+        - websecure
+      rule: "Host(`{{env "NEXTCLOUD_HOST_NAME"}}.{{env "HOST_DOMAIN"}}`)"
+      
+# Default variable subsitution is not occuring. Results of below line are:  ".domain.tld"
+#      rule: "Host(`{{env "NEXTCLOUD_HOST_NAME:-nextcloud"}}.{{env "HOST_DOMAIN"}}`)"
+      middlewares:
+        - default-headers
+      tls: {}
+      service: nextcloud
+
+  services:
+    nextcloud:
+      loadBalancer:
+        servers:
+          - url: "https://{{env "NEXTCLOUD_ADDRESS"}}"
+        passHostHeader: true
+        
