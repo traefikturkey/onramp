@@ -1,0 +1,8 @@
+version: '3'
+
+
+services:
+  pihole:
+    labels:
+      - traefik.http.middlewares.pihole-addprefix.addprefix.prefix=/admin
+      - traefik.http.routers.pihole.middlewares=pihole-addprefix
