@@ -13,7 +13,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./etc/nextcloud:/config
-      - ${NEXTCLOUD_DATA_VOLUME:-./media}:${NEXTCLOUD_DATA_PATH:-/data}
+      - ${NEXTCLOUD_DATA_VOLUME:-./media/nextcloud/}:${NEXTCLOUD_DATA_PATH:-/data}
     env_file: 
       - .env
     labels:
