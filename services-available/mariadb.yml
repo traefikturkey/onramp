@@ -19,9 +19,9 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
-      - MYSQL_USER=admin
-      - MYSQL_PASSWORD=admin
-      - MYSQL_ROOT_PASSWORD=admin
+      - MYSQL_USER=${MARIADB_USER:-admin}
+      - MYSQL_PASSWORD=${MARIADB_USER_PASSWORD:-admin}
+      - MYSQL_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD:-admin}
     ports:
       - 3306:3306
     labels:
