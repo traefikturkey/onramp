@@ -1,0 +1,47 @@
+version: '3'
+
+networks:
+  default:
+    name: traefik
+    
+# https://github.com/benphelps/homepage
+
+# To use the docker integration with labels, have a look here, as it needs seperate config
+# https://github.com/benphelps/homepage/wiki/Docker-Integration
+# https://github.com/benphelps/homepage/wiki/Service-Discovery
+
+services:
+  homepage:
+    image: ghcr.io/benphelps/homepage:${HOMEPAGE_DOCKER_TAG:-latest}
+    container_name: ${HOMEPAGE_CONTAINER_NAME:-homepage} 
+    restart: unless-stopped
+    volumes:
+      - ./etc/homepage:/app/config
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=${HOMEPAGE_CONTAINER_NAME:-homepage}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.homepage.entrypoints=websecure
+      - traefik.http.routers.homepage.rule=Host(`${HOMEPAGE_CONTAINER_NAME:-homepage}.${HOST_DOMAIN}`)
+      - traefik.http.services.homepage.loadbalancer.server.port=3000
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
+
+      # Flame dashboard labels
+      
+      # - flame.type=application # "app" works too
+      # - flame.name=${HOMEPAGE_FLAME_NAME:-homepage} 
+      # - flame.url=${HOMEPAGE_CONTAINER_NAME:-homepage}.${HOST_DOMAIN}
+      # - flame.icon=${HOMEPAGE_FLAME_ICON:-docker} # optional, default is "docker"
+
+      # - homepage.group=A group
+      # - homepage.name=homepage
+      # - homepage.icon=
+      # - homepage.href=https://${HOMEPAGE_CONTAINER_NAME:-homepage}.${HOST_DOMAIN}
+      # - homepage.description=This page
