@@ -37,3 +37,9 @@ services:
       - flame.name=${WHOAMI_FLAME_NAME:-whoami} 
       - flame.url=${WHOAMI_CONTAINER_NAME:-whoami}.${HOST_DOMAIN}
       - flame.icon=${WHOAMI_FLAME_ICON:-docker} # optional, default is "docker"
+
+      #- homepage.group=traefik
+      - homepage.name=${WHOAMI_CONTAINER_NAME:-whoami}
+      #- homepage.icon=
+      - homepage.href=https://${WHOAMI_CONTAINER_NAME:-whoami}.${HOST_DOMAIN}
+      - homepage.description=Tiny Go webserver that prints OS information and HTTP request to output
