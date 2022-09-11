@@ -6,9 +6,6 @@ networks:
     
 # https://hub.docker.com/r/mbentley/omada-controller
 
-# To be able to use traefik reverse proxying on omada you need to dump the certs using cert dumper
-# make enable-service cert-dumper
-# make enable-overide omada-traefik
 
 services:
   omada:
@@ -26,7 +23,7 @@ services:
       - PGID=${PGID:-1000}
       - TZ=${TZ}
       - MANAGE_HTTP_PORT=${OMADA_MANAGE_HTTP_PORT:-8088}
-      - MANAGE_HTTPS_PORT=${OMADA_MANAGE_HTTPS_PORT:-8043}
+      - MANAGE_HTTPS_PORT=${OMADA_MANAGE_HTTPS_PORT:-443}
       - PORTAL_HTTP_PORT=${OMADA_PORTAL_HTTP_PORT:-8088}
       - PORTAL_HTTPS_PORT=${OMADA_PORTAL_HTTPS_PORT:-8043}
       - SHOW_SERVER_LOGS=true
@@ -45,19 +42,17 @@ services:
       - '29812:29812'
       - '29813:29813'
 
-# Redirects not working right. Requires further research.
-
     labels:
       - joyride.host.name=${OMADA_CONTAINER_NAME:-omada}.${HOST_DOMAIN}
       - traefik.enable=true
       - traefik.http.routers.omada.entrypoints=websecure
       - traefik.http.routers.omada.rule=Host(`${OMADA_CONTAINER_NAME:-omada}.${HOST_DOMAIN}`)
       - traefik.http.services.omada.loadbalancer.server.scheme=https
-      - traefik.http.services.omada.loadbalancer.server.port=8043
+      - traefik.http.services.omada.loadbalancer.server.port=443
       - traefik.http.services.omada.loadbalancer.passhostheader=true
       - traefik.http.routers.omada.middlewares=omada-middlewares
       - traefik.http.middlewares.omada-middlewares.chain.middlewares=omada-redirect,omada-headers
-      - traefik.http.middlewares.omada-headers.headers.customrequestheaders.Host=${OMADA_CONTAINER_NAME:-omada}.${HOST_DOMAIN}:8043
+      - traefik.http.middlewares.omada-headers.headers.customrequestheaders.Host=${OMADA_CONTAINER_NAME:-omada}.${HOST_DOMAIN}
       - traefik.http.middlewares.omada-headers.headers.customresponseheaders.Host=${OMADA_CONTAINER_NAME:-omada}.${HOST_DOMAIN}
       - traefik.http.middlewares.omada-redirect.redirectregex.regex=^https:\\/\\/([^\\/]+)\\/?$$
       - traefik.http.middlewares.omada-redirect.redirectregex.replacement=https://$$1/login
