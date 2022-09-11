@@ -292,6 +292,8 @@ reset-database-folder:
 reset-etc: remove-etc
 	git checkout ./etc/$(or $(SERVICE_PASSED_DNCASED),no_service_passed)/
 
+stop-reset-etc: stop-service reset-etc
+
 reset-database: remove-etc reset-database-folder	
 
 #########################################################
