@@ -6,6 +6,10 @@ networks:
     
 # https://hub.docker.com/r/mbentley/omada-controller
 
+# To be able to use traefik reverse proxying on omada you need to dump the certs using cert dumper
+# make enable-service cert-dumper
+# make enable-overide omada-traefik
+
 services:
   omada:
     image: mbentley/omada-controller:${OMADA_DOCKER_TAG:-latest}
