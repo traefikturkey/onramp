@@ -28,9 +28,6 @@ services:
       - PORTAL_HTTPS_PORT=${OMADA_PORTAL_HTTPS_PORT:-8043}
       - SHOW_SERVER_LOGS=true
       - SHOW_MONGODB_LOGS=false
-      - SSL_CERT_NAME="tls.crt"
-      - SSL_KEY_NAME="tls.key"
-
     ports:
       - '8088:8088'
       - '8043:8043'
