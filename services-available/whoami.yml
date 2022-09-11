@@ -9,7 +9,7 @@ networks:
 services:
   whoami:
     image: traefik/whoami:${WHOAMI_DOCKER_TAG:-latest}
-    container_name: whoami
+    container_name: ${WHOAMI_CONTAINER_NAME:-whoami}
     restart: unless-stopped
     volumes:
       - /etc/timezone:/etc/timezone:ro
@@ -19,10 +19,10 @@ services:
       - PGID=${PGID:-1000}
       - TZ=${TZ}
     labels:
-      - joyride.host.name=whoami.${HOST_DOMAIN}
+      - joyride.host.name=${WHOAMI_CONTAINER_NAME:-whoami}.${HOST_DOMAIN}
       - traefik.enable=true
       - traefik.http.routers.whoami.entrypoints=websecure
-      - traefik.http.routers.whoami.rule=Host(`whoami.${HOST_DOMAIN}`)
+      - traefik.http.routers.whoami.rule=Host(`${WHOAMI_CONTAINER_NAME:-whoami}.${HOST_DOMAIN}`)
       - traefik.http.services.whoami.loadbalancer.server.port=80
       #- traefik.http.routers.whoami.middlewares=authentik@docker
       #- traefik.http.routers.whoami.middlewares=authelia@docker
