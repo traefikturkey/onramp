@@ -7,7 +7,6 @@ networks:
 # https://hub.docker.com/r/prestashop/prestashop/
 # https://www.prestashop.com/en
 
-
 services:
   prestashop:
     image: prestashop/prestashop:${PRESTASHOP_DOCKER_TAG:-latest}

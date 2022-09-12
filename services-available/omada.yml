@@ -6,6 +6,8 @@ networks:
     
 # https://hub.docker.com/r/mbentley/omada-controller
 
+# Article on issues with device adoption
+# https://www.tp-link.com/us/support/faq/3192/
 
 services:
   omada:
@@ -30,15 +32,18 @@ services:
       - SHOW_SERVER_LOGS=true
       - SHOW_MONGODB_LOGS=false
     ports:
+      # Below ports required for portal access
       - '8088:8088'
       - '8043:8043'
-      - '27001:27001/udp'
-      - '27002:27002'
-      - '27017:27017'
+      # - '27001:27001/udp'
+      # - '27002:27002'
+      # - '27017:27017'
+      # Below ports required for device discovery
       - '29810:29810/udp'
       - '29811:29811'
       - '29812:29812'
       - '29813:29813'
+      - '29814:29814'
 
     labels:
       - joyride.host.name=${OMADA_CONTAINER_NAME:-omada}.${HOST_DOMAIN}
