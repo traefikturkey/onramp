@@ -52,7 +52,7 @@ services:
       - autoheal=true  
 
   authentik-server:
-    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_DOCKER_TAG:-2022.7.2}
+    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_DOCKER_TAG:-2022.8.2}
     container_name: authentik_server
     restart: unless-stopped
     command: server
@@ -87,7 +87,7 @@ services:
       - autoheal=true
 
   worker:
-    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_DOCKER_TAG:-2022.7.2}
+    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_DOCKER_TAG:-2022.8.2}
     container_name: authentik_worker
     restart: unless-stopped
     command: worker
