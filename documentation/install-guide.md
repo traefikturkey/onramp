@@ -9,7 +9,7 @@
 - Install Docker
     Below are two different methods for installing docker:
     * [Docker Linux Installation steps](https://docs.docker.com/desktop/linux/install/#generic-installation-steps)
-    * or using this bash script on ubuntu available [here](https://gist.github.com/ilude/52b775682ec6ea5cc31933f81cef49f6)
+    * or using this bash script on ubuntu available [here](https://github.com/traefikturkey/onvoy/tree/master/ubuntu/bash)
 
     
 
