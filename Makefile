@@ -356,7 +356,7 @@ create-db-user-pw:
 remove-db-user: 
 	$(mysql-connect) -e 'DROP USER $(first_arg);'
 
-create-user-with-db: create-db-user create-database
+create-user-with-db: create-db-user-pw create-database 
 
 #########################################################
 #
