@@ -335,7 +335,7 @@ mysql-connect = @docker exec -it $(MARIADB_CONTAINER_NAME) mysql -p$(MARIADB_ROO
 first_arg = $(shell echo $(EMPTY_TARGETS)| cut -d ' ' -f 1)
 second_arg = $(shell echo $(EMPTY_TARGETS)| cut -d ' ' -f 2)
 
-password = $(shell openssl rand -hex 16)
+password := $(shell openssl rand -hex 16)
 
 
 mariadb-console:
@@ -350,13 +350,9 @@ show-databases:
 create-db-user:
 	$(mysql-connect) -e 'CREATE USER $(first_arg) IDENTIFIED BY "'$(second_arg)'";'
 
-
-#@echo $(mysql-connect) -e 'CREATE USER $(first_arg) IDENTIFIED BY "'$(shell openssl rand -hex 16 > $1 | echo $1 )'";'
-
-
 create-db-user-pw: 
-	@echo $(mysql-connect) -e 'CREATE USER $(first_arg) IDENTIFIED BY "'$(password)'";'
-	@echo $(password)
+	@echo Here is your password : $(password) : Please put it in the .env file under the service name
+	$(mysql-connect) -e 'CREATE USER IF NOT EXISTS $(first_arg) IDENTIFIED BY "'$(password)'";'
 
 grant-db-perms:
 	$(mysql-connect) -e 'GRANT ALL PRIVILEGES ON '$(first_arg)'.* TO $(first_arg);'
