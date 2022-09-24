@@ -318,6 +318,48 @@ show-tunnel:
 
 #########################################################
 #
+# mariadb commands
+#
+#########################################################
+
+# enable this for to be asked for password to connect to the database
+#mysql-connect = $(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) exec mariadb mysql -p
+mysql-connect = $(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) exec mariadb mysql -p$(MARIADB_ROOT_PASSWORD)
+
+first_arg = $(shell echo $(EMPTY_TARGETS)| cut -d ' ' -f 1)
+second_arg = $(shell echo $(EMPTY_TARGETS)| cut -d ' ' -f 2)
+
+password = $(shell openssl rand -hex 16)
+
+
+mariadb-console:
+	$(mysql-connect)
+
+create-database:
+	$(mysql-connect) -e 'CREATE DATABASE IF NOT EXISTS $(first_arg);'
+
+show-databases: 
+	$(mysql-connect) -e 'show databases;'
+
+create-db-user:
+	$(mysql-connect) -e 'CREATE USER $(first_arg) IDENTIFIED BY "'$(second_arg)'";'
+
+
+#@echo $(mysql-connect) -e 'CREATE USER $(first_arg) IDENTIFIED BY "'$(shell openssl rand -hex 16 > $1 | echo $1 )'";'
+
+
+create-db-user-pw: 
+	@echo $(mysql-connect) -e 'CREATE USER $(first_arg) IDENTIFIED BY "'$(password)'";'
+	@echo $(password)
+
+
+remove-db-user: 
+	$(mysql-connect) -e 'DROP USER $(first_arg);'
+
+create-user-with-db: create-db-user create-database
+
+#########################################################
+#
 # test and debugging commands
 #
 #########################################################
