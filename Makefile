@@ -352,6 +352,8 @@ create-db-user-pw:
 	@echo $(mysql-connect) -e 'CREATE USER $(first_arg) IDENTIFIED BY "'$(password)'";'
 	@echo $(password)
 
+grant-db-perms:
+	$(mysql-connect) -e 'GRANT ALL PRIVILEGES ON '$(first_arg)'.* TO $(first_arg);'
 
 remove-db-user: 
 	$(mysql-connect) -e 'DROP USER $(first_arg);'
