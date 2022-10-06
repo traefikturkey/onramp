@@ -16,6 +16,6 @@ http:
     minecraft-dynmap:
       loadBalancer:
         servers:
-          - url: "https://{{env "MINECRAFT_DYNMAP_ADDRESS"}}:8123/"
+          - url: "http://{{env "MINECRAFT_DYNMAP_ADDRESS"}}:8123/"
         passHostHeader: true
         
