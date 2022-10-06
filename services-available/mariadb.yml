@@ -9,7 +9,7 @@ networks:
 services:
   mariadb:
     image: mariadb:${MARIADB_DOCKER_TAG:-latest}
-    container_name: mariadb
+    container_name: ${MARIADB_CONTAINER_NAME:-mariadb}
     restart: unless-stopped
     volumes:
       - ./media/databases/mariadb:/var/lib/mysql
