@@ -1,0 +1,21 @@
+http:
+  routers:
+    minecraft-dynmap:
+      entryPoints:
+        - websecure
+      rule: "Host(`{{env "MINECRAFT_DYNMAP_HOST_NAME"}}.{{env "HOST_DOMAIN"}}`)"
+      
+# Default variable subsitution is not occuring. Results of below line are:  ".domain.tld"
+#      rule: "Host(`{{env "MINECRAFT_DYNMAP_HOST_NAME:-minecraft-dynmap"}}.{{env "HOST_DOMAIN"}}`)"
+      middlewares:
+        - default-headers
+      tls: {}
+      service: minecraft-dynmap
+
+  services:
+    minecraft-dynmap:
+      loadBalancer:
+        servers:
+          - url: "https://{{env "MINECRAFT_DYNMAP_ADDRESS"}}:8123/"
+        passHostHeader: true
+        
