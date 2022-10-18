@@ -15,9 +15,9 @@ services:
       - ./etc/lidarr:/config
       - ${LIDARR_MUSIC_VOLUME:-./media/music}:/music
       - ${LIDARR_DOWNLOADS_VOLUME:-./media/downloads}:/downloads
-      - /dev/rtc:/dev/rtc:ro
-      - /etc/timezone:/etc/timezone:ro
-      - /etc/localtime:/etc/localtime:ro
+      # - /dev/rtc:/dev/rtc:ro
+      # - /etc/timezone:/etc/timezone:ro
+      # - /etc/localtime:/etc/localtime:ro
     ports:
       - 8686:8686
     environment:
