@@ -1,19 +1,19 @@
 version: '3'
 
 volumes:
-  nzbget-nfs-downloads:
+  sabnzbd-nfs-downloads:
     labels:
       - remove_volume_on=down
     driver_opts:
       type: nfs
-      o: "addr=${nzbget_MEDIA_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
-      device: ":${nzbget_MEDIA_NFS_DOWNLOADS_PATH:-${NFS_DOWNLOADS_PATH}}"
+      o: "addr=${SABNZBD_MEDIA_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
+      device: ":${SABNZBD_MEDIA_NFS_DOWNLOADS_PATH:-${NFS_DOWNLOADS_PATH}}"
 
 services:
-  nzbget:
+  sabnzbd:
     volumes:
-      - ${nzbget_CONFIG_VOLUME:-./etc/nzbget}:/config
-      - ${nzbget_DOWNLOADS_VOLUME:-nzbget-nfs-downloads}:/downloads
+      - ${SABNZBD_CONFIG_VOLUME:-./etc/sabnzbd}:/config
+      - ${SABNZBD_DOWNLOADS_VOLUME:-sabnzbd-nfs-downloads}:/downloads
       - /dev/rtc:/dev/rtc:ro
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
