@@ -9,6 +9,14 @@ volumes:
       o: "addr=${SONARR_MEDIA_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
       device: ":${SONARR_MEDIA_NFS_SERVER_PATH:-${NFS_SHOWS_PATH}}"
 
+  sonarr-nfs-anime:
+    labels:
+      - remove_volume_on=down
+    driver_opts:
+      type: nfs
+      o: "addr=${SONARR_MEDIA_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
+      device: ":${SONARR_MEDIA_NFS_SERVER_PATH:-${NFS_ANIME_PATH}}"      
+
   sonarr-nfs-downloads:
     labels:
       - remove_volume_on=down
@@ -22,6 +30,7 @@ services:
     volumes:
       - ${SONARR_CONFIG_VOLUME:-./etc/sonarr}:/config
       - ${MEDIA_SHOWS_VOLUME:-sonarr-nfs-media}:/tv
+      - ${MEDIA_ANIME_VOLUME:-sonarr-nfs-anime}:/anime
       - ${MEDIA_DOWNLOADS_VOLUME:-sonarr-nfs-downloads}:/downloads
       - /dev/rtc:/dev/rtc:ro
       - /etc/timezone:/etc/timezone:ro
