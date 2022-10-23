@@ -4,7 +4,8 @@ networks:
   default:
     name: traefik
     
-# <================= add links to documentation here =================>
+# https://hub.docker.com/r/recyclarr/recyclarr
+# https://recyclarr.dev/wiki/installation/
 
 services:
   recyclarr:
@@ -12,7 +13,7 @@ services:
     container_name: ${RECYCLARR_CONTAINER_NAME:-recyclarr} 
     restart: unless-stopped
     volumes:
-      - ./etc/recyclarr:/config # <==== this probably needs changed 
+      - ./etc/recyclarr:/config 
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
