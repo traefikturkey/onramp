@@ -30,7 +30,7 @@ services:
     volumes:
       - ${SONARR_CONFIG_VOLUME:-./etc/sonarr}:/config
       - ${MEDIA_SHOWS_VOLUME:-sonarr-nfs-media}:/tv
-      - ${MEDIA_EXTRA_VOLUME:-sonarr-nfs-extra}:/anime
+      - ${MEDIA_EXTRA_VOLUME:-sonarr-nfs-extra}:/extra
       - ${MEDIA_DOWNLOADS_VOLUME:-sonarr-nfs-downloads}:/downloads
       - /dev/rtc:/dev/rtc:ro
       - /etc/timezone:/etc/timezone:ro
