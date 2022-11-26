@@ -10,7 +10,7 @@ services:
   radarr:
     image: linuxserver/radarr:${RADARR_DOCKER_TAG:-latest}
     container_name: ${RADAR_CONTAINER_NAME:-radarr}
-    restart: unless-stopped
+    restart: ${RADARR_RESTART:-unless-stopped}
     volumes:
       - ${RADARR_CONFIG_VOLUME:-./etc/radarr}:/config
       - ${MEDIA_MOVIES_VOLUME:-./media/movies}:/movies

@@ -10,7 +10,7 @@ services:
   ${SERVICE_PASSED_DNCASED}:
     image: <==== container_image ====>:${${SERVICE_PASSED_UPCASED}_DOCKER_TAG:-latest}
     container_name: ${${SERVICE_PASSED_UPCASED}_CONTAINER_NAME:-${SERVICE_PASSED_DNCASED}} 
-    restart: unless-stopped
+    restart: ${${SERVICE_PASSED_UPCASED}_RESTART:-unless-stopped}
     volumes:
       - ./etc/${SERVICE_PASSED_DNCASED}:/config # <==== this probably needs changed 
       - /etc/timezone:/etc/timezone:ro
