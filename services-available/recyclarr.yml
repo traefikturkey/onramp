@@ -11,7 +11,7 @@ services:
   recyclarr:
     image: ghcr.io/recyclarr/recyclarr:${RECYCLARR_DOCKER_TAG:-latest}
     container_name: ${RECYCLARR_CONTAINER_NAME:-recyclarr} 
-    restart: unless-stopped
+    restart: ${RECYCLARR_RESTART:-unless-stopped}
     volumes:
       - ./etc/recyclarr:/config 
       - /etc/timezone:/etc/timezone:ro

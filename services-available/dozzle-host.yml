@@ -7,10 +7,10 @@ networks:
 # https://github.com/amir20/dozzle
 
 services:
-  dozzle:
+  dozzle-host:
     image: amir20/dozzle:${DOZZLE_DOCKER_TAG:-latest}
     container_name: ${DOZZLE_CONTAINER_NAME:-dozzle}
-    restart: unless-stopped
+    restart: ${DOZZLE_RESTART:-unless-stopped}
     environment:
       - DOZZLE_LEVEL=${DOZZLE_LEVEL:-debug}
     volumes:
@@ -26,3 +26,10 @@ services:
       - traefik.http.services.dozzle.loadbalancer.server.port=8080
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
+
+    # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${DOZZLE_FLAME_NAME:-dozzle} 
+      - flame.url=${DOZZLE_CONTAINER_NAME:-dozzle}.${HOST_DOMAIN}
+      - flame.icon=${DOZZLE_FLAME_ICON:-docker} # optional, default is "docker"

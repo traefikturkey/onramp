@@ -10,7 +10,7 @@ services:
   unifi:
     image: ghcr.io/goofball222/unifi:${UNIFI_DOCKER_TAG:-latest-ubuntu}
     container_name: ${UNIFI_CONTAINER_NAME:-unifi}
-    restart: unless-stopped
+    restart: ${UNIFI_RESTART:-unless-stopped}
     environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
@@ -39,4 +39,11 @@ services:
       - traefik.http.services.unifi.loadbalancer.server.scheme=https
       - traefik.http.services.unifi.loadbalancer.server.port=8443
       - autoheal.stop.timeout=180
+
+    # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${UNIFI_FLAME_NAME:-unifi} 
+      - flame.url=${UNIFI_CONTAINER_NAME:-unifi}.${HOST_DOMAIN}
+      - flame.icon=${UNIFI_FLAME_ICON:-docker} # optional, default is "docker"
       

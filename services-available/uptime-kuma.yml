@@ -24,3 +24,10 @@ services:
       - traefik.http.routers.uptimekuma.service=uptimekuma
       - traefik.http.services.uptimekuma.loadbalancer.server.port=3001
       - traefik.docker.network=traefik
+
+    # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${UPTIMEKUMA_FLAME_NAME:-uptimekuma} 
+      - flame.url=${UPTIMEKUMA_CONTAINER_NAME:-uptimekuma}.${HOST_DOMAIN}
+      - flame.icon=${UPTIMEKUMA_FLAME_ICON:-docker} # optional, default is "docker"
