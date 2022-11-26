@@ -21,8 +21,8 @@ services:
   radarr:
     volumes:
       - ${RADARR_CONFIG_VOLUME:-./etc/radarr}:/config
-      - ${MEDIA_MOVIES_VOLUME:-radarr-nfs-media}:/movies
-      - ${MEDIA_DOWNLOADS_VOLUME:-radarr-nfs-downloads}:/downloads
+      - ${MEDIA_MOVIES_VOLUME:-radarr-nfs-media}:${RADARR_MOVIES_PATH:-/movies}
+      - ${MEDIA_DOWNLOADS_VOLUME:-radarr-nfs-downloads}:${RADARR_DOWNLOADS_PATH:-/downloads}
       - /dev/rtc:/dev/rtc:ro
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
