@@ -10,7 +10,7 @@ services:
   prowlarr:
     image: linuxserver/prowlarr:${PROWLARR_DOCKER_TAG:-develop}
     container_name: ${PROWLARR_CONTAINER_NAME:-prowlarr}
-    restart: unless-stopped
+    restart: ${PROWLARR_RESTART:-unless-stopped}
     volumes:
       - ./etc/prowlarr:/config
       - /etc/timezone:/etc/timezone:ro
@@ -31,6 +31,6 @@ services:
       - autoheal=true
       # Flame dashboard labels
       - flame.type=application # "app" works too
-      - flame.name=${PROWLARR_FLAME_NAME:-traefik} 
+      - flame.name=${PROWLARR_FLAME_NAME:-prowlarr} 
       - flame.url=${PROWLARR_CONTAINER_NAME:-prowlarr}.${HOST_DOMAIN}
       - flame.icon=${PROWLARR_FLAME_ICON:-docker} # optional, default is "docker"

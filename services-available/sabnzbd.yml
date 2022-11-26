@@ -9,9 +9,8 @@ networks:
 services:
   sabnzbd: 
     image: linuxserver/sabnzbd:${SABNZBD_DOCKER_TAG:-latest}
-    container_name: sabnzbd
-    restart: unless-stopped
-    hostname: sabnzbd.${HOST_DOMAIN}
+    container_name: ${SABNZBD_CONTAINER_NAME:-sabnzbd}
+    restart: ${SABNZBD_RESTART:-unless-stopped}
     volumes:
       - ./etc/sabnzbd:/config
       - ${SABNZBD_DOWNLOADS_DIR:-./media/downloads}:/downloads
@@ -31,10 +30,17 @@ services:
       start_period: 20s
       timeout: 10s
     labels:
-      - joyride.host.name=sabnzbd.${HOST_DOMAIN}
+      - joyride.host.name=${SABNZBD_CONTAINER_NAME:-sabnzbd}.${HOST_DOMAIN}
       - traefik.enable=true
       - traefik.http.routers.sabnzbd.entrypoints=websecure
-      - traefik.http.routers.sabnzbd.rule=Host(`sabnzbd.${HOST_DOMAIN}`)
+      - traefik.http.routers.sabnzbd.rule=Host(`${SABNZBD_CONTAINER_NAME:-sabnzbd}.${HOST_DOMAIN}`)
       - traefik.http.services.sabnzbd.loadbalancer.server.port=8080
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
+
+    # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${SABNZBD_FLAME_NAME:-sabnzbd} 
+      - flame.url=${SABNZBD_CONTAINER_NAME:-sabnzbd}.${HOST_DOMAIN}
+      - flame.icon=${SABNZBD_FLAME_ICON:-docker} # optional, default is "docker"
