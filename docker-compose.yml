@@ -8,9 +8,9 @@ networks:
 
 services:
   traefik:
-    image: traefik:2.8 # replace with traefik:latest if you are feeling frisky
-    container_name: traefik
-    restart: unless-stopped
+    image: traefik:${TRAEFIK_DOCKER_TAG:-2.9} # replace with traefik:latest if you are feeling frisky
+    container_name: ${TRAEFIK_CONTAINER_NAME:-traefik}
+    restart: ${TRAEFIK_RESTART:-unless-stopped}
     networks:
       - traefik
     extra_hosts:
