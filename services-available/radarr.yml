@@ -42,6 +42,6 @@ services:
     # Flame dashboard labels
       
       - flame.type=application # "app" works too
-      - flame.name=${RADARR_FLAME_NAME:-radarr} 
-      - flame.url=${RADARR_CONTAINER_NAME:-radarr}.${HOST_DOMAIN}
-      - flame.icon=${RADARR_FLAME_ICON:-docker} # optional, default is "docker"
+      - flame.name=${RADARR_FLAME_NAME:-Radarr} 
+      - flame.url=https://${RADARR_CONTAINER_NAME:-radarr}.${HOST_DOMAIN}
+      - flame.icon=${RADARR_FLAME_ICON:-movie-search-outline} # optional, default is "docker"

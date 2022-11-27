@@ -37,5 +37,5 @@ services:
       
       - flame.type=application # "app" works too
       - flame.name=${NZBGET_FLAME_NAME:-nzbget} 
-      - flame.url=${NZBGET_CONTAINER_NAME:-nzbget}.${HOST_DOMAIN}
+      - flame.url=https://${NZBGET_CONTAINER_NAME:-nzbget}.${HOST_DOMAIN}
       - flame.icon=${NZBGET_FLAME_ICON:-docker} # optional, default is "docker"

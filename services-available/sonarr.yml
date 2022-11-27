@@ -42,6 +42,6 @@ services:
     # Flame dashboard labels
       
       - flame.type=application # "app" works too
-      - flame.name=${SONARR_FLAME_NAME:-sonarr} 
-      - flame.url=${SONARR_CONTAINER_NAME:-sonarr}.${HOST_DOMAIN}
-      - flame.icon=${SONARR_FLAME_ICON:-docker} # optional, default is "docker"
+      - flame.name=${SONARR_FLAME_NAME:-Sonarr} 
+      - flame.url=https://${SONARR_CONTAINER_NAME:-sonarr}.${HOST_DOMAIN}
+      - flame.icon=${SONARR_FLAME_ICON:-television-classic} # optional, default is "docker"

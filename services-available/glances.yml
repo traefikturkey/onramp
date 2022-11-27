@@ -37,5 +37,5 @@ services:
       
       - flame.type=application # "app" works too
       - flame.name=${GLANCES_FLAME_NAME:-glances} 
-      - flame.url=${GLANCES_CONTAINER_NAME:-glances}.${HOST_DOMAIN}
+      - flame.url=https://${GLANCES_CONTAINER_NAME:-glances}.${HOST_DOMAIN}
       - flame.icon=${GLANCES_FLAME_ICON:-docker} # optional, default is "docker"

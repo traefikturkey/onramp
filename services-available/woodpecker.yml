@@ -43,7 +43,7 @@ services:
       
       - flame.type=application # "app" works too
       - flame.name=${WOODPECKER_FLAME_NAME:-woodpecker} 
-      - flame.url=${WOODPECKER_CONTAINER_NAME:-woodpecker}.${HOST_DOMAIN}
+      - flame.url=https://${WOODPECKER_CONTAINER_NAME:-woodpecker}.${HOST_DOMAIN}
       - flame.icon=${WOODPECKER_FLAME_ICON:-docker} # optional, default is "docker"
 
   woodpecker-agent:

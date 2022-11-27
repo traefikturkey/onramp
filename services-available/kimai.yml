@@ -37,5 +37,5 @@ services:
       
       - flame.type=application # "app" works too
       - flame.name=${KIMAI_FLAME_NAME:-kimai} 
-      - flame.url=${KIMAI_CONTAINER_NAME:-kimai}.${HOST_DOMAIN}
+      - flame.url=https://${KIMAI_CONTAINER_NAME:-kimai}.${HOST_DOMAIN}
       - flame.icon=${KIMAI_FLAME_ICON:-docker} # optional, default is "docker"

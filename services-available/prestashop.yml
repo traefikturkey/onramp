@@ -34,5 +34,5 @@ services:
       
       - flame.type=application # "app" works too
       - flame.name=${PRESTASHOP_FLAME_NAME:-prestashop} 
-      - flame.url=${PRESTASHOP_CONTAINER_NAME:-prestashop}.${HOST_DOMAIN}
+      - flame.url=https://${PRESTASHOP_CONTAINER_NAME:-prestashop}.${HOST_DOMAIN}
       - flame.icon=${PRESTASHOP_FLAME_ICON:-docker} # optional, default is "docker"

@@ -55,6 +55,6 @@ services:
       
       - flame.type=application # "app" works too
       - flame.name=${TRANSMISSION_VPN_FLAME_NAME:-transmission-vpn} 
-      - flame.url=${TRANSMISSION_VPN_CONTAINER_NAME:-transmission-vpn}.${HOST_DOMAIN}
+      - flame.url=https://${TRANSMISSION_VPN_CONTAINER_NAME:-transmission-vpn}.${HOST_DOMAIN}
       - flame.icon=${TRANSMISSION_VPN_FLAME_ICON:-docker} # optional, default is "docker"
 

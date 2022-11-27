@@ -32,6 +32,6 @@ services:
       
       - flame.type=application # "app" works too
       - flame.name=${TRUECOMMAND_FLAME_NAME:-truecommand} 
-      - flame.url=${TRUECOMMAND_CONTAINER_NAME:-truecommand}.${HOST_DOMAIN}
+      - flame.url=https://${TRUECOMMAND_CONTAINER_NAME:-truecommand}.${HOST_DOMAIN}
       - flame.icon=${TRUECOMMAND_FLAME_ICON:-docker} # optional, default is "docker"
 

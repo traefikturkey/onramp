@@ -41,7 +41,7 @@ services:
       
       - flame.type=application # "app" works too
       - flame.name=${AIRPRINT_FLAME_NAME:-airprint} 
-      - flame.url=${AIRPRINT_CONTAINER_NAME:-airprint}.${HOST_DOMAIN}
+      - flame.url=https://${AIRPRINT_CONTAINER_NAME:-airprint}.${HOST_DOMAIN}
       - flame.icon=${AIRPRINT_FLAME_ICON:-docker} # optional, default is "docker"
 
     devices: 

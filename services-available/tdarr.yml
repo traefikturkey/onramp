@@ -46,5 +46,5 @@ services:
       
       - flame.type=application # "app" works too
       - flame.name=${TDARR_FLAME_NAME:-tdarr} 
-      - flame.url=${TDARR_CONTAINER_NAME:-tdarr}.${HOST_DOMAIN}
-      - flame.icon=${TDARR_FLAME_ICON:-docker} # optional, default is "docker"
+      - flame.url=https://${TDARR_CONTAINER_NAME:-tdarr}.${HOST_DOMAIN}
+      - flame.icon=${TDARR_FLAME_ICON:-transfer} # optional, default is "docker"

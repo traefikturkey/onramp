@@ -33,5 +33,5 @@ services:
       
       - flame.type=application # "app" works too
       - flame.name=${ADGUARD_FLAME_NAME:-adguard} 
-      - flame.url=${ADGUARD_CONTAINER_NAME:-adguard}.${HOST_DOMAIN}
+      - flame.url=https://${ADGUARD_CONTAINER_NAME:-adguard}.${HOST_DOMAIN}
       - flame.icon=${ADGUARD_FLAME_ICON:-docker} # optional, default is "docker"

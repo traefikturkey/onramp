@@ -32,5 +32,5 @@ services:
       # Flame dashboard labels
       - flame.type=application # "app" works too
       - flame.name=${PROWLARR_FLAME_NAME:-prowlarr} 
-      - flame.url=${PROWLARR_CONTAINER_NAME:-prowlarr}.${HOST_DOMAIN}
+      - flame.url=https://${PROWLARR_CONTAINER_NAME:-prowlarr}.${HOST_DOMAIN}
       - flame.icon=${PROWLARR_FLAME_ICON:-docker} # optional, default is "docker"
