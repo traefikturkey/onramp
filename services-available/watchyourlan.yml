@@ -24,7 +24,7 @@ services:
       - GUIIP=${WATCHYOURLAN_GUIIP:-0.0.0.0} # probably don't need to mess with this, works with traefik as is
       - THEME=${WATCHYOURLAN_THEME:-darkly} # Any theme name from https://bootswatch.com in lowcase
       - TIMEOUT=${WATCHYOURLAN_TIMEOUT:-600} # seconds to rescan, 600 = 10 minutes
-      - SHOUTRRR_URL=${WATCHYOURLAN_SHOUTRRR_URL} # Url to any notification service supported by Shoutrrr (gotify, email, telegram and others)
+      - SHOUTRRR_URL=${WATCHYOURLAN_SHOUTRRR_URL:- } # Url to any notification service supported by Shoutrrr (gotify, email, telegram and others)
     labels:
       - joyride.host.name=${WATCHYOURLAN_CONTAINER_NAME:-watchyourlan}.${HOST_DOMAIN}
       - traefik.enable=true
