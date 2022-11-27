@@ -11,7 +11,7 @@ services:
     image: aceberg/watchyourlan:${WATCHYOURLAN_DOCKER_TAG:-latest}
     container_name: ${WATCHYOURLAN_CONTAINER_NAME:-watchyourlan} 
     restart: ${WATCHYOURLAN_RESTART:-unless-stopped}
-    network_mode: host
+    network_mode: host # required to arpscan interfaces defined below
     volumes:
       - ./etc/watchyourlan:/data 
       - /etc/timezone:/etc/timezone:ro
@@ -20,11 +20,11 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
-      - IFACE=${WATCHYOURLAN_IFACE:-eth0}
-      - GUIIP=${WATCHYOURLAN_GUIIP:-0.0.0.0}
-      - THEME=${WATCHYOURLAN_THEME:-darkly}
-      - TIMEOUT=${WATCHYOURLAN_TIMEOUT:-600}
-      - SHOUTRRR_URL=${WATCHYOURLAN_SHOUTRRR_URL}
+      - IFACE=${WATCHYOURLAN_IFACE:-eth0} # can support multiple interfaces seperated by a space
+      - GUIIP=${WATCHYOURLAN_GUIIP:-0.0.0.0} # probably don't need to mess with this, works with traefik as is
+      - THEME=${WATCHYOURLAN_THEME:-darkly} # Any theme name from https://bootswatch.com in lowcase
+      - TIMEOUT=${WATCHYOURLAN_TIMEOUT:-600} # seconds to rescan, 600 = 10 minutes
+      - SHOUTRRR_URL=${WATCHYOURLAN_SHOUTRRR_URL} # Url to any notification service supported by Shoutrrr (gotify, email, telegram and others)
     labels:
       - joyride.host.name=${WATCHYOURLAN_CONTAINER_NAME:-watchyourlan}.${HOST_DOMAIN}
       - traefik.enable=true
