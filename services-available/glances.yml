@@ -1,0 +1,41 @@
+version: '3'
+
+networks:
+  default:
+    name: traefik
+    
+# https://github.com/nicolargo/glances
+
+services:
+  glances:
+    image: nicolargo/glances:${GLANCES_DOCKER_TAG:-latest}
+    container_name: ${GLANCES_CONTAINER_NAME:-glances} 
+    restart: ${GLANCES_RESTART:-unless-stopped}
+    pid: host
+    volumes:
+      
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./etc/glances:/config # <==== this probably needs changed 
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - GLANCES_OPT=-w
+    labels:
+      - joyride.host.name=${GLANCES_CONTAINER_NAME:-glances}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.glances.entrypoints=websecure
+      - traefik.http.routers.glances.rule=Host(`${GLANCES_CONTAINER_NAME:-glances}.${HOST_DOMAIN}`)
+      - traefik.http.services.glances.loadbalancer.server.port=61208
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
+
+      # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${GLANCES_FLAME_NAME:-glances} 
+      - flame.url=${GLANCES_CONTAINER_NAME:-glances}.${HOST_DOMAIN}
+      - flame.icon=${GLANCES_FLAME_ICON:-docker} # optional, default is "docker"
