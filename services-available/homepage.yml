@@ -37,7 +37,7 @@ services:
       
       # - flame.type=application # "app" works too
       # - flame.name=${HOMEPAGE_FLAME_NAME:-homepage} 
-      # - flame.url=${HOMEPAGE_CONTAINER_NAME:-homepage}.${HOST_DOMAIN}
+      # - flame.url=https://${HOMEPAGE_CONTAINER_NAME:-homepage}.${HOST_DOMAIN}
       # - flame.icon=${HOMEPAGE_FLAME_ICON:-docker} # optional, default is "docker"
 
       # - homepage.group=A group

@@ -32,6 +32,6 @@ services:
       # Flame dashboard labels
       
       - flame.type=application # "app" works too
-      - flame.name=${FRESHRSS_FLAME_NAME:-freshrss} 
-      - flame.url=${FRESHRSS_CONTAINER_NAME:-freshrss}.${HOST_DOMAIN}
-      - flame.icon=${FRESHRSS_FLAME_ICON:-docker} # optional, default is "docker"
+      - flame.name=${FRESHRSS_FLAME_NAME:-FreshRSS} 
+      - flame.url=https://${FRESHRSS_CONTAINER_NAME:-freshrss}.${HOST_DOMAIN}
+      - flame.icon=${FRESHRSS_FLAME_ICON:-newspaper-variant-outline} # optional, default is "docker"

@@ -37,6 +37,6 @@ services:
       # Flame dashboard labels
       
       - flame.type=application # "app" works too
-      - flame.name=${WATCHYOURLAN_FLAME_NAME:-watchyourlan} 
-      - flame.url=${WATCHYOURLAN_CONTAINER_NAME:-watchyourlan}.${HOST_DOMAIN}
-      - flame.icon=${WATCHYOURLAN_FLAME_ICON:-docker} # optional, default is "docker"
+      - flame.name=${WATCHYOURLAN_FLAME_NAME:-WatchYourLan} 
+      - flame.url=https://${WATCHYOURLAN_CONTAINER_NAME:-watchyourlan}.${HOST_DOMAIN}
+      - flame.icon=${WATCHYOURLAN_FLAME_ICON:-shield-search} # optional, default is "docker"

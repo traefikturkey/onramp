@@ -36,5 +36,5 @@ services:
       
       - flame.type=application # "app" works too
       - flame.name=${BAZARR_FLAME_NAME:-bazarr} 
-      - flame.url=${BAZARR_CONTAINER_NAME:-bazarr}.${HOST_DOMAIN}
+      - flame.url=https://${BAZARR_CONTAINER_NAME:-bazarr}.${HOST_DOMAIN}
       - flame.icon=${BAZARR_FLAME_ICON:-docker} # optional, default is "docker"

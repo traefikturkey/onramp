@@ -66,5 +66,5 @@ services:
       
       - flame.type=application # "app" works too
       - flame.name=${TRAEFIK_FLAME_NAME:-traefik} 
-      - flame.url=${HOST_NAME}.${HOST_DOMAIN}/traefik
+      - flame.url=https://${HOST_NAME}.${HOST_DOMAIN}/traefik
       - flame.icon=${TRAEFIK_FLAME_ICON:-docker} # optional, default is "docker"

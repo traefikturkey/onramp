@@ -46,7 +46,7 @@ services:
       
       - flame.type=application # "app" works too
       - flame.name=${NETBOX_FLAME_NAME:-netbox} 
-      - flame.url=${NETBOX_CONTAINER_NAME:-netbox}.${HOST_DOMAIN}
+      - flame.url=https://${NETBOX_CONTAINER_NAME:-netbox}.${HOST_DOMAIN}
       - flame.icon=${NETBOX_FLAME_ICON:-docker} # optional, default is "docker"
 
   netbox-postgresql:

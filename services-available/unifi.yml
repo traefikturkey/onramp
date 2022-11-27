@@ -44,6 +44,6 @@ services:
       
       - flame.type=application # "app" works too
       - flame.name=${UNIFI_FLAME_NAME:-unifi} 
-      - flame.url=${UNIFI_CONTAINER_NAME:-unifi}.${HOST_DOMAIN}
-      - flame.icon=${UNIFI_FLAME_ICON:-docker} # optional, default is "docker"
+      - flame.url=https://${UNIFI_CONTAINER_NAME:-unifi}.${HOST_DOMAIN}
+      - flame.icon=${UNIFI_FLAME_ICON:-wan} # optional, default is "docker"
       

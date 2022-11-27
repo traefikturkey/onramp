@@ -35,7 +35,7 @@ services:
       
       - flame.type=application # "app" works too
       - flame.name=${WHOAMI_FLAME_NAME:-whoami} 
-      - flame.url=${WHOAMI_CONTAINER_NAME:-whoami}.${HOST_DOMAIN}
+      - flame.url=https://${WHOAMI_CONTAINER_NAME:-whoami}.${HOST_DOMAIN}
       - flame.icon=${WHOAMI_FLAME_ICON:-docker} # optional, default is "docker"
 
       #- homepage.group=traefik

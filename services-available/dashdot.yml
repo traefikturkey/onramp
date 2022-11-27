@@ -36,5 +36,5 @@ services:
       
       - flame.type=application # "app" works too
       - flame.name=${DASHDOT_FLAME_NAME:-dashdot} 
-      - flame.url=${DASHDOT_CONTAINER_NAME:-dashdot}.${HOST_DOMAIN}
+      - flame.url=https://${DASHDOT_CONTAINER_NAME:-dashdot}.${HOST_DOMAIN}
       - flame.icon=${DASHDOT_FLAME_ICON:-docker} # optional, default is "docker"

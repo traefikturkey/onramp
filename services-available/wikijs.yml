@@ -34,6 +34,6 @@ services:
       
       - flame.type=application # "app" works too
       - flame.name=${WIKIJS_FLAME_NAME:-wikijs} 
-      - flame.url=${WIKIJS_CONTAINER_NAME:-wikijs}.${HOST_DOMAIN}
+      - flame.url=https://${WIKIJS_CONTAINER_NAME:-wikijs}.${HOST_DOMAIN}
       - flame.icon=${WIKIJS_FLAME_ICON:-docker} # optional, default is "docker"
 

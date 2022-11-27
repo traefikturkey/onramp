@@ -30,6 +30,6 @@ services:
     # Flame dashboard labels
       
       - flame.type=application # "app" works too
-      - flame.name=${DOZZLE_FLAME_NAME:-dozzle} 
-      - flame.url=${HOST_NAME}.${HOST_DOMAIN}/logs
-      - flame.icon=${DOZZLE_FLAME_ICON:-docker} # optional, default is "docker"
+      - flame.name=${DOZZLE_FLAME_NAME:-Dozzle} 
+      - flame.url=https://${HOST_NAME}.${HOST_DOMAIN}/logs
+      - flame.icon=${DOZZLE_FLAME_ICON:-math-log} # optional, default is "docker"

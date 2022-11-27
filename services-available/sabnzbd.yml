@@ -42,5 +42,5 @@ services:
       
       - flame.type=application # "app" works too
       - flame.name=${SABNZBD_FLAME_NAME:-sabnzbd} 
-      - flame.url=${SABNZBD_CONTAINER_NAME:-sabnzbd}.${HOST_DOMAIN}
-      - flame.icon=${SABNZBD_FLAME_ICON:-docker} # optional, default is "docker"
+      - flame.url=https://${SABNZBD_CONTAINER_NAME:-sabnzbd}.${HOST_DOMAIN}
+      - flame.icon=${SABNZBD_FLAME_ICON:-cloud-download-outline} # optional, default is "docker"

@@ -40,5 +40,5 @@ services:
       
       - flame.type=application # "app" works too
       - flame.name=${WORDPRESS_FLAME_NAME:-wordpress} 
-      - flame.url=${WORDPRESS_CONTAINER_NAME:-wordpress}.${HOST_DOMAIN}
+      - flame.url=https://${WORDPRESS_CONTAINER_NAME:-wordpress}.${HOST_DOMAIN}
       - flame.icon=${WORDPRESS_FLAME_ICON:-docker} # optional, default is "docker"

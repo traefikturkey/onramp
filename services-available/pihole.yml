@@ -42,5 +42,5 @@ services:
       
       - flame.type=application # "app" works too
       - flame.name=${PIHOLE_FLAME_NAME:-pihole} 
-      - flame.url=${PIHOLE_CONTAINER_NAME:-pihole}.${HOST_DOMAIN}
+      - flame.url=https://${PIHOLE_CONTAINER_NAME:-pihole}.${HOST_DOMAIN}
       - flame.icon=${PIHOLE_FLAME_ICON:-docker} # optional, default is "docker"

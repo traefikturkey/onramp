@@ -38,5 +38,5 @@ services:
       
       - flame.type=application # "app" works too
       - flame.name=${MINECRAFT_BEDROCK_FLAME_NAME:-minecraft-bedrock} 
-      - flame.url=${MINECRAFT_BEDROCK_CONTAINER_NAME:-minecraft-bedrock}.${HOST_DOMAIN}
+      - flame.url=https://${MINECRAFT_BEDROCK_CONTAINER_NAME:-minecraft-bedrock}.${HOST_DOMAIN}
       - flame.icon=${MINECRAFT_BEDROCK_FLAME_ICON:-docker} # optional, default is "docker"
