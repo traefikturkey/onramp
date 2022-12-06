@@ -1,0 +1,40 @@
+version: '3'
+
+networks:
+  default:
+    name: traefik
+    
+# https://hub.docker.com/r/linuxserver/paperless-ngx
+# https://github.com/paperless-ngx/paperless-ngx
+# https://docs.paperless-ngx.com/
+
+services:
+  paperless-ngx:
+    image: ghcr.io/paperless-ngx/paperless-ngx:${PAPERLESS_NGX_DOCKER_TAG:-latest}
+    container_name: ${PAPERLESS_NGX_CONTAINER_NAME:-paperless-ngx} 
+    restart: ${PAPERLESS_NGX_RESTART:-unless-stopped}
+    volumes:
+      - ./etc/paperless-ngx/config:/config 
+      - ./etc/paperless-ngx/data:/data 
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      #- REDIS_URL= Optional for pointing to an external redis. Can optionally include a port: redisp:port
+    labels:
+      - joyride.host.name=${PAPERLESS_NGX_CONTAINER_NAME:-paperless-ngx}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.paperless-ngx.entrypoints=websecure
+      - traefik.http.routers.paperless-ngx.rule=Host(`${PAPERLESS_NGX_CONTAINER_NAME:-paperless-ngx}.${HOST_DOMAIN}`)
+      - traefik.http.services.paperless-ngx.loadbalancer.server.port=8000
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
+
+      # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${PAPERLESS_NGX_FLAME_NAME:-paperless-ngx} 
+      - flame.url=https://${PAPERLESS_NGX_CONTAINER_NAME:-paperless-ngx}.${HOST_DOMAIN}
+      - flame.icon=${PAPERLESS_NGX_FLAME_ICON:-docker} # optional, default is "docker"
