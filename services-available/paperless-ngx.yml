@@ -29,6 +29,17 @@ services:
     ports:
       - "3306:3306"
 
+  gotenberg:
+    image: docker.io/gotenberg/gotenberg:7.6
+    restart: unless-stopped
+    command:
+      - "gotenberg"
+      - "--chromium-disable-routes=true"
+
+  tika:
+    image: ghcr.io/paperless-ngx/tika:latest
+    restart: unless-stopped
+
   paperless-ngx:
     image: ghcr.io/paperless-ngx/paperless-ngx:${PAPERLESS_NGX_DOCKER_TAG:-latest}
     container_name: ${PAPERLESS_NGX_CONTAINER_NAME:-paperless-ngx} 
@@ -36,6 +47,8 @@ services:
     depends_on:
       - broker
       - db  
+      - gotenberg
+      - tika
     volumes:
       - ./etc/paperless-ngx/data:/usr/src/paperless/data
       - ./etc/paperless-ngx/media:/usr/src/paperless/media
@@ -49,6 +62,9 @@ services:
       - TZ=${TZ}
       - PAPERLESS_URL=https://${PAPERLESS_NGX_CONTAINER_NAME:-paperless-ngx}.${HOST_DOMAIN} #Required for proper authentication behind traefik
       - PAPERLESS_REDIS=redis://broker:6379
+      - PAPERLESS_TIKA_ENABLED=1
+      - PAPERLESS_TIKA_GOTENBERG_ENDPOINT=http://gotenberg:3000
+      - PAPERLESS_TIKA_ENDPOINT=http://tika:9998
       - PAPERLESS_DBENGINE=${PAPERLESS_DB_ENGINE:-mariadb}
       - PAPERLESS_DBPORT=${PAPERLESS_DB_PORT:-3306}
       - PAPERLESS_DBHOST=${PAPERLESS_DB_HOST:-db}
@@ -58,7 +74,6 @@ services:
       - PAPERLESS_ADMIN_USER=${PAPERLESS_ADMINUSER:-admin}
       - PAPERLESS_ADMIN_MAIL=${PAPERLESS_ADMINMAIL:-admin@yourmail.com}
       - PAPERLESS_ADMIN_PASSWORD=${PAPERLESS_ADMINPASSWORD:-admin}
-
     labels:
       - joyride.host.name=${PAPERLESS_NGX_CONTAINER_NAME:-paperless-ngx}.${HOST_DOMAIN}
       - traefik.enable=true
