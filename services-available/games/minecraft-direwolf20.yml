@@ -1,0 +1,32 @@
+version: '3.8'
+
+networks:
+  default:
+    name: ${DIREWOLF20_MINECRAFT_NETWORK:-games}
+
+services:
+  minecraft-direwolf20:
+    image: itzg/minecraft-server:${DIREWOLF20_MINECRAFT_VERSION:-java17}
+    container_name: ${DIREWOLF20_MINECRAFT_CONTAINER_NAME:-minecraft-direwolf20}
+    restart: ${DIREWOLF20_MINECRAFT_RESTART_POLICY:-no}
+    environment:
+      - EULA=true
+      - TYPE=FTBA
+      - FTB_MODPACK_ID=101
+      - FTB_MODPACK_VERSON_ID=2297
+      - VERSION=1.19.2
+      - MAX_MEMORY=18G
+      - MEMORY=12G
+      - DISABLE_HEALTHCHECK=true
+      - FTB_LEGACYJAVAFIXER=true
+      - USE_AIKAR_FLAGS=true
+      - MAX_TICK_TIME=-1
+    ports:
+      - ${DIREWOLF20_MINECRAFT_PORT:-25565}:25565
+    volumes:
+      - ./etc/games/${DIREWOLF20_MINECRAFT_HOSTNAME:-minecraft-direwolf20}:/data
+    labels:
+      - joyride.host.name=${MINECRAFT_HOSTNAME:-minecraft-direwolf20}.${HOST_DOMAIN}
+      - traefik.enable=false
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true

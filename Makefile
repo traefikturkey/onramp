@@ -152,7 +152,7 @@ start-staging: build
 	@echo "open https://$(HOST_NAME).$(HOST_DOMAIN)/traefik in a browser"
 	@echo "and check that you have a staging cert from LetsEncrypt!"
 	@echo ""
-	@echo "if you don't get the write cert run the following command and look for error messages:"
+	@echo "if you don't get a LetsEncrypt staging cert run the following command and look for error messages:"
 	@echo "$(DOCKER_COMPOSE) logs | grep acme"
 	@echo ""
 	@echo "otherwise run the following command if you successfully got a staging certificate:"
