@@ -11,13 +11,14 @@ services:
     image: lscr.io/linuxserver/wireshark:${WIRESHARK_DOCKER_TAG:-latest}
     container_name: ${WIRESHARK_CONTAINER_NAME:-wireshark} 
     restart: ${WIRESHARK_RESTART:-unless-stopped}
+    privileged: true
     cap_add:
       - NET_ADMIN
-    security_opt:
-      - seccomp:unconfined #optional
+    # security_opt:
+    #   - seccomp:unconfined #optional
     network_mode: host    
     volumes:
-      - ./etc/wireshark:/config # <==== this probably needs changed 
+      - ./etc/wireshark:/config 
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
