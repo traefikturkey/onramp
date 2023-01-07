@@ -16,7 +16,9 @@ services:
       - NET_ADMIN
     # security_opt:
     #   - seccomp:unconfined #optional
-    network_mode: host    
+    network_mode: host   
+    ports:
+      - 13000:3000 
     volumes:
       - ./etc/wireshark:/config 
       - /etc/timezone:/etc/timezone:ro
