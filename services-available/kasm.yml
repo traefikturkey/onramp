@@ -26,7 +26,8 @@ services:
       - traefik.enable=true
       - traefik.http.routers.kasm.entrypoints=websecure
       - traefik.http.routers.kasm.rule=Host(`${KASM_CONTAINER_NAME:-kasm}.${HOST_DOMAIN}`)
-      - traefik.http.services.kasm.loadbalancer.server.port=3000
+      - traefik.http.services.kasm.loadbalancer.server.scheme=https
+      - traefik.http.services.kasm.loadbalancer.server.port=443
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
 
