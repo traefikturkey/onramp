@@ -1,0 +1,33 @@
+version: '3'
+
+# https://hub.docker.com/r/petersem/monocker
+
+services:
+  monocker:
+    image: petersem/monocker:${MONOCKER_DOCKER_TAG:-latest}
+    container_name: ${MONOCKER_CONTAINER_NAME:-monocker} 
+    restart: ${MONOCKER_RESTART:-unless-stopped}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      # Optional label to preface messages. Handy if you are running multiple versions of Monocker
+      SERVER_LABEL:  ${MONOCKER_SERVER_LABEL:-Monocker}
+      # Specify the messaging platform and details, or leave blank if only wanting container logs (pick one only)
+      MESSAGE_PLATFORM: ${MONOCKER_MESSAGE_PLATFORM}
+      # MESSAGE_PLATFORM: 'telegram@your_bot_id@your_chat_id'
+      # MESSAGE_PLATFORM: 'pushbullet@your_api_key@your_device_id'
+      # MESSAGE_PLATFORM: 'pushover@your_user_key@your_app_api_token'
+      # MESSAGE_PLATFORM: 'discord@webhook_url'
+      # Optional - includes or excludes specified containers - default behaviour is false
+      LABEL_ENABLE: ${MONOCKER_LABEL_ENABLE:-false}
+      # Optional - only show when container state changes to being offline (paused, exited, running (unhealthy), or dead) - default is false
+      ONLY_OFFLINE_STATES: ${MONOCKER_ONLY_OFFLINE_STATES:-false}
+      # Optional - regardless of any other settings, you can ignore or include 'exited'
+      EXCLUDE_EXITED: ${MONOCKER_EXCLUDE_EXITED:-false}
+
+    labels:
+      - traefik.enable=false
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
