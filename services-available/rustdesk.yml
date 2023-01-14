@@ -1,0 +1,53 @@
+version: '3'
+    
+# https://rustdesk.com/docs/en/self-host/install/
+
+services:
+  rustdesk:
+    image: rustdesk/rustdesk-server:${RUSTDESK_DOCKER_TAG:-latest}
+    container_name: ${RUSTDESK_ID_CONTAINER_NAME:-rustdesk-id-server} 
+    restart: ${RUSTDESK_RESTART:-unless-stopped}
+    command: hbbs -r ${RUSTDESK_RELAY_CONTAINER_NAME:-rustdesk-relay}.${HOST_DOMAIN}:21117
+    volumes:
+      - ./etc/rustdesk:/root
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 21115:21115
+      - 21116:21116
+      - 21116:21116/udp
+      - 21118:21118
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    depends_on:
+      - rustdesk-relay
+    labels:
+      - joyride.host.name=${RUSTDESK_CONTAINER_NAME:-rustdesk}.${HOST_DOMAIN}
+      - traefik.enable=false
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
+
+  rustdesk-relay:
+    image: rustdesk/rustdesk-server:${RUSTDESK_DOCKER_TAG:-latest}
+    container_name: ${RUSTDESK_RELAY_CONTAINER_NAME:-rustdesk-relay} 
+    restart: ${RUSTDESK_RESTART:-unless-stopped}
+    ports:
+      - 21117:21117
+      - 21119:21119
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    command: hbbr
+    volumes:
+      - ./etc/rustdesk:/root 
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+    labels:
+      - joyride.host.name=${RUSTDESK_RELAY_CONTAINER_NAME:-rustdesk-relay}.${HOST_DOMAIN}
+      - traefik.enable=false
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
