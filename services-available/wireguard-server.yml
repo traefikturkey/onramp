@@ -1,0 +1,35 @@
+version: '3'
+
+# <================= add links to documentation here =================>
+
+services:
+  wireguard-server:
+    image: lscr.io/linuxserver/wireguard:${WIREGUARD_SERVER_DOCKER_TAG:-latest}
+    container_name: ${WIREGUARD_SERVER_CONTAINER_NAME:-wireguard-server} 
+    restart: ${WIREGUARD_SERVER_RESTART:-unless-stopped}
+    cap_add:
+      - NET_ADMIN
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+    ports:
+      - ${WIREGUARD_SERVER_PORT:-51820}:${WIREGUARD_SERVER_PORT:-51820}/udp
+    volumes:
+      - ./etc/wireguard-server:/config
+      - /lib/modules:/lib/modules  
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - SERVERURL=${WIREGUARD_SERVER_URL:-${WIREGUARD_SERVER_CONTAINER_NAME:-wireguard-server}.${HOST_DOMAIN}}
+      - SERVERPORT=${WIREGUARD_SERVER_PORT:-51820}
+      - PEERS=${WIREGUARD_PEERS:-1}
+      - PEERDNS=${WIREGUARD_PEERDNS:-auto}
+      - ALLOWEDIPS=${WIREGUARD_ALLOWEDIPS:-0.0.0.0/0} 
+      - INTERNAL_SUBNET=${WIREGUARD_INTERNAL_SUBNET:-10.250.250.0/24} #Subnet used in VPN tunnel
+    labels:
+      - joyride.host.name=${WIREGUARD_SERVER_CONTAINER_NAME:-wireguard-server}.${HOST_DOMAIN}
+      - traefik.enable=false
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
