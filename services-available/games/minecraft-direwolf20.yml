@@ -8,12 +8,12 @@ services:
   minecraft-direwolf20:
     image: itzg/minecraft-server:${DIREWOLF20_MINECRAFT_VERSION:-java17}
     container_name: ${DIREWOLF20_MINECRAFT_CONTAINER_NAME:-minecraft-direwolf20}
-    restart: ${DIREWOLF20_MINECRAFT_RESTART_POLICY:-no}
+    restart: ${DIREWOLF20_MINECRAFT_RESTART_POLICY:-on-failure}
     environment:
       - EULA=true
       - TYPE=FTBA
       - FTB_MODPACK_ID=101
-      - FTB_MODPACK_VERSON_ID=2297
+      - FTB_MODPACK_VERSON_ID=2297 #2312
       - VERSION=1.19.2
       - MAX_MEMORY=18G
       - MEMORY=12G
