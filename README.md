@@ -109,13 +109,13 @@ make list-games
 
 to enable a game:
 ```
-make enable-games factorio
+make enable-game factorio
 make restart
 ```
 
 and disabled a game:
 ```
-make disable-games factorio
+make disable-game factorio
 make restart
 ```
 
