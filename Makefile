@@ -267,8 +267,8 @@ create-backup: backups
 	sudo tar --exclude=.keep -czf ./backups/onramp-config-backup-$(HOST_NAME)-$(shell date +'%y-%m-%d-%H%M').tar.gz ./etc ./services-enabled ./overrides-enabled .env || true
 
 create-nfs-backup: create-backup
- 	sudo mount -t nfs $(NFS_SERVER):$(NFS_BACKUP_PATH) $(NFS_BACKUP_TMP_DIR)
-	sudo mv ./backups/onramp-config-backup* $NFS_BACKUP_TEMP_DIR &
+	sudo mount -t nfs $(NFS_SERVER):$(NFS_BACKUP_PATH) $(NFS_BACKUP_TMP_DIR)
+	sudo mv ./backups/onramp-config-backup* $(NFS_BACKUP_TMP_DIR)
 	sudo umount $(NFS_BACKUP_TMP_DIR)
 
 backups:
