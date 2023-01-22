@@ -11,8 +11,8 @@ and an API token created like so
 
 ![Cloudflare api token](https://cdn.discordapp.com/attachments/979867396800131104/985259853696102420/unknown.png "Cloudflare api token")
 
-
-if you need to you can run the following to do the basic setup automagically
+After installing docker and getting your Cloudflare API key
+you can run the following to do the basic setup automagically:
 
 ```
 sudo apt install git make nano -y
