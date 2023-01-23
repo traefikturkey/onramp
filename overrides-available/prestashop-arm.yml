@@ -1,0 +1,15 @@
+version: '3'
+
+# https://hub.docker.com/r/prestashop/prestashop/
+# https://www.prestashop.com/en
+
+services:
+  prestashop:
+    image: yobasystems/alpine-prestashop:${PRESTASHOP_DOCKER_TAG:-latest}
+    volumes:
+      - ./etc/prestaarm:/usr/html/
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - URL=${PRESTASHOP_CONTAINER_NAME:-prestashop}.${HOST_DOMAIN}
+      - PS_INSTALL_AUTO=1
