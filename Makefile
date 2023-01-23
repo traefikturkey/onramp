@@ -382,6 +382,9 @@ grant-db-perms:
 remove-db-user: 
 	$(mysql-connect) -e 'DROP USER $(first_arg);'
 
+drop-database:
+	$(mysql-connect) -e 'DROP DATABASE $(first_arg);'
+
 create-user-with-db: create-db-user-pw create-database grant-db-perms
 
 #########################################################
