@@ -1,12 +1,12 @@
 [![Discord notification Action](https://github.com/ilude/traefik-setup-docker-compose/actions/workflows/alert-traefik-project.yml/badge.svg)](https://github.com/ilude/traefik-setup-docker-compose/actions/workflows/alert-traefik-project.yml)
 #### A docker-compose setup of common services with traefik using cloudflare dns-01 for letsencrypt certificates
 
-This repo assumes that you are running a debian linux disto like ubuntu, so a few of the scripted commands below may need to be adjusted if you are running using a different distro or package management. You will need to install docker and docker-compose CLI on your linux host, you can do this by following the steps here:
-[Docker Engine Linux Installation steps](https://docs.docker.com/engine/install/) and [Compose CLI] (https://docs.docker.com/compose/install/linux/)
+This repo assumes that you are running a debian linux disto like Ubuntu, so a few of the scripted commands below may need to be adjusted if you are running using a different distro or package management. You will need to install Docker and Docker-compose CLI on your linux host, you can do this by following the steps here:
+[Docker Engine Linux Installation steps](https://docs.docker.com/engine/install/) and [Compose CLI](https://docs.docker.com/compose/install/linux/)
 
-or using this bash script on ubuntu available [here](https://github.com/traefikturkey/onvoy/tree/master/ubuntu/bash)
+**Or** by using this bash script on ubuntu available [here](https://github.com/traefikturkey/onvoy/tree/master/ubuntu/bash)
 
-you'll need a personal domain that's setup with Cloudflare
+You'll need a personal domain that's setup with Cloudflare
 and an API token created like so
 
 ![Cloudflare api token](https://cdn.discordapp.com/attachments/979867396800131104/985259853696102420/unknown.png "Cloudflare api token")
