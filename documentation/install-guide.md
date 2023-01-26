@@ -3,10 +3,11 @@
 ## 1. Preparation
 
 <p>
-    This repo assumes that you are running a debian linux disto like ubuntu, so a few of the scripted commands below may need to be adjusted if you are running using a different distro or package management. You will need to install docker on your linux host and obtain a cloudflare API token.
+    This repository makes the assumption that running a debian based distro of linux like ubuntu, so a few of the scripted commands below may need to be adjusted if you are using a different distro or package management. You will need to install docker on your linux host and obtain a cloudflare API token.
 </p>
 
 - Install Docker
+
     Below are two different methods for installing docker:
     * [Docker Linux Installation steps](https://docs.docker.com/desktop/linux/install/#generic-installation-steps)
     * or using this bash script on ubuntu available [here](https://github.com/traefikturkey/onvoy/tree/master/ubuntu/bash)
@@ -14,6 +15,7 @@
     
 
 - Get Cloudflare API Token
+
 <p>You'll need a personal domain that's setup with Cloudflare
 and an API token created like so</p>
 
@@ -21,8 +23,8 @@ and an API token created like so</p>
 
 ## 2. Installation
 
-    if you need to you can run the following to do the basic setup automagically
-
+    After installing docker and getting your Cloudflare API key
+    you can run the following to do the basic setup automagically:
     ```
     sudo apt install git make nano -y
 

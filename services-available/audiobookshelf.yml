@@ -1,0 +1,39 @@
+version: '3'
+
+networks:
+  default:
+    name: traefik
+    
+# https://hub.docker.com/r/advplyr/audiobookshelf
+
+services:
+  audiobookshelf:
+    image: ghcr.io/advplyr/audiobookshelf:${AUDIOBOOKSHELF_DOCKER_TAG:-latest}
+    container_name: ${AUDIOBOOKSHELF_CONTAINER_NAME:-audiobookshelf} 
+    restart: ${AUDIOBOOKSHELF_RESTART:-unless-stopped}
+    volumes:
+      - ./etc/audiobookshelf/config:/config
+      - ./etc/audiobookshelf/metadata:/metadata
+      - ${AUDIOBOOKSHELF_MEDIA_AUDIOBOOKS:-./media/audiobooks}:${AUDIOBOOKSHELF_MEDIA_AUDIOBOOKS_PATH:-/audiobooks}
+      - ${AUDIOBOOKSHELF_MEDIA_PODCASTS:-./media/podcasts}:${AUDIOBOOKSHELF_MEDIA_PODCASTS_PATH:-/podcasts}
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - AUDIOBOOKSHELF_UID=${PUID:-1000}
+      - AUDIOBOOKSHELF_GID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=${AUDIOBOOKSHELF_CONTAINER_NAME:-audiobookshelf}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.audiobookshelf.entrypoints=websecure
+      - traefik.http.routers.audiobookshelf.rule=Host(`${AUDIOBOOKSHELF_CONTAINER_NAME:-audiobookshelf}.${HOST_DOMAIN}`)
+      - traefik.http.services.audiobookshelf.loadbalancer.server.port=80
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
+
+      # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${AUDIOBOOKSHELF_FLAME_NAME:-audiobookshelf} 
+      - flame.url=https://${AUDIOBOOKSHELF_CONTAINER_NAME:-audiobookshelf}.${HOST_DOMAIN}
+      - flame.icon=${AUDIOBOOKSHELF_FLAME_ICON:-docker} # optional, default is "docker"
