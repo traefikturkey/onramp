@@ -286,7 +286,7 @@ restore-nfs-backup:
 # clean out old backups if exist	
 	rm -rf ./backups/*
 # find latest backup file on NFS share
-	find $(NFS_BACKUP_TMP_DIR) -type f -printf "%T@ %p\n" | sort -n | cut -d' ' -f 2- | tail -n 1 | cp "{}" ./backups
+	cp -p $(find /mnt/temp -type f -printf "%T@ %p\n" | sort -n | cut -d' ' -f 2- | tail -n 1) ./backups
 # expand archive to /apps/onramp and wait until finished
 	sudo tar -xvf ./backups/* -C /apps/onramp &
 	wait
