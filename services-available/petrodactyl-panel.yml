@@ -8,22 +8,22 @@ networks:
 # https://github.com/EdyTheCow/docker-pterodactyl/blob/master/panel/compose/docker-compose.yml
 
 services:
-  petrodactyl-panel:
-    image: ghcr.io/pterodactyl/panel:${PETRODACTYL_PANEL_DOCKER_TAG:-latest}
-    container_name: ${PETRODACTYL_PANEL_CONTAINER_NAME:-petrodactyl-panel} 
-    restart: ${PETRODACTYL_PANEL_RESTART:-unless-stopped}
+  pterodactyl-panel:
+    image: ghcr.io/pterodactyl/panel:${PTERODACTYL_PANEL_DOCKER_TAG:-latest}
+    container_name: ${PTERODACTYL_PANEL_CONTAINER_NAME:-pterodactyl-panel} 
+    restart: ${PTERODACTYL_PANEL_RESTART:-unless-stopped}
     volumes:
-      - "./etc/petrodactyl-panel:/config"
+      - "./etc/pterodactyl-panel:/config"
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-      - "./etc/petrodactyl-panel/var/:/app/var/"
-      - "./etc/petrodactyl-panel/logs/:/app/storage/logs"
-      - "./etc/petrodactyl-panel/nginx/:/etc/nginx/conf.d/"
+      - "./etc/pterodactyl-panel/var/:/app/var/"
+      - "./etc/pterodactyl-panel/logs/:/app/storage/logs"
+      - "./etc/pterodactyl-panel/nginx/:/etc/nginx/conf.d/"
     environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
-      - DB_PASSWORD="${PTETRODACTYL_PANEL_DB_PASSWORD}"
+      - DB_PASSWORD="${PTERODACTYL_PANEL_DB_PASSWORD}"
       - APP_ENV="production"
       - APP_ENVIRONMENT_ONLY="true"
       - CACHE_DRIVER="redis"
@@ -32,20 +32,20 @@ services:
       - REDIS_HOST="redis"
       - DB_HOST=mariadb
       - TRUSTED_PROXIES="*"
-      - APP_URL="${PETRODACTYL_PANEL_CONTAINER_NAME:-panel}.${HOST_DOMAIN}"
+      - APP_URL="${PTERODACTYL_PANEL_CONTAINER_NAME:-panel}.${HOST_DOMAIN}"
       - APP_TIMEZONE="UTC"
     labels:
-      - joyride.host.name=${PETRODACTYL_PANEL_CONTAINER_NAME:-panel}.${HOST_DOMAIN}
+      - joyride.host.name=${PTERODACTYL_PANEL_CONTAINER_NAME:-panel}.${HOST_DOMAIN}
       - traefik.enable=true
-      - traefik.http.routers.petrodactyl-panel.entrypoints=websecure
-      - traefik.http.routers.petrodactyl-panel.rule=Host(`${PETRODACTYL_PANEL_CONTAINER_NAME:-panel}.${HOST_DOMAIN}`)
-      - traefik.http.services.petrodactyl-panel.loadbalancer.server.port=80
+      - traefik.http.routers.pterodactyl-panel.entrypoints=websecure
+      - traefik.http.routers.pterodactyl-panel.rule=Host(`${PTERODACTYL_PANEL_CONTAINER_NAME:-panel}.${HOST_DOMAIN}`)
+      - traefik.http.services.pterodactyl-panel.loadbalancer.server.port=80
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
 
       # Flame dashboard labels
       
       - flame.type=application # "app" works too
-      - flame.name=${PETRODACTYL_PANEL_FLAME_NAME:-petrodactyl-panel} 
-      - flame.url=https://${PETRODACTYL_PANEL_CONTAINER_NAME:-panel}.${HOST_DOMAIN}
-      - flame.icon=${PETRODACTYL_PANEL_FLAME_ICON:-docker} # optional, default is "docker"
+      - flame.name=${PTERODACTYL_PANEL_FLAME_NAME:-pterodactyl-panel} 
+      - flame.url=https://${PTERODACTYL_PANEL_CONTAINER_NAME:-panel}.${HOST_DOMAIN}
+      - flame.icon=${PTERODACTYL_PANEL_FLAME_ICON:-docker} # optional, default is "docker"
