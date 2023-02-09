@@ -180,6 +180,14 @@ list-overrides:
 list-external:
 	@ls -1 ./etc/traefik/available/ | sed -e 's/\.yml$ //'
 
+list-enabled:
+	@ls -1 ./services-enabled/ | sed -e 's/\.yml$ //' 
+
+count-enabled:
+	@$(MAKE) list-enabled | wc -l
+
+list-count: list-enabled count-enabled
+
 #########################################################
 #
 # build related commands
