@@ -181,12 +181,16 @@ list-external:
 	@ls -1 ./etc/traefik/available/ | sed -e 's/\.yml$ //'
 
 list-enabled:
-	@ls -1 ./services-enabled/ | sed -e 's/\.yml$ //' 
+	@printf "%s\n" $(shell ls -1 ./services-enabled/ | sed -e 's/\.yml$ //' )
+
+print-enabled:
+	@printf "%s\n" "Here are your enabled services : " $(shell ls -1 ./services-enabled/ | sed -e 's/\.yml$ //' )
 
 count-enabled:
-	@$(MAKE) list-enabled | wc -l
+	@echo "Total services run in onramp (this is excluding Traefik, and multi-services composes are counted as one) : " $(shell make list-enabled | wc -l )
 
-list-count: list-enabled count-enabled
+list-count: print-enabled count-enabled
+
 
 #########################################################
 #
