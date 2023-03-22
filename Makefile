@@ -4,12 +4,19 @@ ifneq (,$(wildcard ./.env))
     export
 endif
 
-export DOCKER_COMPOSE_FILES :=  $(wildcard services-enabled/*.yml) $(wildcard overrides-enabled/*.yml) $(wildcard docker-compose.*.yml) 
-export DOCKER_COMPOSE_FLAGS := -f docker-compose.yml $(foreach file, $(DOCKER_COMPOSE_FILES), -f $(file))
-
 # look for the second target word passed to make
 export SERVICE_PASSED_DNCASED := $(strip $(word 2,$(MAKECMDGOALS)))
 export SERVICE_PASSED_UPCASED := $(strip $(subst -,_,$(shell echo $(SERVICE_PASSED_DNCASED) | tr a-z A-Z )))
+
+export DOCKER_COMPOSE_FILES :=  $(wildcard services-enabled/*.yml) $(wildcard overrides-enabled/*.yml) $(wildcard docker-compose.*.yml) 
+export DOCKER_COMPOSE_FLAGS := -f docker-compose.yml $(foreach file, $(DOCKER_COMPOSE_FILES), -f $(file))
+
+DOCKER_COMPOSE_DEVELOPMENT_FILES := $(wildcard services-dev/*.yml)
+DOCKER_COMPOSE_DEVELOPMENT_FLAGS := --project-directory ./ $(foreach file, $(DOCKER_COMPOSE_DEVELOPMENT_FILES), -f $(file))
+
+# used to look for the file in the services-enabled folder when [start|stop|pull]-service is used 
+SERVICE_FILES := $(wildcard services-enabled/$(SERVICE_PASSED_DNCASED).yml) $(wildcard overrides-enabled/$(SERVICE_PASSED_DNCASED)-*.yml)
+SERVICE_FLAGS := --project-directory ./ $(foreach file, $(SERVICE_FILES), -f $(file))
 
 # get the boxes ip address and the current users id and group id
 export HOSTIP := $(shell ip route get 1.1.1.1 | grep -oP 'src \K\S+')
@@ -35,10 +42,6 @@ ifdef VSCODE_IPC_HOOK_CLI
 else
 	EDITOR := nano
 endif
-
-# used to look for the file in the services-enabled folder when [start|stop|pull]-service is used 
-SERVICE_FILES := $(wildcard services-enabled/$(SERVICE_PASSED_DNCASED).yml) $(wildcard overrides-enabled/$(SERVICE_PASSED_DNCASED)-*.yml)
-SERVICE_FLAGS := --project-directory ./ $(foreach file, $(SERVICE_FILES), -f $(file))
 
 # use the rest as arguments as empty targets aka: MAGIC
 EMPTY_TARGETS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
@@ -120,6 +123,16 @@ create-service:
 create-game:
 	envsubst '$${SERVICE_PASSED_DNCASED},$${SERVICE_PASSED_UPCASED}' < ./.templates/service.template > ./services-available/games/$(SERVICE_PASSED_DNCASED).yml
 	$(EDITOR) ./services-available/games/$(SERVICE_PASSED_DNCASED).yml
+
+start-dev: COMPOSE_IGNORE_ORPHANS = true 
+start-dev: build services-dev
+	$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_DEVELOPMENT_FLAGS) up -d --force-recreate $(SERVICE_PASSED_DNCASED)
+
+stop-dev:
+	-$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_DEVELOPMENT_FLAGS) stop $(SERVICE_PASSED_DNCASED)
+
+services-dev:
+	mkdir -p ./services-dev
 
 #########################################################
 #
