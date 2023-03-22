@@ -1,0 +1,37 @@
+version: '3'
+
+networks:
+  default:
+    name: traefik
+
+# https://hub.docker.com/r/kasmweb/postman    
+
+services:
+  postman:
+    image: kasmweb/postman:${POSTMAN_DOCKER_TAG:-1.12.0-rolling}
+    container_name: ${POSTMAN_CONTAINER_NAME:-postman} 
+    restart: ${POSTMAN_RESTART:-unless-stopped}
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - VNC_PW=${POSTMAN_PASSWORD:-supersecretchangemenow}
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=${POSTMAN_CONTAINER_NAME:-postman}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.postman.entrypoints=websecure
+      - traefik.http.routers.postman.rule=Host(`${POSTMAN_CONTAINER_NAME:-postman}.${HOST_DOMAIN}`)
+      - traefik.http.services.postman.loadbalancer.server.scheme=https # enable if the service wants to connect over https
+      - traefik.http.services.postman.loadbalancer.server.port=6901
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
+
+      # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${POSTMAN_FLAME_NAME:-postman} 
+      - flame.url=https://${POSTMAN_CONTAINER_NAME:-postman}.${HOST_DOMAIN}
+      - flame.icon=${POSTMAN_FLAME_ICON:-docker} # optional, default is "docker"
