@@ -21,6 +21,7 @@ services:
       - PGID=${PGID:-1000}
       - TZ=${TZ}
       - PMA_ARBITRARY=1
+      - UPLOAD_LIMIT=1G
     labels:
       - joyride.host.name=phpmyadmin.${HOST_DOMAIN}
       - traefik.enable=true
