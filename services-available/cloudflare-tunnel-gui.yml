@@ -8,7 +8,6 @@ networks:
 # https://hub.docker.com/r/cloudflare/cloudflared
 # https://github.com/cloudflare/cloudflared
 
-
 services:
   cloudflare-tunnel-gui:
     image: cloudflare/cloudflared:${CLOUDFLARE_TUNNEL_DOCKER_TAG:-latest}
