@@ -17,7 +17,7 @@ services:
       - ALLOW_SIGNUP=true
       - PUID=1000
       - PGID=1000
-      - TZ=America/Chicago
+      - TZ=${TZ}
       - BASE_URL=${MEALIE_CONTAINER_NAME:-mealie}.${HOST_DOMAIN}
       - RECIPE_PUBLIC=true
       - RECIPE_SHOW_NUTRITION=true
