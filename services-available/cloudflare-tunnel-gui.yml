@@ -10,10 +10,10 @@ networks:
 
 
 services:
-  cloudflared:
-    image: cloudflare/cloudflared:latest
-    container_name: cloudflared
-    restart: unless-stopped
+  cloudflare-tunnel-gui:
+    image: cloudflare/cloudflared:${CLOUDFLARE_TUNNEL_DOCKER_TAG:-latest}
+    container_name: ${CLOUDFLARE_TUNNEL_CONTAINER_NAME:-cloudflare-tunnel-gui}
+    restart: ${CLOUDFLARE_TUNNEL_RESTART:-unless-stopped}
     volumes:
       - ./etc/cloudflared:/cloudflared
       - /etc/timezone:/etc/timezone:ro

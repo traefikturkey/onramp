@@ -11,8 +11,8 @@ networks:
 services:
   cloudflare-tunnel:
     image: cloudflare/cloudflared:${CLOUDFLARE_TUNNEL_DOCKER_TAG:-latest}
-    container_name: cloudflare-tunnel
-    restart: unless-stopped
+    container_name: ${CLOUDFLARE_TUNNEL_CONTAINER_NAME:-cloudflare-tunnel}
+    restart: ${CLOUDFLARE_TUNNEL_RESTART:-unless-stopped}
     command: tunnel --url traefik:443 --hostname ${HOST_NAME}.${HOST_DOMAIN} run ${CLOUDFLARE_TUNNEL_NAME}
     volumes:
       - ./etc/cloudflare-tunnel:/etc/cloudflared
