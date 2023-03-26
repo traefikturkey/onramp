@@ -50,7 +50,7 @@ $(eval $(EMPTY_TARGETS):;@:)
 # this is the default target run if no other targets are passed to make
 # i.e. if you just type: make
 start: build
-	$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) up -d
+	$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) up -d --force-recreate --remove-orphans
 	
 remove-orphans: build
 	$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) up -d --remove-orphans	
