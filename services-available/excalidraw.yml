@@ -1,0 +1,45 @@
+version: '3'
+
+networks:
+  default:
+    name: traefik
+    
+# https://excalidraw.com/
+# https://github.com/excalidraw and https://github.com/excalidraw/excalidraw
+# Keep in mind this version does not implement the sharable links
+# or real time collaborative sessions as stated on their docker hub page 
+# https://hub.docker.com/r/excalidraw/excalidraw
+# Look at this for that https://github.com/excalidraw/excalidraw/discussions/3879
+
+# It also does not seem to feature saving of drawings, 
+# so be careful with that and remember to save your drawings before refreshing or leaving
+
+services:
+  excalidraw:
+    image: excalidraw/excalidraw:${EXCALIDRAW_DOCKER_TAG:-latest}
+    container_name: ${EXCALIDRAW_CONTAINER_NAME:-excalidraw} 
+    restart: ${EXCALIDRAW_RESTART:-unless-stopped}
+    volumes:
+    # - ./etc/excalidraw:/config # <==== this probably needs changed 
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=${EXCALIDRAW_CONTAINER_NAME:-excalidraw}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.excalidraw.entrypoints=websecure
+      - traefik.http.routers.excalidraw.rule=Host(`${EXCALIDRAW_CONTAINER_NAME:-excalidraw}.${HOST_DOMAIN}`)
+      #- traefik.http.services.excalidraw.loadbalancer.server.scheme=https # enable if the service wants to connect over https
+      - traefik.http.services.excalidraw.loadbalancer.server.port=80
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
+
+      # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${EXCALIDRAW_FLAME_NAME:-excalidraw} 
+      - flame.url=https://${EXCALIDRAW_CONTAINER_NAME:-excalidraw}.${HOST_DOMAIN}
+      - flame.icon=${EXCALIDRAW_FLAME_ICON:-docker} # optional, default is "docker"
