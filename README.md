@@ -1,17 +1,18 @@
 [![Discord notification Action](https://github.com/ilude/traefik-setup-docker-compose/actions/workflows/alert-traefik-project.yml/badge.svg)](https://github.com/ilude/traefik-setup-docker-compose/actions/workflows/alert-traefik-project.yml)
-#### A docker-compose setup of common services with traefik using cloudflare dns-01 for letsencrypt certificates
+#### A docker-compose setup of common services with Traefik using cloudflare dns-01 for letsencrypt certificates
 
 This repo assumes that you are running a debian linux disto like Ubuntu, so a few of the scripted commands below may need to be adjusted if you are running using a different distro or package management. You will need to install Docker and Docker-compose CLI on your linux host, you can do this by following the steps here:
 [Docker Engine Linux Installation steps](https://docs.docker.com/engine/install/) and [Compose CLI](https://docs.docker.com/compose/install/linux/)
 
-**Or** by using this bash script on ubuntu available [here](https://github.com/traefikturkey/onvoy/tree/master/ubuntu/bash)
+
+**Or** by using this bash script on Ubuntu available [here](https://github.com/traefikturkey/onvoy/tree/master/ubuntu/bash)
 
 You'll need a personal domain that's setup with Cloudflare
 and an API token created like so
 
 ![Cloudflare api token](https://cdn.discordapp.com/attachments/979867396800131104/985259853696102420/unknown.png "Cloudflare api token")
 
-After installing docker and getting your Cloudflare API key
+After installing Docker and getting your Cloudflare API key
 you can run the following to do the basic setup automagically:
 
 ```
@@ -26,12 +27,12 @@ cd onramp
 make start-staging
 ```
 
-edit the .env file to include cloudflare credenitals your domain and the hostname of the current machine save the file by typing ctrl-x followed by the letter  traefik will start and attempt to obtain a staging certificate wait and then follow the on screen directions
+Edit the .env file to include Cloudflare credenitals, your domain and the hostname of the current machine, save the file by typing ctrl-x followed by the letter. Traefik will start and attempt to obtain a staging certificate, wait and then follow the on screen directions.
 
 ```
 make down-staging
 ```
-you are now ready to bring things up with the production certificates
+You are now ready to bring things up with the production certificates
 
 ```
 make
@@ -39,16 +40,18 @@ make
 
 ## Docker Services
 
-other docker services are included in the ./services-available directory
+Other docker services are included in the ./services-available directory
 The configuration files include links to the web page for the services which has 
-the available documentation
+the available documentation. 
 
-to list them:
+> Note : This also includes cautions and notices for some of the different services, so be sure to look at them.
+
+To list them:
 ```
 make list-services
 ```
 
-they can be enabled by running the following commands:
+They can be enabled by running the following commands:
 
 ```
 make enable-service uptime-kuma
@@ -62,31 +65,31 @@ make disable-service uptime-kuma
 make restart
 ```
 
-to create a new service:
+To create a new service:
 ```
 make create-service name-of-service
 ```
 
-this will create a file in /services-available that is built using the service.template
+This will create a file in /services-available that is built using the service.template
 
 
 
 ## Docker Overrides
 
-Several docker overrides are included that allow extending the functionallity of existing services to add features like NFS mounted media directories and Intel Quicksync or Nvidia GPU support to the Plex and Jellyfin containers
+Several docker overrides are included that allow extending the functionallity of existing services to add features like NFS mounted media directories and Intel Quicksync or Nvidia GPU support to the Plex and Jellyfin containers.
 
-to list avaliable overrides:
+To list avaliable overrides:
 ```
 make list-overrides
 ```
 
-to enable an override:
+To enable an override:
 ```
 make enable-override plex-nfs
 make restart
 ```
 
-to disable and override:
+To disable an override:
 ```
 make disable-override plex-nfs
 make restart
@@ -98,60 +101,60 @@ make restart
 
 ## Docker Game servers
 
-Docker based Game servers are included in the ./services-available/games directory 
+Docker based Game servers are included in the ./services-available/games directory.
 The configuration files include links to the web page for the services which has 
-the available documentation
+the available documentation.
 
-to list available games:
+To list available games:
 ```
 make list-games
 ```
 
-to enable a game:
+To enable a game:
 ```
 make enable-game factorio
 make restart
 ```
 
-and disabled a game:
+To disable a game:
 ```
 make disable-game factorio
 make restart
 ```
 
 ## External Services
-External services can also be proxied through traefik to list the available configurations:
+External services can also be proxied through Traefik to list the available configurations:
 
 ```
 make list-external
 ```
 
-they can be enabled by running the following commands:
+They can be enabled by running the following commands:
 
 ```
 make enable-external proxmox
 make restart
 ```
 
-and disabled with the following:
+And disabled with the following:
 ```
 make disable-external proxmox
 make restart
 ```
 ## Backing up Configuration
 
-### create backup file
+### Create backup file
 ```
 make create-backup
 ```
-this will create a traefik-config-backup.tar.gz in the project directory
+This will create a traefik-config-backup.tar.gz in the project directory
 
-### copy backup file to another machine
+### Copy backup file to another machine
 ```
 scp ./backups/traefik-config-backup.tar.gz <user>@<other_host>:/apps/onramp/backups/
 ```
 
-### restore backup file on the other machine
+### Restore backup file on the other machine
 ```
 make restore-backup
 ```
@@ -168,7 +171,7 @@ make restart  # does a docker compose down followed by an up -d
 make logs     # does a docker compose logs -f
 make update   # does a docker compose down, pull (to get the latest docker images) and up -d
 
-# you can run multiple commands at once like this
+# You can run multiple commands at once like this
 make; make logs
 ```
 ## Environment Variables
@@ -183,6 +186,6 @@ You can override this value by placing the following line in your .env file
 ```
 UNIFI_DOCKER_TAG=latest-ubuntu-beta
 ```
-this will enable pulling the latest-ubuntu-beta version of the unifi container instead of the default stable version
+This will enable pulling the latest-ubuntu-beta version of the unifi container instead of the default stable version
 
 Please see https://docs.docker.com/compose/environment-variables/ for more information about environment variable in docker compose
