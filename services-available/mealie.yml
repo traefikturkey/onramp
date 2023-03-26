@@ -6,7 +6,7 @@ networks:
 # https://hay-kot.github.io/mealie/documentation/getting-started/install/
 
 services:
-  mealie-omni:
+  mealie:
     image: hkotel/mealie:${MEALIE_DOCKER_TAG:-omni-nightly
     container_name: ${MEALIE_CONTAINER_NAME:-mealie}
     restart: ${MEALIE_RESTART:-unless-stopped}
