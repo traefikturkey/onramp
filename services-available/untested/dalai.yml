@@ -8,6 +8,8 @@ networks:
 # This file does requiere it's own setup and image as there is no image out there, it has to be build localy
 # https://www.youtube.com/watch?v=PyZPyqQqkLE here for reference
 
+# This service does have a remote code execution vulnerability, so use it with caution  
+
 services:
   dalai:
     image: dalai-dalai:${DALAI_DOCKER_TAG:-latest}
