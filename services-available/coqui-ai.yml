@@ -1,0 +1,41 @@
+version: '3'
+
+networks:
+  default:
+    name: traefik
+    
+# https://tts.readthedocs.io/en/latest/inference.html
+# https://tts.readthedocs.io/en/latest/docker_images.html
+# https://github.com/coqui-ai/TTS
+
+
+services:
+  coqui-ai:
+    image: ghcr.io/coqui-ai/tts-cpu:${COQUI_AI_DOCKER_TAG:-latest}
+    container_name: ${COQUI_AI_CONTAINER_NAME:-coqui-ai} 
+    restart: ${COQUI_AI_RESTART:-unless-stopped}
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    entrypoint: python3
+    command: TTS/server/server.py --model_name tts_models/en/vctk/vits
+    labels:
+      - joyride.host.name=${COQUI_AI_CONTAINER_NAME:-coqui-ai}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.coqui-ai.entrypoints=websecure
+      - traefik.http.routers.coqui-ai.rule=Host(`${COQUI_AI_CONTAINER_NAME:-coqui-ai}.${HOST_DOMAIN}`)
+      #- traefik.http.services.coqui-ai.loadbalancer.server.scheme=https # enable if the service wants to connect over https
+      - traefik.http.services.coqui-ai.loadbalancer.server.port=5002
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
+
+      # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${COQUI_AI_FLAME_NAME:-coqui-ai} 
+      - flame.url=https://${COQUI_AI_CONTAINER_NAME:-coqui-ai}.${HOST_DOMAIN}
+      - flame.icon=${COQUI_AI_FLAME_ICON:-docker} # optional, default is "docker"
