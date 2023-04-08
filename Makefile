@@ -329,6 +329,14 @@ clean-acme:
 	@echo "removing acme certificate file"
 	sudo rm etc/traefik/letsencrypt/acme.json
 
+prune:
+	docker image prune
+
+prune-force:
+	docker image prune -f
+
+prune-update: prune-force update
+
 remove-etc: 
 	rm -rf ./etc/$(or $(SERVICE_PASSED_DNCASED),no_service_passed)/
 
