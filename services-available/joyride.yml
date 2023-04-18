@@ -2,6 +2,14 @@ version: '3'
 
 # https://github.com/ilude/joyride
 
+# if you want to run joyride on port 53
+# run the following commands on ubuntu
+# sudo systemctl disable systemd-resolved.service
+# sudo systemctl stop systemd-resolved
+# 
+# then add your primary dns servers ip address
+# to /etc/resolv.conf
+
 services:
   joyride:
     image: ghcr.io/ilude/joyride:${JOYRIDE_DOCKER_TAG:-latest}
@@ -10,7 +18,7 @@ services:
     environment:
       - HOSTIP=${HOSTIP}
     ports:
-      - 54:54/udp
+      - ${JOYRIDE_PORT:-54}:54/udp
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro

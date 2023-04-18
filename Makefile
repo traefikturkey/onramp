@@ -85,7 +85,7 @@ bash-exec:
 #########################################################
 
 start-service: COMPOSE_IGNORE_ORPHANS = true 
-start-service: build enable-service
+start-service: enable-service build 
 	$(DOCKER_COMPOSE) $(SERVICE_FLAGS) up -d --force-recreate $(SERVICE_PASSED_DNCASED)
 
 down-service: stop-service
@@ -97,17 +97,28 @@ restart-service: down-service start-service
 update-service: down-service pull-service start-service
 pull-service: 
 	$(DOCKER_COMPOSE) $(SERVICE_FLAGS) pull $(SERVICE_PASSED_DNCASED)
-
+ 
 enable-game: etc/$(SERVICE_PASSED_DNCASED)
+ifneq (,$(wildcard ../services-available/games/$(SERVICE_PASSED_DNCASED).yml))
+	@echo "Enabling $(SERVICE_PASSED_DNCASED)..."
 	@ln -s ../services-available/games/$(SERVICE_PASSED_DNCASED).yml ./services-enabled/$(SERVICE_PASSED_DNCASED).yml || true
-
+else
+	@echo "No such service file ../services-available/games/$(SERVICE_PASSED_DNCASED).yml!"
+endif
+	
+.PHONY: enable-service build 
 enable-service: etc/$(SERVICE_PASSED_DNCASED) services-enabled/$(SERVICE_PASSED_DNCASED).yml
 
 etc/$(SERVICE_PASSED_DNCASED):
 	@mkdir -p ./etc/$(SERVICE_PASSED_DNCASED)
 
 services-enabled/$(SERVICE_PASSED_DNCASED).yml:
+ifneq (,$(wildcard ../services-available/$(SERVICE_PASSED_DNCASED).yml))
+	@echo "Enabling $(SERVICE_PASSED_DNCASED)..."
 	@ln -s ../services-available/$(SERVICE_PASSED_DNCASED).yml ./services-enabled/$(SERVICE_PASSED_DNCASED).yml || true
+else
+	@echo "No such service file ../services-available/$(SERVICE_PASSED_DNCASED).yml!"
+endif
 
 remove-game: disable-service
 disable-game: disable-service
