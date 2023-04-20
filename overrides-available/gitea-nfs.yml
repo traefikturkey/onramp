@@ -1,0 +1,17 @@
+version: '3'
+
+volumes:
+  gitea-nfs-data:
+    labels:
+      - remove_volume_on=down
+    driver_opts:
+      type: nfs
+      o: "addr=${GITEA_DATA_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
+      device: ":${GITEA_DATA_NFS_SERVER_PATH:-${NFS_MEDIA_PATH}}"
+
+services:
+  gitea:
+    volumes:
+      - ${GITEA_DATA_VOLUME:-gitea-nfs-data}:${GITEA_DATA_PATH:-/data}
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro

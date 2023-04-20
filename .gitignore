@@ -31,6 +31,8 @@ etc/*/*
 etc/*/*/*
 !etc/*/*/.keep
 
+etc/gitea/*
+
 !etc/grafana/provisioning/*
 !etc/loki/loki-config.yml
 !etc/prometheus/conf-originals/*
