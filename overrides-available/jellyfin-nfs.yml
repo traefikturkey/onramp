@@ -12,5 +12,5 @@ volumes:
 services:
   jellyfin:
     volumes:
-      - ${JOYRIDE_CONFIG_VOLUME:-./etc/jellyfin}:/config
-      - ${JOYRIDE_MEDIA_VOLUME:-jellyfin-nfs-media}:${JOYRIDE_MEDIA_PATH:-/data}
+      - ${JELLYFIN_CONFIG_VOLUME:-./etc/jellyfin}:/config
+      - ${JELLYFIN_MEDIA_VOLUME:-jellyfin-nfs-media}:${JELLYFIN_MEDIA_PATH:-/data}
