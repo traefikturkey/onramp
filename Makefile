@@ -434,6 +434,18 @@ create-user-with-db: create-db-user-pw create-database grant-db-perms
 
 #########################################################
 #
+# prestashop commands
+#
+#########################################################
+
+remove-presta-install-folder:
+	@sudo rm -rf etc/prestashop/install/
+
+rename-presta-admin:
+	@sudo mv etc/prestashop/admin/ etc/prestashop/$(first_arg)
+
+#########################################################
+#
 # test and debugging commands
 #
 #########################################################
