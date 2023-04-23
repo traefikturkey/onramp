@@ -171,8 +171,8 @@ pull-compose:
 
 start-staging: build
 	ACME_CASERVER=https://acme-staging-v02.api.letsencrypt.org/directory $(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) up -d --force-recreate
-	@echo "waiting 30 seconds for cert DNS propogation..."
-	@sleep 30
+	@echo "waiting ${CF_RESOLVER_WAITTIME:-30} seconds for cert DNS propogation..."
+	@sleep ${CF_RESOLVER_WAITTIME:-30}
 	@echo "open https://$(HOST_NAME).$(HOST_DOMAIN)/traefik in a browser"
 	@echo "and check that you have a staging cert from LetsEncrypt!"
 	@echo ""
