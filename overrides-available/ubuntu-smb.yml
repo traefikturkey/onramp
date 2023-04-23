@@ -13,4 +13,4 @@ volumes:
 services:
   ubuntu-test:
     volumes:
-      - ${UBUNTU_TEST_VOLUME:-ubuntu-test-nfs-volume}:/mnt
+      - ${UBUNTU_TEST_SMB_VOLUME:-ubuntu-test-smb-volume}:/mnt
