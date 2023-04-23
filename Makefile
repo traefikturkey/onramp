@@ -23,7 +23,7 @@ export HOSTIP := $(shell ip route get 1.1.1.1 | grep -oP 'src \K\S+')
 export PUID 	:= $(shell id -u)
 export PGID 	:= $(shell id -g)
 export HOST_NAME := $(or $(HOST_NAME), $(shell hostname))
-export CF_RESOLVER_WAITTIME := $(or $(CF_RESOLVER_WAITTIME), 30) 
+export CF_RESOLVER_WAITTIME := $(strip $(or $(CF_RESOLVER_WAITTIME), 30))
 
 # check if we should use docker-compose or docker compose
 ifeq (, $(shell which docker-compose))
