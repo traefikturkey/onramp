@@ -7,16 +7,11 @@ volumes:
       - remove_volume_on=down
     driver_opts:
       type: nfs
-      o: "addr=${YOUTUBE_DL_MEDIA_NFS_SERVER-${NFS_SERVER}},nolock,noatime,soft,rw"
+      o: "addr=${YOUTUBE_DL_MEDIA_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
       device: ":${YOUTUBE_DL_MEDIA_NFS_SERVER_PATH:-${NFS_YT_PATH}}"
 
 services:
   youtube-dl:
-    environment:
-      - PUID=${PUID:-1000}
-      - PGID=${PGID:-1000}
-      - TZ=${TZ}
-      - YDL_CONFIG_PATH=${YDL_CONFIG_PATH:-/config}
     volumes:
       - ${YOUTUBE_DL_CONFIG_VOLUME:-./etc/youtube-dl}:${YDL_CONFIG_PATH:-/config}
       - ${YOUTUBE_DL_MEDIA_VOLUME:-youtube-dl-nfs-media}:${YOUTUBE_DL_MEDIA_PATH:-/youtube-dl}
