@@ -164,6 +164,9 @@ update-compose: down-compose pull-compose start-compose
 pull-compose: 
 	$(DOCKER_COMPOSE) $(SERVICE_FLAGS) pull
 
+compose-run:
+	$(DOCKER_COMPOSE) $(SERVICE_FLAGS) run $(SERVICE_PASSED_DNCASED) $(second_arg)
+	
 #########################################################
 #
 # staging commands
