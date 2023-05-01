@@ -1,0 +1,16 @@
+- hosts: localhost
+  become: true
+  pre_tasks:
+    - name: install required roles
+      shell: "ansible-galaxy install {{ item }} -p /etc/ansible/roles"
+      with_items:
+        - nvidia.nvidia_driver
+        - nvidia.nvidia_docker
+  tasks:
+    - name: install libnvidia-decode
+      package:
+        name: libnvidia-decode-515-server
+        state: present
+  roles:
+    - nvidia.nvidia_driver
+    - nvidia.nvidia_docker

@@ -1,0 +1,21 @@
+---
+- hosts: localhost
+  become: true
+  vars:
+    docker_edition: 'ce'
+    docker_package_state: present
+    docker_service_state: started
+    docker_service_enabled: true
+    docker_restart_handler_state: restarted
+    docker_install_compose_plugin: true
+    docker_compose_package: docker-compose-plugin
+    docker_compose_package_state: present
+    docker_users:
+    - "{{ lookup('env','USER') }}"
+  pre_tasks:
+    - name: install required roles
+      shell: "ansible-galaxy install {{ item }} -p /etc/ansible/roles"
+      with_items:
+        - geerlingguy.docker
+  roles:
+    - geerlingguy.docker
