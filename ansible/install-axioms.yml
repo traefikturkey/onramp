@@ -1,0 +1,14 @@
+---
+- hosts: localhost
+  tasks:
+    - name: Creates ansible roles directory
+      file:
+        path: ./roles
+        state: directory
+    - name: install required roles
+      shell: "ansible-galaxy install {{ item }} -p ./roles"
+      with_items:
+        - geerlingguy.docker
+        - geerlingguy.node_exporter 
+        - nvidia.nvidia_driver
+        - nvidia.nvidia_docker

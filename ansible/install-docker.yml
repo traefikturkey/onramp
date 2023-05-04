@@ -12,10 +12,5 @@
     docker_compose_package_state: present
     docker_users:
     - "{{ lookup('env','USER') }}"
-  pre_tasks:
-    - name: install required roles
-      shell: "ansible-galaxy install {{ item }} -p /etc/ansible/roles"
-      with_items:
-        - geerlingguy.docker
   roles:
     - geerlingguy.docker

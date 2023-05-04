@@ -1,10 +1,5 @@
 ---
 - hosts: localhost
   become: true
-  pre_tasks:
-    - name: install required roles
-      shell: "ansible-galaxy install {{ item }} -p /etc/ansible/roles"
-      with_items:
-      - geerlingguy.node_exporter 
   roles:
     - geerlingguy.node_exporter 

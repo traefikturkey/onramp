@@ -81,6 +81,29 @@ bash-exec:
 
 #########################################################
 #
+# install commands
+#
+#########################################################
+
+install-ansible:
+	sudo apt-add-repository ppa:ansible/ansible -y
+	sudo apt update
+	sudo apt install ansible -y
+	@echo "Beginning installing ansible roles requirements..."
+	ansible-playbook ansible/install-axioms.yml
+	@echo "Completed installing ansible roles requirements..."
+
+install-docker:
+	ansible-playbook ansible/install-docker.yml
+
+install-node-exporter:
+	ansible-playbook ansible/install-node-exporter.yml
+
+install-nvidia-drivers:
+	ansible-playbook ansible/install-nvidia-drivers.yml
+
+#########################################################
+#
 # service commands
 #
 #########################################################
@@ -287,9 +310,6 @@ create-external:
 
 edit-env:
 	$(EDITOR) .env
-
-install-node-exporter:
-	curl -s https://gist.githubusercontent.com/ilude/2cf7a3b7712378c6b9bcf1e1585bf70f/raw/setup_node_exporter.sh?$(date +%s) | /bin/bash -s | tee build.log
 
 #########################################################
 #
