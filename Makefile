@@ -93,13 +93,13 @@ install-ansible:
 	ansible-playbook ansible/install-axioms.yml
 	@echo "Completed installing ansible roles requirements..."
 
-install-docker:
+install-docker: install-ansible
 	ansible-playbook ansible/install-docker.yml
 
-install-node-exporter:
+install-node-exporter: install-ansible
 	ansible-playbook ansible/install-node-exporter.yml
 
-install-nvidia-drivers:
+install-nvidia-drivers: install-ansible
 	ansible-playbook ansible/install-nvidia-drivers.yml
 
 #########################################################
