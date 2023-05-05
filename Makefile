@@ -337,20 +337,15 @@ backups:
 restore-backup:
 	sudo tar -xvf ./backups/traefik-config-backup.tar.gz
 
-restore-nfs-backup:
+restore-nfs-backup: backups
 	sudo mount -t nfs $(NFS_SERVER):$(NFS_BACKUP_PATH) $(NFS_BACKUP_TMP_DIR)
-# look for backups folder, if not there, create it.  Works when it's a brand new installation
-	ifeq (! -d ./backups )
-		mkdir ./backups
-	endif
-# clean out old backups if exist	
+# clean out old backups if exist
 	rm -rf ./backups/*
 # find latest backup file on NFS share
-	cp -p $(find /mnt/temp -type f -printf "%T@ %p\n" | sort -n | cut -d' ' -f 2- | tail -n 1) ./backups
+	cp -p $(shell find $(NFS_BACKUP_TMP_DIR)/*$(HOST_NAME)* -type f -printf "%T@ %p\n" | sort -n | cut -d' ' -f 2- | tail -n 1) ./backups/
 # expand archive to /apps/onramp and wait until finished
-	sudo tar -xvf ./backups/* -C /apps/onramp &
-	wait
-# cleanup	
+    sudo tar -xvf ./backups/* -C /apps/onramp
+# cleanup
 	sudo umount $(NFS_BACKUP_TMP_DIR)
 	echo -n "Please run 'make restart' to apply restored backup"
 
