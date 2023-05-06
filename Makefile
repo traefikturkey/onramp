@@ -341,21 +341,15 @@ $(NFS_BACKUP_TMP_DIR):
 	mkdir -p $(NFS_BACKUP_TMP_DIR)
 	sudo mount -t nfs $(NFS_SERVER):$(NFS_BACKUP_PATH) $(NFS_BACKUP_TMP_DIR)
 	
-
 restore-nfs-backup: $(NFS_BACKUP_TMP_DIR) backups
-
-        $(eval BACKUP_FILE := $(shell find $(NFS_BACKUP_TMP_DIR)/*$(HOST_NAME)* -type f -printf "%T@ %p\n" | sort -n | cut -d' ' -f 2- | tail -n 1))
-
-        sudo rm -rf ./backups/*
-        cp -p  $(BACKUP_FILE) ./backups/
-
-        sudo tar -xvf ./backups/*
-
-        echo $(basename $(BACKUP_FILE)) > .restore_latest
-
-        sudo umount $(NFS_BACKUP_TMP_DIR)
-        sudo rm -r $(NFS_BACKUP_TMP_DIR)
-        echo -n "Please run 'make restart' to apply restored backup"	
+	$(eval BACKUP_FILE := $(shell find $(NFS_BACKUP_TMP_DIR)/*$(HOST_NAME)* -type f -printf "%T@ %p\n" | sort -n | cut -d' ' -f 2- | tail -n 1))
+	sudo rm -rf ./backups/*
+	cp -p  $(BACKUP_FILE) ./backups/
+	sudo tar -xvf ./backups/*
+	echo $(basename $(BACKUP_FILE)) > .restore_latest
+	sudo umount $(NFS_BACKUP_TMP_DIR)
+	sudo rm -r $(NFS_BACKUP_TMP_DIR)
+	echo -n "Please run 'make restart' to apply restored backup"	
 
 #########################################################
 #
