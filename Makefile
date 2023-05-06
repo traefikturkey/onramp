@@ -338,7 +338,7 @@ restore-backup:
 	sudo tar -xvf ./backups/onramp-config-backup-$(HOST_NAME)-*.tar.gz
 
 $(NFS_BACKUP_TMP_DIR):
-	mkdir -p $(NFS_BACKUP_TMP_DIR)
+	sudo mkdir -p $(NFS_BACKUP_TMP_DIR)
 	sudo mount -t nfs $(NFS_SERVER):$(NFS_BACKUP_PATH) $(NFS_BACKUP_TMP_DIR)
 	
 restore-nfs-backup: $(NFS_BACKUP_TMP_DIR) backups
