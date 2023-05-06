@@ -339,13 +339,13 @@ restore-backup:
 
 restore-nfs-backup: backups
 	sudo mount -t nfs $(NFS_SERVER):$(NFS_BACKUP_PATH) $(NFS_BACKUP_TMP_DIR)
-# clean out old backups if exist
+	# clean out old backups if exist
 	rm -rf ./backups/*
-# find latest backup file on NFS share
+	# find latest backup file on NFS share
 	cp -p $(shell find $(NFS_BACKUP_TMP_DIR)/*$(HOST_NAME)* -type f -printf "%T@ %p\n" | sort -n | cut -d' ' -f 2- | tail -n 1) ./backups/
-# expand archive to /apps/onramp and wait until finished
-    sudo tar -xvf ./backups/* -C
-# cleanup
+	# expand archive to /apps/onramp and wait until finished
+    sudo tar -xvf ./backups/*
+	# cleanup
 	sudo umount $(NFS_BACKUP_TMP_DIR)
 	echo -n "Please run 'make restart' to apply restored backup"
 
