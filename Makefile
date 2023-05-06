@@ -346,7 +346,7 @@ restore-nfs-backup: $(NFS_BACKUP_TMP_DIR) backups
 	sudo rm -rf ./backups/*
 	cp -p  $(BACKUP_FILE) ./backups/
 	sudo tar -xvf ./backups/*
-	echo $(basename $(BACKUP_FILE)) > .restore_latest
+	echo $(shell basename $(BACKUP_FILE)) > .restore_latest
 	sudo umount $(NFS_BACKUP_TMP_DIR)
 	sudo rm -r $(NFS_BACKUP_TMP_DIR)
 	echo -n "Please run 'make restart' to apply restored backup"	
