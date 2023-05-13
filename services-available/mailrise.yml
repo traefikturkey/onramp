@@ -1,0 +1,30 @@
+version: '3'
+
+networks:
+  default:
+    name: traefik
+    
+# https://github.com/YoRyan/mailrise
+
+services:
+  mailrise:
+    image: yoryan/mailrise:${MAILRISE_DOCKER_TAG:-latest}
+    container_name: ${MAILRISE_CONTAINER_NAME:-mailrise} 
+    restart: ${MAILRISE_RESTART:-unless-stopped}
+    volumes:
+      - ./etc/mailrise:/config # <==== this probably needs changed 
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=${MAILRISE_CONTAINER_NAME:-mailrise}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.tcp.routers.mailrise.rule=HostSNI(`${MAILRISE_CONTAINER_NAME:-mailrise}.${HOST_DOMAIN}`)
+      - traefik.tcp.routers.mailrise.tls=true
+      - traefik.tcp.routers.mailrise.tls.certresolver=letsencrypt
+      - traefik.tcp.routers.mailrise.entrypoints=mailsecure
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
