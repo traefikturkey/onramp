@@ -13,7 +13,7 @@ services:
     restart: ${SABNZBD_RESTART:-unless-stopped}
     volumes:
       - ./etc/sabnzbd:/config
-      - ${SABNZBD_DOWNLOADS_DIR:-./media/downloads}:/downloads
+      - ${MEDIA_DOWNLOADS_VOLUME:-./media/downloads}:/downloads
       - /dev/rtc:/dev/rtc:ro
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
