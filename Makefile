@@ -90,7 +90,7 @@ install-ansible:
 	sudo apt update
 	sudo apt install ansible -y
 	@echo "Beginning installing ansible roles requirements..."
-	ansible-playbook ansible/install-axioms.yml
+	ansible-playbook ansible/ansible-requirements.yml
 	@echo "Completed installing ansible roles requirements..."
 
 install-docker: install-ansible
