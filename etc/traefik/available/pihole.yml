@@ -7,7 +7,7 @@ http:
       rule: "Host(`{{env "PIHOLE_HOST_NAME"}}.{{env "HOST_DOMAIN"}}`)"
       middlewares:
         - default-headers
-        - addprefix-pihole
+        - pihole-redirect 
       tls: {}
       service: pihole
 
@@ -19,6 +19,7 @@ http:
         passHostHeader: true
 
   middlewares:
-    addprefix-pihole:
-      addPrefix:
-        prefix: "/admin"
+    pihole-redirect:
+      redirectRegex:
+        regex: "^https?://{{env "PIHOLE_HOST_NAME"}}.{{env "HOST_DOMAIN"}}/$"
+        replacement: "https://{{env "PIHOLE_HOST_NAME"}}.{{env "HOST_DOMAIN"}}/admin/"
