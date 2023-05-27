@@ -6,11 +6,11 @@ networks:
   
 services:
   bouncer-traefik:
-    image: docker.io/fbonalair/traefik-crowdsec-bouncer:${CROWDSEC_TRAEFIK_DOCKER_TAG:-latest}
+    image: docker.io/fbonalair/traefik-crowdsec-bouncer:${TRAEFIK_BOUNCER_DOCKER_TAG:-latest}
     container_name: bouncer-traefik
     environment:
      - CROWDSEC_AGENT_HOST=crowdsec:8080
-     - CROWDSEC_BOUNCER_API_KEY=${TRARFIK_BOUNCER_API_KEY}
+     - CROWDSEC_BOUNCER_API_KEY=${TRAEFIK_BOUNCER_API_KEY}
     depends_on:
       - crowdsec
     restart: unless-stopped  
