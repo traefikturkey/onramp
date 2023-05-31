@@ -52,7 +52,7 @@ services:
       - autoheal=true  
 
   authentik-server:
-    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_DOCKER_TAG:-2022.8.2}
+    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_DOCKER_TAG:-2023.5.2}
     container_name: authentik_server
     restart: unless-stopped
     command: server
@@ -74,6 +74,8 @@ services:
       - ./etc/authentik/media:/media
       - ./etc/authentik/certs:/certs
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      # - ./etc/authentik/geoip:/geoip
+      # Uncomment above to enable the use of the geoipupdate container. This will allow more frequent updates but isn't required.
     labels:
       - joyride.host.name=${AUTHENTIK_AUTH_DOMAIN}
       - traefik.enable=true
@@ -100,10 +102,12 @@ services:
       - AUTHENTIK_POSTGRESQL__NAME=${PG_DB:-authentik}
       - AUTHENTIK_POSTGRESQL__PASSWORD=${PG_PASS_AUTHENTIK}
       - AUTHENTIK_SECRET_KEY=${AUTHENTIK_SECRET_KEY}
-      # AUTHENTIK_ERROR_REPORTING__ENABLED: "true"
+      #- AUTHENTIK_GEOIP: /tmp/geoipdisabled
+      # If you uncomment above it will disable GeoIP.
+      #- AUTHENTIK_ERROR_REPORTING__ENABLED: "true"
       # This is optional, and can be removed. If you remove this, the following will happen
-      # - The permissions for the /media folders aren't fixed, so make sure they are 1000:1000
-      # - The docker socket can't be accessed anymore
+      #- The permissions for the /media folders aren't fixed, so make sure they are 1000:1000
+      #- The docker socket can't be accessed anymore
     user: authentik
     volumes:
       - ./etc/authentik/media:/media
@@ -111,23 +115,24 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./etc/authentik/custom-templates:/templates
       #- ./etc/authentik/geoip:/geoip
+      # Uncomment above to enable the use of the geoipupdate container. This will allow more frequent updates but isn't required.
     labels:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=false
       - autoheal=true  
 
-  # geoipupdate:
-  #   image: "maxmindinc/geoipupdate:latest"
-  #   volumes:
-  #     - "geoip:/usr/share/GeoIP"
-  #   networks:
-  #     - internal
-  #   environment:
-  #     GEOIPUPDATE_EDITION_IDS: "GeoLite2-City"
-  #     GEOIPUPDATE_FREQUENCY: "8"
-  #   env_file:
-  #     - .env
-
-# volumes:
-#   geoip:
-#     driver: local
+  #geoipupdate:
+  #  image: maxmindinc/geoipupdate:latest
+  #  volumes:
+  #    - ./etc/authentik/geoip:/usr/share/GeoIP
+  #  environment:
+  #    - GEOIPUPDATE_EDITION_IDS=GeoLite2-City
+  #    - GEOIPUPDATE_FREQUENCY=8
+  #    - GEOIPUPDATE_ACCOUNT_ID=${GEOIP_ACCOUNT}
+  #    - GEOIPUPDATE_LICENSE_KEY=${GEOIP_KEY}
+  #  labels:
+  #    - com.centurylinklabs.watchtower.enable=true
+  #    - traefik.enable=false
+  #    - autoheal=true
+  #  env_file:
+  #    - .env
