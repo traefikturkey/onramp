@@ -311,6 +311,9 @@ create-external:
 edit-env:
 	$(EDITOR) .env
 
+generate-matrix-config:
+	docker run -it --rm  -v ./etc/synapse:/data  -e SYNAPSE_SERVER_NAME=synapse.traefikturkey.icu -e SYNAPSE_REPORT_STATS=yes matrixdotorg/synapse:latest generate	
+
 #########################################################
 #
 # backup and restore up commands
