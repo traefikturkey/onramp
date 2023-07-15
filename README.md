@@ -12,6 +12,16 @@ and an API token created like so
 
 ![Cloudflare api token](https://cdn.discordapp.com/attachments/979867396800131104/985259853696102420/unknown.png "Cloudflare api token")
 
+## Bug in docker-compose cli plugin >= 2.19.1
+https://github.com/docker/compose/issues/10797
+
+run the following command to use docker-compose cli plugin version 2.18.1
+```
+curl -SL https://github.com/docker/compose/releases/download/v2.18.1/docker-compose-linux-x86_64 -o /usr/local/lib/docker/cli-plugins/docker-compose
+```
+
+## Install dependencies and OnRamp
+
 After installing Docker and getting your Cloudflare API key
 you can run the following to do the basic setup automagically:
 
