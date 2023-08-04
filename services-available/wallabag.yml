@@ -1,0 +1,72 @@
+version: '3'
+
+networks:
+  default:
+    name: traefik
+  database:
+
+# https://github.com/wallabag/wallabag
+
+services:
+  wallabag:
+    image: wallabag/wallabag
+    container_name: wallabag
+    environment:
+      - MYSQL_ROOT_PASSWORD=${WALLABAG_DB_ROOT_PASSWORD:-wallaroot}
+      - SYMFONY__ENV__DATABASE_DRIVER=pdo_mysql
+      - SYMFONY__ENV__DATABASE_HOST=db
+      - SYMFONY__ENV__DATABASE_PORT=3306
+      - SYMFONY__ENV__DATABASE_NAME=${WALLABAG_DB_NAME:-wallabag}
+      - SYMFONY__ENV__DATABASE_USER=${WALLABAG_DB_USER:-wallabag}
+      - SYMFONY__ENV__DATABASE_PASSWORD=${WALLABAG_DB_PASSWORD:-wallapass}
+      - SYMFONY__ENV__DATABASE_CHARSET=utf8mb4
+      - SYMFONY__ENV__DATABASE_TABLE_PREFIX="wallabag_"
+      - SYMFONY__ENV__MAILER_DSN=smtp://${WALLABAG_SMTP_SERVER:-127.0.0.1}
+      - SYMFONY__ENV__FROM_EMAIL=${WALLABAG_EMAIL:-wallabag@example.com}
+      - SYMFONY__ENV__DOMAIN_NAME=https://${WALLABAG_CONTAINER_NAME:-wallabag}.${HOST_DOMAIN}
+      - SYMFONY__ENV__SERVER_NAME=${WALLABAG_SERVER_NAME:-'Your Wallabag'}
+    volumes:
+      - ./etc/wallabag/images:/var/www/wallabag/web/assets/images
+    labels:
+      - joyride.host.name=${WALLABAG_CONTAINER_NAME:-wallabag}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.wallabag.entrypoints=websecure
+      - traefik.http.routers.wallabag.rule=Host(`${WALLABAG_CONTAINER_NAME:-wallabag}.${HOST_DOMAIN}`)
+      - traefik.http.services.wallabag.loadbalancer.server.port=80
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
+    networks:
+      - traefik 
+      - database
+    healthcheck:
+      test: ["CMD", "wget" ,"--no-verbose", "--tries=1", "--spider", "http://localhost"]
+      interval: 1m
+      timeout: 3s
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: mariadb
+    environment:
+      - MYSQL_ROOT_PASSWORD=${WALLABAG_DB_PASSWORD:-wallaroot}
+    volumes:
+      - ./etc/wallabag/data:/var/lib/mysql
+    networks:
+      - database
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      interval: 20s
+      timeout: 3s
+
+
+  redis:
+    image: redis:alpine
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 20s
+      timeout: 3s
+    networks:
+      - database 
+
+
