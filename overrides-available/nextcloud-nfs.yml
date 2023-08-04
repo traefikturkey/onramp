@@ -7,7 +7,7 @@ volumes:
     driver_opts:
       type: nfs
       o: "addr=${NEXTCLOUD_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
-      device: ":${NEXTCLOUD_NFS_SERVER_PATH:-${NFS_MEDIA_PATH}}"
+      device: ":${NEXTCLOUD_NFS_SERVER_PATH:-${NFS_NEXTCLOUD_PATH}}"
 
 services:
   nextcloud:
