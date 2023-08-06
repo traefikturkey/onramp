@@ -25,6 +25,7 @@ services:
       - SYMFONY__ENV__FROM_EMAIL=${WALLABAG_EMAIL:-wallabag@example.com}
       - SYMFONY__ENV__DOMAIN_NAME=https://${WALLABAG_CONTAINER_NAME:-wallabag}.${HOST_DOMAIN}
       - SYMFONY__ENV__SERVER_NAME=${WALLABAG_SERVER_NAME:-'Your Wallabag'}
+    restart: unless-stopped
     volumes:
       - ./etc/wallabag/images:/var/www/wallabag/web/assets/images
     labels:
@@ -50,6 +51,7 @@ services:
     image: mariadb
     environment:
       - MYSQL_ROOT_PASSWORD=${WALLABAG_DB_PASSWORD:-wallaroot}
+    restart: unless-stopped
     volumes:
       - ./etc/wallabag/data:/var/lib/mysql
     networks:
@@ -62,6 +64,7 @@ services:
 
   redis:
     image: redis:alpine
+    restart: unless-stopped
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 20s
