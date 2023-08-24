@@ -17,7 +17,6 @@ services:
       - ./etc/joplin:/var/lib/postgresql/data
     ports:
       - "5432:5432"
-    restart: unless-stopped
     environment:
       - POSTGRES_PASSWORD=${JOPLIN_POSTGRES_PASSWORD:-postgres}
       - POSTGRES_USER=${JOPLIN_POSTGRES_USER:-postgres}
