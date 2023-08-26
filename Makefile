@@ -384,6 +384,10 @@ reset-etc: remove-etc
 
 stop-reset-etc: stop-service reset-etc
 
+disable-remove-etc: disable-service remove-etc
+
+disable-reset-etc: disable-service reset-etc
+
 reset-database: remove-etc reset-database-folder	
 
 #########################################################
