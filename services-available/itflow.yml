@@ -18,7 +18,7 @@ services:
       - MARIADB_USER=${ITFLOW_DB_USER:-itflow}
       - MARIADB_PASSWORD=${ITFLOW_DB_PASS:-itflowpass}
     volumes:
-      - itflow-db:/var/lib/mysql/
+      - ./etc/itflow/data:/var/lib/mysql/
 
   itflow:
     image: lued/itflow:${ITFLOW_DOCKER_TAG:-latest}
