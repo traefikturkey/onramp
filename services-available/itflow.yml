@@ -28,7 +28,7 @@ services:
     depends_on: 
       - itflow-db
     volumes:
-      - ./etc/itflow:/var/www/html
+      - ./etc/itflow/www:/var/www/html
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
