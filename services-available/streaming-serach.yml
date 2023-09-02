@@ -1,0 +1,37 @@
+version: '3'
+
+networks:
+  default:
+    name: traefik
+    
+# https://github.com/Colaski/global-streaming-search
+
+services:
+  streaming-serach:
+    image: colaski/global-streaming-search:${STREAMING_SERACH_DOCKER_TAG:-latest}
+    container_name: ${STREAMING_SERACH_CONTAINER_NAME:-streaming-serach} 
+    restart: ${STREAMING_SERACH_RESTART:-unless-stopped}
+    volumes:
+      #- ./etc/streaming-serach:/config # <==== this probably needs changed 
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=${STREAMING_SERACH_CONTAINER_NAME:-streaming-serach}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.streaming-serach.entrypoints=websecure
+      - traefik.http.routers.streaming-serach.rule=Host(`${STREAMING_SERACH_CONTAINER_NAME:-streaming-serach}.${HOST_DOMAIN}`)
+      #- traefik.http.services.streaming-serach.loadbalancer.server.scheme=https # enable if the service wants to connect over https
+      - traefik.http.services.streaming-serach.loadbalancer.server.port=8000
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
+
+      # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${STREAMING_SERACH_FLAME_NAME:-streaming-serach} 
+      - flame.url=https://${STREAMING_SERACH_CONTAINER_NAME:-streaming-serach}.${HOST_DOMAIN}
+      - flame.icon=${STREAMING_SERACH_FLAME_ICON:-docker} # optional, default is "docker"
