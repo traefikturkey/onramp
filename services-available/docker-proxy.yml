@@ -23,6 +23,9 @@ services:
       - TASKS=1
       - SERVICES=1
       - NETWORKS=1
+    ports:
+      # default to localhost for security
+      - ${DOCKER_PROXY_INTERFACE_IP:-127.0.0.1}:${DOCKER_PROXY_INTERFACE_PORT:-2375}:2375
     labels:
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
