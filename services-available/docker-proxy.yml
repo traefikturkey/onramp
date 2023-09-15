@@ -29,4 +29,3 @@ services:
     labels:
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
-"
