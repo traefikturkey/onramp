@@ -362,7 +362,7 @@ restore-nfs-backup: $(NFS_BACKUP_TMP_DIR) backups
 
 clean-acme:
 	@echo "removing acme certificate file"
-	sudo rm etc/traefik/letsencrypt/acme.json
+	-sudo rm etc/traefik/letsencrypt/acme.json
 
 prune:
 	docker image prune
