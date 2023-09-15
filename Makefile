@@ -23,7 +23,7 @@ export HOSTIP := $(shell ip route get 1.1.1.1 | grep -oP 'src \K\S+')
 export PUID 	:= $(shell id -u)
 export PGID 	:= $(shell id -g)
 export HOST_NAME := $(or $(HOST_NAME), $(shell hostname))
-export CF_RESOLVER_WAITTIME := $(strip $(or $(CF_RESOLVER_WAITTIME), 30))
+export CF_RESOLVER_WAITTIME := $(strip $(or $(CF_RESOLVER_WAITTIME), 60))
 
 # check if we should use docker-compose or docker compose
 ifeq (, $(shell which docker-compose))
@@ -198,8 +198,8 @@ compose-run:
 
 start-staging: build
 	ACME_CASERVER=https://acme-staging-v02.api.letsencrypt.org/directory $(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) up -d --force-recreate
-	@echo "waiting $(CF_RESOLVER_WAITTIME:-60) seconds for cert DNS propogation..."
-	@sleep $(CF_RESOLVER_WAITTIME:-60)
+	@echo "waiting $(CF_RESOLVER_WAITTIME) seconds for cert DNS propogation..."
+	@sleep $(CF_RESOLVER_WAITTIME)
 	@echo "open https://$(HOST_NAME).$(HOST_DOMAIN)/traefik in a browser"
 	@echo "and check that you have a staging cert from LetsEncrypt!"
 	@echo ""
