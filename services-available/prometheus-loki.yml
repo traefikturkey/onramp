@@ -13,9 +13,9 @@ networks:
 # make enable-override promtail-syslog
 
 services:
-  loki:
+  prometheus-loki:
     image: grafana/loki:${LOKI_DOCKER_TAG:-latest}
-    container_name: loki
+    container_name: ${LOKI_CONTAINER_NAME:-prometheus-loki}
     restart: unless-stopped
     volumes:
       - ./etc/loki:/etc/loki

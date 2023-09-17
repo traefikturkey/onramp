@@ -140,6 +140,7 @@ services-enabled/$(SERVICE_PASSED_DNCASED).yml:
 ifneq (,$(wildcard ./services-available/$(SERVICE_PASSED_DNCASED).yml))
 	@echo "Enabling $(SERVICE_PASSED_DNCASED)..."
 	@ln -s ../services-available/$(SERVICE_PASSED_DNCASED).yml ./services-enabled/$(SERVICE_PASSED_DNCASED).yml || true
+	@sleep 1
 else
 	@echo "No such service file ./services-available/$(SERVICE_PASSED_DNCASED).yml!"
 endif
