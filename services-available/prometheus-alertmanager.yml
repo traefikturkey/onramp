@@ -6,25 +6,28 @@ networks:
 
 # https://github.com/prometheus/alertmanager
 
+volumes:
+  prometheus:
+    name: onramp_prometheus
+    external: true
+
+services:
   prometheus-alertmanager:
     image: prom/alertmanager:${ALERTMANAGER_DOCKER_TAG:-latest}
-    container_name: prometheus-alertmanager
+    container_name: ${ALERTMANAGER_CONTAINER_NAME:-prometheus-alertmanager}
     restart: unless-stopped
     command:
-      - '--config.file=/etc/alertmanager/alertmanager.yml'
-      - '--log.level=debug'
+      - --config.file=/etc/alertmanager/alertmanager.yml
+      - --log.level=debug
     # ports:
     #   - 9093:9093
     volumes:
       - ./etc/prometheus/conf:/etc/alertmanager:rw
       - prometheus:/alertmanager:rw
-    labels:
-      - joyride.host.name=alertmanager.${HOST_DOMAIN}
-      - com.centurylinklabs.watchtower.enable=true
+    labels: 
+      - joyride.host.name=${ALERTMANAGER_HOST_NAME:-alertmanager}.${HOST_DOMAIN}
       - traefik.enable=true
-      - traefik.http.routers.alertmanager.rule=Host(`alertmanager.${HOST_DOMAIN}`)
+      - traefik.http.routers.alertmanager.rule=Host(`${ALERTMANAGER_HOST_NAME:-alertmanager}.${HOST_DOMAIN}`)
       - traefik.http.routers.alertmanager.entrypoints=websecure
-      - traefik.http.routers.alertmanager.tls=true
-      - traefik.http.routers.alertmanager.tls.certresolver=letsencrypt
-      - traefik.http.services.alertmanager.loadbalancer.server.scheme=http
       - traefik.http.services.alertmanager.loadbalancer.server.port=9093
+      - com.centurylinklabs.watchtower.enable=true

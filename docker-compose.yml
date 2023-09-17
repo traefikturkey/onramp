@@ -54,7 +54,6 @@ services:
     labels:
       - joyride.host.name=${HOST_NAME}.${HOST_DOMAIN}
       - traefik.enable=true
-      #- traefik.docker.network=traefik
       - traefik.http.routers.traefik.entrypoints=websecure
       - traefik.http.routers.traefik.service=api@internal
       #- traefik.http.routers.traefik.rule=Host(`traefik.${HOST_DOMAIN}`)
@@ -62,10 +61,3 @@ services:
       - traefik.http.routers.traefik.rule=Host(`${HOST_NAME}.${HOST_DOMAIN}`)  && (PathPrefix(`/traefik`) || PathPrefix(`/api`))
       - traefik.http.routers.traefik.middlewares=traefik_strip 
       - traefik.http.middlewares.traefik_strip.stripprefix.prefixes=/traefik
-
-      # Flame dashboard labels
-      
-      - flame.type=application # "app" works too
-      - flame.name=${TRAEFIK_FLAME_NAME:-traefik} 
-      - flame.url=https://${HOST_NAME}.${HOST_DOMAIN}/traefik
-      - flame.icon=${TRAEFIK_FLAME_ICON:-docker} # optional, default is "docker"
