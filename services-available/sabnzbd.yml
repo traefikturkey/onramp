@@ -17,8 +17,8 @@ services:
       - /dev/rtc:/dev/rtc:ro
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-    #ports:
-      # - 8181:8080 needed to do a fresh setup because of hostname whitelist
+    # ports:
+    #   - 8181:8080 # needed to do a fresh setup because of hostname whitelist
     environment: 
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
@@ -37,10 +37,3 @@ services:
       - traefik.http.services.sabnzbd.loadbalancer.server.port=8080
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
-
-    # Flame dashboard labels
-      
-      - flame.type=application # "app" works too
-      - flame.name=${SABNZBD_FLAME_NAME:-sabnzbd} 
-      - flame.url=https://${SABNZBD_CONTAINER_NAME:-sabnzbd}.${HOST_DOMAIN}
-      - flame.icon=${SABNZBD_FLAME_ICON:-cloud-download-outline} # optional, default is "docker"

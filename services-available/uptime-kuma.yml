@@ -13,22 +13,15 @@ services:
     restart: unless-stopped
     volumes:
       - ./etc/uptime-kuma:/app/data
-      - /var/run/docker.sock:/var/run/docker.sock
+      - ${UPTIMEKUMA_DOCKER_SOCKET:-/var/run/docker.sock}:/var/run/docker.sock
     env_file: 
       - .env
     labels:
-      - joyride.host.name=${UPTIMEKUMA_CONTAINER_NAME:-uptimekuma}.${HOST_DOMAIN}
+      - joyride.host.name=${UPTIMEKUMA_HOST_NAME:-uptimekuma}.${HOST_DOMAIN}
       - traefik.enable=true
       - traefik.http.routers.uptimekuma.entrypoints=websecure
-      - traefik.http.routers.uptimekuma.rule=Host(`${UPTIMEKUMA_CONTAINER_NAME:-uptimekuma}.${HOST_DOMAIN}`)
+      - traefik.http.routers.uptimekuma.rule=Host(`${UPTIMEKUMA_HOST_NAME:-uptimekuma}.${HOST_DOMAIN}`)
       - traefik.http.routers.uptimekuma.tls=true
       - traefik.http.routers.uptimekuma.service=uptimekuma
       - traefik.http.services.uptimekuma.loadbalancer.server.port=3001
       - traefik.docker.network=traefik
-
-    # Flame dashboard labels
-      
-      - flame.type=application # "app" works too
-      - flame.name=${UPTIMEKUMA_FLAME_NAME:-UptimeKuma} 
-      - flame.url=https://${UPTIMEKUMA_CONTAINER_NAME:-uptimekuma}.${HOST_DOMAIN}
-      - flame.icon=${UPTIMEKUMA_FLAME_ICON:-monitor-eye} # optional, default is "docker"
