@@ -1,9 +1,14 @@
 - hosts: localhost
   become: true
   tasks:
-     # https://help.ubuntu.com/community/NvidiaDriversInstallation#NVIDIA_drivers_releases
+    - name: install ubuntu-drivers-common
+      package:
+        name: ubuntu-drivers-common
+        state: present
+    # https://help.ubuntu.com/community/NvidiaDriversInstallation#Installing_the_drivers_on_servers_and.2For_for_computing_purposes
     - name: install latest nvidia drivers
       command: ubuntu-drivers install --gpgpu
+    
   roles:
     - nvidia.nvidia_driver
     - nvidia.nvidia_docker
