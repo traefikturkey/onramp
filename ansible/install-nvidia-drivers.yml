@@ -1,10 +1,8 @@
 - hosts: localhost
   become: true
   tasks:
-    - name: install libnvidia-decode
-      package:
-        name: libnvidia-decode-515-server
-        state: present
+    - name: install latest nvidia drivers
+      command: sudo ubuntu-drivers install --gpgpu
   roles:
     - nvidia.nvidia_driver
     - nvidia.nvidia_docker
