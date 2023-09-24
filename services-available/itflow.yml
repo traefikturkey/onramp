@@ -31,6 +31,7 @@ services:
       - ./etc/itflow/www:/var/www/html
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
+    user: "33"
     environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
