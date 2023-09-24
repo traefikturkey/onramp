@@ -328,7 +328,7 @@ import-backup: restore-backup
 	@echo "import-backup is depercated and will be removed in the future, please use make restore-backup"
 
 create-backup: backups
-	sudo tar --exclude=.keep -czf ./backups/onramp-config-backup-$(HOST_NAME)-$(shell date +'%y-%m-%d-%H%M').tar.gz ./etc ./services-enabled ./overrides-enabled .env || true
+	sudo tar --exclude=.keep -czf ./backups/onramp-config-backup-$(HOST_NAME)-$(shell date +'%y-%m-%d-%H%M').tar.gz ./etc ./services-enabled ./overrides-enabled .env ./media/databases || true
 
 create-nfs-backup: create-backup
 	sudo mount -t nfs $(NFS_SERVER):$(NFS_BACKUP_PATH) $(NFS_BACKUP_TMP_DIR)
