@@ -1,6 +1,7 @@
 - hosts: localhost
   become: true
   tasks:
+     # https://help.ubuntu.com/community/NvidiaDriversInstallation#NVIDIA_drivers_releases
     - name: install latest nvidia drivers
       command: ubuntu-drivers install --gpgpu
   roles:
