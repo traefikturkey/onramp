@@ -85,8 +85,22 @@ bash-exec:
 #
 #########################################################
 
+distro := $(shell lsb_release -is)
+
+ifeq ($(distro),Ubuntu)
+    APT_ADD_REPO := sudo apt-add-repository ppa:ansible/ansible -y
+else
+    APT_ADD_REPO :=
+endif
+
+check-apt-add-repo:
+	@echo $(APT_ADD_REPO)
+
+check-distro:
+	@echo $(distro)
+
 install-ansible:
-	sudo apt-add-repository ppa:ansible/ansible -y
+	$(APT_ADD_REPO)
 	sudo apt update
 	sudo apt install ansible -y
 	@echo "Beginning installing ansible roles requirements..."
