@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  traefik:
+      volumes:
+      - ./etc/traefik/letsencrypt:/letsencrypt
+      - ./etc/traefik/enabled:/enabled
+      - /etc/localtime:/etc/localtime:ro
+      - /usr/share/zoneinfo:/usr/share/zoneinfo:ro
+      - /run/user/1000/podman/podman.sock:/var/run/docker.sock:ro
