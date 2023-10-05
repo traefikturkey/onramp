@@ -1,0 +1,65 @@
+version: '3'
+
+networks:
+  default:
+    name: traefik
+
+# DON'T FORGET TO CHANGE THE SECRET KEY IN /etc/searxng/searxng.yml!
+#
+services:
+  searxng:
+    image: searxng/searxng:${SEARXNG_DOCKER_TAG:-latest}
+    container_name: ${SEARXNG_CONTAINER_NAME:-searxng}
+    restart: unless-stopped
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - UMASK=022
+    volumes:
+      - ${SEARXNG_VOLUME-./etc/searxng}:/etc/searxng:rw
+    environment:
+      - SEARXNG_BASE_URL=https://${SEARXNG_HOSTNAME:-searxng}/
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - SETGID
+      - SETUID
+      - DAC_OVERRIDE
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
+        max-file: "1"
+
+    labels:
+      - joyride.host.name=${SEARXNG_CONTAINER_NAME:-searxng}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.searxng.entrypoints=websecure
+      - traefik.http.routers.searxng.rule=Host(`${SEARXNG_CONTAINER_NAME:-searxng}.${HOST_DOMAIN}`)
+      - traefik.http.services.searxng.loadbalancer.server.port=8080
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
+
+      # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${SEARXNG_FLAME_NAME:-searxng} 
+      - flame.url=https://${SEARXNG_CONTAINER_NAME:-searxng}.${HOST_DOMAIN}
+
+  redis:
+    container_name: searxng-redis
+    image: "redis:alpine"
+    command: redis-server --save "" --appendonly "no"
+    tmpfs:
+     - /var/lib/redis
+    cap_drop:
+     - ALL
+    cap_add:
+     - SETGID
+     - SETUID
+     - DAC_OVERRIDE
+    restart: unless-stopped
+
+
