@@ -32,7 +32,7 @@ etc/*/*
 etc/*/*/*
 !etc/*/*/.keep
 
-etc/healtchecks
+etc/healthchecks
 etc/gitea/*
 
 !etc/grafana/provisioning/*
