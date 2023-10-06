@@ -17,7 +17,7 @@ services:
       - DB=postgres
       - DB_CONN_MAX_AGE=0
       - DB_HOST=hc-postgres
-      - DB_NAME=healthchecks
+      - DB_NAME=${HEALTHCHECKS_DB_NAME:-healthchecks}
       - DB_PASSWORD=${HEALTHCHECKS_DB_PASS:-changeme}
       - DB_PORT=5432
       - DB_SSLMODE=allow
