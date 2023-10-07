@@ -1,0 +1,23 @@
+http:
+  routers:
+    homeassistant:
+      entryPoints:
+        - websecure
+      rule: "Host(`{{env "HOMEASSISTANT_HOST_NAME"}}.{{env "HOST_DOMAIN"}}`)"
+      
+# Default variable subsitution is not occuring. Results of below line are:  ".domain.tld"
+#      rule: "Host(`{{env "HOMEASSISTANT_HOST_NAME:-homeassistant"}}.{{env "HOST_DOMAIN"}}`)"
+      middlewares:
+        - default-headers
+      tls: {}
+      service: homeassistant
+
+  services:
+    homeassistant:
+      loadBalancer:
+        servers:
+          - url: "http://{{env "HOMEASSISTANT_ADDRESS"}}:{{env "HOMEASSISTANT_PORT"}}"
+        passHostHeader: true
+        
+# code 400 ?
+# https://community.home-assistant.io/t/home-assistant-400-bad-request-docker-proxy-solution/322163/7
