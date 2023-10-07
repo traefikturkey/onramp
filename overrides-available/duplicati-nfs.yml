@@ -1,0 +1,19 @@
+version: '3'
+
+volumes:
+  duplicati-backup-nfs:
+    labels:
+      - remove_volume_on=down
+    driver_opts:
+      type: nfs
+      o: "addr=${DUPLICATI_BACKUP_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
+      device: ":${DUPLICATI_BACKUP_NFS_SERVER_PATH:-${NFS_BACKUP_PATH}}"
+
+services:
+  duplicati:
+    volumes:
+      - ./etc/duplicati:/config 
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - duplicati-backup-nfs:/backups
+      - ./:/source
