@@ -32,6 +32,11 @@ else
 	DOCKER_COMPOSE := docker-compose
 endif
 
+ifneq (,$(wildcard ./services-enabled/cloudflare-tunnel.yml))
+		CLOUDFLARE_TARGET := cloudflare-tunnel
+		include Makefile.cloudflare
+endif
+
 # setup PLEX_ALLOWED_NETWORKS defaults if they are not already in the .env file
 ifndef PLEX_ALLOWED_NETWORKS
 	export PLEX_ALLOWED_NETWORKS := $(HOSTIP/24)
@@ -264,7 +269,12 @@ list-count: print-enabled count-enabled
 #
 #########################################################
 
-build: .env etc/authelia/configuration.yml etc/dashy/dashy-config.yml etc/prometheus/conf etc/adguard/conf/AdGuardHome.yaml
+build: dependencies .env etc/authelia/configuration.yml etc/dashy/dashy-config.yml etc/prometheus/conf etc/adguard/conf/AdGuardHome.yaml $(CLOUDFLARE_TARGET)
+
+dependencies:
+	sudo add-apt-repository ppa:rmescandon/yq -y
+	sudo apt update
+	DEBIAN_FRONTEND=noninteractive sudo apt install git make nano jq yq -y
 
 .env:
 	cp .templates/env.template .env
