@@ -1,0 +1,31 @@
+version: '3'
+
+networks:
+  default:
+    name: traefik
+    
+# <================= add links to documentation here =================>
+
+services:
+  duplicati:
+    image: lscr.io/linuxserver/duplicati:${DUPLICATI_DOCKER_TAG:-latest}
+    container_name: ${DUPLICATI_CONTAINER_NAME:-duplicati} 
+    restart: ${DUPLICATI_RESTART:-unless-stopped}
+    volumes:
+      - ./etc/duplicati:/config 
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - ./backups:/backups
+      - ./:/source
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=${DUPLICATI_HOST_NAME:-duplicati}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.duplicati.entrypoints=websecure
+      - traefik.http.routers.duplicati.rule=Host(`${DUPLICATI_HOST_NAME:-duplicati}.${HOST_DOMAIN}`)
+      - traefik.http.services.duplicati.loadbalancer.server.port=8200
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
