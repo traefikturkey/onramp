@@ -18,7 +18,7 @@ After installing Docker and getting your Cloudflare API key
 you can run the following to do the basic setup automagically:
 
 ```
-sudo apt install git make nano -y
+sudo apt install git make nano jq yq -y
 
 sudo mkdir /apps
 sudo chown -R $USER:$USER /apps
