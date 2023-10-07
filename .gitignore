@@ -44,6 +44,6 @@ etc/gitea/*
 !etc/crowdsec/acquis.yaml
 !etc/adguard/conf/AdGuardHome.template
 !etc/pihole/dns.template
-!etc/searxng/searxng.yml
+!etc/searxng/settings.template.yml
 
 ansible/roles/
