@@ -4,15 +4,15 @@ networks:
   default:
     name: traefik
     
-# https://github.com/benphelps/homepage
+# https://github.com/gethomepage/homepage/
 
 # To use the docker integration with labels, have a look here, as it needs seperate config
-# https://github.com/benphelps/homepage/wiki/Docker-Integration
-# https://github.com/benphelps/homepage/wiki/Service-Discovery
+# https://github.com/gethomepage/homepage//wiki/Docker-Integration
+# https://github.com/gethomepage/homepage//wiki/Service-Discovery
 
 services:
   homepage:
-    image: ghcr.io/benphelps/homepage:${HOMEPAGE_DOCKER_TAG:-latest}
+    image: ghcr.io/gethomepage/homepage:${HOMEPAGE_DOCKER_TAG:-latest}
     container_name: ${HOMEPAGE_CONTAINER_NAME:-homepage} 
     restart: unless-stopped
     volumes:
