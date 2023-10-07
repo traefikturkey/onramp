@@ -4,8 +4,9 @@ networks:
   default:
     name: traefik
 
-# DON'T FORGET TO CHANGE THE SECRET KEY IN /etc/searxng/searxng.yml!
-#
+# Copy the settings template in etc/searxng and save it as settings.yml in the same directory. 
+# Make sure you change the secret key.
+
 services:
   searxng:
     image: searxng/searxng:${SEARXNG_DOCKER_TAG:-latest}
