@@ -19,7 +19,7 @@ services:
       - PGID=${PGID:-1000}
       - TZ=${TZ}
       - ADMIN_TOKEN=${VAULT_ADMIN_SECRET}
-      - SIGNUPS_ENABLED=${VAULTWARDEN_SIGNUPS_ENABLED:-true}
+      - SIGNUPS_ALLOWED=${VAULTWARDEN_SIGNUPS_ENABLED:-true}
     labels:
       - joyride.host.name=${VAULTWARDEN_CONTAINER_NAME:-vaultwarden}.${HOST_DOMAIN}
       - traefik.enable=true
