@@ -1,0 +1,43 @@
+version: '3'
+
+networks:
+  default:
+    name: traefik
+    
+# <================= add links to documentation here =================>
+
+services:
+  frigate-coral:
+    image: ghcr.io/blakeblackshear/frigate:${FRIGATE_CORAL_DOCKER_TAG:-dev-e1a6398}
+    container_name: ${FRIGATE_CORAL_CONTAINER_NAME:-frigate-coral} 
+    restart: ${FRIGATE_CORAL_RESTART:-unless-stopped}
+    devices:
+      - /dev/bus/usb:/dev/bus/usb 
+    volumes:
+      - ./etc/frigate-coral:/config
+      #- ./etc/frigate/frigate.db:/database/frigate.db
+      #- /apps/trt-models/trt-models:/trt-models
+      - /mnt/apps/frigate-coral:/media/frigate
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - type: tmpfs # Optional: 1GB of memory, reduces SSD/SD Card wear
+        target: /tmp/cache
+        tmpfs:
+          size: 1000000000
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - PLUS_API_KEY=${FRIGATE_PLUS_API_KEY:-}
+      - FRIGATE_RTSP_USER=${FRIGATE_RTSP_USER:-}
+      - FRIGATE_RTSP_PASSWORD=${FRIGATE_RTSP_PASSWORD:-}
+      - FRIGATE_MQTT_USER=${FRIGATE_MQTT_USER:-}
+      - FRIGATE_MQTT_PASSWORD=${FRIGATE_MQTT_PASSWORD:-}
+    labels:
+      - joyride.host.name=${FRIGATE_CORAL_CONTAINER_NAME:-frigate-coral}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.frigate-coral.entrypoints=websecure
+      - traefik.http.routers.frigate-coral.rule=Host(`${FRIGATE_CORAL_CONTAINER_NAME:-frigate-coral}.${HOST_DOMAIN}`)
+      - traefik.http.services.frigate-coral.loadbalancer.server.port=5000
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
