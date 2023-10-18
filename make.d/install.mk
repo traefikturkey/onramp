@@ -4,7 +4,7 @@
 #
 #########################################################
 
-build: install-dependencies .env $(BUILD_DEPENDENCIES) $(CLOUDFLARE_TARGET)
+build: install-dependencies .env $(BUILD_DEPENDENCIES)
 
 install: build install-docker
 
