@@ -1,5 +1,5 @@
-[![Discord notification Action](https://github.com/ilude/traefik-setup-docker-compose/actions/workflows/alert-traefik-project.yml/badge.svg)](https://github.com/ilude/traefik-setup-docker-compose/actions/workflows/alert-traefik-project.yml)
-#### A docker-compose setup of common services with Traefik using cloudflare dns-01 for letsencrypt certificates
+[![Discord notification Action](https://github.com/traefikturkey/onramp/actions/workflows/alert-traefik-project.yml/badge.svg)](https://github.com/traefikturkey/onramp/actions/workflows/alert-traefik-project.yml)
+#### A docker-compose setup of common services with Traefik using Cloudflare dns-01 for letsencrypt certificates
 
 This repo assumes that you are running a debian linux disto like Ubuntu!
 
