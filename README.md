@@ -4,9 +4,9 @@
 This repo assumes that you are running a debian linux disto like Ubuntu!
 
 You'll need a personal domain that's setup with Cloudflare
-and an API token created like so
+and an scoped API token created like so
 
-![Cloudflare api token](https://cdn.discordapp.com/attachments/979867396800131104/985259853696102420/unknown.png "Cloudflare api token")
+![Cloudflare api token](https://raw.githubusercontent.com/traefikturkey/onramp/master/documentation/assets/read%2Bedit-token.png "Cloudflare api token")
 
 ## Download OnRamp
 
