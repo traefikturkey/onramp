@@ -94,15 +94,33 @@ distro := $(shell lsb_release -is)
 
 ifeq ($(distro),Ubuntu)
     APT_ADD_REPO := sudo apt-add-repository ppa:ansible/ansible -y
+	APT_ADD_YQ_REPO := sudo add-apt-repository ppa:rmescandon/yq -y
 else
     APT_ADD_REPO :=
+	APT_ADD_YQ_REPO :=
 endif
 
 check-apt-add-repo:
 	@echo $(APT_ADD_REPO)
+	@echo $(APT_ADD_YQ_REPO)
 
 check-distro:
 	@echo $(distro)
+
+required-dependencies = git nano jq yq
+
+ifeq (, $(shell which $(required-dependencies)))
+    dependencies_installed = 0
+else
+    dependencies_installed = 1
+endif
+
+dependencies:
+ifeq (,dependencies_installed )
+	$(APT_ADD_YQ_REPO)
+	sudo apt update
+	DEBIAN_FRONTEND=noninteractive sudo apt install $(required-dependencies) -y
+endif
 
 install-ansible:
 	$(APT_ADD_REPO)
@@ -270,11 +288,6 @@ list-count: print-enabled count-enabled
 #########################################################
 
 build: dependencies .env etc/authelia/configuration.yml etc/dashy/dashy-config.yml etc/prometheus/conf etc/adguard/conf/AdGuardHome.yaml $(CLOUDFLARE_TARGET)
-
-dependencies:
-	sudo add-apt-repository ppa:rmescandon/yq -y
-	sudo apt update
-	DEBIAN_FRONTEND=noninteractive sudo apt install git make nano jq yq -y
 
 .env:
 	cp .templates/env.template .env
