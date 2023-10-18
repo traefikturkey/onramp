@@ -33,8 +33,8 @@ else
 endif
 
 ifneq (,$(wildcard ./services-enabled/cloudflare-tunnel.yml))
-		CLOUDFLARE_TARGET := cloudflare-tunnel
-		include make.d/cloudflare.mk
+	BUILD_DEPENDENCIES += cloudflare-tunnel
+	include make.d/cloudflare.mk
 endif
 
 # setup PLEX_ALLOWED_NETWORKS defaults if they are not already in the .env file
@@ -234,24 +234,38 @@ list-count: print-enabled count-enabled
 #
 #########################################################
 
-build: install-dependencies .env etc/authelia/configuration.yml etc/dashy/dashy-config.yml etc/prometheus/conf etc/adguard/conf/AdGuardHome.yaml $(CLOUDFLARE_TARGET)
-
-.env:
-	cp .templates/env.template .env
-	$(EDITOR) .env
+ifneq (,$(wildcard ./services-enabled/authelia.yml))
+	BUILD_DEPENDENCIES += etc/authelia/configuration.yml
+endif
 
 etc/authelia/configuration.yml:
 	envsubst '$${HOST_DOMAIN}' < ./etc/authelia/configuration.template > ./etc/authelia/configuration.yml
 
+ifneq (,$(wildcard ./services-enabled/adguard.yml))
+	BUILD_DEPENDENCIES += etc/adguard/conf/AdGuardHome.yaml
+endif
+
 etc/adguard/conf/AdGuardHome.yaml:
 	envsubst '$${ADGUARD_PASSWORD}, $${ADGUARD_USER}, $${HOST_DOMAIN}' < ./etc/adguard/conf/AdGuardHome.template > ./etc/adguard/conf/AdGuardHome.yaml
+
+ifneq (,$(wildcard ./services-enabled/pihole.yml))
+	BUILD_DEPENDENCIES += etc/pihole/dnsmasq/03-custom-dns-names.conf
+endif
 
 etc/pihole/dnsmasq/03-custom-dns-names.conf:
 	envsubst '$${HOST_DOMAIN}, $${HOSTIP} ' < ./etc/pihole/dns.template > ./etc/pihole/dnsmasq/03-custom-dns-names.conf
 
+ifneq (,$(wildcard ./services-enabled/dashy.yml))
+	BUILD_DEPENDENCIES += etc/dashy/dashy-config.yml
+endif
+
 etc/dashy/dashy-config.yml:
 	mkdir -p ./etc/dashy
 	touch ./etc/dashy/dashy-config.yml
+
+ifneq (,$(wildcard ./services-enabled/prometheus.yml))
+	BUILD_DEPENDENCIES += etc/prometheus/conf
+endif
 
 etc/prometheus/conf:
 	mkdir -p etc/prometheus/conf
