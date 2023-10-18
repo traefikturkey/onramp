@@ -4,10 +4,17 @@
 #
 #########################################################
 
+build: install-dependencies .env $(BUILD_DEPENDENCIES) $(CLOUDFLARE_TARGET)
+
+install: build install-docker
+
+.env:
+	cp .templates/env.template .env
+	$(EDITOR) .env
+
 required-dependencies = git nano jq yq
 
 install-dependencies:
-echo $(shell which $(required-dependencies) | echo $?)
 ifneq (0,$(shell which $(required-dependencies) | echo $$?))
 	sudo apt-add-repository ppa:rmescandon/yq -y
 	sudo apt update

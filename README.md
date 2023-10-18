@@ -1,24 +1,20 @@
 [![Discord notification Action](https://github.com/ilude/traefik-setup-docker-compose/actions/workflows/alert-traefik-project.yml/badge.svg)](https://github.com/ilude/traefik-setup-docker-compose/actions/workflows/alert-traefik-project.yml)
 #### A docker-compose setup of common services with Traefik using cloudflare dns-01 for letsencrypt certificates
 
-This repo assumes that you are running a debian linux disto like Ubuntu, so a few of the scripted commands below may need to be adjusted if you are running using a different distro or package management. You will need to install Docker and Docker-compose CLI on your linux host, you can do this by following the steps here:
-[Docker Engine Linux Installation steps](https://docs.docker.com/engine/install/) and [Compose CLI](https://docs.docker.com/compose/install/linux/)
-
-
-**Or** by using this bash script on Ubuntu available [here](https://github.com/traefikturkey/onvoy/tree/master/ubuntu/bash)
+This repo assumes that you are running a debian linux disto like Ubuntu!
 
 You'll need a personal domain that's setup with Cloudflare
 and an API token created like so
 
 ![Cloudflare api token](https://cdn.discordapp.com/attachments/979867396800131104/985259853696102420/unknown.png "Cloudflare api token")
 
-## Install dependencies and OnRamp
+## Download OnRamp
 
-After installing Docker and getting your Cloudflare API key
+After getting your Cloudflare API key
 you can run the following to do the basic setup automagically:
 
-```
-sudo apt install git make nano jq yq -y
+```bash
+sudo apt install git make -y
 
 sudo mkdir /apps
 sudo chown -R $USER:$USER /apps
@@ -26,17 +22,24 @@ cd /apps
 git clone https://github.com/traefikturkey/onramp.git onramp
 cd onramp
 
+make install
+```
+
+Edit the .env file to include Cloudflare credentials, your domain and the hostname of the current machine, save the file and exit. 
+
+```bash
 make start-staging
 ```
 
-Edit the .env file to include Cloudflare credenitals, your domain and the hostname of the current machine, save the file by typing ctrl-x followed by the letter. Traefik will start and attempt to obtain a staging certificate, wait and then follow the on screen directions.
+Traefik will start and attempt to obtain a staging certificate, wait and then follow the on screen directions.
 
-```
+```bash
 make down-staging
 ```
+
 You are now ready to bring things up with the production certificates
 
-```
+```bash
 make
 ```
 
@@ -44,7 +47,7 @@ make
 
 Other docker services are included in the ./services-available directory
 The configuration files include links to the web page for the services which has 
-the available documentation. 
+the available documentation.
 
 > Note : This also includes cautions and notices for some of the different services, so be sure to look at them.
 
