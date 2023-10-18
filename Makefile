@@ -34,7 +34,7 @@ endif
 
 ifneq (,$(wildcard ./services-enabled/cloudflare-tunnel.yml))
 		CLOUDFLARE_TARGET := cloudflare-tunnel
-		include Makefile.cloudflare
+		include make.d/cloudflare.mk
 endif
 
 # setup PLEX_ALLOWED_NETWORKS defaults if they are not already in the .env file
@@ -84,60 +84,7 @@ bash-run:
 bash-exec:
 	$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) exec $(SERVICE_PASSED_DNCASED) sh
 
-#########################################################
-#
-# install commands
-#
-#########################################################
-
-distro := $(shell lsb_release -is)
-
-ifeq ($(distro),Ubuntu)
-    APT_ADD_REPO := sudo apt-add-repository ppa:ansible/ansible -y
-	APT_ADD_YQ_REPO := sudo add-apt-repository ppa:rmescandon/yq -y
-else
-    APT_ADD_REPO :=
-	APT_ADD_YQ_REPO :=
-endif
-
-check-apt-add-repo:
-	@echo $(APT_ADD_REPO)
-	@echo $(APT_ADD_YQ_REPO)
-
-check-distro:
-	@echo $(distro)
-
-required-dependencies = git nano jq yq
-
-ifeq (, $(shell which $(required-dependencies)))
-    dependencies_installed = 0
-else
-    dependencies_installed = 1
-endif
-
-dependencies:
-ifeq (,dependencies_installed )
-	$(APT_ADD_YQ_REPO)
-	sudo apt update
-	DEBIAN_FRONTEND=noninteractive sudo apt install $(required-dependencies) -y
-endif
-
-install-ansible:
-	$(APT_ADD_REPO)
-	sudo apt update
-	sudo apt install ansible -y
-	@echo "Beginning installing ansible roles requirements..."
-	ansible-playbook ansible/ansible-requirements.yml
-	@echo "Completed installing ansible roles requirements..."
-
-install-docker: install-ansible
-	ansible-playbook ansible/install-docker.yml
-
-install-node-exporter: install-ansible
-	ansible-playbook ansible/install-node-exporter.yml
-
-install-nvidia-drivers: install-ansible
-	ansible-playbook ansible/install-nvidia-drivers.yml
+include make.d/install.mk
 
 #########################################################
 #
@@ -287,7 +234,7 @@ list-count: print-enabled count-enabled
 #
 #########################################################
 
-build: dependencies .env etc/authelia/configuration.yml etc/dashy/dashy-config.yml etc/prometheus/conf etc/adguard/conf/AdGuardHome.yaml $(CLOUDFLARE_TARGET)
+build: install-dependencies .env etc/authelia/configuration.yml etc/dashy/dashy-config.yml etc/prometheus/conf etc/adguard/conf/AdGuardHome.yaml $(CLOUDFLARE_TARGET)
 
 .env:
 	cp .templates/env.template .env
@@ -352,176 +299,14 @@ edit-env:
 generate-matrix-config:
 	docker run -it --rm  -v ./etc/synapse:/data  -e SYNAPSE_SERVER_NAME=synapse.traefikturkey.icu -e SYNAPSE_REPORT_STATS=yes matrixdotorg/synapse:latest generate	
 
-#########################################################
-#
-# backup and restore up commands
-#
-#########################################################
+include make.d/backup.mk
 
-create-backup: backups
-	sudo tar --exclude=.keep --exclude=etc/plex/Library -czf ./backups/onramp-config-backup-$(HOST_NAME)-$(shell date +'%y-%m-%d-%H%M').tar.gz ./etc ./services-enabled ./overrides-enabled .env || true
+include make.d/cleanup.mk
 
-create-nfs-backup: create-backup
-	sudo mount -t nfs $(NFS_SERVER):$(NFS_BACKUP_PATH) $(NFS_BACKUP_TMP_DIR)
-	sudo mv ./backups/onramp-config-backup* $(NFS_BACKUP_TMP_DIR)
-	sudo umount $(NFS_BACKUP_TMP_DIR)
+include make.d/database.mk
 
-backups:
-	mkdir -p ./backups/
+include make.d/prestashop.mk
 
-restore-backup:
-	sudo tar -xvf ./backups/onramp-config-backup-$(HOST_NAME)-*.tar.gz
+include make.d/testing.mk
 
-$(NFS_BACKUP_TMP_DIR):
-	sudo mkdir -p $(NFS_BACKUP_TMP_DIR)
-	sudo mount -t nfs $(NFS_SERVER):$(NFS_BACKUP_PATH) $(NFS_BACKUP_TMP_DIR)
-	
-restore-nfs-backup: $(NFS_BACKUP_TMP_DIR) backups
-	$(eval BACKUP_FILE := $(shell find $(NFS_BACKUP_TMP_DIR)/*$(HOST_NAME)* -type f -printf "%T@ %p\n" | sort -n | cut -d' ' -f 2- | tail -n 1))
-	sudo rm -rf ./backups/*
-	cp -p  $(BACKUP_FILE) ./backups/
-	sudo tar -xvf ./backups/*
-	echo $(shell basename $(BACKUP_FILE)) > .restore_latest
-	sudo umount $(NFS_BACKUP_TMP_DIR)
-	sudo rm -r $(NFS_BACKUP_TMP_DIR)
-	echo -n "Please run 'make restart' to apply restored backup"	
-
-#########################################################
-#
-# clean up commands
-#
-#########################################################
-
-clean-acme:
-	@echo "removing acme certificate file"
-	-sudo rm etc/traefik/letsencrypt/acme.json
-
-prune:
-	docker image prune
-
-prune-force:
-	docker image prune -f
-
-prune-update: prune-force update
-
-remove-etc: 
-	rm -rf ./etc/$(or $(SERVICE_PASSED_DNCASED),no_service_passed)/
-
-reset-database-folder:
-	rm -rf ./media/databases/$(or $(SERVICE_PASSED_DNCASED),no_service_passed)/
-	git checkout ./media/databases/$(or $(SERVICE_PASSED_DNCASED),no_service_passed)/.keep
-
-reset-etc: remove-etc
-	git checkout ./etc/$(or $(SERVICE_PASSED_DNCASED),no_service_passed)/
-
-stop-reset-etc: stop-service reset-etc
-
-disable-remove-etc: disable-service remove-etc
-
-disable-reset-etc: disable-service reset-etc
-
-reset-database: remove-etc reset-database-folder	
-
-#########################################################
-#
-# cloudflare tunnel commands
-#
-#########################################################
-
-CLOUDFLARE_CMD = $(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) run --rm cloudflare-tunnel
-
-./etc/cloudflare-tunnel/cert.pem:
-	$(CLOUDFLARE_CMD) login
-
-create-tunnel: ./etc/cloudflare-tunnel/cert.pem
-	$(CLOUDFLARE_CMD) tunnel create $(CLOUDFLARE_TUNNEL_NAME)
-	$(CLOUDFLARE_CMD) tunnel route dns $(CLOUDFLARE_TUNNEL_NAME) $(CLOUDFLARE_TUNNEL_HOSTNAME)
-
-delete-tunnel:
-	$(CLOUDFLARE_CMD) tunnel cleanup $(CLOUDFLARE_TUNNEL_NAME)
-	$(CLOUDFLARE_CMD) tunnel delete $(CLOUDFLARE_TUNNEL_NAME)
-
-show-tunnel:
-	$(CLOUDFLARE_CMD) tunnel info $(CLOUDFLARE_TUNNEL_NAME)
-
-#########################################################
-#
-# mariadb commands
-#
-#########################################################
-
-ifndef MARIADB_CONTAINER_NAME
-MARIADB_CONTAINER_NAME=mariadb
-endif
-
-# enable this to be asked for password to when you connect to the database
-#mysql-connect = @docker exec -it $(MARIADB_CONTAINER_NAME) mysql -p
-
-# enable this to not be asked for password to when you connect to the database
-mysql-connect = @docker exec -it $(MARIADB_CONTAINER_NAME) mysql -p$(MARIADB_ROOT_PASSWORD)
-
-first_arg = $(shell echo $(EMPTY_TARGETS)| cut -d ' ' -f 1)
-second_arg = $(shell echo $(EMPTY_TARGETS)| cut -d ' ' -f 2)
-
-password := $(shell openssl rand -hex 16)
-
-
-mariadb-console:
-	$(mysql-connect)
-
-create-database:
-	$(mysql-connect) -e 'CREATE DATABASE IF NOT EXISTS $(first_arg);'
-
-show-databases: 
-	$(mysql-connect) -e 'show databases;'
-
-create-db-user:
-	$(mysql-connect) -e 'CREATE USER $(first_arg) IDENTIFIED BY "'$(second_arg)'";'
-
-create-db-user-pw: 
-	@echo Here is your password : $(password) : Please put it in the .env file under the service name
-	$(mysql-connect) -e 'CREATE USER IF NOT EXISTS $(first_arg) IDENTIFIED BY "'$(password)'";'
-
-grant-db-perms:
-	$(mysql-connect) -e 'GRANT ALL PRIVILEGES ON '$(first_arg)'.* TO $(first_arg);'
-
-remove-db-user: 
-	$(mysql-connect) -e 'DROP USER $(first_arg);'
-
-drop-database:
-	$(mysql-connect) -e 'DROP DATABASE $(first_arg);'
-
-create-user-with-db: create-db-user-pw create-database grant-db-perms
-
-#########################################################
-#
-# prestashop commands
-#
-#########################################################
-
-remove-presta-install-folder:
-	@sudo rm -rf etc/prestashop/install/
-
-rename-presta-admin:
-	@sudo mv etc/prestashop/admin/ etc/prestashop/$(first_arg)
-
-#########################################################
-#
-# test and debugging commands
-#
-#########################################################
-
-excuse:
-	@curl -s programmingexcuses.com | egrep -o "<a[^<>]+>[^<>]+</a>" | egrep -o "[^<>]+" | sed -n 2p
-
-test-smtp:
-	envsubst .templates/smtp.template | nc localhost 25
-
-# https://stackoverflow.com/questions/7117978/gnu-make-list-the-values-of-all-variables-or-macros-in-a-particular-run
-echo:
-	@$(MAKE) -pn | grep -A1 "^# makefile"| grep -v "^#\|^--" | grep -e "^[A-Z]+*" | sort
-
-env:
-	@env | sort
-
-include env_ifs.mk
+include make.d/checks.mk
