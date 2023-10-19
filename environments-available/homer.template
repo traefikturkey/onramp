@@ -1,0 +1,23 @@
+###############################################
+# HOMER settings 
+###############################################
+
+# Environment variables required by the service you are adding
+# can be placed in this file in the format specified below:
+#
+# HOMER_EXAMPLE_VARIABLE=$HOMER_EXAMPLE_VARIABLE
+#
+# When the service is enabled using 'make enable-service <servicename>' the user
+# will be prompted to enter values for any variables (uncommented) listed in this file.
+#
+# Some helpful commands to make changes to either this template file, or the homer.env file in use by OnRamp:
+#
+# Template: 'make edit-env-template homer'
+# Env:      'make edit-env homer'
+
+
+#HOMER_DOCKER_TAG=$HOMER_DOCKER_TAG
+#HOMER_CONTAINER_NAME=$HOMER_CONTAINER_NAME
+#HOMER_RESTART=$HOMER_RESTART
+
+#HOMER_ASSETS_DIR=$HOMER_ASSETS_DIR

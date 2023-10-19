@@ -1,0 +1,26 @@
+###############################################
+# QDIRSTAT settings 
+###############################################
+
+# Environment variables required by the service you are adding
+# can be placed in this file in the format specified below:
+#
+# QDIRSTAT_EXAMPLE_VARIABLE=$QDIRSTAT_EXAMPLE_VARIABLE
+#
+# When the service is enabled using 'make enable-service <servicename>' the user
+# will be prompted to enter values for any variables (uncommented) listed in this file.
+#
+# Some helpful commands to make changes to either this template file, or the qdirstat.env file in use by OnRamp:
+#
+# Template: 'make edit-env-template qdirstat'
+# Env:      'make edit-env qdirstat'
+
+
+#QDIRSTAT_DOCKER_TAG=$QDIRSTAT_DOCKER_TAG
+#QDIRSTAT_CONTAINER_NAME=$QDIRSTAT_CONTAINER_NAME
+#QDIRSTAT_RESTART=$QDIRSTAT_RESTART
+
+#QDIRSTAT_MEDIA_VOLUME=$QDIRSTAT_MEDIA_VOLUME
+
+#QDIRSTAT_NFS_SERVER=$QDIRSTAT_NFS_SERVER
+#QDIRSTAT_NFS_SERVER_PATH=$QDIRSTAT_NFS_SERVER_PATH

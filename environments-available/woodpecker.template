@@ -1,0 +1,34 @@
+###############################################
+# WOODPECKER settings 
+###############################################
+
+# Environment variables required by the service you are adding
+# can be placed in this file in the format specified below:
+#
+# WOODPECKER_EXAMPLE_VARIABLE=$WOODPECKER_EXAMPLE_VARIABLE
+#
+# When the service is enabled using 'make enable-service <servicename>' the user
+# will be prompted to enter values for any variables (uncommented) listed in this file.
+#
+# Some helpful commands to make changes to either this template file, or the woodpecker.env file in use by OnRamp:
+#
+# Template: 'make edit-env-template woodpecker'
+# Env:      'make edit-env woodpecker'
+
+
+#WOODPECKER_DOCKER_TAG=$WOODPECKER_DOCKER_TAG
+#WOODPECKER_CONTAINER_NAME=$WOODPECKER_CONTAINER_NAME
+#WOODPECKER_RESTART=$WOODPECKER_RESTART
+#WOODPECKER_AGENT_DOCKER_TAG=$WOODPECKER_AGENT_DOCKER_TAG
+#WOODPECKER_AGENT_CONTAINER_NAME=$WOODPECKER_AGENT_CONTAINER_NAME
+#WOODPECKER_AGENT_RESTART=$WOODPECKER_AGENT_RESTART
+
+WOODPECKER_ADMIN=$WOODPECKER_ADMIN
+#WOODPECKER_HOST=$WOODPECKER_HOST
+#WOODPECKER_GITEA=$WOODPECKER_GITEA
+#WOODPECKER_GITEA_URL=$WOODPECKER_GITEA_URL
+#WOODPECKER_AGENT_SECRET=$WOODPECKER_AGENT_SECRET
+#WOODPECKER_GITEA_CLIENT=$WOODPECKER_GITEA_CLIENT
+#WOODPECKER_GITEA_SECRET=$WOODPECKER_GITEA_SECRET
+
+#WOODPECKER_AGENT_SECRET=$WOODPECKER_AGENT_SECRET

@@ -1,0 +1,23 @@
+###############################################
+# FLAME settings 
+###############################################
+
+# Environment variables required by the service you are adding
+# can be placed in this file in the format specified below:
+#
+# FLAME_EXAMPLE_VARIABLE=$FLAME_EXAMPLE_VARIABLE
+#
+# When the service is enabled using 'make enable-service <servicename>' the user
+# will be prompted to enter values for any variables (uncommented) listed in this file.
+#
+# Some helpful commands to make changes to either this template file, or the flame.env file in use by OnRamp:
+#
+# Template: 'make edit-env-template flame'
+# Env:      'make edit-env flame'
+
+
+#FLAME_DOCKER_TAG=$FLAME_DOCKER_TAG
+#FLAME_CONTAINER_NAME=$FLAME_CONTAINER_NAME
+#FLAME_RESTART=$FLAME_RESTART
+
+#FLAME_PASSWORD=$FLAME_PASSWORD

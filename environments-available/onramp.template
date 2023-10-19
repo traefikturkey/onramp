@@ -1,0 +1,37 @@
+ONRAMP_CF_API_EMAIL=$ONRAMP_CF_API_EMAIL
+ONRAMP_CF_DNS_API_TOKEN=$ONRAMP_CF_DNS_API_TOKEN
+ONRAMP_HOST_NAME=$ONRAMP_HOST_NAME
+ONRAMP_HOST_DOMAIN=$ONRAMP_HOST_DOMAIN
+ONRAMP_TZ=$ONRAMP_TZ
+
+################################################
+#
+# Please edit this file and enter your info 
+# into the <placeholders> below
+#
+################################################
+
+CF_API_EMAIL=$ONRAMP_CF_API_EMAIL
+CF_DNS_API_TOKEN=$ONRAMP_CF_DNS_API_TOKEN
+HOST_NAME=$ONRAMP_HOST_NAME
+HOST_DOMAIN=$ONRAMP_HOST_DOMAIN
+
+# https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#Time_Zone_abbreviations
+# choose a value from the TZ database name column on the wikipedia page above
+TZ=$ONRAMP_TZ
+
+################################################
+#
+# The values below are optional, and are only need
+# if you enable the associated services
+#
+################################################
+
+###############################################
+# Traefik settings 
+###############################################
+#TRAEFIK_DOCKER_TAG=2.9
+#TRAEFIK_CONTAINER_NAME=
+#TRAEFIK_RESTART=
+TRAEFIK_ACCESSLOG=true
+TRAEFIK_LOG_LEVEL=DEBUG

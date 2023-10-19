@@ -1,0 +1,23 @@
+###############################################
+# CLOUDFLARE_TUNNEL settings 
+###############################################
+
+# Environment variables required by the service you are adding
+# can be placed in this file in the format specified below:
+#
+# CLOUDFLARE_TUNNEL_EXAMPLE_VARIABLE=$CLOUDFLARE_TUNNEL_EXAMPLE_VARIABLE
+#
+# When the service is enabled using 'make enable-service <servicename>' the user
+# will be prompted to enter values for any variables (uncommented) listed in this file.
+#
+# Some helpful commands to make changes to either this template file, or the cloudflare-tunnel.env file in use by OnRamp:
+#
+# Template: 'make edit-env-template cloudflare-tunnel'
+# Env:      'make edit-env cloudflare-tunnel'
+
+
+#CLOUDFLARE_TUNNEL_DOCKER_TAG=$CLOUDFLARE_TUNNEL_DOCKER_TAG
+#CLOUDFLARE_TUNNEL_CONTAINER_NAME=$CLOUDFLARE_TUNNEL_CONTAINER_NAME
+#CLOUDFLARE_TUNNEL_RESTART=$CLOUDFLARE_TUNNEL_RESTART
+
+CLOUDFLARE_TUNNEL_NAME=$CLOUDFLARE_TUNNEL_NAME

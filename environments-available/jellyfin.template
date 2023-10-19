@@ -1,0 +1,27 @@
+###############################################
+# JELLYFIN settings 
+###############################################
+
+# Environment variables required by the service you are adding
+# can be placed in this file in the format specified below:
+#
+# JELLYFIN_EXAMPLE_VARIABLE=$JELLYFIN_EXAMPLE_VARIABLE
+#
+# When the service is enabled using 'make enable-service <servicename>' the user
+# will be prompted to enter values for any variables (uncommented) listed in this file.
+#
+# Some helpful commands to make changes to either this template file, or the jellyfin.env file in use by OnRamp:
+#
+# Template: 'make edit-env-template jellyfin'
+# Env:      'make edit-env jellyfin'
+
+
+#JELLYFIN_DOCKER_TAG=$JELLYFIN_DOCKER_TAG
+#JELLYFIN_CONTAINER_NAME=$JELLYFIN_CONTAINER_NAME
+#JELLYFIN_RESTART=$JELLYFIN_RESTART
+
+#JELLYFIN_CONFIG_VOLUME=$JELLYFIN_CONFIG_VOLUME
+#JELLYFIN_MEDIA_VOLUME=$JELLYFIN_MEDIA_VOLUME
+#JELLYFIN_MEDIA_PATH=$JOYRIDE_MEDIA_PATH
+#JELLYFIN_MEDIA_NFS_SERVER=$JELLYFIN_MEDIA_NFS_SERVER
+#JELLYFIN_MEDIA_NFS_SERVER_PATH=$JELLYFIN_MEDIA_NFS_SERVER_PATH

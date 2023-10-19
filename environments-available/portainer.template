@@ -1,0 +1,24 @@
+###############################################
+# PORTAINER settings 
+###############################################
+
+# Environment variables required by the service you are adding
+# can be placed in this file in the format specified below:
+#
+# PORTAINER_EXAMPLE_VARIABLE=$PORTAINER_EXAMPLE_VARIABLE
+#
+# When the service is enabled using 'make enable-service <servicename>' the user
+# will be prompted to enter values for any variables (uncommented) listed in this file.
+#
+# Some helpful commands to make changes to either this template file, or the portainer.env file in use by OnRamp:
+#
+# Template: 'make edit-env-template portainer'
+# Env:      'make edit-env portainer'
+
+
+#PORTAINER_DOCKER_TAG=$PORTAINER_DOCKER_TAG
+#PORTAINER_CONTAINER_NAME=$PORTAINER_CONTAINER_NAME
+#PORTAINER_RESTART=$PORTAINER_RESTART
+
+#PORTAINER_VERSION=$PORTAINER_VERSION
+#PORTAINER_LICENSE_KEY=$PORTAINER_LICENSE_KEY

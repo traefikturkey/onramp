@@ -1,0 +1,29 @@
+###############################################
+# NETBOOTXYZ settings 
+###############################################
+
+# Environment variables required by the service you are adding
+# can be placed in this file in the format specified below:
+#
+# NETBOOTXYZ_EXAMPLE_VARIABLE=$NETBOOTXYZ_EXAMPLE_VARIABLE
+#
+# When the service is enabled using 'make enable-service <servicename>' the user
+# will be prompted to enter values for any variables (uncommented) listed in this file.
+#
+# Some helpful commands to make changes to either this template file, or the netbootxyz.env file in use by OnRamp:
+#
+# Template: 'make edit-env-template netbootxyz'
+# Env:      'make edit-env netbootxyz'
+
+
+#NETBOOTXYZ_DOCKER_TAG=$NETBOOTXYZ_DOCKER_TAG
+#NETBOOTXYZ_CONTAINER_NAME=$NETBOOTXYZ_CONTAINER_NAME
+#NETBOOTXYZ_RESTART=$NETBOOTXYZ_RESTART
+
+
+#NETBOOTXYZ_MEDIA_NFS_SERVER=$NETBOOTXYZ_MEDIA_NFS_SERVER
+#NETBOOTXYZ_MEDIA_NFS_SERVER_PATH=$NETBOOTXYZ_MEDIA_NFS_SERVER_PATH
+
+#NETBOOTXYZ_CONFIG_VOLUME=$NETBOOTXYZ_CONFIG_VOLUME
+#NETBOOTXYZ_ASSETS_VOLUME=$NETBOOTXYZ_ASSETS_VOLUME
+#NETBOOTXYZ_ASSETS_PATH=$NETBOOTXYZ_ASSETS_PATH

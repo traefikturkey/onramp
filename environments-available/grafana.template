@@ -1,0 +1,24 @@
+###############################################
+# GRAFANA settings 
+###############################################
+
+# Environment variables required by the service you are adding
+# can be placed in this file in the format specified below:
+#
+# GRAFANA_EXAMPLE_VARIABLE=$GRAFANA_EXAMPLE_VARIABLE
+#
+# When the service is enabled using 'make enable-service <servicename>' the user
+# will be prompted to enter values for any variables (uncommented) listed in this file.
+#
+# Some helpful commands to make changes to either this template file, or the grafana.env file in use by OnRamp:
+#
+# Template: 'make edit-env-template grafana'
+# Env:      'make edit-env grafana'
+
+
+#GRAFANA_DOCKER_TAG=$GRAFANA_DOCKER_TAG
+#GRAFANA_CONTAINER_NAME=$GRAFANA_CONTAINER_NAME
+#GRAFANA_RESTART=$GRAFANA_RESTART
+
+#GRAFANA_SECURITY_ADMIN_PASSWORD=$GRAFANA_SECURITY_ADMIN_PASSWORD
+#GRAFANA_SECURITY_ADMIN_USER=$GRAFANA_SECURITY_ADMIN_USER

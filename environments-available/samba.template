@@ -1,0 +1,27 @@
+###############################################
+# SAMBA settings 
+###############################################
+
+# Environment variables required by the service you are adding
+# can be placed in this file in the format specified below:
+#
+# SAMBA_EXAMPLE_VARIABLE=$SAMBA_EXAMPLE_VARIABLE
+#
+# When the service is enabled using 'make enable-service <servicename>' the user
+# will be prompted to enter values for any variables (uncommented) listed in this file.
+#
+# Some helpful commands to make changes to either this template file, or the samba.env file in use by OnRamp:
+#
+# Template: 'make edit-env-template samba'
+# Env:      'make edit-env samba'
+
+
+#SAMBA_DOCKER_TAG=$SAMBA_DOCKER_TAG
+#SAMBA_CONTAINER_NAME=$SAMBA_CONTAINER_NAME
+#SAMBA_RESTART=$SAMBA_RESTART
+
+#SAMBA_WORKGROUP=$SAMBA_WORKGROUP
+SAMBA_USER=$SAMBA_USER
+SAMBA_PASSWORD=$SAMBA_PASSWORD
+#SAMBA_SHARE1_NAME=$SAMBA_SHARE1_NAME
+#SAMBA_SHARE1_VOLUME=$SAMBA_SHARE1_VOLUME

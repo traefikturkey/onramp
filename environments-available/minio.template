@@ -1,0 +1,27 @@
+###############################################
+# MINIO settings 
+###############################################
+
+# Environment variables required by the service you are adding
+# can be placed in this file in the format specified below:
+#
+# MINIO_EXAMPLE_VARIABLE=$MINIO_EXAMPLE_VARIABLE
+#
+# When the service is enabled using 'make enable-service <servicename>' the user
+# will be prompted to enter values for any variables (uncommented) listed in this file.
+#
+# Some helpful commands to make changes to either this template file, or the minio.env file in use by OnRamp:
+#
+# Template: 'make edit-env-template minio'
+# Env:      'make edit-env minio'
+
+
+#MINIO_DOCKER_TAG=$MINIO_DOCKER_TAG
+#MINIO_CONTAINER_NAME=$MINIO_CONTAINER_NAME
+#MINIO_RESTART=$MINIO_RESTART
+
+MINIO_USER=$MINIO_USER
+MINIO_PASSWORD=$MINIO_PASSWORD
+
+#MINIO_ROOT_NFS_SERVER=$MINIO_ROOT_NFS_SERVER
+#MINIO_ROOT_NFS_SERVER_PATH=$MINIO_ROOT_NFS_SERVER_PATH

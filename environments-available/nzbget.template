@@ -1,0 +1,28 @@
+###############################################
+# NZBGET settings 
+###############################################
+
+# Environment variables required by the service you are adding
+# can be placed in this file in the format specified below:
+#
+# NZBGET_EXAMPLE_VARIABLE=$NZBGET_EXAMPLE_VARIABLE
+#
+# When the service is enabled using 'make enable-service <servicename>' the user
+# will be prompted to enter values for any variables (uncommented) listed in this file.
+#
+# Some helpful commands to make changes to either this template file, or the nzbget.env file in use by OnRamp:
+#
+# Template: 'make edit-env-template nzbget'
+# Env:      'make edit-env nzbget'
+
+
+#NZBGET_DOCKER_TAG=$NZBGET_DOCKER_TAG
+#NZBGET_CONTAINER_NAME=$NZBGET_CONTAINER_NAME
+#NZBGET_RESTART=$NZBGET_RESTART
+
+#NZBGET_DOWNLOADS_DIR=$NZBGET_DOWNLOADS_DIR
+
+#NZBGET_MEDIA_NFS_SERVER=$NZBGET_MEDIA_NFS_SERVER
+#NZBGET_MEDIA_NFS_DOWNLOADS_PATH=$NZBGET_MEDIA_NFS_DOWNLOADS_PATH
+#NZBGET_CONFIG_VOLUME=$NZBGET_CONFIG_VOLUME
+#NZBGET_DOWNLOADS_VOLUME=$NZBGET_DOWNLOADS_VOLUME

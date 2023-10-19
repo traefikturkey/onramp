@@ -1,0 +1,29 @@
+###############################################
+# LIDARR settings 
+###############################################
+
+# Environment variables required by the service you are adding
+# can be placed in this file in the format specified below:
+#
+# LIDARR_EXAMPLE_VARIABLE=$LIDARR_EXAMPLE_VARIABLE
+#
+# When the service is enabled using 'make enable-service <servicename>' the user
+# will be prompted to enter values for any variables (uncommented) listed in this file.
+#
+# Some helpful commands to make changes to either this template file, or the lidarr.env file in use by OnRamp:
+#
+# Template: 'make edit-env-template lidarr'
+# Env:      'make edit-env lidarr'
+
+
+#LIDARR_DOCKER_TAG=$LIDARR_DOCKER_TAG
+#LIDARR_CONTAINER_NAME=$LIDARR_CONTAINER_NAME
+#LIDARR_RESTART=$LIDARR_RESTART
+
+#LIDARR_MUSIC_VOLUME=$LIDARR_MUSIC_VOLUME
+#LIDARR_DOWNLOADS_VOLUME=$LIDARR_DOWNLOADS_VOLUME
+
+#LIDARR_MEDIA_NFS_SERVER=$LIDARR_MEDIA_NFS_SERVER
+#LIDARR_MEDIA_NFS_SERVER_PATH=$LIDARR_MEDIA_NFS_SERVER_PATH
+#LIDARR_MEDIA_NFS_DOWNLOADS_PATH=$LIDARR_MEDIA_NFS_DOWNLOADS_PATH
+#LIDARR_CONFIG_VOLUME=$LIDARR_CONFIG_VOLUME

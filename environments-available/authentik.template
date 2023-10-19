@@ -1,0 +1,52 @@
+###############################################
+# AUTHENTIK settings 
+###############################################
+
+# Environment variables required by the service you are adding
+# can be placed in this file in the format specified below:
+#
+# AUTHENTIK_EXAMPLE_VARIABLE=$AUTHENTIK_EXAMPLE_VARIABLE
+#
+# When the service is enabled using 'make enable-service <servicename>' the user
+# will be prompted to enter values for any variables (uncommented) listed in this file.
+#
+# Some helpful commands to make changes to either this template file, or the authentik.env file in use by OnRamp:
+#
+# Template: 'make edit-env-template authentik'
+# Env:      'make edit-env authentik'
+
+
+#AUTHENTIK_DOCKER_TAG=$AUTHENTIK_DOCKER_TAG
+#AUTHENTIK_CONTAINER_NAME=$AUTHENTIK_CONTAINER_NAME
+#AUTHENTIK_RESTART=$AUTHENTIK_RESTART
+
+AUTHENTIK_AUTH_DOMAIN=$AUTHENTIK_AUTH_DOMAIN
+AUTHENTIK_AUTH_HOST=$AUTHENTIK_AUTH_HOST
+
+
+#AUTHENTIK_POSTGRES_DOCKER_TAG=$AUTHENTIK_POSTGRES_DOCKER_TAG
+#AUTHENTIK_POSTGRES_CONTAINER_NAME=$AUTHENTIK_POSTGRES_CONTAINER_NAME
+#AUTHENTIK_POSTGRES_RESTART=$AUTHENTIK_POSTGRES_RESTART
+
+#AUTHENTIK_POSTGRES_DB=$AUTHENTIK_POSTGRES_DB
+#AUTHENTIK_POSTGRES_USER=$AUTHENTIK_POSTGRES_USER
+
+# Postgres password can be generated with the following command:
+#
+#   <openssl rand -hex 25>
+#
+AUTHENTIK_POSTGRES_PASS=$AUTHENTIK_POSTGRES_PASS
+
+#AUTHENTIK_REDIS_DOCKER_TAG=$AUTHENTIK_REDIS_DOCKER_TAG
+#AUTHENTIK_REDIS_CONTAINER_NAME=$AUTHENTIK_REDIS_CONTAINER_NAME
+#AUTHENTIK_REDIS_RESTART=$AUTHENTIK_REDIS_RESTART
+
+#AUTHENTIK_IMAGE=$AUTHENTIK_IMAGE
+#AUTHENTIK_BOOTSTRAP_PASSWORD=$AUTHENTIK_BOOTSTRAP_PASSWORD
+
+
+# Secret Key can be generated with the following command:
+#
+#   <a very secret password> <openssl rand -hex 25>
+#
+AUTHENTIK_SECRET_KEY=$AUTHENTIK_SECRET_KEY

@@ -1,0 +1,27 @@
+###############################################
+# BAZARR settings 
+###############################################
+
+# Environment variables required by the service you are adding
+# can be placed in this file in the format specified below:
+#
+# BAZARR_EXAMPLE_VARIABLE=$BAZARR_EXAMPLE_VARIABLE
+#
+# When the service is enabled using 'make enable-service <servicename>' the user
+# will be prompted to enter values for any variables (uncommented) listed in this file.
+#
+# Some helpful commands to make changes to either this template file, or the bazarr.env file in use by OnRamp:
+#
+# Template: 'make edit-env-template bazarr'
+# Env:      'make edit-env bazarr'
+
+
+#BAZARR_DOCKER_TAG=$BAZARR_DOCKER_TAG
+#BAZARR_CONTAINER_NAME=$BAZARR_CONTAINER_NAME
+#BAZARR_RESTART=$BAZARR_RESTART
+#BAZARR_CONFIG_VOLUME=$BAZARR_CONFIG_VOLUME
+#BAZARR_MOVIES_VOLUME=$BAZARR_MOVIES_VOLUME
+#BAZARR_SHOWS_VOLUME=$BAZARR_SHOWS_VOLUME
+#BAZARR_MEDIA_NFS_SERVER=$BAZARR_MEDIA_NFS_SERVER
+#BAZARR_MEDIA_MOVIES_PATH=$BAZARR_MEDIA_MOVIES_PATH
+#BAZARR_MEDIA_SHOWS_PATH=$BAZARR_MEDIA_SHOWS_PATH

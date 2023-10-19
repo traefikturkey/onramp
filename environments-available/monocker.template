@@ -1,0 +1,28 @@
+###############################################
+# MONOCKER settings 
+###############################################
+
+# Environment variables required by the service you are adding
+# can be placed in this file in the format specified below:
+#
+# MONOCKER_EXAMPLE_VARIABLE=$MONOCKER_EXAMPLE_VARIABLE
+#
+# When the service is enabled using 'make enable-service <servicename>' the user
+# will be prompted to enter values for any variables (uncommented) listed in this file.
+#
+# Some helpful commands to make changes to either this template file, or the monocker.env file in use by OnRamp:
+#
+# Template: 'make edit-env-template monocker'
+# Env:      'make edit-env monocker'
+
+
+#MONOCKER_DOCKER_TAG=$MONOCKER_DOCKER_TAG
+#MONOCKER_CONTAINER_NAME=$MONOCKER_CONTAINER_NAME
+#MONOCKER_RESTART=$MONOCKER_RESTART
+
+#MONOCKER_SERVER_LABEL=$MONOCKER_SERVER_LABEL
+#MONOCKER_LABEL_ENABLE=$MONOCKER_LABEL_ENABLE
+#MONOCKER_ONLY_OFFLINE_STATES=$MONOCKER_ONLY_OFFLINE_STATES
+#MONOCKER_EXCLUDE_EXITED=$MONOCKER_EXCLUDE_EXITED
+
+MONOCKER_MESSAGE_PLATFORM=$MONOCKER_MESSAGE_PLATFORM

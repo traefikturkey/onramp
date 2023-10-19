@@ -1,0 +1,33 @@
+###############################################
+# UBUNTU settings 
+###############################################
+
+# Environment variables required by the service you are adding
+# can be placed in this file in the format specified below:
+#
+# UBUNTU_EXAMPLE_VARIABLE=$UBUNTU_EXAMPLE_VARIABLE
+#
+# When the service is enabled using 'make enable-service <servicename>' the user
+# will be prompted to enter values for any variables (uncommented) listed in this file.
+#
+# Some helpful commands to make changes to either this template file, or the ubuntu.env file in use by OnRamp:
+#
+# Template: 'make edit-env-template ubuntu'
+# Env:      'make edit-env ubuntu'
+
+
+#UBUNTU_DOCKER_TAG=$UBUNTU_DOCKER_TAG
+#UBUNTU_CONTAINER_NAME=$UBUNTU_CONTAINER_NAME
+#UBUNTU_RESTART=$UBUNTU_RESTART
+
+#UBUNTU_TEST_VOLUME=$UBUNTU_TEST_VOLUME
+
+#UBUNTU_TEST_NFS_SERVER=$UBUNTU_TEST_NFS_SERVER
+#UBUNTU_TEST_NFS_SERVER_PATH=$UBUNTU_TEST_NFS_SERVER_PATH
+#UBUNTU_TEST_NFS_VOLUME=$UBUNTU_TEST_NFS_VOLUME
+
+#UBUNTU_TEST_SMB_SERVER=$UBUNTU_TEST_SMB_SERVER
+#UBUNTU_TEST_SMB_USERNAME=$UBUNTU_TEST_SMB_USERNAME
+#UBUNTU_TEST_SMB_PASSWORD=$UBUNTU_TEST_SMB_PASSWORD
+#UBUNTU_TEST_SMB_DOMAIN_NAME=$UBUNTU_TEST_SMB_DOMAIN_NAME
+#UBUNTU_TEST_SMB_VOLUME=$UBUNTU_TEST_SMB_VOLUME

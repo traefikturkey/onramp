@@ -1,0 +1,27 @@
+###############################################
+# GHOST settings 
+###############################################
+
+# Environment variables required by the service you are adding
+# can be placed in this file in the format specified below:
+#
+# GHOST_EXAMPLE_VARIABLE=$GHOST_EXAMPLE_VARIABLE
+#
+# When the service is enabled using 'make enable-service <servicename>' the user
+# will be prompted to enter values for any variables (uncommented) listed in this file.
+#
+# Some helpful commands to make changes to either this template file, or the ghost.env file in use by OnRamp:
+#
+# Template: 'make edit-env-template ghost'
+# Env:      'make edit-env ghost'
+
+
+#GHOST_DOCKER_TAG=$GHOST_DOCKER_TAG
+#GHOST_CONTAINER_NAME=$GHOST_CONTAINER_NAME
+#GHOST_RESTART=$GHOST_RESTART
+
+#GHOST_URL=$GHOST_URL
+#GHOST_DATABASE_HOST=$GHOST_DATABASE_HOST
+#GHOST_DATABASE_USER=$GHOST_DATABASE_USER
+#GHOST_DATABASE_PASSWORD=$GHOST_DATABASE_PASSWORD
+#GHOST_DATABASE_NAME=$GHOST_DATABASE_NAME

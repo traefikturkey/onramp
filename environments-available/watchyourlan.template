@@ -1,0 +1,27 @@
+###############################################
+# WATCHYOURLAN settings 
+###############################################
+
+# Environment variables required by the service you are adding
+# can be placed in this file in the format specified below:
+#
+# WATCHYOURLAN_EXAMPLE_VARIABLE=$WATCHYOURLAN_EXAMPLE_VARIABLE
+#
+# When the service is enabled using 'make enable-service <servicename>' the user
+# will be prompted to enter values for any variables (uncommented) listed in this file.
+#
+# Some helpful commands to make changes to either this template file, or the watchyourlan.env file in use by OnRamp:
+#
+# Template: 'make edit-env-template watchyourlan'
+# Env:      'make edit-env watchyourlan'
+
+
+#WATCHYOURLAN_DOCKER_TAG=$WATCHYOURLAN_DOCKER_TAG
+#WATCHYOURLAN_CONTAINER_NAME=$WATCHYOURLAN_CONTAINER_NAME
+#WATCHYOURLAN_RESTART=$WATCHYOURLAN_RESTART
+
+#WATCHYOURLAN_IFACE=$WATCHYOURLAN_IFACE
+#WATCHYOURLAN_GUIIP=$WATCHYOURLAN_GUIIP
+#WATCHYOURLAN_THEME=$WATCHYOURLAN_GUIIP
+#WATCHYOURLAN_TIMEOUT=$WATCHYOURLAN_TIMEOUT
+#WATCHYOURLAN_SHOUTRRR_URL=$WATCHYOURLAN_SHOUTRRR_URL

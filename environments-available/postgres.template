@@ -1,0 +1,26 @@
+###############################################
+# POSTGRES settings 
+###############################################
+
+# Environment variables required by the service you are adding
+# can be placed in this file in the format specified below:
+#
+# POSTGRES_EXAMPLE_VARIABLE=$POSTGRES_EXAMPLE_VARIABLE
+#
+# When the service is enabled using 'make enable-service <servicename>' the user
+# will be prompted to enter values for any variables (uncommented) listed in this file.
+#
+# Some helpful commands to make changes to either this template file, or the postgres.env file in use by OnRamp:
+#
+# Template: 'make edit-env-template postgres'
+# Env:      'make edit-env postgres'
+
+
+#POSTGRES_DOCKER_TAG=$POSTGRES_DOCKER_TAG
+#POSTGRES_CONTAINER_NAME=$POSTGRES_CONTAINER_NAME
+#POSTGRES_RESTART=$POSTGRES_RESTART
+
+#POSTGRES_DIR=$POSTGRES_DIR
+POSTGRES_PASS=$POSTGRES_PASS
+#POSTGRES_USER=$POSTGRES_USER
+#POSTGRES_DB=$POSTGRES_DB

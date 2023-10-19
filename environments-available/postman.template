@@ -1,0 +1,23 @@
+###############################################
+# POSTMAN settings 
+###############################################
+
+# Environment variables required by the service you are adding
+# can be placed in this file in the format specified below:
+#
+# POSTMAN_EXAMPLE_VARIABLE=$POSTMAN_EXAMPLE_VARIABLE
+#
+# When the service is enabled using 'make enable-service <servicename>' the user
+# will be prompted to enter values for any variables (uncommented) listed in this file.
+#
+# Some helpful commands to make changes to either this template file, or the postman.env file in use by OnRamp:
+#
+# Template: 'make edit-env-template postman'
+# Env:      'make edit-env postman'
+
+
+#POSTMAN_DOCKER_TAG=$POSTMAN_DOCKER_TAG
+#POSTMAN_CONTAINER_NAME=$POSTMAN_CONTAINER_NAME
+#POSTMAN_RESTART=$POSTMAN_RESTART
+
+POSTMAN_PASSWORD=$POSTMAN_PASSWORD

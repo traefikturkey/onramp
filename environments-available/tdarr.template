@@ -1,0 +1,36 @@
+###############################################
+# TDARR settings 
+###############################################
+
+# Environment variables required by the service you are adding
+# can be placed in this file in the format specified below:
+#
+# TDARR_EXAMPLE_VARIABLE=$TDARR_EXAMPLE_VARIABLE
+#
+# When the service is enabled using 'make enable-service <servicename>' the user
+# will be prompted to enter values for any variables (uncommented) listed in this file.
+#
+# Some helpful commands to make changes to either this template file, or the tdarr.env file in use by OnRamp:
+#
+# Template: 'make edit-env-template tdarr'
+# Env:      'make edit-env tdarr'
+
+
+#TDARR_DOCKER_TAG=$TDARR_DOCKER_TAG
+#TDARR_CONTAINER_NAME=$TDARR_CONTAINER_NAME
+#TDARR_RESTART=$TDARR_RESTART
+
+#TDARR_MEDIA_VOLUME=$TDARR_MEDIA_VOLUME
+#TDARR_MEDIA_PATH=$TDARR_MEDIA_PATH
+#TDARR_TEMP_VOLUME=$TDARR_TEMP_VOLUME
+#TDARR_TEMP_PATH=$TDARR_TEMP_PATH
+#TDARR_WEB_PORT=$TDARR_WEB_PORT
+#TDARR_SERVER_PORT=$TDARR_SERVER_PORT
+#TDARR_UMASK=$TDARR_UMASK
+#TDARR_SERVER_PORT=$TDARR_SERVER_PORT
+#TDARR_INTERNAL_NODE=$TDARR_INTERNAL_NODE
+#TDARR_NODE_ID=$TDARR_NODE_ID
+
+#TDARR_MEDIA_NFS_SERVER=$TDARR_MEDIA_NFS_SERVER
+#TDARR_MEDIA_NFS_SERVER_PATH=$TDARR_MEDIA_NFS_SERVER_PATH
+#TDARR_TEMP_NFS_SERVER_PATH=$TDARR_TEMP_NFS_SERVER_PATH

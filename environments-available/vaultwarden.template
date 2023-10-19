@@ -1,0 +1,30 @@
+###############################################
+# VAULTWARDEN settings 
+###############################################
+
+# Environment variables required by the service you are adding
+# can be placed in this file in the format specified below:
+#
+# VAULTWARDEN_EXAMPLE_VARIABLE=$VAULTWARDEN_EXAMPLE_VARIABLE
+#
+# When the service is enabled using 'make enable-service <servicename>' the user
+# will be prompted to enter values for any variables (uncommented) listed in this file.
+#
+# Some helpful commands to make changes to either this template file, or the vaultwarden.env file in use by OnRamp:
+#
+# Template: 'make edit-env-template vaultwarden'
+# Env:      'make edit-env vaultwarden'
+
+
+#VAULTWARDEN_DOCKER_TAG=$VAULTWARDEN_DOCKER_TAG
+#VAULTWARDEN_CONTAINER_NAME=$VAULTWARDEN_CONTAINER_NAME
+#VAULTWARDEN_RESTART=$VAULTWARDEN_RESTART
+
+
+
+
+# You can create this secret with the following command:
+
+#   <openssl rand -base64 48> # openssl rand -base64 4
+
+#VAULTWARDEN_ADMIN_SECRET=$VAULTWARDEN_ADMIN_SECRET

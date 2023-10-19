@@ -1,0 +1,32 @@
+###############################################
+# MINECRAFT settings 
+###############################################
+
+# Environment variables required by the service you are adding
+# can be placed in this file in the format specified below:
+#
+# MINECRAFT_EXAMPLE_VARIABLE=$MINECRAFT_EXAMPLE_VARIABLE
+#
+# When the service is enabled using 'make enable-service <servicename>' the user
+# will be prompted to enter values for any variables (uncommented) listed in this file.
+#
+# Some helpful commands to make changes to either this template file, or the minecraft.env file in use by OnRamp:
+#
+# Template: 'make edit-env-template minecraft'
+# Env:      'make edit-env minecraft'
+
+
+#MINECRAFT_DOCKER_TAG=$MINECRAFT_DOCKER_TAG
+#MINECRAFT_CONTAINER_NAME=$MINECRAFT_CONTAINER_NAME
+#MINECRAFT_RESTART=$MINECRAFT_RESTART
+
+#MINECRAFT_HOSTNAME=$MINECRAFT_HOSTNAME
+#MINECRAFT_ENABLE_RCON=$MINECRAFT_ENABLE_RCON
+#MINECRAFT_TYPE=$MINECRAFT_TYPE
+#MINECRAFT_VIEW_DISTANCE=$MINECRAFT_VIEW_DISTANCE
+#MINECRAFT_MEMORY=$MINECRAFT_MEMORY
+#MINECRAFT_CONSOLE=$MINECRAFT_CONSOLE
+#MINECRAFT_VANILLATWEAKS_SHARECODE=$MINECRAFT_VANILLATWEAKS_SHARECODE
+#MINECRAFT_PORT=$MINECRAFT_PORT
+
+#MINECRAFT_DYNMAP_NAME=$MINECRAFT_DYNMAP_NAME

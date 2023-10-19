@@ -1,0 +1,23 @@
+###############################################
+# TRILIUM settings 
+###############################################
+
+# Environment variables required by the service you are adding
+# can be placed in this file in the format specified below:
+#
+# TRILIUM_EXAMPLE_VARIABLE=$TRILIUM_EXAMPLE_VARIABLE
+#
+# When the service is enabled using 'make enable-service <servicename>' the user
+# will be prompted to enter values for any variables (uncommented) listed in this file.
+#
+# Some helpful commands to make changes to either this template file, or the trilium.env file in use by OnRamp:
+#
+# Template: 'make edit-env-template trilium'
+# Env:      'make edit-env trilium'
+
+
+#TRILIUM_DOCKER_TAG=$TRILIUM_DOCKER_TAG
+#TRILIUM_CONTAINER_NAME=$TRILIUM_CONTAINER_NAME
+#TRILIUM_RESTART=$TRILIUM_RESTART
+
+#TRILIUM_DATA_DIR=$TRILIUM_DATA_DIR

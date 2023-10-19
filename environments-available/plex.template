@@ -1,0 +1,26 @@
+###############################################
+# PLEX settings 
+###############################################
+
+# Environment variables required by the service you are adding
+# can be placed in this file in the format specified below:
+#
+# PLEX_EXAMPLE_VARIABLE=$PLEX_EXAMPLE_VARIABLE
+#
+# When the service is enabled using 'make enable-service <servicename>' the user
+# will be prompted to enter values for any variables (uncommented) listed in this file.
+#
+# Some helpful commands to make changes to either this template file, or the plex.env file in use by OnRamp:
+#
+# Template: 'make edit-env-template plex'
+# Env:      'make edit-env plex'
+
+
+#PLEX_DOCKER_TAG=$PLEX_DOCKER_TAG
+#PLEX_CONTAINER_NAME=$PLEX_CONTAINER_NAME
+#PLEX_RESTART=$PLEX_RESTART
+
+PLEX_CLAIM=$PLEX_CLAIM
+PLEX_MEDIA_VOLUME=$PLEX_MEDIA_VOLUME
+PLEX_ALLOWED_NETWORKS=PLEX_ALLOWED_NETWORKS
+PLEX_ADVERTISE_IP=$PLEX_ADVERTISE_IP

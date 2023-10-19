@@ -1,0 +1,25 @@
+###############################################
+# MINECRAFT_DIREWOLF20 settings 
+###############################################
+
+# Environment variables required by the service you are adding
+# can be placed in this file in the format specified below:
+#
+# MINECRAFT_DIREWOLF20_EXAMPLE_VARIABLE=$MINECRAFT_DIREWOLF20_EXAMPLE_VARIABLE
+#
+# When the service is enabled using 'make enable-service <servicename>' the user
+# will be prompted to enter values for any variables (uncommented) listed in this file.
+#
+# Some helpful commands to make changes to either this template file, or the minecraft-direwolf20.env file in use by OnRamp:
+#
+# Template: 'make edit-env-template minecraft-direwolf20'
+# Env:      'make edit-env minecraft-direwolf20'
+
+
+#MINECRAFT_DIREWOLF20_DOCKER_TAG=$MINECRAFT_DIREWOLF20_DOCKER_TAG
+#MINECRAFT_DIREWOLF20_CONTAINER_NAME=$MINECRAFT_DIREWOLF20_CONTAINER_NAME
+#MINECRAFT_DIREWOLF20_RESTART=$MINECRAFT_DIREWOLF20_RESTART
+
+#MINECRAFT_DIREWOLF20_NETWORK=$MINECRAFT_DIREWOLF20_NETWORK
+#MINECRAFT_DIREWOLF20_PORT=$MINECRAFT_DIREWOLF20_PORT
+#MINECRAFT_DIREWOLF20_HOSTNAME=$MINECRAFT_DIREWOLF20_HOSTNAME

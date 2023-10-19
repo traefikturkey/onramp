@@ -1,0 +1,28 @@
+###############################################
+# NEXTCLOUD settings 
+###############################################
+
+# Environment variables required by the service you are adding
+# can be placed in this file in the format specified below:
+#
+# NEXTCLOUD_EXAMPLE_VARIABLE=$NEXTCLOUD_EXAMPLE_VARIABLE
+#
+# When the service is enabled using 'make enable-service <servicename>' the user
+# will be prompted to enter values for any variables (uncommented) listed in this file.
+#
+# Some helpful commands to make changes to either this template file, or the nextcloud.env file in use by OnRamp:
+#
+# Template: 'make edit-env-template nextcloud'
+# Env:      'make edit-env nextcloud'
+
+
+#NEXTCLOUD_DOCKER_TAG=$NEXTCLOUD_DOCKER_TAG
+#NEXTCLOUD_CONTAINER_NAME=$NEXTCLOUD_CONTAINER_NAME
+#NEXTCLOUD_RESTART=$NEXTCLOUD_RESTART
+
+#NEXTCLOUD_CONFIG_VOLUME=$NEXTCLOUD_CONFIG_VOLUME
+#NEXTCLOUD_DATA_VOLUME=$NEXTCLOUD_DATA_VOLUME
+#NEXTCLOUD_DATA_PATH=$NEXTCLOUD_DATA_PATH
+
+#NEXTCLOUD_NFS_SERVER=$NEXTCLOUD_NFS_SERVER
+#NEXTCLOUD_NFS_SERVER_PATH=$NEXTCLOUD_NFS_SERVER_PATH

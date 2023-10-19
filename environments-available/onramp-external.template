@@ -1,0 +1,29 @@
+################################################
+#
+# Uncomment the lines below if you want traefik 
+# to proxy to these external services
+#
+################################################
+# REQUIRES manual DNS entry
+# not controlled or managed by joyride
+################################################
+# IDRAC_ADDRESS=<ip_or_fqdn>                # idrac.your_domain.com
+# IDRAC_HOST_NAME=<idrac_hostname>          # idrac hostname, normally idrac
+# MINECRAFT_DYNMAP_HOST_NAME=<minecraft_dynamp_hostname>  
+# MINECRAFT_DYNMAP_ADDRESS=<ip_or_fqdn>
+# OME_ADDRESS=<ip_or_fqdn>                  # ome.your_domain.com
+# OME_HOST_NAME=<ome_hostname>              # ome hostname, normally ome
+# OPNSENSE_ADDRESS=<ip_or_fqdn>             # opnsense.your_domain.com
+# OPENSENSE_HOST_NAME=<opnsense_hostname>   # opnsense hostname, normally opnsense
+# PIHOLE_ADDRESS=<ip_or_fqdn>               # pihole.your_domain.com
+# PIHOLE_HOST_NAME=<pihole_hostname>        # pihole hostname, normally pihole
+# PFSENSE_ADDRESS=<ip_or_fqdn>              # pfsense.your_domain.com
+# PFSENSE_HOST_NAME=<pfsense_hostname>      # pfsense hostname, normally pfsense
+# PROXMOX_ADDRESS=<ip_or_fqdn>              # proxmox.your_domain.com
+# PROXMOX_HOST_NAME=<pve_hostname>          # proxmox hostname, normally pve
+# RANCHER_HOST_NAME=<rancher_hostname>      # rancher.your_domain.com
+# RANCHER_ADDRESS=<ip_or_fqdn>              # rancher hostname, normally rancher
+# SYNOLOGY_HOST_NAME=<synology_hostname>    # synology.your_domain.com
+# SYNOLOGY_ADDRESS=<ip_or_fqdn>             # synology hostname, normally synology
+# TRUENAS_HOST_NAME=<truenas_hostname>      # truenas.your_domain.com
+# TRUENAS_ADDRESS=<ip_or_fqdn>              # truenas hostname, normally truenas

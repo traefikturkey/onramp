@@ -1,0 +1,28 @@
+###############################################
+# YOUTUBE_DL settings 
+###############################################
+
+# Environment variables required by the service you are adding
+# can be placed in this file in the format specified below:
+#
+# YOUTUBE_DL_EXAMPLE_VARIABLE=$YOUTUBE_DL_EXAMPLE_VARIABLE
+#
+# When the service is enabled using 'make enable-service <servicename>' the user
+# will be prompted to enter values for any variables (uncommented) listed in this file.
+#
+# Some helpful commands to make changes to either this template file, or the youtube-dl.env file in use by OnRamp:
+#
+# Template: 'make edit-env-template youtube-dl'
+# Env:      'make edit-env youtube-dl'
+
+
+#YOUTUBE_DL_DOCKER_TAG=$YOUTUBE_DL_DOCKER_TAG
+#YOUTUBE_DL_CONTAINER_NAME=$YOUTUBE_DL_CONTAINER_NAME
+#YOUTUBE_DL_RESTART=$YOUTUBE_DL_RESTART
+
+#YOUTUBE_DL_MEDIA_NFS_SERVER=$YOUTUBE_DL_MEDIA_NFS_SERVER
+#YOUTUBE_DL_MEDIA_NFS_SERVER_PATH=$YOUTUBE_DL_MEDIA_NFS_SERVER_PATH
+#YOUTUBE_DL_CONFIG_VOLUME=$YOUTUBE_DL_CONFIG_VOLUME
+#YOUTUBE_DL_CONFIG_PATH=$YOUTUBE_DL_CONFIG_PATH
+#YOUTUBE_DL_MEDIA_VOLUME=$YOUTUBE_DL_MEDIA_VOLUME
+#YOUTUBE_DL_MEDIA_PATH=$YOUTUBE_DL_MEDIA_PATH

@@ -1,0 +1,28 @@
+###############################################
+# INFLUXDB settings 
+###############################################
+
+# Environment variables required by the service you are adding
+# can be placed in this file in the format specified below:
+#
+# INFLUXDB_EXAMPLE_VARIABLE=$INFLUXDB_EXAMPLE_VARIABLE
+#
+# When the service is enabled using 'make enable-service <servicename>' the user
+# will be prompted to enter values for any variables (uncommented) listed in this file.
+#
+# Some helpful commands to make changes to either this template file, or the influxdb.env file in use by OnRamp:
+#
+# Template: 'make edit-env-template influxdb'
+# Env:      'make edit-env influxdb'
+
+
+#INFLUXDB_DOCKER_TAG=$INFLUXDB_DOCKER_TAG
+#INFLUXDB_CONTAINER_NAME=$INFLUXDB_CONTAINER_NAME
+#INFLUXDB_RESTART=$INFLUXDB_RESTART
+
+#INFLUXDB_INIT_ADMIN_USER=$INFLUXDB_INIT_ADMIN_USER
+#INFLUXDB_INIT_ADMIN_PASSWORD=$INFLUXDB_INIT_ADMIN_PASSWORD
+#INFLUXDB_INIT_ADMIN_TOKEN=$INFLUXDB_INIT_ADMIN_TOKEN
+#INFLUXDB_INIT_ORG=$INFLUXDB_INIT_ORG
+#INFLUXDB_INIT_BUCKET=$INFLUXDB_INIT_BUCKET
+#INFLUXDB_DIR=$INFLUXDB_DIR

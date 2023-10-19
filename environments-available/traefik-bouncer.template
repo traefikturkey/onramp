@@ -1,0 +1,23 @@
+###############################################
+# TRAEFIK_BOUNCER settings 
+###############################################
+
+# Environment variables required by the service you are adding
+# can be placed in this file in the format specified below:
+#
+# TRAEFIK_BOUNCER_EXAMPLE_VARIABLE=$TRAEFIK_BOUNCER_EXAMPLE_VARIABLE
+#
+# When the service is enabled using 'make enable-service <servicename>' the user
+# will be prompted to enter values for any variables (uncommented) listed in this file.
+#
+# Some helpful commands to make changes to either this template file, or the traefik-bouncer.env file in use by OnRamp:
+#
+# Template: 'make edit-env-template traefik-bouncer'
+# Env:      'make edit-env traefik-bouncer'
+
+
+#TRAEFIK_BOUNCER_DOCKER_TAG=$TRAEFIK_BOUNCER_DOCKER_TAG
+#TRAEFIK_BOUNCER_CONTAINER_NAME=$TRAEFIK_BOUNCER_CONTAINER_NAME
+#TRAEFIK_BOUNCER_RESTART=$TRAEFIK_BOUNCER_RESTART
+
+TRAEFIK_BOUNCER_API_KEY=$TRAEFIK_BOUNCER_API_KEY

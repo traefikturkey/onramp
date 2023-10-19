@@ -1,0 +1,28 @@
+###############################################
+# PHOTOPRISM settings 
+###############################################
+
+# Environment variables required by the service you are adding
+# can be placed in this file in the format specified below:
+#
+# PHOTOPRISM_EXAMPLE_VARIABLE=$PHOTOPRISM_EXAMPLE_VARIABLE
+#
+# When the service is enabled using 'make enable-service <servicename>' the user
+# will be prompted to enter values for any variables (uncommented) listed in this file.
+#
+# Some helpful commands to make changes to either this template file, or the photoprism.env file in use by OnRamp:
+#
+# Template: 'make edit-env-template photoprism'
+# Env:      'make edit-env photoprism'
+
+
+#PHOTOPRISM_DOCKER_TAG=$PHOTOPRISM_DOCKER_TAG
+#PHOTOPRISM_CONTAINER_NAME=$PHOTOPRISM_CONTAINER_NAME
+#PHOTOPRISM_RESTART=$PHOTOPRISM_RESTART
+
+#PHOTOPRISM_MEDIA_PHOTOS=$PHOTOPRISM_MEDIA_PHOTOS
+#PHOTOPRISM_MEDIA_VIDEOS=$PHOTOPRISM_MEDIA_VIDEOS
+#PHOTOPRISM_ADMIN_PASSWORD=$PHOTOPRISM_ADMIN_PASSWORD
+
+#PHOTOPRISM_ROOT_NFS_SERVER=$PHOTOPRISM_ROOT_NFS_SERVER
+#PHOTOPRISM_ROOT_NFS_SERVER_PATH=$PHOTOPRISM_ROOT_NFS_SERVER_PATH

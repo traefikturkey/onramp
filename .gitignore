@@ -3,6 +3,7 @@
 *.tar
 *.tar.gz
 backups/*
+environments-enabled/*.env
 services-enabled/*.yml
 services-dev/*.yml
 overrides-enabled/*.yml

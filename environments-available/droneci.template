@@ -1,0 +1,26 @@
+###############################################
+# DRONECI settings 
+###############################################
+
+# Environment variables required by the service you are adding
+# can be placed in this file in the format specified below:
+#
+# DRONECI_EXAMPLE_VARIABLE=$DRONECI_EXAMPLE_VARIABLE
+#
+# When the service is enabled using 'make enable-service <servicename>' the user
+# will be prompted to enter values for any variables (uncommented) listed in this file.
+#
+# Some helpful commands to make changes to either this template file, or the droneci.env file in use by OnRamp:
+#
+# Template: 'make edit-env-template droneci'
+# Env:      'make edit-env droneci'
+
+
+#DRONECI_DOCKER_TAG=$DRONECI_DOCKER_TAG
+#DRONECI_CONTAINER_NAME=$DRONECI_CONTAINER_NAME
+#DRONECI_RESTART=$DRONECI_RESTART
+
+DRONECI_RPC_SECRET=$DRONECI_RPC_SECRET
+DRONECI_ADMIN_USER_CREATE=$DRONECI_ADMIN_USER_CREATE
+DRONECI_GITEA_CLIENT_ID=$DRONECI_GITEA_CLIENT_ID
+DRONECI_GITEA_CLIENT_SECRET=$DRONECI_GITEA_CLIENT_SECRET

@@ -1,0 +1,24 @@
+###############################################
+# AIRPRINT settings 
+###############################################
+
+# Environment variables required by the service you are adding
+# can be placed in this file in the format specified below:
+#
+# AIRPRINT_EXAMPLE_VARIABLE=$AIRPRINT_EXAMPLE_VARIABLE
+#
+# When the service is enabled using 'make enable-service <servicename>' the user
+# will be prompted to enter values for any variables (uncommented) listed in this file.
+#
+# Some helpful commands to make changes to either this template file, or the airprint.env file in use by OnRamp:
+#
+# Template: 'make edit-env-template airprint'
+# Env:      'make edit-env airprint'
+
+
+#AIRPRINT_DOCKER_TAG=$AIRPRINT_DOCKER_TAG
+#AIRPRINT_CONTAINER_NAME=$AIRPRINT_CONTAINER_NAME
+#AIRPRINT_RESTART=$AIRPRINT_RESTART
+
+#AIRPRINT_ADMIN_USER=$AIRPRINT_ADMIN_USER
+#AIRPRINT_ADMIN_PASS=$AIRPRINT_ADMIN_PASS

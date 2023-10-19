@@ -1,0 +1,23 @@
+###############################################
+# SFTP_SERVER settings 
+###############################################
+
+# Environment variables required by the service you are adding
+# can be placed in this file in the format specified below:
+#
+# SFTP_SERVER_EXAMPLE_VARIABLE=$SFTP_SERVER_EXAMPLE_VARIABLE
+#
+# When the service is enabled using 'make enable-service <servicename>' the user
+# will be prompted to enter values for any variables (uncommented) listed in this file.
+#
+# Some helpful commands to make changes to either this template file, or the sftp-server.env file in use by OnRamp:
+#
+# Template: 'make edit-env-template sftp-server'
+# Env:      'make edit-env sftp-server'
+
+
+#SFTP_SERVER_DOCKER_TAG=$SFTP_SERVER_DOCKER_TAG
+#SFTP_SERVER_CONTAINER_NAME=$SFTP_SERVER_CONTAINER_NAME
+#SFTP_SERVER_RESTART=$SFTP_SERVER_RESTART
+
+#SFTP_SERVER_PORT=$SFTP_SERVER_PORT

@@ -1,0 +1,32 @@
+###############################################
+# PAPERLESSNGX settings 
+###############################################
+
+# Environment variables required by the service you are adding
+# can be placed in this file in the format specified below:
+#
+# PAPERLESSNGX_EXAMPLE_VARIABLE=$PAPERLESSNGX_EXAMPLE_VARIABLE
+#
+# When the service is enabled using 'make enable-service <servicename>' the user
+# will be prompted to enter values for any variables (uncommented) listed in this file.
+#
+# Some helpful commands to make changes to either this template file, or the paperlessngx.env file in use by OnRamp:
+#
+# Template: 'make edit-env-template paperlessngx'
+# Env:      'make edit-env paperlessngx'
+
+
+#PAPERLESSNGX_DOCKER_TAG=$PAPERLESSNGX_DOCKER_TAG
+#PAPERLESSNGX_CONTAINER_NAME=$PAPERLESSNGX_CONTAINER_NAME
+#PAPERLESSNGX_RESTART=$PAPERLESSNGX_RESTART
+
+#PAPERLESSNGX_DB_ENGINE=$PAPERLESSNGX_DB_ENGINE
+#PAPERLESSNGX_DB_PORT=$PAPERLESSNGX_DB_PORT
+#PAPERLESSNGX_DB_HOST=$PAPERLESSNGX_DB_HOST
+#PAPERLESSNGX_DB_NAME=$PAPERLESSNGX_DB_NAME
+#PAPERLESSNGX_DB_USER=$PAPERLESSNGX_DB_USER
+#PAPERLESSNGX_DB_PASS=$PAPERLESSNGX_DB_PASS
+#PAPERLESSNGX_DB_ROOTPASS=$PAPERLESSNGX_DB_ROOTPASS
+#PAPERLESSNGX_ADMINUSER=$PAPERLESSNGX_ADMINUSER
+#PAPERLESSNGX_ADMINMAIL=$PAPERLESSNGX_ADMINMAIL
+#PAPERLESSNGX_ADMINPASSWORD=$PAPERLESSNGX_ADMINPASSWORD

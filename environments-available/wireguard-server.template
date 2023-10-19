@@ -1,0 +1,29 @@
+###############################################
+# WIREGUARD_SERVER settings 
+###############################################
+
+# Environment variables required by the service you are adding
+# can be placed in this file in the format specified below:
+#
+# WIREGUARD_SERVER_EXAMPLE_VARIABLE=$WIREGUARD_SERVER_EXAMPLE_VARIABLE
+#
+# When the service is enabled using 'make enable-service <servicename>' the user
+# will be prompted to enter values for any variables (uncommented) listed in this file.
+#
+# Some helpful commands to make changes to either this template file, or the wireguard-server.env file in use by OnRamp:
+#
+# Template: 'make edit-env-template wireguard-server'
+# Env:      'make edit-env wireguard-server'
+
+
+#WIREGUARD_SERVER_DOCKER_TAG=$WIREGUARD_SERVER_DOCKER_TAG
+#WIREGUARD_SERVER_CONTAINER_NAME=$WIREGUARD_SERVER_CONTAINER_NAME
+#WIREGUARD_SERVER_RESTART=$WIREGUARD_SERVER_RESTART
+
+#WIREGUARD_SERVER_PORT=$WIREGUARD_SERVER_PORT
+#WIREGUARD_SERVER_URL=$WIREGUARD_SERVER_URL
+#WIREGUARD_SERVER_PORT=$WIREGUARD_SERVER_PORT
+#WIREGUARD_PEERS=$WIREGUARD_PEERS
+#WIREGUARD_PEERDNS=$WIREGUARD_PEERDNS
+#WIREGUARD_ALLOWEDIPS=$WIREGUARD_ALLOWEDIPS
+#WIREGUARD_INTERNAL_SUBNET=$WIREGUARD_INTERNAL_SUBNET

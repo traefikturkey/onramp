@@ -1,0 +1,30 @@
+###############################################
+# SONARR settings 
+###############################################
+
+# Environment variables required by the service you are adding
+# can be placed in this file in the format specified below:
+#
+# SONARR_EXAMPLE_VARIABLE=$SONARR_EXAMPLE_VARIABLE
+#
+# When the service is enabled using 'make enable-service <servicename>' the user
+# will be prompted to enter values for any variables (uncommented) listed in this file.
+#
+# Some helpful commands to make changes to either this template file, or the sonarr.env file in use by OnRamp:
+#
+# Template: 'make edit-env-template sonarr'
+# Env:      'make edit-env sonarr'
+
+
+#SONARR_DOCKER_TAG=$SONARR_DOCKER_TAG
+#SONARR_CONTAINER_NAME=$SONARR_CONTAINER_NAME
+#SONARR_RESTART=$SONARR_RESTART
+
+#SONARR_CONFIG_VOLUME=$SONARR_CONFIG_VOLUME
+
+#SONARR_MEDIA_NFS_SERVER=$SONARR_MEDIA_NFS_SERVER
+#SONARR_MEDIA_NFS_SERVER_PATH=$SONARR_MEDIA_NFS_SERVER_PATH
+#SONARR_MEDIA_NFS_DOWNLOADS_PATH=$SONARR_MEDIA_NFS_DOWNLOADS_PATH
+#SONARR_TV_PATH=$SONARR_TV_PATH
+#SONARR_DOWNLOADS_PATH=$SONARR_DOWNLOADS_PATH
+#SONARR_EXTRA_PATH=$SONARR_EXTRA_PATH

@@ -1,0 +1,24 @@
+###############################################
+# BASARAN settings 
+###############################################
+
+# Environment variables required by the service you are adding
+# can be placed in this file in the format specified below:
+#
+# BASARAN_EXAMPLE_VARIABLE=$BASARAN_EXAMPLE_VARIABLE
+#
+# When the service is enabled using 'make enable-service <servicename>' the user
+# will be prompted to enter values for any variables (uncommented) listed in this file.
+#
+# Some helpful commands to make changes to either this template file, or the basaran.env file in use by OnRamp:
+#
+# Template: 'make edit-env-template basaran'
+# Env:      'make edit-env basaran'
+
+
+#BASARAN_DOCKER_TAG=$BASARAN_DOCKER_TAG
+#BASARAN_CONTAINER_NAME=$BASARAN_CONTAINER_NAME
+#BASARAN_RESTART=$BASARAN_RESTART
+
+#BASARAN_MODEL=$BASARAN_MODEL
+#BASARAN_SERVER_MODE=$BASARAN_SERVER_MODE

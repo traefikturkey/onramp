@@ -1,0 +1,24 @@
+###############################################
+# WG_EASY settings 
+###############################################
+
+# Environment variables required by the service you are adding
+# can be placed in this file in the format specified below:
+#
+# WG_EASY_EXAMPLE_VARIABLE=$WG_EASY_EXAMPLE_VARIABLE
+#
+# When the service is enabled using 'make enable-service <servicename>' the user
+# will be prompted to enter values for any variables (uncommented) listed in this file.
+#
+# Some helpful commands to make changes to either this template file, or the wg-easy.env file in use by OnRamp:
+#
+# Template: 'make edit-env-template wg-easy'
+# Env:      'make edit-env wg-easy'
+
+
+#WG_EASY_DOCKER_TAG=$WG_EASY_DOCKER_TAG
+#WG_EASY_CONTAINER_NAME=$WG_EASY_CONTAINER_NAME
+#WG_EASY_RESTART=$WG_EASY_RESTART
+
+#WG_EASY_HOST=$WG_EASY_HOST
+#WG_EASY_ALLOWED_IPS=$WG_EASY_ALLOWED_IPS

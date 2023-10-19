@@ -1,0 +1,26 @@
+###############################################
+# MAILHOG settings 
+###############################################
+
+# Environment variables required by the service you are adding
+# can be placed in this file in the format specified below:
+#
+# MAILHOG_EXAMPLE_VARIABLE=$MAILHOG_EXAMPLE_VARIABLE
+#
+# When the service is enabled using 'make enable-service <servicename>' the user
+# will be prompted to enter values for any variables (uncommented) listed in this file.
+#
+# Some helpful commands to make changes to either this template file, or the mailhog.env file in use by OnRamp:
+#
+# Template: 'make edit-env-template mailhog'
+# Env:      'make edit-env mailhog'
+
+
+#MAILHOG_DOCKER_TAG=$MAILHOG_DOCKER_TAG
+#MAILHOG_CONTAINER_NAME=$MAILHOG_CONTAINER_NAME
+#MAILHOG_RESTART=$MAILHOG_RESTART
+
+#MAILHOG_SMTP_PORT=$MAILHOG_SMTP_PORT
+#MAILHOG_SMTP_BIND_ADDR=$MAILHOG_SMTP_BIND_ADDR
+#MAILHOG_MAILDIR_PATH=$MAILHOG_MAILDIR_PATH
+#MAILHOG_STORAGE_PATH=$MAILHOG_STORAGE_PATH
