@@ -1,4 +1,5 @@
-version: '3'volumes:
+version: '3'
+volumes:
   ubuntu-test-nfs-volume:
     labels:
       - remove_volume_on=down

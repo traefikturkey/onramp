@@ -1,4 +1,6 @@
-version: '3'# https://hub.docker.com/r/prestashop/prestashop/
+version: '3'
+
+# https://hub.docker.com/r/prestashop/prestashop/
 # https://www.prestashop.com/en
 
 services:
