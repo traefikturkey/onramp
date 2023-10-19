@@ -7,8 +7,6 @@ services:
     image: redis:${REDIS_DOCKER_TAG:-alpine}
     container_name: ${REDIS_CONTAINER_NAME:-redis} 
     restart: ${REDIS_RESTART:-unless-stopped}
-    networks:
-      - traefik
     volumes:
       - ./etc/redis:/data 
       - /etc/timezone:/etc/timezone:ro
@@ -27,10 +25,3 @@ services:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=false
       - autoheal=true 
-
-      # Flame dashboard labels
-      
-      - flame.type=application # "app" works too
-      - flame.name=${REDIS_FLAME_NAME:-redis} 
-      - flame.url=https://${REDIS_CONTAINER_NAME:-redis}.${HOST_DOMAIN}
-      - flame.icon=${REDIS_FLAME_ICON:-docker} # optional, default is "docker"

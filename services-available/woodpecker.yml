@@ -11,6 +11,7 @@ services:
     restart: unless-stopped
     networks:
       - traefik
+      - default
     volumes:
       - ./etc/woodpecker:/var/lib/woodpecker
       - /etc/timezone:/etc/timezone:ro
@@ -37,19 +38,11 @@ services:
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
 
-      # Flame dashboard labels
-      
-      - flame.type=application # "app" works too
-      - flame.name=${WOODPECKER_FLAME_NAME:-woodpecker} 
-      - flame.url=https://${WOODPECKER_CONTAINER_NAME:-woodpecker}.${HOST_DOMAIN}
-      - flame.icon=${WOODPECKER_FLAME_ICON:-docker} # optional, default is "docker"
 
   woodpecker-agent:
     image: woodpeckerci/woodpecker-agent:latest
     command: agent
     restart: unless-stopped
-    networks:
-      - traefik
     depends_on:
       - woodpecker
     volumes:

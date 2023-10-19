@@ -1,8 +1,5 @@
 version: "3"
 
-  loki:
-    name: loki
-
 # https://grafana.com/docs/grafana/next/setup-grafana/installation/docker/
 # https://github.com/prometheus/prometheus
 

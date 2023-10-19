@@ -8,8 +8,6 @@ services:
     image: postgres14
     container_name: radarr-postgres
     restart: unless-stopped
-    networks:
-      - traefik
     volumes:
       - ${POSTGRES_DIR:-./media/databases/radrr-postgres/data}:/var/lib/postgresql/data
     environment:

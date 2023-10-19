@@ -24,14 +24,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.synapse.entrypoints=websecure
       - traefik.http.routers.synapse.rule=Host(`${SYNAPSE_CONTAINER_NAME:-synapse}.${HOST_DOMAIN}`)
-      #- traefik.http.services.synapse.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.synapse.loadbalancer.server.port=8008
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
 
-      # Flame dashboard labels
-
-      - flame.type=application # "app" works too
-      - flame.name=${SYNAPSE_FLAME_NAME:-synapse}
-      - flame.url=https://${SYNAPSE_CONTAINER_NAME:-synapse}.${HOST_DOMAIN}
-      - flame.icon=${SYNAPSE_FLAME_ICON:-docker} # optional, default is "docker"

@@ -27,15 +27,6 @@ services:
       #- traefik.http.routers.whoami.middlewares=crowdsec-bouncer@file
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
-
-      
-      # Flame dashboard labels
-      
-      - flame.type=application # "app" works too
-      - flame.name=${WHOAMI_FLAME_NAME:-whoami} 
-      - flame.url=https://${WHOAMI_CONTAINER_NAME:-whoami}.${HOST_DOMAIN}
-      - flame.icon=${WHOAMI_FLAME_ICON:-docker} # optional, default is "docker"
-
       #- homepage.group=traefik
       - homepage.name=${WHOAMI_CONTAINER_NAME:-whoami}
       #- homepage.icon=

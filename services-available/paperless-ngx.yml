@@ -8,16 +8,12 @@ services:
   broker:
     image: docker.io/library/redis:7
     restart: unless-stopped
-    networks:
-      - traefik
     volumes:
       - ./etc/paperless-ngx/redisdata:/data
 
   db:
     image: docker.io/library/mariadb:10
     restart: unless-stopped
-    networks:
-      - traefik
     volumes:
       - ./etc/paperless-ngx/dbdata:/var/lib/mysql
     environment:
@@ -32,8 +28,6 @@ services:
   gotenberg:
     image: docker.io/gotenberg/gotenberg:7.6
     restart: unless-stopped
-    networks:
-      - traefik
     command:
       - "gotenberg"
       - "--chromium-disable-routes=true"
@@ -41,8 +35,6 @@ services:
   tika:
     image: ghcr.io/paperless-ngx/tika:latest
     restart: unless-stopped
-    networks:
-      - traefik
 
   paperless-ngx:
     image: ghcr.io/paperless-ngx/paperless-ngx:${PAPERLESS_NGX_DOCKER_TAG:-latest}
@@ -50,6 +42,7 @@ services:
     restart: ${PAPERLESS_NGX_RESTART:-unless-stopped}
     networks:
       - traefik
+      - default
     depends_on:
       - broker
       - db  
@@ -88,10 +81,3 @@ services:
       - traefik.http.services.paperless-ngx.loadbalancer.server.port=8000
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
-
-      # Flame dashboard labels
-      
-      - flame.type=application # "app" works too
-      - flame.name=${PAPERLESS_NGX_FLAME_NAME:-paperless-ngx} 
-      - flame.url=https://${PAPERLESS_NGX_CONTAINER_NAME:-paperless-ngx}.${HOST_DOMAIN}
-      - flame.icon=${PAPERLESS_NGX_FLAME_ICON:-docker} # optional, default is "docker"

@@ -31,13 +31,6 @@ services:
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
 
-      # Flame dashboard labels
-      
-      # - flame.type=application # "app" works too
-      # - flame.name=${HOMEPAGE_FLAME_NAME:-homepage} 
-      # - flame.url=https://${HOMEPAGE_CONTAINER_NAME:-homepage}.${HOST_DOMAIN}
-      # - flame.icon=${HOMEPAGE_FLAME_ICON:-docker} # optional, default is "docker"
-
       # - homepage.group=A group
       # - homepage.name=homepage
       # - homepage.icon=

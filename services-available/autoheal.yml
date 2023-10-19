@@ -1,12 +1,12 @@
-version: '3'# https://github.com/willfarrell/docker-autoheal
+version: '3'
+
+# https://github.com/willfarrell/docker-autoheal
 
 services:  
   autoheal:
     image: willfarrell/autoheal:${AUTOHEAL_DOCKER_TAG:-latest}
     container_name: ${AUTOHEAL_CONTAINER_NAME:-autoheal}
     restart: unless-stopped
-    networks:
-      - traefik
     environment: 
       - AUTOHEAL_CONTAINER_LABEL=all
       - AUTOHEAL_INTERVAL=${AUTOHEAL_INTERVAL_VALUE:-5}

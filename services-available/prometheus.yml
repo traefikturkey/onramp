@@ -1,6 +1,4 @@
 version: '3'
-  loki:
-    name: loki
 
 # https://github.com/prometheus/prometheus
 

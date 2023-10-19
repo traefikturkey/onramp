@@ -9,8 +9,6 @@ services:
     image: dperson/samba:${SAMBA_DOCKER_TAG:-latest}
     container_name: ${SAMBA_CONTAINER_NAME:-samba}
     restart: unless-stopped
-    networks:
-      - traefik
     ports:  
       - 137:137/udp  
       - 138:138/udp  
