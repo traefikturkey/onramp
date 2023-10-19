@@ -11,6 +11,7 @@ services:
     restart: unless-stopped
     networks:
       - traefik
+      - default
     links:
       - prometheus-alertmanager
       - prometheus-blackbox
@@ -47,8 +48,6 @@ services:
     image: ghcr.io/ilude/prometheus-pve-exporter
     container_name: proxmox-exporter
     restart: unless-stopped
-    networks:
-      - traefik
     env_file: 
       - .env
     # ports:

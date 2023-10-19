@@ -10,9 +10,7 @@ services:
     image: postgres
     container_name: authentik_postgresql
     restart: unless-stopped
-    networks:
-      - traefik
-    user: "1000:1000"
+    user: ${PUID}:${PGID}
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
       start_period: 20s
@@ -36,8 +34,6 @@ services:
     image: redis:alpine
     container_name: authentik_redis
     restart: unless-stopped
-    networks:
-      - traefik
     volumes:
     - ./etc/authentik/redis:/data
     healthcheck:
@@ -94,8 +90,6 @@ services:
     image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_DOCKER_TAG:-2022.8.2}
     container_name: authentik_worker
     restart: unless-stopped
-    networks:
-      - traefik
     command: worker
     environment:
       - PUID=${PUID:-1000}

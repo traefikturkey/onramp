@@ -5,8 +5,6 @@ services:
     image: petersem/monocker:${MONOCKER_DOCKER_TAG:-latest}
     container_name: ${MONOCKER_CONTAINER_NAME:-monocker} 
     restart: ${MONOCKER_RESTART:-unless-stopped}
-    networks:
-      - traefik
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /etc/timezone:/etc/timezone:ro

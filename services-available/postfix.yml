@@ -7,8 +7,6 @@ services:
     image: juanluisbaptiste/postfix:${POSTFIX_DOCKER_TAG:-latest}
     container_name: ${POSTFIX_CONTAINER_NAME:-postfix} 
     restart: unless-stopped
-    networks:
-      - traefik
     ports:
       - 25:25
     environment:

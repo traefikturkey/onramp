@@ -7,7 +7,7 @@ services:
     hostname: itflow-db
     container_name: itflow-db
     image: mariadb:10.6.11
-    restart: always
+    restart: unless-stopped
     networks:
       - traefik
     environment:
@@ -49,14 +49,6 @@ services:
       - traefik.enable=true
       - traefik.http.routers.itflow.entrypoints=websecure
       - traefik.http.routers.itflow.rule=Host(`${ITFLOW_CONTAINER_NAME:-itflow}.${HOST_DOMAIN}`)
-      #- traefik.http.services.itflow.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.itflow.loadbalancer.server.port=8080
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
-
-      # Flame dashboard labels
-      
-      - flame.type=application # "app" works too
-      - flame.name=${ITFLOW_FLAME_NAME:-itflow} 
-      - flame.url=https://${ITFLOW_CONTAINER_NAME:-itflow}.${HOST_DOMAIN}
-      - flame.icon=${ITFLOW_FLAME_ICON:-docker} # optional, default is "docker"

@@ -6,8 +6,6 @@ services:
     image: ghcr.io/containrrr/watchtower:${WATCHTOWER_DOCKER_TAG:-latest}
     container_name: watchtower
     restart: unless-stopped
-    networks:
-      - traefik
     environment: 
       - WATCHTOWER_NOTIFICATIONS=${WATCHTOWER_NOTIFICATIONS:-shoutrrr}
       - WATCHTOWER_NOTIFICATION_URL=${WATCHTOWER_NOTIFICATION_URL} 

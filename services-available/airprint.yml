@@ -35,13 +35,6 @@ services:
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
 
-      # Flame dashboard labels
-      
-      - flame.type=application # "app" works too
-      - flame.name=${AIRPRINT_FLAME_NAME:-airprint} 
-      - flame.url=https://${AIRPRINT_CONTAINER_NAME:-airprint}.${HOST_DOMAIN}
-      - flame.icon=${AIRPRINT_FLAME_ICON:-docker} # optional, default is "docker"
-
     devices: 
       # your usb device forwarding to the docker image 
       # Here you will need to passthru the USB of your printer to the VM

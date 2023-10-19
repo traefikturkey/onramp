@@ -37,33 +37,21 @@ services:
       - SITE_LOGO_URL=https://healthchecks.io/static/img/logo-full-ua.svg 
       - SITE_NAME=${HEALTHCHECKS_SITE_NAME:-healthchecks}
       - SITE_ROOT=https://${HEALTHCHECKS_CONTAINER_NAME:-healthchecks}.${HOST_DOMAIN}
-
-
-
     labels:
       - joyride.host.name=${HEALTHCHECKS_CONTAINER_NAME:-healthchecks}.${HOST_DOMAIN}
       - traefik.enable=true
       - traefik.http.routers.healthchecks.entrypoints=websecure
       - traefik.http.routers.healthchecks.rule=Host(`${HEALTHCHECKS_CONTAINER_NAME:-healthchecks}.${HOST_DOMAIN}`)
-      #- traefik.http.services.healthchecks.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.healthchecks.loadbalancer.server.port=8000
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
 
-      # Flame dashboard labels
-      
-      - flame.type=application # "app" works too
-      - flame.name=${HEALTHCHECKS_FLAME_NAME:-healthchecks} 
-      - flame.url=https://${HEALTHCHECKS_CONTAINER_NAME:-healthchecks}.${HOST_DOMAIN}
-      - flame.icon=${HEALTHCHECKS_FLAME_ICON:-docker} # optional, default is "docker"
 
 
   hc-postgres:
     image: postgres:${HEALTHCHECKS_DOCKER_TAG:-16.0}
     container_name: hc-postgres
     restart: unless-stopped
-    networks:
-      - traefik
     environment:
       POSTGRES_USER: ${HEALTHCHECKS_DB_USER:-dbadmin}
       POSTGRES_PASSWORD: ${HEALTHCHECKS_DB_PASS:-changeme}

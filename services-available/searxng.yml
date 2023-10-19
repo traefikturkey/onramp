@@ -31,7 +31,6 @@ services:
       options:
         max-size: "1m"
         max-file: "1"
-
     labels:
       - joyride.host.name=${SEARXNG_CONTAINER_NAME:-searxng}.${HOST_DOMAIN}
       - traefik.enable=true
@@ -41,11 +40,6 @@ services:
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
 
-      # Flame dashboard labels
-      
-      - flame.type=application # "app" works too
-      - flame.name=${SEARXNG_FLAME_NAME:-searxng} 
-      - flame.url=https://${SEARXNG_CONTAINER_NAME:-searxng}.${HOST_DOMAIN}
 
   redis:
     container_name: searxng-redis
@@ -60,7 +54,3 @@ services:
      - SETUID
      - DAC_OVERRIDE
     restart: unless-stopped
-    networks:
-      - traefik
-
-

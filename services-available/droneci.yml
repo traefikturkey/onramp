@@ -12,6 +12,7 @@ services:
     restart: unless-stopped
     networks:
       - traefik
+      - default
     depends_on:
       - gitea
     environment:
@@ -48,8 +49,6 @@ services:
     container_name: drone-runner
     image: drone/drone-runner-docker
     restart: unless-stopped
-    networks:
-      - traefik
     depends_on:
       - drone
     environment:

@@ -1,4 +1,6 @@
 version: '3'
+
+networks:
   database:
 
 # https://github.com/wallabag/wallabag
@@ -50,8 +52,6 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=${WALLABAG_DB_PASSWORD:-wallaroot}
     restart: unless-stopped
-    networks:
-      - traefik
     volumes:
       - ./etc/wallabag/data:/var/lib/mysql
     networks:
@@ -65,8 +65,6 @@ services:
   redis:
     image: redis:alpine
     restart: unless-stopped
-    networks:
-      - traefik
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 20s

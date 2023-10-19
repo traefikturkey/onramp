@@ -45,9 +45,3 @@ services:
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
 
-      # Flame dashboard labels
-
-      - flame.type=application # "app" works too
-      - flame.name=${MEALIE_FLAME_NAME:-mealie}
-      - flame.url=https://${MEALIE_CONTAINER_NAME:-mealie}.${HOST_DOMAIN}
-      - flame.icon=${MEALIE_FLAME_ICON:-docker} # optional, default is "docker"

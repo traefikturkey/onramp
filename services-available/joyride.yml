@@ -13,8 +13,6 @@ services:
     image: ghcr.io/ilude/joyride:${JOYRIDE_DOCKER_TAG:-latest}
     container_name: ${JOYRIDE_CONTAINER_NAME:-joyride}
     restart: unless-stopped
-    networks:
-      - traefik
     environment:
       - HOSTIP=${HOSTIP}
     ports:

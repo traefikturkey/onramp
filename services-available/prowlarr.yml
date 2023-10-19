@@ -27,8 +27,3 @@ services:
       - traefik.http.services.prowlarr.loadbalancer.server.port=9696
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
-      # Flame dashboard labels
-      - flame.type=application # "app" works too
-      - flame.name=${PROWLARR_FLAME_NAME:-prowlarr} 
-      - flame.url=https://${PROWLARR_CONTAINER_NAME:-prowlarr}.${HOST_DOMAIN}
-      - flame.icon=${PROWLARR_FLAME_ICON:-docker} # optional, default is "docker"

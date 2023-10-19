@@ -5,7 +5,5 @@ services:
     image: ubuntu
     container_name: ubuntu
     restart: on-failure
-    networks:
-      - traefik
     volumes:
       - ${UBUNTU_TEST_VOLUME:-.}:/mnt

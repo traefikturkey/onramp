@@ -9,8 +9,6 @@ services:
     user: root # Required for container to correctly interact with the volume.
     container_name: mssql
     restart: unless-stopped
-    networks:
-      - traefik
     volumes:
       - ${MSSQL_DB_DIR:-./media/databases/mssql}:/var/opt/mssql/data # paths will have to be researched futher
       - /etc/timezone:/etc/timezone:ro

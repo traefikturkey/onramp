@@ -25,9 +25,3 @@ services:
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
 
-    # Flame dashboard labels
-      
-      - flame.type=application # "app" works too
-      - flame.name=${DOZZLE_FLAME_NAME:-Dozzle} 
-      - flame.url=https://${HOST_NAME}.${HOST_DOMAIN}/logs
-      - flame.icon=${DOZZLE_FLAME_ICON:-math-log} # optional, default is "docker"

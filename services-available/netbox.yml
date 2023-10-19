@@ -9,6 +9,7 @@ services:
     restart: unless-stopped
     networks:
       - traefik
+      - default
     volumes:
       - ./etc/netbox:/config # <==== this probably needs changed 
       - /etc/timezone:/etc/timezone:ro
@@ -40,19 +41,10 @@ services:
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
 
-      # Flame dashboard labels
-      
-      - flame.type=application # "app" works too
-      - flame.name=${NETBOX_FLAME_NAME:-netbox} 
-      - flame.url=https://${NETBOX_CONTAINER_NAME:-netbox}.${HOST_DOMAIN}
-      - flame.icon=${NETBOX_FLAME_ICON:-docker} # optional, default is "docker"
-
   netbox-postgresql:
     image: postgres
     container_name: netbox_postgresql
     restart: unless-stopped
-    networks:
-      - traefik
     user: "1000:1000"
     volumes:
       - ./etc/netbox/postgresql:/var/lib/postgresql/data
@@ -73,8 +65,6 @@ services:
     image: redis:alpine
     container_name: netbox_redis
     restart: unless-stopped
-    networks:
-      - traefik
     volumes:
     - ./etc/netbox/redis:/data
     labels:

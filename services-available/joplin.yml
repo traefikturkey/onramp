@@ -9,8 +9,6 @@ services:
     image: postgres:15
     container_name: ${JOPLIN_DB_CONTAINER_NAME:-joplin-db} 
     restart: ${JOPLIN_RESTART:-unless-stopped}
-    networks:
-      - traefik
     volumes:
       - ./etc/joplin:/var/lib/postgresql/data
     ports:
@@ -60,10 +58,3 @@ services:
       - traefik.http.services.joplin.loadbalancer.server.port=22300
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
-
-      # Flame dashboard labels
-      
-      - flame.type=application # "app" works too
-      - flame.name=${JOPLIN_FLAME_NAME:-joplin} 
-      - flame.url=https://${JOPLIN_CONTAINER_NAME:-joplin}.${HOST_DOMAIN}
-      - flame.icon=${JOPLIN_FLAME_ICON:-docker} # optional, default is "docker"

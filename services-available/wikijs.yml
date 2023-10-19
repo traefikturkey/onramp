@@ -28,10 +28,4 @@ services:
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
 
-      # Flame dashboard labels
-      
-      - flame.type=application # "app" works too
-      - flame.name=${WIKIJS_FLAME_NAME:-wikijs} 
-      - flame.url=https://${WIKIJS_CONTAINER_NAME:-wikijs}.${HOST_DOMAIN}
-      - flame.icon=${WIKIJS_FLAME_ICON:-docker} # optional, default is "docker"
 

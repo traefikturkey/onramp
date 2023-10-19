@@ -35,7 +35,6 @@ services:
       - DISABLE_PORT_UPDATER=true
       - OVERRIDE_DNS_1=1.1.1.1
       - OVERRIDE_DNS_2=1.0.0.1      
-
     logging:
       driver: json-file
       options:
@@ -48,11 +47,3 @@ services:
       - traefik.http.services.transmission-vpn.loadbalancer.server.port=9091
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
-
-      # Flame dashboard labels
-      
-      - flame.type=application # "app" works too
-      - flame.name=${TRANSMISSION_VPN_FLAME_NAME:-transmission-vpn} 
-      - flame.url=https://${TRANSMISSION_VPN_CONTAINER_NAME:-transmission-vpn}.${HOST_DOMAIN}
-      - flame.icon=${TRANSMISSION_VPN_FLAME_ICON:-docker} # optional, default is "docker"
-

@@ -5,8 +5,6 @@ services:
     image: eclipse-mosquitto:${MOSQITTO_MQTT_DOCKER_TAG:-latest}
     container_name: mosquitto-mqtt
     restart: unless-stopped
-    networks:
-      - traefik
     user: ${PUID:-1000}:${PGID:-1000}
     volumes:
       - ./etc/mosquitto/config:/mosquitto/config

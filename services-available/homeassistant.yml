@@ -1,4 +1,6 @@
-version: '3'# https://hub.docker.com/r/linuxserver/homeassistant
+version: '3'
+
+# https://hub.docker.com/r/linuxserver/homeassistant
 
 services:
   homeassistant:

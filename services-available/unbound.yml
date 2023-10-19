@@ -7,8 +7,6 @@ services:
     image: mvance/unbound:${UNBOUND_DOCKER_TAG:-latest}
     container_name: ${UNBOUND_CONTAINER_NAME:-unbound} 
     restart: unless-stopped
-    networks:
-      - traefik
     volumes:
       #- ./etc/unbound:/opt/unbound/etc/unbound/
       - /etc/timezone:/etc/timezone:ro
