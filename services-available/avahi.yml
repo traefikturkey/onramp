@@ -1,12 +1,12 @@
-version: '3'
-
-# https://github.com/MattKobayashi/docker-avahi
+version: '3'# https://github.com/MattKobayashi/docker-avahi
 
 services:
   avahi:
     image: ghcr.io/mattkobayashi/docker-avahi:${AVAHI_DOCKER_TAG:-latest}  
     container_name: ${AVAHI_CONTAINER_NAME:-avahi}
     restart: unless-stopped
+    networks:
+      - traefik
     network_mode: host
     environment:
       - SERVER_HOST_NAME=${HOST_NAME}

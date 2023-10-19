@@ -1,9 +1,5 @@
 version: '3'
 
-networks:
-  default:
-    name: traefik
-
 # https://github.com/portainer/portainer
 
 services:
@@ -11,6 +7,8 @@ services:
     image: portainer/portainer-ee:${PORTAINER_DOCKER_TAG:-latest}
     container_name: portainer-ee
     restart: unless-stopped
+    networks:
+      - traefik
     volumes:
       - ./etc/portainer-ee:/data
       - /etc/timezone:/etc/timezone:ro

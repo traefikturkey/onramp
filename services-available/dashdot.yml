@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # https://github.com/MauriceNino/dashdot
 # https://getdashdot.com/
@@ -13,6 +9,8 @@ services:
     image: mauricenino/dashdot:${DASHDOT_DOCKER_TAG:-latest}
     container_name: ${DASHDOT_CONTAINER_NAME:-dashdot} 
     restart: unless-stopped
+    networks:
+      - traefik
     #privileged: false
     volumes:
       #- ./etc/dashdot:/config # <==== this probably needs changed 

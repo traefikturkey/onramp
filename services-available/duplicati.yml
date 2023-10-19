@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # <================= add links to documentation here =================>
 
@@ -11,6 +7,8 @@ services:
     image: lscr.io/linuxserver/duplicati:${DUPLICATI_DOCKER_TAG:-latest}
     container_name: ${DUPLICATI_CONTAINER_NAME:-duplicati} 
     restart: ${DUPLICATI_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/duplicati:/config 
       - /etc/timezone:/etc/timezone:ro

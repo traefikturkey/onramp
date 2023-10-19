@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # https://docs.tdarr.io/docs/installation/docker/run-compose
 
@@ -11,6 +7,8 @@ services:
     image: ghcr.io/haveagitgat/tdarr:${TDARR_DOCKER_TAG:-latest}
     container_name: ${TDARR_CONTAINER_NAME:-tdarr} 
     restart: ${TDARR_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/tdarr/server:/app/server
       - ./etc/tdarr/config:/app/configs 

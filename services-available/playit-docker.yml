@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # https://github.com/mafen/playit-docker
 # https://github.com/playit-cloud/playit-agent
@@ -12,6 +8,8 @@ services:
     image: ghcr.io/mafen/playit-docker:${PLAYIT_DOCKER_DOCKER_TAG:-latest}
     container_name: ${PLAYIT_DOCKER_CONTAINER_NAME:-playit-docker} 
     restart: ${PLAYIT_DOCKER_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       #- ./etc/playit-docker:/config # <==== this probably needs changed 
       - /etc/timezone:/etc/timezone:ro

@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # https://github.com/mailhog/MailHog
  
@@ -11,6 +7,8 @@ services:
     image: mailhog/mailhog:${MAILHOG_DOCKER_TAG:-latest}
     container_name: ${MAILHOG_CONTAINER_NAME:-mailhog} 
     restart: unless-stopped
+    networks:
+      - traefik
     ports:
       - ${MH_SMTP_PORT:-1025}:${MH_SMTP_PORT:-1025}
     volumes:

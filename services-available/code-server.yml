@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # https://github.com/coder/code-server
 # https://github.com/linuxserver/docker-code-server
@@ -13,6 +9,8 @@ services:
     image: lscr.io/linuxserver/code-server:${CODE_SERVER_DOCKER_TAG:-latest}
     container_name: ${CODE_SERVER_CONTAINER_NAME:-code-server}
     restart: unless-stopped
+    networks:
+      - traefik
     volumes:
       - ./etc/code-server:/config
       - /etc/timezone:/etc/timezone:ro

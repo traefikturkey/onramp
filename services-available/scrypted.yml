@@ -1,9 +1,5 @@
 version: '3'
 
-networks:
-  default:
-    name: traefik
-
 # https://github.com/koush/scrypted    
 # https://docs.technotim.live/posts/scrypted-home-hub/
 
@@ -12,6 +8,8 @@ services:
     image: koush/scrypted:${SCRYPTED_DOCKER_TAG:-latest}
     container_name: ${SCRYPTED_CONTAINER_NAME:-scrypted} 
     restart: ${SCRYPTED_RESTART:-unless-stopped}
+    networks:
+      - traefik
     network_mode: host
     volumes:
       - ./etc/scrypted:/server/volume # <==== this probably needs changed 

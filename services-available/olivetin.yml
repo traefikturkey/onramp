@@ -1,9 +1,5 @@
 version: '3'
 
-networks:
-  default:
-    name: traefik
-
 # https://github.com/OliveTin/OliveTin
 
 services:
@@ -11,6 +7,8 @@ services:
     image: jamesread/olivetin:${OLIVETIN_DOCKER_TAG:-latest}
     container_name: olivetin
     restart: unless-stopped
+    networks:
+      - traefik
     volumes:
       - ./etc/olivetin:/config # replace host path or volume as needed
     # ports:

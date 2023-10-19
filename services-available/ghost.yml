@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # https://hub.docker.com/_/ghost
 
@@ -11,6 +7,8 @@ services:
     image: ghost:${GHOST_DOCKER_TAG:-alpine}
     container_name: ${GHOST_CONTAINER_NAME:-ghost} 
     restart: ${GHOST_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/ghost:/var/lib/ghost/content
       - /etc/timezone:/etc/timezone:ro

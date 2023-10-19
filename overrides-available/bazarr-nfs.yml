@@ -1,6 +1,4 @@
-version: '3'
-
-volumes:
+version: '3'volumes:
   bazarr-nfs-movies:
     labels:
       - remove_volume_on=down

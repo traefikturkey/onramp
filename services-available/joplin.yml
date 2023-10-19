@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # https://joplinapp.org/
 # https://hub.docker.com/r/joplin/server
@@ -13,6 +9,8 @@ services:
     image: postgres:15
     container_name: ${JOPLIN_DB_CONTAINER_NAME:-joplin-db} 
     restart: ${JOPLIN_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/joplin:/var/lib/postgresql/data
     ports:
@@ -26,6 +24,8 @@ services:
     image: joplin/server:${JOPLIN_DOCKER_TAG:-latest}
     container_name: ${JOPLIN_CONTAINER_NAME:-joplin} 
     restart: ${JOPLIN_RESTART:-unless-stopped}
+    networks:
+      - traefik
     depends_on:
       - db
     volumes:

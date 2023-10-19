@@ -1,7 +1,5 @@
 version: "3"
-networks:
-  default:
-    name: traefik
+
   loki:
     name: loki
 
@@ -17,6 +15,8 @@ services:
     image: grafana/loki:${LOKI_DOCKER_TAG:-latest}
     container_name: ${LOKI_CONTAINER_NAME:-prometheus-loki}
     restart: unless-stopped
+    networks:
+      - traefik
     volumes:
       - ./etc/loki:/etc/loki
       - /etc/timezone:/etc/timezone:ro
@@ -34,6 +34,8 @@ services:
     image: gliderlabs/logspout:${LOGSPOUT_DOCKER_TAG:-latest}
     container_name: logspout
     restart: unless-stopped
+    networks:
+      - traefik
     command: syslog+tcp://promtail:1514
     networks:
       - loki
@@ -53,6 +55,8 @@ services:
     image: grafana/promtail:${PROMTAIL_DOCKER_TAG:-latest}
     container_name: promtail
     restart: unless-stopped
+    networks:
+      - traefik
     volumes:
       - /var/log:/var/log
       - ./etc/promtail:/etc/promtail

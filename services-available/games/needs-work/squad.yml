@@ -1,9 +1,5 @@
 version: '3'
 
-networks:
-  default:
-    name: traefik
-
 # PLEASE NOTE: This needs more work, not sure how to connect clients    
 # https://hub.docker.com/r/cm2network/squad/
 

@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # https://wordpress.com/
 # https://hub.docker.com/_/wordpress
@@ -13,6 +9,8 @@ services:
     image: wordpress:${WORDPRESS_DOCKER_TAG:-latest}
     container_name: ${WORDPRESS_CONTAINER_NAME:-wordpress} 
     restart: unless-stopped
+    networks:
+      - traefik
     volumes:
       - ./etc/wordpress:/var/www/html/
       - /etc/timezone:/etc/timezone:ro

@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # https://github.com/zadam/trilium
 
@@ -11,6 +7,8 @@ services:
     image: zadam/trilium:${TRILIUM_DOCKER_TAG:-latest}
     container_name: ${TRILIUM_CONTAINER_NAME:-trilium} 
     restart: ${TRILIUM_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/trilium:/home/node/trilium-data
       - /etc/timezone:/etc/timezone:ro

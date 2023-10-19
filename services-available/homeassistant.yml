@@ -1,12 +1,12 @@
-version: '3'
-
-# https://hub.docker.com/r/linuxserver/homeassistant
+version: '3'# https://hub.docker.com/r/linuxserver/homeassistant
 
 services:
   homeassistant:
     image: lscr.io/linuxserver/homeassistant:${HOMEASSISTANT_DOCKER_TAG:-latest}
     container_name: ${HOMEASSISTANT_CONTAINER_NAME:-homeassistant}
     restart: unless-stopped
+    networks:
+      - traefik
     network_mode: host
     volumes:
       - ./etc/homeassistant:/config

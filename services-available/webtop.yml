@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # https://github.com/linuxserver/docker-webtop
 
@@ -11,6 +7,8 @@ services:
     image: lscr.io/linuxserver/webtop:${WEBTOP_DOCKER_TAG:-latest}
     container_name: ${WEBTOP_CONTAINER_NAME:-webtop} 
     restart: unless-stopped
+    networks:
+      - traefik
     volumes:
       - ./etc/webtop:/config # <==== this probably needs changed 
       - /etc/timezone:/etc/timezone:ro

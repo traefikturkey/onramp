@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
   
 services:
   bouncer-traefik:
@@ -14,6 +10,8 @@ services:
     depends_on:
       - crowdsec
     restart: unless-stopped  
+    networks:
+      - traefik
     labels:
       - traefik.enable=false
       - com.centurylinklabs.watchtower.enable=true

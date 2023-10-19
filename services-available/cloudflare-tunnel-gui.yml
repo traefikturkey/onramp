@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/
 # https://hub.docker.com/r/cloudflare/cloudflared
@@ -13,6 +9,8 @@ services:
     image: cloudflare/cloudflared:${CLOUDFLARE_TUNNEL_DOCKER_TAG:-latest}
     container_name: ${CLOUDFLARE_TUNNEL_CONTAINER_NAME:-cloudflare-tunnel-gui}
     restart: ${CLOUDFLARE_TUNNEL_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/cloudflared:/cloudflared
       - /etc/timezone:/etc/timezone:ro

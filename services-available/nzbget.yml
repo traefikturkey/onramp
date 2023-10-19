@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 #  https://hub.docker.com/r/linuxserver/nzbget
 
@@ -11,6 +7,8 @@ services:
     image: linuxserver/nzbget:${NZBGET_DOCKER_TAG:-latest}
     container_name: ${NZBGET_CONTAINER_NAME:-nzbget} 
     restart: unless-stopped
+    networks:
+      - traefik
     volumes:
       - ./etc/nzbget:/config # <==== this probably needs changed 
       - ${NZBGET_DOWNLOADS_DIR:-./media/downloads}:/downloads

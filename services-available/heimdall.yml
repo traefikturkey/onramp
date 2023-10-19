@@ -1,9 +1,5 @@
 version: '3'
 
-networks:
-  default:
-    name: traefik
-
 # https://github.com/linuxserver/Heimdall
 
 services:
@@ -11,6 +7,8 @@ services:
     image: lscr.io/linuxserver/heimdall:${HEIMDALL_DOCKER_TAG:-latest}
     container_name: ${HEIMDALL_CONTAINER_NAME:-heimdall}
     restart: unless-stopped
+    networks:
+      - traefik
     volumes:
       - ./etc/heimdall:/config
     labels:

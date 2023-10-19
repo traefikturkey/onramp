@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
 # https://github.com/pi-hole/docker-pi-hole/blob/master/README.md
 
 services:
@@ -10,6 +6,8 @@ services:
     image: pihole/pihole:${PIHOLE_DOCKER_TAG:-latest}
     container_name: ${PIHOLE_CONTAINER_NAME:-pihole} 
     restart: unless-stopped
+    networks:
+      - traefik
     #network_mode: "host"
     # cap_add:
     #   - NET_ADMIN

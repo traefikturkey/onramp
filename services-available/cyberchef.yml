@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # https://github.com/gchq/CyberChef/
 
@@ -11,6 +7,8 @@ services:
     image: mpepping/cyberchef:${CYBERCHEF_DOCKER_TAG:-latest}
     container_name: ${CYBERCHEF_CONTAINER_NAME:-cyberchef}
     restart: unless-stopped
+    networks:
+      - traefik
     labels:
       - joyride.host.name=${CYBERCHEF_CONTAINER_NAME:-cyberchef}.${HOST_DOMAIN}
       - traefik.enable=true

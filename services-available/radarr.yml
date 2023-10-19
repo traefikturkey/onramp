@@ -1,9 +1,5 @@
 version: '3'
 
-networks:
-  default:
-    name: traefik
-
 # https://hub.docker.com/r/linuxserver/radarr
 
 services:
@@ -11,6 +7,8 @@ services:
     image: linuxserver/radarr:${RADARR_DOCKER_TAG:-latest}
     container_name: ${RADARR_CONTAINER_NAME:-radarr}
     restart: ${RADARR_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ${RADARR_CONFIG_VOLUME:-./etc/radarr}:/config
       - ${MEDIA_MOVIES_VOLUME:-./media/movies}:/movies

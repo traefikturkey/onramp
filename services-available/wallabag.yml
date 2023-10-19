@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
   database:
 
 # https://github.com/wallabag/wallabag
@@ -26,6 +22,8 @@ services:
       - SYMFONY__ENV__DOMAIN_NAME=https://${WALLABAG_CONTAINER_NAME:-wallabag}.${HOST_DOMAIN}
       - SYMFONY__ENV__SERVER_NAME=${WALLABAG_SERVER_NAME:-'Your Wallabag'}
     restart: unless-stopped
+    networks:
+      - traefik
     volumes:
       - ./etc/wallabag/images:/var/www/wallabag/web/assets/images
     labels:
@@ -52,6 +50,8 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=${WALLABAG_DB_PASSWORD:-wallaroot}
     restart: unless-stopped
+    networks:
+      - traefik
     volumes:
       - ./etc/wallabag/data:/var/lib/mysql
     networks:
@@ -65,6 +65,8 @@ services:
   redis:
     image: redis:alpine
     restart: unless-stopped
+    networks:
+      - traefik
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 20s

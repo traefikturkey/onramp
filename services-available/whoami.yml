@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # https://hub.docker.com/r/traefik/whoami
 
@@ -11,6 +7,8 @@ services:
     image: traefik/whoami:${WHOAMI_DOCKER_TAG:-latest}
     container_name: ${WHOAMI_CONTAINER_NAME:-whoami}
     restart: unless-stopped
+    networks:
+      - traefik
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro

@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # https://woodpecker-ci.org/
 # https://woodpecker-ci.org/docs/intro
@@ -13,6 +9,8 @@ services:
     image: woodpeckerci/woodpecker-server:${WOODPECKER_DOCKER_TAG:-latest}
     container_name: ${WOODPECKER_CONTAINER_NAME:-woodpecker} 
     restart: unless-stopped
+    networks:
+      - traefik
     volumes:
       - ./etc/woodpecker:/var/lib/woodpecker
       - /etc/timezone:/etc/timezone:ro
@@ -50,6 +48,8 @@ services:
     image: woodpeckerci/woodpecker-agent:latest
     command: agent
     restart: unless-stopped
+    networks:
+      - traefik
     depends_on:
       - woodpecker
     volumes:

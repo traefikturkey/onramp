@@ -1,6 +1,4 @@
-version: '3'
-
-volumes:
+version: '3'volumes:
   ubuntu-test-smb-volume:
     labels:
       - project_volume_cleanup=down

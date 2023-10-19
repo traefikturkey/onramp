@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # https://hub.docker.com/_/influxdb
 # https://github.com/influxdata/influxdb
@@ -12,6 +8,8 @@ services:
     image: influxdb:${INFLUXDB_DOCKER_TAG:-latest}
     container_name: ${INFLUXDB_CONTAINER_NAME:-influxdb} 
     restart: unless-stopped
+    networks:
+      - traefik
     volumes:
       - ./etc/influxdb:/etc/influxdb2
       - ${INFLUXDB_DIR:-./media/databases/influxdb}:/var/lib/influxdb2

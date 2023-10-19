@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # https://hub.docker.com/r/linuxserver/apprise-api
 
@@ -11,6 +7,8 @@ services:
     image: lscr.io/linuxserver/apprise-api:${APPRISE_DOCKER_TAG:-latest}
     container_name: ${APPRISE_CONTAINER_NAME:-apprise} 
     restart: ${APPRISE_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/apprise:/config # <==== this probably needs changed 
       - /etc/timezone:/etc/timezone:ro

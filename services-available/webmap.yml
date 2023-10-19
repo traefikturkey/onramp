@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # https://github.com/SECUREFOREST/WebMap
 
@@ -11,6 +7,8 @@ services:
     image: secureforest/webmap:${WEBMAP_DOCKER_TAG:-latest}
     container_name: ${WEBMAP_CONTAINER_NAME:-webmap}
     restart: unless-stopped
+    networks:
+      - traefik
     volumes:
       - ${WEBMAP_CONFIG_PATH:-./etc/webmap}:/opt/xml
       - /etc/timezone:/etc/timezone:ro

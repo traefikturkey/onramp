@@ -1,6 +1,4 @@
-version: '3'
-
-# https://hub.docker.com/r/mbentley/omada-controller
+version: '3'# https://hub.docker.com/r/mbentley/omada-controller
 
 # To be your own certs you need to either dump the certs using cert dumper or speficy a location manualy
 # make enable-service cert-dumper

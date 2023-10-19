@@ -7,6 +7,8 @@ services:
     image: rustdesk/rustdesk-server:${RUSTDESK_DOCKER_TAG:-latest}
     container_name: ${RUSTDESK_ID_CONTAINER_NAME:-rustdesk-id-server} 
     restart: ${RUSTDESK_RESTART:-unless-stopped}
+    networks:
+      - traefik
     command: hbbs -r ${RUSTDESK_RELAY_CONTAINER_NAME:-rustdesk-relay}.${HOST_DOMAIN}:21117
     volumes:
       - ./etc/rustdesk:/root
@@ -33,6 +35,8 @@ services:
     image: rustdesk/rustdesk-server:${RUSTDESK_DOCKER_TAG:-latest}
     container_name: ${RUSTDESK_RELAY_CONTAINER_NAME:-rustdesk-relay} 
     restart: ${RUSTDESK_RESTART:-unless-stopped}
+    networks:
+      - traefik
     ports:
       - 21117:21117
       - 21119:21119
@@ -46,6 +50,8 @@ services:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     restart: unless-stopped
+    networks:
+      - traefik
     labels:
       - joyride.host.name=${RUSTDESK_RELAY_CONTAINER_NAME:-rustdesk-relay}.${HOST_DOMAIN}
       - traefik.enable=false

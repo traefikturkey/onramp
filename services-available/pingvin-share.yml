@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # https://github.com/stautonico/pingvin-share
 
@@ -11,6 +7,8 @@ services:
     image: stonith404/pingvin-share:${PINGVIN_SHARE_DOCKER_TAG:-latest}
     container_name: ${PINGVIN_SHARE_CONTAINER_NAME:-pingvin-share} 
     restart: ${PINGVIN_SHARE_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/pingvin-share:/opt/app/backend/data
       - ${PINGVIN_MEDIA_VOLUME:-./media/pingvin-share}:/opt/app/frontend/public/img

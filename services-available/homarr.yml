@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # https://github.com/ajnart/homarr
 
@@ -11,6 +7,8 @@ services:
     image: ghcr.io/ajnart/homarr:${HOMARR_DOCKER_TAG:-dev}
     container_name: ${HOMARR_CONTAINER_NAME:-homarr} 
     restart: unless-stopped
+    networks:
+      - traefik
     volumes:
       - ./etc/homarr/configs:/app/data/configs
       - ./etc/homarr/icons:/app/public/icons

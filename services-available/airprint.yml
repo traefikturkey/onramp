@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # https://github.com/chuckcharlie/cups-avahi-airprint
 
@@ -11,6 +7,8 @@ services:
     image: chuckcharlie/cups-avahi-airprint:${AIRPRINT_DOCKER_TAG:-latest}
     container_name: ${AIRPRINT_CONTAINER_NAME:-airprint} 
     restart: unless-stopped
+    networks:
+      - traefik
     # Host mode is needed for AirPrint © Apple TM to work 
     # This is required to support multicasting which is needed for AirPrint © Apple TM.
     # Can be disabled an replaced with the port for manual operation

@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # https://github.com/nicolargo/glances
 
@@ -11,6 +7,8 @@ services:
     image: nicolargo/glances:${GLANCES_DOCKER_TAG:-latest}
     container_name: ${GLANCES_CONTAINER_NAME:-glances} 
     restart: ${GLANCES_RESTART:-unless-stopped}
+    networks:
+      - traefik
     pid: host
     volumes:
       

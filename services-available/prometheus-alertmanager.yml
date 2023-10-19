@@ -1,9 +1,5 @@
 version: '3'
 
-networks:
-  default:
-    name: traefik
-
 # https://github.com/prometheus/alertmanager
 
 volumes:
@@ -16,6 +12,8 @@ services:
     image: prom/alertmanager:${ALERTMANAGER_DOCKER_TAG:-latest}
     container_name: ${ALERTMANAGER_CONTAINER_NAME:-prometheus-alertmanager}
     restart: unless-stopped
+    networks:
+      - traefik
     command:
       - --config.file=/etc/alertmanager/alertmanager.yml
       - --log.level=debug
