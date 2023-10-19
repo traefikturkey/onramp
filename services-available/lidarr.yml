@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # https://hub.docker.com/r/linuxserver/lidarr
 
@@ -11,6 +7,8 @@ services:
     image: linuxserver/lidarr
     container_name: lidarr
     restart: unless-stopped
+    networks:
+      - traefik
     volumes:
       - ./etc/lidarr:/config
       - ${LIDARR_MUSIC_VOLUME:-./media/music}:/music

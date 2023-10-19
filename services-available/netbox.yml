@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # https://docs.linuxserver.io/images/docker-netbox
 
@@ -11,6 +7,8 @@ services:
     image: lscr.io/linuxserver/netbox:${NETBOX_DOCKER_TAG:-latest}
     container_name: ${NETBOX_CONTAINER_NAME:-netbox} 
     restart: unless-stopped
+    networks:
+      - traefik
     volumes:
       - ./etc/netbox:/config # <==== this probably needs changed 
       - /etc/timezone:/etc/timezone:ro
@@ -53,6 +51,8 @@ services:
     image: postgres
     container_name: netbox_postgresql
     restart: unless-stopped
+    networks:
+      - traefik
     user: "1000:1000"
     volumes:
       - ./etc/netbox/postgresql:/var/lib/postgresql/data
@@ -73,6 +73,8 @@ services:
     image: redis:alpine
     container_name: netbox_redis
     restart: unless-stopped
+    networks:
+      - traefik
     volumes:
     - ./etc/netbox/redis:/data
     labels:

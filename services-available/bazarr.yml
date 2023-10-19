@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # https://hub.docker.com/r/linuxserver/bazarr
 
@@ -11,6 +7,8 @@ services:
     image: linuxserver/bazarr:${BAZARR_DOCKER_TAG:-latest}
     container_name: ${BAZARR_CONTAINER_NAME:-bazarr}
     restart: unless-stopped
+    networks:
+      - traefik
     volumes:
       - ./etc/bazarr:/config
       - ${BAZARR_MOVIES_VOLUME:-./media/movies}:/movies

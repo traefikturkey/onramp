@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # https://github.com/crowdsecurity/crowdsec
 
@@ -11,6 +7,8 @@ services:
     image: ghcr.io/crowdsecurity/crowdsec:${CROWDSEC_DOCKER_TAG:-latest}
     container_name: ${CROWDSEC_CONTAINER_NAME:-crowdsec} 
     restart: unless-stopped
+    networks:
+      - traefik
     volumes:
       - ./etc/crowdsec:/etc/crowdsec/
       - ./etc/crowdsec/db:/var/lib/crowdsec/data/

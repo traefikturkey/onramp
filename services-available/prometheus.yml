@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
   loki:
     name: loki
 
@@ -13,6 +9,8 @@ services:
     image: prom/prometheus:${PROMETHEUS_DOCKER_TAG:-latest}
     container_name: ${PROMETHEUS_CONTAINER_NAME:-prometheus}
     restart: unless-stopped
+    networks:
+      - traefik
     command: 
       - --config.file=/etc/prometheus/conf/prometheus.yml
       - --storage.tsdb.path=/prometheus/data

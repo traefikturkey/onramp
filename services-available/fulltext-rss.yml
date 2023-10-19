@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # https://christitus.com/why-we-dont-browse-the-internet-anymore/
 # https://www.youtube.com/watch?v=nxV0CPNeFxY
@@ -12,6 +8,8 @@ services:
     image: heussd/fivefilters-full-text-rss:${FULLTEXT_RSS_DOCKER_TAG:-latest}
     container_name: ${FULLTEXT_RSS_CONTAINER_NAME:-fulltext-rss} 
     restart: ${FULLTEXT_RSS_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/fulltext-rss:/config # <==== this probably needs changed 
       - /etc/timezone:/etc/timezone:ro

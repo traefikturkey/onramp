@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # https://github.com/nbr23/youtube-dl-server
 
@@ -11,6 +7,8 @@ services:
     image: nbr23/youtube-dl-server:${YOUTUBE_DL_DOCKER_TAG:-yt-dlp}
     container_name: ${YOUTUBE_DL_CONTAINER_NAME:-youtube-dl} 
     restart: ${YOUTUBE_DL_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/youtube-dl:/youtube-dl
       - /etc/timezone:/etc/timezone:ro

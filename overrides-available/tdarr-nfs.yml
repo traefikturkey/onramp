@@ -1,6 +1,4 @@
-version: '3'
-
-volumes:
+version: '3'volumes:
   tdarr-nfs-media:
     labels:
       - remove_volume_on=down

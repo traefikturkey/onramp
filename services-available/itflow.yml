@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # https://itflow.org/
 
@@ -12,6 +8,8 @@ services:
     container_name: itflow-db
     image: mariadb:10.6.11
     restart: always
+    networks:
+      - traefik
     environment:
       - MARIADB_RANDOM_ROOT_PASSWORD=true
       - MARIADB_DATABASE=${ITFLOW_DB_NAME:-itflow}
@@ -25,6 +23,8 @@ services:
     container_name: ${ITFLOW_CONTAINER_NAME:-itflow} 
     hostname: ${ITFLOW_HOSTNAME:-itflow} 
     restart: ${ITFLOW_RESTART:-unless-stopped}
+    networks:
+      - traefik
     depends_on: 
       - itflow-db
     volumes:

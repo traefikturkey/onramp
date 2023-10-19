@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # https://www.pgadmin.org/
 # https://hub.docker.com/r/dpage/pgadmin4/
@@ -12,6 +8,8 @@ services:
     image: dpage/pgadmin4:latest
     container_name: pgadmin
     restart: unless-stopped
+    networks:
+      - traefik
     volumes:
       #- ./etc/pgadmin:/var/lib/pgadmin 
       - /etc/pgadmin/servers.json:/pgadmin4/servers.json

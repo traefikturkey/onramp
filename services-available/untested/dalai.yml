@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # https://github.com/cocktailpeanut/dalai
 # This file does requiere it's own setup and image as there is no image out there, it has to be build localy

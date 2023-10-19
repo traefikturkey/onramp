@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # https://github.com/immense/Remotely
 
@@ -11,6 +7,8 @@ services:
     image: immybot/remotely:${REMOTELY_DOCKER_TAG:-latest}
     container_name: ${REMOTELY_CONTAINER_NAME:-remotely} 
     restart: ${REMOTELY_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/remotely:/remotely-data
       - /etc/timezone:/etc/timezone:ro

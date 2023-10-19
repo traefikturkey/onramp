@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # https://github.com/AdguardTeam/AdGuardHome
 
@@ -11,6 +7,8 @@ services:
     image: adguard/adguardhome:${ADGUARD_DOCKER_TAG:-latest}
     container_name: ${ADGUARD_CONTAINER_NAME:-adguard} 
     restart: unless-stopped
+    networks:
+      - traefik
     volumes:
       - ./etc/adguard/conf:/opt/adguardhome/conf
       - ./etc/adguard/work:/opt/adguardhome/work

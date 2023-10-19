@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # https://hub.docker.com/_/postgres
 
@@ -11,6 +7,8 @@ services:
     image: postgres
     container_name: postgres
     restart: unless-stopped
+    networks:
+      - traefik
     volumes:
       - ${POSTGRES_DIR:-./media/databases/postgres/data}:/var/lib/postgresql/data
     environment:

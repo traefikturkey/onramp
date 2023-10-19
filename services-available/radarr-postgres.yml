@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # https://hub.docker.com/_/postgres
 # https://wiki.servarr.com/radarr/postgres-setup
@@ -12,6 +8,8 @@ services:
     image: postgres14
     container_name: radarr-postgres
     restart: unless-stopped
+    networks:
+      - traefik
     volumes:
       - ${POSTGRES_DIR:-./media/databases/radrr-postgres/data}:/var/lib/postgresql/data
     environment:

@@ -1,11 +1,11 @@
-version: '3'
-
-# https://github.com/oznu/docker-cloudflare-ddns
+version: '3'# https://github.com/oznu/docker-cloudflare-ddns
 
 services:
   cloudflare-ddns:
     image: oznu/cloudflare-ddns:${CLOUDFLARE_DDNS_DOCKER_TAG:-latest} 
     restart: unless-stopped
+    networks:
+      - traefik
     environment:
       - EMAIL=${CF_API_EMAIL}
       - API_KEY=${CF_DNS_API_TOKEN}

@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # https://github.com/drakkan/sftpgo
 
@@ -11,6 +7,8 @@ services:
     image: drakkan/sftpgo:${SFTP_SERVER_DOCKER_TAG:-latest}
     container_name: ${SFTP_SERVER_CONTAINER_NAME:-sftp-server} 
     restart: ${SFTP_SERVER_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/sftp-server:/var/lib/sftpgo
       - /etc/timezone:/etc/timezone:ro

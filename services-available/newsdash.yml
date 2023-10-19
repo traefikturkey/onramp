@@ -1,9 +1,5 @@
 version: '3'
 
-networks:
-  default:
-    name: traefik
-
 volumes:
   redis:
     
@@ -14,6 +10,8 @@ services:
     image: newsdash/newsdash:${NEWSDASH_DOCKER_TAG:-latest}
     container_name: newsdash
     restart: ${NEWSDASH_DOCKER_RESTART_POLICY:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/newsdash:/config # <==== this probably needs changed ====>
       - /etc/timezone:/etc/timezone:ro
@@ -32,6 +30,8 @@ services:
   redis:
     image: bitnami/redis
     restart: ${REDIS_DOCKER_RESTART_POLICY:-unless-stopped}
+    networks:
+      - traefik
     mem_limit: 1g
     command: /opt/bitnami/scripts/redis/run.sh --loglevel ${REDIS_LOG_LEVEL:-notice}
     environment:

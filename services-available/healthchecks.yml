@@ -1,8 +1,4 @@
-version: '3'
-networks:
-  default:
-    name: traefik
-    
+version: '3'    
 # <================= add links to documentation here =================>
 
 services:
@@ -10,6 +6,8 @@ services:
     image: healthchecks/healthchecks:${HEALTHCHECKS_DOCKER_TAG:-latest}
     container_name: ${HEALTHCHECKS_CONTAINER_NAME:-healthchecks} 
     restart: ${HEALTHCHECKS_RESTART:-unless-stopped}
+    networks:
+      - traefik
     depends_on:
       - hc-postgres
     environment:
@@ -64,6 +62,8 @@ services:
     image: postgres:${HEALTHCHECKS_DOCKER_TAG:-16.0}
     container_name: hc-postgres
     restart: unless-stopped
+    networks:
+      - traefik
     environment:
       POSTGRES_USER: ${HEALTHCHECKS_DB_USER:-dbadmin}
       POSTGRES_PASSWORD: ${HEALTHCHECKS_DB_PASS:-changeme}

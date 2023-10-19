@@ -1,6 +1,4 @@
-version: '3'
-
-services:
+version: '3'services:
   traefik:
       volumes:
       - ./etc/traefik/letsencrypt:/letsencrypt

@@ -1,9 +1,5 @@
 version: '3'
 
-networks:
-  default:
-    name: traefik
-
 # https://hub.docker.com/r/recyclarr/recyclarr
 # https://recyclarr.dev/wiki/installation/
 
@@ -12,6 +8,8 @@ services:
     image: ghcr.io/recyclarr/recyclarr:${RECYCLARR_DOCKER_TAG:-latest}
     container_name: ${RECYCLARR_CONTAINER_NAME:-recyclarr}
     restart: ${RECYCLARR_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/recyclarr:/config
       - /etc/timezone:/etc/timezone:ro

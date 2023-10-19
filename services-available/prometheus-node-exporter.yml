@@ -1,9 +1,5 @@
 version: '3'
 
-networks:
-  default:
-    name: traefik
-
 # Please see Makefile install-node-exporter: to install node-export directly on the host
 # by running: 'make install-node-exporter' as an alternative to using this container
 # 
@@ -22,6 +18,8 @@ networks:
       - '--path.sysfs=/host/sys'
       - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
     restart: unless-stopped
+    networks:
+      - traefik
     network_mode: host
     labels:
       org.label-schema.group: "monitoring"

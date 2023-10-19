@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # https://github.com/owncast/owncast
 
@@ -11,6 +7,8 @@ services:
     image: owncast/owncast:${OWNCAST_DOCKER_TAG:-latest}
     container_name: ${OWNCAST_CONTAINER_NAME:-owncast} 
     restart: ${OWNCAST_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/owncast:/app/data
       - /etc/timezone:/etc/timezone:ro

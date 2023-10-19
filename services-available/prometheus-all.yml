@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
   loki:
     name: loki
 
@@ -13,6 +9,8 @@ services:
     image: prom/prometheus:${PROMETHEUS_DOCKER_TAG:-latest}
     container_name: prometheus
     restart: unless-stopped
+    networks:
+      - traefik
     links:
       - prometheus-alertmanager
       - prometheus-blackbox
@@ -49,6 +47,8 @@ services:
     image: ghcr.io/ilude/prometheus-pve-exporter
     container_name: proxmox-exporter
     restart: unless-stopped
+    networks:
+      - traefik
     env_file: 
       - .env
     # ports:
@@ -60,6 +60,8 @@ services:
     image: prom/blackbox-exporter:latest
     container_name: prometheus-blackbox
     restart: unless-stopped
+    networks:
+      - traefik
     command: 
       - '--config.file=/etc/prometheus/conf/blackbox.yml'
     privileged: true
@@ -84,6 +86,8 @@ services:
     image: prom/alertmanager:latest
     container_name: prometheus-alertmanager
     restart: unless-stopped
+    networks:
+      - traefik
     command:
       - '--config.file=/etc/alertmanager/alertmanager.yml'
       - '--log.level=debug'

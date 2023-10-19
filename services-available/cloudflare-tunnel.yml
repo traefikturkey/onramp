@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/
 # https://hub.docker.com/r/cloudflare/cloudflared
@@ -22,6 +18,8 @@ services:
     image: cloudflare/cloudflared:${CLOUDFLARE_TUNNEL_DOCKER_TAG:-latest}
     container_name: ${CLOUDFLARE_TUNNEL_CONTAINER_NAME:-cloudflare-tunnel}
     restart: ${CLOUDFLARE_TUNNEL_RESTART:-unless-stopped}
+    networks:
+      - traefik
     command: tunnel --url traefik:443 --hostname ${HOST_NAME}.${HOST_DOMAIN} run ${CLOUDFLARE_TUNNEL_NAME}
     depends_on:
       - cloudflared_chown

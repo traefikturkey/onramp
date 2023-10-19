@@ -1,6 +1,4 @@
-version: '3'
-
-volumes:
+version: '3'volumes:
   sonarr-nfs-media:
     labels:
       - remove_volume_on=down

@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # https://github.com/YoRyan/mailrise
 
@@ -11,6 +7,8 @@ services:
     image: yoryan/mailrise:${MAILRISE_DOCKER_TAG:-latest}
     container_name: ${MAILRISE_CONTAINER_NAME:-mailrise} 
     restart: ${MAILRISE_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/mailrise/mailrise.conf:/etc/mailrise.conf:ro #File needs to exist BEFORE starting the container.
       - /etc/timezone:/etc/timezone:ro

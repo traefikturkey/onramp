@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # https://hub.docker.com/r/linuxserver/wikijs
 # https://docs.requarks.io/
@@ -12,6 +8,8 @@ services:
     image: linuxserver/wikijs:${WIKIJS_DOCKER_TAG:-latest}
     container_name: ${WIKIJS_CONTAINER_NAME:-wikijs} 
     restart: unless-stopped
+    networks:
+      - traefik
     volumes:
       - ./etc/wikijs:/config
       - ./etc/wikijs:/data

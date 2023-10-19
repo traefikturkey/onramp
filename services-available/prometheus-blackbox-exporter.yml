@@ -1,9 +1,5 @@
 version: '3'
 
-networks:
-  default:
-    name: traefik
-
 # https://github.com/prometheus/blackbox_exporter
 
 services:
@@ -11,6 +7,8 @@ services:
     image: prom/blackbox-exporter:${BLACKBOX_EXPORTER_DOCKER_TAG:-latest}
     container_name: prometheus-blackbox-exporter
     restart: unless-stopped
+    networks:
+      - traefik
     command: 
       - '--config.file=/etc/prometheus/conf/blackbox.yml'
     privileged: true

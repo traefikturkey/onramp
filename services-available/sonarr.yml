@@ -1,9 +1,5 @@
 version: '3'
 
-networks:
-  default:
-    name: traefik
-
 # https://hub.docker.com/r/linuxserver/sonarr
 
 services:
@@ -11,6 +7,8 @@ services:
     image: linuxserver/sonarr:${SONARR_DOCKER_TAG:-latest}
     container_name: ${SONARR_CONTAINER_NAME:-sonarr}
     restart: ${SONARR_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ${SONARR_CONFIG_VOLUME:-./etc/sonarr}:/config
       - ${MEDIA_SHOWS_VOLUME:-./media/shows}:/tv

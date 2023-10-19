@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # <================= add links to documentation here =================>
 
@@ -11,6 +7,8 @@ services:
     image: ghcr.io/blakeblackshear/frigate:${FRIGATE_DOCKER_TAG:-master-6bcf44a-tensorrt}
     container_name: ${FRIGATE_CONTAINER_NAME:-frigate} 
     restart: ${FRIGATE_RESTART:-unless-stopped}
+    networks:
+      - traefik
     # devices:
     #   - /dev/bus/usb:/dev/bus/usb 
     volumes:

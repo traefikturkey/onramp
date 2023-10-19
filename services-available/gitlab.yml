@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # https://docs.gitlab.com/ee/install/docker.html
 
@@ -11,6 +7,8 @@ services:
     image: gitlab/gitlab-ce:${GITLAB_DOCKER_TAG:-latest}
     container_name: ${GITLAB_CONTAINER_NAME:-gitlab} 
     restart: unless-stopped
+    networks:
+      - traefik
     volumes:
       - ./etc/gitlab/config:/etc/config
       - ./etc/gitlab/data:/var/opt/gitlab
@@ -50,6 +48,8 @@ services:
   #   image: gitlab/gitlab-runner:alpine
   #   container_name: gitlab-runner    
   #   restart: always
+    networks:
+      - traefik
   #   depends_on:
   #     - gitlab
   #   volumes:

@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # <================= add links to documentation here =================>
 
@@ -11,6 +7,8 @@ services:
     image: kdelfour/lychee-docker:${LYCHEE_DOCKER_TAG:-latest}
     container_name: lychee
     restart: unless-stopped
+    networks:
+      - traefik
     volumes:
       - ./etc/lychee:/config # <==== this probably needs changed ====>
       - /etc/timezone:/etc/timezone:ro

@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # https://github.com/tobybatch/kimai2
 # https://github.com/kevinpapst/kimai2
@@ -12,6 +8,8 @@ services:
     image: kimai/kimai2:${KIMAI_DOCKER_TAG:-apache}
     container_name: ${KIMAI_CONTAINER_NAME:-kimai} 
     restart: unless-stopped
+    networks:
+      - traefik
     volumes:
       #- ./etc/kimai:/opt/kimai/public
       - /etc/timezone:/etc/timezone:ro

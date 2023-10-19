@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # https://github.com/hyperonym/basaran
 # https://huggingface.co/bigscience/bloomz-560m
@@ -14,6 +10,8 @@ services:
     image: ghcr.io/hyperonym/basaran:${BASARAN_DOCKER_TAG:-0.13.3}
     container_name: ${BASARAN_CONTAINER_NAME:-basaran} 
     restart: ${BASARAN_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro

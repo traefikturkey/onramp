@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # https://github.com/WeeJeWel/wg-easy
 
@@ -11,6 +7,8 @@ services:
     image: weejewel/wg-easy:${WG_EASY_DOCKER_TAG:-latest}
     container_name: ${WG_EASY_CONTAINER_NAME:-wg-easy} 
     restart: ${WG_EASY_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/wg-easy:/etc/wireguard
       - /etc/timezone:/etc/timezone:ro

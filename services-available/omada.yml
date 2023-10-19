@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # https://hub.docker.com/r/mbentley/omada-controller
 
@@ -14,6 +10,8 @@ services:
     image: mbentley/omada-controller:${OMADA_DOCKER_TAG:-latest}
     container_name: ${OMADA_CONTAINER_NAME:-omada} 
     restart: unless-stopped
+    networks:
+      - traefik
     volumes:
       - ${OMADA_CONFIG_DIR:-./etc/omada}/data:/opt/tplink/EAPController/data
       - ${OMADA_CONFIG_DIR:-./etc/omada}/work:/opt/tplink/EAPController/work

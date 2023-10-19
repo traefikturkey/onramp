@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # https://github.com/photoprism/photoprism
 # https://hub.docker.com/r/photoprism/photoprism
@@ -12,6 +8,8 @@ services:
     image: photoprism/photoprism:${PHOTOPRISM_DOCKER_TAG:-latest}
     container_name: ${PHOTOPRISM_CONTAINER_NAME:-photoprism} 
     restart: unless-stopped
+    networks:
+      - traefik
     volumes:
       - ./etc/photoprism/:/photoprism/config
       - /etc/timezone:/etc/timezone:ro

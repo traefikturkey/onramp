@@ -1,9 +1,5 @@
 version: '3'
 
-networks:
-  default:
-    name: traefik
-
 # https://github.com/SelfhostedPro/Yacht
 
 services:
@@ -11,6 +7,8 @@ services:
     image: selfhostedpro/yacht:${YACHT_DOCKER_TAG:-latest}
     container_name: yacht
     restart: unless-stopped
+    networks:
+      - traefik
     volumes:
       - ./etc/yacht:/config
       - /var/run/docker.sock:/var/run/docker.sock

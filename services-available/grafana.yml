@@ -1,7 +1,5 @@
 version: "3"
-networks:
-  default:
-    name: traefik
+
   loki:
     name: loki
 
@@ -13,6 +11,8 @@ services:
     image: grafana/grafana:${GRAFANA_DOCKER_TAG:-latest}
     container_name: ${GRAFANA_CONTAINER_NAME:-grafana}
     restart: unless-stopped
+    networks:
+      - traefik
     user: ${PUID:-1000}
     networks:
       - default

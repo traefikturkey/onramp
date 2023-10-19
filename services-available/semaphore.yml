@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # https://docs.ansible-semaphore.com/
 
@@ -10,6 +6,8 @@ services:
   # uncomment this section and comment out the mysql section to use postgres instead of mysql
   #semaphore-postgres:
     #restart: unless-stopped
+    networks:
+      - traefik
     #image: postgres:14
     #hostname: postgres
     #volumes: 
@@ -21,6 +19,8 @@ services:
   # if you wish to use postgres, comment the mysql service section below 
   semaphore-mysql:
     restart: unless-stopped
+    networks:
+      - traefik
     ports:
       - 3306:3306
     image: mysql:8.0
@@ -37,6 +37,8 @@ services:
     image: semaphoreui/semaphore:${SEMAPHORE_DOCKER_TAG:-latest}
     container_name: ${SEMAPHORE_CONTAINER_NAME:-semaphore} 
     restart: ${SEMAPHORE_RESTART:-unless-stopped}
+    networks:
+      - traefik
     depends_on:
       - mysql #change to postgres for postgres
     volumes:

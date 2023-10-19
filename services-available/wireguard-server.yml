@@ -1,6 +1,4 @@
-version: '3'
-
-# https://hub.docker.com/r/linuxserver/wireguard
+version: '3'# https://hub.docker.com/r/linuxserver/wireguard
 # https://docs.linuxserver.io/images/docker-wireguard
 
 services:
@@ -8,6 +6,8 @@ services:
     image: lscr.io/linuxserver/wireguard:${WIREGUARD_SERVER_DOCKER_TAG:-latest}
     container_name: ${WIREGUARD_SERVER_CONTAINER_NAME:-wireguard-server} 
     restart: ${WIREGUARD_SERVER_RESTART:-unless-stopped}
+    networks:
+      - traefik
     cap_add:
       - NET_ADMIN
     sysctls:

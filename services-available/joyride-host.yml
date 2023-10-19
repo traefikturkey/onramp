@@ -1,6 +1,4 @@
-version: '3'
-
-# https://github.com/ilude/joyride
+version: '3'# https://github.com/ilude/joyride
 # use this if combined with pihole
 
 services:
@@ -8,6 +6,8 @@ services:
     image: ghcr.io/ilude/joyride:${JOYRIDE_DOCKER_TAG:-latest}
     container_name: ${JOYRIDE_CONTAINER_NAME:-joyride}
     restart: unless-stopped
+    networks:
+      - traefik
     network_mode: "host"
     environment:
       - HOSTIP=${HOSTIP}

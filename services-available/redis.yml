@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # https://github.com/redis/redis
 
@@ -11,6 +7,8 @@ services:
     image: redis:${REDIS_DOCKER_TAG:-alpine}
     container_name: ${REDIS_CONTAINER_NAME:-redis} 
     restart: ${REDIS_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/redis:/data 
       - /etc/timezone:/etc/timezone:ro

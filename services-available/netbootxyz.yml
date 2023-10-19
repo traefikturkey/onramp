@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  default:
-    name: traefik
     
 # https://docs.linuxserver.io/images/docker-netbootxyz
 
@@ -11,6 +7,8 @@ services:
     image: linuxserver/netbootxyz:${NETBOOTXYZ_DOCKER_TAG:-latest}
     container_name: ${NETBOOTXYZ_CONTAINER_NAME:-netbootxyz} 
     restart: unless-stopped
+    networks:
+      - traefik
     volumes:
       - ./etc/netbootxyz:/config
       - ./media/netbootxyz:/assets
