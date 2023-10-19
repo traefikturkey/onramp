@@ -19,8 +19,6 @@ services:
     ports:
       - 3100:3100
     command: -config.file=/etc/loki/loki-config.yml
-    networks:
-      - loki
     labels:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=false
@@ -30,8 +28,6 @@ services:
     container_name: logspout
     restart: unless-stopped
     command: syslog+tcp://promtail:1514
-    networks:
-      - loki
     depends_on:
       - promtail
     environment:
@@ -52,8 +48,6 @@ services:
       - /var/log:/var/log
       - ./etc/promtail:/etc/promtail
     command: -config.file=/etc/promtail/promtail-config.yml
-    networks:
-      - loki
     labels:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=false
