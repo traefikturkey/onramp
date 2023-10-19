@@ -7,6 +7,9 @@
 # REQUIRES manual DNS entry
 # not controlled or managed by joyride
 ################################################
+# HOMEASSISTANT_HOST_NAME=<ha_hostname>     # homeassistant.your_domain.com
+# HOMEASSISTANT_ADDRESS=<ip_or_fqdn>        # homeassistant hostname, normally homeassistant
+# HOMEASSISTANT_PORT=8123                   # homeassistant port, normally 8123
 # IDRAC_ADDRESS=<ip_or_fqdn>                # idrac.your_domain.com
 # IDRAC_HOST_NAME=<idrac_hostname>          # idrac hostname, normally idrac
 # MINECRAFT_DYNMAP_HOST_NAME=<minecraft_dynamp_hostname>  
