@@ -1,4 +1,5 @@
-version: '3'volumes:
+version: '3'
+volumes:
     photoprism-nfs-root:
       labels:
         - remove_volume_on=down
