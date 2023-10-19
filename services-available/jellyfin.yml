@@ -15,8 +15,8 @@ services:
       - TZ=${TZ}
       - JELLYFIN_PublishedServerUrl=${JELLYFIN_CONTAINER_NAME:-jellyfin}.${HOST_DOMAIN}
     volumes:
-      - ${JELLYFIN_CONFIG_VOLUME:-./etc/jellyfin}:/config
-      - ${JELLYFIN_MEDIA_VOLUME:-./media}:${JOYRIDE_MEDIA_PATH:-/data}
+      - ${JELLYFIN_CONFIG_VOLUME:-./etc/jellyfin}:${JELLYFIN_CONFIG_PATH:-/config}
+      - ${JELLYFIN_MEDIA_VOLUME:-./media}:${JELLYFIN_MEDIA_PATH:-/data}
     ports:
       # - 8096:8096 # http web gui
       # - 8920:8920 # https web gui
