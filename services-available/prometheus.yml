@@ -9,6 +9,7 @@ services:
     restart: unless-stopped
     networks:
       - traefik
+      - default
     command: 
       - --config.file=/etc/prometheus/conf/prometheus.yml
       - --storage.tsdb.path=/prometheus/data
@@ -25,9 +26,6 @@ services:
       - /etc/localtime:/etc/localtime:ro
     extra_hosts:
       - host.docker.internal:host-gateway
-    networks:
-      - default
-      - loki
     labels:
       - joyride.host.name=${PROMETHEUS_HOST_NAME:-prometheus}.${HOST_DOMAIN}
       - traefik.enable=true

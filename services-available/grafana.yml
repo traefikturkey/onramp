@@ -10,10 +10,8 @@ services:
     restart: unless-stopped
     networks:
       - traefik
-    user: ${PUID:-1000}
-    networks:
       - default
-      - loki
+    user: ${PUID:-1000}
     env_file:
       - .env
     environment:
