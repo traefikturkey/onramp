@@ -49,7 +49,6 @@ services:
       - ./etc/rustdesk:/root 
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-    restart: unless-stopped
     networks:
       - traefik
     labels:
