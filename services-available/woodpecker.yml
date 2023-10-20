@@ -32,7 +32,6 @@ services:
       - WOODPECKER_AGENT_SECRET=${WOODPECKER_AGENT_SECRET}
       - WOODPECKER_GITEA_CLIENT=${WOODPECKER_GITEA_CLIENT}
       - WOODPECKER_GITEA_SECRET=${WOODPECKER_GITEA_SECRET}
-
     labels:
       - joyride.host.name=${WOODPECKER_CONTAINER_NAME:-woodpecker}.${HOST_DOMAIN}
       - traefik.enable=true

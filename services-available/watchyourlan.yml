@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  traefik:
-    external: true
     
 # https://github.com/aceberg/WatchYourLAN
 
