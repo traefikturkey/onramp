@@ -15,8 +15,6 @@ services:
       - traefik
     pid: host
     volumes:
-      
-    volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./etc/glances:/config # <==== this probably needs changed 
       - /etc/timezone:/etc/timezone:ro
