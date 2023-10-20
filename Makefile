@@ -297,7 +297,7 @@ endif
 
 # Still need to look into creating a template for the mailrise.conf
 etc/mailrise/mailrise.conf:
-	envsubst '$${MAILRISE_EMAIL}, $${MAILRISE_WEBHOOK} ' < ./templates/mailrise.template > ./etc/mailrise/mailrise.conf
+	envsubst '$${MAILRISE_EMAIL}, $${MAILRISE_WEBHOOK}' < ./templates/mailrise.template > ./etc/mailrise/mailrise.conf
 
 #########################################################
 #
