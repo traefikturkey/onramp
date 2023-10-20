@@ -1,0 +1,4 @@
+configs:
+  ${MAILRISE_EMAIL}:
+    urls:
+      -  ${MAILRISE_WEBHOOK}
