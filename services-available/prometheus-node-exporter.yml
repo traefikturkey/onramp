@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  default:
-    name: traefik
+  traefik:
+    external: true   
 
 # Please see Makefile install-node-exporter: to install node-export directly on the host
 # by running: 'make install-node-exporter' as an alternative to using this container

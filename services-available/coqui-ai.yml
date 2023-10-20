@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  default:
-    name: traefik
+  traefik:
+    external: true   
     
 # https://tts.readthedocs.io/en/latest/inference.html
 # https://tts.readthedocs.io/en/latest/docker_images.html

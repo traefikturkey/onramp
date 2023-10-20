@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  default:
-    name: traefik
+  traefik:
+    external: true   
     
 # https://wordpress.com/
 # https://hub.docker.com/_/wordpress

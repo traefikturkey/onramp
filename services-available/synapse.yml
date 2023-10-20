@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  default:
-    name: traefik
+  traefik:
+    external: true   
 
 # https://github.com/matrix-org/synapse
 # docker run -it --rm  -v ./etc/synapse:/data  -e SYNAPSE_SERVER_NAME=synapse.traefikturkey.icu -e SYNAPSE_REPORT_STATS=yes matrixdotorg/synapse:latest generate

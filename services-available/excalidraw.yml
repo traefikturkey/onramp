@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  default:
-    name: traefik
+  traefik:
+    external: true   
     
 # https://excalidraw.com/
 # https://github.com/excalidraw and https://github.com/excalidraw/excalidraw

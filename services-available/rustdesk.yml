@@ -45,12 +45,8 @@ services:
       - ./etc/rustdesk:/root 
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-<<<<<<< Updated upstream
     networks:
       - traefik
-=======
-    restart: unless-stopped
->>>>>>> Stashed changes
     labels:
       - joyride.host.name=${RUSTDESK_RELAY_CONTAINER_NAME:-rustdesk-relay}.${HOST_DOMAIN}
       - traefik.enable=false

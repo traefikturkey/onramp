@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  default:
-    name: traefik
+  traefik:
+    external: true   
     
 # https://github.com/zadam/trilium
 # https://github.com/BaptisteBdn/docker-selfhosted-apps/tree/main/trilium

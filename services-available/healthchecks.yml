@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 version: '3'    
 
 # https://hub.docker.com/r/healthchecks/healthchecks
@@ -7,14 +6,6 @@ version: '3'
 networks:
   traefik:
     external: true   
-=======
-version: '3'
-
-networks:
-  traefik:
-    external: true    
-# <================= add links to documentation here =================>
->>>>>>> master
 
 services:
   healthchecks:

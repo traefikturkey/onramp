@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  default:
-    name: traefik
+  traefik:
+    external: true   
     
 # https://docs.linuxserver.io/images/docker-netbox
 

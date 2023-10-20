@@ -1,9 +1,9 @@
 version: '3'
 
 networks:
-  default:
-    name: traefik
-    
+  traefik:
+    external: true   
+     
 # https://github.com/AdguardTeam/AdGuardHome
 
 services:
