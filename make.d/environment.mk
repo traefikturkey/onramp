@@ -26,5 +26,7 @@ edit-env-external:
 regenerate-env:
 	@python3 scripts/env-subst.py environments-available/$(SERVICE_PASSED_DNCASED).template $(SERVICE_PASSED_UPCASED)
 
+env: show-env
+
 show-env:
 	@env | sort

@@ -4,13 +4,34 @@
 #
 #########################################################
 
-build: install-dependencies .env $(BUILD_DEPENDENCIES)
+build: install-dependencies environments-enabled/onramp.env $(BUILD_DEPENDENCIES)
 
 install: build install-docker
 
-.env:
-	cp .templates/env.template .env
-	$(EDITOR) .env
+environments-enabled/onramp.env:
+	@clear
+	@echo "***********************************************"
+	@echo "Traefik Turkey OnRamp Setup"
+	@echo "***********************************************"
+	@echo ""
+	@echo "Welcome to OnRamp - Traefik with all the stuffing."
+	@echo ""
+	@echo ""
+	@echo "To proceed with the initial setup you will need to "
+	@echo "provide some information that is required for"
+	@echo "OnRamp to function properly."
+	@echo ""
+	@echo "Required information:"
+	@echo ""
+	@echo "--> Cloudflare Email Address"
+	@echo "--> Cloudflare Access Token"
+	@echo "--> Hostname of system OnRamp is running on."
+	@echo "--> Domain for which traefik will be handling requests"
+	@echo "--> Timezone"
+	@echo ""
+	@echo ""
+	@echo ""
+	@python3 scripts/env-subst.py environments-available/onramp.template "ONRAMP"
 
 required-dependencies = git nano jq yq
 
