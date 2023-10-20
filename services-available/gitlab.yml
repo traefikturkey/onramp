@@ -1,4 +1,8 @@
 version: '3'
+
+networks:
+  traefik:
+    external: true
     
 # https://docs.gitlab.com/ee/install/docker.html
 

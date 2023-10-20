@@ -1,5 +1,9 @@
 version: '3'
 
+networks:
+  traefik:
+    external: true
+
 # https://github.com/SelfhostedPro/Yacht
 
 services:
@@ -15,10 +19,10 @@ services:
     env_file: 
       - .env
     labels:
-      - joyride.host.name=yacht.${HOST_DOMAIN}
+      - joyride.host.name=${YACHT_CONTAINER_NAME:-yacht}.${HOST_DOMAIN}
       - traefik.enable=true
       - traefik.http.routers.yacht.entrypoints=websecure
-      - traefik.http.routers.yacht.rule=Host(`yacht.${HOST_DOMAIN}`)
+      - traefik.http.routers.yacht.rule=Host(`${YACHT_CONTAINER_NAME:-yacht}.${HOST_DOMAIN}`)
       - traefik.http.routers.yacht.tls=true
       - traefik.http.routers.yacht.service=yacht
       - traefik.http.services.yacht.loadbalancer.server.port=8000

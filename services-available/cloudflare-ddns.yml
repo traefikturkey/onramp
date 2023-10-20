@@ -1,5 +1,9 @@
 version: '3'
 
+networks:
+  traefik:
+    external: true
+
 # https://github.com/oznu/docker-cloudflare-ddns
 
 services:

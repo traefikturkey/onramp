@@ -1,4 +1,5 @@
-version: '3'volumes:
+version: '3'
+volumes:
   plex-nfs-media:
     labels:
       - remove_volume_on=down

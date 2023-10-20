@@ -1,5 +1,9 @@
 version: '3'
 
+networks:
+  traefik:
+    external: true
+
 # https://github.com/harness/drone
 # https://docs.drone.io/server/provider/gitea/
 # https://docs.drone.io/runner/docker/installation/linux/

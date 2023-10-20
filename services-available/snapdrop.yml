@@ -1,5 +1,9 @@
 version: '3'
 
+networks:
+  traefik:
+    external: true
+
 # https://hub.docker.com/r/linuxserver/snapdrop
 
 services:
@@ -19,10 +23,10 @@ services:
     #   - 80:80
     #   - 443:443
     labels:
-      - joyride.host.name=snapdrop.${HOST_DOMAIN}
+      - joyride.host.name=${SNAPDROP_CONTAINER_NAME:-snapdrop}.${HOST_DOMAIN}
       - traefik.enable=true
       - traefik.docker.network=traefik
-      - traefik.http.routers.snapdrop.rule=Host(`snapdrop.${HOST_DOMAIN}`)
+      - traefik.http.routers.snapdrop.rule=Host(`${SNAPDROP_CONTAINER_NAME:-snapdrop}.${HOST_DOMAIN}`)
       - traefik.http.routers.snapdrop.entrypoints=websecure
       - traefik.http.services.snapdrop.loadbalancer.server.port=80
       - com.centurylinklabs.watchtower.enable=true

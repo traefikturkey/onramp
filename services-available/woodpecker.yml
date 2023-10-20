@@ -1,4 +1,8 @@
 version: '3'
+
+networks:
+  traefik:
+    external: true
     
 # https://woodpecker-ci.org/
 # https://woodpecker-ci.org/docs/intro
@@ -28,7 +32,6 @@ services:
       - WOODPECKER_AGENT_SECRET=${WOODPECKER_AGENT_SECRET}
       - WOODPECKER_GITEA_CLIENT=${WOODPECKER_GITEA_CLIENT}
       - WOODPECKER_GITEA_SECRET=${WOODPECKER_GITEA_SECRET}
-
     labels:
       - joyride.host.name=${WOODPECKER_CONTAINER_NAME:-woodpecker}.${HOST_DOMAIN}
       - traefik.enable=true

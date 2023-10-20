@@ -1,4 +1,8 @@
 version: '3'
+
+networks:
+  traefik:
+    external: true
     
 # https://hay-kot.github.io/homebox/
 # https://hay-kot.github.io/homebox/quick-start/

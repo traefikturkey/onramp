@@ -1,4 +1,8 @@
 version: '3'
+
+networks:
+  traefik:
+    external: true
     
 # https://christitus.com/why-we-dont-browse-the-internet-anymore/
 # https://www.youtube.com/watch?v=nxV0CPNeFxY

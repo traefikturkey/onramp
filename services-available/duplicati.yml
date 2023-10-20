@@ -1,6 +1,10 @@
 version: '3'
+
+networks:
+  traefik:
+    external: true
     
-# <================= add links to documentation here =================>
+# https://www.duplicati.com/
 
 services:
   duplicati:
@@ -10,11 +14,11 @@ services:
     networks:
       - traefik
     volumes:
-      - ./etc/duplicati:/config 
+      - ./etc/duplicati:/config
+      - ./media/backups:/backups
+      - ./:/mnt/onramp
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-      - ./backups:/backups
-      - ./:/source
     environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
