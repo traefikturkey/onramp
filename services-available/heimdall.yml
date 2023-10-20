@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
 
 # https://github.com/linuxserver/Heimdall
 
@@ -10,11 +10,15 @@ services:
   heimdall:
     image: lscr.io/linuxserver/heimdall:${HEIMDALL_DOCKER_TAG:-latest}
     container_name: ${HEIMDALL_CONTAINER_NAME:-heimdall}
-    restart: unless-stopped
-    networks:
-      - traefik
+    restart: ${HEIMDALL_RESTART:-unless-stopped}
     volumes:
       - ./etc/heimdall:/config
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
     labels:
       - joyride.host.name=${HEIMDALL_CONTAINER_NAME:-heimdall}.${HOST_DOMAIN}
       - traefik.enable=true
@@ -22,4 +26,7 @@ services:
       - traefik.http.routers.heimdall.rule=Host(`${HEIMDALL_CONTAINER_NAME:-heimdall}.${HOST_DOMAIN}`)
       - traefik.http.routers.heimdall.tls=true
       - traefik.http.routers.heimdall.service=heimdall
+      #- traefik.http.services.heimdall.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.heimdall.loadbalancer.server.port=80
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true

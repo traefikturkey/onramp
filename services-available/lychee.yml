@@ -1,20 +1,18 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
     
-# <================= add links to documentation here =================>
+# https://hub.docker.com/r/kdelfour/lychee-docker/
 
 services:
   lychee:
     image: kdelfour/lychee-docker:${LYCHEE_DOCKER_TAG:-latest}
-    container_name: lychee
-    restart: unless-stopped
-    networks:
-      - traefik
+    container_name: ${LYCHEE_CONTAINER_NAME:-lychee}
+    restart: ${LYCHEE_RESTART:-unless-stopped}
     volumes:
-      - ./etc/lychee:/config # <==== this probably needs changed ====>
+      - ./etc/lychee:/config
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
@@ -22,10 +20,10 @@ services:
       - PGID=${PGID:-1000}
       - TZ=${TZ}
     labels:
-      - joyride.host.name=lychee.${HOST_DOMAIN}
+      - joyride.host.name=${LYCHEE_CONTAINER_NAME:-lychee}.${HOST_DOMAIN}
       - traefik.enable=true
       - traefik.http.routers.lychee.entrypoints=websecure
-      - traefik.http.routers.lychee.rule=Host(`lychee.${HOST_DOMAIN}`)
+      - traefik.http.routers.lychee.rule=Host(`${LYCHEE_CONTAINER_NAME:-lychee}.${HOST_DOMAIN}`)
       - traefik.http.services.lychee.loadbalancer.server.port=80
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true

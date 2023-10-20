@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
     
 # https://github.com/nicolargo/glances
 
@@ -11,8 +11,6 @@ services:
     image: nicolargo/glances:${GLANCES_DOCKER_TAG:-latest}
     container_name: ${GLANCES_CONTAINER_NAME:-glances} 
     restart: ${GLANCES_RESTART:-unless-stopped}
-    networks:
-      - traefik
     pid: host
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -32,3 +30,10 @@ services:
       - traefik.http.services.glances.loadbalancer.server.port=61208
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
+
+      # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${GLANCES_FLAME_NAME:-glances} 
+      - flame.url=https://${GLANCES_CONTAINER_NAME:-glances}.${HOST_DOMAIN}
+      - flame.icon=${GLANCES_FLAME_ICON:-docker} # optional, default is "docker"

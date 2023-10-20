@@ -1,9 +1,8 @@
 version: '3'
-
 networks:
-  traefik:
-    external: true
-    
+  default:
+    name: traefik
+
 # https://hay-kot.github.io/mealie/documentation/getting-started/install/
 
 services:
@@ -11,8 +10,6 @@ services:
     image: hkotel/mealie:${MEALIE_DOCKER_TAG:-omni-nightly
     container_name: ${MEALIE_CONTAINER_NAME:-mealie}
     restart: ${MEALIE_RESTART:-unless-stopped}
-    networks:
-      - traefik
     volumes:
       - ${MEALIE_CONFIG_VOLUME:-./etc/mealie}:/app/data
       - /etc/timezone:/etc/timezone:ro
@@ -38,6 +35,10 @@ services:
       # SMTP_FROM_EMAIL=
       # SMTP_USER=
       # SMTP_PASSWORD=      
+<<<<<<< Updated upstream
+=======
+    restart: always
+>>>>>>> Stashed changes
     labels:
       - joyride.host.name=${MEALIE_CONTAINER_NAME:-mealie}.${HOST_DOMAIN}
       - traefik.enable=true
@@ -47,3 +48,9 @@ services:
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
 
+      # Flame dashboard labels
+
+      - flame.type=application # "app" works too
+      - flame.name=${MEALIE_FLAME_NAME:-mealie}
+      - flame.url=https://${MEALIE_CONTAINER_NAME:-mealie}.${HOST_DOMAIN}
+      - flame.icon=${MEALIE_FLAME_ICON:-docker} # optional, default is "docker"

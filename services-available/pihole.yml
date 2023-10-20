@@ -1,18 +1,15 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
-
+  default:
+    name: traefik
 # https://github.com/pi-hole/docker-pi-hole/blob/master/README.md
 
 services:
   pihole:
     image: pihole/pihole:${PIHOLE_DOCKER_TAG:-latest}
     container_name: ${PIHOLE_CONTAINER_NAME:-pihole} 
-    restart: unless-stopped
-    networks:
-      - traefik
+    restart: ${PIHOLE_RESTART:-unless-stopped}
     #network_mode: "host"
     # cap_add:
     #   - NET_ADMIN
@@ -43,3 +40,9 @@ services:
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
 
+      # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${PIHOLE_FLAME_NAME:-pihole} 
+      - flame.url=https://${PIHOLE_CONTAINER_NAME:-pihole}.${HOST_DOMAIN}
+      - flame.icon=${PIHOLE_FLAME_ICON:-docker} # optional, default is "docker"

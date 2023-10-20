@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
     
 # https://github.com/linuxserver/docker-webtop
 
@@ -10,11 +10,9 @@ services:
   webtop:
     image: lscr.io/linuxserver/webtop:${WEBTOP_DOCKER_TAG:-latest}
     container_name: ${WEBTOP_CONTAINER_NAME:-webtop} 
-    restart: unless-stopped
-    networks:
-      - traefik
+    restart: ${WEBTOP_RESTART:-unless-stopped}
     volumes:
-      - ./etc/webtop:/config # <==== this probably needs changed 
+      - ./etc/webtop:/config
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
@@ -29,3 +27,10 @@ services:
       - traefik.http.services.webtop.loadbalancer.server.port=3000
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
+
+      # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${WEBTOP_FLAME_NAME:-webtop} 
+      - flame.url=https://${WEBTOP_CONTAINER_NAME:-webtop}.${HOST_DOMAIN}
+      - flame.icon=${WEBTOP_FLAME_ICON:-docker} # optional, default is "docker"

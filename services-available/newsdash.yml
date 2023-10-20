@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
 
 volumes:
   redis:
@@ -12,19 +12,16 @@ volumes:
 services:
   newsdash:
     image: newsdash/newsdash:${NEWSDASH_DOCKER_TAG:-latest}
-    container_name: newsdash
-    restart: ${NEWSDASH_DOCKER_RESTART_POLICY:-unless-stopped}
-    networks:
-      - traefik
-      - default
+    container_name: ${NEWSDASH_CONTAINER_NAME:-newsdash}
+    restart: ${NEWSDASH_RESTART:-unless-stopped}
     volumes:
-      - ./etc/newsdash:/config # <==== this probably needs changed ====>
+      - ./etc/newsdash:/config
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
-      - REDIS_URL=redis://redis:6380
+      - REDIS_URL=redis://newsdash-redis:6380
     labels:
-      - joyride.host.name=newsdash.${HOST_DOMAIN}
+      - joyride.host.name=${NEWSDASH_CONTAINER_NAME:-newsdash}.${HOST_DOMAIN}
       - traefik.enable=true
       - traefik.http.routers.newsdash.entrypoints=websecure
       - traefik.http.routers.newsdash.rule=Host(`newsdash.${HOST_DOMAIN}`)
@@ -34,9 +31,10 @@ services:
 
   redis:
     image: bitnami/redis
-    restart: ${REDIS_DOCKER_RESTART_POLICY:-unless-stopped}
+    container_name: newsdash-redis
+    restart: ${NEWSDASH_RESTART:-unless-stopped}
     mem_limit: 1g
-    command: /opt/bitnami/scripts/redis/run.sh --loglevel ${REDIS_LOG_LEVEL:-notice}
+    command: /opt/bitnami/scripts/redis/run.sh --loglevel ${NEWSDASH_REDIS_LOG_LEVEL:-notice}
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
     volumes:

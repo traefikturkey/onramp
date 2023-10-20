@@ -1,8 +1,9 @@
-version: '3'
+version: "3"
+
 services:
   ubuntu:
-    image: ubuntu
-    container_name: ubuntu
-    restart: on-failure
+    image: ubuntu:${UBUNTU_DOCKER_TAG:-latest}
+    container_name: ${UBUNTU_CONTAINER_NAME:-ubuntu}
+    restart: ${UBUNTU_RESTART:-on-failure}
     volumes:
       - ${UBUNTU_TEST_VOLUME:-.}:/mnt

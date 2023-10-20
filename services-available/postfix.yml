@@ -1,8 +1,4 @@
 version: '3'
-
-networks:
-  traefik:
-    external: true
   
 # https://github.com/juanluisbaptiste/docker-postfix
 
@@ -10,18 +6,19 @@ services:
   postfix:
     image: juanluisbaptiste/postfix:${POSTFIX_DOCKER_TAG:-latest}
     container_name: ${POSTFIX_CONTAINER_NAME:-postfix} 
-    restart: unless-stopped
+    restart: ${POSTFIX_RESTART:-unless-stopped}
     ports:
       - 25:25
     environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
-    env_file:
-      - .env
+      - SMTP_SERVER=${POSTFIX_SMTP_SERVER:?postfix smtp server not set}
+      - SMTP_USERNAME=${POSTFIX_SMTP_USERNAME:?postfix smtp username not set}
+      - SMTP_PASSWORD=${POSTFIX_SMTP_PASSWORD:?postfix smtp password not set}
+      - SERVER_HOSTNAME=${POSTFIX_CONTAINER_NAME:-postfix}.${HOST_DOMAIN}
     labels:
       - joyride.host.name=${POSTFIX_CONTAINER_NAME:-postfix}.${HOST_DOMAIN}
       - traefik.enable=false
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
-       

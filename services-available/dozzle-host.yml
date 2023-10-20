@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
 
 # https://github.com/amir20/dozzle
 
@@ -11,8 +11,6 @@ services:
     image: amir20/dozzle:${DOZZLE_DOCKER_TAG:-latest}
     container_name: ${DOZZLE_CONTAINER_NAME:-dozzle}
     restart: ${DOZZLE_RESTART:-unless-stopped}
-    networks:
-      - traefik
     environment:
       - DOZZLE_LEVEL=${DOZZLE_LEVEL:-debug}
     volumes:
@@ -28,3 +26,10 @@ services:
       - traefik.http.services.dozzle.loadbalancer.server.port=8080
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
+
+    # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${DOZZLE_FLAME_NAME:-Dozzle} 
+      - flame.url=https://${DOZZLE_CONTAINER_NAME:-dozzle}.${HOST_DOMAIN}
+      - flame.icon=${DOZZLE_FLAME_ICON:-math-log} # optional, default is "docker"

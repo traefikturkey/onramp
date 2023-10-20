@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
     
 # https://hub.docker.com/r/linuxserver/wireshark
 
@@ -11,8 +11,6 @@ services:
     image: lscr.io/linuxserver/wireshark:${WIRESHARK_DOCKER_TAG:-latest}
     container_name: ${WIRESHARK_CONTAINER_NAME:-wireshark} 
     restart: ${WIRESHARK_RESTART:-unless-stopped}
-    networks:
-      - traefik
     privileged: true
     cap_add:
       - NET_ADMIN
@@ -37,3 +35,10 @@ services:
       - traefik.http.services.wireshark.loadbalancer.server.port=3000
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
+
+      # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${WIRESHARK_FLAME_NAME:-wireshark} 
+      - flame.url=https://${WIRESHARK_CONTAINER_NAME:-wireshark}.${HOST_DOMAIN}
+      - flame.icon=${WIRESHARK_FLAME_ICON:-docker} # optional, default is "docker"

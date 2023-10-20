@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
     
 # https://hay-kot.github.io/homebox/
 # https://hay-kot.github.io/homebox/quick-start/
@@ -12,8 +12,6 @@ services:
     image: ghcr.io/hay-kot/homebox:${HOMEBOX_DOCKER_TAG:-latest}
     container_name: ${HOMEBOX_CONTAINER_NAME:-homebox} 
     restart: ${HOMEBOX_RESTART:-unless-stopped}
-    networks:
-      - traefik
     volumes:
       - ./etc/homebox:/data 
       - /etc/timezone:/etc/timezone:ro
@@ -30,6 +28,14 @@ services:
       - traefik.enable=true
       - traefik.http.routers.homebox.entrypoints=websecure
       - traefik.http.routers.homebox.rule=Host(`${HOMEBOX_CONTAINER_NAME:-homebox}.${HOST_DOMAIN}`)
+      #- traefik.http.services.homebox.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.homebox.loadbalancer.server.port=7745
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
+
+      # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${HOMEBOX_FLAME_NAME:-homebox} 
+      - flame.url=https://${HOMEBOX_CONTAINER_NAME:-homebox}.${HOST_DOMAIN}
+      - flame.icon=${HOMEBOX_FLAME_ICON:-docker} # optional, default is "docker"

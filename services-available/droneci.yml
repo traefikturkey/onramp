@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
 
 # https://github.com/harness/drone
 # https://docs.drone.io/server/provider/gitea/
@@ -11,26 +11,23 @@ networks:
 
 services:
   drone:
-    image: drone/drone:${DRONE_DOCKER_TAG:-latest}
-    container_name: ${DRONE_CONTAINER_NAME:-drone}
-    restart: unless-stopped
-    networks:
-      - traefik
-      - default
+    image: drone/drone:${DRONECI_DOCKER_TAG:-latest}
+    container_name: ${DRONECI_CONTAINER_NAME:-drone}
+    restart: ${DRONECI_RESTART:-unless-stopped}
     depends_on:
       - gitea
     environment:
       - DRONE_DATABASE_DRIVER=sqlite3
       - DRONE_DATABASE_DATASOURCE=/data/database.sqlite
-      - DRONE_GITEA_CLIENT_ID=${DRONE_GITEA_CLIENT_ID}
-      - DRONE_GITEA_CLIENT_SECRET=${DRONE_GITEA_CLIENT_SECRET}
+      - DRONE_GITEA_CLIENT_ID=${DRONECI_GITEA_CLIENT_ID}
+      - DRONE_GITEA_CLIENT_SECRET=${DRONECI_GITEA_CLIENT_SECRET}
       - DRONE_GITEA_SERVER=https://${GITEA_CONTAINER_NAME:-gitea}.${HOST_DOMAIN}/
       - DRONE_GIT_ALWAYS_AUTH=false
       - DRONE_SERVER_PROTO=https
-      - DRONE_SERVER_HOST=${DRONE_CONTAINER_NAME:-drone}.${HOST_DOMAIN}
+      - DRONE_SERVER_HOST=${DRONECI_CONTAINER_NAME:-drone}.${HOST_DOMAIN}
       - DRONE_TLS_AUTOCERT=false
-      - DRONE_RPC_SECRET=${DRONE_RPC_SECRET}
-      - DRONE_USER_CREATE=username:${DRONE_ADMIN_USER_CREATE},machine:false,admin:true,token:${DRONE_RPC_SECRET}
+      - DRONE_RPC_SECRET=${DRONECI_RPC_SECRET}
+      - DRONE_USER_CREATE=username:${DRONECI_ADMIN_USER_CREATE},machine:false,admin:true,token:${DRONECI_RPC_SECRET}
       - DRONE_LOGS_DEBUG=true
     # ports:
     #   - 4001:80
@@ -41,9 +38,9 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock
     labels:
-      - joyride.host.name=${DRONE_CONTAINER_NAME:-drone}.${HOST_DOMAIN}
+      - joyride.host.name=${DRONECI_CONTAINER_NAME:-drone}.${HOST_DOMAIN}
       - traefik.enable=true
-      - traefik.http.routers.drone.rule=Host(`${DRONE_CONTAINER_NAME:-drone}.${HOST_DOMAIN}`)
+      - traefik.http.routers.drone.rule=Host(`${DRONECI_CONTAINER_NAME:-drone}.${HOST_DOMAIN}`)
       - traefik.http.routers.drone.entrypoints=websecure
       - traefik.http.services.drone.loadbalancer.server.port=80
       - com.centurylinklabs.watchtower.enable=true
@@ -57,8 +54,8 @@ services:
       - drone
     environment:
       - DRONE_RPC_PROTO=https
-      - DRONE_RPC_HOST=${DRONE_CONTAINER_NAME:-drone}.${HOST_DOMAIN}
-      - DRONE_RPC_SECRET=${DRONE_RPC_SECRET}
+      - DRONE_RPC_HOST=${DRONECI_CONTAINER_NAME:-drone}.${HOST_DOMAIN}
+      - DRONE_RPC_SECRET=${DRONECI_RPC_SECRET}
       - DRONE_RUNNER_CAPACITY=2
       - DRONE_RUNNER_NETWORKS=traefik
       - DRONE_DEBUG=false

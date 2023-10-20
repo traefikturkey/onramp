@@ -1,20 +1,18 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
-
+  default:
+    name: traefik
+    
 # https://hub.docker.com/r/phpmyadmin/phpmyadmin
 
 services:
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:${PHPMYADMIN_DOCKER_TAG:-latest}
-    container_name: phpmyadmin
-    restart: unless-stopped
-    networks:
-      - traefik
+    container_name: ${PHPMYADMIN_CONTAINER_NAME:-phpmyadmin}
+    restart: ${PHPMYADMIN_RESTART:-unless-stopped}
     volumes:
-      - ./etc/phpmyadmin:/data # <==== this probably needs changed ====>
+      - ./etc/phpmyadmin:/data
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
@@ -24,10 +22,10 @@ services:
       - PMA_ARBITRARY=1
       - UPLOAD_LIMIT=1G
     labels:
-      - joyride.host.name=phpmyadmin.${HOST_DOMAIN}
+      - joyride.host.name=${PHPMYADMIN_CONTAINER_NAME:-phpmyadmin}.${HOST_DOMAIN}
       - traefik.enable=true
       - traefik.http.routers.phpmyadmin.entrypoints=websecure
-      - traefik.http.routers.phpmyadmin.rule=Host(`phpmyadmin.${HOST_DOMAIN}`)
+      - traefik.http.routers.phpmyadmin.rule=Host(`${PHPMYADMIN_CONTAINER_NAME:-phpmyadmin}.${HOST_DOMAIN}`)
       - traefik.http.services.phpmyadmin.loadbalancer.server.port=80
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true

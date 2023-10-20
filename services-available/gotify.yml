@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
     
 # https://github.com/gotify/server
 
@@ -10,9 +10,7 @@ services:
   gotify:
     image: ghcr.io/gotify/server:${GOTIFY_DOCKER_TAG:-latest}
     container_name: ${GOTIFY_CONTAINER_NAME:-gotify} 
-    restart: unless-stopped
-    networks:
-      - traefik
+    restart: ${GOTIFY_RESTART:-unless-stopped}
     volumes:
       - ./etc/gotify:/app/data
       - /etc/timezone:/etc/timezone:ro

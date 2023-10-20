@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
     
 # https://excalidraw.com/
 # https://github.com/excalidraw and https://github.com/excalidraw/excalidraw
@@ -19,8 +19,6 @@ services:
     image: excalidraw/excalidraw:${EXCALIDRAW_DOCKER_TAG:-latest}
     container_name: ${EXCALIDRAW_CONTAINER_NAME:-excalidraw} 
     restart: ${EXCALIDRAW_RESTART:-unless-stopped}
-    networks:
-      - traefik
     volumes:
     # - ./etc/excalidraw:/config # <==== this probably needs changed 
       - /etc/timezone:/etc/timezone:ro
@@ -34,6 +32,14 @@ services:
       - traefik.enable=true
       - traefik.http.routers.excalidraw.entrypoints=websecure
       - traefik.http.routers.excalidraw.rule=Host(`${EXCALIDRAW_CONTAINER_NAME:-excalidraw}.${HOST_DOMAIN}`)
+      #- traefik.http.services.excalidraw.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.excalidraw.loadbalancer.server.port=80
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
+
+      # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${EXCALIDRAW_FLAME_NAME:-excalidraw} 
+      - flame.url=https://${EXCALIDRAW_CONTAINER_NAME:-excalidraw}.${HOST_DOMAIN}
+      - flame.icon=${EXCALIDRAW_FLAME_ICON:-docker} # optional, default is "docker"

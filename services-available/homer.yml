@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
     
 # https://hub.docker.com/r/b4bz/homer
 
@@ -10,9 +10,7 @@ services:
   homer:
     image: b4bz/homer:${HOMER_DOCKER_TAG:-latest}
     container_name: ${HOMER_CONTAINER_NAME:-homer}
-    restart: unless-stopped
-    networks:
-      - traefik
+    restart: ${HOMER_RESTART:-unless-stopped}
     volumes:
       - ${HOMER_ASSETS_DIR:-./etc/homer}:/www/assets
       - /etc/timezone:/etc/timezone:ro

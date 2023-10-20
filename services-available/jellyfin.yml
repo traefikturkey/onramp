@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
     
 # https://hub.docker.com/r/linuxserver/jellyfin
 
@@ -10,16 +10,14 @@ services:
   jellyfin:
     image: lscr.io/linuxserver/jellyfin:${JELLYFIN_DOCKER_TAG:-latest}
     container_name: ${JELLYFIN_CONTAINER_NAME:-jellyfin}
-    restart: unless-stopped
-    networks:
-      - traefik
+    restart: ${JELLYFIN_RESTART:-unless-stopped}
     environment: 
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
       - JELLYFIN_PublishedServerUrl=${JELLYFIN_CONTAINER_NAME:-jellyfin}.${HOST_DOMAIN}
     volumes:
-      - ${JELLYFIN_CONFIG_VOLUME:-./etc/jellyfin}:${JELLYFIN_CONFIG_PATH:-/config}
+      - ${JELLYFIN_CONFIG_VOLUME:-./etc/jellyfin}:/config
       - ${JELLYFIN_MEDIA_VOLUME:-./media}:${JELLYFIN_MEDIA_PATH:-/data}
     ports:
       # - 8096:8096 # http web gui

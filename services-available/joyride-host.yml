@@ -5,8 +5,8 @@ version: '3'
 
 services:
   joyride-host:
-    image: ghcr.io/ilude/joyride:${JOYRIDE_DOCKER_TAG:-latest}
-    container_name: ${JOYRIDE_CONTAINER_NAME:-joyride}
+    image: ghcr.io/ilude/joyride:${JOYRIDE_HOST_DOCKER_TAG:-latest}
+    container_name: ${JOYRIDE_HOST_CONTAINER_NAME:-joyride}
     restart: unless-stopped
     network_mode: "host"
     environment:

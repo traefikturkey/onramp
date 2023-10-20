@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
 
 # https://github.com/portainer/portainer
 
@@ -10,9 +10,7 @@ services:
   portainer:
     image: portainer/portainer-${PORTAINER_VERSION:-ce}:${PORTAINER_DOCKER_TAG:-latest}
     container_name: ${PORTAINER_CONTAINER_NAME:-portainer}
-    restart: unless-stopped
-    networks:
-      - traefik
+    restart: ${PORTAINER_RESTART:-unless-stopped}
     volumes:
       - ./etc/portainer:/data
       - /etc/timezone:/etc/timezone:ro

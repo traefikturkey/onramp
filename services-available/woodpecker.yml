@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
     
 # https://woodpecker-ci.org/
 # https://woodpecker-ci.org/docs/intro
@@ -12,10 +12,7 @@ services:
   woodpecker:
     image: woodpeckerci/woodpecker-server:${WOODPECKER_DOCKER_TAG:-latest}
     container_name: ${WOODPECKER_CONTAINER_NAME:-woodpecker} 
-    restart: unless-stopped
-    networks:
-      - traefik
-      - default
+    restart: ${WOODPECKER_RESTART:-unless-stopped}
     volumes:
       - ./etc/woodpecker:/var/lib/woodpecker
       - /etc/timezone:/etc/timezone:ro
@@ -32,6 +29,7 @@ services:
       - WOODPECKER_AGENT_SECRET=${WOODPECKER_AGENT_SECRET}
       - WOODPECKER_GITEA_CLIENT=${WOODPECKER_GITEA_CLIENT}
       - WOODPECKER_GITEA_SECRET=${WOODPECKER_GITEA_SECRET}
+
     labels:
       - joyride.host.name=${WOODPECKER_CONTAINER_NAME:-woodpecker}.${HOST_DOMAIN}
       - traefik.enable=true
@@ -41,11 +39,18 @@ services:
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
 
+      # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${WOODPECKER_FLAME_NAME:-woodpecker} 
+      - flame.url=https://${WOODPECKER_CONTAINER_NAME:-woodpecker}.${HOST_DOMAIN}
+      - flame.icon=${WOODPECKER_FLAME_ICON:-docker} # optional, default is "docker"
 
   woodpecker-agent:
-    image: woodpeckerci/woodpecker-agent:latest
+    image: woodpeckerci/woodpecker-agent:${WOODPECKER_AGENT_DOCKER_TAG:-latest}
+    container_name: ${WOODPECKER_AGENT_CONTAINER_NAME:-woodpecker-agent} 
+    restart: ${WOODPECKER_AGENT_RESTART:-unless-stopped}
     command: agent
-    restart: unless-stopped
     depends_on:
       - woodpecker
     volumes:

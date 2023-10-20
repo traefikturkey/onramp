@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
     
 # https://docs.linuxserver.io/images/docker-netbootxyz
 
@@ -10,9 +10,7 @@ services:
   netbootxyz:
     image: linuxserver/netbootxyz:${NETBOOTXYZ_DOCKER_TAG:-latest}
     container_name: ${NETBOOTXYZ_CONTAINER_NAME:-netbootxyz} 
-    restart: unless-stopped
-    networks:
-      - traefik
+    restart: ${NETBOOTXYZ_RESTART:-unless-stopped}
     volumes:
       - ./etc/netbootxyz:/config
       - ./media/netbootxyz:/assets
@@ -36,3 +34,10 @@ services:
       - traefik.http.services.netbootxyz.loadbalancer.server.port=3000
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
+
+      # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${NETBOOTXYZ_FLAME_NAME:-netbootxyz} 
+      - flame.url=https://${NETBOOTXYZ_CONTAINER_NAME:-netbootxyz}.${HOST_DOMAIN}
+      - flame.icon=${NETBOOTXYZ_FLAME_ICON:-docker} # optional, default is "docker"

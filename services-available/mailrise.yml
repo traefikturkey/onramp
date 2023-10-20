@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
     
 # https://github.com/YoRyan/mailrise
 
@@ -11,19 +11,20 @@ services:
     image: yoryan/mailrise:${MAILRISE_DOCKER_TAG:-latest}
     container_name: ${MAILRISE_CONTAINER_NAME:-mailrise} 
     restart: ${MAILRISE_RESTART:-unless-stopped}
-    networks:
-      - traefik
     volumes:
-      - ./etc/mailrise/mailrise.conf:/etc/mailrise.conf:ro #File needs to exist BEFORE starting the container.
+      - ./etc/mailrise:/config
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-    ports:
-      - ${MAILRISE_PORT:-8025}:8025 #Needs the port exposed so that external apps can communicate with it.
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
     labels:
       - joyride.host.name=${MAILRISE_CONTAINER_NAME:-mailrise}.${HOST_DOMAIN}
       - traefik.enable=true
       - traefik.tcp.routers.mailrise.rule=HostSNI(`${MAILRISE_CONTAINER_NAME:-mailrise}.${HOST_DOMAIN}`)
       - traefik.tcp.routers.mailrise.tls=true
       - traefik.tcp.routers.mailrise.tls.certresolver=letsencrypt
-      - traefik.tcp.routers.mailrise.entrypoints=mailsecure - com.centurylinklabs.watchtower.enable=true
+      - traefik.tcp.routers.mailrise.entrypoints=mailsecure
+      - com.centurylinklabs.watchtower.enable=true
       - autoheal=true

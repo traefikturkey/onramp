@@ -1,14 +1,13 @@
 version: '3'
 
-    
 # https://github.com/containrrr/watchtower
 # https://containrrr.dev/watchtower/notifications/
 
 services:
   watchtower:
     image: ghcr.io/containrrr/watchtower:${WATCHTOWER_DOCKER_TAG:-latest}
-    container_name: watchtower
-    restart: unless-stopped
+    container_name: ${WATCHTOWER_CONTAINER_NAME:-watchtower}
+    restart: ${WATCHTOWER_RESTART:-unless-stopped}
     environment: 
       - WATCHTOWER_NOTIFICATIONS=${WATCHTOWER_NOTIFICATIONS:-shoutrrr}
       - WATCHTOWER_NOTIFICATION_URL=${WATCHTOWER_NOTIFICATION_URL} 

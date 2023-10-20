@@ -1,5 +1,3 @@
-version: '3'
-
 # enabling this will allow you to send syslog data from an 
 # external server into this instance of promtail
 services:

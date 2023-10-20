@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
     
 # https://github.com/jlesage/docker-qdirstat
 
@@ -10,9 +10,7 @@ services:
   qdirstat:
     image: jlesage/qdirstat:${QDIRSTAT_DOCKER_TAG:-latest}
     container_name: ${QDIRSTAT_CONTAINER_NAME:-qdirstat}
-    restart: unless-stopped
-    networks:
-      - traefik
+    restart: ${QDIRSTAT_RESTART:-unless-stopped}
     cap_add:
       - SYS_NICE
     environment:

@@ -1,18 +1,12 @@
 version: '3'
 
-networks:
-  traefik:
-    external: true
-
 # https://hub.docker.com/r/linuxserver/homeassistant
 
 services:
   homeassistant:
     image: lscr.io/linuxserver/homeassistant:${HOMEASSISTANT_DOCKER_TAG:-latest}
     container_name: ${HOMEASSISTANT_CONTAINER_NAME:-homeassistant}
-    restart: unless-stopped
-    networks:
-      - traefik
+    restart: ${HOMEASSISTANT_RESTART:-unless-stopped}
     network_mode: host
     volumes:
       - ./etc/homeassistant:/config

@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
     
 # https://wordpress.com/
 # https://hub.docker.com/_/wordpress
@@ -12,9 +12,7 @@ services:
   wordpress:
     image: wordpress:${WORDPRESS_DOCKER_TAG:-latest}
     container_name: ${WORDPRESS_CONTAINER_NAME:-wordpress} 
-    restart: unless-stopped
-    networks:
-      - traefik
+    restart: ${WORDPRESS_RESTART:-unless-stopped}
     volumes:
       - ./etc/wordpress:/var/www/html/
       - /etc/timezone:/etc/timezone:ro
@@ -37,3 +35,10 @@ services:
       - traefik.http.services.wordpress.loadbalancer.server.port=80
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
+
+      # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${WORDPRESS_FLAME_NAME:-wordpress} 
+      - flame.url=https://${WORDPRESS_CONTAINER_NAME:-wordpress}.${HOST_DOMAIN}
+      - flame.icon=${WORDPRESS_FLAME_ICON:-docker} # optional, default is "docker"

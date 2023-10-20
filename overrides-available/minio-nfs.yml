@@ -1,4 +1,5 @@
 version: '3'
+
 volumes:
     minio-nfs-root:
       labels:

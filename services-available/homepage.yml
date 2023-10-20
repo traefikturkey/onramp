@@ -1,22 +1,20 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
     
-# https://github.com/gethomepage/homepage/
+# https://github.com/benphelps/homepage
 
 # To use the docker integration with labels, have a look here, as it needs seperate config
-# https://github.com/gethomepage/homepage//wiki/Docker-Integration
-# https://github.com/gethomepage/homepage//wiki/Service-Discovery
+# https://github.com/benphelps/homepage/wiki/Docker-Integration
+# https://github.com/benphelps/homepage/wiki/Service-Discovery
 
 services:
   homepage:
-    image: ghcr.io/gethomepage/homepage:${HOMEPAGE_DOCKER_TAG:-latest}
+    image: ghcr.io/benphelps/homepage:${HOMEPAGE_DOCKER_TAG:-latest}
     container_name: ${HOMEPAGE_CONTAINER_NAME:-homepage} 
-    restart: unless-stopped
-    networks:
-      - traefik
+    restart: ${HOMEPAGE_RESTART:-unless-stopped}
     volumes:
       - ./etc/homepage:/app/config
       - /etc/timezone:/etc/timezone:ro
@@ -34,6 +32,13 @@ services:
       - traefik.http.services.homepage.loadbalancer.server.port=3000
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
+
+      # Flame dashboard labels
+      
+      # - flame.type=application # "app" works too
+      # - flame.name=${HOMEPAGE_FLAME_NAME:-homepage} 
+      # - flame.url=https://${HOMEPAGE_CONTAINER_NAME:-homepage}.${HOST_DOMAIN}
+      # - flame.icon=${HOMEPAGE_FLAME_ICON:-docker} # optional, default is "docker"
 
       # - homepage.group=A group
       # - homepage.name=homepage

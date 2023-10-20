@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
     
 # https://github.com/hyperonym/basaran
 # https://huggingface.co/bigscience/bloomz-560m
@@ -14,8 +14,6 @@ services:
     image: ghcr.io/hyperonym/basaran:${BASARAN_DOCKER_TAG:-0.13.3}
     container_name: ${BASARAN_CONTAINER_NAME:-basaran} 
     restart: ${BASARAN_RESTART:-unless-stopped}
-    networks:
-      - traefik
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
@@ -34,3 +32,10 @@ services:
       - traefik.http.services.basaran.loadbalancer.server.port=80
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
+
+      # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${BASARAN_FLAME_NAME:-basaran} 
+      - flame.url=https://${BASARAN_CONTAINER_NAME:-basaran}.${HOST_DOMAIN}
+      - flame.icon=${BASARAN_FLAME_ICON:-docker} # optional, default is "docker"

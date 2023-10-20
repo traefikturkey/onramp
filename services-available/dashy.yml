@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
     
 # https://github.com/Lissy93/dashy
 
@@ -10,9 +10,7 @@ services:
   dashy:
     image: ghcr.io/lissy93/dashy:${DASHY_DOCKER_TAG:-latest}
     container_name: ${DASHY_CONTAINER_NAME:-dashy}
-    restart: unless-stopped
-    networks:
-      - traefik
+    restart: ${DASHY_RESTART:-unless-stopped}
     volumes:
       - ./etc/dashy/dashy-config.yml:/app/public/conf.yml
       - ./media/assets/dashy-icons:/app/public/item-icons

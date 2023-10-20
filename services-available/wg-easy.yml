@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
     
 # https://github.com/WeeJeWel/wg-easy
 
@@ -11,8 +11,6 @@ services:
     image: weejewel/wg-easy:${WG_EASY_DOCKER_TAG:-latest}
     container_name: ${WG_EASY_CONTAINER_NAME:-wg-easy} 
     restart: ${WG_EASY_RESTART:-unless-stopped}
-    networks:
-      - traefik
     volumes:
       - ./etc/wg-easy:/etc/wireguard
       - /etc/timezone:/etc/timezone:ro
@@ -40,3 +38,10 @@ services:
       - traefik.http.services.wg-easy.loadbalancer.server.port=51821
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
+
+      # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${WG_EASY_FLAME_NAME:-wg-easy} 
+      - flame.url=https://${WG_EASY_CONTAINER_NAME:-wg-easy}.${HOST_DOMAIN}
+      - flame.icon=${WG_EASY_FLAME_ICON:-docker} # optional, default is "docker"

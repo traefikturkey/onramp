@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
     
 # https://hub.docker.com/r/traefik/whoami
 
@@ -10,9 +10,7 @@ services:
   whoami:
     image: traefik/whoami:${WHOAMI_DOCKER_TAG:-latest}
     container_name: ${WHOAMI_CONTAINER_NAME:-whoami}
-    restart: unless-stopped
-    networks:
-      - traefik
+    restart: ${WHOAMI_RESTART:-unless-stopped}
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
@@ -31,6 +29,15 @@ services:
       #- traefik.http.routers.whoami.middlewares=crowdsec-bouncer@file
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
+
+      
+      # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${WHOAMI_FLAME_NAME:-whoami} 
+      - flame.url=https://${WHOAMI_CONTAINER_NAME:-whoami}.${HOST_DOMAIN}
+      - flame.icon=${WHOAMI_FLAME_ICON:-docker} # optional, default is "docker"
+
       #- homepage.group=traefik
       - homepage.name=${WHOAMI_CONTAINER_NAME:-whoami}
       #- homepage.icon=

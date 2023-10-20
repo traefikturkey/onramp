@@ -1,18 +1,16 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
 
 # https://hub.docker.com/r/linuxserver/tautulli
 
 services:
   tautulli:
     image: lscr.io/linuxserver/tautulli:${TAUTULLI_DOCKER_TAG:-latest}
-    container_name: tautulli
-    restart: unless-stopped
-    networks:
-      - traefik
+    container_name: ${TAUTULLI_CONTAINER_NAME:-tautulli}
+    restart: ${TAUTULLI_RESTART:-unless-stopped}
     volumes:
       - ./etc/tautulli:/config
     environment: 
@@ -20,10 +18,17 @@ services:
       - PGID=${PGID:-1000}
       - TZ=${TZ}
     labels:
-      - joyride.host.name=tautulli.${HOST_DOMAIN}
+      - joyride.host.name=${TAUTULLI_CONTAINER_NAME:-tautulli}.${HOST_DOMAIN}
       - traefik.enable=true
       - traefik.http.routers.tautulli.entrypoints=websecure
-      - traefik.http.routers.tautulli.rule=Host(`tautulli.${HOST_DOMAIN}`)
+      - traefik.http.routers.tautulli.rule=Host(`${TAUTULLI_CONTAINER_NAME:-tautulli}.${HOST_DOMAIN}`)
       - traefik.http.services.tautulli.loadbalancer.server.port=8181
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
+
+      # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${TAUTULLI_FLAME_NAME:-tautulli} 
+      - flame.url=https://${TAUTULLI_CONTAINER_NAME:-tautulli}.${HOST_DOMAIN}
+      - flame.icon=${TAUTULLI_FLAME_ICON:-docker} # optional, default is "docker"

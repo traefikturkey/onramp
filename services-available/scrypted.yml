@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
 
 # https://github.com/koush/scrypted    
 # https://docs.technotim.live/posts/scrypted-home-hub/
@@ -12,11 +12,9 @@ services:
     image: koush/scrypted:${SCRYPTED_DOCKER_TAG:-latest}
     container_name: ${SCRYPTED_CONTAINER_NAME:-scrypted} 
     restart: ${SCRYPTED_RESTART:-unless-stopped}
-    networks:
-      - traefik
     network_mode: host
     volumes:
-      - ./etc/scrypted:/server/volume # <==== this probably needs changed 
+      - ./etc/scrypted:/server/volume
       - ./media/videos/scrypted:/media/external
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
@@ -36,6 +34,14 @@ services:
       - traefik.enable=true
       - traefik.http.routers.scrypted.entrypoints=websecure
       - traefik.http.routers.scrypted.rule=Host(`${SCRYPTED_CONTAINER_NAME:-scrypted}.${HOST_DOMAIN}`)
+      #- traefik.http.services.scrypted.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.scrypted.loadbalancer.server.port=10444
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
+
+      # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${SCRYPTED_FLAME_NAME:-scrypted} 
+      - flame.url=https://${SCRYPTED_CONTAINER_NAME:-scrypted}.${HOST_DOMAIN}
+      - flame.icon=${SCRYPTED_FLAME_ICON:-docker} # optional, default is "docker"

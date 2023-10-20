@@ -1,18 +1,16 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
 
 # https://hub.docker.com/r/linuxserver/snapdrop
 
 services:
   snapdrop:
     image: lscr.io/linuxserver/snapdrop:${SNAPDROP_DOCKER_TAG:-latest}
-    container_name: snapdrop
-    restart: unless-stopped
-    networks:
-      - traefik
+    container_name: ${SNAPDROP_CONTAINER_NAME:-snapdrop}
+    restart: ${SNAPDROP_RESTART:-unless-stopped}
     environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}

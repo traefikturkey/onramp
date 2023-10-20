@@ -1,25 +1,23 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
 
 # https://hub.docker.com/r/darkalfx/requestrr
 
 services:
   requestrr:
     image: darkalfx/requestrr:${REQUESTRR_DOCKER_TAG:-latest}
-    container_name: requestrr
-    restart: unless-stopped
-    networks:
-      - traefik
+    container_name: ${REQUESTRR_CONTAINER_NAME:-requestrr}
+    restart: ${REQUESTRR_RESTART:-unless-stopped}
     volumes:
       - ./etc/requestrr:/root/config
     labels:
-      - joyride.host.name=requestrr.${HOST_DOMAIN}
+      - joyride.host.name=${REQUESTRR_CONTAINER_NAME:-requestrr}.${HOST_DOMAIN}
       - traefik.enable=true
       - traefik.http.routers.requestrr.entrypoints=websecure
-      - traefik.http.routers.requestrr.rule=Host(`requestrr.${HOST_DOMAIN}`)
+      - traefik.http.routers.requestrr.rule=Host(`${REQUESTRR_CONTAINER_NAME:-requestrr}.${HOST_DOMAIN}`)
       - traefik.http.services.requestrr.loadbalancer.server.port=4545
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true

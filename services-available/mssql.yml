@@ -1,5 +1,9 @@
 version: '3'
 
+networks: 
+  default:
+    name: traefik
+
 # https://hub.docker.com/_/microsoft-mssql-server    
 # https://docs.microsoft.com/en-us/sql/linux/sql-server-linux-overview?view=sql-server-ver16
 
@@ -7,9 +11,9 @@ services:
   mssql:
     image: mcr.microsoft.com/mssql/server:${MSSQL_DOCKER_TAG:-2022-latest}
     user: root # Required for container to correctly interact with the volume.
-    container_name: mssql
-    restart: unless-stopped
-    volumes:
+    container_name: ${MSSQL_CONTAINER_NAME:-plex}
+    restart: ${MSSQL_RESTART:-unless-stopped}
+     volumes:
       - ${MSSQL_DB_DIR:-./media/databases/mssql}:/var/opt/mssql/data # paths will have to be researched futher
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
@@ -22,7 +26,7 @@ services:
     ports:
       - 1433:1433
     labels:
-      - joyride.host.name=mssql.${HOST_DOMAIN}
+      - joyride.host.name=${MSSQL_CONTAINER_NAME:-mssql}.${HOST_DOMAIN}
       - traefik.enable=false
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true

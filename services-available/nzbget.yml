@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
     
 #  https://hub.docker.com/r/linuxserver/nzbget
 
@@ -10,11 +10,9 @@ services:
   nzbget:
     image: linuxserver/nzbget:${NZBGET_DOCKER_TAG:-latest}
     container_name: ${NZBGET_CONTAINER_NAME:-nzbget} 
-    restart: unless-stopped
-    networks:
-      - traefik
+    restart: ${NZBGET_RESTART:-unless-stopped}
     volumes:
-      - ./etc/nzbget:/config # <==== this probably needs changed 
+      - ./etc/nzbget:/config
       - ${NZBGET_DOWNLOADS_DIR:-./media/downloads}:/downloads
     environment:
       - PUID=${PUID:-1000}
@@ -34,3 +32,10 @@ services:
       - traefik.http.services.nzbget.loadbalancer.server.port=6789
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
+
+      # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${NZBGET_FLAME_NAME:-nzbget} 
+      - flame.url=https://${NZBGET_CONTAINER_NAME:-nzbget}.${HOST_DOMAIN}
+      - flame.icon=${NZBGET_FLAME_ICON:-docker} # optional, default is "docker"

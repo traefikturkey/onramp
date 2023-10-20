@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
     
 # https://github.com/drakkan/sftpgo
 
@@ -11,8 +11,6 @@ services:
     image: drakkan/sftpgo:${SFTP_SERVER_DOCKER_TAG:-latest}
     container_name: ${SFTP_SERVER_CONTAINER_NAME:-sftp-server} 
     restart: ${SFTP_SERVER_RESTART:-unless-stopped}
-    networks:
-      - traefik
     volumes:
       - ./etc/sftp-server:/var/lib/sftpgo
       - /etc/timezone:/etc/timezone:ro
@@ -31,3 +29,10 @@ services:
       - traefik.http.services.sftp-server.loadbalancer.server.port=8080
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
+
+      # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${SFTP_SERVER_FLAME_NAME:-sftp-server} 
+      - flame.url=https://${SFTP_SERVER_CONTAINER_NAME:-sftp-server}.${HOST_DOMAIN}
+      - flame.icon=${SFTP_SERVER_FLAME_ICON:-docker} # optional, default is "docker"

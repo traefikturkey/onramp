@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
 
 # https://goauthentik.io/docs/installation/docker-compose
 # https://github.com/goauthentik/authentik
@@ -11,12 +11,12 @@ networks:
 
 services:
   postgresql:
-    image: postgres
-    container_name: authentik_postgresql
-    restart: unless-stopped
-    user: ${PUID}:${PGID}
+    image: postgres:${AUTHENTIK_POSTGRES_DOCKER_TAG:-latest}
+    container_name: ${AUTHENTIK_POSTGRES_CONTAINER_NAME:-authentik_postgresql}
+    restart: ${AUTHENTIK_POSTGRES_RESTART:-unless-stopped}
+    user: "${PUID:-1000}:${PGID:-1000}"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+      test: ["CMD-SHELL", "pg_isready -d $${AUTHENTIK_POSTGRES_DB} -U $${AUTHENTIK_POSTGRES_USER}"]
       start_period: 20s
       interval: 30s
       retries: 5
@@ -26,18 +26,18 @@ services:
     environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
-      - POSTGRES_PASSWORD=${PG_PASS_AUTHENTIK:?database password required}
-      - POSTGRES_USER=${PG_USER:-authentik}
-      - POSTGRES_DB=${PG_DB:-authentik}
+      - POSTGRES_PASSWORD=${AUTHENTIK_POSTGRES_PASS:?authentik postgres database password required}
+      - POSTGRES_USER=${AUTHENTIK_POSTGRES_USER:-authentik}
+      - POSTGRES_DB=${AUTHENTIK_POSTGRES_DB:-authentik}
     labels:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=false
       - autoheal=true   
        
   redis:
-    image: redis:alpine
-    container_name: authentik_redis
-    restart: unless-stopped
+    image: redis:${AUTHENTIK_REDIS_DOCKER_TAG:-alpine}
+    container_name: ${AUTHENTIK_REDIS_CONTAINER_NAME:-authentik_redis}
+    restart: ${AUTHENTIK_REDIS_RESTART:-unless-stopped}
     volumes:
     - ./etc/authentik/redis:/data
     healthcheck:
@@ -52,20 +52,18 @@ services:
       - autoheal=true  
 
   authentik-server:
-    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_DOCKER_TAG:-2023.5.2}
-    container_name: authentik_server
-    restart: unless-stopped
-    networks:
-      - traefik
+    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_DOCKER_TAG:-2023.6.1}
+    container_name: ${AUTHENTIK_CONTAINER_NAME:-authentik_server}
+    restart: ${AUTHENTIK_RESTART:-unless-stopped}
     command: server
     environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - AUTHENTIK_REDIS__HOST=redis
       - AUTHENTIK_POSTGRESQL__HOST=postgresql
-      - AUTHENTIK_POSTGRESQL__USER=${PG_USER:-authentik}
-      - AUTHENTIK_POSTGRESQL__NAME=${PG_DB:-authentik}
-      - AUTHENTIK_POSTGRESQL__PASSWORD=${PG_PASS_AUTHENTIK}
+      - AUTHENTIK_POSTGRESQL__USER=${AUTHENTIK_POSTGRES_USER:-authentik}
+      - AUTHENTIK_POSTGRESQL__NAME=${AUTHENTIK_POSTGRES_DB:-authentik}
+      - AUTHENTIK_POSTGRESQL__PASSWORD=${AUTHENTIK_POSTGRES_PASS}
       - AUTHENTIK_LOG_LEVEL=debug
       - AUTHENTIK_SECRET_KEY=${AUTHENTIK_SECRET_KEY}
       - AUTHENTIK_BOOTSTRAP_PASSWORD=${AUTHENTIK_BOOTSTRAP_PASSWORD}
@@ -79,10 +77,10 @@ services:
       # - ./etc/authentik/geoip:/geoip
       # Uncomment above to enable the use of the geoipupdate container. This will allow more frequent updates but isn't required.
     labels:
-      - joyride.host.name=${AUTHENTIK_AUTH_DOMAIN}
+      - joyride.host.name=${AUTHENTIK_AUTH_HOST:-authentik_server}.${AUTHENTIK_AUTH_DOMAIN}:-${HOST_DOMAIN}
       - traefik.enable=true
       - traefik.http.routers.authentik.entrypoints=websecure
-      - traefik.http.routers.authentik.rule=Host(`${AUTHENTIK_AUTH_DOMAIN}`) || HostRegexp(`{subdomain:[a-z]+}.${HOST_DOMAIN}`) && PathPrefix(`/outpost.goauthentik.io/`)
+      - traefik.http.routers.authentik.rule=Host(`${AUTHENTIK_AUTH_HOST:-plex}.${AUTHENTIK_AUTH_DOMAIN}`) || HostRegexp(`{subdomain:[a-z]+}.${HOST_DOMAIN}`) && PathPrefix(`/outpost.goauthentik.io/`)
       - traefik.http.services.authentik.loadbalancer.server.port=9000
       - traefik.http.middlewares.authentik.forwardauth.address=http://authentik-server:9000/outpost.goauthentik.io/auth/traefik
       - traefik.http.middlewares.authentik.forwardauth.trustForwardHeader=true
@@ -91,19 +89,21 @@ services:
       - autoheal=true
 
   worker:
-    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_DOCKER_TAG:-2022.8.2}
-    container_name: authentik_worker
-    restart: unless-stopped
+    image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_DOCKER_TAG:-2023.6.1}
+    container_name: ${AUTHENTIK_CONTAINER_NAME:-authentik_worker}
+    restart: ${AUTHENTIK_RESTART:-unless-stopped}
     command: worker
     environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - AUTHENTIK_REDIS__HOST=redis
       - AUTHENTIK_POSTGRESQL__HOST=postgresql
-      - AUTHENTIK_POSTGRESQL__USER=${PG_USER:-authentik}
-      - AUTHENTIK_POSTGRESQL__NAME=${PG_DB:-authentik}
-      - AUTHENTIK_POSTGRESQL__PASSWORD=${PG_PASS_AUTHENTIK}
+      - AUTHENTIK_POSTGRESQL__USER=${AUTHENTIK_POSTGRES_USER:-authentik}
+      - AUTHENTIK_POSTGRESQL__NAME=${AUTHENTIK_POSTGRES_DB:-authentik}
+      - AUTHENTIK_POSTGRESQL__PASSWORD=${AUTHENTIK_POSTGRES_PASS}
+      - AUTHENTIK_LOG_LEVEL=debug
       - AUTHENTIK_SECRET_KEY=${AUTHENTIK_SECRET_KEY}
+      - AUTHENTIK_BOOTSTRAP_PASSWORD=${AUTHENTIK_BOOTSTRAP_PASSWORD}
       #- AUTHENTIK_GEOIP: /tmp/geoipdisabled
       # If you uncomment above it will disable GeoIP.
       #- AUTHENTIK_ERROR_REPORTING__ENABLED: "true"

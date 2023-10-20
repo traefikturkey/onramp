@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
     
 # https://christitus.com/why-we-dont-browse-the-internet-anymore/
 # https://www.youtube.com/watch?v=nxV0CPNeFxY
@@ -12,8 +12,6 @@ services:
     image: heussd/fivefilters-full-text-rss:${FULLTEXT_RSS_DOCKER_TAG:-latest}
     container_name: ${FULLTEXT_RSS_CONTAINER_NAME:-fulltext-rss} 
     restart: ${FULLTEXT_RSS_RESTART:-unless-stopped}
-    networks:
-      - traefik
     volumes:
       - ./etc/fulltext-rss:/config # <==== this probably needs changed 
       - /etc/timezone:/etc/timezone:ro
@@ -30,3 +28,10 @@ services:
       - traefik.http.services.fulltext-rss.loadbalancer.server.port=8096
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
+
+      # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${FULLTEXT_RSS_FLAME_NAME:-fulltext-rss} 
+      - flame.url=https://${FULLTEXT_RSS_CONTAINER_NAME:-fulltext-rss}.${HOST_DOMAIN}
+      - flame.icon=${FULLTEXT_RSS_FLAME_ICON:-docker} # optional, default is "docker"

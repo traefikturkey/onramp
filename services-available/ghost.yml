@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
     
 # https://hub.docker.com/_/ghost
 
@@ -11,8 +11,6 @@ services:
     image: ghost:${GHOST_DOCKER_TAG:-alpine}
     container_name: ${GHOST_CONTAINER_NAME:-ghost} 
     restart: ${GHOST_RESTART:-unless-stopped}
-    networks:
-      - traefik
     volumes:
       - ./etc/ghost:/var/lib/ghost/content
       - /etc/timezone:/etc/timezone:ro
@@ -35,3 +33,10 @@ services:
       - traefik.http.services.ghost.loadbalancer.server.port=2368
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
+
+      # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${GHOST_FLAME_NAME:-ghost} 
+      - flame.url=${GHOST_CONTAINER_NAME:-ghost}.${HOST_DOMAIN}
+      - flame.icon=${GHOST_FLAME_ICON:-docker} # optional, default is "docker"

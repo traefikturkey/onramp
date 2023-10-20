@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
     
 # https://github.com/plexinc/pms-docker
 # https://www.plex.tv/claim
@@ -12,8 +12,6 @@ services:
     image: plexinc/pms-docker:${PLEX_DOCKER_TAG:-latest}
     container_name: ${PLEX_CONTAINER_NAME:-plex}
     restart: ${PLEX_RESTART:-unless-stopped}
-    networks:
-      - traefik
     volumes:
       - ${PLEX_CONFIG_VOLUME:-./etc/plex}:/config
       - ${PLEX_MEDIA_VOLUME:-./media}:${PLEX_MEDIA_PATH:-/data}
@@ -32,14 +30,14 @@ services:
       - 32414:32414/udp
     environment:
       - TZ=${TZ}
-      - ADVERTISE_IP=https://${PLEX_CONTAINER_NAME:-plex}.${HOST_DOMAIN}
+      - ADVERTISE_IP=${PLEX_ADVERTISE_IP:-https://${PLEX_CONTAINER_NAME:-plex}.${HOST_DOMAIN}}
       - ALLOWED_NETWORKS=${PLEX_ALLOWED_NETWORKS}
       - PLEX_CLAIM=${PLEX_CLAIM}
       - PLEX_UID=${PUID:-1000}
       - PLEX_GID=${PGID:-1000}
       - VERSION=docker
-    env_file:
-      - .env
+    # env_file:
+    #   - .env
     labels:
       - joyride.host.name=${PLEX_CONTAINER_NAME:-plex}.${HOST_DOMAIN}
       - traefik.enable=true
@@ -48,9 +46,10 @@ services:
       - traefik.http.services.plex.loadbalancer.server.port=32400
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
-      # Homepage dashboard labels
-      - homepage.group=Media Group
-      - homepage.name=Plex
-      - homepage.icon=plex.svg
-      - homepage.href=https://${PLEX_CONTAINER_NAME:-plex}.${HOST_DOMAIN}
-      - homepage.description=
+
+      # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${PLEX_FLAME_NAME:-Plex} 
+      - flame.url=https://${PLEX_CONTAINER_NAME:-plex}.${HOST_DOMAIN}
+      - flame.icon=${PLEX_FLAME_ICON:-plex} # optional, default is "docker"

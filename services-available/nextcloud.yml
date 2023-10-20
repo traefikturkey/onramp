@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
 
 # https://github.com/linuxserver/docker-nextcloud
 
@@ -11,8 +11,6 @@ services:
     image: lscr.io/linuxserver/nextcloud:${NEXTCLOUD_DOCKER_TAG:-latest}
     container_name: ${NEXTCLOUD_CONTAINER_NAME:-nextcloud}
     restart: ${NEXTCLOUD_RESTART:-unless-stopped}
-    networks:
-      - traefik
     volumes:
       - ${NEXTCLOUD_CONFIG_VOLUME:-./etc/nextcloud}:/config
       - ${NEXTCLOUD_DATA_VOLUME:-./media/nextcloud/}:${NEXTCLOUD_DATA_PATH:-/data}

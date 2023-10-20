@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
     
 # https://github.com/chuckcharlie/cups-avahi-airprint
 
@@ -10,9 +10,7 @@ services:
   airprint:
     image: chuckcharlie/cups-avahi-airprint:${AIRPRINT_DOCKER_TAG:-latest}
     container_name: ${AIRPRINT_CONTAINER_NAME:-airprint} 
-    restart: unless-stopped
-    networks:
-      - traefik
+    restart: ${AIRPRINT_RESTART:-unless-stopped}
     # Host mode is needed for AirPrint © Apple TM to work 
     # This is required to support multicasting which is needed for AirPrint © Apple TM.
     # Can be disabled an replaced with the port for manual operation
@@ -38,6 +36,13 @@ services:
       - traefik.http.services.airprint.loadbalancer.server.port=631
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
+
+      # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${AIRPRINT_FLAME_NAME:-airprint} 
+      - flame.url=https://${AIRPRINT_CONTAINER_NAME:-airprint}.${HOST_DOMAIN}
+      - flame.icon=${AIRPRINT_FLAME_ICON:-docker} # optional, default is "docker"
 
     devices: 
       # your usb device forwarding to the docker image 

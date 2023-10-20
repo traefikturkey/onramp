@@ -1,4 +1,9 @@
 version: "3"
+networks:
+  default:
+    name: traefik
+  loki:
+    name: loki
 
 # https://grafana.com/docs/grafana/next/setup-grafana/installation/docker/
 # https://github.com/prometheus/prometheus
@@ -7,13 +12,11 @@ services:
   grafana:
     image: grafana/grafana:${GRAFANA_DOCKER_TAG:-latest}
     container_name: ${GRAFANA_CONTAINER_NAME:-grafana}
-    restart: unless-stopped
-    networks:
-      - traefik
-      - default
+    restart: ${GRAFANA_RESTART:-unless-stopped}
     user: ${PUID:-1000}
-    env_file:
-      - .env
+    networks:
+      - default
+      - loki
     environment:
       - GF_INSTALL_PLUGINS=camptocamp-prometheus-alertmanager-datasource
     # ports:
@@ -31,4 +34,3 @@ services:
       - traefik.http.routers.grafana.rule=Host(`${GRAFANA_CONTAINER_NAME:-grafana}.${HOST_DOMAIN}`)
       - traefik.http.routers.grafana.entrypoints=websecure
       - traefik.http.services.grafana.loadbalancer.server.port=3000
-

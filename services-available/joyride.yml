@@ -1,5 +1,5 @@
 version: '3'
-    
+
 # https://github.com/ilude/joyride
 
 # if you want to run joyride on port 53
@@ -14,7 +14,7 @@ services:
   joyride:
     image: ghcr.io/ilude/joyride:${JOYRIDE_DOCKER_TAG:-latest}
     container_name: ${JOYRIDE_CONTAINER_NAME:-joyride}
-    restart: unless-stopped
+    restart: ${JOYRIDE_RESTART:-unless-stopped}
     environment:
       - HOSTIP=${HOSTIP}
     ports:

@@ -1,18 +1,15 @@
 version: '3'
 
-networks:
-  traefik:
-    external: true
-
 # https://github.com/oznu/docker-cloudflare-ddns
 
 services:
   cloudflare-ddns:
     image: oznu/cloudflare-ddns:${CLOUDFLARE_DDNS_DOCKER_TAG:-latest} 
-    restart: unless-stopped
+    container_name: ${CLOUDFLARE_DDNS_CONTAINER_NAME:-cloudflare-ddns}
+    restart: ${CLOUDFLARE_DDNS_RESTART:-unless-stopped}
     environment:
-      - EMAIL=${CF_API_EMAIL}
-      - API_KEY=${CF_DNS_API_TOKEN}
+      - EMAIL=${ONRAMP_CF_API_EMAIL}
+      - API_KEY=${ONRAMP_CF_DNS_API_TOKEN}
       - ZONE=${HOST_DOMAIN}
       - SUBDOMAIN=${CLOUDFLARE_DDNS_HOSTNAME}
       - PROXIED=${CLOUDFLARE_DDNS_PROXIED:-false}

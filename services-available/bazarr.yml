@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
     
 # https://hub.docker.com/r/linuxserver/bazarr
 
@@ -10,9 +10,7 @@ services:
   bazarr:
     image: linuxserver/bazarr:${BAZARR_DOCKER_TAG:-latest}
     container_name: ${BAZARR_CONTAINER_NAME:-bazarr}
-    restart: unless-stopped
-    networks:
-      - traefik
+    restart: ${BAZARR_RESTART:-unless-stopped}
     volumes:
       - ./etc/bazarr:/config
       - ${BAZARR_MOVIES_VOLUME:-./media/movies}:/movies
@@ -33,3 +31,10 @@ services:
       - traefik.http.services.bazarr.loadbalancer.server.port=6767
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
+      
+      # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${BAZARR_FLAME_NAME:-bazarr} 
+      - flame.url=https://${BAZARR_CONTAINER_NAME:-bazarr}.${HOST_DOMAIN}
+      - flame.icon=${BAZARR_FLAME_ICON:-docker} # optional, default is "docker"

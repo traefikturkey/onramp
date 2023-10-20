@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
     
 # https://hub.docker.com/r/linuxserver/librespeed
 # https://github.com/linuxserver/docker-librespeed
@@ -10,10 +10,8 @@ networks:
 services:
   librespeed:
     image: lscr.io/linuxserver/librespeed:${LIBRESPEED_DOCKER_TAG:-latest}
-    container_name: librespeed
-    restart: unless-stopped
-    networks:
-      - traefik
+    container_name: ${LIBRESPEED_CONTAINER_NAME:-librespeed}
+    restart: ${LIBRESPEED_RESTART:-unless-stopped}
     volumes:
       - ./etc/librespeed:/config
       - /etc/timezone:/etc/timezone:ro

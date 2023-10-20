@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
 
 # https://github.com/go-gitea/gitea
 # https://docs.gitea.io/en-us/install-with-docker/#environments-variables
@@ -11,9 +11,7 @@ services:
   gitea:
     image: gitea/gitea:${GITEA_DOCKER_TAG:-latest}
     container_name: ${GITEA_CONTAINER_NAME:-gitea}
-    restart: unless-stopped
-    networks:
-      - traefik
+    restart: ${GITEA_RESTART:-unless-stopped}
     environment:
       - APP_NAME=${GITEA_REPOSITORY_NAME:-Gitea}
       - USER_UID=${PUID:-1000}

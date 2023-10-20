@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
     
 # https://github.com/MauriceNino/dashdot
 # https://getdashdot.com/
@@ -12,9 +12,7 @@ services:
   dashdot:
     image: mauricenino/dashdot:${DASHDOT_DOCKER_TAG:-latest}
     container_name: ${DASHDOT_CONTAINER_NAME:-dashdot} 
-    restart: unless-stopped
-    networks:
-      - traefik
+    restart: ${DASHDOT_RESTART:-unless-stopped}
     #privileged: false
     volumes:
       #- ./etc/dashdot:/config # <==== this probably needs changed 
@@ -33,3 +31,10 @@ services:
       - traefik.http.services.dashdot.loadbalancer.server.port=3001
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
+
+      # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${DASHDOT_FLAME_NAME:-dashdot} 
+      - flame.url=https://${DASHDOT_CONTAINER_NAME:-dashdot}.${HOST_DOMAIN}
+      - flame.icon=${DASHDOT_FLAME_ICON:-docker} # optional, default is "docker"

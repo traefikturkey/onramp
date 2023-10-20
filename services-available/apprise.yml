@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
     
 # https://hub.docker.com/r/linuxserver/apprise-api
 
@@ -11,10 +11,8 @@ services:
     image: lscr.io/linuxserver/apprise-api:${APPRISE_DOCKER_TAG:-latest}
     container_name: ${APPRISE_CONTAINER_NAME:-apprise} 
     restart: ${APPRISE_RESTART:-unless-stopped}
-    networks:
-      - traefik
     volumes:
-      - ./etc/apprise:/config # <==== this probably needs changed 
+      - ./etc/apprise:/config
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
@@ -30,3 +28,10 @@ services:
       - traefik.http.services.apprise.loadbalancer.server.port=8000
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
+
+      # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${APPRISE_FLAME_NAME:-apprise} 
+      - flame.url=https://${APPRISE_CONTAINER_NAME:-apprise}.${HOST_DOMAIN}
+      - flame.icon=${APPRISE_FLAME_ICON:-docker} # optional, default is "docker"

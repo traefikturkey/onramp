@@ -1,8 +1,10 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
+  loki:
+    name: loki
 
 # https://github.com/prometheus/prometheus
 
@@ -10,17 +12,17 @@ services:
   prometheus:
     image: prom/prometheus:${PROMETHEUS_DOCKER_TAG:-latest}
     container_name: ${PROMETHEUS_CONTAINER_NAME:-prometheus}
-    restart: unless-stopped
-    networks:
-      - traefik
-      - default
+    restart: ${PROMETHEUS_RESTART:-unless-stopped}
+    links:
+      - prometheus-alertmanager
+      - prometheus-blackbox
     command: 
-      - --config.file=/etc/prometheus/conf/prometheus.yml
-      - --storage.tsdb.path=/prometheus/data
-      - --log.level=${PROMETHEUS_LOG_LEVEL:-debug}
-      - --web.enable-admin-api
-      - --web.external-url=http://${PROMETHEUS_HOST_NAME:-prometheus}.${HOST_DOMAIN}/
-      - --web.route-prefix=/
+      - '--config.file=/etc/prometheus/conf/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus/data'
+      - '--log.level=debug'
+      - '--web.enable-admin-api'
+      # - '--web.external-url=http://prometheus:9090/' 
+      # - '--web.route-prefix=/' 
     # ports:
     #   - 9090:9090
     volumes:
@@ -30,15 +32,76 @@ services:
       - /etc/localtime:/etc/localtime:ro
     extra_hosts:
       - host.docker.internal:host-gateway
+    networks:
+      - default
+      - loki
     labels:
-      - joyride.host.name=${PROMETHEUS_HOST_NAME:-prometheus}.${HOST_DOMAIN}
-      - traefik.enable=true
-      - traefik.docker.network=traefik # required
-      - traefik.http.routers.prometheus.rule=Host(`${PROMETHEUS_HOST_NAME:-prometheus}.${HOST_DOMAIN}`)
-      - traefik.http.routers.prometheus.entrypoints=websecure
-      - traefik.http.services.prometheus.loadbalancer.server.port=9090
+      - joyride.host.name=${PROMETHEUS_CONTAINER_NAME:-prometheus}.${HOST_DOMAIN}
       - com.centurylinklabs.watchtower.enable=true
-      - autoheal=true
+      - traefik.enable=true
+      - traefik.docker.network=traefik
+      - traefik.http.routers.prometheus.rule=Host(`${PROMETHEUS_CONTAINER_NAME:-prometheus}.${HOST_DOMAIN}`)
+      - traefik.http.routers.prometheus.entrypoints=websecure
+      - traefik.http.services.prometheus.loadbalancer.server.scheme=http
+      - traefik.http.services.prometheus.loadbalancer.server.port=9090
+
+  proxmox-exporter:
+    image: ghcr.io/ilude/prometheus-pve-exporter
+    container_name: proxmox-exporter
+    restart: unless-stopped
+    env_file: 
+      - .env
+    # ports:
+    #   - 9221:9221
+    labels:
+      - traefik.enable=false
+
+  prometheus-blackbox:
+    image: prom/blackbox-exporter:latest
+    container_name: prometheus-blackbox
+    restart: unless-stopped
+    command: 
+      - '--config.file=/etc/prometheus/conf/blackbox.yml'
+    privileged: true
+    cap_add: 
+      - CAP_NET_RAW
+    # ports:
+    #   - 9115:9115
+    volumes:
+      - ./etc/prometheus/conf:/etc/prometheus/conf:ro
+    labels:
+      - joyride.host.name=blackbox.${HOST_DOMAIN}
+      - com.centurylinklabs.watchtower.enable=true
+      - traefik.enable=true
+      - traefik.http.routers.blackbox.rule=Host(`blackbox.${HOST_DOMAIN}`)
+      - traefik.http.routers.blackbox.entrypoints=websecure
+      - traefik.http.routers.blackbox.tls=true
+      - traefik.http.routers.blackbox.tls.certresolver=letsencrypt
+      - traefik.http.services.blackbox.loadbalancer.server.scheme=http
+      - traefik.http.services.blackbox.loadbalancer.server.port=9115
+
+  prometheus-alertmanager:
+    image: prom/alertmanager:latest
+    container_name: prometheus-alertmanager
+    restart: unless-stopped
+    command:
+      - '--config.file=/etc/alertmanager/alertmanager.yml'
+      - '--log.level=debug'
+    # ports:
+    #   - 9093:9093
+    volumes:
+      - ./etc/prometheus/conf:/etc/alertmanager:rw
+      - prometheus:/alertmanager:rw
+    labels:
+      - joyride.host.name=alertmanager.${HOST_DOMAIN}
+      - com.centurylinklabs.watchtower.enable=true
+      - traefik.enable=true
+      - traefik.http.routers.alertmanager.rule=Host(`alertmanager.${HOST_DOMAIN}`)
+      - traefik.http.routers.alertmanager.entrypoints=websecure
+      - traefik.http.routers.alertmanager.tls=true
+      - traefik.http.routers.alertmanager.tls.certresolver=letsencrypt
+      - traefik.http.services.alertmanager.loadbalancer.server.scheme=http
+      - traefik.http.services.alertmanager.loadbalancer.server.port=9093
 
 volumes:
   prometheus:

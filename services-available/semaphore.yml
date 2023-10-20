@@ -1,45 +1,31 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
     
 # https://docs.ansible-semaphore.com/
 
 services:
-  # uncomment this section and comment out the mysql section to use postgres instead of mysql
-  #semaphore-postgres:
-    #restart: unless-stopped
-    #image: postgres:14
-    #hostname: postgres
-    #volumes: 
-    #  - semaphore-postgres:/var/lib/postgresql/data
-    #environment:
-    #  POSTGRES_USER: ${SEMAPHORE_DB_USER:-semaphore}
-    #  POSTGRES_PASSWORD: ${SEMAPHORE_DB_PASS:-semaphore}
-    #  POSTGRES_DB: ${SEMAPHORE_DB:-semaphore}
-  # if you wish to use postgres, comment the mysql service section below 
-  semaphore-mysql:
+  mysql:
+    image: mysql:8.0
+    container_name: semephore-mysql
     restart: unless-stopped
+    hostname: mysql
     ports:
       - 3306:3306
-    image: mysql:8.0
-    hostname: mysql
     volumes:
       - ./etc/semaphore/data:/var/lib/mysql
     environment:
-      MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
-      MYSQL_DATABASE: ${SEMAPHORE_DB:-semaphore}
-      MYSQL_USER: ${SEMAPHORE_DB_USER:-semaphore}
-      MYSQL_PASSWORD: ${SEMAPHORE_DB_PASS:-semaphore}
+      MYSQL_RANDOM_ROOT_PASSWORD='yes'
+      MYSQL_DATABASE=${SEMAPHORE_DB_HOST:-mysql}
+      MYSQL_USER=${SEMAPHORE_DB_USER:-semaphore}
+      MYSQL_PASSWORD=${SEMAPHORE_DB_PASS:-semaphore}
 
   semaphore:
     image: semaphoreui/semaphore:${SEMAPHORE_DOCKER_TAG:-latest}
     container_name: ${SEMAPHORE_CONTAINER_NAME:-semaphore} 
     restart: ${SEMAPHORE_RESTART:-unless-stopped}
-    networks:
-      - traefik
-      - default
     depends_on:
       - mysql #change to postgres for postgres
     volumes:
@@ -52,8 +38,8 @@ services:
       - TZ=${TZ}
       - SEMAPHORE_DB_USER=${SEMAPHORE_DB_USER:-semaphore}
       - SEMAPHORE_DB_PASS=${SEMAPHORE_DB_PASS:-semaphore}
-      - SEMAPHORE_DB_HOST=${SEMAPHORE_DB_HOST:-mysql} # for postgres, change to: semaphore-postgres
-      - SEMAPHORE_DB_PORT=${SEMAPHORE_DB_PORT:-3306} # change to 5432 for postgres
+      - SEMAPHORE_DB_HOST=${SEMAPHORE_DB_HOST:-mysql}
+      - SEMAPHORE_DB_PORT=${SEMAPHORE_DB_PORT:-3306}
       - SEMAPHORE_DB_DIALECT=${SEMAPHORE_DB_DIALECT:-mysql}
       - SEMAPHORE_DB=${SEMAPHORE_DB:-semaphore}
       - SEMAPHORE_PLAYBOOK_PATH=${SEMAPHORE_PLAYBOOK_PATH:-/tmp/semaphore/}
@@ -70,6 +56,7 @@ services:
       - SEMAPHORE_LDAP_PASSWORD=${SEMAPHORE_LDAP_PASSWORD:-'ldap_bind_account_password'}
       - SEMAPHORE_LDAP_DN_SEARCH=${SEMAPHORE_LDAP_SEARCH:-'dc=local,dc=example,dc=com'}
       - SEMAPHORE_LDAP_SEARCH_FILTER=${SEMAPHORE_LDAP_SEARCH_FILTER:-"(\u0026(uid=%s)(memberOf=cn=ipausers,cn=groups,cn=accounts,dc=local,dc=example,dc=com))"}
+
     labels:
       - joyride.host.name=${SEMAPHORE_CONTAINER_NAME:-semaphore}.${HOST_DOMAIN}
       - traefik.enable=true
@@ -78,3 +65,10 @@ services:
       - traefik.http.services.semaphore.loadbalancer.server.port=3000
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
+
+      # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${SEMAPHORE_FLAME_NAME:-semaphore} 
+      - flame.url=https://${SEMAPHORE_CONTAINER_NAME:-semaphore}.${HOST_DOMAIN}
+      - flame.icon=${SEMAPHORE_FLAME_ICON:-docker} # optional, default is "docker"

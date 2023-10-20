@@ -1,18 +1,16 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
     
 # https://hub.docker.com/r/linuxserver/lidarr
 
 services:
   lidarr:
-    image: linuxserver/lidarr
-    container_name: lidarr
-    restart: unless-stopped
-    networks:
-      - traefik
+    image: linuxserver/lidarr:${LIDARR_DOCKER_TAG:-latest}
+    container_name: ${LIDARR_CONTAINER_NAME:-lidarr}
+    restart: ${LIDARR_RESTART:-unless-stopped}
     volumes:
       - ./etc/lidarr:/config
       - ${LIDARR_MUSIC_VOLUME:-./media/music}:/music
@@ -27,10 +25,10 @@ services:
       - PGID=${PGID:-1000}
       - TZ=${TZ}
     labels:
-      - joyride.host.name=lidarr.${HOST_DOMAIN}
+      - joyride.host.name=${LIDARR_CONTAINER_NAME:-lidarr}.${HOST_DOMAIN}
       - traefik.enable=true
       - traefik.http.routers.lidarr.entrypoints=websecure
-      - traefik.http.routers.lidarr.rule=Host(`lidarr.${HOST_DOMAIN}`)
+      - traefik.http.routers.lidarr.rule=Host(`${LIDARR_CONTAINER_NAME:-lidarr}.${HOST_DOMAIN}`)
       - traefik.http.services.lidarr.loadbalancer.server.port=8686
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true

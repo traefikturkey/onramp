@@ -1,0 +1,67 @@
+version: "3"
+networks:
+  default:
+    name: traefik
+  loki:
+    name: loki
+
+# https://grafana.com/docs/loki/latest/installation/docker/
+# https://github.com/gliderlabs/logspout
+# https://grafana.com/docs/loki/latest/clients/promtail/
+
+services:
+  loki:
+    image: grafana/loki:${LOKI_DOCKER_TAG:-latest}
+    container_name: ${LOKI_CONTAINER_NAME:-loki}
+    restart: ${LOKI_RESTART:-unless-stopped}
+    volumes:
+      - ./etc/loki:/etc/loki
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 3100:3100
+    command: -config.file=/etc/loki/loki-config.yml
+    networks:
+      - loki
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+      - traefik.enable=false
+
+  logspout:
+    image: gliderlabs/logspout:${LOKI_LOGSPOUT_DOCKER_TAG:-latest}
+    container_name: ${LOKI_LOGSPOUT_CONTAINER_NAME:-loki-logspout}
+    restart: ${LOKI_LOGSPOUT_RESTART:-unless-stopped}
+    command: syslog+tcp://${LOKI_PROMTAIL_CONTAINER_NAME:-loki-promtail}:1514
+    networks:
+      - loki
+    depends_on:
+      - promtail
+    environment:
+      - SYSLOG_HOSTNAME={{.ContainerName}}
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+      - traefik.enable=false
+
+  promtail:
+    image: grafana/promtail:${LOKI_PROMTAIL_DOCKER_TAG:-latest}
+    container_name: ${LOKI_PROMTAIL_CONTAINER_NAME:-loki-promtail}
+    restart: ${LOKI_PROMTAIL_RESTART:-unless-stopped}
+    volumes:
+      - /var/log:/var/log
+      - ./etc/promtail:/etc/promtail
+    # this is only needed if you are going to send syslogs
+    # from an external source
+    ports:
+      - 1514:1514/udp
+      - 1514:1514 
+      - 9080:9080
+    command: -config.file=/etc/promtail/promtail-config.yml
+    networks:
+      - loki
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+      - traefik.enable=false

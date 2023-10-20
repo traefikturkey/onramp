@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
     
 # https://github.com/authelia/authelia
 
@@ -13,8 +13,6 @@ services:
     restart: ${AUTHELIA_RESTART:-unless-stopped}
     expose:
       - 9091
-    networks:
-      - traefik
     volumes:
       - ./etc/authelia:/config
       - /etc/timezone:/etc/timezone:ro
@@ -23,7 +21,7 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
-      - AUTHELIA_LOG_LEVEL=${AUTHELIA_LOG_LEVEL:-trace}
+      - AUTHELIA_LOG_LEVEL=trace
       - AUTHELIA_DEFAULT_REDIRECTION_URL=https://${AUTHELIA_DOMAINHOST:-auth}.${HOST_DOMAIN}
       - AUTHELIA_JWT_SECRET=${AUTHELIA_JWT_SECRET}
       - AUTHELIA_SESSION_DOMAIN=${HOST_DOMAIN}
@@ -36,4 +34,4 @@ services:
       - traefik.http.middlewares.authelia.forwardauth.trustForwardHeader=true
       - traefik.http.middlewares.authelia.forwardauth.authResponseHeaders=Remote-User,Remote-Groups,Remote-Name,Remote-Email
       - com.centurylinklabs.watchtower.enable=true
-      - autoheal=true
+      - autoheal=true 

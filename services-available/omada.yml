@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
     
 # https://hub.docker.com/r/mbentley/omada-controller
 
@@ -13,13 +13,11 @@ services:
   omada:
     image: mbentley/omada-controller:${OMADA_DOCKER_TAG:-latest}
     container_name: ${OMADA_CONTAINER_NAME:-omada} 
-    restart: unless-stopped
-    networks:
-      - traefik
+    restart: ${OMADA_RESTART:-unless-stopped}
     volumes:
       - ${OMADA_CONFIG_DIR:-./etc/omada}/data:/opt/tplink/EAPController/data
-      - ${OMADA_CONFIG_DIR:-./etc/omada}/work:/opt/tplink/EAPController/work
-      - ${OMADA_CONFIG_DIR:-./etc/omada}/logs:/opt/tplink/EAPController/logs
+      - ${OMADA_WORK_DIR:-./etc/omada}/work:/opt/tplink/EAPController/work
+      - ${OMADA_LOGS_DIR:-./etc/omada}/logs:/opt/tplink/EAPController/logs
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
@@ -56,3 +54,10 @@ services:
       - traefik.http.services.omada.loadbalancer.server.port=443
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
+
+      # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${OMADA_FLAME_NAME:-omada} 
+      - flame.url=https://${OMADA_CONTAINER_NAME:-omada}.${HOST_DOMAIN}
+      - flame.icon=${OMADA_FLAME_ICON:-server-network} # optional, default is "docker"

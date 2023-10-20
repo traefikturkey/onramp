@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
     
 # https://docs.gitlab.com/ee/install/docker.html
 
@@ -10,9 +10,7 @@ services:
   gitlab:
     image: gitlab/gitlab-ce:${GITLAB_DOCKER_TAG:-latest}
     container_name: ${GITLAB_CONTAINER_NAME:-gitlab} 
-    restart: unless-stopped
-    networks:
-      - traefik
+    restart: ${GITLAB_RESTART:-unless-stopped}
     volumes:
       - ./etc/gitlab/config:/etc/config
       - ./etc/gitlab/data:/var/opt/gitlab
@@ -41,6 +39,12 @@ services:
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
 
+      # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${GITLAB_FLAME_NAME:-gitlab} 
+      - flame.url=https://${GITLAB_CONTAINER_NAME:-gitlab}.${HOST_DOMAIN}
+      - flame.icon=${GITLAB_FLAME_ICON:-docker} # optional, default is "docker"
 
   # gitlab-runner:
   #   image: gitlab/gitlab-runner:alpine

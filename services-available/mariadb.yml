@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
     
 # https://hub.docker.com/_/mariadb
 
@@ -10,7 +10,7 @@ services:
   mariadb:
     image: mariadb:${MARIADB_DOCKER_TAG:-latest}
     container_name: ${MARIADB_CONTAINER_NAME:-mariadb}
-    restart: unless-stopped
+    restart: ${MARIADB_RESTART:-unless-stopped}
     volumes:
       - ${MARIADB_DB_VOLUME:-./media/databases/mariadb}:/var/lib/mysql
       - /etc/timezone:/etc/timezone:ro

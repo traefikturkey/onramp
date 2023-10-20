@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
     
 # https://hub.docker.com/r/felddy/foundryvtt
 
@@ -11,8 +11,6 @@ services:
     image: felddy/foundryvtt:${FOUNDRYVTT_DOCKER_TAG:-latest}
     container_name: ${FOUNDRYVTT_CONTAINER_NAME:-foundryvtt} 
     restart: ${FOUNDRYVTT_RESTART:-unless-stopped}
-    networks:
-      - traefik
     volumes:
       - ./etc/foundryvtt:/data
       # - /etc/timezone:/etc/timezone:ro
@@ -30,6 +28,14 @@ services:
       - traefik.enable=true
       - traefik.http.routers.foundryvtt.entrypoints=websecure
       - traefik.http.routers.foundryvtt.rule=Host(`${FOUNDRYVTT_CONTAINER_NAME:-foundryvtt}.${HOST_DOMAIN}`)
+      #- traefik.http.services.foundryvtt.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.foundryvtt.loadbalancer.server.port=30000
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
+
+      # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${FOUNDRYVTT_FLAME_NAME:-foundryvtt} 
+      - flame.url=https://${FOUNDRYVTT_CONTAINER_NAME:-foundryvtt}.${HOST_DOMAIN}
+      - flame.icon=${FOUNDRYVTT_FLAME_ICON:-docker} # optional, default is "docker"

@@ -1,8 +1,8 @@
 version: '3'
 
 networks:
-  traefik:
-    external: true
+  default:
+    name: traefik
     
 # https://github.com/minio/minio
 
@@ -20,8 +20,6 @@ services:
     image: minio/minio:${MINIO_DOCKER_TAG:-latest}
     container_name: ${MINIO_CONTAINER_NAME:-minio} 
     restart: ${MINIO_RESTART:-unless-stopped}
-    networks:
-      - traefik
     volumes:
       - ./etc/minio:/data # <==== this probably needs changed 
       # - /etc/timezone:/etc/timezone:ro
@@ -38,6 +36,14 @@ services:
       - traefik.enable=true
       - traefik.http.routers.minio.entrypoints=websecure
       - traefik.http.routers.minio.rule=Host(`${MINIO_CONTAINER_NAME:-minio}.${HOST_DOMAIN}`)
+      #- traefik.http.services.minio.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.minio.loadbalancer.server.port=9001
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
+
+      # Flame dashboard labels
+      
+      - flame.type=application # "app" works too
+      - flame.name=${NFS_MINIO_FLAME_NAME:-minio} 
+      - flame.url=https://${NFS_MINIO_CONTAINER_NAME:-minio}.${HOST_DOMAIN}
+      - flame.icon=${NFS_MINIO_FLAME_ICON:-docker} # optional, default is "docker"
