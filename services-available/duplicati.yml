@@ -3,10 +3,6 @@ version: '3'
 networks:
   traefik:
     external: true
-
-networks:
-  traefik:
-    external: true
     
 # https://www.duplicati.com/
 
