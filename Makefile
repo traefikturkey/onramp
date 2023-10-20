@@ -1,6 +1,7 @@
 # include .env variable in the current environment
-ifneq (,$(wildcard ./.env))
-    include .env
+ENVIRONMENT_FILES := $(wildcard ./environments-enabled/*.env)
+ifneq (,$(wildcard ./environments-enabled/*.env))
+    include ${ENVIRONMENT_FILES}
     export
 endif
 
@@ -23,18 +24,13 @@ export HOSTIP := $(shell ip route get 1.1.1.1 | grep -oP 'src \K\S+')
 export PUID 	:= $(shell id -u)
 export PGID 	:= $(shell id -g)
 export HOST_NAME := $(or $(HOST_NAME), $(shell hostname))
-export CF_RESOLVER_WAITTIME := $(strip $(or $(CF_RESOLVER_WAITTIME), 60))
+export CF_RESOLVER_WAITTIME := $(strip $(or $(CF_RESOLVER_WAITTIME), 30))
 
 # check if we should use docker-compose or docker compose
 ifeq (, $(shell which docker-compose))
 	DOCKER_COMPOSE := docker compose
 else
 	DOCKER_COMPOSE := docker-compose
-endif
-
-ifneq (,$(wildcard ./services-enabled/cloudflare-tunnel.yml))
-	BUILD_DEPENDENCIES += cloudflare-tunnel
-	include make.d/cloudflare.mk
 endif
 
 # setup PLEX_ALLOWED_NETWORKS defaults if they are not already in the .env file
@@ -84,8 +80,6 @@ bash-run:
 bash-exec:
 	$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) exec $(SERVICE_PASSED_DNCASED) sh
 
-include make.d/install.mk
-
 #########################################################
 #
 # service commands
@@ -115,7 +109,7 @@ else
 endif
 	
 .PHONY: enable-service build 
-enable-service: etc/$(SERVICE_PASSED_DNCASED) services-enabled/$(SERVICE_PASSED_DNCASED).yml
+enable-service: etc/$(SERVICE_PASSED_DNCASED) services-enabled/$(SERVICE_PASSED_DNCASED).yml environments-enabled/$(SERVICE_PASSED_DNCASED).env
 
 etc/$(SERVICE_PASSED_DNCASED):
 	@mkdir -p ./etc/$(SERVICE_PASSED_DNCASED)
@@ -129,20 +123,31 @@ else
 	@echo "No such service file ./services-available/$(SERVICE_PASSED_DNCASED).yml!"
 endif
 
+environments-enabled/$(SERVICE_PASSED_DNCASED).env:
+ifeq (,$(wildcard ./environments-available/$(SERVICE_PASSED_DNCASED).template))
+	@envsubst '$${SERVICE_PASSED_DNCASED},$${SERVICE_PASSED_UPCASED}' < ./.templates/environment.template > environments-available/$(SERVICE_PASSED_DNCASED).template
+endif
+	@python3 scripts/env-subst.py environments-available/$(SERVICE_PASSED_DNCASED).template $(SERVICE_PASSED_UPCASED)
+
 remove-game: disable-service
 disable-game: disable-service
 remove-service: disable-service
 disable-service: stop-service
+	rm ./environments-enabled/$(SERVICE_PASSED_DNCASED).env
 	rm ./services-enabled/$(SERVICE_PASSED_DNCASED).yml
 	rm ./overrides-enabled/$(SERVICE_PASSED_DNCASED)-*.yml 2> /dev/null || true
 
 create-service:
 	envsubst '$${SERVICE_PASSED_DNCASED},$${SERVICE_PASSED_UPCASED}' < ./.templates/service.template > ./services-available/$(SERVICE_PASSED_DNCASED).yml
+	envsubst '$${SERVICE_PASSED_DNCASED},$${SERVICE_PASSED_UPCASED}' < ./.templates/environment.template > environments-available/$(SERVICE_PASSED_DNCASED).template
 	$(EDITOR) ./services-available/$(SERVICE_PASSED_DNCASED).yml
+	$(EDITOR) environments-available/$(SERVICE_PASSED_DNCASED).template
 
 create-game:
 	envsubst '$${SERVICE_PASSED_DNCASED},$${SERVICE_PASSED_UPCASED}' < ./.templates/service.template > ./services-available/games/$(SERVICE_PASSED_DNCASED).yml
+	envsubst '$${SERVICE_PASSED_DNCASED},$${SERVICE_PASSED_UPCASED}' < ./.templates/environment.template > environments-available/$(SERVICE_PASSED_DNCASED).template
 	$(EDITOR) ./services-available/games/$(SERVICE_PASSED_DNCASED).yml
+	$(EDITOR) environments-available/$(SERVICE_PASSED_DNCASED).template
 
 start-dev: COMPOSE_IGNORE_ORPHANS = true 
 start-dev: build services-dev
@@ -189,7 +194,7 @@ start-staging: build
 	@echo "and check that you have a staging cert from LetsEncrypt!"
 	@echo ""
 	@echo "if you don't get a LetsEncrypt staging cert run the following command and look for error messages:"
-	@echo "docker compose logs | grep acme"
+	@echo "$(DOCKER_COMPOSE) logs | grep acme"
 	@echo ""
 	@echo "otherwise run the following command if you successfully got a staging certificate:"
 	@echo "make down-staging"
@@ -234,6 +239,21 @@ list-count: print-enabled count-enabled
 #
 #########################################################
 
+
+ifneq (,$(wildcard ./environments-enabled/onramp-external.env))
+	BUILD_DEPENDENCIES += environments-enabled/onramp-external.env
+endif
+
+environments-enabled/onramp-external.env:
+	cp environments-available/onramp-external.template environments-enabled/onramp-external.env
+
+ifneq (,$(wildcard ./environments-enabled/onramp-nfs.env))
+	BUILD_DEPENDENCIES += environments-enabled/onramp-nfs.env
+endif
+
+environments-enabled/onramp-nfs.env:
+	cp environments-available/onramp-nfs.template environments-enabled/onramp-nfs.env
+
 ifneq (,$(wildcard ./services-enabled/authelia.yml))
 	BUILD_DEPENDENCIES += etc/authelia/configuration.yml
 endif
@@ -271,6 +291,7 @@ etc/prometheus/conf:
 	mkdir -p etc/prometheus/conf
 	cp --no-clobber --recursive	etc/prometheus/conf-originals/* etc/prometheus/conf
 
+
 #########################################################
 #
 # override commands
@@ -287,7 +308,7 @@ disable-override:
 
 #########################################################
 #
-# external commands
+# external service commands
 #
 #########################################################
 
@@ -307,20 +328,8 @@ create-external:
 #
 #########################################################
 
-edit-env:
-	$(EDITOR) .env
-
 generate-matrix-config:
-	docker run -it --rm  -v ./etc/synapse:/data  -e SYNAPSE_SERVER_NAME=synapse.traefikturkey.icu -e SYNAPSE_REPORT_STATS=yes matrixdotorg/synapse:latest generate	
+	docker run -it --rm  -v ./etc/synapse:/data  -e SYNAPSE_SERVER_NAME=${SYNAPSE_SERVER_NAME} -e SYNAPSE_REPORT_STATS=${SYNAPSE_REPORT_STATS} matrixdotorg/synapse:latest generate	
 
-include make.d/backup.mk
-
-include make.d/cleanup.mk
-
-include make.d/database.mk
-
-include make.d/prestashop.mk
-
-include make.d/testing.mk
-
-include make.d/checks.mk
+# include additional make commands
+include make.d/*.mk
