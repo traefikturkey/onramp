@@ -1,8 +1,6 @@
 version: '3'
 
-networks:
-  traefik:
-    external: true# https://github.com/ilude/joyride
+# https://github.com/ilude/joyride
 # use this if combined with pihole
 
 services:

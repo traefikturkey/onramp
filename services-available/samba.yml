@@ -1,11 +1,5 @@
 version: '3'
 
-networks:
-  traefik:
-    external: truenetworks:
-  default:
-    name: samba
-
 # https://github.com/dperson/samba
 
 services:
