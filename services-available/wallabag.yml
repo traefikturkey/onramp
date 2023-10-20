@@ -1,6 +1,10 @@
 version: '3'
 
 networks:
+  traefik:
+    external: true
+
+networks:
   database:
 
 # https://github.com/wallabag/wallabag

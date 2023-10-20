@@ -1,4 +1,8 @@
 version: '3'
+
+networks:
+  traefik:
+    external: true
     
 # https://rustdesk.com/docs/en/self-host/install/
 

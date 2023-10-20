@@ -1,5 +1,9 @@
 version: '3'
 
+networks:
+  traefik:
+    external: true
+
 # https://github.com/go-gitea/gitea
 # https://docs.gitea.io/en-us/install-with-docker/#environments-variables
 

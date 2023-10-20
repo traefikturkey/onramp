@@ -1,4 +1,8 @@
-version: '3'# https://hub.docker.com/_/eclipse-mosquitto
+version: '3'
+
+networks:
+  traefik:
+    external: true# https://hub.docker.com/_/eclipse-mosquitto
 
 services:
   mosquitto-mqtt:

@@ -1,4 +1,8 @@
-version: '3'# https://github.com/containrrr/watchtower
+version: '3'
+
+networks:
+  traefik:
+    external: true# https://github.com/containrrr/watchtower
 # https://containrrr.dev/watchtower/notifications/
 
 services:
