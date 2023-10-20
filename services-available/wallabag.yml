@@ -3,8 +3,6 @@ version: '3'
 networks:
   traefik:
     external: true
-
-networks:
   database:
 
 # https://github.com/wallabag/wallabag
@@ -28,8 +26,6 @@ services:
       - SYMFONY__ENV__DOMAIN_NAME=https://${WALLABAG_CONTAINER_NAME:-wallabag}.${HOST_DOMAIN}
       - SYMFONY__ENV__SERVER_NAME=${WALLABAG_SERVER_NAME:-'Your Wallabag'}
     restart: unless-stopped
-    networks:
-      - traefik
     volumes:
       - ./etc/wallabag/images:/var/www/wallabag/web/assets/images
     labels:
