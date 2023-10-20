@@ -1,6 +1,7 @@
 version: '3'
+
 volumes:
-  duplicati-backup-nfs:
+  duplicati-nfs-backup:
     labels:
       - remove_volume_on=down
     driver_opts:
@@ -11,8 +12,8 @@ volumes:
 services:
   duplicati:
     volumes:
-      - ./etc/duplicati:/config 
+      - ${DUPLICATI_CONFIG_VOLUME:-./etc/duplicati}:${DUPLICATI_CONFIG_PATH:-/config} 
+      - ${DUPLICATI_BACKUP_VOLUME:-duplicati-nfs-backup}:${DUPLICATI_BACKUP_PATH:-/backups}
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-      - duplicati-backup-nfs:/backups
-      - ./:/source
+      - ./:/mnt/onramp

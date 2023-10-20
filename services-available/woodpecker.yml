@@ -1,4 +1,8 @@
 version: '3'
+
+networks:
+  traefik:
+    external: true
     
 # https://woodpecker-ci.org/
 # https://woodpecker-ci.org/docs/intro

@@ -1,5 +1,9 @@
 version: '3'
 
+networks:
+  traefik:
+    external: true
+
 # https://goauthentik.io/docs/installation/docker-compose
 # https://github.com/goauthentik/authentik
 # https://goauthentik.io/docs/

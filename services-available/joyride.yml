@@ -1,4 +1,8 @@
-version: '3'# https://github.com/ilude/joyride
+version: '3'
+
+networks:
+  traefik:
+    external: true# https://github.com/ilude/joyride
 
 # if you want to run joyride on port 53
 # run the following commands on ubuntu

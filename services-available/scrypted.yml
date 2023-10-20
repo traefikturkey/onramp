@@ -1,5 +1,9 @@
 version: '3'
 
+networks:
+  traefik:
+    external: true
+
 # https://github.com/koush/scrypted    
 # https://docs.technotim.live/posts/scrypted-home-hub/
 

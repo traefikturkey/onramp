@@ -1,4 +1,8 @@
-version: '3'networks:
+version: '3'
+
+networks:
+  traefik:
+    external: truenetworks:
   default:
     name: samba
 

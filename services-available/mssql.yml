@@ -1,5 +1,9 @@
 version: '3'
 
+networks:
+  traefik:
+    external: true
+
 # https://hub.docker.com/_/microsoft-mssql-server    
 # https://docs.microsoft.com/en-us/sql/linux/sql-server-linux-overview?view=sql-server-ver16
 
