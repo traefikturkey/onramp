@@ -38,9 +38,6 @@ services:
       # SMTP_FROM_EMAIL=
       # SMTP_USER=
       # SMTP_PASSWORD=      
-    restart: always
-    networks:
-      - traefik
     labels:
       - joyride.host.name=${MEALIE_CONTAINER_NAME:-mealie}.${HOST_DOMAIN}
       - traefik.enable=true
