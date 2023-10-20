@@ -1,5 +1,7 @@
 version: '3'    
-# <================= add links to documentation here =================>
+
+# https://hub.docker.com/r/healthchecks/healthchecks
+# https://github.com/healthchecks/healthchecks
 
 services:
   healthchecks:
@@ -14,7 +16,7 @@ services:
       - APPRISE_ENABLED=False
       - DB=postgres
       - DB_CONN_MAX_AGE=0
-      - DB_HOST=hc-postgres
+      - DB_HOST=${HEALTHCHECKS_DB_HOST:-hc-postgres}
       - DB_NAME=${HEALTHCHECKS_DB_NAME:-healthchecks}
       - DB_PASSWORD=${HEALTHCHECKS_DB_PASS:-changeme}
       - DB_PORT=5432
