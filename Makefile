@@ -291,6 +291,13 @@ etc/prometheus/conf:
 	mkdir -p etc/prometheus/conf
 	cp --no-clobber --recursive	etc/prometheus/conf-originals/* etc/prometheus/conf
 
+ifneq (,$(wildcard ./services-enabled/mailrise.yml))
+	BUILD_DEPENDENCIES += etc/mailrise/mailrise.conf
+endif
+
+# Still need to look into creating a template for the mailrise.conf
+etc/mailrise/mailrise.conf:
+	touch etc/mailrise/mailrise.conf
 
 #########################################################
 #
