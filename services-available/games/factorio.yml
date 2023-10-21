@@ -1,4 +1,11 @@
 version: '3'
+<<<<<<< HEAD
+=======
+
+networks:
+  default:
+    name: ${FACTORIO_NETWORK:-games}
+>>>>>>> origin/master
 
 # https://hub.docker.com/r/goofball222/factorio
 
