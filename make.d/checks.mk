@@ -5,13 +5,7 @@ endif
 YAML_CHECK_COMMAND := yamllint -d "{extends: default, rules: {quoted-strings: disable, line-length: disable, document-start: disable, comments: disable, comments-indentation: disable}}" *.yml
 .ONESHELL: check-yaml
 check-yaml: install-dependencies
-	$(YAML_CHECK_COMMAND)
-	cd ./overrides-available
-	$(YAML_CHECK_COMMAND)
-	cd ../services-available
-	$(YAML_CHECK_COMMAND)
-	cd ../services-available/games
-	$(YAML_CHECK_COMMAND)
+	yamllint -c .yamllint .
 
 check-cf:
 	@if [ "$(CF_API_EMAIL)" != "" ]; then echo "CF_API_EMAIL : PASSED"; else echo "FAILED : Please set your CF_API_EMAIL in the .env file"; fi
