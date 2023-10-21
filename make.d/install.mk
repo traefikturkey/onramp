@@ -14,13 +14,17 @@ install: build install-docker
 
 required-dependencies = git nano jq yq yamllint
 
-install-dependencies:
-	git config --local include.path $(shell pwd)/.gitconfig
+install-dependencies: .gitconfig
+	
 ifneq (0,$(shell which $(required-dependencies) | echo $$?))
 	sudo apt-add-repository ppa:rmescandon/yq -y
 	sudo apt update
 	DEBIAN_FRONTEND=noninteractive sudo apt install $(required-dependencies) -y
 endif
+
+.gitconfig:
+	git config -f .gitconfig core.hooksPath .githooks
+	git config --local include.path $(shell pwd)/.gitconfig
 
 install-ansible:
 	sudo apt-add-repository ppa:ansible/ansible -y
