@@ -3,13 +3,13 @@ version: '3'
 networks:
   traefik:
     external: true
-    
+
 # https://github.com/stautonico/pingvin-share
 
 services:
   pingvin-share:
     image: stonith404/pingvin-share:${PINGVIN_SHARE_DOCKER_TAG:-latest}
-    container_name: ${PINGVIN_SHARE_CONTAINER_NAME:-pingvin-share} 
+    container_name: ${PINGVIN_SHARE_CONTAINER_NAME:-pingvin-share}
     restart: ${PINGVIN_SHARE_RESTART:-unless-stopped}
     networks:
       - traefik

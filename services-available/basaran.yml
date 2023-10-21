@@ -3,7 +3,7 @@ version: '3'
 networks:
   traefik:
     external: true
-    
+
 # https://github.com/hyperonym/basaran
 # https://huggingface.co/bigscience/bloomz-560m
 
@@ -12,7 +12,7 @@ networks:
 services:
   basaran:
     image: ghcr.io/hyperonym/basaran:${BASARAN_DOCKER_TAG:-0.13.3}
-    container_name: ${BASARAN_CONTAINER_NAME:-basaran} 
+    container_name: ${BASARAN_CONTAINER_NAME:-basaran}
     restart: ${BASARAN_RESTART:-unless-stopped}
     networks:
       - traefik

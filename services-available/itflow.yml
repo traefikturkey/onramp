@@ -3,7 +3,7 @@ version: '3'
 networks:
   traefik:
     external: true
-    
+
 # https://itflow.org/
 
 services:
@@ -24,12 +24,12 @@ services:
 
   itflow:
     image: lued/itflow:${ITFLOW_DOCKER_TAG:-latest}
-    container_name: ${ITFLOW_CONTAINER_NAME:-itflow} 
-    hostname: ${ITFLOW_HOSTNAME:-itflow} 
+    container_name: ${ITFLOW_CONTAINER_NAME:-itflow}
+    hostname: ${ITFLOW_HOSTNAME:-itflow}
     restart: ${ITFLOW_RESTART:-unless-stopped}
     networks:
       - traefik
-    depends_on: 
+    depends_on:
       - itflow-db
     volumes:
       - ./etc/itflow/www:/var/www/html

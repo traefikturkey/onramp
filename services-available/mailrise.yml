@@ -3,13 +3,13 @@ version: '3'
 networks:
   traefik:
     external: true
-    
+
 # https://github.com/YoRyan/mailrise
 
 services:
   mailrise:
     image: yoryan/mailrise:${MAILRISE_DOCKER_TAG:-latest}
-    container_name: ${MAILRISE_CONTAINER_NAME:-mailrise} 
+    container_name: ${MAILRISE_CONTAINER_NAME:-mailrise}
     restart: ${MAILRISE_RESTART:-unless-stopped}
     networks:
       - traefik

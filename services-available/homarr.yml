@@ -3,13 +3,13 @@ version: '3'
 networks:
   traefik:
     external: true
-    
+
 # https://github.com/ajnart/homarr
 
 services:
   homarr:
     image: ghcr.io/ajnart/homarr:${HOMARR_DOCKER_TAG:-dev}
-    container_name: ${HOMARR_CONTAINER_NAME:-homarr} 
+    container_name: ${HOMARR_CONTAINER_NAME:-homarr}
     restart: unless-stopped
     networks:
       - traefik

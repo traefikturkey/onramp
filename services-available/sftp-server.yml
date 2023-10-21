@@ -3,13 +3,13 @@ version: '3'
 networks:
   traefik:
     external: true
-    
+
 # https://github.com/drakkan/sftpgo
 
 services:
   sftp-server:
     image: drakkan/sftpgo:${SFTP_SERVER_DOCKER_TAG:-latest}
-    container_name: ${SFTP_SERVER_CONTAINER_NAME:-sftp-server} 
+    container_name: ${SFTP_SERVER_CONTAINER_NAME:-sftp-server}
     restart: ${SFTP_SERVER_RESTART:-unless-stopped}
     networks:
       - traefik

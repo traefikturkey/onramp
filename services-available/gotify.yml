@@ -3,13 +3,13 @@ version: '3'
 networks:
   traefik:
     external: true
-    
+
 # https://github.com/gotify/server
 
 services:
   gotify:
     image: ghcr.io/gotify/server:${GOTIFY_DOCKER_TAG:-latest}
-    container_name: ${GOTIFY_CONTAINER_NAME:-gotify} 
+    container_name: ${GOTIFY_CONTAINER_NAME:-gotify}
     restart: unless-stopped
     networks:
       - traefik

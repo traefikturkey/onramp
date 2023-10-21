@@ -51,5 +51,3 @@ services:
     labels:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=false
-
-  

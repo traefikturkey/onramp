@@ -3,7 +3,7 @@ version: '3'
 networks:
   traefik:
     external: true
-    
+
 # https://github.com/authelia/authelia
 
 services:
@@ -25,7 +25,7 @@ services:
       - AUTHELIA_DEFAULT_REDIRECTION_URL=${AUTHELIA_REDIR_DOMAIN}
       - AUTHELIA_JWT_SECRET=${AUTHELIA_JWT_SECRET}
       - AUTHELIA_SESSION_DOMAIN=${HOST_DOMAIN}
-    env_file: 
+    env_file:
       - .env
     labels:
       - joyride.host.name=${AUTHELIA_AUTH_DOMAIN}
@@ -36,6 +36,6 @@ services:
       - traefik.http.middlewares.authelia.forwardauth.trustForwardHeader=true
       - traefik.http.middlewares.authelia.forwardauth.authResponseHeaders=Remote-User,Remote-Groups,Remote-Name,Remote-Email
       - com.centurylinklabs.watchtower.enable=true
-      - autoheal=true 
+      - autoheal=true
     expose:
       - 9091

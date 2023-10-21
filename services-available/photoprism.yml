@@ -3,14 +3,14 @@ version: '3'
 networks:
   traefik:
     external: true
-    
+
 # https://github.com/photoprism/photoprism
 # https://hub.docker.com/r/photoprism/photoprism
 
 services:
   photoprism:
     image: photoprism/photoprism:${PHOTOPRISM_DOCKER_TAG:-latest}
-    container_name: ${PHOTOPRISM_CONTAINER_NAME:-photoprism} 
+    container_name: ${PHOTOPRISM_CONTAINER_NAME:-photoprism}
     restart: unless-stopped
     networks:
       - traefik
@@ -39,5 +39,3 @@ services:
       - traefik.http.services.photoprism.loadbalancer.server.port=2342
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
-
-      

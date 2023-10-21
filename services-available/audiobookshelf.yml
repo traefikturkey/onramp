@@ -3,13 +3,13 @@ version: '3'
 networks:
   traefik:
     external: true
-    
+
 # https://hub.docker.com/r/advplyr/audiobookshelf
 
 services:
   audiobookshelf:
     image: ghcr.io/advplyr/audiobookshelf:${AUDIOBOOKSHELF_DOCKER_TAG:-latest}
-    container_name: ${AUDIOBOOKSHELF_CONTAINER_NAME:-audiobookshelf} 
+    container_name: ${AUDIOBOOKSHELF_CONTAINER_NAME:-audiobookshelf}
     restart: ${AUDIOBOOKSHELF_RESTART:-unless-stopped}
     networks:
       - traefik
@@ -32,10 +32,3 @@ services:
       - traefik.http.services.audiobookshelf.loadbalancer.server.port=80
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
-
-      # Flame dashboard labels
-      
-      - flame.type=application # "app" works too
-      - flame.name=${AUDIOBOOKSHELF_FLAME_NAME:-audiobookshelf} 
-      - flame.url=https://${AUDIOBOOKSHELF_CONTAINER_NAME:-audiobookshelf}.${HOST_DOMAIN}
-      - flame.icon=${AUDIOBOOKSHELF_FLAME_ICON:-docker} # optional, default is "docker"

@@ -3,13 +3,13 @@ version: '3'
 networks:
   traefik:
     external: true
-    
+
 # https://hub.docker.com/r/linuxserver/overseerr
 
 services:
   overseerr:
     image: linuxserver/overseerr:${OVERSEERR_DOCKER_TAG:-latest}
-    container_name: ${OVERSEERR_CONTAINER_NAME:-overseerr} 
+    container_name: ${OVERSEERR_CONTAINER_NAME:-overseerr}
     restart: unless-stopped
     networks:
       - traefik

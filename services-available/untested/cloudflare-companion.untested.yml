@@ -1,11 +1,11 @@
 version: '3'
-    
+
 # https://github.com/tiredofit/docker-traefik-cloudflare-companion
 
 services:
   cloudflare-companion:
     image: tiredofit/traefik-cloudflare-companion:${CLOUDFLARE_COMPANION_DOCKER_TAG:-latest}
-    container_name: ${CLOUDFLARE_COMPANION_CONTAINER_NAME:-cloudflare-companion} 
+    container_name: ${CLOUDFLARE_COMPANION_CONTAINER_NAME:-cloudflare-companion}
     restart: unless-stopped
     volumes:
       - /etc/timezone:/etc/timezone:ro

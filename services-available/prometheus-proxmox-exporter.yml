@@ -1,14 +1,14 @@
 version: '3'
 
 # https://github.com/ilude/prometheus-pve-exporter
-# https://github.com/prometheus-pve/prometheus-pve-exporter 
+# https://github.com/prometheus-pve/prometheus-pve-exporter
 
-services:  
+services:
   proxmox-exporter:
     image: ghcr.io/ilude/prometheus-pve-exporter:${PROXMOX_EXPORTER_DOCKER_TAG:-latest}
     container_name: prometheus-proxmox-exporter
     restart: unless-stopped
-    env_file: 
+    env_file:
       - .env
     # ports:
     #   - 9221:9221

@@ -6,7 +6,7 @@ networks:
 
 volumes:
   redis:
-    
+
 # https://github.com/buzz/newsdash
 
 services:

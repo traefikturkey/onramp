@@ -4,19 +4,19 @@ networks:
   traefik:
     external: true
 
-# https://github.com/koush/scrypted    
+# https://github.com/koush/scrypted
 # https://docs.technotim.live/posts/scrypted-home-hub/
 
 services:
   scrypted:
     image: koush/scrypted:${SCRYPTED_DOCKER_TAG:-latest}
-    container_name: ${SCRYPTED_CONTAINER_NAME:-scrypted} 
+    container_name: ${SCRYPTED_CONTAINER_NAME:-scrypted}
     restart: ${SCRYPTED_RESTART:-unless-stopped}
     networks:
       - traefik
     network_mode: host
     volumes:
-      - ./etc/scrypted:/server/volume # <==== this probably needs changed 
+      - ./etc/scrypted:/server/volume # <==== this probably needs changed
       - ./media/videos/scrypted:/media/external
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
@@ -29,8 +29,8 @@ services:
     logging:
       driver: "json-file"
       options:
-          max-size: "10m"
-          max-file: "10"
+        max-size: "10m"
+        max-file: "10"
     labels:
       - joyride.host.name=${SCRYPTED_CONTAINER_NAME:-scrypted}.${HOST_DOMAIN}
       - traefik.enable=true

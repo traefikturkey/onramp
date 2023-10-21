@@ -1,18 +1,18 @@
 version: '3'
-    
+
 # https://github.com/cocktailpeanut/dalai
 # This file does requiere it's own setup and image as there is no image out there, it has to be build localy
 # https://www.youtube.com/watch?v=PyZPyqQqkLE here for reference
 
-# This service does have a remote code execution vulnerability, so use it with caution  
+# This service does have a remote code execution vulnerability, so use it with caution
 
 services:
   dalai:
     image: dalai-dalai:${DALAI_DOCKER_TAG:-latest}
-    container_name: ${DALAI_CONTAINER_NAME:-dalai} 
+    container_name: ${DALAI_CONTAINER_NAME:-dalai}
     restart: ${DALAI_RESTART:-unless-stopped}
     volumes:
-      - ./etc/dalai:/root/dalai/ # <==== this probably needs changed 
+      - ./etc/dalai:/root/dalai/ # <==== this probably needs changed
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
@@ -28,10 +28,3 @@ services:
       - traefik.http.services.dalai.loadbalancer.server.port=3000
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
-
-      # Flame dashboard labels
-      
-      - flame.type=application # "app" works too
-      - flame.name=${DALAI_FLAME_NAME:-dalai} 
-      - flame.url=https://${DALAI_CONTAINER_NAME:-dalai}.${HOST_DOMAIN}
-      - flame.icon=${DALAI_FLAME_ICON:-docker} # optional, default is "docker"

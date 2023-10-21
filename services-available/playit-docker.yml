@@ -3,17 +3,17 @@ version: '3'
 networks:
   traefik:
     external: true
-    
+
 # https://github.com/mafen/playit-docker
 # https://github.com/playit-cloud/playit-agent
 
 services:
   playit-docker:
     image: ghcr.io/mafen/playit-docker:${PLAYIT_DOCKER_DOCKER_TAG:-latest}
-    container_name: ${PLAYIT_DOCKER_CONTAINER_NAME:-playit-docker} 
+    container_name: ${PLAYIT_DOCKER_CONTAINER_NAME:-playit-docker}
     restart: ${PLAYIT_DOCKER_RESTART:-unless-stopped}
     volumes:
-      #- ./etc/playit-docker:/config # <==== this probably needs changed 
+      #- ./etc/playit-docker:/config # <==== this probably needs changed
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:

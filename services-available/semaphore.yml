@@ -3,22 +3,22 @@ version: '3'
 networks:
   traefik:
     external: true
-    
+
 # https://docs.ansible-semaphore.com/
 
 services:
   # uncomment this section and comment out the mysql section to use postgres instead of mysql
   #semaphore-postgres:
-    #restart: unless-stopped
-    #image: postgres:14
-    #hostname: postgres
-    #volumes: 
-    #  - semaphore-postgres:/var/lib/postgresql/data
-    #environment:
-    #  POSTGRES_USER: ${SEMAPHORE_DB_USER:-semaphore}
-    #  POSTGRES_PASSWORD: ${SEMAPHORE_DB_PASS:-semaphore}
-    #  POSTGRES_DB: ${SEMAPHORE_DB:-semaphore}
-  # if you wish to use postgres, comment the mysql service section below 
+  #restart: unless-stopped
+  #image: postgres:14
+  #hostname: postgres
+  #volumes:
+  #  - semaphore-postgres:/var/lib/postgresql/data
+  #environment:
+  #  POSTGRES_USER: ${SEMAPHORE_DB_USER:-semaphore}
+  #  POSTGRES_PASSWORD: ${SEMAPHORE_DB_PASS:-semaphore}
+  #  POSTGRES_DB: ${SEMAPHORE_DB:-semaphore}
+  # if you wish to use postgres, comment the mysql service section below
   semaphore-mysql:
     restart: unless-stopped
     ports:
@@ -35,7 +35,7 @@ services:
 
   semaphore:
     image: semaphoreui/semaphore:${SEMAPHORE_DOCKER_TAG:-latest}
-    container_name: ${SEMAPHORE_CONTAINER_NAME:-semaphore} 
+    container_name: ${SEMAPHORE_CONTAINER_NAME:-semaphore}
     restart: ${SEMAPHORE_RESTART:-unless-stopped}
     networks:
       - traefik
@@ -43,7 +43,7 @@ services:
     depends_on:
       - mysql #change to postgres for postgres
     volumes:
-      #- ./etc/semaphore:/config # <==== this probably needs changed 
+      #- ./etc/semaphore:/config # <==== this probably needs changed
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:

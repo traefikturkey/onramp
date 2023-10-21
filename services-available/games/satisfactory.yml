@@ -1,4 +1,6 @@
-version: '3'networks:
+version: '3'
+
+networks:
   default:
     name: ${SATISFACTORY_NETWORK:-games}
 
@@ -18,7 +20,7 @@ services:
       - ./etc/games/${SATISFACTORY_HOSTNAME:-satisfactory}:/config
     environment:
       - PUID=${PUID:-1000}
-      - PGID=${PGID:-1000} 
+      - PGID=${PGID:-1000}
       - MAXPLAYERS=${SATISFACTORY_MAXPLAYERS:-4}
       - STEAMBETA=${SATISFACTORY_STEAMBETA:-true} # enable experimental branch
       - AUTOPAUSE=${SATISFACTORY_AUTOPAUSE:-true} # should server world run when no one logged in

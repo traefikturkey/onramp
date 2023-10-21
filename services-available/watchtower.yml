@@ -1,6 +1,6 @@
 version: '3'
 
-    
+
 # https://github.com/containrrr/watchtower
 # https://containrrr.dev/watchtower/notifications/
 
@@ -9,10 +9,10 @@ services:
     image: ghcr.io/containrrr/watchtower:${WATCHTOWER_DOCKER_TAG:-latest}
     container_name: watchtower
     restart: unless-stopped
-    environment: 
+    environment:
       - WATCHTOWER_NOTIFICATIONS=${WATCHTOWER_NOTIFICATIONS:-shoutrrr}
-      - WATCHTOWER_NOTIFICATION_URL=${WATCHTOWER_NOTIFICATION_URL} 
-    volumes: 
+      - WATCHTOWER_NOTIFICATION_URL=${WATCHTOWER_NOTIFICATION_URL}
+    volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     labels:
-      - traefik.enable=false 
+      - traefik.enable=false

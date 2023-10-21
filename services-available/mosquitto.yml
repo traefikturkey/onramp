@@ -1,5 +1,5 @@
 version: '3'
-    
+
 # https://hub.docker.com/_/eclipse-mosquitto
 
 services:
@@ -20,4 +20,3 @@ services:
       - traefik.enable=false
       - joyride.host.name=mqtt.${HOST_DOMAIN}
       - com.centurylinklabs.watchtower.enable=true
-

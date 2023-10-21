@@ -3,14 +3,14 @@ version: '3'
 networks:
   traefik:
     external: true
-    
+
 # https://github.com/pterodactyl/panel/blob/develop/docker-compose.example.yml
 # https://github.com/EdyTheCow/docker-pterodactyl/blob/master/panel/compose/docker-compose.yml
 
 services:
   pterodactyl-panel:
     image: ghcr.io/pterodactyl/panel:${PTERODACTYL_PANEL_DOCKER_TAG:-latest}
-    container_name: ${PTERODACTYL_PANEL_CONTAINER_NAME:-pterodactyl-panel} 
+    container_name: ${PTERODACTYL_PANEL_CONTAINER_NAME:-pterodactyl-panel}
     restart: ${PTERODACTYL_PANEL_RESTART:-unless-stopped}
     networks:
       - traefik

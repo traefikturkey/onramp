@@ -3,13 +3,13 @@ version: '3'
 networks:
   traefik:
     external: true
-    
+
 # https://github.com/owncast/owncast
 
 services:
   owncast:
     image: owncast/owncast:${OWNCAST_DOCKER_TAG:-latest}
-    container_name: ${OWNCAST_CONTAINER_NAME:-owncast} 
+    container_name: ${OWNCAST_CONTAINER_NAME:-owncast}
     restart: ${OWNCAST_RESTART:-unless-stopped}
     networks:
       - traefik
@@ -17,7 +17,7 @@ services:
       - ./etc/owncast:/app/data
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-    ports: 
+    ports:
       - 1935:1935
     environment:
       - PUID=${PUID:-1000}

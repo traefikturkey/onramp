@@ -3,13 +3,13 @@ version: '3'
 networks:
   traefik:
     external: true
-    
+
 # https://hub.docker.com/r/felddy/foundryvtt
 
 services:
   foundryvtt:
     image: felddy/foundryvtt:${FOUNDRYVTT_DOCKER_TAG:-latest}
-    container_name: ${FOUNDRYVTT_CONTAINER_NAME:-foundryvtt} 
+    container_name: ${FOUNDRYVTT_CONTAINER_NAME:-foundryvtt}
     restart: ${FOUNDRYVTT_RESTART:-unless-stopped}
     networks:
       - traefik

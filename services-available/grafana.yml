@@ -3,7 +3,7 @@ version: "3"
 # https://grafana.com/docs/grafana/next/setup-grafana/installation/docker/
 # https://github.com/prometheus/prometheus
 
-services:    
+services:
   grafana:
     image: grafana/grafana:${GRAFANA_DOCKER_TAG:-latest}
     container_name: ${GRAFANA_CONTAINER_NAME:-grafana}
@@ -31,4 +31,3 @@ services:
       - traefik.http.routers.grafana.rule=Host(`${GRAFANA_CONTAINER_NAME:-grafana}.${HOST_DOMAIN}`)
       - traefik.http.routers.grafana.entrypoints=websecure
       - traefik.http.services.grafana.loadbalancer.server.port=3000
-

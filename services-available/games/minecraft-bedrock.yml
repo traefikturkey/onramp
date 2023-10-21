@@ -1,16 +1,16 @@
 version: '3'
-    
+
 # https://hub.docker.com/r/itzg/minecraft-bedrock-server
 
 services:
   minecraft-bedrock:
     image: itzg/minecraft-bedrock-server:${MINECRAFT_BEDROCK_DOCKER_TAG:-latest}
-    container_name: ${MINECRAFT_BEDROCK_CONTAINER_NAME:-minecraft-bedrock} 
+    container_name: ${MINECRAFT_BEDROCK_CONTAINER_NAME:-minecraft-bedrock}
     restart: unless-stopped
-    ports: 
+    ports:
       - 19132:19132/udp
     volumes:
-      #- ./etc/minecraft-bedrock:/config # <==== this probably needs changed 
+      #- ./etc/minecraft-bedrock:/config # <==== this probably needs changed
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       - ./etc/games/${MINECRAFT_BEDROCK_HOSTNAME:-minecraft-bedrock}:/data
@@ -29,10 +29,3 @@ services:
       # - traefik.http.services.minecraft-bedrock.loadbalancer.server.port=8096
       # - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
-
-      # Flame dashboard labels
-      
-      - flame.type=application # "app" works too
-      - flame.name=${MINECRAFT_BEDROCK_FLAME_NAME:-minecraft-bedrock} 
-      - flame.url=https://${MINECRAFT_BEDROCK_CONTAINER_NAME:-minecraft-bedrock}.${HOST_DOMAIN}
-      - flame.icon=${MINECRAFT_BEDROCK_FLAME_ICON:-docker} # optional, default is "docker"

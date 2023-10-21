@@ -3,7 +3,7 @@ version: '3'
 networks:
   traefik:
     external: true
-    
+
 # https://github.com/MauriceNino/dashdot
 # https://getdashdot.com/
 
@@ -11,13 +11,13 @@ networks:
 services:
   dashdot:
     image: mauricenino/dashdot:${DASHDOT_DOCKER_TAG:-latest}
-    container_name: ${DASHDOT_CONTAINER_NAME:-dashdot} 
+    container_name: ${DASHDOT_CONTAINER_NAME:-dashdot}
     restart: unless-stopped
     networks:
       - traefik
     #privileged: false
     volumes:
-      #- ./etc/dashdot:/config # <==== this probably needs changed 
+      #- ./etc/dashdot:/config # <==== this probably needs changed
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       #- /:/mnt/host:ro

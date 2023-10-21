@@ -3,13 +3,13 @@ version: '3'
 networks:
   traefik:
     external: true
-    
+
 # https://docs.linuxserver.io/images/docker-netbootxyz
 
 services:
   netbootxyz:
     image: linuxserver/netbootxyz:${NETBOOTXYZ_DOCKER_TAG:-latest}
-    container_name: ${NETBOOTXYZ_CONTAINER_NAME:-netbootxyz} 
+    container_name: ${NETBOOTXYZ_CONTAINER_NAME:-netbootxyz}
     restart: unless-stopped
     networks:
       - traefik

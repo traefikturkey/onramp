@@ -3,13 +3,13 @@ version: '3'
 networks:
   traefik:
     external: true
-    
+
 # https://hub.docker.com/r/linuxserver/wireshark
 
 services:
   wireshark:
     image: lscr.io/linuxserver/wireshark:${WIRESHARK_DOCKER_TAG:-latest}
-    container_name: ${WIRESHARK_CONTAINER_NAME:-wireshark} 
+    container_name: ${WIRESHARK_CONTAINER_NAME:-wireshark}
     restart: ${WIRESHARK_RESTART:-unless-stopped}
     networks:
       - traefik
@@ -18,11 +18,11 @@ services:
       - NET_ADMIN
     # security_opt:
     #   - seccomp:unconfined #optional
-    network_mode: host   
+    network_mode: host
     ports:
-      - 13000:3000 
+      - 13000:3000
     volumes:
-      - ./etc/wireshark:/config 
+      - ./etc/wireshark:/config
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:

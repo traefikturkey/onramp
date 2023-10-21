@@ -3,7 +3,7 @@ version: '3'
 networks:
   traefik:
     external: true
-    
+
 # https://hub.docker.com/r/linuxserver/paperless-ngx
 # https://github.com/paperless-ngx/paperless-ngx
 # https://docs.paperless-ngx.com/
@@ -42,14 +42,14 @@ services:
 
   paperless-ngx:
     image: ghcr.io/paperless-ngx/paperless-ngx:${PAPERLESS_NGX_DOCKER_TAG:-latest}
-    container_name: ${PAPERLESS_NGX_CONTAINER_NAME:-paperless-ngx} 
+    container_name: ${PAPERLESS_NGX_CONTAINER_NAME:-paperless-ngx}
     restart: ${PAPERLESS_NGX_RESTART:-unless-stopped}
     networks:
       - traefik
       - default
     depends_on:
       - broker
-      - db  
+      - db
       - gotenberg
       - tika
     volumes:

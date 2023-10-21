@@ -22,7 +22,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
     ports:
       - 7878:7878
-    environment: 
+    environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}

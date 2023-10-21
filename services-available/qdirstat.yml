@@ -3,7 +3,7 @@ version: '3'
 networks:
   traefik:
     external: true
-    
+
 # https://github.com/jlesage/docker-qdirstat
 
 services:
@@ -22,7 +22,7 @@ services:
       - KEEP_APP_RUNNING=1
       - APP_NICENESS=10
     volumes:
-      - ./etc/qdirstat:/config 
+      - ./etc/qdirstat:/config
       - ${QDIRSTAT_MEDIA_VOLUME:-./media}:/storage
     labels:
       - joyride.host.name=${QDIRSTAT_CONTAINER_NAME:-qdirstat}.${HOST_DOMAIN}

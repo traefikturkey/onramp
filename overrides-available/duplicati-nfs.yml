@@ -12,7 +12,7 @@ volumes:
 services:
   duplicati:
     volumes:
-      - ${DUPLICATI_CONFIG_VOLUME:-./etc/duplicati}:${DUPLICATI_CONFIG_PATH:-/config} 
+      - ${DUPLICATI_CONFIG_VOLUME:-./etc/duplicati}:${DUPLICATI_CONFIG_PATH:-/config}
       - ${DUPLICATI_BACKUP_VOLUME:-duplicati-nfs-backup}:${DUPLICATI_BACKUP_PATH:-/backups}
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro

@@ -3,19 +3,19 @@ version: '3'
 networks:
   traefik:
     external: true
-    
+
 # https://christitus.com/why-we-dont-browse-the-internet-anymore/
 # https://www.youtube.com/watch?v=nxV0CPNeFxY
 
 services:
   fulltext-rss:
     image: heussd/fivefilters-full-text-rss:${FULLTEXT_RSS_DOCKER_TAG:-latest}
-    container_name: ${FULLTEXT_RSS_CONTAINER_NAME:-fulltext-rss} 
+    container_name: ${FULLTEXT_RSS_CONTAINER_NAME:-fulltext-rss}
     restart: ${FULLTEXT_RSS_RESTART:-unless-stopped}
     networks:
       - traefik
     volumes:
-      - ./etc/fulltext-rss:/config # <==== this probably needs changed 
+      - ./etc/fulltext-rss:/config # <==== this probably needs changed
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
