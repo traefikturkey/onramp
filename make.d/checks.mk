@@ -3,7 +3,7 @@ ifndef NETBOX_EMAIL
 endif
 
 .ONESHELL: check-yaml
-check-yaml:
+check-yaml: install-dependencies
 	@yamllint -d "{extends: default, rules: {quoted-strings: disable, line-length: disable, document-start: disable, comments: disable, comments-indentation: disable}}" *.yml
 	cd ./overrides-available
 	@yamllint -d "{extends: default, rules: {quoted-strings: disable, line-length: disable, document-start: disable, comments: disable, comments-indentation: disable}}" *.yml

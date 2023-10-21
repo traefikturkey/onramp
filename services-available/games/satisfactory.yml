@@ -1,9 +1,5 @@
 version: '3'
 
-networks:
-  default:
-    name: ${SATISFACTORY_NETWORK:-games}
-
 # https://github.com/wolveix/satisfactory-server
 
 services:

@@ -12,7 +12,7 @@ install: build install-docker
 	cp .templates/env.template .env
 	$(EDITOR) .env
 
-required-dependencies = git nano jq yq
+required-dependencies = git nano jq yq yamllint
 
 install-dependencies:
 ifneq (0,$(shell which $(required-dependencies) | echo $$?))
