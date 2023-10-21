@@ -33,14 +33,21 @@ environments-enabled/onramp.env:
 	@echo ""
 	@python3 scripts/env-subst.py environments-available/onramp.template "ONRAMP"
 
-required-dependencies = git nano jq yq yamllint
+EXECUTABLES = git nano jq yq yamllint
+MISSING_PACKAGES := $(foreach exec,$(EXECUTABLES),$(if $(shell which $(exec)),,addpackage-$(exec)))
 
-install-dependencies:
-ifneq (0,$(shell which $(required-dependencies) | echo $$?))
+addrepositories:
 	sudo apt-add-repository ppa:rmescandon/yq -y
 	sudo apt update
-	DEBIAN_FRONTEND=noninteractive sudo apt install $(required-dependencies) -y
-endif
+
+addpackage-%: addrepositories
+	DEBIAN_FRONTEND=noninteractive sudo apt install $* -y
+
+install-dependencies: .gitconfig $(MISSING_PACKAGES)
+
+.gitconfig:
+	git config -f .gitconfig core.hooksPath .githooks
+	git config --local include.path $(shell pwd)/.gitconfig
 
 install-ansible:
 	sudo apt-add-repository ppa:ansible/ansible -y

@@ -2,15 +2,13 @@
   become: true
   tasks:
     - name: install dependencies
-      become: yes
+      become: true
       apt:
-        update_cache: yes
+        update_cache: true
         name:
-          - nvidia-driver-535 
+          - nvidia-driver-535
           - nvidia-dkms-535
         state: present
 
   roles:
     - nvidia.nvidia_docker
-  #   - nvidia.nvidia_driver
-  #   

@@ -2,14 +2,8 @@ ifndef NETBOX_EMAIL
 	NETBOX_SUPERUSER_EMAIL=$(CF_API_EMAIL)
 endif
 
-.ONESHELL: check-yaml
 check-yaml: install-dependencies
-	@yamllint -d "{extends: default, rules: {quoted-strings: disable, line-length: disable, document-start: disable, comments: disable, comments-indentation: disable}}" *.yml
-	cd ./overrides-available
-	@yamllint -d "{extends: default, rules: {quoted-strings: disable, line-length: disable, document-start: disable, comments: disable, comments-indentation: disable}}" *.yml
-	cd ../services-available
-	@yamllint -d "{extends: default, rules: {quoted-strings: disable, line-length: disable, document-start: disable, comments: disable, comments-indentation: disable}}" *.yml
-	
+	yamllint -c .yamllint .
 
 check-cf:
 	@if [ "$(CF_API_EMAIL)" != "" ]; 		then echo "CF_API_EMAIL:		PASSED"; else echo "FAILED : Please set your CF_API_EMAIL in the onramp.env file"; fi
