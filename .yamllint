@@ -1,6 +1,8 @@
 ignore: |
   etc/
   .github/
+  overrides-enabled/
+  services-enabled/
 
 extends: default
 
