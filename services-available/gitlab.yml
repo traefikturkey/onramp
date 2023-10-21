@@ -39,13 +39,6 @@ services:
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
 
-      # Flame dashboard labels
-      
-      - flame.type=application # "app" works too
-      - flame.name=${GITLAB_FLAME_NAME:-gitlab} 
-      - flame.url=https://${GITLAB_CONTAINER_NAME:-gitlab}.${HOST_DOMAIN}
-      - flame.icon=${GITLAB_FLAME_ICON:-docker} # optional, default is "docker"
-
   # gitlab-runner:
   #   image: gitlab/gitlab-runner:alpine
   #   container_name: gitlab-runner    
