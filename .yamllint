@@ -4,6 +4,8 @@ ignore: |
   overrides-enabled/
   services-enabled/
 
+ignore-from-file: .gitignore
+
 extends: default
 
 yaml-files:
