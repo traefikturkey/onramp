@@ -2,8 +2,6 @@ ifndef NETBOX_EMAIL
 	NETBOX_SUPERUSER_EMAIL=$(CF_API_EMAIL)
 endif
 
-YAML_CHECK_COMMAND := yamllint -d "{extends: default, rules: {quoted-strings: disable, line-length: disable, document-start: disable, comments: disable, comments-indentation: disable}}" *.yml
-.ONESHELL: check-yaml
 check-yaml: install-dependencies
 	yamllint -c .yamllint .
 
