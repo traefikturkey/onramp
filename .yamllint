@@ -1,0 +1,17 @@
+ignore: |
+  etc/
+  .github/
+
+extends: default
+
+yaml-files:
+  - '*.yaml'
+  - '*.yml'
+  - '.yamllint'
+
+rules:
+  quoted-strings: disable
+  line-length: disable
+  document-start: disable
+  comments: disable
+  comments-indentation: disable

@@ -11,7 +11,7 @@ services:
     image: traefik:${TRAEFIK_DOCKER_TAG:-2.9} # replace with traefik:latest if you are feeling frisky
     container_name: ${TRAEFIK_CONTAINER_NAME:-traefik}
     restart: ${TRAEFIK_RESTART:-unless-stopped}
-    networks: 
+    networks:
       - traefik
     extra_hosts:
       - host.docker.internal:172.17.0.1
