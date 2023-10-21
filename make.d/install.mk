@@ -15,7 +15,7 @@ install: build install-docker
 required-dependencies = git nano jq yq yamllint
 
 install-dependencies:
-git config --local include.path $(shell pwd)/.gitconfig
+	git config --local include.path $(shell pwd)/.gitconfig
 ifneq (0,$(shell which $(required-dependencies) | echo $$?))
 	sudo apt-add-repository ppa:rmescandon/yq -y
 	sudo apt update
