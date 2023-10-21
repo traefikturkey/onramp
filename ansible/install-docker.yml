@@ -11,6 +11,6 @@
     docker_compose_package: docker-compose-plugin
     docker_compose_package_state: present
     docker_users:
-    - "{{ lookup('env','USER') }}"
+      - "{{ lookup('env','USER') }}"
   roles:
     - geerlingguy.docker
