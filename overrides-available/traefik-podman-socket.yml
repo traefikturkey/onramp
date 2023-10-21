@@ -1,7 +1,7 @@
 version: '3'
 services:
   traefik:
-      volumes:
+    volumes:
       - ./etc/traefik/letsencrypt:/letsencrypt
       - ./etc/traefik/enabled:/enabled
       - /etc/localtime:/etc/localtime:ro

@@ -2,25 +2,25 @@ version: '3'
 
 networks:
   traefik:
-    external: true   
-    
+    external: true
+
 # https://excalidraw.com/
 # https://github.com/excalidraw and https://github.com/excalidraw/excalidraw
 # Keep in mind this version does not implement the sharable links
-# or real time collaborative sessions as stated on their docker hub page 
+# or real time collaborative sessions as stated on their docker hub page
 # https://hub.docker.com/r/excalidraw/excalidraw
 # Look at this for that https://github.com/excalidraw/excalidraw/discussions/3879
 
-# It also does not seem to feature saving of drawings, 
+# It also does not seem to feature saving of drawings,
 # so be careful with that and remember to save your drawings before refreshing or leaving
 
 services:
   excalidraw:
     image: excalidraw/excalidraw:${EXCALIDRAW_DOCKER_TAG:-latest}
-    container_name: ${EXCALIDRAW_CONTAINER_NAME:-excalidraw} 
+    container_name: ${EXCALIDRAW_CONTAINER_NAME:-excalidraw}
     restart: ${EXCALIDRAW_RESTART:-unless-stopped}
     volumes:
-    # - ./etc/excalidraw:/config # <==== this probably needs changed 
+    # - ./etc/excalidraw:/config # <==== this probably needs changed
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:

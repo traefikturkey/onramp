@@ -2,12 +2,24 @@ version: '3'
 
 networks:
   traefik:
-    external: true   
-    
+    external: true
+
 # https://docs.ansible-semaphore.com/
 
 services:
-  mysql:
+  # uncomment this section and comment out the mysql section to use postgres instead of mysql
+  #semaphore-postgres:
+  #restart: unless-stopped
+  #image: postgres:14
+  #hostname: postgres
+  #volumes:
+  #  - semaphore-postgres:/var/lib/postgresql/data
+  #environment:
+  #  POSTGRES_USER: ${SEMAPHORE_DB_USER:-semaphore}
+  #  POSTGRES_PASSWORD: ${SEMAPHORE_DB_PASS:-semaphore}
+  #  POSTGRES_DB: ${SEMAPHORE_DB:-semaphore}
+  # if you wish to use postgres, comment the mysql service section below
+  semaphore-mysql:
     image: mysql:8.0
     container_name: semephore-mysql
     restart: unless-stopped
@@ -24,12 +36,12 @@ services:
 
   semaphore:
     image: semaphoreui/semaphore:${SEMAPHORE_DOCKER_TAG:-latest}
-    container_name: ${SEMAPHORE_CONTAINER_NAME:-semaphore} 
+    container_name: ${SEMAPHORE_CONTAINER_NAME:-semaphore}
     restart: ${SEMAPHORE_RESTART:-unless-stopped}
     depends_on:
       - mysql #change to postgres for postgres
     volumes:
-      #- ./etc/semaphore:/config # <==== this probably needs changed 
+      #- ./etc/semaphore:/config # <==== this probably needs changed
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
@@ -65,10 +77,3 @@ services:
       - traefik.http.services.semaphore.loadbalancer.server.port=3000
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
-
-      # Flame dashboard labels
-      
-      - flame.type=application # "app" works too
-      - flame.name=${SEMAPHORE_FLAME_NAME:-semaphore} 
-      - flame.url=https://${SEMAPHORE_CONTAINER_NAME:-semaphore}.${HOST_DOMAIN}
-      - flame.icon=${SEMAPHORE_FLAME_ICON:-docker} # optional, default is "docker"

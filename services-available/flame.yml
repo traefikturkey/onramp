@@ -2,8 +2,8 @@ version: '3'
 
 networks:
   traefik:
-    external: true   
-    
+    external: true
+
 # https://hub.docker.com/r/pawelmalak/flame
 
 services:
@@ -11,8 +11,10 @@ services:
     image: pawelmalak/flame:${FLAME_DOCKER_TAG:-latest}
     container_name: ${FLAME_CONTAINER_NAME:-flame} 
     restart: ${FLAME_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
-      - ./etc/flame:/app/data 
+      - ./etc/flame:/app/data
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock

@@ -2,7 +2,7 @@ version: '3'
 
 # https://github.com/willfarrell/docker-autoheal
 
-services:  
+services:
   autoheal:
     image: willfarrell/autoheal:${AUTOHEAL_DOCKER_TAG:-latest}
     container_name: ${AUTOHEAL_CONTAINER_NAME:-autoheal}
@@ -14,4 +14,4 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     labels:
-      - traefik.enable=false 
+      - traefik.enable=false

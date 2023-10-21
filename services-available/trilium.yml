@@ -2,15 +2,15 @@ version: '3'
 
 networks:
   traefik:
-    external: true   
-    
+    external: true
+
 # https://github.com/zadam/trilium
 # https://github.com/BaptisteBdn/docker-selfhosted-apps/tree/main/trilium
 
 services:
   trilium:
     image: zadam/trilium:${TRILIUM_DOCKER_TAG:-latest}
-    container_name: ${TRILIUM_CONTAINER_NAME:-trilium} 
+    container_name: ${TRILIUM_CONTAINER_NAME:-trilium}
     restart: ${TRILIUM_RESTART:-unless-stopped}
     volumes:
       - ./etc/trilium:/data

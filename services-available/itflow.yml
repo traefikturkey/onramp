@@ -2,15 +2,20 @@ version: '3'
 
 networks:
   traefik:
-    external: true   
-    
-# <================= add links to documentation here =================>
+    external: true
+
+# https://itflow.org/
 
 services:
   itflow:
-    image: <==== container_image ====>:${ITFLOW_DOCKER_TAG:-latest}
-    container_name: ${ITFLOW_CONTAINER_NAME:-itflow} 
+    image: lued/itflow:${ITFLOW_DOCKER_TAG:-latest}
+    container_name: ${ITFLOW_CONTAINER_NAME:-itflow}
+    hostname: ${ITFLOW_HOSTNAME:-itflow}
     restart: ${ITFLOW_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    depends_on:
+      - itflow-db
     volumes:
       - ./etc/itflow:/config # <==== this probably needs changed 
       - /etc/timezone:/etc/timezone:ro

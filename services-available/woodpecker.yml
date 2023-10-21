@@ -2,8 +2,8 @@ version: '3'
 
 networks:
   traefik:
-    external: true   
-    
+    external: true
+
 # https://woodpecker-ci.org/
 # https://woodpecker-ci.org/docs/intro
 
@@ -13,6 +13,9 @@ services:
     image: woodpeckerci/woodpecker-server:${WOODPECKER_DOCKER_TAG:-latest}
     container_name: ${WOODPECKER_CONTAINER_NAME:-woodpecker} 
     restart: ${WOODPECKER_RESTART:-unless-stopped}
+    networks:
+      - traefik
+      - default
     volumes:
       - ./etc/woodpecker:/var/lib/woodpecker
       - /etc/timezone:/etc/timezone:ro
@@ -38,13 +41,6 @@ services:
       - traefik.http.services.woodpecker.loadbalancer.server.port=8000
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
-
-      # Flame dashboard labels
-      
-      - flame.type=application # "app" works too
-      - flame.name=${WOODPECKER_FLAME_NAME:-woodpecker} 
-      - flame.url=https://${WOODPECKER_CONTAINER_NAME:-woodpecker}.${HOST_DOMAIN}
-      - flame.icon=${WOODPECKER_FLAME_ICON:-docker} # optional, default is "docker"
 
   woodpecker-agent:
     image: woodpeckerci/woodpecker-agent:${WOODPECKER_AGENT_DOCKER_TAG:-latest}

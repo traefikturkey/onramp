@@ -2,8 +2,8 @@ version: '3'
 
 networks:
   traefik:
-    external: true   
-    
+    external: true
+
 # https://hub.docker.com/r/linuxserver/jellyfin
 
 services:
@@ -11,6 +11,8 @@ services:
     image: lscr.io/linuxserver/jellyfin:${JELLYFIN_DOCKER_TAG:-latest}
     container_name: ${JELLYFIN_CONTAINER_NAME:-jellyfin}
     restart: ${JELLYFIN_RESTART:-unless-stopped}
+    networks:
+      - traefik
     environment: 
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
@@ -32,4 +34,3 @@ services:
       - traefik.http.services.jellyfin.loadbalancer.server.port=8096
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
-

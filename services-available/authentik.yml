@@ -32,16 +32,16 @@ services:
     labels:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=false
-      - autoheal=true   
-       
+      - autoheal=true
+
   redis:
     image: redis:${AUTHENTIK_REDIS_DOCKER_TAG:-alpine}
     container_name: ${AUTHENTIK_REDIS_CONTAINER_NAME:-authentik_redis}
     restart: ${AUTHENTIK_REDIS_RESTART:-unless-stopped}
     volumes:
-    - ./etc/authentik/redis:/data
+      - ./etc/authentik/redis:/data
     healthcheck:
-      test: [ "CMD-SHELL", "redis-cli ping | grep PONG" ]
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
       start_period: 20s
       interval: 30s
       retries: 5
@@ -49,7 +49,7 @@ services:
     labels:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=false
-      - autoheal=true  
+      - autoheal=true
 
   authentik-server:
     image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_DOCKER_TAG:-2023.6.1}
@@ -121,7 +121,7 @@ services:
     labels:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=false
-      - autoheal=true  
+      - autoheal=true
 
   #geoipupdate:
   #  image: maxmindinc/geoipupdate:latest

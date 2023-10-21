@@ -4,13 +4,13 @@ networks:
   traefik:
     external: true   
 
-# https://github.com/koush/scrypted    
+# https://github.com/koush/scrypted
 # https://docs.technotim.live/posts/scrypted-home-hub/
 
 services:
   scrypted:
     image: koush/scrypted:${SCRYPTED_DOCKER_TAG:-latest}
-    container_name: ${SCRYPTED_CONTAINER_NAME:-scrypted} 
+    container_name: ${SCRYPTED_CONTAINER_NAME:-scrypted}
     restart: ${SCRYPTED_RESTART:-unless-stopped}
     network_mode: host
     volumes:
@@ -27,8 +27,8 @@ services:
     logging:
       driver: "json-file"
       options:
-          max-size: "10m"
-          max-file: "10"
+        max-size: "10m"
+        max-file: "10"
     labels:
       - joyride.host.name=${SCRYPTED_CONTAINER_NAME:-scrypted}.${HOST_DOMAIN}
       - traefik.enable=true
@@ -38,10 +38,3 @@ services:
       - traefik.http.services.scrypted.loadbalancer.server.port=10444
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
-
-      # Flame dashboard labels
-      
-      - flame.type=application # "app" works too
-      - flame.name=${SCRYPTED_FLAME_NAME:-scrypted} 
-      - flame.url=https://${SCRYPTED_CONTAINER_NAME:-scrypted}.${HOST_DOMAIN}
-      - flame.icon=${SCRYPTED_FLAME_ICON:-docker} # optional, default is "docker"

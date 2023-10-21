@@ -2,8 +2,8 @@ version: '3'
 
 networks:
   traefik:
-    external: true   
-    
+    external: true
+
 # https://hub.docker.com/r/linuxserver/bazarr
 
 services:
@@ -31,4 +31,3 @@ services:
       - traefik.http.services.bazarr.loadbalancer.server.port=6767
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
-     

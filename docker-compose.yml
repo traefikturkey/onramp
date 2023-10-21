@@ -60,5 +60,5 @@ services:
       #- traefik.http.routers.traefik.rule=Host(`traefik.${HOST_DOMAIN}`)
       # comment the following three(3) lines if using the rule=Host line above
       - traefik.http.routers.traefik.rule=Host(`${HOST_NAME}.${HOST_DOMAIN}`)  && (PathPrefix(`/traefik`) || PathPrefix(`/api`))
-      - traefik.http.routers.traefik.middlewares=traefik_strip 
+      - traefik.http.routers.traefik.middlewares=traefik_strip
       - traefik.http.middlewares.traefik_strip.stripprefix.prefixes=/traefik

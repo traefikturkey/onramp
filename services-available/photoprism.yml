@@ -2,8 +2,8 @@ version: '3'
 
 networks:
   traefik:
-    external: true   
-    
+    external: true
+
 # https://github.com/photoprism/photoprism
 # https://hub.docker.com/r/photoprism/photoprism
 
@@ -12,6 +12,8 @@ services:
     image: photoprism/photoprism:${PHOTOPRISM_DOCKER_TAG:-latest}
     container_name: ${PHOTOPRISM_CONTAINER_NAME:-photoprism} 
     restart: ${PHOTOPRISM_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/photoprism/:/photoprism/config
       - /etc/timezone:/etc/timezone:ro
@@ -37,11 +39,3 @@ services:
       - traefik.http.services.photoprism.loadbalancer.server.port=2342
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
-
-      # Flame dashboard labels
-      
-      - flame.type=application # "app" works too
-      - flame.name=${PHOTOPRISM_FLAME_NAME:-photoprism} 
-      - flame.url=https://${PHOTOPRISM_CONTAINER_NAME:-photoprism}.${HOST_DOMAIN}
-      - flame.icon=${PHOTOPRISM_FLAME_ICON:-docker} # optional, default is "docker"
-    

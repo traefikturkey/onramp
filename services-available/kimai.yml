@@ -2,8 +2,8 @@ version: '3'
 
 networks:
   traefik:
-    external: true   
-    
+    external: true
+
 # https://github.com/tobybatch/kimai2
 # https://github.com/kevinpapst/kimai2
 
@@ -12,6 +12,8 @@ services:
     image: kimai/kimai2:${KIMAI_DOCKER_TAG:-apache}
     container_name: ${KIMAI_CONTAINER_NAME:-kimai} 
     restart: ${KIMAI_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       #- ./etc/kimai:/opt/kimai/public
       - /etc/timezone:/etc/timezone:ro
@@ -30,12 +32,3 @@ services:
       - traefik.http.services.kimai.loadbalancer.server.port=8001
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
-    
-      
-
-      # Flame dashboard labels
-      
-      - flame.type=application # "app" works too
-      - flame.name=${KIMAI_FLAME_NAME:-kimai} 
-      - flame.url=https://${KIMAI_CONTAINER_NAME:-kimai}.${HOST_DOMAIN}
-      - flame.icon=${KIMAI_FLAME_ICON:-docker} # optional, default is "docker"

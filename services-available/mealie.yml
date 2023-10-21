@@ -1,7 +1,7 @@
 version: '3'
 networks:
   traefik:
-    external: true   
+    external: true
 
 # https://hay-kot.github.io/mealie/documentation/getting-started/install/
 
@@ -25,7 +25,7 @@ services:
       - RECIPE_SHOW_ASSETS=true
       - RECIPE_LANDSCAPE_VIEW=true
       - RECIPE_DISABLE_COMMENTS=false
-      - RECIPE_DISABLE_AMOUNT=false      
+      - RECIPE_DISABLE_AMOUNT=false
       # =====================================
       # Email Configuration
       # SMTP_HOST=
@@ -34,7 +34,7 @@ services:
       # SMTP_AUTH_STRATEGY=TLS # Options: 'TLS', 'SSL', 'NONE'
       # SMTP_FROM_EMAIL=
       # SMTP_USER=
-      # SMTP_PASSWORD=      
+      # SMTP_PASSWORD=
     labels:
       - joyride.host.name=${MEALIE_CONTAINER_NAME:-mealie}.${HOST_DOMAIN}
       - traefik.enable=true
@@ -43,10 +43,3 @@ services:
       - traefik.http.services.mealie.loadbalancer.server.port=3000
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
-
-      # Flame dashboard labels
-
-      - flame.type=application # "app" works too
-      - flame.name=${MEALIE_FLAME_NAME:-mealie}
-      - flame.url=https://${MEALIE_CONTAINER_NAME:-mealie}.${HOST_DOMAIN}
-      - flame.icon=${MEALIE_FLAME_ICON:-docker} # optional, default is "docker"

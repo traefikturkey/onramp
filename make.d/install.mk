@@ -33,7 +33,7 @@ environments-enabled/onramp.env:
 	@echo ""
 	@python3 scripts/env-subst.py environments-available/onramp.template "ONRAMP"
 
-required-dependencies = git nano jq yq
+required-dependencies = git nano jq yq yamllint
 
 install-dependencies:
 ifneq (0,$(shell which $(required-dependencies) | echo $$?))

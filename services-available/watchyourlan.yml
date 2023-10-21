@@ -1,19 +1,15 @@
 version: '3'
 
-networks:
-  traefik:
-    external: true   
-    
 # https://github.com/aceberg/WatchYourLAN
 
 services:
   watchyourlan:
     image: aceberg/watchyourlan:${WATCHYOURLAN_DOCKER_TAG:-latest}
-    container_name: ${WATCHYOURLAN_CONTAINER_NAME:-watchyourlan} 
+    container_name: ${WATCHYOURLAN_CONTAINER_NAME:-watchyourlan}
     restart: ${WATCHYOURLAN_RESTART:-unless-stopped}
     network_mode: host # required to arpscan interfaces defined below
     volumes:
-      - ./etc/watchyourlan:/data 
+      - ./etc/watchyourlan:/data
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
@@ -33,10 +29,3 @@ services:
       - traefik.http.services.watchyourlan.loadbalancer.server.port=8840
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
-
-      # Flame dashboard labels
-      
-      - flame.type=application # "app" works too
-      - flame.name=${WATCHYOURLAN_FLAME_NAME:-WatchYourLan} 
-      - flame.url=https://${WATCHYOURLAN_CONTAINER_NAME:-watchyourlan}.${HOST_DOMAIN}
-      - flame.icon=${WATCHYOURLAN_FLAME_ICON:-shield-search} # optional, default is "docker"

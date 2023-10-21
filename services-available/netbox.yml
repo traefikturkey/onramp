@@ -11,6 +11,9 @@ services:
     image: lscr.io/linuxserver/netbox:${NETBOX_DOCKER_TAG:-latest}
     container_name: ${NETBOX_CONTAINER_NAME:-netbox} 
     restart: ${NETBOX_RESTART:-unless-stopped}
+    networks:
+      - traefik
+      - default
     volumes:
       - ./etc/netbox:/config
       - /etc/timezone:/etc/timezone:ro
@@ -42,13 +45,6 @@ services:
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
 
-      # Flame dashboard labels
-      
-      - flame.type=application # "app" works too
-      - flame.name=${NETBOX_FLAME_NAME:-netbox} 
-      - flame.url=https://${NETBOX_CONTAINER_NAME:-netbox}.${HOST_DOMAIN}
-      - flame.icon=${NETBOX_FLAME_ICON:-docker} # optional, default is "docker"
-
   netbox-postgresql:
     image: postgres
     container_name: netbox_postgresql
@@ -65,15 +61,15 @@ services:
     labels:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=false
-      - autoheal=true   
+      - autoheal=true
 
   netbox-redis:
     image: redis:alpine
     container_name: netbox_redis
     restart: unless-stopped
     volumes:
-    - ./etc/netbox/redis:/data
+      - ./etc/netbox/redis:/data
     labels:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=false
-      - autoheal=true  
+      - autoheal=true

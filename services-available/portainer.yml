@@ -18,7 +18,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
       - PORTAINER_LICENSE_KEY=${PORTAINER_LICENSE_KEY}
-    env_file: 
+    env_file:
       - .env
     labels:
       - joyride.host.name=${PORTAINER_CONTAINER_NAME:-portainer}.${HOST_DOMAIN}

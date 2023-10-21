@@ -11,10 +11,12 @@ services:
     image: prom/blackbox-exporter:${BLACKBOX_EXPORTER_DOCKER_TAG:-latest}
     container_name: prometheus-blackbox-exporter
     restart: unless-stopped
-    command: 
+    networks:
+      - traefik
+    command:
       - '--config.file=/etc/prometheus/conf/blackbox.yml'
     privileged: true
-    cap_add: 
+    cap_add:
       - CAP_NET_RAW
     # ports:
     #   - 9115:9115
@@ -22,11 +24,9 @@ services:
       - ./etc/prometheus/conf:/etc/prometheus/conf:ro
     labels:
       - joyride.host.name=blackbox.${HOST_DOMAIN}
-      - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=true
       - traefik.http.routers.blackbox.rule=Host(`blackbox.${HOST_DOMAIN}`)
       - traefik.http.routers.blackbox.entrypoints=websecure
-      - traefik.http.routers.blackbox.tls=true
-      - traefik.http.routers.blackbox.tls.certresolver=letsencrypt
-      - traefik.http.services.blackbox.loadbalancer.server.scheme=http
       - traefik.http.services.blackbox.loadbalancer.server.port=9115
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true

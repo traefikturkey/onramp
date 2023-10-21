@@ -2,20 +2,20 @@ version: '3'
 
 networks:
   traefik:
-    external: true   
-    
+    external: true
+
 # https://docs.tdarr.io/docs/installation/docker/run-compose
 
 services:
   tdarr:
     image: ghcr.io/haveagitgat/tdarr:${TDARR_DOCKER_TAG:-latest}
-    container_name: ${TDARR_CONTAINER_NAME:-tdarr} 
+    container_name: ${TDARR_CONTAINER_NAME:-tdarr}
     restart: ${TDARR_RESTART:-unless-stopped}
     volumes:
       - ./etc/tdarr/server:/app/server
-      - ./etc/tdarr/config:/app/configs 
+      - ./etc/tdarr/config:/app/configs
       - ${TDARR_MEDIA_VOLUME:-./media}:${TDARR_MEDIA_PATH:-/media}
-      - ${TDARR_TEMP_VOLUME:-./media/tdarr-temp}:${TDARR_TEMP_PATH:-/temp} 
+      - ${TDARR_TEMP_VOLUME:-./media/tdarr-temp}:${TDARR_TEMP_PATH:-/temp}
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     ports:
@@ -41,10 +41,3 @@ services:
       - traefik.http.services.tdarr.loadbalancer.server.port=${TDARR_WEB_PORT:-8265}
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
-
-      # Flame dashboard labels
-      
-      - flame.type=application # "app" works too
-      - flame.name=${TDARR_FLAME_NAME:-tdarr} 
-      - flame.url=https://${TDARR_CONTAINER_NAME:-tdarr}.${HOST_DOMAIN}
-      - flame.icon=${TDARR_FLAME_ICON:-transfer} # optional, default is "docker"

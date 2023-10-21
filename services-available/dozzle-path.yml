@@ -13,23 +13,16 @@ services:
     restart: ${DOZZLE_RESTART:-unless-stopped}
     environment:
       - DOZZLE_LEVEL=${DOZZLE_LEVEL:-debug}
-      - DOZZLE_BASE=${DOZZLE_BASE:-/logs}  
+      - DOZZLE_BASE=${DOZZLE_BASE:-/logs}
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
     labels:
       - traefik.enable=true
-      - traefik.http.routers.dozzle.rule=PathPrefix(`${DOZZLE_BASE:-/logs}`) 
+      - traefik.http.routers.dozzle.rule=PathPrefix(`${DOZZLE_BASE:-/logs}`)
       - traefik.http.routers.dozzle.entrypoints=websecure
       - traefik.http.services.dozzle.loadbalancer.server.scheme=http
       - traefik.http.services.dozzle.loadbalancer.server.port=8080
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
-
-    # Flame dashboard labels
-      
-      - flame.type=application # "app" works too
-      - flame.name=${DOZZLE_FLAME_NAME:-Dozzle} 
-      - flame.url=https://${HOST_NAME}.${HOST_DOMAIN}/logs
-      - flame.icon=${DOZZLE_FLAME_ICON:-math-log} # optional, default is "docker"

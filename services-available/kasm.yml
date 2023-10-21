@@ -2,14 +2,14 @@ version: '3'
 
 networks:
   traefik:
-    external: true   
-    
+    external: true
+
 # https://hub.docker.com/r/linuxserver/kasm
 
 services:
   kasm:
     image: lscr.io/linuxserver/kasm:${KASM_DOCKER_TAG:-latest}
-    container_name: ${KASM_CONTAINER_NAME:-kasm} 
+    container_name: ${KASM_CONTAINER_NAME:-kasm}
     restart: ${KASM_RESTART:-unless-stopped}
     privileged: true
     volumes:
@@ -30,10 +30,3 @@ services:
       - traefik.http.services.kasm.loadbalancer.server.port=443
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
-
-      # Flame dashboard labels
-      
-      - flame.type=application # "app" works too
-      - flame.name=${KASM_FLAME_NAME:-kasm} 
-      - flame.url=https://${KASM_CONTAINER_NAME:-kasm}.${HOST_DOMAIN}
-      - flame.icon=${KASM_FLAME_ICON:-docker} # optional, default is "docker"

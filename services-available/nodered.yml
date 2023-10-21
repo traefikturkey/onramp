@@ -11,6 +11,8 @@ services:
     image: nodered/node-red:${NODERED_DOCKER_TAG:-latest}
     container_name: ${NODERED_CONTAINER_NAME:-nodered}
     restart: ${NODERED_RESTART:-unless-stopped}
+    networks:
+      - traefik
     # uncomment the network_mode: host line if nodered needs  
     # to be auto discovered by Amazon Alexa or Google Home
     # network_mode: host

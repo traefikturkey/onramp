@@ -19,12 +19,9 @@ networks:
       - ./etc/prometheus/conf:/etc/alertmanager:rw
       - prometheus:/alertmanager:rw
     labels:
-      - joyride.host.name=alertmanager.${HOST_DOMAIN}
-      - com.centurylinklabs.watchtower.enable=true
+      - joyride.host.name=${ALERTMANAGER_HOST_NAME:-alertmanager}.${HOST_DOMAIN}
       - traefik.enable=true
       - traefik.http.routers.alertmanager.rule=Host(`alertmanager.${HOST_DOMAIN}`)
       - traefik.http.routers.alertmanager.entrypoints=websecure
-      - traefik.http.routers.alertmanager.tls=true
-      - traefik.http.routers.alertmanager.tls.certresolver=letsencrypt
-      - traefik.http.services.alertmanager.loadbalancer.server.scheme=http
       - traefik.http.services.alertmanager.loadbalancer.server.port=9093
+      - com.centurylinklabs.watchtower.enable=true

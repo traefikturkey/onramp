@@ -2,14 +2,14 @@ version: '3'
 
 networks:
   traefik:
-    external: true   
-    
+    external: true
+
 # https://github.com/nbr23/youtube-dl-server
 
 services:
   youtube-dl:
     image: nbr23/youtube-dl-server:${YOUTUBE_DL_DOCKER_TAG:-yt-dlp}
-    container_name: ${YOUTUBE_DL_CONTAINER_NAME:-youtube-dl} 
+    container_name: ${YOUTUBE_DL_CONTAINER_NAME:-youtube-dl}
     restart: ${YOUTUBE_DL_RESTART:-unless-stopped}
     volumes:
       - ./etc/youtube-dl:/youtube-dl
@@ -28,10 +28,3 @@ services:
       - traefik.http.services.youtube-dl.loadbalancer.server.port=8080
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
-
-      # Flame dashboard labels
-      
-      - flame.type=application # "app" works too
-      - flame.name=${YOUTUBE_DL_FLAME_NAME:-youtube-dl} 
-      - flame.url=https://${YOUTUBE_DL_CONTAINER_NAME:-youtube-dl}.${HOST_DOMAIN}
-      - flame.icon=${YOUTUBE_DL_FLAME_ICON:-docker} # optional, default is "docker"

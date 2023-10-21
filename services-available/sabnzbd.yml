@@ -7,7 +7,7 @@ networks:
 # https://hub.docker.com/r/linuxserver/sabnzbd
 
 services:
-  sabnzbd: 
+  sabnzbd:
     image: linuxserver/sabnzbd:${SABNZBD_DOCKER_TAG:-latest}
     container_name: ${SABNZBD_CONTAINER_NAME:-sabnzbd}
     restart: ${SABNZBD_RESTART:-unless-stopped}
@@ -17,9 +17,9 @@ services:
       - /dev/rtc:/dev/rtc:ro
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-    #ports:
-      # - 8181:8080 needed to do a fresh setup because of hostname whitelist
-    environment: 
+    # ports:
+    #   - 8181:8080 # needed to do a fresh setup because of hostname whitelist
+    environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
@@ -37,10 +37,3 @@ services:
       - traefik.http.services.sabnzbd.loadbalancer.server.port=8080
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
-
-    # Flame dashboard labels
-      
-      - flame.type=application # "app" works too
-      - flame.name=${SABNZBD_FLAME_NAME:-sabnzbd} 
-      - flame.url=https://${SABNZBD_CONTAINER_NAME:-sabnzbd}.${HOST_DOMAIN}
-      - flame.icon=${SABNZBD_FLAME_ICON:-cloud-download-outline} # optional, default is "docker"

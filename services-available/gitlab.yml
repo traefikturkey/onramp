@@ -2,8 +2,8 @@ version: '3'
 
 networks:
   traefik:
-    external: true   
-    
+    external: true
+
 # https://docs.gitlab.com/ee/install/docker.html
 
 services:
@@ -11,6 +11,8 @@ services:
     image: gitlab/gitlab-ce:${GITLAB_DOCKER_TAG:-latest}
     container_name: ${GITLAB_CONTAINER_NAME:-gitlab} 
     restart: ${GITLAB_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/gitlab/config:/etc/config
       - ./etc/gitlab/data:/var/opt/gitlab
@@ -21,12 +23,12 @@ services:
       - PGID=${PGID:-1000}
       - TZ=${TZ}
       - GITLAB_OMNIBUS_CONFIG=
-          external_url 'https://${GITLAB_CONTAINER_NAME:-gitlab}.${HOST_DOMAIN}'; 
+          external_url 'https://${GITLAB_CONTAINER_NAME:-gitlab}.${HOST_DOMAIN}';
           #registry_external_url 'https://${GITLAB_CONTAINER_NAME:-gitlab}.${HOST_DOMAIN}'
           #registry['enable'] = true;
     ports:
       # - 4000:4000
-      - "222:22"      
+      - "222:22"
     labels:
       - joyride.host.name=${GITLAB_CONTAINER_NAME:-gitlab}.${HOST_DOMAIN}
       - traefik.enable=true
@@ -41,7 +43,7 @@ services:
 
   # gitlab-runner:
   #   image: gitlab/gitlab-runner:alpine
-  #   container_name: gitlab-runner    
+  #   container_name: gitlab-runner
   #   restart: always
   #   depends_on:
   #     - gitlab

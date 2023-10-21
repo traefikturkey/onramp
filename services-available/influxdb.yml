@@ -2,8 +2,8 @@ version: '3'
 
 networks:
   traefik:
-    external: true   
-    
+    external: true
+
 # https://hub.docker.com/_/influxdb
 # https://github.com/influxdata/influxdb
 
@@ -12,6 +12,8 @@ services:
     image: influxdb:${INFLUXDB_DOCKER_TAG:-latest}
     container_name: ${INFLUXDB_CONTAINER_NAME:-influxdb} 
     restart: ${INFLUXDB_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/influxdb:/etc/influxdb2
       - ${INFLUXDB_DIR:-./media/databases/influxdb}:/var/lib/influxdb2
@@ -21,11 +23,11 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - DOCKER_INFLUXDB_INIT_MODE=setup
-      - DOCKER_INFLUXDB_INIT_USERNAME=${INFLUXDB_INIT_ADMIN_USER} 
+      - DOCKER_INFLUXDB_INIT_USERNAME=${INFLUXDB_INIT_ADMIN_USER}
       - DOCKER_INFLUXDB_INIT_PASSWORD=${INFLUXDB_INIT_ADMIN_PASSWORD}
       - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${INFLUXDB_INIT_ADMIN_TOKEN}
-      - DOCKER_INFLUXDB_INIT_ORG=${INFLUXDB_INIT_ORG} 
-      - DOCKER_INFLUXDB_INIT_BUCKET=${INFLUXDB_INIT_BUCKET} 
+      - DOCKER_INFLUXDB_INIT_ORG=${INFLUXDB_INIT_ORG}
+      - DOCKER_INFLUXDB_INIT_BUCKET=${INFLUXDB_INIT_BUCKET}
       - TZ=${TZ}
     labels:
       - joyride.host.name=${INFLUXDB_CONTAINER_NAME:-influxdb}.${HOST_DOMAIN}

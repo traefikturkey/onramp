@@ -2,8 +2,8 @@ version: '3'
 
 networks:
   traefik:
-    external: true   
-    
+    external: true
+
 # https://github.com/authelia/authelia
 
 services:
@@ -34,4 +34,4 @@ services:
       - traefik.http.middlewares.authelia.forwardauth.trustForwardHeader=true
       - traefik.http.middlewares.authelia.forwardauth.authResponseHeaders=Remote-User,Remote-Groups,Remote-Name,Remote-Email
       - com.centurylinklabs.watchtower.enable=true
-      - autoheal=true 
+      - autoheal=true

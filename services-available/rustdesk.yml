@@ -1,11 +1,15 @@
 version: '3'
-    
+
+networks:
+  traefik:
+    external: true
+
 # https://rustdesk.com/docs/en/self-host/install/
 
 services:
   rustdesk:
     image: rustdesk/rustdesk-server:${RUSTDESK_DOCKER_TAG:-latest}
-    container_name: ${RUSTDESK_ID_CONTAINER_NAME:-rustdesk-id-server} 
+    container_name: ${RUSTDESK_ID_CONTAINER_NAME:-rustdesk-id-server}
     restart: ${RUSTDESK_RESTART:-unless-stopped}
     command: hbbs -r ${RUSTDESK_RELAY_CONTAINER_NAME:-rustdesk-relay}.${HOST_DOMAIN}:21117
     volumes:
@@ -31,8 +35,10 @@ services:
 
   rustdesk-relay:
     image: rustdesk/rustdesk-server:${RUSTDESK_DOCKER_TAG:-latest}
-    container_name: ${RUSTDESK_RELAY_CONTAINER_NAME:-rustdesk-relay} 
+    container_name: ${RUSTDESK_RELAY_CONTAINER_NAME:-rustdesk-relay}
     restart: ${RUSTDESK_RESTART:-unless-stopped}
+    networks:
+      - traefik
     ports:
       - 21117:21117
       - 21119:21119
@@ -42,11 +48,9 @@ services:
       - TZ=${TZ}
     command: hbbr
     volumes:
-      - ./etc/rustdesk:/root 
+      - ./etc/rustdesk:/root
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-    networks:
-      - traefik
     labels:
       - joyride.host.name=${RUSTDESK_RELAY_CONTAINER_NAME:-rustdesk-relay}.${HOST_DOMAIN}
       - traefik.enable=false

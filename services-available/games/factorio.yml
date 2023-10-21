@@ -1,16 +1,12 @@
 version: '3'
 
-networks:
-  default:
-    name: ${FACTORIO_NETWORK:-games}
-
 # https://hub.docker.com/r/goofball222/factorio
 
 services:
   factorio:
     image: goofball222/factorio:${FACTORIO_VERSION:-latest}
     container_name: ${FACTORIO_CONTAINER_NAME:-factorio}
-    restart:  ${FACTORIO_RESTART_POLICY:-unless-stopped}
+    restart: ${FACTORIO_RESTART_POLICY:-unless-stopped}
     hostname: ${FACTORIO_HOSTNAME:-factorio}
     ports:
       - ${FACTORIO_PORT_27015:-27015}:27015

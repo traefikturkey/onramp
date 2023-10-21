@@ -2,15 +2,17 @@ version: '3'
 
 networks:
   traefik:
-    external: true   
-    
+    external: true
+
 # https://github.com/mailhog/MailHog
- 
+
 services:
   mailhog:
     image: mailhog/mailhog:${MAILHOG_DOCKER_TAG:-latest}
     container_name: ${MAILHOG_CONTAINER_NAME:-mailhog} 
     restart: ${MAILHOG_RESTART:-unless-stopped}
+    networks:
+      - traefik
     ports:
       - ${MAILHOG_SMTP_PORT:-1025}:${MAILHOG_SMTP_PORT:-1025}
     volumes:

@@ -13,7 +13,7 @@ services:
     restart: ${TAUTULLI_RESTART:-unless-stopped}
     volumes:
       - ./etc/tautulli:/config
-    environment: 
+    environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}

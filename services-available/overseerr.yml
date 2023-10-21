@@ -2,8 +2,8 @@ version: '3'
 
 networks:
   traefik:
-    external: true   
-    
+    external: true
+
 # https://hub.docker.com/r/linuxserver/overseerr
 
 services:
@@ -11,6 +11,8 @@ services:
     image: linuxserver/overseerr:${OVERSEERR_DOCKER_TAG:-latest}
     container_name: ${OVERSEERR_CONTAINER_NAME:-overseerr} 
     restart: ${OVERSEER_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/overseerr:/config
       - /etc/timezone:/etc/timezone:ro
@@ -29,10 +31,3 @@ services:
       - traefik.http.services.overseerr.loadbalancer.server.port=5055
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
-
-      # Flame dashboard labels
-      
-      - flame.type=application # "app" works too
-      - flame.name=${OVERSEERR_FLAME_NAME:-overseerr} 
-      - flame.url=https://${OVERSEERR_CONTAINER_NAME:-overseerr}.${HOST_DOMAIN}
-      - flame.icon=${OVERSEERR_FLAME_ICON:-docker} # optional, default is "docker"

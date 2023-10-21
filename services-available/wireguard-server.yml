@@ -6,7 +6,7 @@ version: '3'
 services:
   wireguard-server:
     image: lscr.io/linuxserver/wireguard:${WIREGUARD_SERVER_DOCKER_TAG:-latest}
-    container_name: ${WIREGUARD_SERVER_CONTAINER_NAME:-wireguard-server} 
+    container_name: ${WIREGUARD_SERVER_CONTAINER_NAME:-wireguard-server}
     restart: ${WIREGUARD_SERVER_RESTART:-unless-stopped}
     cap_add:
       - NET_ADMIN
@@ -16,7 +16,7 @@ services:
       - ${WIREGUARD_SERVER_PORT:-51820}:${WIREGUARD_SERVER_PORT:-51820}/udp
     volumes:
       - ./etc/wireguard-server:/config
-      - /lib/modules:/lib/modules  
+      - /lib/modules:/lib/modules
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
@@ -27,7 +27,7 @@ services:
       - SERVERPORT=${WIREGUARD_SERVER_PORT:-51820}
       - PEERS=${WIREGUARD_PEERS:-1}
       - PEERDNS=${WIREGUARD_PEERDNS:-auto}
-      - ALLOWEDIPS=${WIREGUARD_ALLOWEDIPS:-0.0.0.0/0} 
+      - ALLOWEDIPS=${WIREGUARD_ALLOWEDIPS:-0.0.0.0/0}
       - INTERNAL_SUBNET=${WIREGUARD_INTERNAL_SUBNET:-10.250.250.0/24} #Subnet used in VPN tunnel
     labels:
       - joyride.host.name=${WIREGUARD_SERVER_CONTAINER_NAME:-wireguard-server}.${HOST_DOMAIN}

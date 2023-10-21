@@ -4,12 +4,12 @@ networks:
   traefik:
     external: true   
 
-# https://hub.docker.com/r/kasmweb/postman    
+# https://hub.docker.com/r/kasmweb/postman
 
 services:
   postman:
     image: kasmweb/postman:${POSTMAN_DOCKER_TAG:-1.12.0-rolling}
-    container_name: ${POSTMAN_CONTAINER_NAME:-postman} 
+    container_name: ${POSTMAN_CONTAINER_NAME:-postman}
     restart: ${POSTMAN_RESTART:-unless-stopped}
     volumes:
       - /etc/timezone:/etc/timezone:ro

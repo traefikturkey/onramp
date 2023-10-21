@@ -4,7 +4,7 @@ version: '3'
 
 services:
   avahi:
-    image: ghcr.io/mattkobayashi/docker-avahi:${AVAHI_DOCKER_TAG:-latest}  
+    image: ghcr.io/mattkobayashi/docker-avahi:${AVAHI_DOCKER_TAG:-latest}
     container_name: ${AVAHI_CONTAINER_NAME:-avahi}
     restart: ${AVAHI_RESTART:-unless-stopped}
     network_mode: host

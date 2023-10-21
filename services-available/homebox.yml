@@ -2,18 +2,18 @@ version: '3'
 
 networks:
   traefik:
-    external: true   
-    
+    external: true
+
 # https://hay-kot.github.io/homebox/
 # https://hay-kot.github.io/homebox/quick-start/
 
 services:
   homebox:
     image: ghcr.io/hay-kot/homebox:${HOMEBOX_DOCKER_TAG:-latest}
-    container_name: ${HOMEBOX_CONTAINER_NAME:-homebox} 
+    container_name: ${HOMEBOX_CONTAINER_NAME:-homebox}
     restart: ${HOMEBOX_RESTART:-unless-stopped}
     volumes:
-      - ./etc/homebox:/data 
+      - ./etc/homebox:/data
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:

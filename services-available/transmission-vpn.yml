@@ -2,8 +2,8 @@ version: '3'
 
 networks:
   traefik:
-    external: true   
-    
+    external: true
+
 # https://hub.docker.com/r/haugene/transmission-openvpn
 # https://haugene.github.io/docker-transmission-openvpn/
 
@@ -12,6 +12,8 @@ services:
     image: haugene/transmission-openvpn:${TRANSMISSION_VPN_DOCKER_TAG:-latest}
     container_name: ${TRANSMISSION_VPN_CONTAINER_NAME:-transmission-vpn} 
     restart: ${TRANSMISSION_VPN_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/transmission-vpn:/data
       - /etc/timezone:/etc/timezone:ro
@@ -27,7 +29,7 @@ services:
       - TRANSMISSION_WEB_UI=${TRANSMISSION_VPN_WEBUI:-combustion}
       - TRANSMISSION_DOWNLOAD_DIR=/downloads/completed
       - TRANSMISSION_INCOMPLETE_DIR=/downloads/incomplete
-      - TRANSMISSION_WATCH_DIR=/downloads/torrents      
+      - TRANSMISSION_WATCH_DIR=/downloads/torrents
       - OPENVPN_PROVIDER=${TRANSMISSION_VPN_PROVIDER:-PIA}
       - OPENVPN_CONFIG=${TRANSMISSION_VPN_CONFIG:-france}
       - OPENVPN_USERNAME=${TRANSMISSION_VPN_USERNAME:-user}
@@ -36,12 +38,11 @@ services:
       - OPENVPN_IPV6=off
       - DISABLE_PORT_UPDATER=true
       - OVERRIDE_DNS_1=1.1.1.1
-      - OVERRIDE_DNS_2=1.0.0.1      
-
+      - OVERRIDE_DNS_2=1.0.0.1
     logging:
       driver: json-file
       options:
-        max-size: 10m      
+        max-size: 10m
     labels:
       - joyride.host.name=${TRANSMISSION_VPN_CONTAINER_NAME:-transmission-vpn}.${HOST_DOMAIN}
       - traefik.enable=true
@@ -50,11 +51,3 @@ services:
       - traefik.http.services.transmission-vpn.loadbalancer.server.port=9091
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
-
-      # Flame dashboard labels
-      
-      - flame.type=application # "app" works too
-      - flame.name=${TRANSMISSION_VPN_FLAME_NAME:-transmission-vpn} 
-      - flame.url=https://${TRANSMISSION_VPN_CONTAINER_NAME:-transmission-vpn}.${HOST_DOMAIN}
-      - flame.icon=${TRANSMISSION_VPN_FLAME_ICON:-docker} # optional, default is "docker"
-

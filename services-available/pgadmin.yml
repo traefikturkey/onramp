@@ -2,8 +2,8 @@ version: '3'
 
 networks:
   traefik:
-    external: true   
-    
+    external: true
+
 # https://www.pgadmin.org/
 # https://hub.docker.com/r/dpage/pgadmin4/
 

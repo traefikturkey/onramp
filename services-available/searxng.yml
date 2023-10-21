@@ -4,7 +4,7 @@ networks:
   traefik:
     external: true
 
-# Copy the settings template in etc/searxng and save it as settings.yml in the same directory. 
+# Copy the settings template in etc/searxng and save it as settings.yml in the same directory.
 # Make sure you change the secret key.
 
 services:
@@ -49,11 +49,11 @@ services:
     image: "redis:alpine"
     command: redis-server --save "" --appendonly "no"
     tmpfs:
-     - /var/lib/redis
+      - /var/lib/redis
     cap_drop:
-     - ALL
+      - ALL
     cap_add:
-     - SETGID
-     - SETUID
-     - DAC_OVERRIDE
+      - SETGID
+      - SETUID
+      - DAC_OVERRIDE
     restart: unless-stopped

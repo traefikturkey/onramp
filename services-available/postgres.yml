@@ -2,8 +2,8 @@ version: '3'
 
 networks:
   traefik:
-    external: true   
-    
+    external: true
+
 # https://hub.docker.com/_/postgres
 
 services:
@@ -21,7 +21,7 @@ services:
       - POSTGRES_USER=${POSTGRES_USER:-admin}
       - POSTGRES_DB=${POSTGRES_DB:-admin}
     ports:
-    - 5432:5432
+      - 5432:5432
     labels:
       - traefik.enable=false
       - com.centurylinklabs.watchtower.enable=true

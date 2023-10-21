@@ -5,12 +5,13 @@ version: '3'
 
 networks:
   traefik:
-    external: true   
+    external: true
+# <================= add links to documentation here =================>
 
 services:
   healthchecks:
     image: healthchecks/healthchecks:${HEALTHCHECKS_DOCKER_TAG:-latest}
-    container_name: ${HEALTHCHECKS_CONTAINER_NAME:-healthchecks}  
+    container_name: ${HEALTHCHECKS_CONTAINER_NAME:-healthchecks}
     restart: ${HEALTHCHECKS_RESTART:-unless-stopped}
     networks:
       - traefik
@@ -40,7 +41,7 @@ services:
       - REGISTRATION_OPEN=True
       - SECRET_KEY=${HEALTHCHECKS_SECRET_KEY:-123456}
       - SHELL_ENABLED=False
-      - SITE_LOGO_URL=https://healthchecks.io/static/img/logo-full-ua.svg 
+      - SITE_LOGO_URL=https://healthchecks.io/static/img/logo-full-ua.svg
       - SITE_NAME=${HEALTHCHECKS_SITE_NAME:-healthchecks}
       - SITE_ROOT=https://${HEALTHCHECKS_CONTAINER_NAME:-healthchecks}.${HOST_DOMAIN}
     labels:
@@ -52,8 +53,6 @@ services:
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
 
-
-
   hc-postgres:
     image: postgres:${HEALTHCHECKS_DOCKER_TAG:-16.0}
     container_name: hc-postgres
@@ -61,7 +60,6 @@ services:
     environment:
       POSTGRES_USER: ${HEALTHCHECKS_DB_USER:-dbadmin}
       POSTGRES_PASSWORD: ${HEALTHCHECKS_DB_PASS:-changeme}
-      POSTGRES_DB: healthchecks 
+      POSTGRES_DB: healthchecks
     volumes:
       - ./etc/healthchecks:/var/lib/postgresql/data
-

@@ -12,5 +12,5 @@ volumes:
 services:
   qdirstat:
     volumes:
-      - ./etc/qdirstat:/config 
+      - ./etc/qdirstat:/config
       - ${QDIRSTAT_MEDIA_VOLUME:-qdirstat-nfs-volume}:/storage

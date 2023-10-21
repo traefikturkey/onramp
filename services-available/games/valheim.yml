@@ -1,18 +1,16 @@
-version: '3'networks:
-  default:
-    name: ${VALHEIM_NETWORK:-traefik}
-    
+version: '3'
+
 # https://github.com/lloesche/valheim-server-docker
 # https://github.com/lloesche/valheim-server-docker/blob/main/valheim.env.example
 
 services:
   valheim:
     image: ghcr.io/lloesche/valheim-server:${VALHEIM_DOCKER_TAG:-latest}
-    container_name: ${VALHEIM_CONTAINER_NAME:-valheim} 
+    container_name: ${VALHEIM_CONTAINER_NAME:-valheim}
     restart: ${VALHEIM_RESTART:-unless-stopped}
     #enabling this below is optional https://github.com/lloesche/valheim-server-docker#basic-docker-usage
     # cap_add:
-    #   - sys_nice 
+    #   - sys_nice
     volumes:
       - ./etc/games/valheim/config:/config
       - ./etc/games/valheim/data:/opt/valheim
@@ -26,7 +24,7 @@ services:
       - SERVER_NAME=${VALHEIM_SERVER_NAME:-Valheim server run by Docker}
       - WORLD_NAME=${VALHEIM_WORLD_NAME:-valheim} # server will crash if the there are any upper case letters in the world name
       - SERVER_PASS=${VALHEIM_SERVER_PASS:-Valheim}
-    ports: 
+    ports:
       - "2456-2457:2456-2457/udp"
       #- "9001:9001/tcp"
     labels:
@@ -37,10 +35,3 @@ services:
       - traefik.http.services.valheim.loadbalancer.server.port=9001
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
-
-      # Flame dashboard labels
-      
-      - flame.type=application # "app" works too
-      - flame.name=${VALHEIM_FLAME_NAME:-valheim} 
-      - flame.url=https://${VALHEIM_CONTAINER_NAME:-valheim}.${HOST_DOMAIN}
-      - flame.icon=${VALHEIM_FLAME_ICON:-docker} # optional, default is "docker"

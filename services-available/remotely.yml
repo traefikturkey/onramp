@@ -2,14 +2,14 @@ version: '3'
 
 networks:
   traefik:
-    external: true   
-    
+    external: true
+
 # https://github.com/immense/Remotely
 
 services:
   remotely:
     image: immybot/remotely:${REMOTELY_DOCKER_TAG:-latest}
-    container_name: ${REMOTELY_CONTAINER_NAME:-remotely} 
+    container_name: ${REMOTELY_CONTAINER_NAME:-remotely}
     restart: ${REMOTELY_RESTART:-unless-stopped}
     volumes:
       - ./etc/remotely:/remotely-data
@@ -27,10 +27,3 @@ services:
       - traefik.http.services.remotely.loadbalancer.server.port=5000
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
-
-      # Flame dashboard labels
-      
-      - flame.type=application # "app" works too
-      - flame.name=${REMOTELY_FLAME_NAME:-remotely} 
-      - flame.url=https://${REMOTELY_CONTAINER_NAME:-remotely}.${HOST_DOMAIN}
-      - flame.icon=${REMOTELY_FLAME_ICON:-docker} # optional, default is "docker"

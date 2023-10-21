@@ -2,8 +2,8 @@ version: '3'
 
 networks:
   traefik:
-    external: true   
-    
+    external: true
+
 # https://hub.docker.com/r/linuxserver/wikijs
 # https://docs.requarks.io/
 
@@ -12,6 +12,8 @@ services:
     image: linuxserver/wikijs:${WIKIJS_DOCKER_TAG:-latest}
     container_name: ${WIKIJS_CONTAINER_NAME:-wikijs} 
     restart: ${WIKIJS_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/wikijs:/config
       - ./etc/wikijs:/data
@@ -29,11 +31,3 @@ services:
       - traefik.http.services.wikijs.loadbalancer.server.port=3000
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
-
-      # Flame dashboard labels
-      
-      - flame.type=application # "app" works too
-      - flame.name=${WIKIJS_FLAME_NAME:-wikijs} 
-      - flame.url=https://${WIKIJS_CONTAINER_NAME:-wikijs}.${HOST_DOMAIN}
-      - flame.icon=${WIKIJS_FLAME_ICON:-docker} # optional, default is "docker"
-

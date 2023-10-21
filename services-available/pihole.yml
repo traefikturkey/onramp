@@ -10,11 +10,13 @@ services:
     image: pihole/pihole:${PIHOLE_DOCKER_TAG:-latest}
     container_name: ${PIHOLE_CONTAINER_NAME:-pihole} 
     restart: ${PIHOLE_RESTART:-unless-stopped}
+    networks:
+      - traefik
     #network_mode: "host"
     # cap_add:
     #   - NET_ADMIN
     volumes:
-      - ./etc/pihole:/etc/pihole 
+      - ./etc/pihole:/etc/pihole
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       - ./etc/pihole/dnsmasq:/etc/dnsmasq.d
@@ -27,7 +29,7 @@ services:
       - "53:53/tcp"
       - "53:53/udp"
     #   - "67:67/udp"
-    #   - "8080:80/tcp"  
+    #   - "8080:80/tcp"
     labels:
       - joyride.host.name=${PIHOLE_CONTAINER_NAME:-pihole}.${HOST_DOMAIN}
       - traefik.enable=true
@@ -39,10 +41,3 @@ services:
       - traefik.http.routers.pihole.middlewares=piholeredirect
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
-
-      # Flame dashboard labels
-      
-      - flame.type=application # "app" works too
-      - flame.name=${PIHOLE_FLAME_NAME:-pihole} 
-      - flame.url=https://${PIHOLE_CONTAINER_NAME:-pihole}.${HOST_DOMAIN}
-      - flame.icon=${PIHOLE_FLAME_ICON:-docker} # optional, default is "docker"

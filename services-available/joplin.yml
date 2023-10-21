@@ -2,16 +2,29 @@ version: '3'
 
 networks:
   traefik:
-    external: true   
-    
+    external: true
+
 # https://joplinapp.org/
 # https://hub.docker.com/r/joplin/server
 # https://github.com/laurent22/joplin
 
 services:
+  db:
+    image: postgres:15
+    container_name: ${JOPLIN_DB_CONTAINER_NAME:-joplin-db}
+    restart: ${JOPLIN_RESTART:-unless-stopped}
+    volumes:
+      - ./etc/joplin:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=${JOPLIN_POSTGRES_PASSWORD:-postgres}
+      - POSTGRES_USER=${JOPLIN_POSTGRES_USER:-postgres}
+      - POSTGRES_DB=${JOPLIN_POSTGRES_DATABASE:-joplin}
+
   joplin:
     image: joplin/server:${JOPLIN_DOCKER_TAG:-latest}
-    container_name: ${JOPLIN_CONTAINER_NAME:-joplin} 
+    container_name: ${JOPLIN_CONTAINER_NAME:-joplin}
     restart: ${JOPLIN_RESTART:-unless-stopped}
     volumes:
       - /etc/timezone:/etc/timezone:ro
@@ -37,7 +50,7 @@ services:
       # - MAILER_AUTH_USER=you@yourdomain.com
       # - MAILER_AUTH_PASSWORD=3m@1lPa55w0rD
       # - MAILER_NOREPLY_NAME=JoplinServer
-      # - MAILER_NOREPLY_EMAIL=you@yourdomain.com      
+      # - MAILER_NOREPLY_EMAIL=you@yourdomain.com
     labels:
       - joyride.host.name=${JOPLIN_CONTAINER_NAME:-joplin}.${HOST_DOMAIN}
       - traefik.enable=true

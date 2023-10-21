@@ -2,15 +2,15 @@ version: '3'
 
 networks:
   traefik:
-    external: true   
-    
+    external: true
+
 # https://github.com/pterodactyl/panel/blob/develop/docker-compose.example.yml
 # https://github.com/EdyTheCow/docker-pterodactyl/blob/master/panel/compose/docker-compose.yml
 
 services:
   pterodactyl-panel:
     image: ghcr.io/pterodactyl/panel:${PTERODACTYL_PANEL_DOCKER_TAG:-latest}
-    container_name: ${PTERODACTYL_PANEL_CONTAINER_NAME:-pterodactyl-panel} 
+    container_name: ${PTERODACTYL_PANEL_CONTAINER_NAME:-pterodactyl-panel}
     restart: ${PTERODACTYL_PANEL_RESTART:-unless-stopped}
     volumes:
       - "./etc/pterodactyl-panel:/config"
@@ -42,10 +42,3 @@ services:
       - traefik.http.services.pterodactyl-panel.loadbalancer.server.port=80
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
-
-      # Flame dashboard labels
-      
-      - flame.type=application # "app" works too
-      - flame.name=${PTERODACTYL_PANEL_FLAME_NAME:-pterodactyl-panel} 
-      - flame.url=https://${PTERODACTYL_PANEL_CONTAINER_NAME:-panel}.${HOST_DOMAIN}
-      - flame.icon=${PTERODACTYL_PANEL_FLAME_ICON:-docker} # optional, default is "docker"

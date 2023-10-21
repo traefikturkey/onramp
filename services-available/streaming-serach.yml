@@ -3,18 +3,18 @@ version: '3'
 networks:
   traefik:
     external: true
-    
+
 # https://github.com/Colaski/global-streaming-search
 
 services:
   streaming-serach:
     image: colaski/global-streaming-search:${STREAMING_SERACH_DOCKER_TAG:-latest}
-    container_name: ${STREAMING_SERACH_CONTAINER_NAME:-streaming-serach} 
+    container_name: ${STREAMING_SERACH_CONTAINER_NAME:-streaming-serach}
     restart: ${STREAMING_SERACH_RESTART:-unless-stopped}
     networks:
       - traefik
     volumes:
-      #- ./etc/streaming-serach:/config # <==== this probably needs changed 
+      #- ./etc/streaming-serach:/config # <==== this probably needs changed
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
