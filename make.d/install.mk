@@ -33,12 +33,20 @@ environments-enabled/onramp.env:
 	@echo ""
 	@python3 scripts/env-subst.py environments-available/onramp.template "ONRAMP"
 
-EXECUTABLES = git nano jq yq yamllint
+EXECUTABLES = git nano jq yq pip yamllint
 MISSING_PACKAGES := $(foreach exec,$(EXECUTABLES),$(if $(shell which $(exec)),,addpackage-$(exec)))
 
 addrepositories:
 	sudo apt-add-repository ppa:rmescandon/yq -y
 	sudo apt update
+
+addpackage-pip:
+	curl -sSL https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+	sudo python3 get-pip.py
+	rm get-pip.py
+
+addpackage-yamllint: addpackage-pip
+	sudo pip install --root-user-action=ignore yamllint
 
 addpackage-%: addrepositories
 	DEBIAN_FRONTEND=noninteractive sudo apt install $* -y
