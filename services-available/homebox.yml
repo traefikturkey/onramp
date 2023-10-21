@@ -12,6 +12,8 @@ services:
     image: ghcr.io/hay-kot/homebox:${HOMEBOX_DOCKER_TAG:-latest}
     container_name: ${HOMEBOX_CONTAINER_NAME:-homebox}
     restart: ${HOMEBOX_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/homebox:/data
       - /etc/timezone:/etc/timezone:ro

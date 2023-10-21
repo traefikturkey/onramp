@@ -12,6 +12,8 @@ services:
     image: linuxserver/syncthing:${SYNCTHING_DOCKER_TAG:-latest}
     container_name: ${SYNCTHING_CONTAINER_NAME:-syncthing}
     restart: ${SYNCTHING_RESTART:-unless-stopped}
+    networks:
+      - traefik
     environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}

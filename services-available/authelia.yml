@@ -11,6 +11,8 @@ services:
     image: authelia/authelia:${AUTHELIA_DOCKER_TAG:-latest}
     container_name: ${AUTHELIA_CONTAINER_NAME:-authelia}
     restart: ${AUTHELIA_RESTART:-unless-stopped}
+    networks:
+      - traefik
     expose:
       - 9091
     volumes:

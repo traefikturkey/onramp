@@ -14,6 +14,8 @@ services:
     image: drone/drone:${DRONECI_DOCKER_TAG:-latest}
     container_name: ${DRONECI_CONTAINER_NAME:-drone}
     restart: ${DRONECI_RESTART:-unless-stopped}
+    networks:
+      - traefik
     depends_on:
       - gitea
     environment:

@@ -11,6 +11,8 @@ services:
     image: felddy/foundryvtt:${FOUNDRYVTT_DOCKER_TAG:-latest}
     container_name: ${FOUNDRYVTT_CONTAINER_NAME:-foundryvtt}
     restart: ${FOUNDRYVTT_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/foundryvtt:/data
       # - /etc/timezone:/etc/timezone:ro

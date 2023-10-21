@@ -14,6 +14,8 @@ services:
     image: newsdash/newsdash:${NEWSDASH_DOCKER_TAG:-latest}
     container_name: ${NEWSDASH_CONTAINER_NAME:-newsdash}
     restart: ${NEWSDASH_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/newsdash:/config
       - /etc/timezone:/etc/timezone:ro

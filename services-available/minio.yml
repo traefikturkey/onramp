@@ -20,6 +20,8 @@ services:
     image: minio/minio:${MINIO_DOCKER_TAG:-latest}
     container_name: ${MINIO_CONTAINER_NAME:-minio}
     restart: ${MINIO_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/minio:/data # <==== this probably needs changed
       # - /etc/timezone:/etc/timezone:ro

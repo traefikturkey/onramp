@@ -19,6 +19,8 @@ services:
     image: excalidraw/excalidraw:${EXCALIDRAW_DOCKER_TAG:-latest}
     container_name: ${EXCALIDRAW_CONTAINER_NAME:-excalidraw}
     restart: ${EXCALIDRAW_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
     # - ./etc/excalidraw:/config # <==== this probably needs changed
       - /etc/timezone:/etc/timezone:ro

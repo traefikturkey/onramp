@@ -11,6 +11,8 @@ services:
     image: stonith404/pingvin-share:${PINGVINSHARE_DOCKER_TAG:-latest}
     container_name: ${PINGVINSHARE_CONTAINER_NAME:-pingvin-share}
     restart: ${PINGVINSHARE_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/pingvin-share:/opt/app/backend/data
       - ${PINGVINSHARE_MEDIA_VOLUME:-./media/pingvin-share}:/opt/app/frontend/public/img

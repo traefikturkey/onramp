@@ -11,6 +11,8 @@ services:
     image: ghost:${GHOST_DOCKER_TAG:-alpine}
     container_name: ${GHOST_CONTAINER_NAME:-ghost}
     restart: ${GHOST_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/ghost:/var/lib/ghost/content
       - /etc/timezone:/etc/timezone:ro

@@ -11,6 +11,8 @@ services:
     image: vaultwarden/server:${VAULTWARDEN_DOCKER_TAG:-latest}
     container_name: ${VAULTWARDEN_CONTAINER_NAME:-vaultwarden}
     restart: ${VAULTWARDEN_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/vaultwarden:/data
       - /dev/rtc:/dev/rtc:ro

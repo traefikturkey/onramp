@@ -11,6 +11,8 @@ services:
     image: mpepping/cyberchef:${CYBERCHEF_DOCKER_TAG:-latest}
     container_name: ${CYBERCHEF_CONTAINER_NAME:-cyberchef}
     restart: ${CYBERCHEF_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/cyberchef:/config
       - /etc/timezone:/etc/timezone:ro

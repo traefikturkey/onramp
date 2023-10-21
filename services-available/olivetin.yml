@@ -11,6 +11,8 @@ services:
     image: jamesread/olivetin:${OLIVETIN_DOCKER_TAG:-latest}
     container_name: ${OLIVETIN_CONTAINER_NAME:-olivetin}
     restart: ${OLIVETIN_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/olivetin:/config # replace host path or volume as needed
     # ports:

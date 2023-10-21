@@ -11,6 +11,8 @@ services:
     image: lscr.io/linuxserver/kasm:${KASM_DOCKER_TAG:-latest}
     container_name: ${KASM_CONTAINER_NAME:-kasm}
     restart: ${KASM_RESTART:-unless-stopped}
+    networks:
+      - traefik
     privileged: true
     volumes:
       - ./etc/kasm/data:/opt

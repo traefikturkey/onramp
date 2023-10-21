@@ -7,6 +7,8 @@ services:
     image: fallenbagel/jellyseer:${JELLYSEER_DOCKER_TAG:-latest}
     container_name: ${JELLYSEER_CONTAINER_NAME:-jellyseer}
     restart: ${JELLYSEER_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/jellyseer:/config # <==== this probably needs changed
       - /etc/timezone:/etc/timezone:ro

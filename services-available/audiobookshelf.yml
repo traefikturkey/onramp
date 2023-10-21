@@ -11,6 +11,8 @@ services:
     image: ghcr.io/advplyr/audiobookshelf:${AUDIOBOOKSHELF_DOCKER_TAG:-latest}
     container_name: ${AUDIOBOOKSHELF_CONTAINER_NAME:-audiobookshelf}
     restart: ${AUDIOBOOKSHELF_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/audiobookshelf/config:/config
       - ./etc/audiobookshelf/metadata:/metadata

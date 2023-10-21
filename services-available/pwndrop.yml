@@ -11,6 +11,8 @@ services:
     image: lscr.io/linuxserver/pwndrop:${PWNDROP_DOCKER_TAG:-latest}
     container_name: ${PWNDROP_CONTAINER_NAME:-pwndrop}
     restart: ${PWNDROP_RESTART:-unless-stopped}
+    networks:
+      - traefik
     environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}

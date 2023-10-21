@@ -12,6 +12,8 @@ services:
     image: gcr.io/cadvisor/cadvisor:${CADVISOR_DOCKER_TAG:-latest}
     container_name: ${CADVISOR_CONTAINER_NAME:-cadvisor}
     restart: ${CADVISOR_RESTART:-unless-stopped}
+    networks:
+      - traefik
     command:
       - -allow_dynamic_housekeeping=false
       - -housekeeping_interval=30s

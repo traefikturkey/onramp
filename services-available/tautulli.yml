@@ -11,6 +11,8 @@ services:
     image: lscr.io/linuxserver/tautulli:${TAUTULLI_DOCKER_TAG:-latest}
     container_name: ${TAUTULLI_CONTAINER_NAME:-tautulli}
     restart: ${TAUTULLI_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/tautulli:/config
     environment:

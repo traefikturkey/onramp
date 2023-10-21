@@ -2,8 +2,6 @@ version: "3"
 networks:
   traefik:
     external: true
-  loki:
-    name: loki
 
 # https://grafana.com/docs/grafana/next/setup-grafana/installation/docker/
 # https://github.com/prometheus/prometheus
@@ -15,8 +13,7 @@ services:
     restart: ${GRAFANA_RESTART:-unless-stopped}
     user: ${PUID:-1000}
     networks:
-      - default
-      - loki
+      - traefik
     environment:
       - GF_INSTALL_PLUGINS=camptocamp-prometheus-alertmanager-datasource
     # ports:

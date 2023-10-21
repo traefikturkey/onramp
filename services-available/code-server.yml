@@ -13,6 +13,8 @@ services:
     image: lscr.io/linuxserver/code-server:${CODE_SERVER_DOCKER_TAG:-latest}
     container_name: ${CODE_SERVER_CONTAINER_NAME:-code-server}
     restart: ${CODE_SERVER_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/code-server:/config
       - /etc/timezone:/etc/timezone:ro

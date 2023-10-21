@@ -11,6 +11,8 @@ services:
     image: mariadb:${MARIADB_DOCKER_TAG:-latest}
     container_name: ${MARIADB_CONTAINER_NAME:-mariadb}
     restart: ${MARIADB_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ${MARIADB_DB_VOLUME:-./media/databases/mariadb}:/var/lib/mysql
       - /etc/timezone:/etc/timezone:ro

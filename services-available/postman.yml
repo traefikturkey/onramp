@@ -11,6 +11,8 @@ services:
     image: kasmweb/postman:${POSTMAN_DOCKER_TAG:-1.12.0-rolling}
     container_name: ${POSTMAN_CONTAINER_NAME:-postman}
     restart: ${POSTMAN_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro

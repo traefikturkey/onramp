@@ -11,6 +11,8 @@ services:
     image: linuxserver/sabnzbd:${SABNZBD_DOCKER_TAG:-latest}
     container_name: ${SABNZBD_CONTAINER_NAME:-sabnzbd}
     restart: ${SABNZBD_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/sabnzbd:/config
       - ${MEDIA_DOWNLOADS_VOLUME:-./media/downloads}:/downloads

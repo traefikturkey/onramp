@@ -11,6 +11,8 @@ services:
     image: lscr.io/linuxserver/heimdall:${HEIMDALL_DOCKER_TAG:-latest}
     container_name: ${HEIMDALL_CONTAINER_NAME:-heimdall}
     restart: ${HEIMDALL_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/heimdall:/config
       - /etc/timezone:/etc/timezone:ro

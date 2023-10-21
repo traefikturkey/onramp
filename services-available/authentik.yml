@@ -55,6 +55,8 @@ services:
     image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_DOCKER_TAG:-2023.6.1}
     container_name: ${AUTHENTIK_CONTAINER_NAME:-authentik_server}
     restart: ${AUTHENTIK_RESTART:-unless-stopped}
+    networks:
+      - traefik
     command: server
     environment:
       - PUID=${PUID:-1000}

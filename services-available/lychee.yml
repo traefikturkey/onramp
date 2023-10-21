@@ -11,6 +11,8 @@ services:
     image: kdelfour/lychee-docker:${LYCHEE_DOCKER_TAG:-latest}
     container_name: ${LYCHEE_CONTAINER_NAME:-lychee}
     restart: ${LYCHEE_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/lychee:/config
       - /etc/timezone:/etc/timezone:ro

@@ -12,6 +12,8 @@ services:
     image: ghcr.io/matrix-org/synapse:${SYNAPSE_DOCKER_TAG:-latest}
     container_name: ${SYNAPSE_CONTAINER_NAME:-synapse}
     restart: ${SYNAPSE_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/synapse:/data
       - /etc/timezone:/etc/timezone:ro

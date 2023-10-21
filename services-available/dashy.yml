@@ -11,6 +11,8 @@ services:
     image: ghcr.io/lissy93/dashy:${DASHY_DOCKER_TAG:-latest}
     container_name: ${DASHY_CONTAINER_NAME:-dashy}
     restart: ${DASHY_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/dashy/dashy-config.yml:/app/public/conf.yml
       - ./media/assets/dashy-icons:/app/public/item-icons

@@ -12,6 +12,8 @@ services:
     image: lscr.io/linuxserver/freshrss:${FRESHRSS_DOCKER_TAG:-latest}
     container_name: ${FRESHRSS_CONTAINER_NAME:-freshrss}
     restart: ${FRESHRSS_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/freshrss:/config
       - /etc/timezone:/etc/timezone:ro

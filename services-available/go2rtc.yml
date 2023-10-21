@@ -11,6 +11,8 @@ services:
     image: alexxit/go2rtc:${GO2RTC_DOCKER_TAG:-latest}
     container_name: ${GO2RTC_CONTAINER_NAME:-go2rtc}
     restart: ${GO2RTC_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/go2rtc:/config
       - /etc/timezone:/etc/timezone:ro

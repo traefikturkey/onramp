@@ -11,6 +11,8 @@ services:
     image: nicolargo/glances:${GLANCES_DOCKER_TAG:-latest}
     container_name: ${GLANCES_CONTAINER_NAME:-glances}
     restart: ${GLANCES_RESTART:-unless-stopped}
+    networks:
+      - traefik
     pid: host
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock

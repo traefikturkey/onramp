@@ -11,6 +11,8 @@ services:
     image: jlesage/qdirstat:${QDIRSTAT_DOCKER_TAG:-latest}
     container_name: ${QDIRSTAT_CONTAINER_NAME:-qdirstat}
     restart: ${QDIRSTAT_RESTART:-unless-stopped}
+    networks:
+      - traefik
     cap_add:
       - SYS_NICE
     environment:

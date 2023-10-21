@@ -11,6 +11,8 @@ services:
     image: linuxserver/bazarr:${BAZARR_DOCKER_TAG:-latest}
     container_name: ${BAZARR_CONTAINER_NAME:-bazarr}
     restart: ${BAZARR_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/bazarr:/config
       - ${BAZARR_MOVIES_VOLUME:-./media/movies}:/movies

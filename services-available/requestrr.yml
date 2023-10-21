@@ -11,6 +11,8 @@ services:
     image: darkalfx/requestrr:${REQUESTRR_DOCKER_TAG:-latest}
     container_name: ${REQUESTRR_CONTAINER_NAME:-requestrr}
     restart: ${REQUESTRR_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/requestrr:/root/config
     labels:

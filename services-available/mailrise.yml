@@ -11,6 +11,8 @@ services:
     image: yoryan/mailrise:${MAILRISE_DOCKER_TAG:-latest}
     container_name: ${MAILRISE_CONTAINER_NAME:-mailrise}
     restart: ${MAILRISE_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/mailrise:/config
       - /etc/timezone:/etc/timezone:ro

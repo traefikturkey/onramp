@@ -7,6 +7,8 @@ services:
     image: lscr.io/linuxserver/homeassistant:${HOMEASSISTANT_DOCKER_TAG:-latest}
     container_name: ${HOMEASSISTANT_CONTAINER_NAME:-homeassistant}
     restart: ${HOMEASSISTANT_RESTART:-unless-stopped}
+    networks:
+      - traefik
     network_mode: host
     volumes:
       - ./etc/homeassistant:/config

@@ -11,6 +11,8 @@ services:
     image: louislam/uptime-kuma:${UPTIMEKUMA_DOCKER_TAG:-latest}
     container_name: ${UPTIMEKUMA_CONTAINER_NAME:-uptimekuma}
     restart: ${UPTIMEKUMA_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/uptime-kuma:/app/data
       - ${UPTIMEKUMA_DOCKER_SOCKET:-/var/run/docker.sock}:/var/run/docker.sock

@@ -11,6 +11,8 @@ services:
     image: ghcr.io/goofball222/unifi:${UNIFI_DOCKER_TAG:-latest-ubuntu}
     container_name: ${UNIFI_CONTAINER_NAME:-unifi}
     restart: ${UNIFI_RESTART:-unless-stopped}
+    networks:
+      - traefik
     environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}

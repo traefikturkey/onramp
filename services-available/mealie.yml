@@ -10,6 +10,8 @@ services:
     image: hkotel/mealie:${MEALIE_DOCKER_TAG:-omni-nightly
     container_name: ${MEALIE_CONTAINER_NAME:-mealie}
     restart: ${MEALIE_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ${MEALIE_CONFIG_VOLUME:-./etc/mealie}:/app/data
       - /etc/timezone:/etc/timezone:ro

@@ -10,6 +10,8 @@ networks:
     image: prom/alertmanager:${ALERTMANAGER_DOCKER_TAG:-latest}
     container_name: prometheus-alertmanager
     restart: unless-stopped
+    networks:
+      - traefik
     command:
       - '--config.file=/etc/alertmanager/alertmanager.yml'
       - '--log.level=debug'

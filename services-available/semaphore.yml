@@ -38,6 +38,8 @@ services:
     image: semaphoreui/semaphore:${SEMAPHORE_DOCKER_TAG:-latest}
     container_name: ${SEMAPHORE_CONTAINER_NAME:-semaphore}
     restart: ${SEMAPHORE_RESTART:-unless-stopped}
+    networks:
+      - traefik
     depends_on:
       - mysql #change to postgres for postgres
     volumes:

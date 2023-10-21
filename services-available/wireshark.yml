@@ -11,6 +11,8 @@ services:
     image: lscr.io/linuxserver/wireshark:${WIRESHARK_DOCKER_TAG:-latest}
     container_name: ${WIRESHARK_CONTAINER_NAME:-wireshark}
     restart: ${WIRESHARK_RESTART:-unless-stopped}
+    networks:
+      - traefik
     privileged: true
     cap_add:
       - NET_ADMIN

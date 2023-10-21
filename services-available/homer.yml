@@ -11,6 +11,8 @@ services:
     image: b4bz/homer:${HOMER_DOCKER_TAG:-latest}
     container_name: ${HOMER_CONTAINER_NAME:-homer}
     restart: ${HOMER_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ${HOMER_ASSETS_DIR:-./etc/homer}:/www/assets
       - /etc/timezone:/etc/timezone:ro

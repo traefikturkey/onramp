@@ -12,6 +12,8 @@ services:
     image: gitea/gitea:${GITEA_DOCKER_TAG:-latest}
     container_name: ${GITEA_CONTAINER_NAME:-gitea}
     restart: ${GITEA_RESTART:-unless-stopped}
+    networks:
+      - traefik
     environment:
       - APP_NAME=${GITEA_REPOSITORY_NAME:-Gitea}
       - USER_UID=${PUID:-1000}

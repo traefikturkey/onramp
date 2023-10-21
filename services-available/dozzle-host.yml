@@ -11,6 +11,8 @@ services:
     image: amir20/dozzle:${DOZZLE_DOCKER_TAG:-latest}
     container_name: ${DOZZLE_CONTAINER_NAME:-dozzle}
     restart: ${DOZZLE_RESTART:-unless-stopped}
+    networks:
+      - traefik
     environment:
       - DOZZLE_LEVEL=${DOZZLE_LEVEL:-debug}
     volumes:

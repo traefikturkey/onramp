@@ -26,6 +26,8 @@ services:
     image: joplin/server:${JOPLIN_DOCKER_TAG:-latest}
     container_name: ${JOPLIN_CONTAINER_NAME:-joplin}
     restart: ${JOPLIN_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro

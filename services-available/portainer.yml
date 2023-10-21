@@ -11,6 +11,8 @@ services:
     image: portainer/portainer-${PORTAINER_VERSION:-ce}:${PORTAINER_DOCKER_TAG:-latest}
     container_name: ${PORTAINER_CONTAINER_NAME:-portainer}
     restart: ${PORTAINER_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/portainer:/data
       - /etc/timezone:/etc/timezone:ro

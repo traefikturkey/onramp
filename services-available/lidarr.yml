@@ -11,6 +11,8 @@ services:
     image: linuxserver/lidarr:${LIDARR_DOCKER_TAG:-latest}
     container_name: ${LIDARR_CONTAINER_NAME:-lidarr}
     restart: ${LIDARR_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/lidarr:/config
       - ${LIDARR_MUSIC_VOLUME:-./media/music}:/music

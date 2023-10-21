@@ -7,6 +7,8 @@ services:
     image: aceberg/watchyourlan:${WATCHYOURLAN_DOCKER_TAG:-latest}
     container_name: ${WATCHYOURLAN_CONTAINER_NAME:-watchyourlan}
     restart: ${WATCHYOURLAN_RESTART:-unless-stopped}
+    networks:
+      - traefik
     network_mode: host # required to arpscan interfaces defined below
     volumes:
       - ./etc/watchyourlan:/data

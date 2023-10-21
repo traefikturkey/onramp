@@ -12,6 +12,8 @@ services:
     image: dpage/pgadmin4:${PGADMIN_DOCKER_TAG:-latest}
     container_name: ${PGADMIN_CONTAINER_NAME:-pgadmin}
     restart: ${PGADMIN_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/pgadmin:/var/lib/pgadmin4
       # - ./etc/pgadmin/servers.json:/pgadmin4/servers.json

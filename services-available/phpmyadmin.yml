@@ -11,6 +11,8 @@ services:
     image: phpmyadmin/phpmyadmin:${PHPMYADMIN_DOCKER_TAG:-latest}
     container_name: ${PHPMYADMIN_CONTAINER_NAME:-phpmyadmin}
     restart: ${PHPMYADMIN_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/phpmyadmin:/data
       - /etc/timezone:/etc/timezone:ro
