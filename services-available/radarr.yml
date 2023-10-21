@@ -2,7 +2,7 @@ version: '3'
 
 networks:
   traefik:
-    external: true   
+    external: true
 
 # https://hub.docker.com/r/linuxserver/radarr
 
@@ -38,10 +38,3 @@ services:
       - traefik.http.services.radarr.loadbalancer.server.port=7878
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
-
-    # Flame dashboard labels
-      
-      - flame.type=application # "app" works too
-      - flame.name=${RADARR_FLAME_NAME:-Radarr} 
-      - flame.url=https://${RADARR_CONTAINER_NAME:-radarr}.${HOST_DOMAIN}
-      - flame.icon=${RADARR_FLAME_ICON:-movie-search-outline} # optional, default is "docker"

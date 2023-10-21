@@ -9,7 +9,7 @@ networks:
 services:
   netbootxyz:
     image: linuxserver/netbootxyz:${NETBOOTXYZ_DOCKER_TAG:-latest}
-    container_name: ${NETBOOTXYZ_CONTAINER_NAME:-netbootxyz} 
+    container_name: ${NETBOOTXYZ_CONTAINER_NAME:-netbootxyz}
     restart: ${NETBOOTXYZ_RESTART:-unless-stopped}
     networks:
       - traefik

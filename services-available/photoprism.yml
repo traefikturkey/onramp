@@ -10,7 +10,7 @@ networks:
 services:
   photoprism:
     image: photoprism/photoprism:${PHOTOPRISM_DOCKER_TAG:-latest}
-    container_name: ${PHOTOPRISM_CONTAINER_NAME:-photoprism} 
+    container_name: ${PHOTOPRISM_CONTAINER_NAME:-photoprism}
     restart: ${PHOTOPRISM_RESTART:-unless-stopped}
     networks:
       - traefik

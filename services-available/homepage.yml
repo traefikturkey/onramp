@@ -13,7 +13,7 @@ networks:
 services:
   homepage:
     image: ghcr.io/gethomepage/homepage:${HOMEPAGE_DOCKER_TAG:-latest}
-    container_name: ${HOMEPAGE_CONTAINER_NAME:-homepage} 
+    container_name: ${HOMEPAGE_CONTAINER_NAME:-homepage}
     restart: ${HOMEPAGE_RESTART:-unless-stopped}
     networks:
       - traefik

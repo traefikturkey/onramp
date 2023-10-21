@@ -10,7 +10,7 @@ networks:
 services:
   influxdb:
     image: influxdb:${INFLUXDB_DOCKER_TAG:-latest}
-    container_name: ${INFLUXDB_CONTAINER_NAME:-influxdb} 
+    container_name: ${INFLUXDB_CONTAINER_NAME:-influxdb}
     restart: ${INFLUXDB_RESTART:-unless-stopped}
     networks:
       - traefik

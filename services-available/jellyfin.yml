@@ -13,7 +13,7 @@ services:
     restart: ${JELLYFIN_RESTART:-unless-stopped}
     networks:
       - traefik
-    environment: 
+    environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}

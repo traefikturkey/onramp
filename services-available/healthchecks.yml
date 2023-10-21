@@ -1,4 +1,4 @@
-version: '3'    
+version: '3'
 
 # https://hub.docker.com/r/healthchecks/healthchecks
 # https://github.com/healthchecks/healthchecks

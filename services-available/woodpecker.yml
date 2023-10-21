@@ -11,7 +11,7 @@ networks:
 services:
   woodpecker:
     image: woodpeckerci/woodpecker-server:${WOODPECKER_DOCKER_TAG:-latest}
-    container_name: ${WOODPECKER_CONTAINER_NAME:-woodpecker} 
+    container_name: ${WOODPECKER_CONTAINER_NAME:-woodpecker}
     restart: ${WOODPECKER_RESTART:-unless-stopped}
     networks:
       - traefik
@@ -44,7 +44,7 @@ services:
 
   woodpecker-agent:
     image: woodpeckerci/woodpecker-agent:${WOODPECKER_AGENT_DOCKER_TAG:-latest}
-    container_name: ${WOODPECKER_AGENT_CONTAINER_NAME:-woodpecker-agent} 
+    container_name: ${WOODPECKER_AGENT_CONTAINER_NAME:-woodpecker-agent}
     restart: ${WOODPECKER_AGENT_RESTART:-unless-stopped}
     command: agent
     depends_on:

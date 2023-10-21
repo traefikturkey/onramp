@@ -2,14 +2,14 @@ version: '3'
 
 networks:
   traefik:
-    external: true   
-    
+    external: true
+
 # https://docs.linuxserver.io/images/docker-netbox
 
 services:
   netbox:
     image: lscr.io/linuxserver/netbox:${NETBOX_DOCKER_TAG:-latest}
-    container_name: ${NETBOX_CONTAINER_NAME:-netbox} 
+    container_name: ${NETBOX_CONTAINER_NAME:-netbox}
     restart: ${NETBOX_RESTART:-unless-stopped}
     networks:
       - traefik

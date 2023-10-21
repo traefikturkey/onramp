@@ -9,7 +9,7 @@ networks:
 services:
   mailhog:
     image: mailhog/mailhog:${MAILHOG_DOCKER_TAG:-latest}
-    container_name: ${MAILHOG_CONTAINER_NAME:-mailhog} 
+    container_name: ${MAILHOG_CONTAINER_NAME:-mailhog}
     restart: ${MAILHOG_RESTART:-unless-stopped}
     networks:
       - traefik

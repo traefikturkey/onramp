@@ -2,7 +2,7 @@ version: '3'
 
 networks:
   traefik:
-    external: true   
+    external: true
 
 # https://hub.docker.com/r/nodered/node-red/
 
@@ -13,7 +13,7 @@ services:
     restart: ${NODERED_RESTART:-unless-stopped}
     networks:
       - traefik
-    # uncomment the network_mode: host line if nodered needs  
+    # uncomment the network_mode: host line if nodered needs
     # to be auto discovered by Amazon Alexa or Google Home
     # network_mode: host
     user: ${PUID:-1000}:${PGID:-1000}

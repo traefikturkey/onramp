@@ -2,7 +2,7 @@ version: '3'
 
 networks:
   traefik:
-    external: true   
+    external: true
 
 # https://github.com/goofball222/unifi
 
@@ -39,11 +39,3 @@ services:
       - traefik.http.services.unifi.loadbalancer.server.scheme=https
       - traefik.http.services.unifi.loadbalancer.server.port=8443
       - autoheal.stop.timeout=180
-
-    # Flame dashboard labels
-      
-      - flame.type=application # "app" works too
-      - flame.name=${UNIFI_FLAME_NAME:-unifi} 
-      - flame.url=https://${UNIFI_CONTAINER_NAME:-unifi}.${HOST_DOMAIN}
-      - flame.icon=${UNIFI_FLAME_ICON:-wan} # optional, default is "docker"
-      

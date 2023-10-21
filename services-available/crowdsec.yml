@@ -9,7 +9,7 @@ networks:
 services:
   crowdsec:
     image: ghcr.io/crowdsecurity/crowdsec:${CROWDSEC_DOCKER_TAG:-latest}
-    container_name: ${CROWDSEC_CONTAINER_NAME:-crowdsec} 
+    container_name: ${CROWDSEC_CONTAINER_NAME:-crowdsec}
     restart: ${CROWDSEC_RESTART:-unless-stopped}
     volumes:
       - ./etc/crowdsec:/etc/crowdsec/

@@ -2,7 +2,7 @@ version: '3'
 
 networks:
   traefik:
-    external: true   
+    external: true
 
 # https://hub.docker.com/r/linuxserver/tautulli
 
@@ -25,10 +25,3 @@ services:
       - traefik.http.services.tautulli.loadbalancer.server.port=8181
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
-
-      # Flame dashboard labels
-      
-      - flame.type=application # "app" works too
-      - flame.name=${TAUTULLI_FLAME_NAME:-tautulli} 
-      - flame.url=https://${TAUTULLI_CONTAINER_NAME:-tautulli}.${HOST_DOMAIN}
-      - flame.icon=${TAUTULLI_FLAME_ICON:-docker} # optional, default is "docker"

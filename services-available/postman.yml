@@ -2,7 +2,7 @@ version: '3'
 
 networks:
   traefik:
-    external: true   
+    external: true
 
 # https://hub.docker.com/r/kasmweb/postman
 
@@ -28,10 +28,3 @@ services:
       - traefik.http.services.postman.loadbalancer.server.port=6901
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
-
-      # Flame dashboard labels
-      
-      - flame.type=application # "app" works too
-      - flame.name=${POSTMAN_FLAME_NAME:-postman} 
-      - flame.url=https://${POSTMAN_CONTAINER_NAME:-postman}.${HOST_DOMAIN}
-      - flame.icon=${POSTMAN_FLAME_ICON:-docker} # optional, default is "docker"

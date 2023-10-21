@@ -10,7 +10,7 @@ networks:
 services:
   prestashop:
     image: prestashop/prestashop:${PRESTASHOP_DOCKER_TAG:-latest}
-    container_name: ${PRESTASHOP_CONTAINER_NAME:-prestashop} 
+    container_name: ${PRESTASHOP_CONTAINER_NAME:-prestashop}
     restart: ${PRESTASHOP_RESTART:-unless-stopped}
     networks:
       - traefik

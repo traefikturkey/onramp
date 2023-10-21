@@ -2,13 +2,13 @@ version: '3'
 
 networks:
   traefik:
-    external: true   
+    external: true
 # https://github.com/pi-hole/docker-pi-hole/blob/master/README.md
 
 services:
   pihole:
     image: pihole/pihole:${PIHOLE_DOCKER_TAG:-latest}
-    container_name: ${PIHOLE_CONTAINER_NAME:-pihole} 
+    container_name: ${PIHOLE_CONTAINER_NAME:-pihole}
     restart: ${PIHOLE_RESTART:-unless-stopped}
     networks:
       - traefik

@@ -10,7 +10,7 @@ networks:
 services:
   playit-docker:
     image: ghcr.io/mafen/playit-docker:${PLAYITDOCKER_DOCKER_TAG:-latest}
-    container_name: ${PLAYITDOCKER_CONTAINER_NAME:-playit-docker} 
+    container_name: ${PLAYITDOCKER_CONTAINER_NAME:-playit-docker}
     restart: ${PLAYIT_DOCKER_RESTART:-unless-stopped}
     volumes:
       #- ./etc/playit-docker:/config # <==== this probably needs changed

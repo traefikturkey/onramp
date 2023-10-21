@@ -11,15 +11,15 @@ services:
     image: dperson/samba:${SAMBA_DOCKER_TAG:-latest}
     container_name: ${SAMBA_CONTAINER_NAME:-samba}
     restart: ${SAMBA_RESTART:-unless-stopped}
-    ports:  
-      - 137:137/udp  
-      - 138:138/udp  
-      - 139:139/tcp  
-      - 445:445/tcp  
-    environment:  
-      - TZ=${TZ}  
-      - USERID=${PUID:-1000}  
-      - GROUPID=${PGID:-1000}  
+    ports:
+      - 137:137/udp
+      - 138:138/udp
+      - 139:139/tcp
+      - 445:445/tcp
+    environment:
+      - TZ=${TZ}
+      - USERID=${PUID:-1000}
+      - GROUPID=${PGID:-1000}
       - WORKGROUP=${SAMBA_WORKGROUP:-workgroup}
       - USER=${SAMBRA_USER};${SAMBA_PASSWORD}
       #- USER2=${SAMBA_USER2};${SAMBA_PASSWORD2}

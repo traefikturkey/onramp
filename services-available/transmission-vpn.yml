@@ -10,7 +10,7 @@ networks:
 services:
   transmission-vpn:
     image: haugene/transmission-openvpn:${TRANSMISSION_VPN_DOCKER_TAG:-latest}
-    container_name: ${TRANSMISSION_VPN_CONTAINER_NAME:-transmission-vpn} 
+    container_name: ${TRANSMISSION_VPN_CONTAINER_NAME:-transmission-vpn}
     restart: ${TRANSMISSION_VPN_RESTART:-unless-stopped}
     networks:
       - traefik

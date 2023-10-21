@@ -9,7 +9,7 @@ networks:
 services:
   flame:
     image: pawelmalak/flame:${FLAME_DOCKER_TAG:-latest}
-    container_name: ${FLAME_CONTAINER_NAME:-flame} 
+    container_name: ${FLAME_CONTAINER_NAME:-flame}
     restart: ${FLAME_RESTART:-unless-stopped}
     networks:
       - traefik

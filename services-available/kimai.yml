@@ -10,7 +10,7 @@ networks:
 services:
   kimai:
     image: kimai/kimai2:${KIMAI_DOCKER_TAG:-apache}
-    container_name: ${KIMAI_CONTAINER_NAME:-kimai} 
+    container_name: ${KIMAI_CONTAINER_NAME:-kimai}
     restart: ${KIMAI_RESTART:-unless-stopped}
     networks:
       - traefik

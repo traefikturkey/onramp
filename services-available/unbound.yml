@@ -5,7 +5,7 @@ version: '3'
 services:
   unbound:
     image: mvance/unbound:${UNBOUND_DOCKER_TAG:-latest}
-    container_name: ${UNBOUND_CONTAINER_NAME:-unbound} 
+    container_name: ${UNBOUND_CONTAINER_NAME:-unbound}
     restart: ${UNBOUND_RESTART:-unless-stopped}
     volumes:
       - /etc/timezone:/etc/timezone:ro

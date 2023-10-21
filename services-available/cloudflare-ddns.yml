@@ -4,7 +4,7 @@ version: '3'
 
 services:
   cloudflare-ddns:
-    image: oznu/cloudflare-ddns:${CLOUDFLARE_DDNS_DOCKER_TAG:-latest} 
+    image: oznu/cloudflare-ddns:${CLOUDFLARE_DDNS_DOCKER_TAG:-latest}
     container_name: ${CLOUDFLARE_DDNS_CONTAINER_NAME:-cloudflare-ddns}
     restart: ${CLOUDFLARE_DDNS_RESTART:-unless-stopped}
     environment:

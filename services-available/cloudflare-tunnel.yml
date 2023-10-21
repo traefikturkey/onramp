@@ -18,7 +18,7 @@ services:
       - /mnt
     volumes:
       - ./etc/cloudflare-tunnel:/mnt
-      
+
   cloudflare-tunnel:
     image: cloudflare/cloudflared:${CLOUDFLARE_TUNNEL_DOCKER_TAG:-latest}
     container_name: ${CLOUDFLARE_TUNNEL_CONTAINER_NAME:-cloudflare-tunnel}

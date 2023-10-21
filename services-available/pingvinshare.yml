@@ -2,14 +2,14 @@ version: '3'
 
 networks:
   traefik:
-    external: true   
-    
+    external: true
+
 # https://github.com/stautonico/pingvin-share
 
 services:
   pingvin-share:
     image: stonith404/pingvin-share:${PINGVINSHARE_DOCKER_TAG:-latest}
-    container_name: ${PINGVINSHARE_CONTAINER_NAME:-pingvin-share} 
+    container_name: ${PINGVINSHARE_CONTAINER_NAME:-pingvin-share}
     restart: ${PINGVINSHARE_RESTART:-unless-stopped}
     volumes:
       - ./etc/pingvin-share:/opt/app/backend/data
@@ -28,10 +28,3 @@ services:
       - traefik.http.services.pingvin-share.loadbalancer.server.port=3000
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
-
-      # Flame dashboard labels
-      
-      - flame.type=application
-      - flame.name=${PINGVIN_SHARE_FLAME_NAME:-pingvin-share}
-      - flame.url=https://${PINGVINSHARE_CONTAINER_NAME:-share}.${HOST_DOMAIN}
-      - flame.icon=${PINGVINSHARE_FLAME_ICON:-docker}

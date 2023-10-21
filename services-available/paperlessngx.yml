@@ -2,8 +2,8 @@ version: '3'
 
 networks:
   traefik:
-    external: true   
-    
+    external: true
+
 # https://hub.docker.com/r/linuxserver/paperless-ngx
 # https://github.com/paperless-ngx/paperless-ngx
 # https://docs.paperless-ngx.com/
@@ -46,11 +46,11 @@ services:
 
   paperless-ngx:
     image: ghcr.io/paperless-ngx/paperless-ngx:${PAPERLESSNGX_DOCKER_TAG:-latest}
-    container_name: ${PAPERLESSNGX_CONTAINER_NAME:-paperless-ngx} 
+    container_name: ${PAPERLESSNGX_CONTAINER_NAME:-paperless-ngx}
     restart: ${PAPERLESSNGX_RESTART:-unless-stopped}
     depends_on:
       - broker
-      - db  
+      - db
       - gotenberg
       - tika
     volumes:
@@ -86,10 +86,3 @@ services:
       - traefik.http.services.paperless-ngx.loadbalancer.server.port=8000
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
-
-      # Flame dashboard labels
-      
-      - flame.type=application # "app" works too
-      - flame.name=${PAPERLESSNGX_FLAME_NAME:-paperless-ngx} 
-      - flame.url=https://${PAPERLESSNGX_CONTAINER_NAME:-paperless-ngx}.${HOST_DOMAIN}
-      - flame.icon=${PAPERLESSNGX_FLAME_ICON:-docker} # optional, default is "docker"

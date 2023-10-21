@@ -1,7 +1,7 @@
 version: "3"
 networks:
   traefik:
-    external: true   
+    external: true
   loki:
     name: loki
 
@@ -57,7 +57,7 @@ services:
     # from an external source
     ports:
       - 1514:1514/udp
-      - 1514:1514 
+      - 1514:1514
       - 9080:9080
     command: -config.file=/etc/promtail/promtail-config.yml
     networks:

@@ -9,7 +9,7 @@ networks:
 services:
   postfix:
     image: juanluisbaptiste/postfix:${POSTFIX_DOCKER_TAG:-latest}
-    container_name: ${POSTFIX_CONTAINER_NAME:-postfix} 
+    container_name: ${POSTFIX_CONTAINER_NAME:-postfix}
     restart: ${POSTFIX_RESTART:-unless-stopped}
     ports:
       - 25:25

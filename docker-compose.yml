@@ -18,7 +18,7 @@ services:
     ports:
       - 80:80
       - 443:443
-    env_file: 
+    env_file:
       - environments-enabled/onramp.env
     volumes:
       - ./etc/traefik/letsencrypt:/letsencrypt

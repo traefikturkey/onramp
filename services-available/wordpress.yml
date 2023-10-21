@@ -11,7 +11,7 @@ networks:
 services:
   wordpress:
     image: wordpress:${WORDPRESS_DOCKER_TAG:-latest}
-    container_name: ${WORDPRESS_CONTAINER_NAME:-wordpress} 
+    container_name: ${WORDPRESS_CONTAINER_NAME:-wordpress}
     restart: ${WORDPRESS_RESTART:-unless-stopped}
     networks:
       - traefik

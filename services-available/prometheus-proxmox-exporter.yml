@@ -1,8 +1,8 @@
-  version: '3'
+version: '3'
 
 networks:
   traefik:
-    external: true   
+    external: true
 
 # https://github.com/ilude/prometheus-pve-exporter
 # https://github.com/prometheus-pve/prometheus-pve-exporter

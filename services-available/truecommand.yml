@@ -9,7 +9,7 @@ networks:
 services:
   truecommand:
     image: ixsystems/truecommand:${TRUECOMMAND_DOCKER_TAG:-latest}
-    container_name: ${TRUECOMMAND_CONTAINER_NAME:-truecommand} 
+    container_name: ${TRUECOMMAND_CONTAINER_NAME:-truecommand}
     restart: ${TRUECOMMAND_RESTART:-unless-stopped}
     networks:
       - traefik

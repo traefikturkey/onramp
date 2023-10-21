@@ -9,7 +9,7 @@ networks:
 services:
   webtop:
     image: lscr.io/linuxserver/webtop:${WEBTOP_DOCKER_TAG:-latest}
-    container_name: ${WEBTOP_CONTAINER_NAME:-webtop} 
+    container_name: ${WEBTOP_CONTAINER_NAME:-webtop}
     restart: ${WEBTOP_RESTART:-unless-stopped}
     networks:
       - traefik

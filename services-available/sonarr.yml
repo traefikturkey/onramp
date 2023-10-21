@@ -2,7 +2,7 @@ version: '3'
 
 networks:
   traefik:
-    external: true   
+    external: true
 
 # https://hub.docker.com/r/linuxserver/sonarr
 
@@ -38,10 +38,3 @@ services:
       - traefik.http.services.sonarr.loadbalancer.server.port=8989
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
-
-    # Flame dashboard labels
-      
-      - flame.type=application # "app" works too
-      - flame.name=${SONARR_FLAME_NAME:-Sonarr} 
-      - flame.url=https://${SONARR_CONTAINER_NAME:-sonarr}.${HOST_DOMAIN}
-      - flame.icon=${SONARR_FLAME_ICON:-television-classic} # optional, default is "docker"

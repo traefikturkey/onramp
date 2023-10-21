@@ -9,7 +9,7 @@ networks:
 services:
   gitlab:
     image: gitlab/gitlab-ce:${GITLAB_DOCKER_TAG:-latest}
-    container_name: ${GITLAB_CONTAINER_NAME:-gitlab} 
+    container_name: ${GITLAB_CONTAINER_NAME:-gitlab}
     restart: ${GITLAB_RESTART:-unless-stopped}
     networks:
       - traefik

@@ -10,7 +10,7 @@ networks:
 services:
   wikijs:
     image: linuxserver/wikijs:${WIKIJS_DOCKER_TAG:-latest}
-    container_name: ${WIKIJS_CONTAINER_NAME:-wikijs} 
+    container_name: ${WIKIJS_CONTAINER_NAME:-wikijs}
     restart: ${WIKIJS_RESTART:-unless-stopped}
     networks:
       - traefik

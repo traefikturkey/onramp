@@ -10,7 +10,7 @@ networks:
 services:
   dashdot:
     image: mauricenino/dashdot:${DASHDOT_DOCKER_TAG:-latest}
-    container_name: ${DASHDOT_CONTAINER_NAME:-dashdot} 
+    container_name: ${DASHDOT_CONTAINER_NAME:-dashdot}
     restart: ${DASHDOT_RESTART:-unless-stopped}
     networks:
       - traefik

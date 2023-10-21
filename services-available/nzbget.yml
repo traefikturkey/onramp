@@ -9,7 +9,7 @@ networks:
 services:
   nzbget:
     image: linuxserver/nzbget:${NZBGET_DOCKER_TAG:-latest}
-    container_name: ${NZBGET_CONTAINER_NAME:-nzbget} 
+    container_name: ${NZBGET_CONTAINER_NAME:-nzbget}
     restart: ${NZBGET_RESTART:-unless-stopped}
     networks:
       - traefik

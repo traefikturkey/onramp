@@ -9,7 +9,7 @@ networks:
 services:
   gotify:
     image: ghcr.io/gotify/server:${GOTIFY_DOCKER_TAG:-latest}
-    container_name: ${GOTIFY_CONTAINER_NAME:-gotify} 
+    container_name: ${GOTIFY_CONTAINER_NAME:-gotify}
     restart: ${GOTIFY_RESTART:-unless-stopped}
     networks:
       - traefik

@@ -7,7 +7,7 @@ services:
     image: willfarrell/autoheal:${AUTOHEAL_DOCKER_TAG:-latest}
     container_name: ${AUTOHEAL_CONTAINER_NAME:-autoheal}
     restart: ${AUTOHEAL_RESTART:-unless-stopped}
-    environment: 
+    environment:
       - AUTOHEAL_CONTAINER_LABEL=all
       - AUTOHEAL_INTERVAL=${AUTOHEAL_INTERVAL_VALUE:-5}
       - AUTOHEAL_DEFAULT_STOP_TIMEOUT=${AUTOHEAL_STOP_TIMEOUT:-10}

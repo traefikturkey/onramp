@@ -46,7 +46,7 @@ services:
       - traefik.http.services.plex.loadbalancer.server.port=32400
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
-      
+
       # Homepage dashboard labels
       - homepage.group=Media Group
       - homepage.name=Plex

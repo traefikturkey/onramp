@@ -9,7 +9,7 @@ networks:
 services:
   overseerr:
     image: linuxserver/overseerr:${OVERSEERR_DOCKER_TAG:-latest}
-    container_name: ${OVERSEERR_CONTAINER_NAME:-overseerr} 
+    container_name: ${OVERSEERR_CONTAINER_NAME:-overseerr}
     restart: ${OVERSEER_RESTART:-unless-stopped}
     networks:
       - traefik

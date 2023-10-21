@@ -17,7 +17,7 @@ services:
     depends_on:
       - itflow-db
     volumes:
-      - ./etc/itflow:/config # <==== this probably needs changed 
+      - ./etc/itflow:/config # <==== this probably needs changed
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:

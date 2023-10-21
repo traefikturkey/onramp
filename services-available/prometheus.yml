@@ -2,9 +2,7 @@ version: '3'
 
 networks:
   traefik:
-    external: true   
-  loki:
-    name: loki
+    external: true
 
 # https://github.com/prometheus/prometheus
 
@@ -35,9 +33,6 @@ services:
       - /etc/localtime:/etc/localtime:ro
     extra_hosts:
       - host.docker.internal:host-gateway
-    networks:
-      - default
-      - loki
     labels:
       - joyride.host.name=${PROMETHEUS_CONTAINER_NAME:-prometheus}.${HOST_DOMAIN}
       - com.centurylinklabs.watchtower.enable=true
@@ -52,7 +47,7 @@ services:
     image: ghcr.io/ilude/prometheus-pve-exporter
     container_name: proxmox-exporter
     restart: unless-stopped
-    env_file: 
+    env_file:
       - .env
     # ports:
     #   - 9221:9221
@@ -63,10 +58,10 @@ services:
     image: prom/blackbox-exporter:latest
     container_name: prometheus-blackbox
     restart: unless-stopped
-    command: 
+    command:
       - '--config.file=/etc/prometheus/conf/blackbox.yml'
     privileged: true
-    cap_add: 
+    cap_add:
       - CAP_NET_RAW
     # ports:
     #   - 9115:9115

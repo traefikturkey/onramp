@@ -9,7 +9,7 @@ services:
     user: root # Required for container to correctly interact with the volume.
     container_name: ${MSSQL_CONTAINER_NAME:-plex}
     restart: ${MSSQL_RESTART:-unless-stopped}
-     volumes:
+    volumes:
       - ${MSSQL_DB_DIR:-./media/databases/mssql}:/var/opt/mssql/data # paths will have to be researched futher
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
