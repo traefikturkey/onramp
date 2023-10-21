@@ -12,15 +12,17 @@ install: build install-docker
 	cp .templates/env.template .env
 	$(EDITOR) .env
 
-required-dependencies = git nano jq yq yamllint
+EXECUTABLES = git nano jq yq yamllint
+MISSING_PACKAGES := $(foreach exec,$(EXECUTABLES),$(if $(shell which $(exec)),,addpackage-$(exec)))
 
-install-dependencies: .gitconfig
-	
-ifneq (0,$(shell which $(required-dependencies) | echo $$?))
+addrepositories:
 	sudo apt-add-repository ppa:rmescandon/yq -y
 	sudo apt update
-	DEBIAN_FRONTEND=noninteractive sudo apt install $(required-dependencies) -y
-endif
+
+addpackage-%: addrepositories
+	DEBIAN_FRONTEND=noninteractive sudo apt install $* -y
+
+install-dependencies: .gitconfig $(MISSING_PACKAGES)
 
 .gitconfig:
 	git config -f .gitconfig core.hooksPath .githooks
