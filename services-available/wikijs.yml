@@ -3,14 +3,14 @@ version: '3'
 networks:
   traefik:
     external: true
-    
+
 # https://hub.docker.com/r/linuxserver/wikijs
 # https://docs.requarks.io/
 
 services:
   wikijs:
     image: linuxserver/wikijs:${WIKIJS_DOCKER_TAG:-latest}
-    container_name: ${WIKIJS_CONTAINER_NAME:-wikijs} 
+    container_name: ${WIKIJS_CONTAINER_NAME:-wikijs}
     restart: unless-stopped
     networks:
       - traefik
@@ -31,5 +31,3 @@ services:
       - traefik.http.services.wikijs.loadbalancer.server.port=3000
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
-
-

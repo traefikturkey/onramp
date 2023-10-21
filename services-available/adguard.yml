@@ -3,13 +3,13 @@ version: '3'
 networks:
   traefik:
     external: true
-    
+
 # https://github.com/AdguardTeam/AdGuardHome
 
 services:
   adguard:
     image: adguard/adguardhome:${ADGUARD_DOCKER_TAG:-latest}
-    container_name: ${ADGUARD_CONTAINER_NAME:-adguard} 
+    container_name: ${ADGUARD_CONTAINER_NAME:-adguard}
     restart: unless-stopped
     networks:
       - traefik

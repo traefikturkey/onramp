@@ -16,7 +16,7 @@ services:
     volumes:
       - ./etc/vaultwarden:/data
       - /dev/rtc:/dev/rtc:ro
-    environment: 
+    environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}

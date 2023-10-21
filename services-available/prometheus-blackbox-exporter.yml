@@ -13,10 +13,10 @@ services:
     restart: unless-stopped
     networks:
       - traefik
-    command: 
+    command:
       - '--config.file=/etc/prometheus/conf/blackbox.yml'
     privileged: true
-    cap_add: 
+    cap_add:
       - CAP_NET_RAW
     # ports:
     #   - 9115:9115

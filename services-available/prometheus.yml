@@ -14,7 +14,7 @@ services:
     networks:
       - traefik
       - default
-    command: 
+    command:
       - --config.file=/etc/prometheus/conf/prometheus.yml
       - --storage.tsdb.path=/prometheus/data
       - --log.level=${PROMETHEUS_LOG_LEVEL:-debug}

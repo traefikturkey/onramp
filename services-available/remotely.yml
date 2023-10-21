@@ -3,13 +3,13 @@ version: '3'
 networks:
   traefik:
     external: true
-    
+
 # https://github.com/immense/Remotely
 
 services:
   remotely:
     image: immybot/remotely:${REMOTELY_DOCKER_TAG:-latest}
-    container_name: ${REMOTELY_CONTAINER_NAME:-remotely} 
+    container_name: ${REMOTELY_CONTAINER_NAME:-remotely}
     restart: ${REMOTELY_RESTART:-unless-stopped}
     networks:
       - traefik

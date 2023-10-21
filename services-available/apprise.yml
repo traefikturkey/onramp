@@ -3,18 +3,18 @@ version: '3'
 networks:
   traefik:
     external: true
-    
+
 # https://hub.docker.com/r/linuxserver/apprise-api
 
 services:
   apprise:
     image: lscr.io/linuxserver/apprise-api:${APPRISE_DOCKER_TAG:-latest}
-    container_name: ${APPRISE_CONTAINER_NAME:-apprise} 
+    container_name: ${APPRISE_CONTAINER_NAME:-apprise}
     restart: ${APPRISE_RESTART:-unless-stopped}
     networks:
       - traefik
     volumes:
-      - ./etc/apprise:/config # <==== this probably needs changed 
+      - ./etc/apprise:/config # <==== this probably needs changed
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:

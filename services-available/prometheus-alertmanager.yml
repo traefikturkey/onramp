@@ -26,7 +26,7 @@ services:
     volumes:
       - ./etc/prometheus/conf:/etc/alertmanager:rw
       - prometheus:/alertmanager:rw
-    labels: 
+    labels:
       - joyride.host.name=${ALERTMANAGER_HOST_NAME:-alertmanager}.${HOST_DOMAIN}
       - traefik.enable=true
       - traefik.http.routers.alertmanager.rule=Host(`${ALERTMANAGER_HOST_NAME:-alertmanager}.${HOST_DOMAIN}`)

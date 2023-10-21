@@ -3,7 +3,7 @@ version: '3'
 networks:
   traefik:
     external: true
-    
+
 # https://hub.docker.com/r/mbentley/omada-controller
 
 # Article on issues with device adoption
@@ -12,7 +12,7 @@ networks:
 services:
   omada:
     image: mbentley/omada-controller:${OMADA_DOCKER_TAG:-latest}
-    container_name: ${OMADA_CONTAINER_NAME:-omada} 
+    container_name: ${OMADA_CONTAINER_NAME:-omada}
     restart: unless-stopped
     networks:
       - traefik

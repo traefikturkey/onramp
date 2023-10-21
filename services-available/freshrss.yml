@@ -3,19 +3,19 @@ version: '3'
 networks:
   traefik:
     external: true
-    
+
 # https://christitus.com/why-we-dont-browse-the-internet-anymore/
 # https://www.youtube.com/watch?v=nxV0CPNeFxY
 
 services:
   freshrss:
     image: lscr.io/linuxserver/freshrss:${FRESHRSS_DOCKER_TAG:-latest}
-    container_name: ${FRESHRSS_CONTAINER_NAME:-freshrss} 
+    container_name: ${FRESHRSS_CONTAINER_NAME:-freshrss}
     restart: ${FRESHRSS_RESTART:-unless-stopped}
     networks:
       - traefik
     volumes:
-      - ./etc/freshrss:/config  
+      - ./etc/freshrss:/config
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:

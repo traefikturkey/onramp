@@ -22,9 +22,9 @@ services:
       - /etc/localtime:/etc/localtime:ro
     # ports:
     #   - 8989:8989
-    environment: 
+    environment:
       - PUID=${PUID:-1000}
-      - PGID=${PGID:-1000} 
+      - PGID=${PGID:-1000}
       - TZ=${TZ}
     healthcheck:
       test: curl --fail http://localhost:8989 || exit 1

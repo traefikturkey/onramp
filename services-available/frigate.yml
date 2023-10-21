@@ -3,18 +3,18 @@ version: '3'
 networks:
   traefik:
     external: true
-    
+
 # <================= add links to documentation here =================>
 
 services:
   frigate:
     image: ghcr.io/blakeblackshear/frigate:${FRIGATE_DOCKER_TAG:-master-6bcf44a-tensorrt}
-    container_name: ${FRIGATE_CONTAINER_NAME:-frigate} 
+    container_name: ${FRIGATE_CONTAINER_NAME:-frigate}
     restart: ${FRIGATE_RESTART:-unless-stopped}
     networks:
       - traefik
     # devices:
-    #   - /dev/bus/usb:/dev/bus/usb 
+    #   - /dev/bus/usb:/dev/bus/usb
     volumes:
       - ./etc/frigate/config.yml:/config/config.yml
       - ./etc/frigate/frigate.db:/database/frigate.db
@@ -39,7 +39,7 @@ services:
       - "8554:8554" # RTSP feeds
       - "8555:8555/tcp" # WebRTC over tcp
       - "8555:8555/udp" # WebRTC over udp
-    deploy:    
+    deploy:
       resources:
         reservations:
           devices:

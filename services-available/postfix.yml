@@ -3,13 +3,13 @@ version: '3'
 networks:
   traefik:
     external: true
-  
+
 # https://github.com/juanluisbaptiste/docker-postfix
 
 services:
   postfix:
     image: juanluisbaptiste/postfix:${POSTFIX_DOCKER_TAG:-latest}
-    container_name: ${POSTFIX_CONTAINER_NAME:-postfix} 
+    container_name: ${POSTFIX_CONTAINER_NAME:-postfix}
     restart: unless-stopped
     ports:
       - 25:25
@@ -24,4 +24,3 @@ services:
       - traefik.enable=false
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
-       

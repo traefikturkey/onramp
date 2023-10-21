@@ -3,13 +3,13 @@ version: '3'
 networks:
   traefik:
     external: true
-    
+
 # https://github.com/mailhog/MailHog
- 
+
 services:
   mailhog:
     image: mailhog/mailhog:${MAILHOG_DOCKER_TAG:-latest}
-    container_name: ${MAILHOG_CONTAINER_NAME:-mailhog} 
+    container_name: ${MAILHOG_CONTAINER_NAME:-mailhog}
     restart: unless-stopped
     networks:
       - traefik
@@ -26,7 +26,7 @@ services:
       - TZ=${TZ}
       - MH_SMTP_BIND_ADDR=${MH_SMTP_BIND_ADDR:-0.0.0.0:1025}
       - MH_MAILDIR_PATH=maildir
-      - MH_STORAGE=maildir 
+      - MH_STORAGE=maildir
       # - MH_OUTGOING_SMTP={'server name': {'name': 'Mailhog','host': 'postfix.${HOST_DOMAIN}','port': '25','email': 'noreply@${HOST_DOMAIN}' } }
     labels:
       - joyride.host.name=${MAILHOG_CONTAINER_NAME:-mailhog}.${HOST_DOMAIN}

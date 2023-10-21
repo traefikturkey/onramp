@@ -3,19 +3,19 @@ version: '3'
 # https://github.com/dperson/samba
 
 services:
-  samba:  
+  samba:
     image: dperson/samba:${SAMBA_DOCKER_TAG:-latest}
     container_name: ${SAMBA_CONTAINER_NAME:-samba}
     restart: unless-stopped
-    ports:  
-      - 137:137/udp  
-      - 138:138/udp  
-      - 139:139/tcp  
-      - 445:445/tcp  
-    environment:  
-      - TZ=${TZ}  
-      - USERID=${PUID:-1000}  
-      - GROUPID=${PGID:-1000}  
+    ports:
+      - 137:137/udp
+      - 138:138/udp
+      - 139:139/tcp
+      - 445:445/tcp
+    environment:
+      - TZ=${TZ}
+      - USERID=${PUID:-1000}
+      - GROUPID=${PGID:-1000}
       - WORKGROUP=${SAMBA_WORKGROUP:-workgroup}
       - USER=${USER};${SAMBA_PASSWORD}
       #- USER2=${SAMBA_USER2};${SAMBA_PASSWORD2}
@@ -26,11 +26,11 @@ services:
       - SHARE=${SAMBA_SHARE1_NAME:-media};/${SAMBA_SHARE1_NAME:-media};yes;no;no;${USER};${USER};;${SAMBA_SHARE1_NAME:-media}
       #- SHARE2=foo;/foo;yes;no;no;${USER};${USER};;Foo
       #- SHARE3=bar;/bar;yes;no;no;${USER};${USER};;Bar
-    volumes:  
-      - ${SAMBA_SHARE1_VOLUME:-./media}:/${SAMBA_SHARE1_NAME:-media} 
-      #- /host/foo:/container/foo 
-      #- /host/bar:/container/bar 
+    volumes:
+      - ${SAMBA_SHARE1_VOLUME:-./media}:/${SAMBA_SHARE1_NAME:-media}
+      #- /host/foo:/container/foo
+      #- /host/bar:/container/bar
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     labels:
-      - traefik.enable=false 
+      - traefik.enable=false

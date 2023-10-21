@@ -3,18 +3,18 @@ version: '3'
 networks:
   traefik:
     external: true
-    
+
 # https://github.com/linuxserver/docker-webtop
 
 services:
   webtop:
     image: lscr.io/linuxserver/webtop:${WEBTOP_DOCKER_TAG:-latest}
-    container_name: ${WEBTOP_CONTAINER_NAME:-webtop} 
+    container_name: ${WEBTOP_CONTAINER_NAME:-webtop}
     restart: unless-stopped
     networks:
       - traefik
     volumes:
-      - ./etc/webtop:/config # <==== this probably needs changed 
+      - ./etc/webtop:/config # <==== this probably needs changed
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:

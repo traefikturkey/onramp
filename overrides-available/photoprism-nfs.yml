@@ -1,18 +1,18 @@
 version: '3'
 volumes:
-    photoprism-nfs-root:
-      labels:
-        - remove_volume_on=down
-      driver_opts:
-        type: nfs
-        o: "addr=${PHOTOPRISM_ROOT_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
-        device: ":${PHOTOPRISM_ROOT_NFS_SERVER_PATH:-${NFS_PHOTOPRISM_PATH}}"
+  photoprism-nfs-root:
+    labels:
+      - remove_volume_on=down
+    driver_opts:
+      type: nfs
+      o: "addr=${PHOTOPRISM_ROOT_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
+      device: ":${PHOTOPRISM_ROOT_NFS_SERVER_PATH:-${NFS_PHOTOPRISM_PATH}}"
 
 services:
-    photoprism:
-      volumes:
-        - ./etc/photoprism/:/photoprism/config
-        - /etc/timezone:/etc/timezone:ro
-        - /etc/localtime:/etc/localtime:ro
-        - ./etc/photoprism/storage:/photoprism/storage
-        - photoprism-nfs-root:/photoprism/originals/
+  photoprism:
+    volumes:
+      - ./etc/photoprism/:/photoprism/config
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - ./etc/photoprism/storage:/photoprism/storage
+      - photoprism-nfs-root:/photoprism/originals/

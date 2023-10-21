@@ -1,17 +1,17 @@
 version: '3'
-    
+
 # https://docs.linuxserver.io/images/docker-netbox
 
 services:
   netbox:
     image: lscr.io/linuxserver/netbox:${NETBOX_DOCKER_TAG:-latest}
-    container_name: ${NETBOX_CONTAINER_NAME:-netbox} 
+    container_name: ${NETBOX_CONTAINER_NAME:-netbox}
     restart: unless-stopped
     networks:
       - traefik
       - default
     volumes:
-      - ./etc/netbox:/config # <==== this probably needs changed 
+      - ./etc/netbox:/config # <==== this probably needs changed
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
@@ -59,15 +59,15 @@ services:
     labels:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=false
-      - autoheal=true   
+      - autoheal=true
 
   netbox-redis:
     image: redis:alpine
     container_name: netbox_redis
     restart: unless-stopped
     volumes:
-    - ./etc/netbox/redis:/data
+      - ./etc/netbox/redis:/data
     labels:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=false
-      - autoheal=true  
+      - autoheal=true

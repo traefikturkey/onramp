@@ -3,7 +3,7 @@ version: '3'
 networks:
   traefik:
     external: true
-    
+
 # https://www.pgadmin.org/
 # https://hub.docker.com/r/dpage/pgadmin4/
 
@@ -15,7 +15,7 @@ services:
     networks:
       - traefik
     volumes:
-      #- ./etc/pgadmin:/var/lib/pgadmin 
+      #- ./etc/pgadmin:/var/lib/pgadmin
       - /etc/pgadmin/servers.json:/pgadmin4/servers.json
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro

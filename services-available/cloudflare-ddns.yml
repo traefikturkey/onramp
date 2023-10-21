@@ -8,7 +8,7 @@ networks:
 
 services:
   cloudflare-ddns:
-    image: oznu/cloudflare-ddns:${CLOUDFLARE_DDNS_DOCKER_TAG:-latest} 
+    image: oznu/cloudflare-ddns:${CLOUDFLARE_DDNS_DOCKER_TAG:-latest}
     restart: unless-stopped
     environment:
       - EMAIL=${CF_API_EMAIL}

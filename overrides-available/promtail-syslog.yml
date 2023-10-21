@@ -1,8 +1,8 @@
 version: '3'
 
-# enabling this will allow you to send syslog data from an 
+# enabling this will allow you to send syslog data from an
 # external server into this instance of promtail
 services:
   promtail:
     ports:
-      - 1514:1514 
+      - 1514:1514

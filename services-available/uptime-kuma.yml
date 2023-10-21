@@ -16,7 +16,7 @@ services:
     volumes:
       - ./etc/uptime-kuma:/app/data
       - ${UPTIMEKUMA_DOCKER_SOCKET:-/var/run/docker.sock}:/var/run/docker.sock
-    env_file: 
+    env_file:
       - .env
     labels:
       - joyride.host.name=${UPTIMEKUMA_HOST_NAME:-uptimekuma}.${HOST_DOMAIN}

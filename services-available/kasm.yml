@@ -3,13 +3,13 @@ version: '3'
 networks:
   traefik:
     external: true
-    
+
 # https://hub.docker.com/r/linuxserver/kasm
 
 services:
   kasm:
     image: lscr.io/linuxserver/kasm:${KASM_DOCKER_TAG:-latest}
-    container_name: ${KASM_CONTAINER_NAME:-kasm} 
+    container_name: ${KASM_CONTAINER_NAME:-kasm}
     restart: ${KASM_RESTART:-unless-stopped}
     networks:
       - traefik

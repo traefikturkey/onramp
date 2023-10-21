@@ -3,18 +3,18 @@ version: '3'
 networks:
   traefik:
     external: true
-    
+
 #  https://hub.docker.com/r/linuxserver/nzbget
 
 services:
   nzbget:
     image: linuxserver/nzbget:${NZBGET_DOCKER_TAG:-latest}
-    container_name: ${NZBGET_CONTAINER_NAME:-nzbget} 
+    container_name: ${NZBGET_CONTAINER_NAME:-nzbget}
     restart: unless-stopped
     networks:
       - traefik
     volumes:
-      - ./etc/nzbget:/config # <==== this probably needs changed 
+      - ./etc/nzbget:/config # <==== this probably needs changed
       - ${NZBGET_DOWNLOADS_DIR:-./media/downloads}:/downloads
     environment:
       - PUID=${PUID:-1000}

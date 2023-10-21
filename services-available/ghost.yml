@@ -3,13 +3,13 @@ version: '3'
 networks:
   traefik:
     external: true
-    
+
 # https://hub.docker.com/_/ghost
 
 services:
   ghost:
     image: ghost:${GHOST_DOCKER_TAG:-alpine}
-    container_name: ${GHOST_CONTAINER_NAME:-ghost} 
+    container_name: ${GHOST_CONTAINER_NAME:-ghost}
     restart: ${GHOST_RESTART:-unless-stopped}
     networks:
       - traefik

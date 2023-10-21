@@ -3,7 +3,7 @@ version: '3'
 networks:
   traefik:
     external: true
-    
+
 # https://wordpress.com/
 # https://hub.docker.com/_/wordpress
 
@@ -11,7 +11,7 @@ networks:
 services:
   wordpress:
     image: wordpress:${WORDPRESS_DOCKER_TAG:-latest}
-    container_name: ${WORDPRESS_CONTAINER_NAME:-wordpress} 
+    container_name: ${WORDPRESS_CONTAINER_NAME:-wordpress}
     restart: unless-stopped
     networks:
       - traefik
