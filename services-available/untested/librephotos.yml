@@ -11,8 +11,8 @@ services:
     container_name: ${LIBREPHOTOS_PROXY_CONTAINER_NAME:-librephotos} 
     restart: ${LIBREPHOTOS_RESTART:-unless-stopped}
     volumes:
-      - ${LIBREPHOTOS_SCAN_DIRECTORY:-./etc/librephotos/data}:/data
-      - ${LIBREPHOTOS_DATA_DIRECTORY:-./etc/librephotos/protected_media}:/protected_media
+      - ${LIBREPHOTOS_SCAN_DIRECTORY:-./etc/librephotos/pictures}:/data
+      - ${LIBREPHOTOS_DATA_DIRECTORY:-./etc/librephotos/data}/protected_media:/protected_media
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     depends-on:
@@ -52,7 +52,7 @@ services:
     networks:
       - traefik
     volumes:
-      - ${data}/db:/var/lib/postgresql/data
+      - ${LIBREPHOTOS_DATA_DIRECTORY:-./etc/librephotos/data}/db:/var/lib/postgresql/data
     command: postgres -c fsync=off -c synchronous_commit=off -c full_page_writes=off -c random_page_cost=1.0
     healthcheck:
       test: psql -U ${dbUser} -d ${dbName} -c "SELECT 1;"
@@ -71,11 +71,10 @@ services:
     image: reallibrephotos/librephotos:${LIBREPHOTOS_DOCKER_TAG:-latest}
     container_name: ${LIBREPHOTOS_BACKEND_CONTAINER_NAME:-librephotos-backend}
     volumes:
-      - ${LIBREPHOTOS_SCAN_DIRECTORY:-./etc/librephotos/data}:/data
-      - ${LIBREPHOTOS_DATA_DIRECTORY:-./etc/librephotos/protected_media}:/protected_media
-      - ${LIBREPHOTOS_DATA_DIRECTORY:-./etc/librephotos/logs}:/logs
-      - ${LIBREPHOTOS_DATA_DIRECTORY:-./etc/librephotos/cache}:/root/.cache
-      - ${LIBREPHOTOS_CODE_DIRECTORY:-./etc/librephotos/code}:/code
+      - ${LIBREPHOTOS_SCAN_DIRECTORY:-./etc/librephotos/pictures}:/data
+      - ${LIBREPHOTOS_DATA_DIRECTORY:-./etc/librephotos/data}/protected_media:/protected_media
+      - ${LIBREPHOTOS_DATA_DIRECTORY:-./etc/librephotos/data}/logs:/logs
+      - ${LIBREPHOTOS_DATA_DIRECTORY:-./etc/librephotos/data}/cache:/root/.cache
     networks:
       - traefik
     environment:
