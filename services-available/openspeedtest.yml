@@ -6,7 +6,7 @@ networks:
 
 services:
   openspeedtest:
-    image: openspeedtest:${OPENSPEEDTEST_DOCKER_TAG:-latest}
+    image: openspeedtest/${OPENSPEEDTEST_DOCKER_TAG:-latest}
     container_name: ${OPENSPEEDTEST_CONTAINER_NAME:-openspeedtest} 
     restart: ${OPENSPEEDTEST_RESTART:-unless-stopped}
     volumes:
