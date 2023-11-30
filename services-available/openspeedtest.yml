@@ -24,7 +24,7 @@ services:
       - traefik.http.routers.openspeedtest.entrypoints=websecure
       - traefik.http.routers.openspeedtest.rule=Host(`${OPENSPEEDTEST_CONTAINER_NAME:-openspeedtest}.${HOST_DOMAIN}`)
       #- traefik.http.services.openspeedtest.loadbalancer.server.scheme=https # enable if the service wants to connect over https
-      - traefik.http.services.openspeedtest.loadbalancer.server.port=8096
+      - traefik.http.services.openspeedtest.loadbalancer.server.port=3000
       - traefik.http.middlewares.limit.buffering.maxRequestBodyBytes=10000000000
       - traefik.http.routers.openspeedtest.middlewares=limit
       - com.centurylinklabs.watchtower.enable=true
