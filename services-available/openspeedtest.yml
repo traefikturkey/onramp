@@ -16,6 +16,8 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
+    networks:
+      - traefik
     labels:
       - joyride.host.name=${OPENSPEEDTEST_CONTAINER_NAME:-openspeedtest}.${HOST_DOMAIN}
       - traefik.enable=true
