@@ -18,6 +18,8 @@ services:
     depends-on:
       - frontend
       - backend
+    networks:
+      - traefik
     environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
@@ -47,6 +49,8 @@ services:
       - POSTGRES_USER=${LIBREPHOTOS_DBUSER:-docker}
       - POSTGRES_PASSWORD=${LIBREPHOTOS_DBPASS:-AaAa1234}
       - POSTGRES_DB=${LIBREPHOTOS_DBNAME:-librephotos}
+    networks:
+      - traefik
     volumes:
       - ${data}/db:/var/lib/postgresql/data
     command: postgres -c fsync=off -c synchronous_commit=off -c full_page_writes=off -c random_page_cost=1.0
@@ -60,6 +64,8 @@ services:
     image: reallibrephotos/librephotos-frontend:${LIBREPHOTOS_DOCKER_TAG:-latest}
     container_name: ${LIBREPHOTOS_FRONTEND_CONTAINER_NAME:-librephotos-frontend}
     restart: unless-stopped
+    networks:
+      - traefik
 
   backend:
     image: reallibrephotos/librephotos:${LIBREPHOTOS_DOCKER_TAG:-latest}
@@ -70,6 +76,8 @@ services:
       - ${LIBREPHOTOS_DATA_DIRECTORY:-./etc/librephotos/logs}:/logs
       - ${LIBREPHOTOS_DATA_DIRECTORY:-./etc/librephotos/cache}:/root/.cache
       - ${LIBREPHOTOS_CODE_DIRECTORY:-./etc/librephotos/code}:/code
+    networks:
+      - traefik
     environment:
       - SECRET_KEY=${LIBREPHOTOS_SHHHHKEY:-changeme}
       - BACKEND_HOST=${LIBREPHOTOS_BACKEND_CONTAINER_NAME:-librephotos-backend}
