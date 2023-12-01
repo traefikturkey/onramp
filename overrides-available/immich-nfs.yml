@@ -32,6 +32,6 @@ services:
       - immich-db
   database:
     volumes:
-      - immich-nfs-db:/var/lib/postgresql/data
+      - immich-nfs-db:${IMMICH_POSTGRES_DATA_DIR:-/var/lib/postgresql/data}
     networks:
       - immich-db
