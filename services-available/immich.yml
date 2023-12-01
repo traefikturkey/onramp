@@ -19,7 +19,10 @@ services:
     networks:
       - traefik
       - immich-db
+    user: "1000"
     environment:
+      - PGID=${PGID:-1000}
+      - PUID=${PUID:-1000}
       - DB_PASSWORD=${IMMICH_POSTGRES_PASSWORD:-123456}
       - DB_HOSTNAME=${IMMICH_DB_HOSTNAME:-immich_database}
       - DB_USERNAME=${IMMICH_POSTGRES_USER:-postgres}
@@ -61,7 +64,10 @@ services:
     restart: ${IMMICH_RESTART_POLICY:-unless-stopped}
     networks:
       - immich-db
+    user: "1000"
     environment:
+      - PGID=${PGID:-1000}
+      - PUID=${PUID:-1000}
       - DB_DATABASE_NAME=${IMMICH_POSTGRES_DB:-immich}
       - DB_HOSTNAME=${IMMICH_DB_HOSTNAME:-immich_database}
       - DB_USERNAME=${IMMICH_POSTGRES_USER:-postgres}
@@ -115,13 +121,13 @@ services:
     image: postgres:14-alpine@sha256:50d9be76e9a90da4c781554955e0ffc79d9d5c4226838e64b36aacc97cbc35ad
     networks:
       - immich-db
+    user: "1000"
     environment:
-      POSTGRES_PASSWORD: ${IMMICH_POSTGRES_PASSWORD:-123456}
-      POSTGRES_USER: ${IMMICH_POSTGRES_USER:-postgres}
-      POSTGRES_DB: ${IMMICH_POSTGRES_DB:-immich}
+      - PGID=${PGID:-1000}
+      - PUID=${PUID:-1000}
+      - POSTGRES_PASSWORD=${IMMICH_POSTGRES_PASSWORD:-123456}
+      - POSTGRES_USER=${IMMICH_POSTGRES_USER:-postgres}
+      - POSTGRES_DB=${IMMICH_POSTGRES_DB:-immich}
     volumes:
       - ${IMMICH_POSTGRES_DB_DIR:-./etc/immich/db}:/var/lib/postgresql/data
     restart: ${IMMICH_RESTART_POLICY:-unless-stopped}
-
-
-
