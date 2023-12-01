@@ -1,0 +1,37 @@
+version: '3'
+    
+volumes:
+  immich-nfs-upload:
+    labels:
+      - remove_volume_on=down
+    driver_opts:
+      type: nfs
+      o: "addr=${IMMICH_ROOT_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
+      device: ":${IMMICH_UPLOAD_NFS_SERVER_PATH:-${IMMICH_UPLOAD_LOCATION}}"
+  immich-nfs-db:
+    labels:
+      - remove_volume_on=down
+    driver_opts:
+      type: nfs
+      o: "addr=${IMMICH_ROOT_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
+      device: ":${IMMICH_DB_NFS_SERVER_PATH:-${NFS_IMMICH_DATA_PATH}}"
+
+services:
+  immich-server:
+    volumes:
+      - immich-nfs-upload:/usr/src/app/upload
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - traefik
+      - immich-db
+  immich-microservices:
+    volumes:
+      - immich-nfs-upload:/usr/src/app/upload
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - immich-db
+  database:
+    volumes:
+      - immich-nfs-db:/var/lib/postgresql/data
+    networks:
+      - immich-db
