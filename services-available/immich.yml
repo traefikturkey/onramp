@@ -3,20 +3,10 @@ version: '3'
 # <================= add links to documentation here =================>
 #https://immich.app/docs/install/environment-variables
 
-###############################################
-# Immich Variables
-###############################################
-#IMMICH_VERSION=
-#IMMICH_UPLOAD_LOCATION=
-#IMMICH_MODEL_CACHE_DIR=
-#IMMICH_TYPESENSE_API_KEY=
-#IMMICH_TYPESENSE_DATA_DIR=
-# Immich Database
-#
-#IMMICH_POSTGRES_PASSWORD=
-#IMMICH_POSTGRES_USER=
-#IMMICH_POSTGRES_DB=
-#IMMICH_POSTGRES_DB_DIR=
+networks:
+  traefik:
+    external: true
+  immich-db:
 
 services:
   immich-server:
@@ -26,9 +16,12 @@ services:
     volumes:
       - ${IMMICH_UPLOAD_LOCATION:-./etc/immich/upload}:/usr/src/app/upload
       - /etc/localtime:/etc/localtime:ro
+    networks:
+      - traefik
+      - immich-db
     environment:
       - DB_PASSWORD=${IMMICH_POSTGRES_PASSWORD:-123456}
-      - DB_HOSTNAME=${IMMICH_DB_HOSTNAME:-immich_postgres}
+      - DB_HOSTNAME=${IMMICH_DB_HOSTNAME:-immich_database}
       - DB_USERNAME=${IMMICH_POSTGRES_USER:-postgres}
       - DB_DATABASE_NAME=${IMMICH_POSTGRES_DB:-immich}
       - REDIS_HOSTNAME=${IMMICH_REDIS_CONTAINER_NAME:-immich_redis}
@@ -42,6 +35,7 @@ services:
     labels:
       - joyride.host.name=${IMMICH_CONTAINER_NAME:-immich}.${HOST_DOMAIN}
       - traefik.enable=true
+      - traefik.docker.network=traefik
       - traefik.http.routers.immich.entrypoints=websecure
       - traefik.http.routers.immich.rule=Host(`${IMMICH_CONTAINER_NAME:-immich}.${HOST_DOMAIN}`)
       #- traefik.http.services.immich.loadbalancer.server.scheme=https # enable if the service wants to connect over https
@@ -65,7 +59,12 @@ services:
     #   service: hwaccel
     command: [ "start.sh", "microservices" ]
     restart: ${IMMICH_RESTART_POLICY:-unless-stopped}
+    networks:
+      - immich-db
     environment:
+      - DB_DATABASE_NAME=${IMMICH_POSTGRES_DB:-immich}
+      - DB_HOSTNAME=${IMMICH_DB_HOSTNAME:-immich_database}
+      - DB_USERNAME=${IMMICH_POSTGRES_USER:-postgres}
       - DB_PASSWORD=${IMMICH_POSTGRES_PASSWORD:-123456}
       - REDIS_HOSTNAME=${IMMICH_REDIS_CONTAINER_NAME:-immich_redis}
       - TZ=${TZ:-America/New_York}
@@ -82,6 +81,8 @@ services:
   immich-machine-learning:
     container_name: immich_machine_learning
     image: ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION:-release}
+    networks:
+      - immich-db
     volumes:
       - ${IMMICH_MODEL_CACHE_DIR:-./etc/immich/model-cache}:/cache
     restart: ${IMMICH_RESTART_POLICY:-unless-stopped}
@@ -90,24 +91,30 @@ services:
   typesense:
     container_name: immich_typesense
     image: typesense/typesense:0.24.1@sha256:9bcff2b829f12074426ca044b56160ca9d777a0c488303469143dd9f8259d4dd
+    networks:
+      - immich-db
     environment:
       - TYPESENSE_API_KEY=${IMMICH_TYPESENSE_API_KEY:-changeme}
       - TYPESENSE_DATA_DIR=/data
       # remove this to get debug messages
       - GLOG_minloglevel=1
     volumes:
-      - ${IMMICH_TYPESENSE_DATA_DIR:-./etc/immich/typesense=/data
+      - ${IMMICH_TYPESENSE_DATA_DIR:-./etc/immich/typesense}:/data
     restart: ${IMMICH_RESTART_POLICY:-unless-stopped}
 
   redis:
     container_name: immich_redis
+    networks:
+      - immich-db
     image: redis:6.2-alpine@sha256:80cc8518800438c684a53ed829c621c94afd1087aaeb59b0d4343ed3e7bcf6c5
     restart: ${IMMICH_RESTART_POLICY:-unless-stopped}
 
 
   database:
-    container_name: immich_postgres
+    container_name: immich_database
     image: postgres:14-alpine@sha256:50d9be76e9a90da4c781554955e0ffc79d9d5c4226838e64b36aacc97cbc35ad
+    networks:
+      - immich-db
     environment:
       POSTGRES_PASSWORD: ${IMMICH_POSTGRES_PASSWORD:-123456}
       POSTGRES_USER: ${IMMICH_POSTGRES_USER:-postgres}
@@ -115,5 +122,6 @@ services:
     volumes:
       - ${IMMICH_POSTGRES_DB_DIR:-./etc/immich/db}:/var/lib/postgresql/data
     restart: ${IMMICH_RESTART_POLICY:-unless-stopped}
+
 
 
