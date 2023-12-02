@@ -121,10 +121,30 @@ services:
     image: postgres:14-alpine@sha256:50d9be76e9a90da4c781554955e0ffc79d9d5c4226838e64b36aacc97cbc35ad
     networks:
       - immich-db
+    user: "1000"
     environment:
+      - PGID=${PGID:-1000}
+      - PUID=${PUID:-1000}
       - POSTGRES_PASSWORD=${IMMICH_POSTGRES_PASSWORD:-123456}
       - POSTGRES_USER=${IMMICH_POSTGRES_USER:-postgres}
       - POSTGRES_DB=${IMMICH_POSTGRES_DB:-immich}
     volumes:
       - ${IMMICH_POSTGRES_DB_DIR:-./etc/immich/db}:/var/lib/postgresql/data
     restart: ${IMMICH_RESTART_POLICY:-unless-stopped}
+
+
+  # backup:
+  #   container_name: immich_db_backup
+  #   image: prodrigestivill/postgres-backup-local
+  #   environment:
+  #     - POSTGRES_HOST= ${IMMICH_DB_HOSTNAME:-immich_database}
+  #     - POSTGRES_DB= ${IMMICH_POSTGRES_DB:-immich}
+  #     - POSTGRES_USER= ${IMMICH_POSTGRES_USER:-postgres}
+  #     - POSTGRES_PASSWORD= ${IMMICH_POSTGRES_PASSWORD:-123456}
+  #     - SCHEDULE= ${IMMICH_BACKUP_SCHEDULE:-"@daily"}
+  #     - BACKUP_NUM_KEEP= ${IMMICH_BACKUP_RETENTION:-7}
+  #     - BACKUP_DIR= /db_dumps
+  #   volumes:
+  #     - ${IMMICH_POSTGRES_DB_BACKUP_DIR:-./etc/immich/db-dump}:/db_dumps
+  #   depends_on:
+  #     - database
