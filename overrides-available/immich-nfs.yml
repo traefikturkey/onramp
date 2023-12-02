@@ -35,3 +35,6 @@ services:
       - immich-nfs-db:${IMMICH_POSTGRES_DATA_DIR:-/var/lib/postgresql/data}
     networks:
       - immich-db
+  # backup:
+#   volumes:
+#     - ${IMMICH_POSTGRES_DB_BACKUP_DIR:-./etc/immich/db-dump}:/db_dumps
