@@ -1,12 +1,21 @@
 version: '3'
 
 # https://docs.linuxserver.io/images/docker-netbox
+networks:
+  traefik:
+    external: true
+
+volumes:
+  netbox-redis:
 
 services:
   netbox:
     image: lscr.io/linuxserver/netbox:${NETBOX_DOCKER_TAG:-latest}
     container_name: ${NETBOX_CONTAINER_NAME:-netbox}
     restart: unless-stopped
+    depends_on:
+      - netbox-postgresql
+      - netbox-redis
     networks:
       - traefik
       - default
@@ -37,6 +46,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.netbox.entrypoints=websecure
       - traefik.http.routers.netbox.rule=Host(`${NETBOX_CONTAINER_NAME:-netbox}.${HOST_DOMAIN}`)
+      - traefik.http.services.netbox.loadbalancer.server.scheme=http # enable if the service wants to connect over https
       - traefik.http.services.netbox.loadbalancer.server.port=8000
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
@@ -45,6 +55,8 @@ services:
     image: postgres
     container_name: netbox_postgresql
     restart: unless-stopped
+    networks:
+      - traefik
     user: "1000:1000"
     volumes:
       - ./etc/netbox/postgresql:/var/lib/postgresql/data
@@ -65,8 +77,10 @@ services:
     image: redis:alpine
     container_name: netbox_redis
     restart: unless-stopped
+    networks:
+      - traefik
     volumes:
-      - ./etc/netbox/redis:/data
+      - netbox-redis:/data
     labels:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=false
