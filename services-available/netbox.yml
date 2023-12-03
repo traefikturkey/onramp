@@ -16,6 +16,8 @@ services:
     depends_on:
       - netbox-postgresql
       - netbox-redis
+    healthcheck:
+      start_period: 90s
     networks:
       - traefik
       - default
@@ -28,8 +30,9 @@ services:
       - PGID=${PGID:-1000}
       - TZ=${TZ}
       - SKIP_SUPERUSER=false
+      #Note: default username for the superuser is "admin", not the email address.
       - SUPERUSER_EMAIL=${NETBOX_SUPERUSER_EMAIL:-$CF_API_EMAIL}
-      - SUPERUSER_PASSWORD=${NETBOX_SUPERUSER_PASSWORD:-netbox}
+      - SUPERUSER_PASSWORD=${NETBOX_SUPERUSER_PASS:-netbox}
       - ALLOWED_HOST=${NETBOX_CONTAINER_NAME:-netbox}.${HOST_DOMAIN}
       - DB_NAME=${PG_DB_NETBOX:-netbox}
       - DB_USER=${PG_USER_NETBOX:-netbox}
@@ -85,3 +88,4 @@ services:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=false
       - autoheal=true
+
