@@ -34,6 +34,7 @@ etc/*/*/*
 !etc/*/*/.keep
 
 etc/healthchecks
+etc/immich
 etc/gitea/*
 
 !etc/grafana/provisioning/*
