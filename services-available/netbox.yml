@@ -20,7 +20,6 @@ services:
       start_period: 90s
     networks:
       - traefik
-      - default
     volumes:
       - ./etc/netbox:/config # <==== this probably needs changed
       - /etc/timezone:/etc/timezone:ro
@@ -50,6 +49,7 @@ services:
       - traefik.http.routers.netbox.entrypoints=websecure
       - traefik.http.routers.netbox.rule=Host(`${NETBOX_CONTAINER_NAME:-netbox}.${HOST_DOMAIN}`)
       - traefik.http.services.netbox.loadbalancer.server.scheme=http # enable if the service wants to connect over https
+      - traefik.http.routers.netbox.service=netbox
       - traefik.http.services.netbox.loadbalancer.server.port=8000
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
