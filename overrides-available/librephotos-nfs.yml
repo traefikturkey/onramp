@@ -1,5 +1,5 @@
 version: '3'
-    
+
 volumes:
   librephotos-nfs-scan:
     labels:
@@ -32,4 +32,3 @@ services:
       - librephotos-nfs-data:/protected_media
       - ${LIBREPHOTOS_DATA_DIRECTORY:-./etc/librephotos/data}/logs:/logs
       - ${LIBREPHOTOS_DATA_DIRECTORY:-./etc/librephotos/data}/cache:/root/.cache
-
