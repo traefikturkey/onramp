@@ -1,14 +1,14 @@
 version: '3'
-    
+
 networks:
   traefik:
     external: true
-# https://docs.librephotos.com/docs/installation/standard-install/ 
+# https://docs.librephotos.com/docs/installation/standard-install/
 
 services:
   proxy:
     image: reallibrephotos/librephotos-proxy:${LIBREPHOTOS_DOCKER_TAG:-latest}
-    container_name: ${LIBREPHOTOS_PROXY_CONTAINER_NAME:-librephotos} 
+    container_name: ${LIBREPHOTOS_PROXY_CONTAINER_NAME:-librephotos}
     restart: ${LIBREPHOTOS_RESTART:-unless-stopped}
     volumes:
       - ${LIBREPHOTOS_SCAN_DIRECTORY:-./etc/librephotos/pictures}:/data
@@ -37,7 +37,7 @@ services:
       # Flame dashboard labels
       
       - flame.type=application # "app" works too
-      - flame.name=${LIBREPHOTOS_FLAME_NAME:-librephotos} 
+      - flame.name=${LIBREPHOTOS_FLAME_NAME:-librephotos}
       - flame.url=https://${LIBREPHOTOS_CONTAINER_NAME:-librephotos}.${HOST_DOMAIN}
       - flame.icon=${LIBREPHOTOS_FLAME_ICON:-docker} # optional, default is "docker"
 
@@ -99,11 +99,3 @@ services:
     depends_on:
       db:
         condition: service_healthy
-
-
-
-
-
-
-
-

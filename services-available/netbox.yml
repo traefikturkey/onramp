@@ -88,4 +88,3 @@ services:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=false
       - autoheal=true
-
