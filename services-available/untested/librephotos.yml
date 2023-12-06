@@ -35,7 +35,7 @@ services:
       - autoheal=true
 
       # Flame dashboard labels
-      
+
       - flame.type=application # "app" works too
       - flame.name=${LIBREPHOTOS_FLAME_NAME:-librephotos}
       - flame.url=https://${LIBREPHOTOS_CONTAINER_NAME:-librephotos}.${HOST_DOMAIN}
