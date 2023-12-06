@@ -1,0 +1,80 @@
+version: '3'
+
+networks:
+  traefik:
+    external: true
+
+# https://vikunja.io/docs/full-docker-example/
+
+services:
+  vikunja:
+    image: vikunja/frontend:${VIKUNJA_DOCKER_TAG:-latest}
+    container_name: ${VIKUNJA_CONTAINER_NAME:-vikunja}
+    networks:
+      - traefik
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      # - VIKUNJA_API_URL=http://${VIKUNJA_API_CONTAINER_NAME:-vikunja-api}:3456/api/v1
+    restart: ${VIKUNJA_RESTART:-unless-stopped}
+    labels:
+      - joyride.host.name=${VIKUNJA_CONTAINER_NAME:-vikunja}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.vikunja.entrypoints=websecure
+      - traefik.http.routers.vikunja.rule=Host(`${VIKUNJA_CONTAINER_NAME:-vikunja}.${HOST_DOMAIN}`)
+      #- traefik.http.services.vikunja.loadbalancer.server.scheme=https # enable if the service wants to connect over https
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
+
+      # Flame dashboard labels
+
+      - flame.type=application # "app" works too
+      - flame.name=${VIKUNJA_FLAME_NAME:-vikunja}
+      - flame.url=https://${VIKUNJA_CONTAINER_NAME:-vikunja}.${HOST_DOMAIN}
+      - flame.icon=${VIKUNJA_FLAME_ICON:-docker}
+
+  api:
+    image: vikunja/api:${VIKUNJA_DOCKER_TAG:-latest}
+    container_name: ${VIKUNJA_API_CONTAINER_NAME:-vikunja-api}
+    restart: ${VIKUNJA_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/vikunja/files:/config
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      - ${VIKUNJA_DATABASE_CONTAINER_NAME:-vikunja-db}
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.vikunja-api.rule=Host(`${VIKUNJA_CONTAINER_NAME:-vikunja}.${HOST_DOMAIN}`) && (PathPrefix(`/api/v1`) || PathPrefix(`/dav/`) || PathPrefix(`/.well-known/`))
+      - traefik.http.routers.vikunja-api.entrypoints=websecure
+      # - traefik.http.routers.vikunja-api.tls.certResolver=acme
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - VIKUNJA_DATABASE_HOST=${VIKUNJA_DATABASE_HOST:-vikunja-db}
+      - VIKUNJA_DATABASE_PASSWORD=${VIKUNJA_DATABASE_PASSWORD:-secret}
+      - VIKUNJA_DATABASE_TYPE=${VIKUNJA_DATABASE_TYPE:-mysql}
+      - VIKUNJA_DATABASE_USER=${VIKUNJA_DATABASE_USER:-vikunja}
+      - VIKUNJA_DATABASE_DATABASE=${VIKUNJA_DATABASE:-vikunja}
+      - VIKUNJA_SERVICE_JWTSECRET=${VIKUNJA_SERVICE_JWTSECRET:-<a super secure random secret>}
+      - VIKUNJA_SERVICE_FRONTENDURL=${VIKUNJA_SERVICE_FRONTENDURL:-https://<your public frontend url with slash>/}
+
+
+  vikunja-db:
+    image: mariadb:10
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --max-connections=1000
+    container_name: ${VIKUNJA_DATABASE_CONTAINER_NAME:-vikunja-db}
+    environment:
+      - MYSQL_ROOT_PASSWORD=${VIKUNJA_MYSQL_ROOT_PASSWORD:-supersecret}
+      - MYSQL_USER=${VIKUNJA_DATABASE_USER:-vikunja}
+      - MYSQL_PASSWORD=${VIKUNJA_DATABASE_PASSWORD:-secret}
+      - MYSQL_DATABASE=${VIKUNJA_DATABASE:-vikunja}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/vikunja/db:/var/lib/mysql/data
+    restart: ${VIKUNJA_RESTART:-unless-stopped}
