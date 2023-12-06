@@ -1,5 +1,5 @@
 version: '3'
-    
+
 networks:
   traefik:
     external: true
@@ -7,7 +7,7 @@ networks:
 services:
   openspeedtest:
     image: openspeedtest/${OPENSPEEDTEST_DOCKER_TAG:-latest}
-    container_name: ${OPENSPEEDTEST_CONTAINER_NAME:-openspeedtest} 
+    container_name: ${OPENSPEEDTEST_CONTAINER_NAME:-openspeedtest}
     restart: ${OPENSPEEDTEST_RESTART:-unless-stopped}
     volumes:
       - /etc/timezone:/etc/timezone:ro
@@ -31,8 +31,8 @@ services:
       - autoheal=true
 
       # Flame dashboard labels
-      
+
       - flame.type=application # "app" works too
-      - flame.name=${OPENSPEEDTEST_FLAME_NAME:-openspeedtest} 
+      - flame.name=${OPENSPEEDTEST_FLAME_NAME:-openspeedtest}
       - flame.url=https://${OPENSPEEDTEST_CONTAINER_NAME:-openspeedtest}.${HOST_DOMAIN}
       - flame.icon=${OPENSPEEDTEST_FLAME_ICON:-docker} # optional, default is "docker"

@@ -1,6 +1,4 @@
 version: '3'
-    
-# <================= add links to documentation here =================>
 #https://immich.app/docs/install/environment-variables
 
 networks:
@@ -12,7 +10,7 @@ services:
   immich-server:
     container_name: ${IMMICH_CONTAINER_NAME:-immich}
     image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-release}
-    command: [ "start.sh", "immich" ]
+    command: ["start.sh", "immich"]
     volumes:
       - ${IMMICH_UPLOAD_LOCATION:-./etc/immich/upload}:/usr/src/app/upload
       - /etc/localtime:/etc/localtime:ro
@@ -47,9 +45,8 @@ services:
       - autoheal=true
 
       # Flame dashboard labels
-      
       - flame.type=application # "app" works too
-      - flame.name=${IMMICH_FLAME_NAME:-immich} 
+      - flame.name=${IMMICH_FLAME_NAME:-immich}
       - flame.url=https://${IMMICH_CONTAINER_NAME:-immich}.${HOST_DOMAIN}
       - flame.icon=${IMMICH_FLAME_ICON:-docker} # optional, default is "docker"
 
@@ -60,7 +57,7 @@ services:
     # extends:
     #   file: hwaccel.yml
     #   service: hwaccel
-    command: [ "start.sh", "microservices" ]
+    command: ["start.sh", "microservices"]
     restart: ${IMMICH_RESTART_POLICY:-unless-stopped}
     networks:
       - immich-db
@@ -121,7 +118,7 @@ services:
     image: postgres:14-alpine@sha256:50d9be76e9a90da4c781554955e0ffc79d9d5c4226838e64b36aacc97cbc35ad
     networks:
       - immich-db
-    user: "1000"
+    # user: "1000"
     environment:
       - PGID=${PGID:-1000}
       - PUID=${PUID:-1000}

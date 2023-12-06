@@ -30,7 +30,7 @@ services:
     networks:
       - traefik
     depends_on:
-      - semaphore-db 
+      - semaphore-db
     volumes:
       - ./etc/semaphore/inventory:/inventory:ro
       - ./etc/semaphore/authorized_keys:/authorized_keys:ro
