@@ -12,6 +12,8 @@ services:
   broker:
     image: docker.io/library/redis:7
     restart: unless-stopped
+    networks:
+      - traefik
     volumes:
       - ./etc/paperless-ngx/redisdata:/data
 
@@ -20,6 +22,8 @@ services:
     restart: unless-stopped
     volumes:
       - ./etc/paperless-ngx/dbdata:/var/lib/mysql
+    networks:
+      - traefik
     environment:
       - MARIADB_HOST=${PAPERLESS_DB_HOST:-paperless}
       - MARIADB_DATABASE=${PAPERLESS_DB_NAME:-paperless}
@@ -32,6 +36,8 @@ services:
   gotenberg:
     image: docker.io/gotenberg/gotenberg:7.6
     restart: unless-stopped
+    networks:
+      - traefik
     command:
       - "gotenberg"
       - "--chromium-disable-routes=true"
@@ -39,6 +45,8 @@ services:
   tika:
     image: ghcr.io/paperless-ngx/tika:latest
     restart: unless-stopped
+    networks:
+      - traefik
 
   paperless-ngx:
     image: ghcr.io/paperless-ngx/paperless-ngx:${PAPERLESS_NGX_DOCKER_TAG:-latest}
@@ -46,7 +54,6 @@ services:
     restart: ${PAPERLESS_NGX_RESTART:-unless-stopped}
     networks:
       - traefik
-      - default
     depends_on:
       - broker
       - db
@@ -63,7 +70,8 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
-      - PAPERLESS_URL=https://${PAPERLESS_NGX_CONTAINER_NAME:-paperless-ngx}.${HOST_DOMAIN} #Required for proper authentication behind traefik
+       #PAPERLESS_URL Required for proper authentication behind traefik
+      - PAPERLESS_URL=https://${PAPERLESS_NGX_CONTAINER_NAME:-paperless-ngx}.${HOST_DOMAIN}
       - PAPERLESS_REDIS=redis://broker:6379
       - PAPERLESS_TIKA_ENABLED=1
       - PAPERLESS_TIKA_GOTENBERG_ENDPOINT=http://gotenberg:3000
