@@ -53,6 +53,8 @@ services:
   hc-postgres:
     image: postgres:${HEALTHCHECKS_DOCKER_TAG:-16.0}
     container_name: hc-postgres
+    networks:
+      - traefik
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${HEALTHCHECKS_DB_USER:-dbadmin}
