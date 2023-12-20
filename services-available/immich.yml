@@ -31,7 +31,6 @@ services:
     depends_on:
       - redis
       - database
-      - typesense
     restart: ${IMMICH_RESTART_POLICY:-unless-stopped}
     labels:
       - joyride.host.name=${IMMICH_CONTAINER_NAME:-immich}.${HOST_DOMAIN}
@@ -79,7 +78,6 @@ services:
     depends_on:
       - redis
       - database
-      - typesense
 
   immich-machine-learning:
     container_name: immich_machine_learning
