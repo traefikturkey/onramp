@@ -90,21 +90,6 @@ services:
       - ${IMMICH_MODEL_CACHE_DIR:-./etc/immich/model-cache}:/cache
     restart: ${IMMICH_RESTART_POLICY:-unless-stopped}
 
-
-  typesense:
-    container_name: immich_typesense
-    image: typesense/typesense:0.24.1@sha256:9bcff2b829f12074426ca044b56160ca9d777a0c488303469143dd9f8259d4dd
-    networks:
-      - immich-db
-    environment:
-      - TYPESENSE_API_KEY=${IMMICH_TYPESENSE_API_KEY:-changeme}
-      - TYPESENSE_DATA_DIR=/data
-      # remove this to get debug messages
-      - GLOG_minloglevel=1
-    volumes:
-      - ${IMMICH_TYPESENSE_DATA_DIR:-./etc/immich/typesense}:/data
-    restart: ${IMMICH_RESTART_POLICY:-unless-stopped}
-
   redis:
     container_name: immich_redis
     networks:
@@ -115,7 +100,7 @@ services:
 
   database:
     container_name: immich_database
-    image: postgres:14-alpine@sha256:50d9be76e9a90da4c781554955e0ffc79d9d5c4226838e64b36aacc97cbc35ad
+    image: tensorchord/pgvecto-rs:pg14-v0.1.11
     networks:
       - immich-db
     # user: "1000"
