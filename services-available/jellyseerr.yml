@@ -21,8 +21,8 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
-    ports:
-      - 5055:5055      
+    # ports:
+    #   - 5055:5055      
     labels:
       - joyride.host.name=${JELLYSEERR_CONTAINER_NAME:-jellyseerr}.${HOST_DOMAIN}
       - traefik.enable=true
