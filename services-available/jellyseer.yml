@@ -4,7 +4,7 @@ version: '3'
 
 services:
   jellyseer:
-    image: fallenbagel/jellyseer:${JELLYSEER_DOCKER_TAG:-latest}
+    image: fallenbagel/jellyseerr:${JELLYSEER_DOCKER_TAG:-latest}
     container_name: ${JELLYSEER_CONTAINER_NAME:-jellyseer}
     restart: ${JELLYSEER_RESTART:-unless-stopped}
     volumes:
