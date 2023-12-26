@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 # https://github.com/Fallenbagel/jellyseerr/tree/develop
 
@@ -12,7 +12,7 @@ services:
     container_name: ${JELLYSEERR_CONTAINER_NAME:-jellyseerr}
     restart: ${JELLYSEERR_RESTART:-unless-stopped}
     networks:
-      - traefik    
+      - traefik
     volumes:
       - ./etc/jellyseerr:/app/config
       - /etc/timezone:/etc/timezone:ro
@@ -22,7 +22,7 @@ services:
       - PGID=${PGID:-1000}
       - TZ=${TZ}
     # ports:
-    #   - 5055:5055      
+    #   - 5055:5055
     labels:
       - joyride.host.name=${JELLYSEERR_CONTAINER_NAME:-jellyseerr}.${HOST_DOMAIN}
       - traefik.enable=true
