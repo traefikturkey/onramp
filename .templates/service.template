@@ -1,4 +1,8 @@
 version: '3'
+
+networks:
+  traefik:
+    external: true
     
 # <================= add links to documentation here =================>
 
@@ -7,6 +11,8 @@ services:
     image: <==== container_image ====>:${${SERVICE_PASSED_UPCASED}_DOCKER_TAG:-latest}
     container_name: ${${SERVICE_PASSED_UPCASED}_CONTAINER_NAME:-${SERVICE_PASSED_DNCASED}} 
     restart: ${${SERVICE_PASSED_UPCASED}_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/${SERVICE_PASSED_DNCASED}:/config # <==== this probably needs changed 
       - /etc/timezone:/etc/timezone:ro
