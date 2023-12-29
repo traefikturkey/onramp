@@ -1,0 +1,7 @@
+services:
+  semaphore-db:
+    image: postgres:14
+    environment:
+      POSTGRES_USER: ${SEMAPHORE_DB_USER:-semaphore}
+      POSTGRES_PASSWORD: ${SEMAPHORE_DB_PASS:-semaphore}
+      POSTGRES_DB: ${SEMAPHORE_DB:-semaphore}

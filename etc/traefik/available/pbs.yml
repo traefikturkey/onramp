@@ -1,0 +1,18 @@
+http:
+ #region routers
+  routers:
+    pbs:
+      entryPoints:
+        - "websecure"
+      rule: "Host(`{{env "PBS_HOST_NAME"}}.{{env "HOST_DOMAIN"}}`)"
+      middlewares:
+        - default-headers
+      tls: {}
+      service: pbs
+
+  services:
+    pbs:
+      loadBalancer:
+        servers:
+          - url: "https://{{env "PBS_ADDRESS"}}:8007/"
+        passHostHeader: true

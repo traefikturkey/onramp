@@ -1,0 +1,34 @@
+version: "3"
+
+# https://github.com/Fallenbagel/jellyseerr/tree/develop
+
+networks:
+  traefik:
+    external: true
+
+services:
+  jellyseerr:
+    image: fallenbagel/jellyseerr:${JELLYSEERR_DOCKER_TAG:-latest}
+    container_name: ${JELLYSEERR_CONTAINER_NAME:-jellyseerr}
+    restart: ${JELLYSEERR_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/jellyseerr:/app/config
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    # ports:
+    #   - 5055:5055
+    labels:
+      - joyride.host.name=${JELLYSEERR_CONTAINER_NAME:-jellyseerr}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.jellyseerr.entrypoints=websecure
+      - traefik.http.routers.jellyseerr.rule=Host(`${JELLYSEERR_CONTAINER_NAME:-jellyseerr}.${HOST_DOMAIN}`)
+      #- traefik.http.services.jellyseerr.loadbalancer.server.scheme=https # enable if the service wants to connect over>
+      - traefik.http.services.jellyseerr.loadbalancer.server.port=5055
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
