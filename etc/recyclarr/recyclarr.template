@@ -1,0 +1,45 @@
+# Configuration specific to Sonarr
+sonarr:
+  series:
+    # Set the URL/API Key to your actual instance
+    base_url: http://sonarr:8989
+    api_key: your-api-key-here 
+
+    # Quality definitions from the guide to sync to Sonarr. Choices: series, anime
+    quality_definition:
+      type: series
+
+    # Release profiles from the guide to sync to Sonarr v3 (Sonarr v4 does not use this!)
+    # Use `recyclarr list release-profiles` for values you can put here.
+    # https://trash-guides.info/Sonarr/Sonarr-Release-Profile-RegEx/
+    release_profiles:
+      # Series
+      - trash_ids:
+          - EBC725268D687D588A20CBC5F97E538B # Low Quality Groups
+          - 1B018E0C53EC825085DD911102E2CA36 # Release Sources (Streaming Service)
+          - 71899E6C303A07AF0E4746EFF9873532 # P2P Groups + Repack/Proper
+      # Anime (Uncomment below if you want it)
+      - trash_ids:
+          - d428eda85af1df8904b4bbe4fc2f537c # Anime - First release profile
+          - 6cd9e10bb5bb4c63d2d7cd3279924c7b # Anime - Second release profile
+
+# Configuration specific to Radarr.
+radarr:
+  movies:
+    # Set the URL/API Key to your actual instance
+    base_url: http://radarr:7878
+    api_key: your-api-key-here
+    # Which quality definition in the guide to sync to Radarr. Only choice right now is 'movie'
+    quality_definition:
+      type: movie
+
+    # Set to 'true' to automatically remove custom formats from Radarr when they are removed from
+    # the guide or your configuration. This will NEVER delete custom formats you manually created!
+    delete_old_custom_formats: true
+
+    include:
+      - template: uhd-bluray-web
+      - template: remux-web-1080p
+      - template: anime-radarr
+
+
