@@ -5,15 +5,25 @@ networks:
     external: true
 
 # https://docs.linuxserver.io/images/docker-netbox
+networks:
+  traefik:
+    external: true
+
+volumes:
+  netbox-redis:
 
 services:
   netbox:
     image: lscr.io/linuxserver/netbox:${NETBOX_DOCKER_TAG:-latest}
     container_name: ${NETBOX_CONTAINER_NAME:-netbox}
     restart: ${NETBOX_RESTART:-unless-stopped}
+    depends_on:
+      - netbox-postgresql
+      - netbox-redis
+    healthcheck:
+      start_period: 90s
     networks:
       - traefik
-      - default
     volumes:
       - ./etc/netbox:/config
       - /etc/timezone:/etc/timezone:ro
@@ -23,8 +33,9 @@ services:
       - PGID=${PGID:-1000}
       - TZ=${TZ}
       - SKIP_SUPERUSER=false
+      #Note: default username for the superuser is "admin", not the email address.
       - SUPERUSER_EMAIL=${NETBOX_SUPERUSER_EMAIL:-$ONRAMP_CF_API_EMAIL}
-      - SUPERUSER_PASSWORD=${NETBOX_SUPERUSER_PASSWORD:-test}
+      - SUPERUSER_PASSWORD=${NETBOX_SUPERUSER_PASSWORD:-netbox}
       - ALLOWED_HOST=${NETBOX_CONTAINER_NAME:-netbox}.${HOST_DOMAIN}
       - DB_NAME=${NETBOX_PG_DB_NAME:-netbox}
       - DB_USER=${NETBOX_PG_DB_USER:-netbox}
@@ -41,6 +52,8 @@ services:
       - traefik.enable=true
       - traefik.http.routers.netbox.entrypoints=websecure
       - traefik.http.routers.netbox.rule=Host(`${NETBOX_CONTAINER_NAME:-netbox}.${HOST_DOMAIN}`)
+      - traefik.http.services.netbox.loadbalancer.server.scheme=http # enable if the service wants to connect over https
+      - traefik.http.routers.netbox.service=netbox
       - traefik.http.services.netbox.loadbalancer.server.port=8000
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
@@ -49,6 +62,8 @@ services:
     image: postgres
     container_name: netbox_postgresql
     restart: unless-stopped
+    networks:
+      - traefik
     user: "1000:1000"
     volumes:
       - ./etc/netbox/postgresql:/var/lib/postgresql/data
@@ -67,8 +82,10 @@ services:
     image: redis:alpine
     container_name: netbox_redis
     restart: unless-stopped
+    networks:
+      - traefik
     volumes:
-      - ./etc/netbox/redis:/data
+      - netbox-redis:/data
     labels:
       - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=false

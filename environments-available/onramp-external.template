@@ -18,6 +18,8 @@
 # OME_HOST_NAME=<ome_hostname>              # ome hostname, normally ome
 # OPNSENSE_ADDRESS=<ip_or_fqdn>             # opnsense.your_domain.com
 # OPENSENSE_HOST_NAME=<opnsense_hostname>   # opnsense hostname, normally opnsense
+# PBS_HOST_NAME=<pbs_hostname>              # usually pbs
+# PBS_ADDRESS=<ip_or_fqdn>
 # PIHOLE_ADDRESS=<ip_or_fqdn>               # pihole.your_domain.com
 # PIHOLE_HOST_NAME=<pihole_hostname>        # pihole hostname, normally pihole
 # PFSENSE_ADDRESS=<ip_or_fqdn>              # pfsense.your_domain.com

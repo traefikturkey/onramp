@@ -299,6 +299,15 @@ endif
 etc/mailrise/mailrise.conf:
 	envsubst '$${MAILRISE_EMAIL}, $${MAILRISE_WEBHOOK}' < ./etc/mailrise/mailrise.template > ./etc/mailrise/mailrise.conf
 
+
+ifneq (,$(wildcard ./services-enabled/recyclarr.yml))
+	BUILD_DEPENDENCIES += etc/recyclarr/recyclarr.yml
+endif
+
+etc/recyclarr/recyclarr.yml:
+	cp .templates/recyclarr.template .etc/recyclarr/recyclarr.yml
+
+
 #########################################################
 #
 # override commands

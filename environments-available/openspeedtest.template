@@ -1,0 +1,21 @@
+###############################################
+# OPENSPEEDTEST settings 
+###############################################
+
+# Environment variables required by the service you are adding
+# can be placed in this file in the format specified below:
+#
+# OPENSPEEDTEST_EXAMPLE_VARIABLE=$OPENSPEEDTEST_EXAMPLE_VARIABLE
+#
+# When the service is enabled using 'make enable-service <servicename>' the user
+# will be prompted to enter values for any variables (uncommented) listed in this file.
+#
+# Some helpful commands to make changes to either this template file, or the openspeedtest.env file in use by OnRamp:
+#
+# Template: 'make edit-env-template openspeedtest'
+# Env:      'make edit-env openspeedtest'
+
+
+#OPENSPEEDTEST_DOCKER_TAG=$OPENSPEEDTEST_DOCKER_TAG
+#OPENSPEEDTEST_CONTAINER_NAME=$OPENSPEEDTEST_CONTAINER_NAME
+#OPENSPEEDTEST_RESTART=$OPENSPEEDTEST_RESTART

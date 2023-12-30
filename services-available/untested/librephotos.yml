@@ -1,0 +1,101 @@
+version: '3'
+
+networks:
+  traefik:
+    external: true
+# https://docs.librephotos.com/docs/installation/standard-install/
+
+services:
+  proxy:
+    image: reallibrephotos/librephotos-proxy:${LIBREPHOTOS_DOCKER_TAG:-latest}
+    container_name: ${LIBREPHOTOS_PROXY_CONTAINER_NAME:-librephotos}
+    restart: ${LIBREPHOTOS_RESTART:-unless-stopped}
+    volumes:
+      - ${LIBREPHOTOS_SCAN_DIRECTORY:-./etc/librephotos/pictures}:/data
+      - ${LIBREPHOTOS_DATA_DIRECTORY:-./etc/librephotos/data}/protected_media:/protected_media
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    depends-on:
+      - frontend
+      - backend
+    networks:
+      - traefik
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=${LIBREPHOTOS_CONTAINER_NAME:-librephotos}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.librephotos.entrypoints=websecure
+      - traefik.http.routers.librephotos.rule=Host(`${LIBREPHOTOS_CONTAINER_NAME:-librephotos}.${HOST_DOMAIN}`)
+      #- traefik.http.services.librephotos.loadbalancer.server.scheme=https # enable if the service wants to connect over https
+      - traefik.http.services.librephotos.loadbalancer.server.port=80
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
+
+      # Flame dashboard labels
+
+      - flame.type=application # "app" works too
+      - flame.name=${LIBREPHOTOS_FLAME_NAME:-librephotos}
+      - flame.url=https://${LIBREPHOTOS_CONTAINER_NAME:-librephotos}.${HOST_DOMAIN}
+      - flame.icon=${LIBREPHOTOS_FLAME_ICON:-docker} # optional, default is "docker"
+
+  db:
+    image: postgres:13
+    container_name: ${LIBREPHOTOS_DB_CONTAINER_NAME:-librephotos-db}
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=${LIBREPHOTOS_DBUSER:-docker}
+      - POSTGRES_PASSWORD=${LIBREPHOTOS_DBPASS:-AaAa1234}
+      - POSTGRES_DB=${LIBREPHOTOS_DBNAME:-librephotos}
+    networks:
+      - traefik
+    volumes:
+      - ${LIBREPHOTOS_DATA_DIRECTORY:-./etc/librephotos/data}/db:/var/lib/postgresql/data
+    command: postgres -c fsync=off -c synchronous_commit=off -c full_page_writes=off -c random_page_cost=1.0
+    healthcheck:
+      test: psql -U ${dbUser} -d ${dbName} -c "SELECT 1;"
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  frontend:
+    image: reallibrephotos/librephotos-frontend:${LIBREPHOTOS_DOCKER_TAG:-latest}
+    container_name: ${LIBREPHOTOS_FRONTEND_CONTAINER_NAME:-librephotos-frontend}
+    restart: unless-stopped
+    networks:
+      - traefik
+
+  backend:
+    image: reallibrephotos/librephotos:${LIBREPHOTOS_DOCKER_TAG:-latest}
+    container_name: ${LIBREPHOTOS_BACKEND_CONTAINER_NAME:-librephotos-backend}
+    volumes:
+      - ${LIBREPHOTOS_SCAN_DIRECTORY:-./etc/librephotos/pictures}:/data
+      - ${LIBREPHOTOS_DATA_DIRECTORY:-./etc/librephotos/data}/protected_media:/protected_media
+      - ${LIBREPHOTOS_DATA_DIRECTORY:-./etc/librephotos/data}/logs:/logs
+      - ${LIBREPHOTOS_DATA_DIRECTORY:-./etc/librephotos/data}/cache:/root/.cache
+    networks:
+      - traefik
+    environment:
+      - SECRET_KEY=${LIBREPHOTOS_SHHHHKEY:-changeme}
+      - BACKEND_HOST=${LIBREPHOTOS_BACKEND_CONTAINER_NAME:-librephotos-backend}
+      - ADMIN_EMAIL=${LIBREPHOTOS_ADMIN_EMAIL:-}
+      - ADMIN_USERNAME=${LIBREPHOTOS_USERNAME:-}
+      - ADMIN_PASSWORD=${LIBREPHOTOS_USERPASS:-}
+      - DB_BACKEND=postgresql
+      - DB_NAME=${LIBREPHOTOS_DBNAME:-librephotos}
+      - DB_USER=${LIBREPHOTOS_DBUSER:-docker}
+      - DB_PASS=${LIBREPHOTOS_DBPASS:-AaAa1234}
+      - DB_HOST=${LIBREPHOTOS_DB_CONTAINER_NAME:-librephotos-db}
+      - DB_PORT=5432
+      - MAPBOX_API_KEY=${LIBREPHOTOS_MAPAPIKEY:-}
+      - WEB_CONCURRENCY=${LIBREPHOTOS_GUNNIWORKERS:-2}
+      - SKIP_PATTERNS=${LIBREPHOTOS_SKIPPATTERNS:-}
+      - ALLOW_UPLOAD=${LIBREPHOTOS_ALLOWUPLOAD:-FALSE}
+      - CSRF_TRUSTED_ORIGINS=${CSRFTRUSTEDORIGINS:-}
+      - DEBUG=0
+      - HEAVYWEIGHT_PROCESS=${HEAVYWEIGHT_PROCESS:-}
+    depends_on:
+      db:
+        condition: service_healthy

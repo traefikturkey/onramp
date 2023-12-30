@@ -19,20 +19,23 @@ services:
   #  POSTGRES_PASSWORD: ${SEMAPHORE_DB_PASS:-semaphore}
   #  POSTGRES_DB: ${SEMAPHORE_DB:-semaphore}
   # if you wish to use postgres, comment the mysql service section below
-  semaphore-mysql:
-    image: mysql:8.0
-    container_name: semephore-mysql
+  semaphore-db:
     restart: unless-stopped
-    hostname: mysql
+    ### to use postgres instead, enable the semaphore-pg override.
+    image: mysql:8.0
+    container_name: semaphore-db
+    networks:
+      - traefik
     ports:
       - 3306:3306
     volumes:
-      - ./etc/semaphore/data:/var/lib/mysql
+      - ./etc/semaphore/db:/var/lib/mysql
     environment:
-      MYSQL_RANDOM_ROOT_PASSWORD='yes'
-      MYSQL_DATABASE=${SEMAPHORE_DB_HOST:-mysql}
-      MYSQL_USER=${SEMAPHORE_DB_USER:-semaphore}
-      MYSQL_PASSWORD=${SEMAPHORE_DB_PASS:-semaphore}
+      MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+      MYSQL_DATABASE: ${SEMAPHORE_DB:-semaphore}
+      MYSQL_USER: ${SEMAPHORE_DB_USER:-semaphore}
+      MYSQL_PASSWORD: ${SEMAPHORE_DB_PASS:-semaphore}
+      MYSQL_PORT: ${SEMAPHORE_DB_PORT:-3306}
 
   semaphore:
     image: semaphoreui/semaphore:${SEMAPHORE_DOCKER_TAG:-latest}
@@ -41,9 +44,10 @@ services:
     networks:
       - traefik
     depends_on:
-      - mysql #change to postgres for postgres
+      - semaphore-db
     volumes:
-      #- ./etc/semaphore:/config # <==== this probably needs changed
+      - ./etc/semaphore/inventory:/inventory:ro
+      - ./etc/semaphore/authorized_keys:/authorized_keys:ro
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
@@ -52,8 +56,8 @@ services:
       - TZ=${TZ}
       - SEMAPHORE_DB_USER=${SEMAPHORE_DB_USER:-semaphore}
       - SEMAPHORE_DB_PASS=${SEMAPHORE_DB_PASS:-semaphore}
-      - SEMAPHORE_DB_HOST=${SEMAPHORE_DB_HOST:-mysql}
-      - SEMAPHORE_DB_PORT=${SEMAPHORE_DB_PORT:-3306}
+      - SEMAPHORE_DB_HOST=${SEMAPHORE_DB_HOST:-semaphore-db}
+      - SEMAPHORE_DB_PORT=${SEMAPHORE_DB_PORT:-3306} # change to 5432 for postgres
       - SEMAPHORE_DB_DIALECT=${SEMAPHORE_DB_DIALECT:-mysql}
       - SEMAPHORE_DB=${SEMAPHORE_DB:-semaphore}
       - SEMAPHORE_PLAYBOOK_PATH=${SEMAPHORE_PLAYBOOK_PATH:-/tmp/semaphore/}
@@ -70,12 +74,13 @@ services:
       - SEMAPHORE_LDAP_PASSWORD=${SEMAPHORE_LDAP_PASSWORD:-'ldap_bind_account_password'}
       - SEMAPHORE_LDAP_DN_SEARCH=${SEMAPHORE_LDAP_SEARCH:-'dc=local,dc=example,dc=com'}
       - SEMAPHORE_LDAP_SEARCH_FILTER=${SEMAPHORE_LDAP_SEARCH_FILTER:-"(\u0026(uid=%s)(memberOf=cn=ipausers,cn=groups,cn=accounts,dc=local,dc=example,dc=com))"}
-
+      - ANSIBLE_HOST_KEY_CHECKING=${SEMAPHORE_ANSIBLE_HOST_KEY_CHECKING:-false}
     labels:
       - joyride.host.name=${SEMAPHORE_CONTAINER_NAME:-semaphore}.${HOST_DOMAIN}
       - traefik.enable=true
       - traefik.http.routers.semaphore.entrypoints=websecure
       - traefik.http.routers.semaphore.rule=Host(`${SEMAPHORE_CONTAINER_NAME:-semaphore}.${HOST_DOMAIN}`)
+      - traefik.http.services.semaphore.loadbalancer.server.scheme=http
       - traefik.http.services.semaphore.loadbalancer.server.port=3000
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true

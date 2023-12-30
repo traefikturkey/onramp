@@ -47,5 +47,6 @@ etc/gitea/*
 !etc/adguard/conf/AdGuardHome.template
 !etc/pihole/dns.template
 !etc/searxng/settings.template.yml
+!etc/recyclarr/recyclarr.template
 
 ansible/roles/

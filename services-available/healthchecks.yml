@@ -1,12 +1,11 @@
 version: '3'
 
-# https://hub.docker.com/r/healthchecks/healthchecks
-# https://github.com/healthchecks/healthchecks
-
 networks:
   traefik:
     external: true
-# <================= add links to documentation here =================>
+
+# https://hub.docker.com/r/healthchecks/healthchecks
+# https://github.com/healthchecks/healthchecks
 
 services:
   healthchecks:
@@ -56,6 +55,8 @@ services:
   hc-postgres:
     image: postgres:${HEALTHCHECKS_DOCKER_TAG:-16.0}
     container_name: hc-postgres
+    networks:
+      - traefik
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${HEALTHCHECKS_DB_USER:-dbadmin}
