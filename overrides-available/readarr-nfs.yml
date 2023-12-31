@@ -1,0 +1,27 @@
+version: '3'
+volumes:
+  readarr-nfs-media:
+    labels:
+      - remove_volume_on=down
+    driver_opts:
+      type: nfs
+      o: "addr=${READARR_MEDIA_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
+      device: ":${READARR_MEDIA_NFS_SERVER_PATH:-${NFS_BOOKS_PATH}}"
+
+  readarr-nfs-downloads:
+    labels:
+      - remove_volume_on=down
+    driver_opts:
+      type: nfs
+      o: "addr=${READARR_MEDIA_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
+      device: ":${READARR_MEDIA_NFS_DOWNLOADS_PATH:-${NFS_DOWNLOADS_PATH}}"
+
+services:
+  sonarr:
+    volumes:
+      - ${READARR_CONFIG_VOLUME:-./etc/readarr}:/config
+      - ${MEDIA_BOOKS_VOLUME:-readarr-nfs-media}:${READARR_BOOKSTV_PATH:-/books}
+      - ${MEDIA_DOWNLOADS_VOLUME:-readarr-nfs-downloads}:${READARR_DOWNLOADS_PATH:-/downloads}
+      - /dev/rtc:/dev/rtc:ro
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
