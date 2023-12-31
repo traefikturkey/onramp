@@ -4,7 +4,7 @@ networks:
   traefik:
     external: true
 
-# <================= add links to documentation here =================>
+# https://docs.frigate.video/frigate/installation/
 
 services:
   frigate:
