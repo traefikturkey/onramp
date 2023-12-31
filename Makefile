@@ -347,5 +347,14 @@ create-external:
 generate-matrix-config:
 	docker run -it --rm  -v ./etc/synapse:/data  -e SYNAPSE_SERVER_NAME=${SYNAPSE_SERVER_NAME} -e SYNAPSE_REPORT_STATS=${SYNAPSE_REPORT_STATS} matrixdotorg/synapse:latest generate	
 
+#########################################################
+#
+# arrs api-key retrieval
+#
+#########################################################
+
+retrieve-apikey:
+	@grep -oP '(?<=ApiKey>).*?(?=</ApiKey>)' ./etc/$${SERVICE_PASSED_DNCASED}/config.xml
+
 # include additional make commands
 include make.d/*.mk
