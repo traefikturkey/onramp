@@ -17,7 +17,7 @@ volumes:
       device: ":${READARR_MEDIA_NFS_DOWNLOADS_PATH:-${NFS_DOWNLOADS_PATH}}"
 
 services:
-  sonarr:
+  readarr:
     volumes:
       - ${READARR_CONFIG_VOLUME:-./etc/readarr}:/config
       - ${MEDIA_BOOKS_VOLUME:-readarr-nfs-media}:${READARR_BOOKS_PATH:-/books}
