@@ -328,7 +328,7 @@ generate-matrix-config:
 #########################################################
 
 retrieve-apikey:
-	grep -oP '(?<=ApiKey>).*?(?=</ApiKey>)' ./etc/$${SERVICE_PASSED_DNCASED}/config.xml
+	@grep -oP '(?<=ApiKey>).*?(?=</ApiKey>)' ./etc/$${SERVICE_PASSED_DNCASED}/config.xml
 
 # include additional make commands
 include make.d/backup.mk
