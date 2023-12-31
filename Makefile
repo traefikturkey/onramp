@@ -271,6 +271,14 @@ etc/prometheus/conf:
 	mkdir -p etc/prometheus/conf
 	cp --no-clobber --recursive	etc/prometheus/conf-originals/* etc/prometheus/conf
 
+
+ifneq (,$(wildcard ./services-enabled/recyclarr.yml))
+	BUILD_DEPENDENCIES += etc/recyclarr/recyclarr.yml
+endif
+
+etc/recyclarr/recyclarr.yml:
+	cp .templates/recyclarr.template .etc/recyclarr/recyclarr.yml
+
 #########################################################
 #
 # override commands
@@ -313,6 +321,16 @@ edit-env:
 generate-matrix-config:
 	docker run -it --rm  -v ./etc/synapse:/data  -e SYNAPSE_SERVER_NAME=synapse.traefikturkey.icu -e SYNAPSE_REPORT_STATS=yes matrixdotorg/synapse:latest generate	
 
+#########################################################
+#
+# arrs api-key retrieval
+#
+#########################################################
+
+retrieve-apikey:
+	grep -oP '(?<=ApiKey>).*?(?=</ApiKey>)' ./etc/$${SERVICE_PASSED_DNCASED}/config.xml
+
+# include additional make commands
 include make.d/backup.mk
 
 include make.d/cleanup.mk
