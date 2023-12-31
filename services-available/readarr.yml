@@ -8,7 +8,7 @@ networks:
 
 services:
   readarr:
-    image: lscr.io/linuxserver/readarr:${READARR_DOCKER_TAG:-latest}
+    image: lscr.io/linuxserver/readarr:${READARR_DOCKER_TAG:-nightly}
     container_name: ${READARR_CONTAINER_NAME:-readarr}
     restart: ${READARR_RESTART:-unless-stopped}
     networks:
