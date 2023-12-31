@@ -4,7 +4,7 @@ networks:
   traefik:
     external: true
 
-# <================= add links to documentation here =================>
+# https://docs.frigate.video/frigate/installation/
 
 services:
   frigate:
@@ -39,14 +39,7 @@ services:
       - "8554:8554" # RTSP feeds
       - "8555:8555/tcp" # WebRTC over tcp
       - "8555:8555/udp" # WebRTC over udp
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              device_ids: ['0'] # this is only needed when using multiple GPUs
-              #count: 1 # number of GPUs
-              capabilities: [gpu]
+
     labels:
       - joyride.host.name=${FRIGATE_CONTAINER_NAME:-frigate}.${HOST_DOMAIN}
       - traefik.enable=true
