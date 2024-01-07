@@ -33,9 +33,6 @@ addrepositories:
 	$(YQ_APT_ADD_REPO)
 	sudo apt update
 
-addpackage-yamllint: addpackage
-	sudo apt install yamllint
-
 addpackage-%: addrepositories
 	DEBIAN_FRONTEND=noninteractive sudo apt install $* -y
 
