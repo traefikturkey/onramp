@@ -1,0 +1,28 @@
+version: '3'
+volumes:
+  komga-nfs-media:
+    labels:
+      - remove_volume_on=down
+    driver_opts:
+      type: nfs
+      o: "addr=${KOMGA_MEDIA_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
+      device: ":${KOMGA_MEDIA_NFS_SERVER_PATH:-${NFS_KOMGA_PATH}}"
+
+  komga-nfs-downloads:
+    labels:
+      - remove_volume_on=down
+    driver_opts:
+      type: nfs
+      o: "addr=${KOMGA_MEDIA_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
+      device: ":${KOMGA_MEDIA_NFS_DOWNLOADS_PATH:-${NFS_DOWNLOADS_PATH}}"
+
+services:
+  komga:
+    volumes:
+      - ${KOMGA_CONFIG_VOLUME:-./etc/komga}:/config
+      - ${MEDIA_MANGA_VOLUME:-komga-nfs-media}:/manga
+      # - ${MEDIA_COMICS_VOLUME:-komga-nfs-media}/comics:/comics
+      - ${MEDIA_DOWNLOADS_VOLUME:-komga-nfs-downloads}:/downloads
+      - /dev/rtc:/dev/rtc:ro
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro

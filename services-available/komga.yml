@@ -4,7 +4,7 @@ networks:
   traefik:
     external: true
 
-# <================= add links to documentation here =================>
+# https://github.com/Casvt/Kapowarr 
 
 services:
   komga:
