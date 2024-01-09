@@ -3,6 +3,20 @@
 # install commands
 #
 #########################################################
+distro := $(shell lsb_release -is)
+
+
+check-distro:
+	@echo $(distro)
+
+
+ifeq ($(distro),Ubuntu)
+    ANSIBLE_APT_ADD_REPO := sudo apt-add-repository ppa:ansible/ansible -y
+    YQ_APT_ADD_REPO 	 := sudo apt-add-repository ppa:rmescandon/yq -y
+else
+    YQ_APT_ADD_REPO      :=
+    ANSIBLE_APT_ADD_REPO :=
+endif
 
 build: install-dependencies environments-enabled/onramp.env $(BUILD_DEPENDENCIES)
 
@@ -37,16 +51,8 @@ EXECUTABLES = git nano jq yq pip yamllint
 MISSING_PACKAGES := $(foreach exec,$(EXECUTABLES),$(if $(shell which $(exec)),,addpackage-$(exec)))
 
 addrepositories:
-	sudo apt-add-repository ppa:rmescandon/yq -y
+	$(YQ_APT_ADD_REPO)
 	sudo apt update
-
-addpackage-pip:
-	curl -sSL https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-	sudo python3 get-pip.py
-	rm get-pip.py
-
-addpackage-yamllint: addpackage-pip
-	sudo pip install --root-user-action=ignore yamllint
 
 addpackage-%: addrepositories
 	DEBIAN_FRONTEND=noninteractive sudo apt install $* -y
@@ -58,7 +64,8 @@ install-dependencies: .gitconfig $(MISSING_PACKAGES)
 	git config --local include.path $(shell pwd)/.gitconfig
 
 install-ansible:
-	sudo apt-add-repository ppa:ansible/ansible -y
+	#sudo apt-add-repository ppa:ansible/ansible -y
+	$(APT_ADD_REPO)	
 	sudo apt update
 	sudo apt install ansible -y
 	@echo "Installing ansible roles requirements..."
