@@ -143,6 +143,11 @@ create-service:
 	$(EDITOR) ./services-available/$(SERVICE_PASSED_DNCASED).yml
 	$(EDITOR) environments-available/$(SERVICE_PASSED_DNCASED).template
 
+# For services that do not have a environment file yet
+create-environment: 
+	envsubst '$${SERVICE_PASSED_DNCASED},$${SERVICE_PASSED_UPCASED}' < ./.templates/environment.template > environments-available/$(SERVICE_PASSED_DNCASED).template
+	$(EDITOR) environments-available/$(SERVICE_PASSED_DNCASED).template
+
 create-game:
 	envsubst '$${SERVICE_PASSED_DNCASED},$${SERVICE_PASSED_UPCASED}' < ./.templates/service.template > ./services-available/games/$(SERVICE_PASSED_DNCASED).yml
 	envsubst '$${SERVICE_PASSED_DNCASED},$${SERVICE_PASSED_UPCASED}' < ./.templates/environment.template > environments-available/$(SERVICE_PASSED_DNCASED).template
