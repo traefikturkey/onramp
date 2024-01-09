@@ -148,6 +148,9 @@ create-environment:
 	envsubst '$${SERVICE_PASSED_DNCASED},$${SERVICE_PASSED_UPCASED}' < ./.templates/environment.template > environments-available/$(SERVICE_PASSED_DNCASED).template
 	$(EDITOR) environments-available/$(SERVICE_PASSED_DNCASED).template
 
+create-environment-no-edit:
+	envsubst '$${SERVICE_PASSED_DNCASED},$${SERVICE_PASSED_UPCASED}' < ./.templates/environment.template > environments-available/$(SERVICE_PASSED_DNCASED).template
+
 create-game:
 	envsubst '$${SERVICE_PASSED_DNCASED},$${SERVICE_PASSED_UPCASED}' < ./.templates/service.template > ./services-available/games/$(SERVICE_PASSED_DNCASED).yml
 	envsubst '$${SERVICE_PASSED_DNCASED},$${SERVICE_PASSED_UPCASED}' < ./.templates/environment.template > environments-available/$(SERVICE_PASSED_DNCASED).template
@@ -220,6 +223,9 @@ list-games:
 list-services:
 	@ls -1 ./services-available/ | sed -e 's/\.yml$ //'
 
+list-environments:
+	@ls -1 ./environments-available/ | sed -e 's/\.yml$ //'
+
 list-overrides:
 	@ls -1 ./overrides-available/ | sed -e 's/\.yml$ //'
 
@@ -237,6 +243,11 @@ count-enabled:
 
 list-count: print-enabled count-enabled
 
+count-environments:
+	@echo $(shell make list-environments | wc -l )
+
+count-services:
+	@echo $(shell make list-services | wc -l )
 
 #########################################################
 #
