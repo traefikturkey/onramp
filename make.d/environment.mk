@@ -8,6 +8,9 @@ create-environment-template:
 	envsubst '$${SERVICE_PASSED_DNCASED},$${SERVICE_PASSED_UPCASED}' < ./.templates/environment.template > environments-available/$(SERVICE_PASSED_DNCASED).template
 	$(EDITOR) environments-available/$(SERVICE_PASSED_DNCASED).template
 
+create-environment-no-edit:
+	envsubst '$${SERVICE_PASSED_DNCASED},$${SERVICE_PASSED_UPCASED}' < ./.templates/environment.template > environments-available/$(SERVICE_PASSED_DNCASED).template
+
 edit-env-template:
 	$(EDITOR) environments-available/$(SERVICE_PASSED_DNCASED).template
 
