@@ -56,6 +56,7 @@ services:
     image: redis:7-alpine
     networks:
       - traefik
+    restart: unless-stopped
     container_name: kaizoku-redis
     volumes:
       - kaizoku-redis:/manga
