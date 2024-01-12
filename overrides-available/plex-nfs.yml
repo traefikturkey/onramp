@@ -7,13 +7,6 @@ volumes:
       type: nfs
       o: "addr=${PLEX_MEDIA_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
       device: ":${PLEX_MEDIA_NFS_SERVER_PATH:-${NFS_MEDIA_PATH}}"
-  plex-nfs-extra:
-    labels:
-      - remove_volume_on=down
-    driver_opts:
-      type: nfs
-      o: "addr=${PLEX_MEDIA_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
-      device: ":${PLEX_MEDIA_NFS_EXTRA_PATH:-${NFS_EXTRA_PATH}}"
 
 services:
   plex:
