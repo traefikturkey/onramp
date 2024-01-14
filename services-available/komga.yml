@@ -4,8 +4,6 @@ networks:
   traefik:
     external: true
 
-# https://github.com/Casvt/Kapowarr 
-
 services:
   komga:
     image: ghcr.io/gotson/komga:${KOMGA_DOCKER_TAG:-latest}
