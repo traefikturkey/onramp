@@ -13,7 +13,7 @@ docker-compose.*.yml
 
 .env
 envs/*
-overrides-available/plex-nfs-extra.yml
+
 
 # https://theapache64.github.io/git-do-not-ignore/
 !media/
@@ -52,12 +52,12 @@ etc/gitea/*
 !etc/promtail/promtail-config.yml
 
 ansible/roles/
+
+#rands personal customizations
 etc/traefik/available/idrac1.yml
 etc/traefik/available/idrac2.yml
-etc/traefik/available/mjpg-streamer.yml
 etc/traefik/available/octoprint-ender.yml
 etc/traefik/available/octoprint-sunlu.yml
-etc/traefik/available/octoprint.yml
-overrides-available/bazarr-extra.yml
-overrides-available/sonarr-nfs-extra.yml
-
+overrides-available/bazarr-extra-rand.yml
+overrides-available/sonarr-nfs-extra-rand.yml
+overrides-available/plex-nfs-extra-rand.yml
