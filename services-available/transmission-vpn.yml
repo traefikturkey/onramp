@@ -42,8 +42,11 @@ services:
     labels:
       - joyride.host.name=${TRANSMISSION_VPN_CONTAINER_NAME:-transmission-vpn}.${HOST_DOMAIN}
       - traefik.enable=true
+      - traefik.passHostHeader=true
+      - traefik.docker.network=traefik
       - traefik.http.routers.transmission-vpn.entrypoints=websecure
       - traefik.http.routers.transmission-vpn.rule=Host(`${TRANSMISSION_VPN_CONTAINER_NAME:-transmission-vpn}.${HOST_DOMAIN}`)
       - traefik.http.services.transmission-vpn.loadbalancer.server.port=9091
       - com.centurylinklabs.watchtower.enable=true
+      - traefik.http.services.transmission-vpn.loadbalancer.server.scheme=http
       - autoheal=true

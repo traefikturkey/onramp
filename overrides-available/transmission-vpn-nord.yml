@@ -22,3 +22,4 @@ services:
       - DISABLE_PORT_UPDATER=true
       - OVERRIDE_DNS_1=1.1.1.1
       - OVERRIDE_DNS_2=1.0.0.1
+      - HEALTH_CHECK_HOST=github.com
