@@ -1,5 +1,5 @@
 version: '3'
 services:
   plex:
-    device:
+    devices:
       - /dev/dri:/dev/dri
