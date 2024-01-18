@@ -14,6 +14,5 @@ services:
       # you should not put plex config directory on nfs, there are serious performance issues
       - ${PLEX_CONFIG_VOLUME:-./etc/plex}:/config
       - ${PLEX_MEDIA_VOLUME:-plex-nfs-media}:${PLEX_MEDIA_PATH:-/data}
-      - ${PLEX_EXTRA_VOLUME:-plex-nfs-extra}:${PLEX_EXTRA_PATH:-/anime}
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
