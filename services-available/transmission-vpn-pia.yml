@@ -39,10 +39,6 @@ services:
       - DISABLE_PORT_UPDATER=true
       - OVERRIDE_DNS_1=1.1.1.1
       - OVERRIDE_DNS_2=1.0.0.1
-    logging:
-      driver: json-file
-      options:
-        max-size: 10m
     labels:
       - joyride.host.name=${TRANSMISSION_VPN_CONTAINER_NAME:-transmission-vpn}.${HOST_DOMAIN}
       - traefik.enable=true
