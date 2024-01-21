@@ -1,0 +1,43 @@
+version: '3'
+
+networks:
+  traefik:
+    external: true
+
+# https://github.com/Stirling-Tools/Stirling-PDF
+
+services:
+  stirling-pdf:
+    image: frooodle/s-pdf:${STIRLING_PDF_DOCKER_TAG:-latest}
+    container_name: ${STIRLING_PDF_CONTAINER_NAME:-stirling-pdf}
+    restart: ${STIRLING_PDF_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/stirling-pdf/configs:/configs
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - DOCKER_ENABLE_SECURITY=false
+      - SECURITY_ENABLE_LOGIN=true
+      - SYSTEM_DEFAULTLOCALE=${STIRLING_PDF_LOCALE:-en-US}
+    labels:
+      - joyride.host.name=${STIRLING_PDF_CONTAINER_NAME:-stirling-pdf}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.stirling-pdf.entrypoints=websecure
+      - traefik.http.routers.stirling-pdf.rule=Host(`${STIRLING_PDF_CONTAINER_NAME:-stirling-pdf}.${HOST_DOMAIN}`)
+      - traefik.http.middlewares.limit.buffering.maxRequestBodyBytes=10000000000
+      - traefik.http.routers.stirling-pdf.middlewares=limit
+      - traefik.http.services.stirling-pdf.loadbalancer.server.port=8080
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
+
+      # Flame dashboard labels
+
+      - flame.type=application # "app" works too
+      - flame.name=${STIRLING_PDF_FLAME_NAME:-stirling-pdf}
+      - flame.url=https://${STIRLING_PDF_CONTAINER_NAME:-stirling-pdf}.${HOST_DOMAIN}
+      - flame.icon=${STIRLING_PDF_FLAME_ICON:-docker} # optional, default is "docker"

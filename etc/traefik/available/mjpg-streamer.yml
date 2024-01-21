@@ -1,0 +1,20 @@
+http:
+  routers:
+    mjpg-streamer:
+      entryPoints:
+        - websecure
+      rule: "Host(`{{env "MJPG_STREAMER_HOST_NAME"}}.{{env "HOST_DOMAIN"}}`)"
+
+# Default variable subsitution is not occuring. Results of below line are:  ".domain.tld"
+#      rule: "Host(`{{env "MJPG_STREAMER_HOST_NAME:-mjpg-streamer"}}.{{env "HOST_DOMAIN"}}`)"
+      middlewares:
+        - default-headers
+      tls: {}
+      service: mjpg-streamer
+
+  services:
+    mjpg-streamer:
+      loadBalancer:
+        servers:
+          - url: "http://{{env "MJPG_STREAMER_ADDRESS"}}:8080"
+        passHostHeader: true

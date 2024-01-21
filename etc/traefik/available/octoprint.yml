@@ -1,0 +1,21 @@
+http:
+  routers:
+    octoprint:
+      entryPoints:
+        - websecure
+      rule: "Host(`{{env "OCTOPRINT_HOST_NAME"}}.{{env "HOST_DOMAIN"}}`)"
+      
+# Default variable subsitution is not occuring. Results of below line are:  ".domain.tld"
+#      rule: "Host(`{{env "OCTOPRINT_HOST_NAME:-octoprint"}}.{{env "HOST_DOMAIN"}}`)"
+      middlewares:
+        - default-headers
+      tls: {}
+      service: octoprint
+
+  services:
+    octoprint:
+      loadBalancer:
+        servers:
+          - url: "https://{{env "OCTOPRINT_ADDRESS"}}"
+        passHostHeader: true
+        
