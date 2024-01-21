@@ -34,13 +34,6 @@ services:
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
 
-      # Flame dashboard labels
-
-      - flame.type=application # "app" works too
-      - flame.name=${LIBREPHOTOS_FLAME_NAME:-librephotos}
-      - flame.url=https://${LIBREPHOTOS_CONTAINER_NAME:-librephotos}.${HOST_DOMAIN}
-      - flame.icon=${LIBREPHOTOS_FLAME_ICON:-docker} # optional, default is "docker"
-
   db:
     image: postgres:13
     container_name: ${LIBREPHOTOS_DB_CONTAINER_NAME:-librephotos-db}

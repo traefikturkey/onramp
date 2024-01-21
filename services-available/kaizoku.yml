@@ -45,13 +45,6 @@ services:
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
 
-      # Flame dashboard labels
-
-      - flame.type=application # "app" works too
-      - flame.name=${KAIZOKU_FLAME_NAME:-kaizoku}
-      - flame.url=https://${KAIZOKU_CONTAINER_NAME:-kaizoku}.${HOST_DOMAIN}
-      - flame.icon=${KAIZOKU_FLAME_ICON:-docker} # optional, default is "docker"
-
   kaizoku-redis:
     image: redis:7-alpine
     networks:

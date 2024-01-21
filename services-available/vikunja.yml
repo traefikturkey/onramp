@@ -27,13 +27,6 @@ services:
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
 
-      # Flame dashboard labels
-
-      - flame.type=application # "app" works too
-      - flame.name=${VIKUNJA_FLAME_NAME:-vikunja}
-      - flame.url=https://${VIKUNJA_CONTAINER_NAME:-vikunja}.${HOST_DOMAIN}
-      - flame.icon=${VIKUNJA_FLAME_ICON:-docker}
-
   api:
     image: vikunja/api:${VIKUNJA_DOCKER_TAG:-latest}
     container_name: ${VIKUNJA_API_CONTAINER_NAME:-vikunja-api}
