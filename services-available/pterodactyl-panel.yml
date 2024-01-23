@@ -25,7 +25,10 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
-      - DB_PASSWORD="${PTERODACTYL_PANEL_DB_PASSWORD}"
+      - DB_PASSWORD=${PTERODACTYL_PANEL_DB_PASSWORD}
+      - DB_USERNAME=${PTERODACTYL_PANEL_DB_USERNAME:-pterodactyl}
+      - DB_DATABASE=${PTERODACTYL_PANEL_DB_DATABASE:-pterodactyl}
+      - RECAPTCHA_ENABLED=${PTERODACTYL_PANEL_RECAPTCHA_ENABLED:-false}
       - APP_ENV="production"
       - APP_ENVIRONMENT_ONLY="true"
       - CACHE_DRIVER="redis"
@@ -34,7 +37,7 @@ services:
       - REDIS_HOST="redis"
       - DB_HOST=mariadb
       - TRUSTED_PROXIES="*"
-      - APP_URL="${PTERODACTYL_PANEL_CONTAINER_NAME:-panel}.${HOST_DOMAIN}"
+      - APP_URL="https://${PTERODACTYL_PANEL_CONTAINER_NAME:-panel}.${HOST_DOMAIN}"
       - APP_TIMEZONE="UTC"
     labels:
       - joyride.host.name=${PTERODACTYL_PANEL_CONTAINER_NAME:-panel}.${HOST_DOMAIN}
