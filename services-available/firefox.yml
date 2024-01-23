@@ -1,15 +1,15 @@
-version: '3'
+version: "3"
 
 networks:
   traefik:
     external: true
-    
+
 # https://github.com/jlesage/docker-firefox
 
 services:
   firefox:
     image: jlesage/firefox:${FIREFOX_DOCKER_TAG:-latest}
-    container_name: ${FIREFOX_CONTAINER_NAME:-firefox} 
+    container_name: ${FIREFOX_CONTAINER_NAME:-firefox}
     restart: ${FIREFOX_RESTART:-unless-stopped}
     networks:
       - traefik
@@ -25,7 +25,7 @@ services:
       - PGID=${PGID:-1000}
       - TZ=${TZ}
     #ports:
-      #- ${FIREFOX_PORT:-5900}:5900
+    #- ${FIREFOX_PORT:-5900}:5900
     labels:
       - joyride.host.name=${FIREFOX_CONTAINER_NAME:-firefox}.${HOST_DOMAIN}
       - traefik.enable=true
