@@ -5,6 +5,7 @@
 backups/*
 services-enabled/*.yml
 services-dev/*.yml
+services-test/
 overrides-enabled/*.yml
 docker-compose.*.yml
 .vscode
@@ -12,6 +13,7 @@ docker-compose.*.yml
 .gitconfig
 
 .env
+.hosts
 envs/*
 
 

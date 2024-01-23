@@ -8,15 +8,13 @@ networks:
 
 services:
   foundryvtt:
-    image: felddy/foundryvtt:${FOUNDRYVTT_DOCKER_TAG:-latest}
+    image: felddy/foundryvtt:${FOUNDRYVTT_DOCKER_TAG:-release}
     container_name: ${FOUNDRYVTT_CONTAINER_NAME:-foundryvtt}
     restart: ${FOUNDRYVTT_RESTART:-unless-stopped}
     networks:
       - traefik
     volumes:
       - ./etc/foundryvtt:/data
-      # - /etc/timezone:/etc/timezone:ro
-      # - /etc/localtime:/etc/localtime:ro
     environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
