@@ -9,10 +9,10 @@ MARIADB_CONTAINER_NAME=mariadb
 endif
 
 # enable this to be asked for password to when you connect to the database
-#mysql-connect = @docker exec -it $(MARIADB_CONTAINER_NAME) mysql -p
+# mysql-connect = @docker exec -it $(MARIADB_CONTAINER_NAME) mysql -p
+# Broken ^^
 
-# enable this to not be asked for password to when you connect to the database
-mysql-connect = @docker exec -it $(MARIADB_CONTAINER_NAME) mysql -p$(MARIADB_ROOT_PASSWORD)
+mysql-connect = @docker exec -it $(MARIADB_CONTAINER_NAME) $(MARIADB_CONTAINER_NAME) -p
 
 first_arg = $(shell echo $(EMPTY_TARGETS)| cut -d ' ' -f 1)
 second_arg = $(shell echo $(EMPTY_TARGETS)| cut -d ' ' -f 2)
