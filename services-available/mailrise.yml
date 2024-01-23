@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 networks:
   traefik:
@@ -25,5 +25,6 @@ services:
       - traefik.tcp.routers.mailrise.rule=HostSNI(`${MAILRISE_CONTAINER_NAME:-mailrise}.${HOST_DOMAIN}`)
       - traefik.tcp.routers.mailrise.tls=true
       - traefik.tcp.routers.mailrise.tls.certresolver=letsencrypt
-      - traefik.tcp.routers.mailrise.entrypoints=mailsecure - com.centurylinklabs.watchtower.enable=true
+      - traefik.tcp.routers.mailrise.entrypoints=mailsecure
+      - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
