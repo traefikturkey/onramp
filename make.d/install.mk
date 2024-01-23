@@ -1,12 +1,12 @@
 #########################################################
-#
-# install commands
-#
+##
+## install commands
+##
 #########################################################
 distro := $(shell lsb_release -is)
 
 
-check-distro:
+check-distro: ## check distro
 	@echo $(distro)
 
 
