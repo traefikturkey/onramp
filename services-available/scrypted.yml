@@ -14,7 +14,6 @@ services:
     restart: ${SCRYPTED_RESTART:-unless-stopped}
     networks:
       - traefik
-    network_mode: host
     volumes:
       - ./etc/scrypted:/server/volume # <==== this probably needs changed
       - ./media/videos/scrypted:/media/external
