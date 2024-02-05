@@ -36,5 +36,6 @@ services:
       - traefik.http.routers.scrypted.entrypoints=websecure
       - traefik.http.routers.scrypted.rule=Host(`${SCRYPTED_CONTAINER_NAME:-scrypted}.${HOST_DOMAIN}`)
       - traefik.http.services.scrypted.loadbalancer.server.port=10444
+      - traefik.http.services.scrypted.loadbalancer.server.scheme=https
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
