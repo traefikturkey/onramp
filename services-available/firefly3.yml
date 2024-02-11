@@ -5,7 +5,7 @@ networks:
     driver: bridge
   traefik:
     external: true
-volumes: 
+volumes:
   firefly_upload:
   firefly_db:
 
@@ -50,7 +50,7 @@ services:
     hostname: db
     container_name: ${FIREFLY_DB_CONTAINER_NAME:-firefly_db}
     restart: ${FIREFLY3_RESTART:-unless-stopped}
-    environment: 
+    environment:
       - MYSQL_DATABASE=${FIREFLY_DB_DATABASE:-firefly}
       - MYSQL_USER=${FIREFLY_DB_USERNAME:-firefly}
       - MYSQL_PASSWORD=${FIREFLY_DB__PASSWORD:-super_secure_password_change_me}
