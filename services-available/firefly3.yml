@@ -38,6 +38,7 @@ services:
       - DB_PORT=${FIREFLY_DB_PORT:-3306}
       - DB_DATABASE=${FIREFLY_DB_DATABASE:-firefly}
       - DB_USERNAME=${FIREFLY_DB_USERNAME:-firefly}
+      # echo "FIREFLY_DB_PASSWORD=$(openssl rand -base64 16 | tr -d /=+ | cut -c -16)"  >> .env
       - DB_PASSWORD=${FIREFLY_DB_PASSWORD:-super_secure_password_change_me}
     labels:
       - joyride.host.name=${FIREFLY3_CONTAINER_NAME:-firefly}.${HOST_DOMAIN}
@@ -55,12 +56,14 @@ services:
     environment:
       - MYSQL_DATABASE=${FIREFLY_DB_DATABASE:-firefly}
       - MYSQL_USER=${FIREFLY_DB_USERNAME:-firefly}
-      - MYSQL_PASSWORD=${FIREFLY_DB__PASSWORD:-super_secure_password_change_me}
+      - MYSQL_PASSWORD=${FIREFLY_DB_PASSWORD:-super_secure_password_change_me}
       - MYSQL_RANDOM_ROOT_PASSWORD=yes
     networks:
       - firefly_iii
     volumes:
       - firefly_db:/var/lib/mysql
+    labels: 
+      - traefik.enable=false
   cron:
     #
     # To make this work, set STATIC_CRON_TOKEN in your .env file or as an environment variable and replace REPLACEME below
@@ -75,3 +78,5 @@ services:
     command: sh -c "echo \"0 3 * * * wget -qO- http://${FIREFLY3_CONTAINER_NAME:-firefly}.${HOST_DOMAIN}/api/v1/cron/$$APP_KEY\" | crontab - && crond -f -L /dev/stdout"
     networks:
       - firefly_iii
+    labels: 
+      - traefik.enable=false
