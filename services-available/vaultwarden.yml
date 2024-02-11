@@ -24,9 +24,7 @@ services:
       # docker run --rm -it vaultwarden/server /vaultwarden hash --preset owasp
       - ADMIN_TOKEN=${VAULTWARDEN_ADMIN_TOKEN}
       - SIGNUPS_ALLOWED=${VAULTWARDEN_SIGNUPS_ALLOWED:-true}
-      - DOMAIN=${VAULTWARDEN_CONTAINER_NAME:-vaultwarden}.${HOST_DOMAIN}
-      - ADMIN_TOKEN=${VAULT_ADMIN_SECRET}
-      - SIGNUPS_ALLOWED=${VAULTWARDEN_SIGNUPS_ENABLED:-true}
+      - DOMAIN=https://${VAULTWARDEN_CONTAINER_NAME:-vaultwarden}.${HOST_DOMAIN}
       - SMTP_HOST=${VAULTWARDEN_SMTP_HOST:-smtp.domain.tld}
       - SMTP_FROM=${VAULTWARDEN_SMTP_FROM:-vaultwarden@domain.tld}
       - SMTP_FROM_NAME=${VAULTWARDEN_SMTP_FROM_NAME:-Vaultwarden}
