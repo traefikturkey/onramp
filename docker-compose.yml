@@ -22,7 +22,7 @@ services:
       - environments-enabled/onramp.env
     volumes:
       - ./etc/traefik/letsencrypt:/letsencrypt
-      - ./etc/traefik/enabled:/enabled
+      - . /etc/traefik/enabled:/enabled
       - /etc/localtime:/etc/localtime:ro
       - /usr/share/zoneinfo:/usr/share/zoneinfo:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -36,6 +36,9 @@ services:
       - --providers.docker
       - --providers.file.watch=true
       - --providers.file.directory=/enabled
+      # - --providers.docker.allowEmptyServices=true
+      # - --experimental.plugins.sablier.moduleName=github.com/acouvreur/sablier
+      # - --experimental.plugins.sablier.version=v1.6.0
       - --entrypoints.web.address=:80
       - --entrypoints.websecure.address=:443
       - --entrypoints.web.http.redirections.entrypoint.to=websecure
