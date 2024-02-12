@@ -88,7 +88,7 @@ services:
       - firefly_iii
     volumes:
       - firefly_db:/var/lib/mysql
-    labels: 
+    labels:
       - traefik.enable=false
   cron:
     #
@@ -104,5 +104,5 @@ services:
     command: sh -c "echo \"0 3 * * * wget -qO- http://${FIREFLY3_CONTAINER_NAME:-firefly}.${HOST_DOMAIN}/api/v1/cron/$$APP_KEY\" | crontab - && crond -f -L /dev/stdout"
     networks:
       - firefly_iii
-    labels: 
+    labels:
       - traefik.enable=false
