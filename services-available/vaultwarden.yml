@@ -33,7 +33,7 @@ services:
       - SMTP_USERNAME=${VAULTWARDEN_SMTP_USERNAME:-username}
       - SMTP_PASSWORD=${VAULTWARDEN_SMTP_PASSWORD:-password}
       - SMTP_TIMEOUT=15
-      
+
     labels:
       - joyride.host.name=${VAULTWARDEN_CONTAINER_NAME:-vaultwarden}.${HOST_DOMAIN}
       - traefik.enable=true
