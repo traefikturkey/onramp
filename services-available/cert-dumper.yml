@@ -1,9 +1,5 @@
 version: '3'
 
-networks:
-  traefik:
-    external: true
-
 # https://github.com/ldez/traefik-certs-dumper
 
 services:
@@ -11,7 +7,6 @@ services:
     image: ldez/traefik-certs-dumper:${TRAEFIK_CERT_DUMPER_DOCKER_TAG:-v2.8.1}
     container_name: ${TRAEFIK_CERT_DUMPER_CONTAINER_NAME:-traefik-certs-dumper}
     restart: unless-stopped
-
     volumes:
       - ./etc/traefik/letsencrypt:/data
     entrypoint: sh -c '
@@ -25,4 +20,4 @@ services:
     labels:
       - traefik.enable=false
       - com.centurylinklabs.watchtower.enable=${TRAEFIK_CERT_DUMPER_WATCHTOWER_ENABLED:-false}
-      - autoheal=true
+      - autoheal=${TRAEFIK_CERT_DUMPER_AUTOHEAL_ENABLED:-true}

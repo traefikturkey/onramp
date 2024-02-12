@@ -1,0 +1,36 @@
+version: '3'
+
+networks:
+  traefik:
+    external: true
+
+# https://github.com/rundeck/rundeck
+# https://hub.docker.com/r/rundeck/rundeck
+# https://docs.rundeck.com/
+
+services:
+  rundeck:
+    image: rundeck/rundeck:${RUNDECK_DOCKER_TAG:-5.0.1}
+    container_name: ${RUNDECK_CONTAINER_NAME:-rundeck}
+    restart: ${RUNDECK_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/rundeck:/home/rundeck/server/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - RUNDECK_GRAILS_URL=https://${RUNDECK_CONTAINER_NAME:-rundeck}.${HOST_DOMAIN}
+      - RUNDECK_SERVER_FORWARDED=true
+    labels:
+      - joyride.host.name=${RUNDECK_CONTAINER_NAME:-rundeck}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.rundeck.entrypoints=websecure
+      - traefik.http.routers.rundeck.rule=Host(`${RUNDECK_CONTAINER_NAME:-rundeck}.${HOST_DOMAIN}`)
+      #- traefik.http.services.rundeck.loadbalancer.server.scheme=https # enable if the service wants to connect over https
+      - traefik.http.services.rundeck.loadbalancer.server.port=4440
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true

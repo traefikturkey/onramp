@@ -1,0 +1,40 @@
+version: '3'
+
+networks:
+  firefly_iii:
+    driver: bridge
+  traefik:
+    external: true
+volumes:
+  firefly_upload:
+  firefly_db:
+
+# https://github.com/firefly-iii/firefly-iii/tree/main
+
+services:
+  firefly-data-importer:
+    image: fireflyiii/data-importer:${FIREFLY_DATA_IMPORTER_DOCKER_TAG:-latest}
+    container_name: ${FIREFLY_DATA_IMPORTER_CONTAINER_NAME:-firefly-importer}
+    restart: ${FIREFLY_DATA_IMPORTER_RESTART:-always}
+    hostname: importer
+    networks:
+      - traefik
+    ports:
+      - '81:8080'
+    depends_on:
+      - firefly3
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - FIREFLY_III_URL=https://${FIREFLY3_CONTAINER_NAME:-firefly}.${HOST_DOMAIN}
+      - VANITY_URL=https://${FIREFLY3_CONTAINER_NAME:-firefly}.${HOST_DOMAIN}
+      - FIREFLY_III_ACCESS_TOKEN=${FIREFLY_III_ACCESS_TOKEN_JWT}
+    labels:
+      - joyride.host.name=${FIREFLY_DATA_IMPORTER_CONTAINER_NAME:-firefly-importer}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.firefly-data-importer.entrypoints=websecure
+      - traefik.http.routers.firefly-data-importer.rule=Host(`${FIREFLY_DATA_IMPORTER_CONTAINER_NAME:-firefly-importer}.${HOST_DOMAIN}`)
+      - traefik.http.services.firefly-data-importer.loadbalancer.server.port=8080
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
