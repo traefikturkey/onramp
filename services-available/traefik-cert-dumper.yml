@@ -20,4 +20,4 @@ services:
     labels:
       - traefik.enable=false
       - com.centurylinklabs.watchtower.enable=${TRAEFIK_CERT_DUMPER_WATCHTOWER_ENABLED:-false}
-      - autoheal=true
+      - autoheal=${TRAEFIK_CERT_DUMPER_AUTOHEAL_ENABLED:-true}

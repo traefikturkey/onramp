@@ -35,12 +35,10 @@ services:
     labels:
       - org.label-schema.group=monitoring
       - joyride.host.name=${CADVISOR_CONTAINER_NAME:-cadvisor}.${HOST_DOMAIN}
+      - com.centurylinklabs.watchtower.enable=true
       - traefik.enable=true
       - traefik.http.routers.cadvisor.rule=Host(`${CADVISOR_CONTAINER_NAME:-cadvisor}.${HOST_DOMAIN}`)
       - traefik.http.routers.cadvisor.entrypoints=websecure
-      - traefik.http.routers.cadvisor.tls=true
-      - traefik.http.routers.cadvisor.tls.certresolver=letsencrypt
-      - traefik.http.services.cadvisor.loadbalancer.server.scheme=http
       - traefik.http.services.cadvisor.loadbalancer.server.port=8080
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true

@@ -13,6 +13,8 @@ services:
     image: cloudflare/cloudflared:${CLOUDFLARE_TUNNEL_GUI_DOCKER_TAG:-latest}
     container_name: ${CLOUDFLARE_TUNNEL_GUI_CONTAINER_NAME:-cloudflare-tunnel-gui}
     restart: ${CLOUDFLARE_TUNNEL_GUI_RESTART:-unless-stopped}
+    networks:
+      - traefik
     volumes:
       - ./etc/cloudflared:/cloudflared
       - /etc/timezone:/etc/timezone:ro

@@ -23,7 +23,7 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
-      - PROXY_DOMAIN=code-server.${HOST_DOMAIN}
+      - PROXY_DOMAIN=${CODE_SERVER_CONTAINER_NAME:-code-server}.${HOST_DOMAIN}
       - SUDO_PASSWORD=${CODE_SERVER_SUDO_PASSWORD}
     labels:
       - joyride.host.name=${CODE_SERVER_CONTAINER_NAME:-code-server}.${HOST_DOMAIN}

@@ -14,7 +14,6 @@ services:
     restart: ${SCRYPTED_RESTART:-unless-stopped}
     networks:
       - traefik
-    network_mode: host
     volumes:
       - ./etc/scrypted:/server/volume
       - ./media/videos/scrypted:/media/external
@@ -38,5 +37,6 @@ services:
       - traefik.http.routers.scrypted.rule=Host(`${SCRYPTED_CONTAINER_NAME:-scrypted}.${HOST_DOMAIN}`)
       #- traefik.http.services.scrypted.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.scrypted.loadbalancer.server.port=10444
+      - traefik.http.services.scrypted.loadbalancer.server.scheme=https
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true

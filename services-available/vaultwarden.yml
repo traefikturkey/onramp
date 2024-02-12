@@ -20,7 +20,20 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
-      - ADMIN_TOKEN=${VAULTWARDEN_ADMIN_SECRET}
+      - DOMAIN=${VAULTWARDEN_CONTAINER_NAME:-vaultwarden}.${HOST_DOMAIN}
+      # docker run --rm -it vaultwarden/server /vaultwarden hash --preset owasp
+      - ADMIN_TOKEN=${VAULTWARDEN_ADMIN_TOKEN}
+      - SIGNUPS_ALLOWED=${VAULTWARDEN_SIGNUPS_ALLOWED:-true}
+      - DOMAIN=https://${VAULTWARDEN_CONTAINER_NAME:-vaultwarden}.${HOST_DOMAIN}
+      - SMTP_HOST=${VAULTWARDEN_SMTP_HOST:-smtp.domain.tld}
+      - SMTP_FROM=${VAULTWARDEN_SMTP_FROM:-vaultwarden@domain.tld}
+      - SMTP_FROM_NAME=${VAULTWARDEN_SMTP_FROM_NAME:-Vaultwarden}
+      - SMTP_SECURITY=${VAULTWARDEN_SMTP_SECURITY:-starttls}
+      - SMTP_PORT=${VAULTWARDEN_SMTP_PORT:-587}
+      - SMTP_USERNAME=${VAULTWARDEN_SMTP_USERNAME:-username}
+      - SMTP_PASSWORD=${VAULTWARDEN_SMTP_PASSWORD:-password}
+      - SMTP_TIMEOUT=15
+      
     labels:
       - joyride.host.name=${VAULTWARDEN_CONTAINER_NAME:-vaultwarden}.${HOST_DOMAIN}
       - traefik.enable=true

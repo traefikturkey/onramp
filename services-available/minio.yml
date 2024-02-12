@@ -6,15 +6,6 @@ networks:
 
 # https://github.com/minio/minio
 
-# volumes:
-#   minio:
-#     labels:
-#       - remove_volume_on=down
-#     driver_opts:
-#       type: nfs
-#       o: "addr=${MINIO_ROOT_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
-#       device: ":${MINIO_ROOT_NFS_SERVER_PATH:-${NFS_MINIO_PATH}}"
-
 services:
   minio:
     image: minio/minio:${MINIO_DOCKER_TAG:-latest}
@@ -23,9 +14,7 @@ services:
     networks:
       - traefik
     volumes:
-      - ./etc/minio:/data # <==== this probably needs changed
-      # - /etc/timezone:/etc/timezone:ro
-      # - /etc/localtime:/etc/localtime:ro
+      - ./etc/minio:/data
     environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
