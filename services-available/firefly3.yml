@@ -51,29 +51,6 @@ services:
       - traefik.http.services.firefly3.loadbalancer.server.port=8080
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
-  importer:
-    image: fireflyiii/data-importer:latest
-    hostname: importer
-    restart: always
-    container_name: firefly-importer
-    networks:
-      - traefik
-    ports:
-      - '81:8080'
-    depends_on:
-      - firefly3
-    environment:
-      - FIREFLY_III_URL=https://${FIREFLY3_CONTAINER_NAME:-firefly}.${HOST_DOMAIN}
-      - VANITY_URL=https://${FIREFLY3_CONTAINER_NAME:-firefly}.${HOST_DOMAIN}
-      - FIREFLY_III_ACCESS_TOKEN=${FIREFLY_III_ACCESS_TOKEN_JWT}
-    labels:
-      - joyride.host.name=${FIREFLY3_CONTAINER_NAME:-firefly}-importer.${HOST_DOMAIN}
-      - traefik.enable=true
-      - traefik.http.routers.firefly3-importer.entrypoints=websecure
-      - traefik.http.routers.firefly3-importer.rule=Host(`${FIREFLY3_CONTAINER_NAME:-firefly}-importer.${HOST_DOMAIN}`)
-      - traefik.http.services.firefly3-importer.loadbalancer.server.port=8080
-      - com.centurylinklabs.watchtower.enable=true
-      - autoheal=true
   db:
     image: mariadb
     hostname: db
