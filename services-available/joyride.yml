@@ -23,5 +23,6 @@ services:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./etc/joyride/hosts.d:/etc/hosts.d:ro
     labels:
       - traefik.enable=false
