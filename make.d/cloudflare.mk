@@ -4,7 +4,7 @@
 #
 #########################################################
 
-create-tunnel: etc/cloudflared etc/cloudflared/cert.pem etc/cloudflared/%.json
+create-tunnel: etc/cloudflared etc/cloudflared/cert.pem etc/cloudflared/%.json ## create the cloudflare tunnel and dns entry
 
 etc/cloudflared:
 	mkdir -p ./etc/cloudflared
@@ -24,9 +24,9 @@ etc/cloudflared/%.json:
 	sudo chown -R 65532:$(USER) ./config/cloudflared
 	sudo chmod 660 ./config/cloudflared/*
  
-remove-tunnel: remove-cloudflare-dns-entry remove-cloudflare-tunnel 
+remove-tunnel: remove-cloudflare-dns-entry remove-cloudflare-tunnel ## remove the cloudflare tunnel and the dns entry
 	
-remove-cloudflare-tunnel:
+remove-cloudflare-tunnel: ## remove the cloudflare tunnel
 	@echo "Removing Cloudflared Tunnel $(CLOUDFLARE_TUNNEL_URL)"
 	-$(COMPOSE_COMMAND) $(FLAGS) run --rm cloudflared tunnel cleanup $(CLOUDFLARE_TUNNEL_NAME)
 	-$(COMPOSE_COMMAND) $(FLAGS) run --rm cloudflared tunnel delete $(CLOUDFLARE_TUNNEL_NAME)
@@ -44,7 +44,7 @@ remove-cloudflare-dns-entry:
 		echo RECORD_ID = $$RECORD_ID
 		curl -s -X DELETE "https://api.cloudflare.com/client/v4/zones/$${ZONE_ID}/dns_records/$${RECORD_ID}" -H "Authorization: Bearer $(CF_DNS_API_TOKEN)" -H "Content-Type: application/json"
 
-show-tunnel: 
+show-tunnel: ## show the status of the cloudflare tunnel
 	@echo "Checking Cloudflared Tunnel $(CLOUDFLARE_TUNNEL_URL)"
 	-$(COMPOSE_COMMAND) $(FLAGS) run --rm cloudflared tunnel info $(CLOUDFLARE_TUNNEL_NAME) || echo $$?
 	@echo 'command exited with $(.SHELLSTATUS)'
