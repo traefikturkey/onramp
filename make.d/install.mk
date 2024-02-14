@@ -23,7 +23,7 @@ ifneq ("$(wildcard ./etc/traefik/letsencrypt/acme.json)","")
 endif
 
 fix-acme-json-permissions:
-	chmod 600 ./etc/traefik/letsencrypt/acme.json
+	sudo chmod 600 ./etc/traefik/letsencrypt/acme.json
 
 build: install-dependencies .env $(BUILD_DEPENDENCIES)
 
