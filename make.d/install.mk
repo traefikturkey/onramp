@@ -18,6 +18,13 @@ else
     ANSIBLE_APT_ADD_REPO :=
 endif
 
+ifneq ("$(wildcard ./etc/traefik/letsencrypt/acme.json)","")
+    BUILD_DEPENDENCIES += fix-acme-json-permissions
+endif
+
+fix-acme-json-permissions:
+	chmod 600 ./etc/traefik/letsencrypt/acme.json
+
 build: install-dependencies .env $(BUILD_DEPENDENCIES)
 
 install: build install-docker
