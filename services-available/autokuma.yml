@@ -1,0 +1,41 @@
+version: '3'
+
+networks:
+  traefik:
+    external: true
+
+# https://github.com/BigBoot/AutoKuma
+
+services:
+  autokuma:
+    image: ghcr.io/bigboot/autokuma:${AUTOKUMA_DOCKER_TAG:-latest}
+    container_name: ${AUTOKUMA_CONTAINER_NAME:-autokuma}
+    restart: ${AUTOKUMA_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      PUID: ${PUID:-1000}
+      PGID: ${PGID:-1000}
+      TZ: ${TZ}
+      AUTOKUMA__KUMA__URL: ${AUTOKUMA_KUMA_URL:-http://uptimekuma:3001}
+      AUTOKUMA__KUMA__USERNAME: ${AUTOKUMA_KUMA_USERNAME}
+      AUTOKUMA__KUMA__PASSWORD: ${AUTOKUMA_KUMA_PASSWORD}
+      AUTOKUMA__KUMA__DEFAULT_SETTINGS: >-
+         docker.docker_container: {{container_name}}
+         http.max_redirects: 10
+         *.max_retries: 3
+      # AUTOKUMA__KUMA__MFA_TOKEN: ${AUTOKUMA_KUMA_MFA_TOKEN}
+      # AUTOKUMA__KUMA__HEADERS: ${AUTOKUMA_KUMA_HEADERS}
+      # AUTOKUMA__KUMA__TAG_NAME: ${AUTOKUMA_KUMA_TAG_NAME:-AutoKuma}
+      # AUTOKUMA__KUMA__TAG_COLOR: "${AUTOKUMA_KUMA_TAG_COLOR:-#42C0FB}"
+      # AUTOKUMA__KUMA__CALL_TIMEOUT: ${AUTOKUMA_KUMA_CALL_TIMEOUT:-5s}
+      # AUTOKUMA__KUMA__CONNECT_TIMEOUT: ${AUTOKUMA_KUMA_CONNECT_TIMEOUT:-5s}
+      # AUTOKUMA__DOCKER__SOCKET: ${AUTOKUMA_DOCKER_SOCKET:-/var/run/docker.sock}
+      # AUTOKUMA__DOCKER__LABEL_PREFIX: ${AUTOKUMA_DOCKER_LABEL_PREFIX:-kuma}
+
+    labels:
+      - traefik.enable=false
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
