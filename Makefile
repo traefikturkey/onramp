@@ -51,6 +51,13 @@ $(eval $(EMPTY_TARGETS):;@:)
 
 # this is the default target run if no other targets are passed to make
 # i.e. if you just type: make
+
+#########################################################
+##
+## basic commands
+##
+#########################################################
+
 start: build
 	$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) up -d --remove-orphans
 	
@@ -60,19 +67,19 @@ remove-orphans: build
 up: build
 	$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) up --force-recreate --remove-orphans --abort-on-container-exit
 
-down: 
+down: ## stop all services and remove all containers and networks
 	-$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) down --remove-orphans
 	-docker volume ls --quiet --filter "label=remove_volume_on=down" | xargs -r docker volume rm 
 
 pull:
 	$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) pull
 
-logs:
+logs: ## show logs for a service or all services if no service is passed
 	$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) logs -f $(SERVICE_PASSED_DNCASED)
 
-restart: down start
+restart: down start ## restart all services that are enabled
 
-update: down pull start
+update: down pull start ## update all the services that are enabled and restart them
 
 bash-run:
 	$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) run -it --rm $(SERVICE_PASSED_DNCASED) sh
@@ -81,9 +88,9 @@ bash-exec:
 	$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) exec $(SERVICE_PASSED_DNCASED) sh
 
 #########################################################
-#
-# service commands
-#
+##
+## service commands
+##
 #########################################################
 
 start-service: COMPOSE_IGNORE_ORPHANS = true 
@@ -109,7 +116,7 @@ else
 endif
 	
 .PHONY: enable-service build 
-enable-service: etc/$(SERVICE_PASSED_DNCASED) services-enabled/$(SERVICE_PASSED_DNCASED).yml environments-enabled/$(SERVICE_PASSED_DNCASED).env
+enable-service: etc/$(SERVICE_PASSED_DNCASED) services-enabled/$(SERVICE_PASSED_DNCASED).yml environments-enabled/$(SERVICE_PASSED_DNCASED).env ## Enable a service by creating a symlink to the service file in the services-enabled folder
 
 etc/$(SERVICE_PASSED_DNCASED):
 	@mkdir -p ./etc/$(SERVICE_PASSED_DNCASED)
@@ -129,21 +136,22 @@ ifeq (,$(wildcard ./environments-available/$(SERVICE_PASSED_DNCASED).template))
 endif
 	@python3 scripts/env-subst.py environments-available/$(SERVICE_PASSED_DNCASED).template $(SERVICE_PASSED_UPCASED)
 
-remove-game: disable-service
-disable-game: disable-service
-remove-service: disable-service
-disable-service: stop-service
+remove-game: disable-service ## Disable a game and disable it before removing it
+disable-game: disable-service ## Disable a game
+remove-service: disable-service ## Disable a service and disable it before removing it
+disable-service: stop-service ## Disable a service
 	rm ./environments-enabled/$(SERVICE_PASSED_DNCASED).env
 	rm ./services-enabled/$(SERVICE_PASSED_DNCASED).yml
 	rm ./overrides-enabled/$(SERVICE_PASSED_DNCASED)-*.yml 2> /dev/null || true
 
-create-service:
+
+create-service: ## create a service file from the template and open it in the editor 
 	envsubst '$${SERVICE_PASSED_DNCASED},$${SERVICE_PASSED_UPCASED}' < ./.templates/service.template > ./services-available/$(SERVICE_PASSED_DNCASED).yml
 	envsubst '$${SERVICE_PASSED_DNCASED},$${SERVICE_PASSED_UPCASED}' < ./.templates/environment.template > environments-available/$(SERVICE_PASSED_DNCASED).template
 	$(EDITOR) ./services-available/$(SERVICE_PASSED_DNCASED).yml
 	$(EDITOR) environments-available/$(SERVICE_PASSED_DNCASED).template
 
-create-game:
+create-game: ## create a game service using the service template and open it in the editor
 	envsubst '$${SERVICE_PASSED_DNCASED},$${SERVICE_PASSED_UPCASED}' < ./.templates/service.template > ./services-available/games/$(SERVICE_PASSED_DNCASED).yml
 	envsubst '$${SERVICE_PASSED_DNCASED},$${SERVICE_PASSED_UPCASED}' < ./.templates/environment.template > environments-available/$(SERVICE_PASSED_DNCASED).template
 	$(EDITOR) ./services-available/games/$(SERVICE_PASSED_DNCASED).yml
@@ -160,9 +168,9 @@ services-dev:
 	mkdir -p ./services-dev
 
 #########################################################
-#
-# compose commands
-#
+##
+## compose commands
+##
 #########################################################
 
 start-compose: COMPOSE_IGNORE_ORPHANS = true 
@@ -181,12 +189,12 @@ compose-run:
 	$(DOCKER_COMPOSE) $(SERVICE_FLAGS) run $(SERVICE_PASSED_DNCASED) $(second_arg)
 	
 #########################################################
-#
-# staging commands
-#
+##
+## staging commands
+##
 #########################################################
 
-start-staging: build
+start-staging: build ## start the staging and wait for the acme staging certs to be issued
 	ACME_CASERVER=https://acme-staging-v02.api.letsencrypt.org/directory $(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) up -d --force-recreate
 	@echo "waiting $(CF_RESOLVER_WAITTIME) seconds for cert DNS propogation..."
 	@sleep $(CF_RESOLVER_WAITTIME)
@@ -199,41 +207,41 @@ start-staging: build
 	@echo "otherwise run the following command if you successfully got a staging certificate:"
 	@echo "make down-staging"
 
-down-staging:
+down-staging: ## stop the staging and delete the acme staging certs
 	$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) down
 	$(MAKE) clean-acme
 
 #########################################################
-#
-# list commands
-#
+##
+## list commands
+##
 #########################################################
 
-list-games:
+list-games: ## list available games
 	@ls -1 ./services-available/games | sed -n 's/\.yml$ //p'
 
-list-services:
+list-services: ## list available services
 	@ls -1 ./services-available/ | sed -e 's/\.yml$ //'
 
-list-environments:
+list-environments: ## list available environment files
 	@ls -1 ./environments-available/ | sed -e 's/\.yml$ //'
 
-list-overrides:
+list-overrides: ## list available overrides
 	@ls -1 ./overrides-available/ | sed -e 's/\.yml$ //'
 
-list-external:
+list-external: ## list available external services
 	@ls -1 ./etc/traefik/available/ | sed -e 's/\.yml$ //'
 
-list-enabled:
+list-enabled: ## list enabled services
 	@printf "%s\n" $(shell ls -1 ./services-enabled/ | sed -e 's/\.yml$ //' )
 
-print-enabled:
+print-enabled: ## print enabled services
 	@printf "%s\n" "Here are your enabled services : " $(shell ls -1 ./services-enabled/ | sed -e 's/\.yml$ //' )
 
-count-enabled:
+count-enabled: ## count enabled services
 	@echo "Total services run in onramp (this is excluding Traefik, and multi-services composes are counted as one) : " $(shell make list-enabled | wc -l )
 
-list-count: print-enabled count-enabled
+list-count: print-enabled count-enabled ## list enabled services and count them
 
 count-environments:
 	@echo $(shell make list-environments | wc -l )
@@ -242,9 +250,9 @@ count-services:
 	@echo $(shell make list-services | wc -l )
 
 #########################################################
-#
-# build related commands
-#
+##
+## build related commands
+##
 #########################################################
 
 
@@ -317,51 +325,51 @@ etc/recyclarr/recyclarr.yml:
 
 
 #########################################################
-#
-# override commands
-#
+##
+## override commands
+##
 #########################################################
 
 enable-override: overrides-enabled/$(SERVICE_PASSED_DNCASED).yml
 overrides-enabled/$(SERVICE_PASSED_DNCASED).yml:
 	@ln -s ../overrides-available/$(SERVICE_PASSED_DNCASED).yml ./overrides-enabled/$(SERVICE_PASSED_DNCASED).yml || true
 
-remove-override: disable-override
+remove-override: disable-override ## disble the override before removing it
 disable-override:
 	rm ./overrides-enabled/$(SERVICE_PASSED_DNCASED).yml 
 
 #########################################################
-#
-# external service commands
-#
+##
+## external service commands
+##
 #########################################################
 
-disable-external:
+disable-external: ## disable an external service
 	rm ./etc/traefik/enabled/$(SERVICE_PASSED_DNCASED).yml
 
-enable-external:
+enable-external: ## enable an external service
 	@cp ./etc/traefik/available/$(SERVICE_PASSED_DNCASED).yml ./etc/traefik/enabled/$(SERVICE_PASSED_DNCASED).yml || true
 
-create-external:
+create-external: ## create an external service
 	envsubst '$${SERVICE_PASSED_DNCASED},$${SERVICE_PASSED_UPCASED}' < ./.templates/external.template > ./etc/traefik/available/$(SERVICE_PASSED_DNCASED).yml
 	$(EDITOR) ./etc/traefik/available/$(SERVICE_PASSED_DNCASED).yml
 
 #########################################################
-#
-# helper commands
-#
+##
+## helper commands
+##
 #########################################################
 
 generate-matrix-config:
 	docker run -it --rm  -v ./etc/synapse:/data  -e SYNAPSE_SERVER_NAME=${SYNAPSE_SERVER_NAME} -e SYNAPSE_REPORT_STATS=${SYNAPSE_REPORT_STATS} matrixdotorg/synapse:latest generate	
 
 #########################################################
-#
-# arrs api-key retrieval
-#
+##
+## arrs api-key retrieval
+##
 #########################################################
 
-retrieve-apikey:
+retrieve-apikey: ## retrieve api key from arrs
 	@grep -oP '(?<=ApiKey>).*?(?=</ApiKey>)' ./etc/$${SERVICE_PASSED_DNCASED}/config.xml
 
 # include additional make commands

@@ -2,7 +2,7 @@ ifndef NETBOX_EMAIL
 	NETBOX_SUPERUSER_EMAIL=$(CF_API_EMAIL)
 endif
 
-check-yaml: install-dependencies
+check-yaml: install-dependencies ## check the yaml files
 	yamllint -c .yamllint .
 
 check-cf:

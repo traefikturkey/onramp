@@ -1,12 +1,12 @@
 #########################################################
-#
-# install commands
-#
+##
+## install commands
+##
 #########################################################
 distro := $(shell lsb_release -is)
 
 
-check-distro:
+check-distro: ## check distro
 	@echo $(distro)
 
 
@@ -17,6 +17,13 @@ else
     YQ_APT_ADD_REPO      :=
     ANSIBLE_APT_ADD_REPO :=
 endif
+
+ifneq ("$(wildcard ./etc/traefik/letsencrypt/acme.json)","")
+    BUILD_DEPENDENCIES += fix-acme-json-permissions
+endif
+
+fix-acme-json-permissions:
+	sudo chmod 600 ./etc/traefik/letsencrypt/acme.json
 
 build: install-dependencies environments-enabled/onramp.env $(BUILD_DEPENDENCIES)
 
