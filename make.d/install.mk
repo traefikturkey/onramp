@@ -18,12 +18,20 @@ else
     ANSIBLE_APT_ADD_REPO :=
 endif
 
-ifneq ("$(wildcard ./etc/traefik/letsencrypt/acme.json)","")
+ACME_JSON_FILE := ./etc/traefik/letsencrypt/acme.json
+ACME_JSON_PERMS := 600
+
+ifneq ("$(wildcard $(ACME_JSON_FILE))","")
     BUILD_DEPENDENCIES += fix-acme-json-permissions
 endif
 
 fix-acme-json-permissions:
-	sudo chmod 600 ./etc/traefik/letsencrypt/acme.json
+	@if [ -e $(ACME_JSON_FILE) ]; then \
+		if [ $$(stat -c %a $(ACME_JSON_FILE)) != "$(ACME_JSON_PERMS)" ]; then \
+			echo "Fixing permissions on $(ACME_JSON_FILE)"; \
+			sudo chmod $(ACME_JSON_PERMS) $(ACME_JSON_FILE); \
+		fi \
+	fi
 
 build: install-dependencies .env $(BUILD_DEPENDENCIES)
 
