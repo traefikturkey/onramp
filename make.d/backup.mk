@@ -9,7 +9,7 @@ create-backup: backups ## create a backup of the onramp config
 
 create-nfs-backup: create-backup ## create a backup of the onramp config and copy it to the nfs server
 	sudo mount -t nfs $(NFS_SERVER):$(NFS_BACKUP_PATH) $(NFS_BACKUP_TMP_DIR)
-	sudo mv ./backups/onramp-config-backup* $(NFS_BACKUP_TMP_DIR)
+	sudo mv ./backups/$(HOST_NAME)/onramp-config-backup* $(NFS_BACKUP_TMP_DIR)
 	sudo umount $(NFS_BACKUP_TMP_DIR)
 
 backups: ## create backups folder
