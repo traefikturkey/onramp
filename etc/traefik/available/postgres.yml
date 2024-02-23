@@ -1,0 +1,3 @@
+entryPoints:
+  database:
+    address: ":5432"
