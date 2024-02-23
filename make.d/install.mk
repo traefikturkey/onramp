@@ -38,7 +38,7 @@ build: install-dependencies .env $(BUILD_DEPENDENCIES)
 install: build install-docker
 
 .env:
-	cp .templates/env.template .env
+	cp --no-clobber .templates/env.template .env
 	$(EDITOR) .env
 
 EXECUTABLES = git nano jq yq pip yamllint
@@ -67,6 +67,9 @@ install-ansible:
 
 install-docker: install-ansible
 	ansible-playbook ansible/install-docker.yml
+
+update-hosts:
+	ansible-playbook ansible/update-hosts.yml -C
 
 install-node-exporter: install-ansible
 	ansible-playbook ansible/install-node-exporter.yml
