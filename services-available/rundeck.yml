@@ -16,7 +16,8 @@ services:
     networks:
       - traefik
     volumes:
-      - ./etc/rundeck:/home/rundeck/server/data
+      - ./etc/rundeck/db:/home/rundeck/server/data
+      - ./etc/rundeck/config:/home/rundeck/server/config
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
