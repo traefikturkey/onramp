@@ -24,8 +24,4 @@ services:
     labels:
       - joyride.host.name=${MINECRAFT_BEDROCK_CONTAINER_NAME:-minecraft-bedrock}.${HOST_DOMAIN}
       - traefik.enable=false
-      # - traefik.http.routers.minecraft-bedrock.entrypoints=websecure
-      # - traefik.http.routers.minecraft-bedrock.rule=Host(`${MINECRAFT_BEDROCK_CONTAINER_NAME:-minecraft-bedrock}.${HOST_DOMAIN}`)
-      # - traefik.http.services.minecraft-bedrock.loadbalancer.server.port=8096
-      # - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
