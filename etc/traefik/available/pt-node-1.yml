@@ -1,0 +1,21 @@
+http:
+  routers:
+    pt-node-1:
+      entryPoints:
+        - websecure
+      rule: "Host(`{{env "PT_NODE_1_HOST_NAME"}}.{{env "HOST_DOMAIN"}}`)"
+      
+# Default variable subsitution is not occuring. Results of below line are:  ".domain.tld"
+#      rule: "Host(`{{env "PT_NODE_1_HOST_NAME:-pt-node-1"}}.{{env "HOST_DOMAIN"}}`)"
+      middlewares:
+        - default-headers
+      tls: {}
+      service: pt-node-1
+
+  services:
+    pt-node-1:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.16.200:443"
+        passHostHeader: true
+        

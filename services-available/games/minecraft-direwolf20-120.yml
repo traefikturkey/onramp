@@ -4,6 +4,8 @@ networks:
   default:
     name: ${DIREWOLF20_MINECRAFT_NETWORK:-games}
 
+# https://hub.docker.com/r/itzg/minecraft-server
+
 services:
   minecraft-direwolf20:
     image: itzg/minecraft-server:${DIREWOLF20_MINECRAFT_VERSION:-java17}
@@ -12,9 +14,9 @@ services:
     environment:
       - EULA=true
       - TYPE=FTBA
-      - FTB_MODPACK_ID=101
-      - FTB_MODPACK_VERSON_ID=2297 #2312
-      - VERSION=1.19.2
+      - FTB_MODPACK_ID=119
+      - FTB_MODPACK_VERSON_ID=11614
+      - VERSION=1.20.1
       - MAX_MEMORY=18G
       - MEMORY=12G
       - DISABLE_HEALTHCHECK=true
@@ -24,7 +26,7 @@ services:
     ports:
       - ${DIREWOLF20_MINECRAFT_PORT:-25565}:25565
     volumes:
-      - ./etc/games/${DIREWOLF20_MINECRAFT_HOSTNAME:-minecraft-direwolf20}:/data
+      - ./etc/games/${DIREWOLF20_MINECRAFT_HOSTNAME:-minecraft-direwolf20-120}:/data
     labels:
       - joyride.host.name=${MINECRAFT_HOSTNAME:-minecraft-direwolf20}.${HOST_DOMAIN}
       - traefik.enable=false

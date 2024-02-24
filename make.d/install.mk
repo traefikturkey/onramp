@@ -89,6 +89,9 @@ install-ansible:
 install-docker: install-ansible
 	ansible-playbook ansible/install-docker.yml
 
+update-hosts:
+	ansible-playbook ansible/update-hosts.yml -C
+
 install-node-exporter: install-ansible
 	ansible-playbook ansible/install-node-exporter.yml
 
