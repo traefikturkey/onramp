@@ -6,29 +6,39 @@ networks:
 
 # https://hub.docker.com/r/itzg/minecraft-server
 
+# docker exec minecraft-direwolf20-120 mc-send-to-console op playername
+# docker exec minecraft-direwolf20-120 mc-send-to-console time set 1000 # morning
+ 
+
 services:
-  minecraft-direwolf20:
+  minecraft-direwolf20-120:
     image: itzg/minecraft-server:${DIREWOLF20_MINECRAFT_VERSION:-java17}
-    container_name: ${DIREWOLF20_MINECRAFT_CONTAINER_NAME:-minecraft-direwolf20}
-    restart: ${DIREWOLF20_MINECRAFT_RESTART_POLICY:-on-failure}
+    container_name: ${DIREWOLF20_MINECRAFT_CONTAINER_NAME:-minecraft-direwolf20-120}
+    restart: ${DIREWOLF20_MINECRAFT_RESTART_POLICY:-always}
     environment:
-      - EULA=true
-      - TYPE=FTBA
-      - FTB_MODPACK_ID=119
-      - FTB_MODPACK_VERSON_ID=11614
-      - VERSION=1.20.1
-      - MAX_MEMORY=18G
-      - MEMORY=12G
-      - DISABLE_HEALTHCHECK=true
-      - FTB_LEGACYJAVAFIXER=true
-      - USE_AIKAR_FLAGS=true
-      - MAX_TICK_TIME=-1
+      EULA: true
+      TYPE: FTBA
+      FTB_MODPACK_ID: 119
+      FTB_MODPACK_VERSON_ID: 11614
+      VERSION: 1.20.1
+      MAX_MEMORY: 18G
+      MEMORY: 12G
+      DISABLE_HEALTHCHECK: true
+      FTB_LEGACYJAVAFIXER: true
+      USE_AIKAR_FLAGS: true
+      MAX_TICK_TIME: -1
+      DIFFICULTY: ${DIREWOLF20_MINECRAFT_DIFFICULTY:-easy}
+      # OPS_FILE: ${DIREWOLF20_MINECRAFT_OPS_FILE}
+      # EXISTING_OPS_FILE: ${DIREWOLF20_MINECRAFT_EXISTING_OPS_FILE:-SYNCHRONIZE}
+      CREATE_CONSOLE_IN_PIPE: true
+      RCON_CMDS_STARTUP: |-
+          /gamerule playersSleepingPercentage 0
     ports:
       - ${DIREWOLF20_MINECRAFT_PORT:-25565}:25565
     volumes:
       - ./etc/games/${DIREWOLF20_MINECRAFT_HOSTNAME:-minecraft-direwolf20-120}:/data
     labels:
-      - joyride.host.name=${MINECRAFT_HOSTNAME:-minecraft-direwolf20}.${HOST_DOMAIN}
+      - joyride.host.name=${MINECRAFT_HOSTNAME:-minecraft-direwolf20-120}.${HOST_DOMAIN}
       - traefik.enable=false
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
