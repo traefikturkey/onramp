@@ -8,7 +8,6 @@ networks:
 
 # docker exec minecraft-direwolf20-120 mc-send-to-console op playername
 # docker exec minecraft-direwolf20-120 mc-send-to-console time set 1000 # morning
- 
 
 services:
   minecraft-direwolf20-120:
