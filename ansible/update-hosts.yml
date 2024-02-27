@@ -1,0 +1,80 @@
+---
+
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Read .env file
+      slurp:
+        src: ../.env
+      register: env_file
+
+    - name: extract env vars from env_file and remove comments
+      set_fact:
+        env_vars: "{{ (env_file['content'] | b64decode).split('\n') | select('match', '[^#]') }}"
+      changed_when: false
+
+    
+    # - name: extract env vars from env_file and remove comments
+    #   set_fact:
+    #     env_vars: "{{ env_file['content'] | b64decode | split('\n') | select('match', '[^#]') }}"
+    #   changed_when: false
+
+    # - name: dict of env vars
+    #   set_fact:
+    #     env_vars_dict: "{{ env_vars |  map('split', '=') | map('list')  }}"
+    #   changed_when: false
+
+    # - name: print env vars
+    #   debug:
+    #     msg: '{{ item }}'
+    #   loop: "{{ env_vars_dict.items() | list }}"
+
+    # - name: extract hostnames and IP from env var dict
+    #   set_fact:
+    #     env_hostnames: "{{ env_vars_dict.keys() }}"
+    #     #env_ip: "{{ env_vars_dict | selectattr('0', 'match', '.*_ADDRESS.') | map(attribute='1') | list }}"
+    #   changed_when: false
+
+    # - name: print env_hostnames
+    #   debug:
+    #     var: env_hostnames
+
+
+
+    # - name: extract hostnames
+    #   set_fact:
+    #     env_test: "{{ env_vars | select('match', '.*_HOST_NAME.', '.*_ADDRESS.' ) }}"
+
+    # - name: print env_test
+    #   debug:
+    #     var: env_test
+        
+    - name: extract hostnames and IP from env vars
+      set_fact:
+        env_hostnames: "{{ env_vars | select('match', '.*_HOST_NAME.') | map('regex_replace', '.*_HOST_NAME=(.*)', '\\1') }}"
+        env_ip: "{{ env_vars | select('match', '.*_ADDRESS.') | map('regex_replace', '.*_ADDRESS=(.*)', '\\1') }}"
+      changed_when: false
+
+    # - name: Combine hostnames and IPs
+    #   set_fact:
+    #     hosts: "{{ env_hostnames | zip(env_ip) | map('extract', ['0', '1']) | map('regex_replace', '(.*) (.*)', '\\1 \\2') | list}}"
+    #   changed_when: false
+
+    # - name: Combine hostnames and IPs
+    #   set_fact:
+    #     hosts: "{{ env_hostnames | zip(env_ip) | map('regex_replace', '(.*) (.*)', {'ip_address': '\\1', 'hostname': '\\2'}) | list | ansible.utils.consolidate }}"
+    #   changed_when: false
+    
+
+    - name: combine hostnames and IPs
+      set_fact:
+        hosts: "{{ env_hostnames | zip(env_ip)  }}"
+      changed_when: false
+
+    - name: Update hosts file for joyride
+      ansible.builtin.template:
+        src: templates/hosts.j2
+        dest: ../hosts
+        # state: present
+        # create: true
