@@ -36,8 +36,9 @@ services:
       resources:
         reservations:
           devices:
-            - driver: ${OLLAMA_DEVICE_DRIVER:-nvidia}
-              count: all
+            - driver: nvidia
+              device_ids: ['0'] # this is only needed when using multiple GPUs
+              #count: 1 # number of GPUs
               capabilities: [gpu]
     labels:
       - joyride.host.name=${OLLAMA_CONTAINER_NAME:-ollama}.${HOST_DOMAIN}
