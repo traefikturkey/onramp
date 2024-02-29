@@ -14,7 +14,7 @@ services:
     networks:
       - traefik
     volumes:
-      - ./etc/ollama-webui:/app/backend/data 
+      - ./etc/ollama-webui:/app/backend/data
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
