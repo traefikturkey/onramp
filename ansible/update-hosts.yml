@@ -14,7 +14,6 @@
         env_vars: "{{ (env_file['content'] | b64decode).split('\n') | select('match', '[^#]') }}"
       changed_when: false
 
-    
     # - name: extract env vars from env_file and remove comments
     #   set_fact:
     #     env_vars: "{{ env_file['content'] | b64decode | split('\n') | select('match', '[^#]') }}"
@@ -40,8 +39,6 @@
     #   debug:
     #     var: env_hostnames
 
-
-
     # - name: extract hostnames
     #   set_fact:
     #     env_test: "{{ env_vars | select('match', '.*_HOST_NAME.', '.*_ADDRESS.' ) }}"
@@ -49,7 +46,7 @@
     # - name: print env_test
     #   debug:
     #     var: env_test
-        
+
     - name: extract hostnames and IP from env vars
       set_fact:
         env_hostnames: "{{ env_vars | select('match', '.*_HOST_NAME.') | map('regex_replace', '.*_HOST_NAME=(.*)', '\\1') }}"
@@ -65,7 +62,6 @@
     #   set_fact:
     #     hosts: "{{ env_hostnames | zip(env_ip) | map('regex_replace', '(.*) (.*)', {'ip_address': '\\1', 'hostname': '\\2'}) | list | ansible.utils.consolidate }}"
     #   changed_when: false
-    
 
     - name: combine hostnames and IPs
       set_fact:
