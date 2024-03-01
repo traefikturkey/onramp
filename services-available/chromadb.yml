@@ -1,0 +1,32 @@
+version: '3'
+
+networks:
+  traefik:
+    external: true
+
+# https://github.com/chroma-core/chroma/
+
+services:
+  chromadb:
+    image: ghcr.io/chroma-core/chroma:${CHROMADB_DOCKER_TAG:-latest}
+    container_name: ${CHROMADB_CONTAINER_NAME:-chromadb}
+    restart: ${CHROMADB_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - ${CHROMADB_DATA_PATH:-./media/databases/chromadb/}:/chroma/chroma/
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - IS_PERSISTENT=${CHROMADB_IS_PERSISTENT:-TRUE}
+    labels:
+      - joyride.host.name=${CHROMADB_CONTAINER_NAME:-chromadb}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.chromadb.entrypoints=websecure
+      - traefik.http.routers.chromadb.rule=Host(`${CHROMADB_CONTAINER_NAME:-chromadb}.${HOST_DOMAIN}`)
+      - traefik.http.services.chromadb.loadbalancer.server.port=8000
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true

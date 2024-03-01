@@ -7,19 +7,17 @@ networks:
 # https://docs.frigate.video/frigate/installation/
 
 services:
-  frigate:
-    image: ghcr.io/blakeblackshear/frigate:${FRIGATE_DOCKER_TAG:-master-6bcf44a-tensorrt}
+  frigate-nvidia:
+    image: ghcr.io/blakeblackshear/frigate:${FRIGATE_DOCKER_TAG:-stable-tensorrt}
     container_name: ${FRIGATE_CONTAINER_NAME:-frigate}
     restart: ${FRIGATE_RESTART:-unless-stopped}
     networks:
       - traefik
-    # devices:
-    #   - /dev/bus/usb:/dev/bus/usb
     volumes:
-      - ./etc/frigate/config.yml:/config/config.yml
-      - ./etc/frigate/frigate.db:/database/frigate.db
-      - /apps/trt-models/trt-models:/trt-models
-      - /mnt/apps/frigate:/media/frigate
+      - ./etc/frigate:/config
+      # - ./etc/frigate/frigate.db:/database/frigate.db
+      # - /apps/trt-models/trt-models:/trt-models
+      - ${FRIGATE_MEDIA_PATH:-./media/frigate}:/media/frigate
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       - type: tmpfs # Optional: 1GB of memory, reduces SSD/SD Card wear
@@ -35,11 +33,18 @@ services:
       - FRIGATE_RTSP_PASSWORD=${FRIGATE_RTSP_PASSWORD:-}
       - FRIGATE_MQTT_USER=${FRIGATE_MQTT_USER:-}
       - FRIGATE_MQTT_PASSWORD=${FRIGATE_MQTT_PASSWORD:-}
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ['0'] # this is only needed when using multiple GPUs
+              #count: 1 # number of GPUs
+              capabilities: [gpu]
     ports:
-      - "8554:8554" # RTSP feeds
-      - "8555:8555/tcp" # WebRTC over tcp
-      - "8555:8555/udp" # WebRTC over udp
-
+      - 8554:8554 # RTSP feeds
+      - 8555:8555/tcp # WebRTC over tcp
+      - 8555:8555/udp # WebRTC over udp
     labels:
       - joyride.host.name=${FRIGATE_CONTAINER_NAME:-frigate}.${HOST_DOMAIN}
       - traefik.enable=true

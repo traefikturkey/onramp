@@ -4,22 +4,20 @@ networks:
   traefik:
     external: true
 
-# <================= add links to documentation here =================>
+# https://docs.frigate.video/frigate/installation/
 
 services:
   frigate-coral:
-    image: ghcr.io/blakeblackshear/frigate:${FRIGATE_CORAL_DOCKER_TAG:-dev-e1a6398}
-    container_name: ${FRIGATE_CORAL_CONTAINER_NAME:-frigate-coral}
-    restart: ${FRIGATE_CORAL_RESTART:-unless-stopped}
+    image: ghcr.io/blakeblackshear/frigate:${FRIGATE_DOCKER_TAG:-stable}
+    container_name: ${FRIGATE_CONTAINER_NAME:-frigate}
+    restart: ${FRIGATE_RESTART:-unless-stopped}
     networks:
       - traefik
     devices:
       - /dev/bus/usb:/dev/bus/usb
     volumes:
-      - ./etc/frigate-coral:/config
-      #- ./etc/frigate/frigate.db:/database/frigate.db
-      #- /apps/trt-models/trt-models:/trt-models
-      - /mnt/apps/frigate-coral:/media/frigate
+      - ./etc/frigate:/config
+      - ${FRIGATE_MEDIA_PATH:-./media/frigate}:/media/frigate
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       - type: tmpfs # Optional: 1GB of memory, reduces SSD/SD Card wear
@@ -36,10 +34,10 @@ services:
       - FRIGATE_MQTT_USER=${FRIGATE_MQTT_USER:-}
       - FRIGATE_MQTT_PASSWORD=${FRIGATE_MQTT_PASSWORD:-}
     labels:
-      - joyride.host.name=${FRIGATE_CORAL_CONTAINER_NAME:-frigate-coral}.${HOST_DOMAIN}
+      - joyride.host.name=${FRIGATE_CONTAINER_NAME:-frigate}.${HOST_DOMAIN}
       - traefik.enable=true
-      - traefik.http.routers.frigate-coral.entrypoints=websecure
-      - traefik.http.routers.frigate-coral.rule=Host(`${FRIGATE_CORAL_CONTAINER_NAME:-frigate-coral}.${HOST_DOMAIN}`)
-      - traefik.http.services.frigate-coral.loadbalancer.server.port=5000
+      - traefik.http.routers.frigate.entrypoints=websecure
+      - traefik.http.routers.frigate.rule=Host(`${FRIGATE_CONTAINER_NAME:-frigate}.${HOST_DOMAIN}`)
+      - traefik.http.services.frigate.loadbalancer.server.port=5000
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true

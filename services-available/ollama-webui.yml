@@ -1,0 +1,32 @@
+version: '3'
+
+networks:
+  traefik:
+    external: true
+
+# https://github.com/open-webui/open-webui
+
+services:
+  ollama-webui:
+    image: ghcr.io/open-webui/open-webui:${OLLAMA_WEBUI_DOCKER_TAG:-main}
+    container_name: ${OLLAMA_WEBUI_CONTAINER_NAME:-ollama-webui}
+    restart: ${OLLAMA_WEBUI_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/ollama-webui:/app/backend/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - OLLAMA_API_BASE_URL=https://${OLLAMA_CONTAINER_NAME:-ollama}.${HOST_DOMAIN}/api
+    labels:
+      - joyride.host.name=${OLLAMA_WEBUI_CONTAINER_NAME:-chat}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.ollama-webui.entrypoints=websecure
+      - traefik.http.routers.ollama-webui.rule=Host(`${OLLAMA_WEBUI_CONTAINER_NAME:-chat}.${HOST_DOMAIN}`)
+      - traefik.http.services.ollama-webui.loadbalancer.server.port=8080
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
