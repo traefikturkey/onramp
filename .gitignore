@@ -54,6 +54,7 @@ etc/gitea/*
 !etc/searxng/settings.template.yml
 !etc/recyclarr/recyclarr.template
 !etc/promtail/promtail-config.yml
+!etc/olivetin/config.yaml
 
 ansible/roles/
 

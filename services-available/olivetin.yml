@@ -9,19 +9,17 @@ networks:
 services:
   olivetin:
     image: jamesread/olivetin:${OLIVETIN_DOCKER_TAG:-latest}
-    container_name: olivetin
-    restart: unless-stopped
+    container_name: ${OLIVETIN_CONTAINER_NAME:-olivetin}
+    restart: ${OLIVETIN_RESTART:-unless-stopped}
     networks:
       - traefik
     volumes:
       - ./etc/olivetin:/config # replace host path or volume as needed
-    # ports:
-    #   - 1337:1337
     labels:
-      - joyride.host.name=olivetin.${HOST_DOMAIN}
+      - joyride.host.name=${OLIVETIN_HOST_NAME:-olivetin}.${HOST_DOMAIN}
       - traefik.enable=true
       - traefik.http.routers.olivetin.entrypoints=websecure
-      - traefik.http.routers.olivetin.rule=Host(`olivetin.${HOST_DOMAIN}`)
+      - traefik.http.routers.olivetin.rule=Host(`${OLIVETIN_HOST_NAME:-olivetin}.${HOST_DOMAIN}`)
       - traefik.http.services.olivetin.loadbalancer.server.port=1337
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
