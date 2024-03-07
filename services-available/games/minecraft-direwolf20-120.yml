@@ -13,7 +13,7 @@ services:
   minecraft-direwolf20-120:
     image: itzg/minecraft-server:${DIREWOLF20_MINECRAFT_VERSION:-java17}
     container_name: ${DIREWOLF20_MINECRAFT_CONTAINER_NAME:-minecraft-direwolf20-120}
-    restart: ${DIREWOLF20_MINECRAFT_RESTART_POLICY:-always}
+    restart: ${DIREWOLF20_MINECRAFT_RESTART_POLICY:-unless-stopped}
     environment:
       EULA: true
       TYPE: FTBA

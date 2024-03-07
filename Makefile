@@ -321,7 +321,15 @@ ifneq (,$(wildcard ./services-enabled/recyclarr.yml))
 endif
 
 etc/recyclarr/recyclarr.yml:
-	cp --no-clobber.templates/recyclarr.template .etc/recyclarr/recyclarr.yml
+	cp --no-clobber .templates/recyclarr.template .etc/recyclarr/recyclarr.yml
+
+
+ifneq (,$(wildcard ./services-enabled/gatus.yml))
+	BUILD_DEPENDENCIES += etc/gatus/config.yaml
+endif
+
+etc/gatus/config.yaml:
+	cp --no-clobber .templates/gatus.template .etc/gatus/config.yaml
 
 
 #########################################################
