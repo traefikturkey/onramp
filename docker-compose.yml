@@ -49,8 +49,8 @@ services:
       - --entrypoints.websecure.http.tls.domains[0].sans=*.${HOST_DOMAIN}
       - --serverstransport.insecureskipverify=true
       - --certificatesresolvers.letsencrypt.acme.dnschallenge=true
-      - --certificatesresolvers.letsencrypt.acme.dnschallenge.provider=cloudflare
-      - --certificatesresolvers.letsencrypt.acme.email=${CF_API_EMAIL}
+      - --certificatesresolvers.letsencrypt.acme.dnschallenge.provider=${DNS_CHALLENGE_PROVIDER:-cloudflare}
+      - --certificatesresolvers.letsencrypt.acme.email=${DNS_CHALLENGE_API_EMAIL}
       - --certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json
       - --certificatesResolvers.letsencrypt.acme.dnsChallenge.delayBeforeCheck=${CF_RESOLVER_WAITTIME:-60}
       - --certificatesresolvers.letsencrypt.acme.dnschallenge.resolvers=1.1.1.1:53,1.0.0.1:53
