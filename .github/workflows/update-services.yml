@@ -1,0 +1,50 @@
+name: Generate Services Markdown
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'services-available/*.yml'
+
+jobs:
+  generate-services-markdown:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Check for Changes
+        id: changes
+        run: |
+          if git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | grep -q 'services-available/.*\.yml'; then
+            echo "::set-output name=changed::true"
+          else
+            echo "::set-output name=changed::false"
+          fi
+
+      - name: Generate Services Markdown
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          services=""
+          for file in ./services-available/*.yml; do
+            service_name=$(basename "$file" .yml)
+            service_link=$(sed -n '/^#.*https/p' "$file" | sed 's/^#\s*//g')
+            if [ -n "$service_link" ]; then
+              services="$services\n- [$service_name]($service_link)"
+            else
+              services="$services\n- $service_name"
+            fi
+          done
+          echo "# Available Services" > ./services.md
+          echo "" >> ./services.md
+          echo -e "$services" >> ./services.md
+
+      - name: Commit Services Markdown
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'actions@github.com'
+          git add ./services.md
+          git commit -m "Update services.md" || echo "No changes to commit"
+          git push
