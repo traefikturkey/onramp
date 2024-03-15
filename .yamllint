@@ -10,6 +10,7 @@ yaml-files:
 rules:
   truthy: disable
   quoted-strings: disable
+  trailing-spaces: disable
   line-length: disable
   document-start: disable
   comments: disable
