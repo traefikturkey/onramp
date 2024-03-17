@@ -11,7 +11,6 @@ overrides-enabled/*.yml
 docker-compose.*.yml
 .vscode
 .restore_latest
-.gitconfig
 
 .env
 .hosts
