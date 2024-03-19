@@ -41,6 +41,22 @@ jobs:
           echo "" >> ./SERVICES.md
           echo -e "$services" >> ./SERVICES.md
 
+          games=""
+          for file in ./services-available/games*.yml; do
+            service_name=$(basename "$file" .yml)
+            service_link=$(sed -n '/^# \+https/p' "$file" | sed 's/^#\s*//g' | head -n 1)
+            description=$(sed -n 's/^# \+description: //p' "$file" | head -n 1)
+            if [ -n "$service_link" ]; then
+                games="$games\n- [$service_name]($service_link): $description"
+            else
+                games="$games\n- $service_name: $description"
+            fi
+          done
+          echo "" >> ./SERVICES.md
+          echo "# Available Games" >> ./SERVICES.md
+          echo "" >> ./SERVICES.md
+          echo -e "$games" >> ./SERVICES.md
+
       - name: Commit Services Markdown
         #if: steps.changes.outputs.changed == 'true'
         run: |
