@@ -39,16 +39,9 @@ services:
       - traefik.docker.network=traefik
       - traefik.http.routers.immich.entrypoints=websecure
       - traefik.http.routers.immich.rule=Host(`${IMMICH_CONTAINER_NAME:-immich}.${HOST_DOMAIN}`)
-      #- traefik.http.services.immich.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.immich.loadbalancer.server.port=3001
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${IMMICH_WATCHTOWER_ENABLED:-false}
       - autoheal=true
-
-      # Flame dashboard labels
-      - flame.type=application # "app" works too
-      - flame.name=${IMMICH_FLAME_NAME:-immich}
-      - flame.url=https://${IMMICH_CONTAINER_NAME:-immich}.${HOST_DOMAIN}
-      - flame.icon=${IMMICH_FLAME_ICON:-docker} # optional, default is "docker"
 
 
   immich-microservices:
