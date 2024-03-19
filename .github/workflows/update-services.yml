@@ -42,7 +42,7 @@ jobs:
           echo -e "$services" >> ./SERVICES.md
 
           games=""
-          for file in ./services-available/games*.yml; do
+          for file in ./services-available/games/*.yml; do
             service_name=$(basename "$file" .yml)
             service_link=$(sed -n '/^# \+https/p' "$file" | sed 's/^#\s*//g' | head -n 1)
             description=$(sed -n 's/^# \+description: //p' "$file" | head -n 1)
