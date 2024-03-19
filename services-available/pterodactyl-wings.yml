@@ -5,7 +5,7 @@ networks:
     external: true
 
 # description: Daemon for managing game servers
-# <================= add links to documentation here =================>
+# https://pterodactyl.io/
 
 services:
   pterodactyl-wings:
@@ -34,10 +34,3 @@ services:
       - traefik.http.services.pterodactyl-wings.loadbalancer.server.port=8096
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
-
-      # Flame dashboard labels
-
-      - flame.type=application # "app" works too
-      - flame.name=${PTERODACTYL_WINGS_FLAME_NAME:-pterodactyl-wings}
-      - flame.url=https://${PTERODACTYL_WINGS_CONTAINER_NAME:-pterodactyl-wings}.${HOST_DOMAIN}
-      - flame.icon=${PTERODACTYL_WINGS_FLAME_ICON:-docker} # optional, default is "docker"

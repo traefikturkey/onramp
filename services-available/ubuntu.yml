@@ -1,4 +1,8 @@
 version: '3'
+
+# description: ubuntu base image
+# https://hub.docker.com/_/ubuntu
+
 services:
   ubuntu:
     image: ubuntu

@@ -5,7 +5,7 @@ networks:
     external: true
 
 # description: Photo management and sharing platform
-# <================= add links to documentation here =================>
+# https://github.com/LycheeOrg/Lychee-Docker
 
 services:
   lychee:
