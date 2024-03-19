@@ -172,4 +172,13 @@
 # Available Games
 
 
-- games*: 
+- [factorio](https://hub.docker.com/r/goofball222/factorio): 
+- [mindustry](https://github.com/ich777/docker-mindustry): 
+- [minecraft-bedrock](https://hub.docker.com/r/itzg/minecraft-bedrock-server): 
+- [minecraft-direwolf20-119](https://hub.docker.com/r/itzg/minecraft-server): 
+- [minecraft-direwolf20-120](https://hub.docker.com/r/itzg/minecraft-server): 
+- [minecraft-skyfactory4](https://hub.docker.com/r/itzg/minecraft-server): 
+- [minecraft](https://hub.docker.com/r/itzg/minecraft-server): 
+- [rust](https://richardpricejones.medium.com/how-to-create-your-own-rust-server-c37c49d22919): 
+- [satisfactory](https://github.com/wolveix/satisfactory-server): 
+- [valheim](https://github.com/lloesche/valheim-server-docker): 
