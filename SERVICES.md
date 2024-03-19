@@ -174,7 +174,7 @@
 
 - [factorio](https://hub.docker.com/r/goofball222/factorio): Factorio is a game about building and managing factories on an alien planet
 - [mindustry](https://github.com/ich777/docker-mindustry): Mindustry is a sandbox tower defense game
-- [minecraft-bedrock](https://hub.docker.com/r/itzg/minecraft-bedrock-server): Minecraft Bedrock Edition is a version of Minecraft designed for various platforms including mobile, console, and Windows 10
+- [minecraft-bedrock](https://hub.docker.com/r/itzg/minecraft-bedrock-server): Minecraft Bedrock Edition designed for various platforms including mobile and console
 - [minecraft-direwolf20-119](https://hub.docker.com/r/itzg/minecraft-server): Direwolf20 is a Feed The Beast modpack for Minecraft 1.19.2
 - [minecraft-direwolf20-120](https://hub.docker.com/r/itzg/minecraft-server): Direwolf20 is a Feed The Beast modpack for Minecraft 1.20.1
 - [minecraft-skyfactory4](https://hub.docker.com/r/itzg/minecraft-server): SkyFactory 4 is a Feed The Beast modpack for Minecraft 1.12.2
