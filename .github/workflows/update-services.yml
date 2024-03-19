@@ -14,20 +14,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      # - name: Check for Changes
-      #   id: changes
-      #   run: |
-      #     if git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | grep -q 'services-available/.*\.yml\|\.github/update-services\.yml'; then
-      #       echo "changed=true" >> $GITHUB_OUTPUT
-      #     else
-      #       echo "changed=false" >> $GITHUB_OUTPUT
-      #     fi
-
       - name: Generate Services Markdown
-        #if: steps.changes.outputs.changed == 'true'
         run: |
           services=""
+          service_count=0  # Initialize service count variable
           for file in ./services-available/*.yml; do
+            ((service_count++))  # Increment service count for each file processed
             service_name=$(basename "$file" .yml)
             service_link=$(sed -n '/^# \+https/p' "$file" | sed 's/^#\s*//g' | head -n 1)
             description=$(sed -n 's/^# \+description: //p' "$file" | head -n 1)
@@ -38,11 +30,14 @@ jobs:
             fi
           done
           echo "# Available Services" > ./SERVICES.md
+          echo "$service_count services and counting..." >> ./SERVICES.md
           echo "" >> ./SERVICES.md
           echo -e "$services" >> ./SERVICES.md
 
           games=""
+          game_count=0  # Initialize game count variable
           for file in ./services-available/games/*.yml; do
+            ((game_count++))  # Increment game count for each file processed
             service_name=$(basename "$file" .yml)
             service_link=$(sed -n '/^# \+https/p' "$file" | sed 's/^#\s*//g' | head -n 1)
             description=$(sed -n 's/^# \+description: //p' "$file" | head -n 1)
@@ -54,11 +49,11 @@ jobs:
           done
           echo "" >> ./SERVICES.md
           echo "# Available Games" >> ./SERVICES.md
+          echo "$game_count games and counting..." >> ./SERVICES.md
           echo "" >> ./SERVICES.md
           echo -e "$games" >> ./SERVICES.md
 
       - name: Commit Services Markdown
-        #if: steps.changes.outputs.changed == 'true'
         run: |
           git config --global user.name 'GitHub Actions'
           git config --global user.email 'actions@github.com'
