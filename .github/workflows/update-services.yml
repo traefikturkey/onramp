@@ -1,12 +1,12 @@
 name: Generate Services Markdown
 
-on:
-  push:
-    branches:
-      - master
-    paths:
-      - 'services-available/*.yml'
-      - '.github/update-services.yml'
+on: [push]
+  # push:
+  #   branches:
+  #     - master
+  #   paths:
+  #     - 'services-available/*.yml'
+  #     - '.github/update-services.yml'
 
 jobs:
 
@@ -16,17 +16,17 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Check for Changes
-        id: changes
-        run: |
-          if git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | grep -q 'services-available/.*\.yml\|\.github/update-services\.yml'; then
-            echo "changed=true" >> $GITHUB_OUTPUT
-          else
-            echo "changed=false" >> $GITHUB_OUTPUT
-          fi
+      # - name: Check for Changes
+      #   id: changes
+      #   run: |
+      #     if git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | grep -q 'services-available/.*\.yml\|\.github/update-services\.yml'; then
+      #       echo "changed=true" >> $GITHUB_OUTPUT
+      #     else
+      #       echo "changed=false" >> $GITHUB_OUTPUT
+      #     fi
 
       - name: Generate Services Markdown
-        if: steps.changes.outputs.changed == 'true'
+        #if: steps.changes.outputs.changed == 'true'
         run: |
           services=""
           for file in ./services-available/*.yml; do
