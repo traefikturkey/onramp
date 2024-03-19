@@ -4,7 +4,7 @@ networks:
   traefik:
     external: true
 
-# description: N e-commerce platform
+# description: E-commerce platform
 # https://hub.docker.com/r/prestashop/prestashop/
 # https://www.prestashop.com/en
 

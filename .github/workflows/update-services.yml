@@ -29,8 +29,8 @@ jobs:
           services=""
           for file in ./services-available/*.yml; do
             service_name=$(basename "$file" .yml)
-            service_link=$(sed -n '/^#.*https/p' "$file" | sed 's/^#\s*//g' | head -n 1)
-            description=$(sed -n 's/^# description: //p' "$file" | head -n 1)
+            service_link=$(sed -n '/^#\s+https/p' "$file" | sed 's/^#\s*//g' | head -n 1)
+            description=$(sed -n 's/^#\s+description: //p' "$file" | head -n 1)
             if [ -n "$service_link" ]; then
                 services="$services\n- [$service_name]($service_link): $description"
             else

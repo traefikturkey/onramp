@@ -7,8 +7,11 @@ networks:
 
 volumes:
   kaizoku-redis:
-# description: Container for running kaizoku, a web-based anime downloader
-# <================= add links to documentation here =================>
+  
+# description: Web-based anime downloader
+# https://github.com/oae/kaizoku
+# https://komga.org/docs/installation/docker/
+
 
 services:
   kaizoku:
@@ -45,13 +48,6 @@ services:
       - traefik.http.services.kaizoku.loadbalancer.server.port=3000
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
-
-      # Flame dashboard labels
-
-      - flame.type=application # "app" works too
-      - flame.name=${KAIZOKU_FLAME_NAME:-kaizoku}
-      - flame.url=https://${KAIZOKU_CONTAINER_NAME:-kaizoku}.${HOST_DOMAIN}
-      - flame.icon=${KAIZOKU_FLAME_ICON:-docker} # optional, default is "docker"
 
   kaizoku-redis:
     image: redis:7-alpine
