@@ -17,9 +17,9 @@ jobs:
       - name: Generate Services Markdown
         run: |
           services=""
-          service_count=0  # Initialize service count variable
+          service_count=0
           for file in ./services-available/*.yml; do
-            ((service_count++))  # Increment service count for each file processed
+            ((service_count++))
             service_name=$(basename "$file" .yml)
             service_link=$(sed -n '/^# \+https/p' "$file" | sed 's/^#\s*//g' | head -n 1)
             description=$(sed -n 's/^# \+description: //p' "$file" | head -n 1)
@@ -35,9 +35,9 @@ jobs:
           echo -e "$services" >> ./SERVICES.md
 
           games=""
-          game_count=0  # Initialize game count variable
+          game_count=0
           for file in ./services-available/games/*.yml; do
-            ((game_count++))  # Increment game count for each file processed
+            ((game_count++))
             service_name=$(basename "$file" .yml)
             service_link=$(sed -n '/^# \+https/p' "$file" | sed 's/^#\s*//g' | head -n 1)
             description=$(sed -n 's/^# \+description: //p' "$file" | head -n 1)
