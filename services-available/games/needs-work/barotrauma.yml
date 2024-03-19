@@ -1,5 +1,6 @@
 version: '3'
 
+# description: Barotrauma is a 2D online multiplayer game
 # https://hub.docker.com/r/yanwk/barotrauma-server
 
 volumes:

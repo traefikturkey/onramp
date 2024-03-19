@@ -4,6 +4,7 @@ networks:
   default:
     name: ${DIREWOLF20_MINECRAFT_NETWORK:-games}
 
+# description: Direwolf20 is a Feed The Beast modpack for Minecraft 1.19.2
 # https://hub.docker.com/r/itzg/minecraft-server
 
 services:
