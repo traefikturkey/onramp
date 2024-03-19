@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Powerful open-source relational database system
 # https://hub.docker.com/_/postgres
 
 services:

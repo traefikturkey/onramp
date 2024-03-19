@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Enables apple airprint functionality for non-airprint printers
 # https://github.com/chuckcharlie/cups-avahi-airprint
 
 services:

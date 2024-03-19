@@ -26,6 +26,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.komga.entrypoints=websecure
       - traefik.http.routers.komga.rule=Host(`${KOMGA_CONTAINER_NAME:-komga}.${HOST_DOMAIN}`)
+# description: Web-based comic book server
       #- traefik.http.services.komga.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.komga.loadbalancer.server.port=25600
       - com.centurylinklabs.watchtower.enable=true

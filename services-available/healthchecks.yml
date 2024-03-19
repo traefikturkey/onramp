@@ -3,6 +3,7 @@ version: '3'
 networks:
   traefik:
     external: true
+# description: Monitors cron jobs and sends alerts
 # <================= add links to documentation here =================>
 
 services:

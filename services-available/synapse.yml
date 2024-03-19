@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Matrix communication server
 # https://github.com/matrix-org/synapse
 # docker run -it --rm  -v ./etc/synapse:/data  -e SYNAPSE_SERVER_NAME=synapse.traefikturkey.icu -e SYNAPSE_REPORT_STATS=yes matrixdotorg/synapse:latest generate
 services:

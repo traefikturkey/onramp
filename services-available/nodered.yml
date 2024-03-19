@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Flow-based development tool for visual programming
 # https://hub.docker.com/r/nodered/node-red/
 
 services:

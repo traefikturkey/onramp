@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Lightweight git service similar to github
 # https://github.com/go-gitea/gitea
 # https://docs.gitea.io/en-us/install-with-docker/#environments-variables
 

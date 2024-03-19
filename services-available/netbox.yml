@@ -1,5 +1,6 @@
 version: '3'
 
+# description: Web-based ip address management (ipam) and data center infrastructure management (dcim) tool
 # https://docs.linuxserver.io/images/docker-netbox
 networks:
   traefik:

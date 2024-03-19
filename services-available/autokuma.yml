@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Kubernetes monitoring and alerting tool
 # https://github.com/BigBoot/AutoKuma
 
 services:

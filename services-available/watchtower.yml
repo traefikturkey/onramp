@@ -1,6 +1,7 @@
 version: '3'
 
 
+# description: Utomatically updates docker containers
 # https://github.com/containrrr/watchtower
 # https://containrrr.dev/watchtower/notifications/
 

@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Web-based mysql and mariadb database management tool
 # https://hub.docker.com/r/phpmyadmin/phpmyadmin
 
 services:

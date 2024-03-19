@@ -30,10 +30,11 @@ jobs:
           for file in ./services-available/*.yml; do
             service_name=$(basename "$file" .yml)
             service_link=$(sed -n '/^#.*https/p' "$file" | sed 's/^#\s*//g' | head -n 1)
+            description=$(sed -n 's/^# description: //p' "$file" | head -n 1)
             if [ -n "$service_link" ]; then
-              services="$services\n- [$service_name]($service_link)"
+                services="$services\n- [$service_name]($service_link): $description"
             else
-              services="$services\n- $service_name"
+                services="$services\n- $service_name: $description"
             fi
           done
           echo "# Available Services" > ./SERVICES.md

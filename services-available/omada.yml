@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Container for running tp-link omada controller
 # https://hub.docker.com/r/mbentley/omada-controller
 
 # Article on issues with device adoption

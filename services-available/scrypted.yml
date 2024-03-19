@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Home automation platform
 # https://github.com/koush/scrypted
 # https://docs.technotim.live/posts/scrypted-home-hub/
 

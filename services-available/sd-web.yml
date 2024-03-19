@@ -21,6 +21,7 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
+# description: Web-based interface for securedrop, a whistleblower submission system
       #- CLI_ARGS=--allow-code --enable-insecure-extension-access --api --opt-channelslast --opt-sdp-attention
       - PYTHONUNBUFFERED=1
       # or use this for xformers

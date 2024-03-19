@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Customizable dashboard for displaying information
 # https://github.com/Lissy93/dashy
 
 services:

@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Web app for data analysis and transformation
 # https://github.com/gchq/CyberChef/
 
 services:

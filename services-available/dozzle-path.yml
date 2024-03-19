@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Path-based reverse proxy for dozzle
 # https://github.com/amir20/dozzle
 
 services:

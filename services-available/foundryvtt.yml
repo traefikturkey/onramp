@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Virtual tabletop platform for role-playing games
 # https://hub.docker.com/r/felddy/foundryvtt
 
 services:

@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Runs mozilla firefox browser in a container
 # https://github.com/jlesage/docker-firefox
 
 services:

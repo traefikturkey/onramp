@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Dashboard for organizing web applications
 # https://github.com/linuxserver/Heimdall
 
 services:

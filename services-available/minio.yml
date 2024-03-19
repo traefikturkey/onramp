@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: High-performance object storage server
 # https://github.com/minio/minio
 
 services:

@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Mail transfer agent (mta) for sending and receiving emails
 # https://github.com/juanluisbaptiste/docker-postfix
 
 services:

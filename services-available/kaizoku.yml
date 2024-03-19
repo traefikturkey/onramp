@@ -7,6 +7,7 @@ networks:
 
 volumes:
   kaizoku-redis:
+# description: Container for running kaizoku, a web-based anime downloader
 # <================= add links to documentation here =================>
 
 services:

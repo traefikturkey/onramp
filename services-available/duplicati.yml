@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Backs up files and folders to various storage destinations
 # https://www.duplicati.com/
 
 services:

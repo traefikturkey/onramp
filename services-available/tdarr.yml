@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Media optimization and conversion tool
 # https://docs.tdarr.io/docs/installation/docker/run-compose
 
 services:

@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Customizable start page for web browsers
 # https://github.com/gethomepage/homepage/
 
 # To use the docker integration with labels, have a look here, as it needs seperate config

@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Binary newsgrabber for usenet
 # https://hub.docker.com/r/linuxserver/sabnzbd
 
 services:

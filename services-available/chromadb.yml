@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Chromecast database and controller
 # https://github.com/chroma-core/chroma/
 
 services:

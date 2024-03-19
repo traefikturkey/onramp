@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Daemon for managing game servers
 # <================= add links to documentation here =================>
 
 services:

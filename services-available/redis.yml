@@ -4,6 +4,8 @@ networks:
   traefik:
     external: true
 
+# description: N in-memory data structure store
+# description: N in-memory data structure store
 # https://github.com/redis/redis
 
 services:

@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Collects and analyzes resource usage and performance characteristics of running containers
 # https://hub.docker.com/r/google/cadvisor/
 
 services:
