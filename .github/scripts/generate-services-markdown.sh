@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 
 services=""
 service_count=0
