@@ -3,7 +3,7 @@ name: Generate Services Markdown
 on:
   push:
     paths:
-      - 'services-available/*.yml'
+      - 'services-available/**/*.yml'
       - '.github/workflows/update-services.yml'
 
 jobs:
