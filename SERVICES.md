@@ -133,7 +133,7 @@
 - [samba](https://github.com/dperson/samba): Provides file and print services for windows clients
 - [scrypted](https://github.com/koush/scrypted): Home automation platform
 - [sd-web](https://https://github.com/AUTOMATIC1111/stable-diffusion-webui): stable diffusion web interface for ai images
-- searxng: Self-hosted metasearch engine
+- [searxng](https://github.com/searxng/searxng-docker): Self-hosted metasearch engine
 - [semaphore](https://docs.ansible-semaphore.com/): Continuous integration and deployment service
 - [sftp-server](https://github.com/drakkan/sftpgo): Secure ftp server
 - [snapdrop](https://hub.docker.com/r/linuxserver/snapdrop): Web-based file sharing tool for local networks
