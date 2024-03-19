@@ -56,7 +56,7 @@
 - [homebox](https://hay-kot.github.io/homebox/): Dashboard for managing self-hosted services
 - [homepage](https://github.com/gethomepage/homepage/): Customizable start page for web browsers
 - [homer](https://hub.docker.com/r/b4bz/homer): Self-hosted bookmark manager
-- immich: Container for running immich, a web-based image viewer
+- [immich](https://immich.app/docs/install/environment-variables): Container for running immich, a web-based image viewer
 - [influxdb](https://hub.docker.com/_/influxdb): Time-series database for metrics and events
 - [itflow](https://itflow.org/): Workflow automation tool
 - [jellyfin](https://hub.docker.com/r/linuxserver/jellyfin): Media server for streaming content
@@ -67,7 +67,7 @@
 - [kaizoku](https://github.com/oae/kaizoku): Web-based anime downloader
 - [kasm](https://hub.docker.com/r/linuxserver/kasm): Browser-based access to desktops, applications, and web services
 - [kimai](https://github.com/tobybatch/kimai2): Time-tracking software for freelancers and small businesses
-- komga: Web-based comic book server
+- [komga](https://komga.org/docs/installation/docker/): Web-based comic book server
 - [librespeed](https://hub.docker.com/r/linuxserver/librespeed): Self-hosted internet speed test tool
 - [lidarr](https://hub.docker.com/r/linuxserver/lidarr): Manages music collections and downloads
 - [linkding](https://github.com/sissbruecker/linkding): Self-hosted bookmark manager
