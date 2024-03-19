@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Self-hosted uptime monitoring tool
 # https://github.com/louislam/uptime-kuma
 
 services:

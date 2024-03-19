@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: N identity and access management solution
 # https://goauthentik.io/docs/installation/docker-compose
 # https://github.com/goauthentik/authentik
 # https://goauthentik.io/docs/

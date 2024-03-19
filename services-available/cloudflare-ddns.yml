@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Updates dns records on cloudflare dynamically
 # https://github.com/oznu/docker-cloudflare-ddns
 
 services:

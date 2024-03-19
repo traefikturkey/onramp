@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Generates full-text rss feeds from partial feeds
 # https://christitus.com/why-we-dont-browse-the-internet-anymore/
 # https://www.youtube.com/watch?v=nxV0CPNeFxY
 

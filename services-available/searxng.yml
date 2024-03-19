@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Self-hosted metasearch engine
 # Copy the settings template in etc/searxng and save it as settings.yml in the same directory.
 # Make sure you change the secret key.
 

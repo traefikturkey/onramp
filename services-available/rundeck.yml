@@ -4,6 +4,8 @@ networks:
   traefik:
     external: true
 
+# description: Job scheduler and runbook automation platform
+# description: Job scheduler and runbook automation platform
 # https://github.com/rundeck/rundeck
 # https://hub.docker.com/r/rundeck/rundeck
 # https://docs.rundeck.com/

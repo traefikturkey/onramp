@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Manages subtitles for media content
 # https://hub.docker.com/r/linuxserver/bazarr
 
 services:

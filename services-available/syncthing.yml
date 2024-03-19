@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Decentralized file synchronization tool
 # https://hub.docker.com/r/linuxserver/syncthing
 # https://docs.linuxserver.io/images/docker-syncthing
 

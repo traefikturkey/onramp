@@ -4,7 +4,9 @@ networks:
   traefik:
     external: true
 
-# <================= add links to documentation here =================>
+# description: <= put a brief description of ${SERVICE_PASSED_DNCASED} here =>
+# <================= add links to dockerhub here =================>
+# <================= add links to other related documentation here =================>
 
 services:
   ${SERVICE_PASSED_DNCASED}:

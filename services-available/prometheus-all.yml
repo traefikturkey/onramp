@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Collection of prometheus exporters and dashboards
 # https://github.com/prometheus/prometheus
 
 services:

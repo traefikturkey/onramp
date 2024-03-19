@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Self-hosted live video streaming server
 # https://github.com/owncast/owncast
 
 services:

@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Time and task management app
 # https://github.com/johannesjo/super-productivity
 
 services:

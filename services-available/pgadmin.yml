@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Web-based postgresql administration tool
 # https://www.pgadmin.org/
 # https://hub.docker.com/r/dpage/pgadmin4/
 

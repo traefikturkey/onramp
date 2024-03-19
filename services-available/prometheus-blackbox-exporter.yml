@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Tests endpoints over http, https, dns, and more
 # https://github.com/prometheus/blackbox_exporter
 
 services:

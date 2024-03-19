@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Manages and serves audiobooks
 # https://hub.docker.com/r/advplyr/audiobookshelf
 
 services:

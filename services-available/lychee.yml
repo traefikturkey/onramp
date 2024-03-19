@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Photo management and sharing platform
 # <================= add links to documentation here =================>
 
 services:

@@ -4,6 +4,8 @@ networks:
   traefik:
     external: true
 
+# description: Container for running sablier, a web-based timer
+# description: Container for running sablier, a web-based timer
 # <================= add links to documentation here =================>
 
 services:

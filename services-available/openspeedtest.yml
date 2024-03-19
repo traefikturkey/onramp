@@ -23,6 +23,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.openspeedtest.entrypoints=websecure
       - traefik.http.routers.openspeedtest.rule=Host(`${OPENSPEEDTEST_CONTAINER_NAME:-openspeedtest}.${HOST_DOMAIN}`)
+# description: Self-hosted speed test tool
       #- traefik.http.services.openspeedtest.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.openspeedtest.loadbalancer.server.port=3000
       - traefik.http.middlewares.limit.buffering.maxRequestBodyBytes=10000000000

@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Personal knowledge management system
 # https://github.com/zadam/trilium
 
 services:

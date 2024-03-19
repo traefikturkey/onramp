@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: N open-source home automation platform
 # https://hub.docker.com/r/linuxserver/homeassistant
 
 services:

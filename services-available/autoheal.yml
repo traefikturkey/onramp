@@ -1,5 +1,6 @@
 version: '3'
 
+# description: Restarts unhealthy docker containers automatically
 # https://github.com/willfarrell/docker-autoheal
 
 services:

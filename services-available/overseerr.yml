@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Request management and notification system for media content
 # https://hub.docker.com/r/linuxserver/overseerr
 
 services:

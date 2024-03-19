@@ -1,5 +1,6 @@
 version: "3"
 
+# description: Horizontally scalable, highly available log aggregation system
 # https://grafana.com/docs/loki/latest/installation/docker/
 # https://github.com/gliderlabs/logspout
 # https://grafana.com/docs/loki/latest/clients/promtail/

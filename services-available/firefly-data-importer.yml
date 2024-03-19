@@ -9,6 +9,7 @@ volumes:
   firefly_upload:
   firefly_db:
 
+# description: Imports data into firefly iii, a personal finance manager
 # https://github.com/firefly-iii/firefly-iii/tree/main
 
 services:

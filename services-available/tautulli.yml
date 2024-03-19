@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Monitors plex usage and provides statistics
 # https://hub.docker.com/r/linuxserver/tautulli
 
 services:

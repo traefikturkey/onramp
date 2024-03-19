@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Self-hosted email marketing platform
 # https://github.com/YoRyan/mailrise
 
 services:

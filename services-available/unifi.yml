@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Network management controller for ubiquiti devices
 # https://github.com/goofball222/unifi
 
 services:

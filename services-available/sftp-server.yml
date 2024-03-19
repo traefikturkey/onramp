@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Secure ftp server
 # https://github.com/drakkan/sftpgo
 
 services:

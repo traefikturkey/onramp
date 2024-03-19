@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: File-sharing platform
 # https://github.com/stautonico/pingvin-share
 
 services:

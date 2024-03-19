@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Popular content management system (cms)
 # https://wordpress.com/
 # https://hub.docker.com/_/wordpress
 

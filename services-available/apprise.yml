@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Notification framework that supports various services
 # https://hub.docker.com/r/linuxserver/apprise-api
 
 services:

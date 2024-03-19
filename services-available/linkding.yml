@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Self-hosted bookmark manager
 # https://github.com/sissbruecker/linkding
 
 services:

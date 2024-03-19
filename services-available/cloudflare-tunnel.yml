@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Creates secure tunnels to expose local services
 # https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/
 # https://hub.docker.com/r/cloudflare/cloudflared
 # https://github.com/cloudflare/cloudflared
