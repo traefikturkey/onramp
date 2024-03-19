@@ -1,5 +1,6 @@
 version: '3'
 
+# description: Factorio is a game about building and managing factories on an alien planet
 # https://hub.docker.com/r/goofball222/factorio
 
 services:
