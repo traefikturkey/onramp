@@ -10,7 +10,6 @@ volumes:
   
 # description: Web-based anime downloader
 # https://github.com/oae/kaizoku
-# https://komga.org/docs/installation/docker/
 
 services:
   kaizoku:
