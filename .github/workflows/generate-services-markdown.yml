@@ -1,0 +1,19 @@
+name: Generate Services Markdown
+
+on:
+  push:
+    paths:
+      - 'services-available/**/*.yml'
+      - '.github/workflows/update-services.yml'
+
+jobs:
+
+  generate-services-markdown:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Generate Services Markdown
+        run: |
+          ./github/scripts/generate-services-markdown.sh
