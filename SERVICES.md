@@ -172,13 +172,13 @@
 # Available Games
 
 
-- [factorio](https://hub.docker.com/r/goofball222/factorio): 
-- [mindustry](https://github.com/ich777/docker-mindustry): 
-- [minecraft-bedrock](https://hub.docker.com/r/itzg/minecraft-bedrock-server): 
-- [minecraft-direwolf20-119](https://hub.docker.com/r/itzg/minecraft-server): 
-- [minecraft-direwolf20-120](https://hub.docker.com/r/itzg/minecraft-server): 
-- [minecraft-skyfactory4](https://hub.docker.com/r/itzg/minecraft-server): 
-- [minecraft](https://hub.docker.com/r/itzg/minecraft-server): 
-- [rust](https://richardpricejones.medium.com/how-to-create-your-own-rust-server-c37c49d22919): 
-- [satisfactory](https://github.com/wolveix/satisfactory-server): 
-- [valheim](https://github.com/lloesche/valheim-server-docker): 
+- [factorio](https://hub.docker.com/r/goofball222/factorio): Factorio is a game about building and managing factories on an alien planet
+- [mindustry](https://github.com/ich777/docker-mindustry): Mindustry is a sandbox tower defense game
+- [minecraft-bedrock](https://hub.docker.com/r/itzg/minecraft-bedrock-server): Minecraft Bedrock Edition is a version of Minecraft designed for various platforms including mobile, console, and Windows 10
+- [minecraft-direwolf20-119](https://hub.docker.com/r/itzg/minecraft-server): Direwolf20 is a Feed The Beast modpack for Minecraft 1.19.2
+- [minecraft-direwolf20-120](https://hub.docker.com/r/itzg/minecraft-server): Direwolf20 is a Feed The Beast modpack for Minecraft 1.20.1
+- [minecraft-skyfactory4](https://hub.docker.com/r/itzg/minecraft-server): SkyFactory 4 is a Feed The Beast modpack for Minecraft 1.12.2
+- [minecraft](https://hub.docker.com/r/itzg/minecraft-server): Minecraft is a game about placing blocks and going on adventures
+- [rust](https://richardpricejones.medium.com/how-to-create-your-own-rust-server-c37c49d22919): Rust is a multiplayer-only survival video game
+- [satisfactory](https://github.com/wolveix/satisfactory-server): Satisfactory is a first-person open-world factory building game with a dash of exploration and combat
+- [valheim](https://github.com/lloesche/valheim-server-docker): Valheim is a game about exploring a huge fantasy world inspired by norse mythology and viking culture
