@@ -1,170 +1,170 @@
 # Available Services
 
 
-- [adguard](https://github.com/AdguardTeam/AdGuardHome)
-- [airprint](https://github.com/chuckcharlie/cups-avahi-airprint)
-- [apprise](https://hub.docker.com/r/linuxserver/apprise-api)
-- [audiobookshelf](https://hub.docker.com/r/advplyr/audiobookshelf)
-- [authelia](https://github.com/authelia/authelia)
-- [authentik](https://goauthentik.io/docs/installation/docker-compose)
-- [autoheal](https://github.com/willfarrell/docker-autoheal)
-- [autokuma](https://github.com/BigBoot/AutoKuma)
-- [avahi](https://github.com/MattKobayashi/docker-avahi)
-- [basaran](https://github.com/hyperonym/basaran)
-- [bazarr](https://hub.docker.com/r/linuxserver/bazarr)
-- [cadvisor](https://hub.docker.com/r/google/cadvisor/)
-- [cert-dumper](https://github.com/ldez/traefik-certs-dumper)
-- [chromadb](https://github.com/chroma-core/chroma/)
-- [cloudflare-ddns](https://github.com/oznu/docker-cloudflare-ddns)
-- [cloudflare-tunnel-gui](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/)
-- [cloudflare-tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/)
-- [code-server](https://github.com/coder/code-server)
-- [coqui-ai](https://tts.readthedocs.io/en/latest/inference.html)
-- [crowdsec](https://github.com/crowdsecurity/crowdsec)
-- [cv4pve](https://github.com/Corsinvest/cv4pve-admin/tree/main)
-- [cyberchef](https://github.com/gchq/CyberChef/)
-- [dashdot](https://github.com/MauriceNino/dashdot)
-- [dashy](https://github.com/Lissy93/dashy)
-- [docker-proxy](https://github.com/Tecnativa/docker-socket-proxy)
-- [dozzle-host](https://github.com/amir20/dozzle)
-- [dozzle-path](https://github.com/amir20/dozzle)
-- [droneci](https://github.com/harness/drone)
-- [duplicati](https://www.duplicati.com/)
-- [excalidraw](https://excalidraw.com/)
-- [firefly-data-importer](https://github.com/firefly-iii/firefly-iii/tree/main)
-- [firefly3](https://github.com/firefly-iii/firefly-iii/tree/main)
-- [firefox](https://github.com/jlesage/docker-firefox)
-- [flame](https://hub.docker.com/r/pawelmalak/flame)
-- [foundryvtt](https://hub.docker.com/r/felddy/foundryvtt)
-- [freshrss](https://christitus.com/why-we-dont-browse-the-internet-anymore/)
-- [frigate-coral](https://docs.frigate.video/frigate/installation/)
-- [frigate-nvidia](https://docs.frigate.video/frigate/installation/)
-- [fulltext-rss](https://christitus.com/why-we-dont-browse-the-internet-anymore/)
-- [gatus](https://github.com/TwiN/gatus)
-- [ghost](https://hub.docker.com/_/ghost)
-- [gitea](https://github.com/go-gitea/gitea)
-- [gitlab](https://docs.gitlab.com/ee/install/docker.html)
-- [glances](https://github.com/nicolargo/glances)
-- [go2rtc](https://github.com/AlexxIT/go2rtc)
-- [gotify](https://github.com/gotify/server)
-- [grafana](https://grafana.com/docs/grafana/next/setup-grafana/installation/docker/)
-- healthchecks
-- [heimdall](https://github.com/linuxserver/Heimdall)
-- [homarr](https://github.com/ajnart/homarr)
-- [homeassistant](https://hub.docker.com/r/linuxserver/homeassistant)
-- [homebox](https://hay-kot.github.io/homebox/)
-- [homepage](https://github.com/gethomepage/homepage/)
-- [homer](https://hub.docker.com/r/b4bz/homer)
-- [immich](https://immich.app/docs/install/environment-variables)
-- [influxdb](https://hub.docker.com/_/influxdb)
-- [itflow](https://itflow.org/)
-- [jellyfin](https://hub.docker.com/r/linuxserver/jellyfin)
-- [jellyseerr](https://github.com/Fallenbagel/jellyseerr/tree/develop)
-- [joplin](https://joplinapp.org/)
-- [joyride-host](https://github.com/ilude/joyride)
-- [joyride](https://github.com/ilude/joyride)
-- kaizoku
-- [kasm](https://hub.docker.com/r/linuxserver/kasm)
-- [kimai](https://github.com/tobybatch/kimai2)
-- komga
-- [librespeed](https://hub.docker.com/r/linuxserver/librespeed)
-- [lidarr](https://hub.docker.com/r/linuxserver/lidarr)
-- [linkding](https://github.com/sissbruecker/linkding)
-- lychee
-- [mailhog](https://github.com/mailhog/MailHog)
-- [mailrise](https://github.com/YoRyan/mailrise)
-- [mariadb](https://hub.docker.com/_/mariadb)
-- [mealie](https://hay-kot.github.io/mealie/documentation/getting-started/install/)
-- [minio](https://github.com/minio/minio)
-- [monocker](https://hub.docker.com/r/petersem/monocker)
-- [mosquitto](https://hub.docker.com/_/eclipse-mosquitto)
-- [mssql](https://hub.docker.com/_/microsoft-mssql-server)
-- [netbootxyz](https://docs.linuxserver.io/images/docker-netbootxyz)
-- [netbox](https://docs.linuxserver.io/images/docker-netbox)
-- [newsdash](https://github.com/buzz/newsdash)
-- [nextcloud](https://github.com/linuxserver/docker-nextcloud)
-- [nodered](https://hub.docker.com/r/nodered/node-red/)
-- [nzbget](https://hub.docker.com/r/linuxserver/nzbget)
-- [olivetin](https://github.com/OliveTin/OliveTin)
-- [ollama-webui](https://github.com/open-webui/open-webui)
-- [ollama](https://hub.docker.com/r/ollama/ollama)
-- [omada](https://hub.docker.com/r/mbentley/omada-controller)
-- openspeedtest
-- [overseerr](https://hub.docker.com/r/linuxserver/overseerr)
-- [owncast](https://github.com/owncast/owncast)
-- [paperless-ngx](https://hub.docker.com/r/linuxserver/paperless-ngx)
-- [pgadmin](https://www.pgadmin.org/)
-- [photoprism](https://github.com/photoprism/photoprism)
-- [phpmyadmin](https://hub.docker.com/r/phpmyadmin/phpmyadmin)
-- [pihole](https://github.com/pi-hole/docker-pi-hole/blob/master/README.md)
-- [pingvin-share](https://github.com/stautonico/pingvin-share)
-- [playit-docker](https://github.com/mafen/playit-docker)
-- [plex](https://github.com/plexinc/pms-docker)
-- [portainer-ee](https://github.com/portainer/portainer)
-- [portainer](https://github.com/portainer/portainer)
-- [postfix](https://github.com/juanluisbaptiste/docker-postfix)
-- [postgres](https://hub.docker.com/_/postgres)
-- [postman](https://hub.docker.com/r/kasmweb/postman)
-- [prestashop](https://hub.docker.com/r/prestashop/prestashop/)
-- [prometheus-alertmanager](https://github.com/prometheus/alertmanager)
-- [prometheus-all](https://github.com/prometheus/prometheus)
-- [prometheus-blackbox-exporter](https://github.com/prometheus/blackbox_exporter)
-- [prometheus-loki](https://grafana.com/docs/loki/latest/installation/docker/)
-- [prometheus-node-exporter](https://github.com/prometheus/node_exporter)
-- [prometheus-proxmox-exporter](https://github.com/ilude/prometheus-pve-exporter)
-- [prometheus](https://github.com/prometheus/prometheus)
-- [prowlarr](https://hub.docker.com/r/linuxserver/prowlarr)
-- [pterodactyl-panel](https://github.com/pterodactyl/panel/blob/develop/docker-compose.example.yml)
-- pterodactyl-wings
-- [pwndrop](https://hub.docker.com/r/linuxserver/pwndrop)
-- [qdirstat](https://github.com/jlesage/docker-qdirstat)
-- [radarr-postgres](https://hub.docker.com/_/postgres)
-- [radarr](https://hub.docker.com/r/linuxserver/radarr)
-- [readarr](https://docs.linuxserver.io/images/docker-readarr/#docker-compose-recommended-click-here-for-more-info)
-- [recyclarr](https://hub.docker.com/r/recyclarr/recyclarr)
-- [redis](https://github.com/redis/redis)
-- [remotely](https://github.com/immense/Remotely)
-- [requestrr](https://hub.docker.com/r/darkalfx/requestrr)
-- [rundeck](https://github.com/rundeck/rundeck)
-- [rustdesk](https://rustdesk.com/docs/en/self-host/install/)
-- sablier
-- [sabnzbd](https://hub.docker.com/r/linuxserver/sabnzbd)
-- [samba](https://github.com/dperson/samba)
-- [scrypted](https://github.com/koush/scrypted)
-- sd-web
-- searxng
-- [semaphore](https://docs.ansible-semaphore.com/)
-- [sftp-server](https://github.com/drakkan/sftpgo)
-- [snapdrop](https://hub.docker.com/r/linuxserver/snapdrop)
-- [sonarr](https://hub.docker.com/r/linuxserver/sonarr)
-- [stirling-pdf](https://github.com/Stirling-Tools/Stirling-PDF)
-- [streaming-serach](https://github.com/Colaski/global-streaming-search)
-- [super-productivity](https://github.com/johannesjo/super-productivity)
-- [synapse](https://github.com/matrix-org/synapse)
-- [syncthing](https://hub.docker.com/r/linuxserver/syncthing)
-- [tautulli](https://hub.docker.com/r/linuxserver/tautulli)
-- [tdarr](https://docs.tdarr.io/docs/installation/docker/run-compose)
-- traefik-bouncer
-- [transmission-vpn](https://hub.docker.com/r/haugene/transmission-openvpn)
-- [trilium](https://github.com/zadam/trilium)
-- [truecommand](https://hub.docker.com/r/ixsystems/truecommand)
-- ubuntu
-- [unbound](https://hub.docker.com/r/mvance/unbound)
-- [unifi](https://github.com/goofball222/unifi)
-- [uptime-kuma](https://github.com/louislam/uptime-kuma)
-- [vaultwarden](https://github.com/dani-garcia/vaultwarden)
-- [vikunja](https://vikunja.io/docs/full-docker-example/)
-- [wallabag](https://github.com/wallabag/wallabag)
-- [watchtower](https://github.com/containrrr/watchtower)
-- [watchyourlan](https://github.com/aceberg/WatchYourLAN)
-- [webmap](https://github.com/SECUREFOREST/WebMap)
-- [webtop](https://github.com/linuxserver/docker-webtop)
-- [wg-easy](https://github.com/WeeJeWel/wg-easy)
-- [whoami](https://hub.docker.com/r/traefik/whoami)
-- [wikijs](https://hub.docker.com/r/linuxserver/wikijs)
-- [wireguard-server](https://hub.docker.com/r/linuxserver/wireguard)
-- [wireshark](https://hub.docker.com/r/linuxserver/wireshark)
-- [woodpecker](https://woodpecker-ci.org/)
-- [wordpress](https://wordpress.com/)
-- [yacht](https://github.com/SelfhostedPro/Yacht)
-- [youtube-dl](https://github.com/nbr23/youtube-dl-server)
+- [adguard](https://github.com/AdguardTeam/AdGuardHome): Network-wide ad blocker and privacy tool
+- [airprint](https://github.com/chuckcharlie/cups-avahi-airprint): Enables apple airprint functionality for non-airprint printers
+- [apprise](https://hub.docker.com/r/linuxserver/apprise-api): Notification framework that supports various services
+- [audiobookshelf](https://hub.docker.com/r/advplyr/audiobookshelf): Manages and serves audiobooks
+- [authelia](https://github.com/authelia/authelia): Provides single sign-on (sso) and two-factor authentication (2fa) for web applications
+- [authentik](https://goauthentik.io/docs/installation/docker-compose): N identity and access management solution
+- [autoheal](https://github.com/willfarrell/docker-autoheal): Restarts unhealthy docker containers automatically
+- [autokuma](https://github.com/BigBoot/AutoKuma): Kubernetes monitoring and alerting tool
+- [avahi](https://github.com/MattKobayashi/docker-avahi): Implements mdns/dns-sd for local network service discovery
+- [basaran](https://github.com/hyperonym/basaran): Container for running basaran, a web-based file manager
+- [bazarr](https://hub.docker.com/r/linuxserver/bazarr): Manages subtitles for media content
+- [cadvisor](https://hub.docker.com/r/google/cadvisor/): Collects and analyzes resource usage and performance characteristics of running containers
+- [cert-dumper](https://github.com/ldez/traefik-certs-dumper): Extracts ssl certificate information from websites
+- [chromadb](https://github.com/chroma-core/chroma/): Chromecast database and controller
+- [cloudflare-ddns](https://github.com/oznu/docker-cloudflare-ddns): Updates dns records on cloudflare dynamically
+- [cloudflare-tunnel-gui](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/): Provides a graphical interface for cloudflare tunnel
+- [cloudflare-tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/): Creates secure tunnels to expose local services
+- [code-server](https://github.com/coder/code-server): Runs visual studio code in a web browser
+- [coqui-ai](https://tts.readthedocs.io/en/latest/inference.html): Collection of ai models for speech recognition and synthesis
+- [crowdsec](https://github.com/crowdsecurity/crowdsec): Detects and blocks malicious behavior on servers
+- [cv4pve](https://github.com/Corsinvest/cv4pve-admin/tree/main): Container for running clamav on proxmox virtual environment (pve)
+- [cyberchef](https://github.com/gchq/CyberChef/): Web app for data analysis and transformation
+- [dashdot](https://github.com/MauriceNino/dashdot): Dashboard for monitoring docker containers
+- [dashy](https://github.com/Lissy93/dashy): Customizable dashboard for displaying information
+- [docker-proxy](https://github.com/Tecnativa/docker-socket-proxy): Proxy for docker containers
+- [dozzle-host](https://github.com/amir20/dozzle): Web-based docker container log viewer
+- [dozzle-path](https://github.com/amir20/dozzle): Path-based reverse proxy for dozzle
+- [droneci](https://github.com/harness/drone): Continuous integration and delivery platform
+- [duplicati](https://www.duplicati.com/): Backs up files and folders to various storage destinations
+- [excalidraw](https://excalidraw.com/): Collaborative whiteboard tool
+- [firefly-data-importer](https://github.com/firefly-iii/firefly-iii/tree/main): Imports data into firefly iii, a personal finance manager
+- [firefly3](https://github.com/firefly-iii/firefly-iii/tree/main): Manages personal finances and budgets
+- [firefox](https://github.com/jlesage/docker-firefox): Runs mozilla firefox browser in a container
+- [flame](https://hub.docker.com/r/pawelmalak/flame): Self-hosted music recommendation engine
+- [foundryvtt](https://hub.docker.com/r/felddy/foundryvtt): Virtual tabletop platform for role-playing games
+- [freshrss](https://christitus.com/why-we-dont-browse-the-internet-anymore/): Self-hosted rss feed reader
+- [frigate-coral](https://docs.frigate.video/frigate/installation/): Container for running frigate with coral edge tpu support
+- [frigate-nvidia](https://docs.frigate.video/frigate/installation/): Container for running frigate with nvidia gpu support
+- [fulltext-rss](https://christitus.com/why-we-dont-browse-the-internet-anymore/): Generates full-text rss feeds from partial feeds
+- [gatus](https://github.com/TwiN/gatus): Monitors services and sends alerts
+- [ghost](https://hub.docker.com/_/ghost): Headless cms for creating blogs and websites
+- [gitea](https://github.com/go-gitea/gitea): Lightweight git service similar to github
+- [gitlab](https://docs.gitlab.com/ee/install/docker.html): Self-hosted git repository management system
+- [glances](https://github.com/nicolargo/glances): System monitoring tool
+- [go2rtc](https://github.com/AlexxIT/go2rtc): Webrtc gateway for sip
+- [gotify](https://github.com/gotify/server): Self-hosted push notification service
+- [grafana](https://grafana.com/docs/grafana/next/setup-grafana/installation/docker/): Platform for monitoring and observability
+- healthchecks: Monitors cron jobs and sends alerts
+- [heimdall](https://github.com/linuxserver/Heimdall): Dashboard for organizing web applications
+- [homarr](https://github.com/ajnart/homarr): Home automation and remote control system
+- [homeassistant](https://hub.docker.com/r/linuxserver/homeassistant): N open-source home automation platform
+- [homebox](https://hay-kot.github.io/homebox/): Dashboard for managing self-hosted services
+- [homepage](https://github.com/gethomepage/homepage/): Customizable start page for web browsers
+- [homer](https://hub.docker.com/r/b4bz/homer): Self-hosted bookmark manager
+- [immich](https://immich.app/docs/install/environment-variables): Container for running immich, a web-based image viewer
+- [influxdb](https://hub.docker.com/_/influxdb): Time-series database for metrics and events
+- [itflow](https://itflow.org/): Workflow automation tool
+- [jellyfin](https://hub.docker.com/r/linuxserver/jellyfin): Media server for streaming content
+- [jellyseerr](https://github.com/Fallenbagel/jellyseerr/tree/develop): Container for running jellyseerr, a torrent indexer
+- [joplin](https://joplinapp.org/): Note-taking and to-do app
+- [joyride-host](https://github.com/ilude/joyride): Container for running joyride, a web-based dashboard
+- [joyride](https://github.com/ilude/joyride): Web-based dashboard for monitoring services
+- kaizoku: Container for running kaizoku, a web-based anime downloader
+- [kasm](https://hub.docker.com/r/linuxserver/kasm): Browser-based access to desktops, applications, and web services
+- [kimai](https://github.com/tobybatch/kimai2): Time-tracking software for freelancers and small businesses
+- komga: Web-based comic book server
+- [librespeed](https://hub.docker.com/r/linuxserver/librespeed): Self-hosted internet speed test tool
+- [lidarr](https://hub.docker.com/r/linuxserver/lidarr): Manages music collections and downloads
+- [linkding](https://github.com/sissbruecker/linkding): Self-hosted bookmark manager
+- lychee: Photo management and sharing platform
+- [mailhog](https://github.com/mailhog/MailHog): Mail testing tool for developers
+- [mailrise](https://github.com/YoRyan/mailrise): Self-hosted email marketing platform
+- [mariadb](https://hub.docker.com/_/mariadb): Popular open-source relational database management system
+- [mealie](https://hay-kot.github.io/mealie/documentation/getting-started/install/): Recipe management system
+- [minio](https://github.com/minio/minio): High-performance object storage server
+- [monocker](https://hub.docker.com/r/petersem/monocker): Container for running monero mining software
+- [mosquitto](https://hub.docker.com/_/eclipse-mosquitto): N mqtt broker for iot communication
+- [mssql](https://hub.docker.com/_/microsoft-mssql-server): Microsoft sql server container
+- [netbootxyz](https://docs.linuxserver.io/images/docker-netbootxyz): Network boot server for various operating systems
+- [netbox](https://docs.linuxserver.io/images/docker-netbox): Web-based ip address management (ipam) and data center infrastructure management (dcim) tool
+- [newsdash](https://github.com/buzz/newsdash): Self-hosted rss feed reader and dashboard
+- [nextcloud](https://github.com/linuxserver/docker-nextcloud): Powerful self-hosted file sync and sharing platform
+- [nodered](https://hub.docker.com/r/nodered/node-red/): Flow-based development tool for visual programming
+- [nzbget](https://hub.docker.com/r/linuxserver/nzbget): Binary newsgrabber for usenet
+- [olivetin](https://github.com/OliveTin/OliveTin): Container for running olivetin, a web-based note-taking app
+- [ollama-webui](https://github.com/open-webui/open-webui): Web-based user interface for ollama, a media indexer
+- [ollama](https://hub.docker.com/r/ollama/ollama): Media indexer for organizing and managing media files
+- [omada](https://hub.docker.com/r/mbentley/omada-controller): Container for running tp-link omada controller
+- openspeedtest: Self-hosted speed test tool
+- [overseerr](https://hub.docker.com/r/linuxserver/overseerr): Request management and notification system for media content
+- [owncast](https://github.com/owncast/owncast): Self-hosted live video streaming server
+- [paperless-ngx](https://hub.docker.com/r/linuxserver/paperless-ngx): Document management system
+- [pgadmin](https://www.pgadmin.org/): Web-based postgresql administration tool
+- [photoprism](https://github.com/photoprism/photoprism): Personal photo management software
+- [phpmyadmin](https://hub.docker.com/r/phpmyadmin/phpmyadmin): Web-based mysql and mariadb database management tool
+- [pihole](https://github.com/pi-hole/docker-pi-hole/blob/master/README.md): Network-wide ad blocker and dns sinkhole
+- [pingvin-share](https://github.com/stautonico/pingvin-share): File-sharing platform
+- [playit-docker](https://github.com/mafen/playit-docker): Container for running playit live, a radio automation software
+- [plex](https://github.com/plexinc/pms-docker): Media server for streaming movies, tv shows, and music
+- [portainer-ee](https://github.com/portainer/portainer): Commercial version of portainer, a container management tool
+- [portainer](https://github.com/portainer/portainer): Lightweight container management ui
+- [postfix](https://github.com/juanluisbaptiste/docker-postfix): Mail transfer agent (mta) for sending and receiving emails
+- [postgres](https://hub.docker.com/_/postgres): Powerful open-source relational database system
+- [postman](https://hub.docker.com/r/kasmweb/postman): Collaboration platform for api development
+- [prestashop](https://hub.docker.com/r/prestashop/prestashop/): N e-commerce platform
+- [prometheus-alertmanager](https://github.com/prometheus/alertmanager): Manages alerts from prometheus monitoring
+- [prometheus-all](https://github.com/prometheus/prometheus): Collection of prometheus exporters and dashboards
+- [prometheus-blackbox-exporter](description: Tests endpoints over http, https, dns, and more): Tests endpoints over http, https, dns, and more
+- [prometheus-loki](https://grafana.com/docs/loki/latest/installation/docker/): Horizontally scalable, highly available log aggregation system
+- [prometheus-node-exporter](https://github.com/prometheus/node_exporter): Exposes hardware and os metrics to prometheus
+- [prometheus-proxmox-exporter](https://github.com/ilude/prometheus-pve-exporter): Collects metrics from proxmox virtual environment
+- [prometheus](https://github.com/prometheus/prometheus): Monitoring and alerting toolkit
+- [prowlarr](https://hub.docker.com/r/linuxserver/prowlarr): Container for running prowlarr, a media indexer
+- [pterodactyl-panel](https://github.com/pterodactyl/panel/blob/develop/docker-compose.example.yml): Game server management panel
+- pterodactyl-wings: Daemon for managing game servers
+- [pwndrop](https://hub.docker.com/r/linuxserver/pwndrop): Self-hosted file-sharing platform
+- [qdirstat](https://github.com/jlesage/docker-qdirstat): Disk space analyzer and cleanup tool
+- [radarr-postgres](https://hub.docker.com/_/postgres): Container for running radarr with postgresql
+- [radarr](https://hub.docker.com/r/linuxserver/radarr): Manages movie collections and downloads
+- [readarr](https://docs.linuxserver.io/images/docker-readarr/#docker-compose-recommended-click-here-for-more-info): Manages ebook collections and downloads
+- [recyclarr](https://hub.docker.com/r/recyclarr/recyclarr): Container for running recyclarr, a media indexer
+- [redis](https://github.com/redis/redis): N in-memory data structure store
+- [remotely](https://github.com/immense/Remotely): Remote desktop and support tool
+- [requestrr](https://hub.docker.com/r/darkalfx/requestrr): Integrates with sonarr and radarr for requesting media content
+- [rundeck](https://github.com/rundeck/rundeck): Job scheduler and runbook automation platform
+- [rustdesk](https://rustdesk.com/docs/en/self-host/install/): Remote desktop software
+- sablier: Container for running sablier, a web-based timer
+- [sabnzbd](https://hub.docker.com/r/linuxserver/sabnzbd): Binary newsgrabber for usenet
+- [samba](https://github.com/dperson/samba): Provides file and print services for windows clients
+- [scrypted](https://github.com/koush/scrypted): Home automation platform
+- sd-web: Web-based interface for securedrop, a whistleblower submission system
+- searxng: Self-hosted metasearch engine
+- [semaphore](https://docs.ansible-semaphore.com/): Continuous integration and deployment service
+- [sftp-server](https://github.com/drakkan/sftpgo): Secure ftp server
+- [snapdrop](https://hub.docker.com/r/linuxserver/snapdrop): Web-based file sharing tool for local networks
+- [sonarr](https://hub.docker.com/r/linuxserver/sonarr): Manages tv show collections and downloads
+- [stirling-pdf](https://github.com/Stirling-Tools/Stirling-PDF): Container for running stirling pdf, a web-based pdf viewer
+- [streaming-serach](https://github.com/Colaski/global-streaming-search): Container for running streaming search, a media indexer
+- [super-productivity](https://github.com/johannesjo/super-productivity): Time and task management app
+- [synapse](https://github.com/matrix-org/synapse): Matrix communication server
+- [syncthing](https://hub.docker.com/r/linuxserver/syncthing): Decentralized file synchronization tool
+- [tautulli](https://hub.docker.com/r/linuxserver/tautulli): Monitors plex usage and provides statistics
+- [tdarr](https://docs.tdarr.io/docs/installation/docker/run-compose): Media optimization and conversion tool
+- traefik-bouncer: 
+- [transmission-vpn](https://hub.docker.com/r/haugene/transmission-openvpn): Bittorrent client with vpn support
+- [trilium](https://github.com/zadam/trilium): Personal knowledge management system
+- [truecommand](https://hub.docker.com/r/ixsystems/truecommand): Management tool for truenas
+- ubuntu: 
+- [unbound](https://hub.docker.com/r/mvance/unbound): Dns resolver
+- [unifi](https://github.com/goofball222/unifi): Network management controller for ubiquiti devices
+- [uptime-kuma](https://github.com/louislam/uptime-kuma): Self-hosted uptime monitoring tool
+- [vaultwarden](https://github.com/dani-garcia/vaultwarden): Self-hosted bitwarden password manager
+- [vikunja](https://vikunja.io/docs/full-docker-example/): Task and time management app
+- [wallabag](https://github.com/wallabag/wallabag): Self-hosted read-it-later service
+- [watchtower](https://github.com/containrrr/watchtower): Utomatically updates docker containers
+- [watchyourlan](https://github.com/aceberg/WatchYourLAN): Monitors network devices and services
+- [webmap](https://github.com/SECUREFOREST/WebMap): Web-based network scanner
+- [webtop](https://github.com/linuxserver/docker-webtop): Web-based desktop environment
+- [wg-easy](https://github.com/WeeJeWel/wg-easy): Wireguard vpn configuration generator
+- [whoami](https://hub.docker.com/r/traefik/whoami): Simple web service that returns information about the host
+- [wikijs](https://hub.docker.com/r/linuxserver/wikijs): Self-hosted wiki platform
+- [wireguard-server](https://hub.docker.com/r/linuxserver/wireguard): Vpn server using wireguard
+- [wireshark](https://hub.docker.com/r/linuxserver/wireshark): Network protocol analyzer
+- [woodpecker](https://woodpecker-ci.org/): Container for running woodpecker, a web-based email client
+- [wordpress](https://wordpress.com/): Popular content management system (cms)
+- [yacht](https://github.com/SelfhostedPro/Yacht): Web interface for managing docker containers
+- [youtube-dl](https://github.com/nbr23/youtube-dl-server): Command-line program to download videos from youtube and other sites
