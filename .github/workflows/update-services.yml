@@ -1,12 +1,10 @@
 name: Generate Services Markdown
 
-on: [push]
-  # push:
-  #   branches:
-  #     - master
-  #   paths:
-  #     - 'services-available/*.yml'
-  #     - '.github/update-services.yml'
+on:
+  push:
+    paths:
+      - 'services-available/*.yml'
+      - '.github/update-services.yml'
 
 jobs:
 
