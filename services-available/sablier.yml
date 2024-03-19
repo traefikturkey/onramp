@@ -4,7 +4,8 @@ networks:
   traefik:
     external: true
 
-# <================= add links to documentation here =================>
+# description: Container for running sablier, a web-based timer
+# https://github.com/acouvreur/sablier
 
 services:
   sablier:
@@ -38,10 +39,3 @@ services:
       - traefik.http.middlewares.dynamic.plugin.sablier.dynamic.theme=hacker-terminal
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
-
-      # Flame dashboard labels
-
-      - flame.type=application # "app" works too
-      - flame.name=${SABLIER_FLAME_NAME:-sablier}
-      - flame.url=https://${SABLIER_CONTAINER_NAME:-sablier}.${HOST_DOMAIN}
-      - flame.icon=${SABLIER_FLAME_ICON:-docker} # optional, default is "docker"

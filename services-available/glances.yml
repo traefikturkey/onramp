@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: System monitoring tool
 # https://github.com/nicolargo/glances
 
 services:

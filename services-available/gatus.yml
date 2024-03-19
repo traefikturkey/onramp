@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Monitors services and sends alerts
 # https://github.com/TwiN/gatus
 # https://technotim.live/posts/gatus-uptime-monitoring/
 

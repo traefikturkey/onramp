@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Headless cms for creating blogs and websites
 # https://hub.docker.com/_/ghost
 
 services:

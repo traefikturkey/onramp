@@ -1,5 +1,6 @@
 version: '3'
-#https://immich.app/docs/install/environment-variables
+# description: Container for running immich, a web-based image viewer
+# https://immich.app/docs/install/environment-variables
 
 networks:
   traefik:
@@ -38,9 +39,8 @@ services:
       - traefik.docker.network=traefik
       - traefik.http.routers.immich.entrypoints=websecure
       - traefik.http.routers.immich.rule=Host(`${IMMICH_CONTAINER_NAME:-immich}.${HOST_DOMAIN}`)
-      #- traefik.http.services.immich.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.immich.loadbalancer.server.port=3001
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${IMMICH_WATCHTOWER_ENABLED:-false}
       - autoheal=true
 
   immich-microservices:

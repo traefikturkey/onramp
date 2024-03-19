@@ -1,5 +1,6 @@
 version: '3'
 
+# description: Vpn server using wireguard
 # https://hub.docker.com/r/linuxserver/wireguard
 # https://docs.linuxserver.io/images/docker-wireguard
 

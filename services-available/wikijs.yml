@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Self-hosted wiki platform
 # https://hub.docker.com/r/linuxserver/wikijs
 # https://docs.requarks.io/
 

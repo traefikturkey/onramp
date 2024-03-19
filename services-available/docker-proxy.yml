@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Proxy for docker containers
 # https://github.com/Tecnativa/docker-socket-proxy
 
 services:

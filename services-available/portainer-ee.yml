@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Commercial version of portainer, a container management tool
 # https://github.com/portainer/portainer
 
 services:

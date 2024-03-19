@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Web interface for managing docker containers
 # https://github.com/SelfhostedPro/Yacht
 
 services:

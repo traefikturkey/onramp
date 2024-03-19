@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Network boot server for various operating systems
 # https://docs.linuxserver.io/images/docker-netbootxyz
 
 services:

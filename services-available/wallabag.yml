@@ -5,6 +5,7 @@ networks:
     external: true
   database:
 
+# description: Self-hosted read-it-later service
 # https://github.com/wallabag/wallabag
 
 services:

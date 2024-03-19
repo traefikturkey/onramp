@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Webrtc gateway for sip
 # https://github.com/AlexxIT/go2rtc
 
 services:

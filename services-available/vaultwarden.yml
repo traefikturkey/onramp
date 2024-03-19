@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Self-hosted bitwarden password manager
 # https://github.com/dani-garcia/vaultwarden
 
 services:

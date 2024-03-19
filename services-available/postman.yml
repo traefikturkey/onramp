@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Collaboration platform for api development
 # https://hub.docker.com/r/kasmweb/postman
 
 services:

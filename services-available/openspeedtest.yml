@@ -4,6 +4,9 @@ networks:
   traefik:
     external: true
 
+# description: Network Performance Estimation Tool
+# https://github.com/openspeedtest/Docker-Image
+
 services:
   openspeedtest:
     image: openspeedtest/${OPENSPEEDTEST_DOCKER_TAG:-latest}
@@ -23,7 +26,6 @@ services:
       - traefik.enable=true
       - traefik.http.routers.openspeedtest.entrypoints=websecure
       - traefik.http.routers.openspeedtest.rule=Host(`${OPENSPEEDTEST_CONTAINER_NAME:-openspeedtest}.${HOST_DOMAIN}`)
-      #- traefik.http.services.openspeedtest.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.openspeedtest.loadbalancer.server.port=3000
       - traefik.http.middlewares.limit.buffering.maxRequestBodyBytes=10000000000
       - traefik.http.routers.openspeedtest.middlewares=limit

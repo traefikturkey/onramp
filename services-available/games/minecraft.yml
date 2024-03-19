@@ -4,6 +4,7 @@ networks:
   default:
     name: ${FACTORIO_NETWORK:-games}
 
+# description: Minecraft is a game about placing blocks and going on adventures
 # https://hub.docker.com/r/itzg/minecraft-server
 
 services:

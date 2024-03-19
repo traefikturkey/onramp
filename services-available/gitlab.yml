@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Self-hosted git repository management system
 # https://docs.gitlab.com/ee/install/docker.html
 
 services:

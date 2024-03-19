@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Self-hosted rss feed reader
 # https://christitus.com/why-we-dont-browse-the-internet-anymore/
 # https://www.youtube.com/watch?v=nxV0CPNeFxY
 

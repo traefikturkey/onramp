@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Container for running stirling pdf, a web-based pdf viewer
 # https://github.com/Stirling-Tools/Stirling-PDF
 
 services:

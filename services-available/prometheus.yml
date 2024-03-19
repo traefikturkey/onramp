@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Monitoring and alerting toolkit
 # https://github.com/prometheus/prometheus
 
 services:

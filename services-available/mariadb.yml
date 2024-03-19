@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Popular open-source relational database management system
 # https://hub.docker.com/_/mariadb
 
 services:

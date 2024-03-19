@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Manages tv show collections and downloads
 # https://hub.docker.com/r/linuxserver/sonarr
 
 services:

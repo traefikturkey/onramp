@@ -1,5 +1,6 @@
 version: '3'
 
+# description: Extracts ssl certificate information from websites
 # https://github.com/ldez/traefik-certs-dumper
 
 services:

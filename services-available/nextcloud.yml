@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Powerful self-hosted file sync and sharing platform
 # https://github.com/linuxserver/docker-nextcloud
 
 services:

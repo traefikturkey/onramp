@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Container for running frigate with coral edge tpu support
 # https://docs.frigate.video/frigate/installation/
 
 services:

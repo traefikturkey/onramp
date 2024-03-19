@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Web-based docker container log viewer
 # https://github.com/amir20/dozzle
 
 services:

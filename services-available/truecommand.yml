@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Management tool for truenas
 # https://hub.docker.com/r/ixsystems/truecommand
 
 services:

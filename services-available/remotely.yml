@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Remote desktop and support tool
 # https://github.com/immense/Remotely
 
 services:

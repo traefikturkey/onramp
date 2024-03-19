@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Game server management panel
 # https://github.com/pterodactyl/panel/blob/develop/docker-compose.example.yml
 # https://github.com/EdyTheCow/docker-pterodactyl/blob/master/panel/compose/docker-compose.yml
 

@@ -3,6 +3,8 @@ version: '3'
 networks:
   traefik:
     external: true
+
+# description: Network-wide ad blocker and dns sinkhole
 # https://github.com/pi-hole/docker-pi-hole/blob/master/README.md
 
 services:

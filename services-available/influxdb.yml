@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Time-series database for metrics and events
 # https://hub.docker.com/_/influxdb
 # https://github.com/influxdata/influxdb
 

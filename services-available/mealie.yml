@@ -3,6 +3,7 @@ networks:
   traefik:
     external: true
 
+# description: Recipe management system
 # https://hay-kot.github.io/mealie/documentation/getting-started/install/
 
 services:

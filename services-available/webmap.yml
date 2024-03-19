@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Web-based network scanner
 # https://github.com/SECUREFOREST/WebMap
 
 services:

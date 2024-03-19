@@ -4,8 +4,8 @@ networks:
   traefik:
     external: true
 
-# https://hub.docker.com/r/healthchecks/healthchecks
-# https://github.com/healthchecks/healthchecks
+# description: Monitors cron jobs and sends alerts
+# https://healthchecks.io/docs/self_hosted_docker/
 
 services:
   healthchecks:

@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Self-hosted bookmark manager
 # https://hub.docker.com/r/b4bz/homer
 
 services:

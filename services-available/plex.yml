@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Media server for streaming movies, tv shows, and music
 # https://github.com/plexinc/pms-docker
 # https://www.plex.tv/claim
 

@@ -1,5 +1,6 @@
 version: '3'
 
+# description: Container for running joyride, a web-based dashboard
 # https://github.com/ilude/joyride
 # use this if combined with pihole
 

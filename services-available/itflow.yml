@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Workflow automation tool
 # https://itflow.org/
 
 services:

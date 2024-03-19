@@ -3,7 +3,8 @@ version: '3'
 networks:
   traefik:
     external: true
-
+    
+# description: Simple web service that returns information about the host
 # https://hub.docker.com/r/traefik/whoami
 
 services:

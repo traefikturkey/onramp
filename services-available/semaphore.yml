@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Continuous integration and deployment service
 # https://docs.ansible-semaphore.com/
 
 services:

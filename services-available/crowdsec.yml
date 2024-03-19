@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Detects and blocks malicious behavior on servers
 # https://github.com/crowdsecurity/crowdsec
 
 services:

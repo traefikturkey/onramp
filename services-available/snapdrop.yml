@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Web-based file sharing tool for local networks
 # https://hub.docker.com/r/linuxserver/snapdrop
 
 services:

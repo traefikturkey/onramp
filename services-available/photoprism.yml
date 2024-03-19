@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Personal photo management software
 # https://github.com/photoprism/photoprism
 # https://hub.docker.com/r/photoprism/photoprism
 

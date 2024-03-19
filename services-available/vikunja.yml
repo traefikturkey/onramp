@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Task and time management app
 # https://vikunja.io/docs/full-docker-example/
 
 services:

@@ -4,6 +4,8 @@ networks:
   traefik:
     external: true
 
+# description: Container for running recyclarr, a media indexer
+# description: Container for running recyclarr, a media indexer
 # https://hub.docker.com/r/recyclarr/recyclarr
 # https://recyclarr.dev/wiki/installation/
 

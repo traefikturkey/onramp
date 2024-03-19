@@ -7,6 +7,7 @@ networks:
 volumes:
   redis:
 
+# description: Self-hosted rss feed reader and dashboard
 # https://github.com/buzz/newsdash
 
 services:

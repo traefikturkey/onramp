@@ -4,7 +4,8 @@ networks:
   traefik:
     external: true
 
-# https://hub.docker.com/r/kdelfour/lychee-docker/
+# description: Photo management and sharing platform
+# https://github.com/LycheeOrg/Lychee-Docker
 
 services:
   lychee:

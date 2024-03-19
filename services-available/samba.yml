@@ -1,9 +1,6 @@
 version: '3'
 
-networks:
-  default:
-    name: samba
-
+# description: Provides file and print services for windows clients
 # https://github.com/dperson/samba
 
 services:

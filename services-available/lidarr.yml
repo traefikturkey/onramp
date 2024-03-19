@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Manages music collections and downloads
 # https://hub.docker.com/r/linuxserver/lidarr
 
 services:

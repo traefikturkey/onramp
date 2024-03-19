@@ -1,5 +1,10 @@
 version: '3'
 
+networks:
+  traefik:
+    external: true
+
+# description: Home automation platform
 # https://hub.docker.com/r/linuxserver/homeassistant
 
 services:

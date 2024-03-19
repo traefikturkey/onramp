@@ -4,6 +4,8 @@ networks:
   traefik:
     external: true
 
+# description: Disk space analyzer and cleanup tool
+# description: Disk space analyzer and cleanup tool
 # https://github.com/jlesage/docker-qdirstat
 
 services:

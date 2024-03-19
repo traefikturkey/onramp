@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Network protocol analyzer
 # https://hub.docker.com/r/linuxserver/wireshark
 
 services:

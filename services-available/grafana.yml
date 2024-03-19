@@ -3,6 +3,7 @@ networks:
   traefik:
     external: true
 
+# description: Platform for monitoring and observability
 # https://grafana.com/docs/grafana/next/setup-grafana/installation/docker/
 # https://github.com/prometheus/prometheus
 

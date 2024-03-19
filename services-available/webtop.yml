@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Web-based desktop environment
 # https://github.com/linuxserver/docker-webtop
 
 services:

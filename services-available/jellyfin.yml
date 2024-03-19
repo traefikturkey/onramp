@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Media server for streaming content
 # https://hub.docker.com/r/linuxserver/jellyfin
 
 services:

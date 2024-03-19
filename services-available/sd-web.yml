@@ -4,6 +4,9 @@ networks:
   traefik:
     external: true
 
+# description: stable diffusion web interface for ai images
+# https://https://github.com/AUTOMATIC1111/stable-diffusion-webui
+
 services:
   sd-web:
     image: ghcr.io/traefikturkey/sd-webui-docker:${SD_WEB_DOCKER_TAG:-latest}
@@ -21,16 +24,15 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
-      #- CLI_ARGS=--allow-code --enable-insecure-extension-access --api --opt-channelslast --opt-sdp-attention
       - PYTHONUNBUFFERED=1
       # or use this for xformers
+      #- CLI_ARGS=--allow-code --enable-insecure-extension-access --api --opt-channelslast --opt-sdp-attention
       - CLI_ARGS=--allow-code --enable-insecure-extension-access --api --opt-channelslast --xformers
     labels:
       - joyride.host.name=${SD_WEB_CONTAINER_NAME:-sd-web}.${HOST_DOMAIN}
       - traefik.enable=true
       - traefik.http.routers.sd-web.entrypoints=websecure
       - traefik.http.routers.sd-web.rule=Host(`${SD_WEB_CONTAINER_NAME:-sd-web}.${HOST_DOMAIN}`)
-      #- traefik.http.services.sd-web.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.sd-web.loadbalancer.server.port=7860
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true

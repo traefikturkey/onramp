@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Container for running playit live, a radio automation software
 # https://github.com/mafen/playit-docker
 # https://github.com/playit-cloud/playit-agent
 

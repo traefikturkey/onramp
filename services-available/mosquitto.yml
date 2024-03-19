@@ -1,5 +1,6 @@
 version: '3'
 
+# description: N mqtt broker for iot communication
 # https://hub.docker.com/_/eclipse-mosquitto
 
 services:

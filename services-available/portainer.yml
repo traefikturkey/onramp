@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Lightweight container management ui
 # https://github.com/portainer/portainer
 
 services:

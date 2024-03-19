@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Home automation and remote control system
 # https://github.com/ajnart/homarr
 
 services:

@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Note-taking and to-do app
 # https://joplinapp.org/
 # https://hub.docker.com/r/joplin/server
 # https://github.com/laurent22/joplin

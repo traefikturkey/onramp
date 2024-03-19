@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Manages alerts from prometheus monitoring
 # https://github.com/prometheus/alertmanager
 
   prometheus-alertmanager:

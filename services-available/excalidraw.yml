@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Collaborative whiteboard tool
 # https://excalidraw.com/
 # https://github.com/excalidraw and https://github.com/excalidraw/excalidraw
 # Keep in mind this version does not implement the sharable links

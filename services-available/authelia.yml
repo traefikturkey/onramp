@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Provides single sign-on (sso) and two-factor authentication (2fa) for web applications
 # https://github.com/authelia/authelia
 
 services:

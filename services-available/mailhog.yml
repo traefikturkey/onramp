@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Mail testing tool for developers
 # https://github.com/mailhog/MailHog
 
 services:

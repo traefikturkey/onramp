@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Self-hosted file-sharing platform
 # https://hub.docker.com/r/linuxserver/pwndrop
 
 services:

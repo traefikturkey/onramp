@@ -1,10 +1,13 @@
 [![Discord notification Action](https://github.com/traefikturkey/onramp/actions/workflows/alert-traefik-project.yml/badge.svg)](https://github.com/traefikturkey/onramp/actions/workflows/alert-traefik-project.yml)
-#### A docker-compose setup of common services with Traefik using Cloudflare dns-01 for letsencrypt certificates
+[![Generate Services List Action](https://github.com/traefikturkey/onramp/actions/workflows/update-services.yml/badge.svg)](https://github.com/traefikturkey/onramp/actions/workflows/update-services.yml)
+#### A docker-compose setup of [common services](SERVICES.md) with Traefik using Cloudflare dns-01 for letsencrypt certificates
+
+Here is a complete list of [available services](SERVICES.md) and [available games](SERVICES.md#available-games)
 
 This repo assumes that you are running a debian linux disto like Ubuntu!
 
 You'll need a personal domain that's setup with Cloudflare
-and an scoped API token created like so
+and an scoped API token created like shown below, [https://dash.cloudflare.com/profile/api-tokens](https://dash.cloudflare.com/profile/api-tokens) 
 
 ![Cloudflare api token](https://raw.githubusercontent.com/traefikturkey/onramp/master/documentation/assets/read%2Bedit-token.png "Cloudflare api token")
 

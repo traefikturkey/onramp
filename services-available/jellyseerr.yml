@@ -1,5 +1,6 @@
 version: "3"
 
+# description: Container for running jellyseerr, a torrent indexer
 # https://github.com/Fallenbagel/jellyseerr/tree/develop
 
 networks:

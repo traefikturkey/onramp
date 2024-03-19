@@ -1,9 +1,6 @@
 version: '3'
 
-networks:
-  traefik:
-    external: true
-
+# description: Collects metrics from proxmox virtual environment
 # https://github.com/ilude/prometheus-pve-exporter
 # https://github.com/prometheus-pve/prometheus-pve-exporter
 

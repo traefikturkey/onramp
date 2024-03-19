@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Dashboard for monitoring docker containers
 # https://github.com/MauriceNino/dashdot
 # https://getdashdot.com/
 

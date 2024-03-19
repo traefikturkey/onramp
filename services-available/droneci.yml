@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Continuous integration and delivery platform
 # https://github.com/harness/drone
 # https://docs.drone.io/server/provider/gitea/
 # https://docs.drone.io/runner/docker/installation/linux/

@@ -7,17 +7,19 @@ networks:
 volumes:
   ollama:
 
+# description: Media indexer for organizing and managing media files
 # https://hub.docker.com/r/ollama/ollama
 # https://github.com/ollama/ollama
 # https://github.com/ollama/ollama-python
 
-# docker exec -it ollama ollama run llama2    # https://ollama.com/library/llama2     [4 GB]
-# docker exec -it ollama ollama run llama2:chat     [4 GB]
-# docker exec -it ollama ollama run llama2:13b-chat [7.5 GB]
-# docker exec -it ollama ollama run mistral   # https://ollama.com/library/mistral    [4 GB]
-# docker exec -it ollama ollama run mixtral   # https://ollama.com/library/mixtral    [26 GB]
-# docker exec -it ollama ollama run codellama # https://ollama.com/library/codellama  [4 GB]
-# docker exec -it ollama ollama run openhermes [4 GB]
+# docker exec -it ollama ollama pull llama2    # https://ollama.com/library/llama2     [4 GB]
+# docker exec -it ollama ollama pull llama2:chat     [4 GB]
+# docker exec -it ollama ollama pull llama2:13b-chat [7.5 GB]
+# docker exec -it ollama ollama pull mistral   # https://ollama.com/library/mistral    [4 GB]
+# docker exec -it ollama ollama pull mixtral   # https://ollama.com/library/mixtral    [26 GB]
+# docker exec -it ollama ollama pull codellama # https://ollama.com/library/codellama  [4 GB]
+# docker exec -it ollama ollama pull openhermes [4 GB]
+# docker exec -it ollama ollama pull dolphin-mistral
 
 services:
   ollama:

@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Browser-based access to desktops, applications, and web services
 # https://hub.docker.com/r/linuxserver/kasm
 
 services:

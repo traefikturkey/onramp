@@ -4,6 +4,7 @@ networks:
   traefik:
     external: true
 
+# description: Self-hosted push notification service
 # https://github.com/gotify/server
 
 services:

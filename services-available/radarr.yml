@@ -4,6 +4,8 @@ networks:
   traefik:
     external: true
 
+# description: Manages movie collections and downloads
+# description: Manages movie collections and downloads
 # https://hub.docker.com/r/linuxserver/radarr
 
 services:
