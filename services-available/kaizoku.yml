@@ -12,7 +12,6 @@ volumes:
 # https://github.com/oae/kaizoku
 # https://komga.org/docs/installation/docker/
 
-
 services:
   kaizoku:
     image: ghcr.io/oae/kaizoku:${KAIZOKU_DOCKER_TAG:-v1.6.1} # may need to be updated at some point. latest had issues when I tried.
@@ -44,7 +43,6 @@ services:
       - traefik.http.routers.kaizoku.entrypoints=websecure
       - traefik.http.routers.kaizoku.rule=Host(`${KAIZOKU_CONTAINER_NAME:-kaizoku}.${HOST_DOMAIN}`)
       - traefik.http.routers.kaizoku.middlewares=default-headers@file
-      #- traefik.http.services.kaizoku.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.kaizoku.loadbalancer.server.port=3000
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true

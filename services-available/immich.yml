@@ -1,6 +1,6 @@
 version: '3'
 # description: Container for running immich, a web-based image viewer
-#https://immich.app/docs/install/environment-variables
+# https://immich.app/docs/install/environment-variables
 
 networks:
   traefik:
