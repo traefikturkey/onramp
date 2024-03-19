@@ -17,4 +17,5 @@ jobs:
 
       - name: Generate Services Markdown
         run: |
+          chmod +x .github/scripts/generate-services-markdown.sh
           ./github/scripts/generate-services-markdown.sh
