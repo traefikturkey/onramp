@@ -4,7 +4,8 @@ on:
   push:
     paths:
       - 'services-available/**/*.yml'
-      - '.github/workflows/update-services.yml'
+      - '.github/workflows/generate-services-markdown.yml'
+      - '.github/scripts/generate-services-markdown.yml'
 
 jobs:
 
