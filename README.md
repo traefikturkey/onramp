@@ -1,6 +1,8 @@
 [![Discord notification Action](https://github.com/traefikturkey/onramp/actions/workflows/alert-traefik-project.yml/badge.svg)](https://github.com/traefikturkey/onramp/actions/workflows/alert-traefik-project.yml)
 #### A docker-compose setup of common services with Traefik using Cloudflare dns-01 for letsencrypt certificates
 
+Here is a complete list of [available services](SERVICES.md)
+
 This repo assumes that you are running a debian linux disto like Ubuntu!
 
 You'll need a personal domain that's setup with Cloudflare
