@@ -5,6 +5,7 @@ networks:
     external: true
 
 # description: Self-hosted metasearch engine
+# https://github.com/searxng/searxng-docker
 # Copy the settings template in etc/searxng and save it as settings.yml in the same directory.
 # Make sure you change the secret key.
 
