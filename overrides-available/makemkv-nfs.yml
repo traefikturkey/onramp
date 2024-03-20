@@ -11,7 +11,6 @@ volumes:
 services:
   makemkv:
     volumes:
-    volumes:
       - ./etc/makemkv:/config
       - ${MAKEMKV_MEDIA_VOLUME:-makemkv-nfs-media}:${MAKEMKV_MEDIA_PATH:-/output}
       - /etc/timezone:/etc/timezone:ro
