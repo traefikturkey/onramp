@@ -22,4 +22,4 @@ jobs:
           pwd
           echo "Running generate-services-markdown.sh"
           
-          ./github/scripts/generate-services-markdown.sh
+          .github/scripts/generate-services-markdown.sh
