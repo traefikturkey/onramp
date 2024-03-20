@@ -62,7 +62,7 @@ environments-enabled/onramp.env:
 	@echo ""
 	@python3 scripts/env-subst.py environments-available/onramp.template "ONRAMP"
 
-EXECUTABLES = git nano jq yq pip yamllint
+EXECUTABLES = git nano jq yq pip yamllint python3-pathspec
 MISSING_PACKAGES := $(foreach exec,$(EXECUTABLES),$(if $(shell which $(exec)),,addpackage-$(exec)))
 
 addrepositories:
