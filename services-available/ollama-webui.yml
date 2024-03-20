@@ -22,7 +22,7 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
-      - OLLAMA_API_BASE_URL=https://${OLLAMA_CONTAINER_NAME:-ollama}.${HOST_DOMAIN}/api
+      - OLLAMA_BASE_URLS=https://${OLLAMA_CONTAINER_NAME:-ollama}.${HOST_DOMAIN}
     labels:
       - joyride.host.name=${OLLAMA_WEBUI_CONTAINER_NAME:-chat}.${HOST_DOMAIN}
       - traefik.enable=true
