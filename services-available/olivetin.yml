@@ -4,7 +4,7 @@ networks:
   traefik:
     external: true
 
-# description: Container for running olivetin, a web-based note-taking app
+# description: Access predefined shell commands from a web interface.
 # https://github.com/OliveTin/OliveTin
 
 services:
