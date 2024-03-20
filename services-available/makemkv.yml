@@ -1,0 +1,35 @@
+version: '3'
+
+networks:
+  traefik:
+    external: true
+
+# description: Fully automated container for MakeMKV with Web GUI
+# https://hub.docker.com/r/jlesage/makemkv
+
+services:
+  makemkv:
+    image: jlesage/makemkv:${MAKEMKV_DOCKER_TAG:-latest}
+    container_name: ${MAKEMKV_CONTAINER_NAME:-makemkv}
+    restart: ${MAKEMKV_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/makemkv:/config
+      - ${MAKEMKV_OUTPUT_DIR:-./media/videos}:/output
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    devices:
+      - ${MAKEMKV_OPTICAL_DRIVE:-/dev/sr0}:${MAKEMKV_OPTICAL_DRIVE:-/dev/sr0}
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=${MAKEMKV_CONTAINER_NAME:-makemkv}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.makemkv.entrypoints=websecure
+      - traefik.http.routers.makemkv.rule=Host(`${MAKEMKV_CONTAINER_NAME:-makemkv}.${HOST_DOMAIN}`)
+      - traefik.http.services.makemkv.loadbalancer.server.port=5800
+      - com.centurylinklabs.watchtower.enable=true
+      - autoheal=true
