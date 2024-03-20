@@ -25,10 +25,6 @@ services:
       - 5432:5432
     labels:
       - joyride.host.name=${POSTGRES_CONTAINER_NAME:-postgres}.${HOST_DOMAIN}
-      - traefik.enable=true
-      # - traefik.tcp.routers.postgres.rule=HostSNI(`${POSTGRES_CONTAINER_NAME:-postgres}.${HOST_DOMAIN}`)
-      # - traefik.tcp.routers.postgres.tls=true
-      # - traefik.tcp.routers.postgres.tls.certresolver=letsencrypt
-      # - traefik.tcp.routers.postgres.entrypoints=database
+      - traefik.enable=false
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true

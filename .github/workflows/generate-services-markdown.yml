@@ -1,0 +1,28 @@
+name: Generate Services Markdown
+
+on:
+  push:
+    paths:
+      - 'services-available/**/*.yml'
+      - '.github/workflows/generate-services-markdown.yml'
+      - '.github/scripts/generate-services-markdown.yml'
+
+jobs:
+
+  generate-services-markdown:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Generate Services Markdown
+        run: |      
+          .github/scripts/generate-services-markdown.sh
+      
+      - name: Commit Services Markdown
+        run: |
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'actions@github.com'
+          git add ./SERVICES.md
+          git commit -m "Update services.md" || echo "No changes to commit"
+          git push

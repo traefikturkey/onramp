@@ -8,7 +8,7 @@ networks:
 
 services:
   mealie:
-    image: hkotel/mealie:${MEALIE_DOCKER_TAG:-omni-nightly
+    image: hkotel/mealie:${MEALIE_DOCKER_TAG:-omni-nightly}
     container_name: ${MEALIE_CONTAINER_NAME:-mealie}
     restart: ${MEALIE_RESTART:-unless-stopped}
     networks:

@@ -1,4 +1,5 @@
 # Available Services
+169 services and counting...
 
 
 - [adguard](https://github.com/AdguardTeam/AdGuardHome): Network-wide ad blocker and privacy tool
@@ -6,7 +7,7 @@
 - [apprise](https://hub.docker.com/r/linuxserver/apprise-api): Notification framework that supports various services
 - [audiobookshelf](https://hub.docker.com/r/advplyr/audiobookshelf): Manages and serves audiobooks
 - [authelia](https://github.com/authelia/authelia): Provides single sign-on (sso) and two-factor authentication (2fa) for web applications
-- [authentik](https://goauthentik.io/docs/installation/docker-compose): N identity and access management solution
+- [authentik](https://goauthentik.io/docs/installation/docker-compose): identity and access management solution
 - [autoheal](https://github.com/willfarrell/docker-autoheal): Restarts unhealthy docker containers automatically
 - [autokuma](https://github.com/BigBoot/AutoKuma): Kubernetes monitoring and alerting tool
 - [avahi](https://github.com/MattKobayashi/docker-avahi): Implements mdns/dns-sd for local network service discovery
@@ -86,9 +87,11 @@
 - [nextcloud](https://github.com/linuxserver/docker-nextcloud): Powerful self-hosted file sync and sharing platform
 - [nodered](https://hub.docker.com/r/nodered/node-red/): Flow-based development tool for visual programming
 - [nzbget](https://hub.docker.com/r/linuxserver/nzbget): Binary newsgrabber for usenet
-- [olivetin](https://github.com/OliveTin/OliveTin): Container for running olivetin, a web-based note-taking app
+- [olivetin](https://github.com/OliveTin/OliveTin): Access predefined shell commands from a web interface.
+- [ollama-amd](https://hub.docker.com/r/ollama/ollama): Easy way to run large language models locally - AMD GPU
+- [ollama-cpu](https://hub.docker.com/r/ollama/ollama): Easy way to run large language models locally - CPU only
+- [ollama-nvidia](https://hub.docker.com/r/ollama/ollama): Eeasy way to run large language models locally - Nvidia GPU
 - [ollama-webui](https://github.com/open-webui/open-webui): Web-based user interface for ollama, a media indexer
-- [ollama](https://hub.docker.com/r/ollama/ollama): Media indexer for organizing and managing media files
 - [omada](https://hub.docker.com/r/mbentley/omada-controller): Container for running tp-link omada controller
 - [openspeedtest](https://github.com/openspeedtest/Docker-Image): Network Performance Estimation Tool
 - [overseerr](https://hub.docker.com/r/linuxserver/overseerr): Request management and notification system for media content
@@ -139,7 +142,7 @@
 - [snapdrop](https://hub.docker.com/r/linuxserver/snapdrop): Web-based file sharing tool for local networks
 - [sonarr](https://hub.docker.com/r/linuxserver/sonarr): Manages tv show collections and downloads
 - [stirling-pdf](https://github.com/Stirling-Tools/Stirling-PDF): Container for running stirling pdf, a web-based pdf viewer
-- [streaming-serach](https://github.com/Colaski/global-streaming-search): Container for running streaming search, a media indexer
+- [streaming-search](https://github.com/Colaski/global-streaming-search): Container for running streaming search, a media indexer
 - [super-productivity](https://github.com/johannesjo/super-productivity): Time and task management app
 - [synapse](https://github.com/matrix-org/synapse): Matrix communication server
 - [syncthing](https://hub.docker.com/r/linuxserver/syncthing): Decentralized file synchronization tool
@@ -170,6 +173,7 @@
 - [youtube-dl](https://github.com/nbr23/youtube-dl-server): Command-line program to download videos from youtube and other sites
 
 # Available Games
+10 games and counting...
 
 
 - [factorio](https://hub.docker.com/r/goofball222/factorio): Factorio is a game about building and managing factories on an alien planet
