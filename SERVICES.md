@@ -1,4 +1,5 @@
 # Available Services
+167 services and counting...
 
 
 - [adguard](https://github.com/AdguardTeam/AdGuardHome): Network-wide ad blocker and privacy tool
@@ -6,7 +7,7 @@
 - [apprise](https://hub.docker.com/r/linuxserver/apprise-api): Notification framework that supports various services
 - [audiobookshelf](https://hub.docker.com/r/advplyr/audiobookshelf): Manages and serves audiobooks
 - [authelia](https://github.com/authelia/authelia): Provides single sign-on (sso) and two-factor authentication (2fa) for web applications
-- [authentik](https://goauthentik.io/docs/installation/docker-compose): N identity and access management solution
+- [authentik](https://goauthentik.io/docs/installation/docker-compose): identity and access management solution
 - [autoheal](https://github.com/willfarrell/docker-autoheal): Restarts unhealthy docker containers automatically
 - [autokuma](https://github.com/BigBoot/AutoKuma): Kubernetes monitoring and alerting tool
 - [avahi](https://github.com/MattKobayashi/docker-avahi): Implements mdns/dns-sd for local network service discovery
@@ -170,6 +171,7 @@
 - [youtube-dl](https://github.com/nbr23/youtube-dl-server): Command-line program to download videos from youtube and other sites
 
 # Available Games
+10 games and counting...
 
 
 - [factorio](https://hub.docker.com/r/goofball222/factorio): Factorio is a game about building and managing factories on an alien planet
