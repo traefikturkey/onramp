@@ -41,7 +41,7 @@ install: build install-docker
 	cp --no-clobber .templates/env.template .env
 	$(EDITOR) .env
 
-EXECUTABLES = git nano jq yq pip yamllint
+EXECUTABLES = git nano jq yq pip yamllint python3-pathspec
 MISSING_PACKAGES := $(foreach exec,$(EXECUTABLES),$(if $(shell which $(exec)),,addpackage-$(exec)))
 
 addrepositories:
