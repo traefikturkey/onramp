@@ -140,7 +140,7 @@
 - [snapdrop](https://hub.docker.com/r/linuxserver/snapdrop): Web-based file sharing tool for local networks
 - [sonarr](https://hub.docker.com/r/linuxserver/sonarr): Manages tv show collections and downloads
 - [stirling-pdf](https://github.com/Stirling-Tools/Stirling-PDF): Container for running stirling pdf, a web-based pdf viewer
-- [streaming-serach](https://github.com/Colaski/global-streaming-search): Container for running streaming search, a media indexer
+- [streaming-search](https://github.com/Colaski/global-streaming-search): Container for running streaming search, a media indexer
 - [super-productivity](https://github.com/johannesjo/super-productivity): Time and task management app
 - [synapse](https://github.com/matrix-org/synapse): Matrix communication server
 - [syncthing](https://hub.docker.com/r/linuxserver/syncthing): Decentralized file synchronization tool
