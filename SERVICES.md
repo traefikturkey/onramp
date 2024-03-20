@@ -1,5 +1,5 @@
 # Available Services
-169 services and counting...
+170 services and counting...
 
 
 - [adguard](https://github.com/AdguardTeam/AdGuardHome): Network-wide ad blocker and privacy tool
@@ -75,6 +75,7 @@
 - [lychee](https://github.com/LycheeOrg/Lychee-Docker): Photo management and sharing platform
 - [mailhog](https://github.com/mailhog/MailHog): Mail testing tool for developers
 - [mailrise](https://github.com/YoRyan/mailrise): Self-hosted email marketing platform
+- [makemkv](https://hub.docker.com/r/jlesage/makemkv): Fully automated container for MakeMKV with Web GUI
 - [mariadb](https://hub.docker.com/_/mariadb): Popular open-source relational database management system
 - [mealie](https://hay-kot.github.io/mealie/documentation/getting-started/install/): Recipe management system
 - [minio](https://github.com/minio/minio): High-performance object storage server
