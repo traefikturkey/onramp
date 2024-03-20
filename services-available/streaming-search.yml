@@ -8,7 +8,7 @@ networks:
 # https://github.com/Colaski/global-streaming-search
 
 services:
-  streaming-serach:
+  streaming-search:
     image: colaski/global-streaming-search:${STREAMING_SERACH_DOCKER_TAG:-latest}
     container_name: ${STREAMING_SERACH_CONTAINER_NAME:-streaming-serach}
     restart: ${STREAMING_SERACH_RESTART:-unless-stopped}
