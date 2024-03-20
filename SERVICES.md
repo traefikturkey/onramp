@@ -1,5 +1,5 @@
 # Available Services
-167 services and counting...
+169 services and counting...
 
 
 - [adguard](https://github.com/AdguardTeam/AdGuardHome): Network-wide ad blocker and privacy tool
@@ -88,8 +88,10 @@
 - [nodered](https://hub.docker.com/r/nodered/node-red/): Flow-based development tool for visual programming
 - [nzbget](https://hub.docker.com/r/linuxserver/nzbget): Binary newsgrabber for usenet
 - [olivetin](https://github.com/OliveTin/OliveTin): Access predefined shell commands from a web interface.
+- [ollama-amd](https://hub.docker.com/r/ollama/ollama): Easy way to run large language models locally - AMD GPU
+- [ollama-cpu](https://hub.docker.com/r/ollama/ollama): Easy way to run large language models locally - CPU only
+- [ollama-nvidia](https://hub.docker.com/r/ollama/ollama): Eeasy way to run large language models locally - Nvidia GPU
 - [ollama-webui](https://github.com/open-webui/open-webui): Web-based user interface for ollama, a media indexer
-- [ollama](https://hub.docker.com/r/ollama/ollama): Media indexer for organizing and managing media files
 - [omada](https://hub.docker.com/r/mbentley/omada-controller): Container for running tp-link omada controller
 - [openspeedtest](https://github.com/openspeedtest/Docker-Image): Network Performance Estimation Tool
 - [overseerr](https://hub.docker.com/r/linuxserver/overseerr): Request management and notification system for media content
