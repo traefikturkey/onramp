@@ -87,7 +87,7 @@
 - [nextcloud](https://github.com/linuxserver/docker-nextcloud): Powerful self-hosted file sync and sharing platform
 - [nodered](https://hub.docker.com/r/nodered/node-red/): Flow-based development tool for visual programming
 - [nzbget](https://hub.docker.com/r/linuxserver/nzbget): Binary newsgrabber for usenet
-- [olivetin](https://github.com/OliveTin/OliveTin): Container for running olivetin, a web-based note-taking app
+- [olivetin](https://github.com/OliveTin/OliveTin): Access predefined shell commands from a web interface.
 - [ollama-webui](https://github.com/open-webui/open-webui): Web-based user interface for ollama, a media indexer
 - [ollama](https://hub.docker.com/r/ollama/ollama): Media indexer for organizing and managing media files
 - [omada](https://hub.docker.com/r/mbentley/omada-controller): Container for running tp-link omada controller
