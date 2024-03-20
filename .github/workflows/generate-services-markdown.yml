@@ -16,10 +16,13 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Generate Services Markdown
-        run: |
-          chmod +x .github/scripts/generate-services-markdown.sh
-          ls -lha .github/scripts
-          pwd
-          echo "Running generate-services-markdown.sh"
-          
+        run: |      
           .github/scripts/generate-services-markdown.sh
+      
+      - name: Commit Services Markdown
+        run: |
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'actions@github.com'
+          git add ./SERVICES.md
+          git commit -m "Update services.md" || echo "No changes to commit"
+          git push
