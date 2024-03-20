@@ -18,8 +18,8 @@ jobs:
       - name: Generate Services Markdown
         run: |
           chmod +x .github/scripts/generate-services-markdown.sh
-          echo $(ls -lh)
-          echo "$(pwd)"
+          ls -lha
+          pwd
           echo "Running generate-services-markdown.sh"
           
           ./github/scripts/generate-services-markdown.sh
