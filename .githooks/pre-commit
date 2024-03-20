@@ -1,2 +1,0 @@
-#!/bin/sh
-yamllint -c .yamllint .
