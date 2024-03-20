@@ -25,6 +25,7 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
+      - DARK_MODE=${MAKEMKV_DARK_MODE:-1}
     labels:
       - joyride.host.name=${MAKEMKV_CONTAINER_NAME:-makemkv}.${HOST_DOMAIN}
       - traefik.enable=true
