@@ -57,7 +57,7 @@
 - [homebox](https://hay-kot.github.io/homebox/): Dashboard for managing self-hosted services
 - [homepage](https://github.com/gethomepage/homepage/): Customizable start page for web browsers
 - [homer](https://hub.docker.com/r/b4bz/homer): Self-hosted bookmark manager
-- [immich](https://immich.app/docs/install/environment-variables): Container for running immich, a web-based image viewer
+- [immich](https://immich.app/docs/install/environment-variables): Container for running immich, a self-hosted Google Photos alternative.
 - [influxdb](https://hub.docker.com/_/influxdb): Time-series database for metrics and events
 - [itflow](https://itflow.org/): Workflow automation tool
 - [jellyfin](https://hub.docker.com/r/linuxserver/jellyfin): Media server for streaming content
