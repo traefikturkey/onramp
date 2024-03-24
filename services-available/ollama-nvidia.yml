@@ -4,21 +4,25 @@ networks:
   traefik:
     external: true
 
-volumes:
-  ollama:
-
 # description: Eeasy way to run large language models locally - Nvidia GPU
 # https://hub.docker.com/r/ollama/ollama
 # https://github.com/ollama/ollama
 
-# docker exec -it ollama ollama pull llama2           # https://ollama.com/library/llama2     [4 GB]
-# docker exec -it ollama ollama pull llama2:chat      # [4 GB]
-# docker exec -it ollama ollama pull llama2:13b-chat  # [7.5 GB]
-# docker exec -it ollama ollama pull mistral          # https://ollama.com/library/mistral    [4 GB]
-# docker exec -it ollama ollama pull mixtral          # https://ollama.com/library/mixtral    [26 GB]
-# docker exec -it ollama ollama pull codellama        # https://ollama.com/library/codellama  [4 GB]
-# docker exec -it ollama ollama pull openhermes       # [4 GB]
-# docker exec -it ollama ollama pull dolphin-mistral
+# docker exec -it ollama ollama pull llama2               # https://ollama.com/library/llama2     [4 GB]
+# docker exec -it ollama ollama pull llama2:chat          # [4 GB]
+# docker exec -it ollama ollama pull llama2:13b-chat      # [7.5 GB]
+# docker exec -it ollama ollama pull mistral              # https://ollama.com/library/mistral    [4 GB]
+# docker exec -it ollama ollama pull mixtral              # https://ollama.com/library/mixtral    [26 GB]
+# docker exec -it ollama ollama pull codellama            # https://ollama.com/library/codellama  [4 GB]
+# docker exec -it ollama ollama pull codellama:7b-python
+# docker exec -it ollama ollama pull openhermes           # [4 GB]
+# docker exec -it ollama ollama pull dolphin-mistral      # https://ollama.com/library/dolphin-mistral [4 GB]
+# docker exec -it ollama ollama pull dolphin-mixtral      # https://ollama.com/library/dolphin-mixtral [26GB]
+# docker exec -it ollama ollama pull stable-code
+# docker exec -it ollama ollama pull dolphincoder
+# docker exec -it ollama ollama pull tinydolphin
+# docker exec -it ollama ollama pull sqlcoder
+
 
 services:
   ollama:
@@ -28,7 +32,7 @@ services:
     networks:
       - traefik
     volumes:
-      - ollama:/root/.ollama
+      - ${OLLAMA_DATA_PATH:-./media/ollama}:/root/.ollama
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
