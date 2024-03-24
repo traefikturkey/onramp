@@ -360,3 +360,5 @@ include make.d/testing.mk
 include make.d/checks.mk
 
 include make.d/help.mk
+
+include make.d/ai.mk
