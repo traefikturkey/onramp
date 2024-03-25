@@ -3,26 +3,12 @@
 ## install commands
 ##
 #########################################################
-distro := $(shell lsb_release -is)
-
-
-check-distro: ## check distro
-	@echo $(distro)
-
-
-ifeq ($(distro),Ubuntu)
-    ANSIBLE_APT_ADD_REPO := sudo apt-add-repository ppa:ansible/ansible -y
-    YQ_APT_ADD_REPO 	 := sudo apt-add-repository ppa:rmescandon/yq -y
-else
-    YQ_APT_ADD_REPO      :=
-    ANSIBLE_APT_ADD_REPO :=
-endif
-
 ACME_JSON_FILE := ./etc/traefik/letsencrypt/acme.json
 ACME_JSON_PERMS := 600
+export DEBIAN_FRONTEND = noninteractive
 
 ifneq ("$(wildcard $(ACME_JSON_FILE))","")
-    BUILD_DEPENDENCIES += fix-acme-json-permissions
+  BUILD_DEPENDENCIES += fix-acme-json-permissions
 endif
 
 fix-acme-json-permissions:
@@ -62,27 +48,28 @@ environments-enabled/onramp.env:
 	@echo ""
 	@python3 scripts/env-subst.py environments-available/onramp.template "ONRAMP"
 
-EXECUTABLES = git nano jq yq pip yamllint python3-pathspec
-MISSING_PACKAGES := $(foreach exec,$(EXECUTABLES),$(if $(shell which $(exec)),,addpackage-$(exec)))
+REPOS = rmescandon/yq ansible/ansible
+MISSING_REPOS := $(foreach repo,$(REPOS),$(if $(shell apt-cache policy | grep $(repo)),,addrepo/$(repo)))
 
-addrepositories:
-	$(YQ_APT_ADD_REPO)
-	sudo apt update
+EXECUTABLES = git nano jq yq python3-pip yamllint python3-pathspec ansible 
+MISSING_PACKAGES := $(foreach exec,$(EXECUTABLES),$(if $(shell dpkg -s "$(exec)" &> /dev/null),,addpackage-$(exec)))
 
-addpackage-%: addrepositories
-	DEBIAN_FRONTEND=noninteractive sudo apt install $* -y
+# duck you debian
+addrepo/%:
+	@if [ "$(shell lsb_release -si | tail -n 1)" = "Ubuntu" ]; then \
+		sudo apt-add-repository ppa:$* -y; \
+	fi
 
-install-dependencies: .gitconfig $(MISSING_PACKAGES)
+addpackage-%: 
+	sudo apt install $* -y
+
+install-dependencies: .gitconfig $(MISSING_REPOS) $(MISSING_PACKAGES) 
 
 .gitconfig:
 	git config -f .gitconfig core.hooksPath .githooks
 	git config --local include.path $(shell pwd)/.gitconfig
 
-install-ansible:
-	#sudo apt-add-repository ppa:ansible/ansible -y
-	$(APT_ADD_REPO)	
-	sudo apt update
-	sudo apt install ansible -y
+install-ansible: install-dependencies
 	@echo "Installing ansible roles requirements..."
 	ansible-playbook ansible/ansible-requirements.yml
 

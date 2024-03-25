@@ -95,6 +95,8 @@
 - [ollama-nvidia](https://hub.docker.com/r/ollama/ollama): Eeasy way to run large language models locally - Nvidia GPU
 - [ollama-webui](https://github.com/open-webui/open-webui): Web-based user interface for ollama, a media indexer
 - [omada](https://hub.docker.com/r/mbentley/omada-controller): Container for running tp-link omada controller
+- [onboard](https://github.com/traefikturkey/onboard): An RSS and Bookmarks Dashboard 
+- [ongoing](https://github.com/traefikturkey/ongoing): A self hosted url expander (opposite of url shortener)
 - [openspeedtest](https://github.com/openspeedtest/Docker-Image): Network Performance Estimation Tool
 - [overseerr](https://hub.docker.com/r/linuxserver/overseerr): Request management and notification system for media content
 - [owncast](https://github.com/owncast/owncast): Self-hosted live video streaming server
