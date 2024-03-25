@@ -30,7 +30,7 @@ install: build install-docker
 REPOS = rmescandon/yq ansible/ansible
 MISSING_REPOS := $(foreach repo,$(REPOS),$(if $(shell apt-cache policy | grep $(repo)),,addrepo/$(repo)))
 
-EXECUTABLES = git nano jq yq python3-pip yamllint python3-pathspec ansible
+EXECUTABLES = git nano jq yq python3-pip yamllint python3-pathspec ansible software-properties-common
 MISSING_PACKAGES := $(foreach exec,$(EXECUTABLES),$(if $(shell dpkg -s "$(exec)" &> /dev/null),,addpackage-$(exec)))
 
 addrepo/%:
