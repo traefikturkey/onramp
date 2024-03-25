@@ -1,5 +1,5 @@
 # Available Services
-173 services and counting...
+175 services and counting...
 
 
 - [adguard](https://github.com/AdguardTeam/AdGuardHome): Network-wide ad blocker and privacy tool
