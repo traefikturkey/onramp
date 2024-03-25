@@ -1,2 +1,3 @@
 #!/bin/sh
+echo "Running pre-commit hook yamllint..."
 yamllint -c .yamllint .
