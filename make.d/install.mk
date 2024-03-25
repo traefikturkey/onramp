@@ -27,21 +27,17 @@ install: build install-docker
 	cp --no-clobber .templates/env.template .env
 	$(EDITOR) .env
 
-# fuck you debian
-ifeq ($(shell lsb_release -si),"Ubuntu")
-	REPOS = rmescandon/yq ansible/ansible
-else
-	REPOS = ansible/ansible
-endif
-
 REPOS = rmescandon/yq ansible/ansible
 MISSING_REPOS := $(foreach repo,$(REPOS),$(if $(shell apt-cache policy | grep $(repo)),,addrepo/$(repo)))
 
 EXECUTABLES = git nano jq yq python3-pip yamllint python3-pathspec ansible 
 MISSING_PACKAGES := $(foreach exec,$(EXECUTABLES),$(if $(shell dpkg -s "$(exec)" &> /dev/null),,addpackage-$(exec)))
 
+# duck you debian
 addrepo/%:
-	sudo apt-add-repository ppa:$* -y
+	@if [ "$(shell lsb_release -si | tail -n 1)" = "Ubuntu" ]; then \
+		sudo apt-add-repository ppa:$* -y; \
+	fi
 
 addpackage-%: 
 	sudo apt install $* -y
