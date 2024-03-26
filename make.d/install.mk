@@ -7,6 +7,12 @@ ACME_JSON_FILE := ./etc/traefik/letsencrypt/acme.json
 ACME_JSON_PERMS := 600
 export DEBIAN_FRONTEND = noninteractive
 
+
+# Silence absent and/or empty Ansible inventory warnings
+# https://stackoverflow.com/a/59940796/1973777
+export ANSIBLE_LOCALHOST_WARNING = False
+export ANSIBLE_INVENTORY_UNPARSED_WARNING = False
+
 ifneq ("$(wildcard $(ACME_JSON_FILE))","")
   BUILD_DEPENDENCIES += fix-acme-json-permissions
 endif
@@ -43,6 +49,9 @@ addpackage-%:
 	sudo apt install $* -y
 
 install-dependencies: .gitconfig $(MISSING_REPOS) $(MISSING_PACKAGES) 
+	sudo apt update
+	sudo apt full-upgrade -y
+	sudo apt autoremove -y
 
 .gitconfig:
 	git config -f .gitconfig core.hooksPath .githooks

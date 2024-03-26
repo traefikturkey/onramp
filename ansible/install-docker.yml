@@ -14,3 +14,64 @@
       - "{{ lookup('env','USER') }}"
   roles:
     - geerlingguy.docker
+
+  tasks:
+    # https://code.visualstudio.com/docs/setup/linux#_visual-studio-code-is-unable-to-watch-for-file-changes-in-this-large-workspace-error-enospc
+    - name: Set fs.inotify.max_user_watches
+      sysctl:
+        name: fs.inotify.max_user_watches
+        value: '524288'
+        sysctl_file: /etc/sysctl.conf
+
+    - name: Set net.core.somaxconn
+      sysctl:
+        name: net.core.somaxconn
+        value: '1024'
+        sysctl_file: /etc/sysctl.conf
+
+    - name: Set vm.max_map_count
+      sysctl:
+        name: vm.max_map_count
+        value: '262144'
+        sysctl_file: /etc/sysctl.conf
+
+    - name: Set vm.overcommit_memory
+      sysctl:
+        name: vm.overcommit_memory
+        value: '1'
+        sysctl_file: /etc/sysctl.conf
+
+    - name: Set vm.swappiness
+      sysctl:
+        name: vm.swappiness
+        value: '1'
+        sysctl_file: /etc/sysctl.conf
+    
+    - name: Create disable-hugepages.service file
+      become: true
+      lineinfile:
+        path: /etc/systemd/system/disable-hugepages.service
+        line: |
+          [Unit]
+          Description="Disable Transparent Hugepage"
+          Before=docker.service
+          [Service]
+          Type=oneshot
+          ExecStart=/bin/bash -c 'echo never > /sys/kernel/mm/transparent_hugepage/enabled'
+          ExecStart=/bin/bash -c 'echo never > /sys/kernel/mm/transparent_hugepage/defrag'
+          [Install]
+          RequiredBy=docker.service
+        create: yes
+        mode: '0644'
+
+    - name: Enable and start disable-hugepages.service
+      become: true
+      systemd:
+        name: disable-hugepages
+        enabled: true
+        state: started
+
+    - name: Reload systemd
+      become: true
+      systemd:
+        daemon_reload: true
