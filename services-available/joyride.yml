@@ -13,7 +13,7 @@ version: '3'
 
 services:
   joyride:
-    image: ghcr.io/ilude/joyride:${JOYRIDE_DOCKER_TAG:-latest}
+    image: ghcr.io/traefikturkey/joyride:${JOYRIDE_DOCKER_TAG:-latest}
     container_name: ${JOYRIDE_CONTAINER_NAME:-joyride}
     restart: ${JOYRIDE_RESTART:-unless-stopped}
     environment:
