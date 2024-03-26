@@ -8,7 +8,7 @@ networks:
 # https://github.com/amir20/dozzle
 
 services:
-  dozzle-host:
+  dozzle:
     image: amir20/dozzle:${DOZZLE_DOCKER_TAG:-latest}
     container_name: ${DOZZLE_CONTAINER_NAME:-dozzle}
     restart: ${DOZZLE_RESTART:-unless-stopped}
