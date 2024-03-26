@@ -34,7 +34,12 @@ install: build install-docker
 	$(EDITOR) .env
 
 REPOS = rmescandon/yq ansible/ansible
-MISSING_REPOS := $(foreach repo,$(REPOS),$(if $(shell apt-cache policy | grep $(repo)),,addrepo/$(repo)))
+MISSING_REPOS := $(foreach repo,$(REPOS),$(if $(shell apt-cache policy | grep $(repo)),,addrepo/$(repo))) 
+
+# If it's not empty, add a value to it
+ifneq ($(strip $(MISSING_REPOS)),)
+    MISSING_REPOS += update-distro
+endif
 
 EXECUTABLES = git nano jq yq python3-pip yamllint python3-pathspec ansible 
 MISSING_PACKAGES := $(foreach exec,$(EXECUTABLES),$(if $(shell dpkg -s "$(exec)" &> /dev/null),,addpackage-$(exec)))
@@ -48,10 +53,12 @@ addrepo/%:
 addpackage-%: 
 	sudo apt install $* -y
 
-install-dependencies: .gitconfig $(MISSING_REPOS) $(MISSING_PACKAGES) 
+update-distro:
 	sudo apt update
 	sudo apt full-upgrade -y
 	sudo apt autoremove -y
+
+install-dependencies: .gitconfig $(MISSING_REPOS) $(MISSING_PACKAGES) 
 
 .gitconfig:
 	git config -f .gitconfig core.hooksPath .githooks
