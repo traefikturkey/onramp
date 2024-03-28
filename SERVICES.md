@@ -28,8 +28,9 @@
 - [dashdot](https://github.com/MauriceNino/dashdot): Dashboard for monitoring docker containers
 - [dashy](https://github.com/Lissy93/dashy): Customizable dashboard for displaying information
 - [docker-proxy](https://github.com/Tecnativa/docker-socket-proxy): Proxy for docker containers
-- [dozzle-host](https://github.com/amir20/dozzle): Web-based docker container log viewer
+- docker-registry: <= put a brief description of docker-registry here =>
 - [dozzle-path](https://github.com/amir20/dozzle): Path-based reverse proxy for dozzle
+- [dozzle](https://github.com/amir20/dozzle): Web-based docker container log viewer
 - [droneci](https://github.com/harness/drone): Continuous integration and delivery platform
 - [duplicati](https://www.duplicati.com/): Backs up files and folders to various storage destinations
 - [excalidraw](https://excalidraw.com/): Collaborative whiteboard tool
@@ -63,7 +64,6 @@
 - [jellyfin](https://hub.docker.com/r/linuxserver/jellyfin): Media server for streaming content
 - [jellyseerr](https://github.com/Fallenbagel/jellyseerr/tree/develop): Container for running jellyseerr, a torrent indexer
 - [joplin](https://joplinapp.org/): Note-taking and to-do app
-- [joyride-host](https://github.com/ilude/joyride): Container for running joyride, a web-based dashboard
 - [joyride](https://github.com/ilude/joyride): Web-based dashboard for monitoring services
 - [kaizoku](https://github.com/oae/kaizoku): Web-based anime downloader
 - [kasm](https://hub.docker.com/r/linuxserver/kasm): Browser-based access to desktops, applications, and web services
