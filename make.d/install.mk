@@ -7,6 +7,12 @@ ACME_JSON_FILE := ./etc/traefik/letsencrypt/acme.json
 ACME_JSON_PERMS := 600
 export DEBIAN_FRONTEND = noninteractive
 
+
+# Silence absent and/or empty Ansible inventory warnings
+# https://stackoverflow.com/a/59940796/1973777
+export ANSIBLE_LOCALHOST_WARNING = False
+export ANSIBLE_INVENTORY_UNPARSED_WARNING = False
+
 ifneq ("$(wildcard $(ACME_JSON_FILE))","")
   BUILD_DEPENDENCIES += fix-acme-json-permissions
 endif
@@ -49,7 +55,12 @@ environments-enabled/onramp.env:
 	@python3 scripts/env-subst.py environments-available/onramp.template "ONRAMP"
 
 REPOS = rmescandon/yq ansible/ansible
-MISSING_REPOS := $(foreach repo,$(REPOS),$(if $(shell apt-cache policy | grep $(repo)),,addrepo/$(repo)))
+MISSING_REPOS := $(foreach repo,$(REPOS),$(if $(shell apt-cache policy | grep $(repo)),,addrepo/$(repo))) 
+
+# If it's not empty, add a value to it
+ifneq ($(strip $(MISSING_REPOS)),)
+    MISSING_REPOS += update-distro
+endif
 
 EXECUTABLES = git nano jq yq python3-pip yamllint python3-pathspec ansible 
 MISSING_PACKAGES := $(foreach exec,$(EXECUTABLES),$(if $(shell dpkg -s "$(exec)" &> /dev/null),,addpackage-$(exec)))
@@ -62,6 +73,11 @@ addrepo/%:
 
 addpackage-%: 
 	sudo apt install $* -y
+
+update-distro:
+	sudo apt update
+	sudo apt full-upgrade -y
+	sudo apt autoremove -y
 
 install-dependencies: .gitconfig $(MISSING_REPOS) $(MISSING_PACKAGES) 
 
