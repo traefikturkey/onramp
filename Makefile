@@ -260,14 +260,14 @@ ifneq (,$(wildcard ./environments-enabled/onramp-external.env))
 endif
 
 environments-enabled/onramp-external.env:
-	cp --no-clobber environments-available/onramp-external.template environments-enabled/onramp-external.env
+	cp --no-clobber ./environments-available/onramp-external.template ./environments-enabled/onramp-external.env
 
 ifneq (,$(wildcard ./environments-enabled/onramp-nfs.env))
 	BUILD_DEPENDENCIES += environments-enabled/onramp-nfs.env
 endif
 
 environments-enabled/onramp-nfs.env:
-	cp --no-clobber environments-available/onramp-nfs.template environments-enabled/onramp-nfs.env
+	cp --no-clobber ./environments-available/onramp-nfs.template ./environments-enabled/onramp-nfs.env
 
 ifneq (,$(wildcard ./services-enabled/authelia.yml))
 	BUILD_DEPENDENCIES += etc/authelia/configuration.yml
@@ -303,8 +303,8 @@ ifneq (,$(wildcard ./services-enabled/prometheus.yml))
 endif
 
 etc/prometheus/conf:
-	mkdir -p etc/prometheus/conf
-	cp --no-clobber --recursive	etc/prometheus/conf-originals/* etc/prometheus/conf
+	mkdir -p ./etc/prometheus/conf
+	cp --no-clobber --recursive	./etc/prometheus/conf-originals/* ./etc/prometheus/conf
 
 ifneq (,$(wildcard ./services-enabled/mailrise.yml))
 	BUILD_DEPENDENCIES += etc/mailrise/mailrise.conf
@@ -320,7 +320,7 @@ ifneq (,$(wildcard ./services-enabled/recyclarr.yml))
 endif
 
 etc/recyclarr/recyclarr.yml:
-	cp --no-clobber .templates/recyclarr.template .etc/recyclarr/recyclarr.yml
+	cp --no-clobber .templates/recyclarr.template ./etc/recyclarr/recyclarr.yml
 
 
 ifneq (,$(wildcard ./services-enabled/gatus.yml))
@@ -328,7 +328,7 @@ ifneq (,$(wildcard ./services-enabled/gatus.yml))
 endif
 
 etc/gatus/config.yaml:
-	cp --no-clobber .templates/gatus.template .etc/gatus/config.yaml
+	cp --no-clobber .templates/gatus.template ./etc/gatus/config.yaml
 
 
 #########################################################
