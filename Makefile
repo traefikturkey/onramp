@@ -255,20 +255,19 @@ count-services:
 ##
 #########################################################
 
-
 ifneq (,$(wildcard ./environments-enabled/onramp-external.env))
 	BUILD_DEPENDENCIES += environments-enabled/onramp-external.env
 endif
 
 environments-enabled/onramp-external.env:
-	cp environments-available/onramp-external.template environments-enabled/onramp-external.env
+	cp --no-clobber environments-available/onramp-external.template environments-enabled/onramp-external.env
 
 ifneq (,$(wildcard ./environments-enabled/onramp-nfs.env))
 	BUILD_DEPENDENCIES += environments-enabled/onramp-nfs.env
 endif
 
 environments-enabled/onramp-nfs.env:
-	cp environments-available/onramp-nfs.template environments-enabled/onramp-nfs.env
+	cp --no-clobber environments-available/onramp-nfs.template environments-enabled/onramp-nfs.env
 
 ifneq (,$(wildcard ./services-enabled/authelia.yml))
 	BUILD_DEPENDENCIES += etc/authelia/configuration.yml
