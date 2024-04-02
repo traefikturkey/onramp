@@ -25,7 +25,7 @@ fix-acme-json-permissions:
 		fi \
 	fi
 
-build: install-dependencies environments-enabled/onramp.env $(BUILD_DEPENDENCIES)
+build: install-dependencies environments-enabled/onramp.env environments-enabled/onramp-external.env environments-enabled/onramp-nfs.env $(BUILD_DEPENDENCIES)
 
 install: build install-docker
 
@@ -53,6 +53,12 @@ environments-enabled/onramp.env:
 	@echo ""
 	@echo ""
 	@python3 scripts/env-subst.py environments-available/onramp.template "ONRAMP"
+
+environments-enabled/onramp-external.env:
+	cp --no-clobber ./environments-available/onramp-external.template ./environments-enabled/onramp-external.env
+
+environments-enabled/onramp-nfs.env:
+	cp --no-clobber ./environments-available/onramp-nfs.template ./environments-enabled/onramp-nfs.env
 
 REPOS = rmescandon/yq ansible/ansible
 MISSING_REPOS := $(foreach repo,$(REPOS),$(if $(shell apt-cache policy | grep $(repo)),,addrepo/$(repo))) 
