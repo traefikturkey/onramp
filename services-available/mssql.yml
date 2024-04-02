@@ -8,7 +8,7 @@ services:
   mssql:
     image: mcr.microsoft.com/mssql/server:${MSSQL_DOCKER_TAG:-2022-latest}
     user: root # Required for container to correctly interact with the volume.
-    container_name: ${MSSQL_CONTAINER_NAME:-plex}
+    container_name: ${MSSQL_CONTAINER_NAME:-mssql}
     restart: ${MSSQL_RESTART:-unless-stopped}
     volumes:
       - ${MSSQL_DB_DIR:-./media/databases/mssql}:/var/opt/mssql/data # paths will have to be researched futher
