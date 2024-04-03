@@ -20,6 +20,7 @@ services:
       - 443:443
     env_file:
       - environments-enabled/onramp.env
+      - environments-enabled/onramp-external.env
     volumes:
       - ./etc/traefik/letsencrypt:/letsencrypt
       - ./etc/traefik/enabled:/enabled
