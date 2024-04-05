@@ -1,5 +1,5 @@
 # Available Services
-176 services and counting...
+174 services and counting...
 
 
 - [adguard](https://github.com/AdguardTeam/AdGuardHome): Network-wide ad blocker and privacy tool
@@ -57,6 +57,7 @@
 - [homebox](https://hay-kot.github.io/homebox/): Dashboard for managing self-hosted services
 - [homepage](https://github.com/gethomepage/homepage/): Customizable start page for web browsers
 - [homer](https://hub.docker.com/r/b4bz/homer): Self-hosted bookmark manager
+- [huginn](https://hub.docker.com/r/huginn/huginn/): Create agents that monitor and act on your behalf
 - [immich](https://immich.app/docs/install/environment-variables): Container for running immich, a self-hosted Google Photos alternative.
 - [influxdb](https://hub.docker.com/_/influxdb): Time-series database for metrics and events
 - [itflow](https://itflow.org/): Workflow automation tool
