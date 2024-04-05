@@ -18,8 +18,11 @@ services:
       - ./etc/onboard:/app/configs
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /var/run/docker.sock:/var/run/docker.sock
     environment:
+      - OLLAMA_URL=${OLLAMA_URL}
+      # ONBOARD_PAGE_TIMEOUT: in seconds - 600 seconds = 10 minutes
+      - ONBOARD_PAGE_TIMEOUT=${ONBOARD_PAGE_TIMEOUT:-600}
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
