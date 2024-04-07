@@ -1,0 +1,8 @@
+A system that will build-up or tear-down requirements for a particular service. This could include building out the etc directory structure beyond the basic etc/(servicename), needed template files, etc. Then tear-down would be anything required to completely remove the targeted service's footprint within onramp.
+
+scaffold.mk
+
+services-scaffold
+  - service
+      - buildup
+      - teardown
