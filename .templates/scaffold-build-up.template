@@ -1,0 +1,8 @@
+#!/bin/bash
+
+###############################################
+# ${SERVICE_PASSED_UPCASED} build up script
+###############################################
+
+# Include in this script any commands related to the build up of this service.
+

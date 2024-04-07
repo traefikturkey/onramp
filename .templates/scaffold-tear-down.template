@@ -1,0 +1,7 @@
+#!/bin/bash
+
+###############################################
+# ${SERVICE_PASSED_UPCASED} tear down script 
+###############################################
+
+# Include in this script any commands related to the tear down of this service.

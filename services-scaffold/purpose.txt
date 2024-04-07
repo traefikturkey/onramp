@@ -4,5 +4,5 @@ scaffold.mk
 
 services-scaffold
   - service
-      - buildup
-      - teardown
+      - buildup.sh
+      - teardown.sh
