@@ -13,8 +13,11 @@ create-service-scaffold: ## Creates the directory and file structure for a servi
 remove-service-scaffold: ## Removes the service directory from within the services-scaffold directory.
 	sudo rm -rf ./services-scaffold/$(SERVICE_PASSED_DNCASED)
 
-scaffold-build-up:
+scaffold-build-up:  ## Executes the build-up script for the passed service.
 	bash ./services-scaffold/$(SERVICE_PASSED_DNCASED)/build-up.sh
 
-scaffold-tear-down:
+scaffold-tear-down: ##  Executes the tear-down script for the passed service.
 	bash ./services-scaffold/$(SERVICE_PASSED_DNCASED)/tear-down.sh
+
+list-scaffolds: ## list available scaffolds
+	@find ./services-scaffold/* -type d | cut -d"/" -f3 | sort -u

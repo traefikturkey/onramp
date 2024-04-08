@@ -1,9 +1,9 @@
 #!/bin/bash
 
 ###############################################
-# ${SERVICE_PASSED_UPCASED} tear down script 
+# PAPERLESS_NGX tear down script 
 ###############################################
 
 # Include in this script any commands related to the tear down of this service.
 
-sudo rm -rf ./etc/${SERVICE_PASSED_DNCASED}
+sudo rm -rf ./etc/paperless-ngx
