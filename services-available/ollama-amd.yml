@@ -11,14 +11,11 @@ volumes:
 # https://hub.docker.com/r/ollama/ollama
 # https://github.com/ollama/ollama
 
-# docker exec -it ollama ollama pull llama2           # https://ollama.com/library/llama2     [4 GB]
-# docker exec -it ollama ollama pull llama2:chat      # [4 GB]
-# docker exec -it ollama ollama pull llama2:13b-chat  # [7.5 GB]
-# docker exec -it ollama ollama pull mistral          # https://ollama.com/library/mistral    [4 GB]
-# docker exec -it ollama ollama pull mixtral          # https://ollama.com/library/mixtral    [26 GB]
-# docker exec -it ollama ollama pull codellama        # https://ollama.com/library/codellama  [4 GB]
-# docker exec -it ollama ollama pull openhermes       # [4 GB]
-# docker exec -it ollama ollama pull dolphin-mistral
+# add models to etc/ollama/Ollamamodels and run 
+# make.d/scripts/ollama-update-models.sh
+# to pull or update models
+# see .templates/Ollamamodels.sample for examples
+# Available models: https://ollama.com/library/
 
 services:
   ollama:
