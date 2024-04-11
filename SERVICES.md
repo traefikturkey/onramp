@@ -1,5 +1,5 @@
 # Available Services
-174 services and counting...
+175 services and counting...
 
 
 - [adguard](https://github.com/AdguardTeam/AdGuardHome): Network-wide ad blocker and privacy tool
@@ -62,6 +62,7 @@
 - [immich](https://immich.app/docs/install/environment-variables): Container for running immich, a self-hosted Google Photos alternative.
 - [influxdb](https://hub.docker.com/_/influxdb): Time-series database for metrics and events
 - [itflow](https://itflow.org/): Workflow automation tool
+- [iventoy](https://github.com/The-Drobe/iventoy-docker): ventoy as a PXE server (WARNING: This is a DHCP server!!!)
 - [jellyfin](https://hub.docker.com/r/linuxserver/jellyfin): Media server for streaming content
 - [jellyseerr](https://github.com/Fallenbagel/jellyseerr/tree/develop): Container for running jellyseerr, a torrent indexer
 - [joplin](https://joplinapp.org/): Note-taking and to-do app
