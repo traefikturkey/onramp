@@ -1,5 +1,5 @@
 # Available Services
-177 services and counting...
+175 services and counting...
 
 
 - [adguard](https://github.com/AdguardTeam/AdGuardHome): Network-wide ad blocker and privacy tool
@@ -61,6 +61,7 @@
 - [immich](https://immich.app/docs/install/environment-variables): Container for running immich, a self-hosted Google Photos alternative.
 - [influxdb](https://hub.docker.com/_/influxdb): Time-series database for metrics and events
 - [itflow](https://itflow.org/): Workflow automation tool
+- [iventoy](https://github.com/The-Drobe/iventoy-docker): ventoy as a PXE server (WARNING: This is a DHCP server!!!)
 - [jellyfin](https://hub.docker.com/r/linuxserver/jellyfin): Media server for streaming content
 - [jellyseer](https://github.com/Fallenbagel/jellyseerr/tree/develop): 
 - [jellyseerr](https://github.com/Fallenbagel/jellyseerr/tree/develop): Container for running jellyseerr, a torrent indexer
@@ -166,7 +167,7 @@
 - [vaultwarden](https://github.com/dani-garcia/vaultwarden): Self-hosted bitwarden password manager
 - [vikunja](https://vikunja.io/docs/full-docker-example/): Task and time management app
 - [wallabag](https://github.com/wallabag/wallabag): Self-hosted read-it-later service
-- [watchtower](https://github.com/containrrr/watchtower): Utomatically updates docker containers
+- [watchtower](https://github.com/containrrr/watchtower): Automatically updates docker containers
 - [watchyourlan](https://github.com/aceberg/WatchYourLAN): Monitors network devices and services
 - [webmap](https://github.com/SECUREFOREST/WebMap): Web-based network scanner
 - [webtop](https://github.com/linuxserver/docker-webtop): Web-based desktop environment
