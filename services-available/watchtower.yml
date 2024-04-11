@@ -1,7 +1,10 @@
 version: '3'
 
+networks:
+  traefik:
+    external: true
 
-# description: Utomatically updates docker containers
+# description: Automatically updates docker containers
 # https://github.com/containrrr/watchtower
 # https://containrrr.dev/watchtower/notifications/
 
@@ -10,6 +13,9 @@ services:
     image: ghcr.io/containrrr/watchtower:${WATCHTOWER_DOCKER_TAG:-latest}
     container_name: ${WATCHTOWER_CONTAINER_NAME:-watchtower}
     restart: ${WATCHTOWER_RESTART:-unless-stopped}
+    # so homepage can talk to it directly
+    networks:
+      - traefik
     environment:
       - TZ=${TZ}
       - WATCHTOWER_NOTIFICATIONS_HOSTNAME=${WATCHTOWER_NOTIFICATIONS_HOSTNAME:-${HOST_NAME}.${HOST_DOMAIN}}
@@ -18,6 +24,7 @@ services:
       - WATCHTOWER_NOTIFICATION_URL=${WATCHTOWER_NOTIFICATION_URL}
       - WATCHTOWER_SCHEDULE=${WATCHTOWER_SCHEDULE:-0 0 4 * * *}
       - WATCHTOWER_HTTP_API_METRICS=${WATCHTOWER_HTTP_API_METRICS:-false}
+      - WATCHTOWER_HTTP_API_TOKEN=${WATCHTOWER_HTTP_API_TOKEN:-watchtower_secret_token}
       - WATCHTOWER_CLEANUP=${WATCHTOWER_CLEANUP:-false}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
