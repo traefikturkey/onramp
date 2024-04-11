@@ -164,7 +164,7 @@
 - [vaultwarden](https://github.com/dani-garcia/vaultwarden): Self-hosted bitwarden password manager
 - [vikunja](https://vikunja.io/docs/full-docker-example/): Task and time management app
 - [wallabag](https://github.com/wallabag/wallabag): Self-hosted read-it-later service
-- [watchtower](https://github.com/containrrr/watchtower): Utomatically updates docker containers
+- [watchtower](https://github.com/containrrr/watchtower): Automatically updates docker containers
 - [watchyourlan](https://github.com/aceberg/WatchYourLAN): Monitors network devices and services
 - [webmap](https://github.com/SECUREFOREST/WebMap): Web-based network scanner
 - [webtop](https://github.com/linuxserver/docker-webtop): Web-based desktop environment
