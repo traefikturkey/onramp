@@ -21,11 +21,10 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
-      - DOMAIN=${VAULTWARDEN_CONTAINER_NAME:-vaultwarden}.${HOST_DOMAIN}
       # docker run --rm -it vaultwarden/server /vaultwarden hash --preset owasp
       - ADMIN_TOKEN=${VAULTWARDEN_ADMIN_TOKEN}
       - SIGNUPS_ALLOWED=${VAULTWARDEN_SIGNUPS_ALLOWED:-true}
-      - DOMAIN=https://${VAULTWARDEN_CONTAINER_NAME:-vaultwarden}.${HOST_DOMAIN}
+      - DOMAIN=https://${VAULTWARDEN_HOSTNAME:-vaultwarden}.${HOST_DOMAIN}
       - SMTP_HOST=${VAULTWARDEN_SMTP_HOST:-smtp.domain.tld}
       - SMTP_FROM=${VAULTWARDEN_SMTP_FROM:-vaultwarden@domain.tld}
       - SMTP_FROM_NAME=${VAULTWARDEN_SMTP_FROM_NAME:-Vaultwarden}
@@ -36,10 +35,10 @@ services:
       - SMTP_TIMEOUT=15
 
     labels:
-      - joyride.host.name=${VAULTWARDEN_CONTAINER_NAME:-vaultwarden}.${HOST_DOMAIN}
+      - joyride.host.name=${VAULTWARDEN_HOSTNAME:-vaultwarden}.${HOST_DOMAIN}
       - traefik.enable=true
       - traefik.http.routers.vaultwarden.entrypoints=websecure
-      - traefik.http.routers.vaultwarden.rule=Host(`${VAULTWARDEN_CONTAINER_NAME:-vaultwarden}.${HOST_DOMAIN}`)
+      - traefik.http.routers.vaultwarden.rule=Host(`${VAULTWARDEN_HOSTNAME:-vaultwarden}.${HOST_DOMAIN}`)
       - traefik.http.services.vaultwarden.loadbalancer.server.port=80
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
