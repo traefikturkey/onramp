@@ -1,0 +1,23 @@
+###############################################
+# MAKEMKV settings 
+###############################################
+
+# Environment variables required by the service you are adding
+# can be placed in this file in the format specified below:
+#
+# MAKEMKV_EXAMPLE_VARIABLE=$MAKEMKV_EXAMPLE_VARIABLE
+#
+# When the service is enabled using 'make enable-service <servicename>' the user
+# will be prompted to enter values for any variables (uncommented) listed in this file.
+#
+# Some helpful commands to make changes to either this template file, or the makemkv.env file in use by OnRamp:
+#
+# Template: 'make edit-env-template makemkv'
+# Env:      'make edit-env makemkv'
+
+
+#MAKEMKV_DOCKER_TAG=$MAKEMKV_DOCKER_TAG
+#MAKEMKV_CONTAINER_NAME=$MAKEMKV_CONTAINER_NAME
+#MAKEMKV_RESTART=$MAKEMKV_RESTART
+
+MAKEMKV_OPTICAL_DRIVE=$MAKEMKV_OPTICAL_DRIVE
