@@ -28,7 +28,7 @@ cd onramp
 make install
 ```
 
-Edit the .env file to include Cloudflare credentials, your domain and the hostname of the current machine, save the file and exit. 
+During the install process you will be prompted for your Cloudflare email and token, your domain, the hostname of the current machine, and finally your timezone.
 
 ```bash
 make start-staging
@@ -65,7 +65,10 @@ They can be enabled by running the following commands:
 make enable-service uptime-kuma
 make restart
 ```
-> Note: this creates a symlink file in ./services-enabled to the service.yml file in ./services-available
+> Note: this creates a symlink file in ./services-enabled to the service.yml file in ./services-available.
+        if there is an associated environment template for the service in ./environments-available it will
+        be scanned and you will be prompted for required environment values pertaining to the service, and
+        the resulting <servicename>.env file will be stored in ./environments-enabled
 
 and disabled with the following:
 ```
