@@ -1,4 +1,4 @@
-version: '3'
+---
 # description: Container for running immich, a self-hosted Google Photos alternative.
 # https://immich.app/docs/install/environment-variables
 
@@ -8,7 +8,7 @@ networks:
   immich-db:
 
 services:
-  immich-server:
+  immich:
     container_name: ${IMMICH_CONTAINER_NAME:-immich}
     image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-v1.95.1}
     command: ["start.sh", "immich"]
