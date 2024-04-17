@@ -10,7 +10,7 @@ networks:
 services:
   immich:
     container_name: ${IMMICH_CONTAINER_NAME:-immich}
-    image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-v1.95.1}
+    image: ghcr.io/immich-app/immich-server:${IMMICH_DOCKER_TAG:-v1.95.1}
     command: ["start.sh", "immich"]
     volumes:
       - ${IMMICH_UPLOAD_LOCATION:-./etc/immich/upload}:/usr/src/app/upload
@@ -45,7 +45,7 @@ services:
 
   immich-microservices:
     container_name: immich_microservices
-    image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-v1.95.1}
+    image: ghcr.io/immich-app/immich-server:${IMMICH_DOCKER_TAG:-v1.95.1}
     # extends:
     #   file: hwaccel.yml
     #   service: hwaccel
