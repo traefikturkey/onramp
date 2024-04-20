@@ -1,5 +1,5 @@
 # Available Services
-175 services and counting...
+176 services and counting...
 
 
 - [adguard](https://github.com/AdguardTeam/AdGuardHome): Network-wide ad blocker and privacy tool
@@ -150,6 +150,7 @@
 - [stirling-pdf](https://github.com/Stirling-Tools/Stirling-PDF): Container for running stirling pdf, a web-based pdf viewer
 - [streaming-search](https://github.com/Colaski/global-streaming-search): Container for running streaming search, a media indexer
 - [super-productivity](https://github.com/johannesjo/super-productivity): Time and task management app
+- [surrealdb](https://github.com/surrealdb/surrealdb/blob/main/docker/DOCKER.md): scalable, distributed, collaborative, document-graph database
 - [synapse](https://github.com/matrix-org/synapse): Matrix communication server
 - [syncthing](https://hub.docker.com/r/linuxserver/syncthing): Decentralized file synchronization tool
 - [tautulli](https://hub.docker.com/r/linuxserver/tautulli): Monitors plex usage and provides statistics
