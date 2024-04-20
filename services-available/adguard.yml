@@ -35,7 +35,7 @@ services:
       - TZ=${TZ}
     labels:
       - joyride.host.name=${ADGUARD_CONTAINER_NAME:-adguard}.${HOST_DOMAIN}
-      - traefik.enable=true
+      - traefik.enable=${ADGUARD_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.adguard.entrypoints=websecure
       - traefik.http.routers.adguard.rule=Host(`${ADGUARD_CONTAINER_NAME:-adguard}.${HOST_DOMAIN}`)
       - traefik.http.services.adguard.loadbalancer.server.port=80
