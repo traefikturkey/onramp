@@ -15,7 +15,7 @@ services:
       - TRAEFIK_VERSION=${CLOUDFLARE_COMPANION_TRAEFIK_VERSION:-2}
       - CF_EMAIL=${CF_API_EMAIL}
       - CF_TOKEN=${CF_DNS_API_TOKEN}
-      - TARGET_DOMAIN=${CLOUDFLARE_COMPANION_TARGET_DOMAIN} # host.example.com
+      - TARGET_DOMAIN=${CLOUDFLARE_COMPANION_TARGET_DOMAIN} 
       - DOMAIN1=${CLOUDFLARE_COMPANION_DOMAIN1:-${HOST_DOMAIN}}
       - DOMAIN1_ZONE_ID=${CLOUDFLARE_COMPANION_DOMAIN1_ZONE_ID:-1234567890}
       - PUID=${PUID:-1000}
@@ -24,5 +24,4 @@ services:
     labels:
       - traefik.enable=false
       - com.centurylinklabs.watchtower.enable=true
-
       - autoheal=true

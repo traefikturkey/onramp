@@ -1,15 +1,16 @@
 #!/bin/sh
-
-# set -x: Enables debug mode, which prints each command before executing it. This can be helpful for debugging.
-# set -x 
-
-# set -e: Exits the script if any command in the script fails (i.e., returns a non-zero exit code).
-
 set -e
 
 echo "Running pre-commit yamllint checks..."
-yamllint -c .yamllint .
+# Get the list of changed YAML files
+changed_yaml_files=$(git diff --cached --name-only --diff-filter=ACMRTUXB services-available/**/*.yml)
 
+# Run yamllint only on the changed YAML files
+if [ -n "$changed_yaml_files" ]; then
+  yamllint -c .yamllint $changed_yaml_files
+fi
+
+echo "Generating SERVICES.md..."
 # Check if there are changes in services-available/**/*.yml
 if [ -n "$(git diff --cached --name-only --diff-filter=ACMRTUXB services-available/**/*.yml)" ]; then
   # Call the script to generate SERVICES.md
