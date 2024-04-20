@@ -1,0 +1,41 @@
+version: '3'
+
+networks:
+  traefik:
+    external: true
+
+# description: scalable, distributed, collaborative, document-graph database
+# https://github.com/surrealdb/surrealdb/blob/main/docker/DOCKER.md
+# https://surrealdb.com/docs/surrealdb/installation/running/docker
+
+services:
+  surrealdb:
+    image: surrealdb/surrealdb:${SURREALDB_DOCKER_TAG:-latest}
+    container_name: ${SURREALDB_CONTAINER_NAME:-surrealdb}
+    restart: ${SURREALDB_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - ${SURREALDB_DIR:-./media/databases/surrealdb}:/data
+    entrypoint: 
+      # https://surrealdb.com/docs/surrealdb/cli/start
+      - /surreal 
+      - start 
+      - --auth
+      - file:/data/${SURREALDB_NAME:-database} 
+    environment:
+      # none, full, error, warn, info, debug, trace
+      - SURREAL_USER=${SURREALDB_USER:-surreal}
+      - SURREAL_PASS=${SURREALDB_PASS:-supersecretpassword497}
+      - SURREAL_LOG=${SURREALDB_LOG_LEVEL:-debug}
+      - SURREAL_AUTH=${SURREALDB_AUTH:-true}
+      - SURREAL_CAPS_ALLOW_ALL=${SURREALDB_CAPS_ALLOW_ALL:-true}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=${SURREALDB_CONTAINER_NAME:-surrealdb}.${HOST_DOMAIN}
+      - traefik.enable=${SURREALDB_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.surrealdb.entrypoints=websecure
+      - traefik.http.routers.surrealdb.rule=Host(`${SURREALDB_CONTAINER_NAME:-surrealdb}.${HOST_DOMAIN}`)
+      - traefik.http.services.surrealdb.loadbalancer.server.port=8000
+      - com.centurylinklabs.watchtower.enable=${SURREALDB_WATCHTOWER_ENABLED:-true}
+      - autoheal=${SURREALDB_AUTOHEAL_ENABLED:-true}
