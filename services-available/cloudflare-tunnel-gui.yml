@@ -25,9 +25,7 @@ services:
       - PGID=${PGID:-1000}
       - TZ=${TZ}
     command: tunnel run --token ${CLOUDFLARED_TOKEN}
-    #- --no-autoupdate
-    #- --hello-world
     labels:
-      - traefik.enable=false
-      - com.centurylinklabs.watchtower.enable=true
-      - autoheal=true
+      - traefik.enable=${CLOUDFLARE_TUNNEL_TRAEFIK_ENABLED:-false}
+      - com.centurylinklabs.watchtower.enable=true ${CLOUDFLARE_TUNNEL_WATCHTOWER_ENABLED:-true}
+      - autoheal=${CLOUDFLARE_TUNNEL_AUTOHEAL_ENABLED:-true}
