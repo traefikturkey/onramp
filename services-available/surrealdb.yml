@@ -27,7 +27,7 @@ services:
       # none, full, error, warn, info, debug, trace
       - SURREAL_USER=${SURREALDB_USER:-surreal}
       - SURREAL_PASS=${SURREALDB_PASS:-supersecretpassword497}
-      - SURREAL_LOG=${SURREALDB_LOG_LEVEL:-debug}
+      - SURREAL_LOG=${SURREALDB_LOG_LEVEL:-info}
       - SURREAL_AUTH=${SURREALDB_AUTH:-true}
       - SURREAL_CAPS_ALLOW_ALL=${SURREALDB_CAPS_ALLOW_ALL:-true}
       - TZ=${TZ}
