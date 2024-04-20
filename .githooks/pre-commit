@@ -1,18 +1,20 @@
 #!/bin/sh
 set -e
 
-echo "Running pre-commit yamllint checks..."
+
 # Get the list of changed YAML files
 changed_yaml_files=$(git diff --cached --name-only --diff-filter=ACMRTUXB services-available/**/*.yml)
 
 # Run yamllint only on the changed YAML files
 if [ -n "$changed_yaml_files" ]; then
+  echo "Running pre-commit yamllint checks..."
   yamllint -c .yamllint $changed_yaml_files
 fi
 
-echo "Generating SERVICES.md..."
+
 # Check if there are changes in services-available/**/*.yml
 if [ -n "$(git diff --cached --name-only --diff-filter=ACMRTUXB services-available/**/*.yml)" ]; then
+  echo "Generating SERVICES.md..."
   # Call the script to generate SERVICES.md
   .githooks/generate-services-markdown.sh
 
