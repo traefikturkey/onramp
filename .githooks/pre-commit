@@ -1,3 +1,12 @@
 #!/bin/sh
 echo "Running pre-commit yamllint checks..."
 yamllint -c .yamllint .
+
+# Check if there are changes in services-available/**/*.yml
+if [ -n "$(git diff --cached --name-only --diff-filter=ACMRTUXB services-available/**/*.yml)" ]; then
+  # Call the script to generate SERVICES.md
+  .github/scripts/generate-services-markdown.sh
+
+  # Add SERVICES.md to the commit
+  git add ./SERVICES.md
+fi

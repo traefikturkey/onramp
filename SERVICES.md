@@ -1,5 +1,5 @@
 # Available Services
-176 services and counting...
+175 services and counting...
 
 
 - [adguard](https://github.com/AdguardTeam/AdGuardHome): Network-wide ad blocker and privacy tool
@@ -34,8 +34,8 @@
 - [droneci](https://github.com/harness/drone): Continuous integration and delivery platform
 - [duplicati](https://www.duplicati.com/): Backs up files and folders to various storage destinations
 - [excalidraw](https://excalidraw.com/): Collaborative whiteboard tool
-- [firefly-data-importer](https://github.com/firefly-iii/firefly-iii/tree/main): Imports data into firefly iii, a personal finance manager
 - [firefly3](https://github.com/firefly-iii/firefly-iii/tree/main): Manages personal finances and budgets
+- [firefly-data-importer](https://github.com/firefly-iii/firefly-iii/tree/main): Imports data into firefly iii, a personal finance manager
 - [firefox](https://github.com/jlesage/docker-firefox): Runs mozilla firefox browser in a container
 - [flame](https://hub.docker.com/r/pawelmalak/flame): Self-hosted music recommendation engine
 - [foundryvtt](https://hub.docker.com/r/felddy/foundryvtt): Virtual tabletop platform for role-playing games
@@ -54,7 +54,6 @@
 - [healthchecks](https://healthchecks.io/docs/self_hosted_docker/): Monitors cron jobs and sends alerts
 - [heimdall](https://github.com/linuxserver/Heimdall): Dashboard for organizing web applications
 - [homarr](https://github.com/ajnart/homarr): Home automation and remote control system
-- [homeassistant](https://hub.docker.com/r/linuxserver/homeassistant): Home automation platform
 - [homebox](https://hay-kot.github.io/homebox/): Dashboard for managing self-hosted services
 - [homepage](https://github.com/gethomepage/homepage/): Customizable start page for web browsers
 - [homer](https://hub.docker.com/r/b4bz/homer): Self-hosted bookmark manager
