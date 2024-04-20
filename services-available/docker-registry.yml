@@ -4,9 +4,9 @@ networks:
   traefik:
     external: true
 
-# description: <= put a brief description of docker-registry here =>
-# <================= add links to dockerhub or github repo here =================>
-# <================= add links to other related documentation here =================>
+# description: Registry for storing and distributing container images
+# https://hub.docker.com/_/registry
+# https://docs.docker.com/registry/
 
 services:
   docker-registry:
@@ -16,7 +16,7 @@ services:
     networks:
       - traefik
     volumes:
-      - ./media/docker-registry:/var/lib/registry
+      - ${DOCKER_REGISTRY_PATH:-./etc/docker-registry}:/var/lib/registry
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:

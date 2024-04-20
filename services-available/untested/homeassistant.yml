@@ -14,7 +14,7 @@ services:
     restart: ${HOMEASSISTANT_RESTART:-unless-stopped}
     networks:
       - traefik
-    network_mode: host
+    #network_mode: host
     volumes:
       - ./etc/homeassistant:/config
       - /etc/timezone:/etc/timezone:ro

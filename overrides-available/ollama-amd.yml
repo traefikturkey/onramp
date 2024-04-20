@@ -1,0 +1,6 @@
+services:
+  ollama:
+    image: ollama/ollama:${OLLAMA_DOCKER_TAG:-rocm}
+    devices:
+      - /dev/kfd
+      - /dev/dri
