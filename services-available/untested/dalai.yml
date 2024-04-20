@@ -24,7 +24,6 @@ services:
       - traefik.enable=true
       - traefik.http.routers.dalai.entrypoints=websecure
       - traefik.http.routers.dalai.rule=Host(`${DALAI_CONTAINER_NAME:-dalai}.${HOST_DOMAIN}`)
-      #- traefik.http.services.dalai.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.dalai.loadbalancer.server.port=3000
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
