@@ -4,10 +4,7 @@ networks:
   traefik:
     external: true
 
-volumes:
-  ollama:
-
-# description: Easy way to run large language models locally - CPU only
+# description: Eeasy way to run large language models locally - Nvidia GPU
 # https://hub.docker.com/r/ollama/ollama
 # https://github.com/ollama/ollama
 
@@ -17,6 +14,7 @@ volumes:
 # see .templates/Ollamamodels.sample for examples
 # Available models: https://ollama.com/library/
 
+
 services:
   ollama:
     image: ollama/ollama:${OLLAMA_DOCKER_TAG:-latest}
@@ -25,7 +23,7 @@ services:
     networks:
       - traefik
     volumes:
-      - ollama:/root/.ollama
+      - ${OLLAMA_DATA_PATH:-./media/ollama}:/root/.ollama
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:

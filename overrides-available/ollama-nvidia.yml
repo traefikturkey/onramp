@@ -1,0 +1,15 @@
+services:
+  ollama:
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - gpus=${OLLAMA_GPUS:-all}
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ['0'] # this is only needed when using multiple GPUs
+              #count: 1 # number of GPUs
+              capabilities: [gpu]
