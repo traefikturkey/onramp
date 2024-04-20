@@ -1,5 +1,5 @@
 # Available Services
-175 services and counting...
+174 services and counting...
 
 
 - [adguard](https://github.com/AdguardTeam/AdGuardHome): Network-wide ad blocker and privacy tool
@@ -28,7 +28,7 @@
 - [dashdot](https://github.com/MauriceNino/dashdot): Dashboard for monitoring docker containers
 - [dashy](https://github.com/Lissy93/dashy): Customizable dashboard for displaying information
 - [docker-proxy](https://github.com/Tecnativa/docker-socket-proxy): Proxy for docker containers
-- docker-registry: <= put a brief description of docker-registry here =>
+- [docker-registry](https://hub.docker.com/_/registry): Registry for storing and distributing container images
 - [dozzle-path](https://github.com/amir20/dozzle): Path-based reverse proxy for dozzle
 - [dozzle](https://github.com/amir20/dozzle): Web-based docker container log viewer
 - [droneci](https://github.com/harness/drone): Continuous integration and delivery platform
@@ -91,10 +91,8 @@
 - [nodered](https://hub.docker.com/r/nodered/node-red/): Flow-based development tool for visual programming
 - [nzbget](https://hub.docker.com/r/linuxserver/nzbget): Binary newsgrabber for usenet
 - [olivetin](https://github.com/OliveTin/OliveTin): Access predefined shell commands from a web interface.
-- [ollama-amd](https://hub.docker.com/r/ollama/ollama): Easy way to run large language models locally - AMD GPU
-- [ollama-cpu](https://hub.docker.com/r/ollama/ollama): Easy way to run large language models locally - CPU only
-- [ollama-nvidia](https://hub.docker.com/r/ollama/ollama): Eeasy way to run large language models locally - Nvidia GPU
 - [ollama-webui](https://github.com/open-webui/open-webui): Web-based user interface for ollama, a media indexer
+- [ollama](https://hub.docker.com/r/ollama/ollama): Eeasy way to run large language models locally - Nvidia GPU
 - [omada](https://hub.docker.com/r/mbentley/omada-controller): Container for running tp-link omada controller
 - [onboard](https://github.com/traefikturkey/onboard): An RSS and Bookmarks Dashboard 
 - [ongoing](https://github.com/traefikturkey/ongoing): A self hosted url expander (opposite of url shortener)
@@ -146,6 +144,7 @@
 - [sftp-server](https://github.com/drakkan/sftpgo): Secure ftp server
 - [snapdrop](https://hub.docker.com/r/linuxserver/snapdrop): Web-based file sharing tool for local networks
 - [sonarr](https://hub.docker.com/r/linuxserver/sonarr): Manages tv show collections and downloads
+- [sqliteweb](https://hub.docker.com/r/tomdesinto/sqliteweb/): Web-based SQLite Database Browser
 - [stirling-pdf](https://github.com/Stirling-Tools/Stirling-PDF): Container for running stirling pdf, a web-based pdf viewer
 - [streaming-search](https://github.com/Colaski/global-streaming-search): Container for running streaming search, a media indexer
 - [super-productivity](https://github.com/johannesjo/super-productivity): Time and task management app
