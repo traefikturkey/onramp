@@ -30,6 +30,7 @@ services:
       - TZ=${TZ}
       - PHOTOPRISM_CONFIG_PATH=/photoprism/config
       - PHOTOPRISM_AUTH_MODE=password
+      - PHOTOPRISM_ADMIN_PASSWORD=${PHOTOPRISM_ADMIN_PASSWORD:-insecure}
       - PHOTOPRISM_ORIGINALS_PATH=/photoprism/originals
       - PHOTOPRISM_SITE_URL=https://${PHOTOPRISM_CONTAINER_NAME:-photoprism}.${HOST_DOMAIN}
     labels:
