@@ -1,5 +1,5 @@
 # Available Services
-174 services and counting...
+175 services and counting...
 
 
 - [adguard](https://github.com/AdguardTeam/AdGuardHome): Network-wide ad blocker and privacy tool
@@ -34,8 +34,8 @@
 - [droneci](https://github.com/harness/drone): Continuous integration and delivery platform
 - [duplicati](https://www.duplicati.com/): Backs up files and folders to various storage destinations
 - [excalidraw](https://excalidraw.com/): Collaborative whiteboard tool
-- [firefly-data-importer](https://github.com/firefly-iii/firefly-iii/tree/main): Imports data into firefly iii, a personal finance manager
 - [firefly3](https://github.com/firefly-iii/firefly-iii/tree/main): Manages personal finances and budgets
+- [firefly-data-importer](https://github.com/firefly-iii/firefly-iii/tree/main): Imports data into firefly iii, a personal finance manager
 - [firefox](https://github.com/jlesage/docker-firefox): Runs mozilla firefox browser in a container
 - [flame](https://hub.docker.com/r/pawelmalak/flame): Self-hosted music recommendation engine
 - [foundryvtt](https://hub.docker.com/r/felddy/foundryvtt): Virtual tabletop platform for role-playing games
@@ -77,6 +77,7 @@
 - [lychee](https://github.com/LycheeOrg/Lychee-Docker): Photo management and sharing platform
 - [mailhog](https://github.com/mailhog/MailHog): Mail testing tool for developers
 - [mailrise](https://github.com/YoRyan/mailrise): Self-hosted email marketing platform
+- [maintainerr](https://github.com/jorenn92/Maintainerr): managing media library
 - [makemkv](https://hub.docker.com/r/jlesage/makemkv): Fully automated container for MakeMKV with Web GUI
 - [mariadb](https://hub.docker.com/_/mariadb): Popular open-source relational database management system
 - [mealie](https://hay-kot.github.io/mealie/documentation/getting-started/install/): Recipe management system
