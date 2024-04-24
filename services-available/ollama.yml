@@ -30,6 +30,8 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
+    ports:
+      - ${OLLAMA_PORT:-11434}:11434
     labels:
       - joyride.host.name=${OLLAMA_CONTAINER_NAME:-ollama}.${HOST_DOMAIN}
       - traefik.enable=true

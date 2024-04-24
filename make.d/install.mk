@@ -106,3 +106,7 @@ install-node-exporter: install-ansible
 
 install-nvidia-drivers: install-ansible
 	ansible-playbook ansible/install-nvidia-drivers.yml
+
+# kill all vscode instances running on the server
+make kill-code:
+	ps aux | grep .vscode-server | awk '{print $2}' | xargs kill

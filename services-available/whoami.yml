@@ -33,9 +33,3 @@ services:
       #- traefik.http.routers.whoami.middlewares=my-plugindemo@file
       - com.centurylinklabs.watchtower.enable=true
       - autoheal=true
-
-      #- homepage.group=traefik
-      #- homepage.icon=
-      - homepage.name=${WHOAMI_CONTAINER_NAME:-whoami}
-      - homepage.href=https://${WHOAMI_CONTAINER_NAME:-whoami}.${HOST_DOMAIN}
-      - homepage.description=Tiny Go webserver that prints OS information and HTTP request to output
