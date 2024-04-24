@@ -18,6 +18,9 @@ services:
     restart: ${JOYRIDE_RESTART:-unless-stopped}
     environment:
       - HOSTIP=${HOSTIP}
+      - JOYRIDE_NXDOMAIN_ENABLED=${JOYRIDE_NXDOMAIN_ENABLED:-false}
+      - JOYRIDE_LOG_DEBUG=${JOYRIDE_LOG_DEBUG:-false}
+      - JOYRIDE_LOG_QUERIES=${JOYRIDE_LOG_QUERIES:-false}
     ports:
       - ${JOYRIDE_PORT:-54}:54/udp
     volumes:
