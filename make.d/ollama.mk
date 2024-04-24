@@ -1,2 +1,2 @@
 update-ollama-models:
-	$(shell pwd)/make.d/scripts/ollama-update-models.sh --docker
+	$(shell pwd)/make.d/scripts/update-ollama-models.sh --docker
