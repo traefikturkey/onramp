@@ -35,9 +35,9 @@ services:
       timeout: 10s
     labels:
       - joyride.host.name=${SONARR_CONTAINER_NAME:-sonarr}.${HOST_DOMAIN}
-      - traefik.enable=true
+      - traefik.enable=${SONARR_TRAEFIK_ENABLE:-true}
       - traefik.http.routers.sonarr.entrypoints=websecure
       - traefik.http.routers.sonarr.rule=Host(`${SONARR_CONTAINER_NAME:-sonarr}.${HOST_DOMAIN}`)
       - traefik.http.services.sonarr.loadbalancer.server.port=8989
-      - com.centurylinklabs.watchtower.enable=true
-      - autoheal=true
+      - com.centurylinklabs.watchtower.enable=${SONARR_WATCHTOWER_ENABLE:-true}
+      - autoheal=${SONARR_AUTOHEAL:-true}

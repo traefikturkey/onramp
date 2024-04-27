@@ -29,4 +29,5 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     labels:
-      - traefik.enable=false
+      - traefik.enable=${WATCHTOWER_TRAEFIK_ENABLE:-false}
+      - autoheal=${WATCHTOWER_AUTOHEAL:-true}

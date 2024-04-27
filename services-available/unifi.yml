@@ -12,6 +12,7 @@ services:
     image: ghcr.io/goofball222/unifi:${UNIFI_DOCKER_TAG:-latest-ubuntu}
     container_name: ${UNIFI_CONTAINER_NAME:-unifi}
     restart: ${UNIFI_RESTART:-unless-stopped}
+    mem_limit: ${UNIFI_MEM_LIMIT:-2g}
     networks:
       - traefik
     environment:
@@ -35,10 +36,11 @@ services:
       - /etc/localtime:/etc/localtime:ro
     labels:
       - joyride.host.name=${UNIFI_CONTAINER_NAME:-unifi}.${HOST_DOMAIN}
-      - com.centurylinklabs.watchtower.enable=true
-      - traefik.enable=true
+      - traefik.enable=${UNIFI_TRAEFIK_ENABLE:-true}
       - traefik.http.routers.unifi.entrypoints=websecure
       - traefik.http.routers.unifi.rule=Host(`${UNIFI_CONTAINER_NAME:-unifi}.${HOST_DOMAIN}`)
       - traefik.http.services.unifi.loadbalancer.server.scheme=https
       - traefik.http.services.unifi.loadbalancer.server.port=8443
-      - autoheal.stop.timeout=180
+      - com.centurylinklabs.watchtower.enable=${UNIFI_WATCHTOWER_ENABLE:-true}
+      - autoheal=${UNIFI_AUTOHEAL:-true}
+      - autoheal.stop.timeout=${UNIFI_AUTOHEAL_TIMEOUT:-180}

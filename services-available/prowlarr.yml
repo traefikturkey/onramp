@@ -26,9 +26,9 @@ services:
       - TZ=${TZ}
     labels:
       - joyride.host.name=${PROWLARR_CONTAINER_NAME:-prowlarr}.${HOST_DOMAIN}
-      - traefik.enable=true
+      - traefik.enable=${PROWLARR_TRAEFIK_ENABLE:-true}
       - traefik.http.routers.prowlarr.entrypoints=websecure
       - traefik.http.routers.prowlarr.rule=Host(`${PROWLARR_CONTAINER_NAME:-prowlarr}.${HOST_DOMAIN}`)
       - traefik.http.services.prowlarr.loadbalancer.server.port=9696
-      - com.centurylinklabs.watchtower.enable=true
-      - autoheal=true
+      - com.centurylinklabs.watchtower.enable=${PROWLARR_WATCHTOWER_ENABLE:-true}
+      - autoheal=${PROWLARR_AUTOHEAL:-true}
