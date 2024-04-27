@@ -31,9 +31,9 @@ services:
       - ${OLLAMA_PORT:-11434}:11434
     labels:
       - joyride.host.name=${OLLAMA_CONTAINER_NAME:-ollama}.${HOST_DOMAIN}
-      - traefik.enable=true
+      - traefik.enable=${OLLAMA_TRAEFIK_ENABLE:-true}
       - traefik.http.routers.ollama.entrypoints=websecure
       - traefik.http.routers.ollama.rule=Host(`${OLLAMA_CONTAINER_NAME:-ollama}.${HOST_DOMAIN}`)
       - traefik.http.services.ollama.loadbalancer.server.port=11434
-      - com.centurylinklabs.watchtower.enable=true
-      - autoheal=true
+      - com.centurylinklabs.watchtower.enable=${OLLAMA_WATCHTOWER_ENABLE:-true}
+      - autoheal=${OLLAMA_AUTOHEAL:-true}

@@ -33,9 +33,9 @@ services:
       - FRIGATE_MQTT_PASSWORD=${FRIGATE_MQTT_PASSWORD:-}
     labels:
       - joyride.host.name=${FRIGATE_HOST_NAME:-frigate}.${HOST_DOMAIN}
-      - traefik.enable=true
+      - traefik.enable=${FRIGATE_TRAEFIK_ENABLE:-true}
       - traefik.http.routers.frigate.entrypoints=websecure
       - traefik.http.routers.frigate.rule=Host(`${FRIGATE_HOST_NAME:-frigate}.${HOST_DOMAIN}`)
       - traefik.http.services.frigate.loadbalancer.server.port=5000
-      - com.centurylinklabs.watchtower.enable=true
-      - autoheal=true
+      - com.centurylinklabs.watchtower.enable=${FRIGATE_WATCHTOWER_ENABLE:-true}
+      - autoheal=${FRIGATE_AUTOHEAL:-true}
