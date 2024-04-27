@@ -10,7 +10,6 @@ services:
     restart: ${MONOCKER_RESTART:-unless-stopped}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
       # Optional label to preface messages. Handy if you are running multiple versions of Monocker

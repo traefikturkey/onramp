@@ -16,7 +16,6 @@ services:
       - traefik
     volumes:
       - ./etc/overseerr:/config
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     ports:
       - 5055:5055

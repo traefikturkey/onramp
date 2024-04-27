@@ -17,7 +17,6 @@ services:
       - traefik
     volumes:
       - "./etc/pterodactyl-panel:/config"
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       - "./etc/pterodactyl-panel/var/:/app/var/"
       - "./etc/pterodactyl-panel/logs/:/app/storage/logs"

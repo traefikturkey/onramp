@@ -15,7 +15,6 @@ services:
     volumes:
       - ./etc/crowdsec:/etc/crowdsec/
       - ./etc/crowdsec/db:/var/lib/crowdsec/data/
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
     environment:

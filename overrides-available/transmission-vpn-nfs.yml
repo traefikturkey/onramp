@@ -14,5 +14,4 @@ services:
       - ${TRANSMISSION_CONFIG_VOLUME:-./etc/transmission-vpn}:/data
       - ${TRANSMISSION_DOWNLOADS_VOLUME:-transmission-nfs-media}:/downloads
       - /dev/rtc:/dev/rtc:ro
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro

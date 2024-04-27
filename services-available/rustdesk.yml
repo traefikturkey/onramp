@@ -16,7 +16,6 @@ services:
     command: hbbs -r ${RUSTDESK_RELAY_CONTAINER_NAME:-rustdesk-relay}.${HOST_DOMAIN}:21117
     volumes:
       - ./etc/rustdesk:/root
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     ports:
       - 21115:21115
@@ -51,7 +50,6 @@ services:
     command: hbbr
     volumes:
       - ./etc/rustdesk:/root
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     labels:
       - joyride.host.name=${RUSTDESK_RELAY_CONTAINER_NAME:-rustdesk-relay}.${HOST_DOMAIN}

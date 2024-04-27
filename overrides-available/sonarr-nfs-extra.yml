@@ -32,5 +32,4 @@ services:
       - ${MEDIA_SHOWS_VOLUME:-sonarr-nfs-media}:${SONARR_TV_PATH:-/tv}
       - ${MEDIA_DOWNLOADS_VOLUME:-sonarr-nfs-downloads}:${SONARR_DOWNLOADS_PATH:-/downloads}
       - /dev/rtc:/dev/rtc:ro
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro

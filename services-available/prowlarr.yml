@@ -16,7 +16,6 @@ services:
       - traefik
     volumes:
       - ./etc/prowlarr:/config
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     ports:
       - 9696:9696

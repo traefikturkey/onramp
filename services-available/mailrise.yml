@@ -16,7 +16,6 @@ services:
       - traefik
     volumes:
       - ./etc/mailrise/mailrise.conf:/etc/mailrise.conf:ro #File needs to exist BEFORE starting the container.
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     ports:
       - ${MAILRISE_PORT:-8025}:8025 #Needs the port exposed so that external apps can communicate with it.

@@ -24,5 +24,4 @@ services:
       # - ${MEDIA_COMICS_VOLUME:-komga-nfs-media}/comics:/comics
       - ${MEDIA_DOWNLOADS_VOLUME:-komga-nfs-downloads}:/downloads
       - /dev/rtc:/dev/rtc:ro
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro

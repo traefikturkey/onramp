@@ -16,7 +16,6 @@ services:
       - traefik
     volumes:
       - ./etc/jellyseerr:/app/config
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
       - PUID=${PUID:-1000}

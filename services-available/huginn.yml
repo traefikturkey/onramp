@@ -18,7 +18,6 @@ services:
       - traefik
     volumes:
       - huginn:/var/lib/mysql
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
       - PUID=${PUID:-1000}

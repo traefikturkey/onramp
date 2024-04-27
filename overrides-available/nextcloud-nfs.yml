@@ -14,5 +14,4 @@ services:
       # you should not put plex config directory on nfs, there are serious performance issues
       - ./etc/nextcloud:/config
       - ${NEXTCLOUD_DATA_VOLUME:-nextcloud-nfs-data}:${NEXTCLOUD_DATA_PATH:-/data}
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro

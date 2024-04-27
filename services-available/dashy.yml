@@ -17,7 +17,6 @@ services:
     volumes:
       - ./etc/dashy/dashy-config.yml:/app/public/conf.yml
       - ./media/assets/dashy-icons:/app/public/item-icons
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
       - NODE_ENV=production

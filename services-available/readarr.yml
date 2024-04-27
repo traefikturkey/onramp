@@ -19,7 +19,6 @@ services:
       - ${READARR_CONFIG_VOLUME:-./etc/readarr}:/config
       - ${MEDIA_BOOKS_VOLUME:-./media/books}:/books
       - ${MEDIA_DOWNLOADS_VOLUME:-./media/downloads}:/downloads
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     ports:
       - 8787:8787

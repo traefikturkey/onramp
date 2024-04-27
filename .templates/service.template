@@ -17,7 +17,6 @@ services:
       - traefik
     volumes:
       - ./etc/${SERVICE_PASSED_DNCASED}:/config # <==== this probably needs changed
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
       - PUID=${PUID:-1000}

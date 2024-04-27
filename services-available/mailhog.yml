@@ -18,7 +18,6 @@ services:
       - ${MH_SMTP_PORT:-1025}:${MH_SMTP_PORT:-1025}
     volumes:
       - mailhog_storage:/home/mailhog
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
       - MH_HOSTNAME=${MAILHOG_CONTAINER_NAME:-mailhog}.${HOST_DOMAIN}

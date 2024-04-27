@@ -23,5 +23,4 @@ services:
       - ${MEDIA_BOOKS_VOLUME:-readarr-nfs-media}:${READARR_BOOKS_PATH:-/books}
       - ${MEDIA_DOWNLOADS_VOLUME:-readarr-nfs-downloads}:${READARR_DOWNLOADS_PATH:-/downloads}
       - /dev/rtc:/dev/rtc:ro
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro

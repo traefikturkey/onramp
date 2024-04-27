@@ -22,7 +22,6 @@ services:
     volumes:
       - ./etc/grafana:/var/lib/grafana
       - ./etc/grafana/provisioning:/etc/grafana/provisioning
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     labels:
       - joyride.host.name=${GRAFANA_CONTAINER_NAME:-grafana}.${HOST_DOMAIN}

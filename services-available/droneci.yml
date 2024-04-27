@@ -38,7 +38,6 @@ services:
     #   - 4002:9000
     volumes:
       - ./etc/droneci:/data
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock
     labels:
@@ -69,6 +68,5 @@ services:
     ports:
       - 4003:3000
     volumes:
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock

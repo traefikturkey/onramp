@@ -28,7 +28,6 @@ services:
       - cloudflared_chown
     volumes:
       - ./etc/cloudflare-tunnel:/home/nonroot/.cloudflared/
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     labels:
       - traefik.enable=${CLOUDFLARE_TUNNEL_TRAEFIK_ENABLED:-false}

@@ -13,7 +13,6 @@ services:
     container_name: ${DOCKER_PROXY_CONTAINER_NAME:-docker-proxy}
     restart: ${DOCKER_PROXY_RESTART:-unless-stopped}
     volumes:
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock
     environment:

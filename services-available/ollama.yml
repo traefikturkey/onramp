@@ -24,7 +24,6 @@ services:
       - traefik
     volumes:
       - ${OLLAMA_DATA_PATH:-./media/ollama}:/root/.ollama
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
       - PUID=${PUID:-1000}

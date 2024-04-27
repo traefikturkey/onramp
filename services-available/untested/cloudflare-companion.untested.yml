@@ -8,7 +8,6 @@ services:
     container_name: ${CLOUDFLARE_COMPANION_CONTAINER_NAME:-cloudflare-companion}
     restart: unless-stopped
     volumes:
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
     environment:

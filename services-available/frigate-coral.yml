@@ -19,7 +19,6 @@ services:
     volumes:
       - ./etc/frigate:/config
       - ${FRIGATE_MEDIA_PATH:-./media/frigate}:/media/frigate
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       - type: tmpfs # Optional: 1GB of memory, reduces SSD/SD Card wear
         target: /tmp/cache

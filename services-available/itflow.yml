@@ -34,7 +34,6 @@ services:
       - itflow-db
     volumes:
       - ./etc/itflow/www:/var/www/html
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     user: "33"
     environment:

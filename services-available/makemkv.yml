@@ -17,7 +17,6 @@ services:
     volumes:
       - ./etc/makemkv:/config
       - ${MAKEMKV_OUTPUT_DIR:-./media/videos}:/output
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     devices:
       - ${MAKEMKV_OPTICAL_DRIVE:-/dev/sr0}:${MAKEMKV_OPTICAL_DRIVE:-/dev/sr0}

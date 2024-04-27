@@ -21,7 +21,6 @@ services:
       - ${OMADA_CONFIG_DIR:-./etc/omada}/data:/opt/tplink/EAPController/data
       - ${OMADA_CONFIG_DIR:-./etc/omada}/work:/opt/tplink/EAPController/work
       - ${OMADA_CONFIG_DIR:-./etc/omada}/logs:/opt/tplink/EAPController/logs
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
       - PUID=${PUID:-1000}

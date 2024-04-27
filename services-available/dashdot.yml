@@ -19,7 +19,6 @@ services:
     #privileged: false
     volumes:
       #- ./etc/dashdot:/config # <==== this probably needs changed
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       #- /:/mnt/host:ro
     environment:

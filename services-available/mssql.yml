@@ -12,7 +12,6 @@ services:
     restart: unless-stopped
     volumes:
       - ${MSSQL_DB_DIR:-./media/databases/mssql}:/var/opt/mssql/data # paths will have to be researched futher
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
       - PUID=${PUID:-1000}

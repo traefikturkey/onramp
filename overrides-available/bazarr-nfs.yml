@@ -23,5 +23,4 @@ services:
       - ${MEDIA_SHOWS_VOLUME:-bazarr-nfs-shows}:/tv
       - ${MEDIA_DOWNLOADS_VOLUME:-bazarr-nfs-movies}:/movies
       - /dev/rtc:/dev/rtc:ro
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
