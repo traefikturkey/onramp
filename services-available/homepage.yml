@@ -13,7 +13,8 @@ services:
   homepage:
     image: ghcr.io/gethomepage/homepage:${HOMEPAGE_DOCKER_TAG:-latest}
     container_name: ${HOMEPAGE_CONTAINER_NAME:-homepage}
-    restart: unless-stopped
+    restart: ${HOMEPAGE_RESTART:-unless-stopped}
+    mem_limit: ${HOMEPAGE_MEM_LIMIT:-200m}
     networks:
       - traefik
     volumes:
@@ -26,15 +27,9 @@ services:
       - TZ=${TZ}
     labels:
       - joyride.host.name=${HOMEPAGE_CONTAINER_NAME:-homepage}.${HOST_DOMAIN}
-      - traefik.enable=true
+      - traefik.enable=${HOMEPAGE_TRAEFIK_ENABLE:-true}
       - traefik.http.routers.homepage.entrypoints=websecure
       - traefik.http.routers.homepage.rule=Host(`${HOMEPAGE_CONTAINER_NAME:-homepage}.${HOST_DOMAIN}`)
       - traefik.http.services.homepage.loadbalancer.server.port=3000
-      - com.centurylinklabs.watchtower.enable=true
-      - autoheal=true
-
-      # - homepage.group=A group
-      # - homepage.name=homepage
-      # - homepage.icon=
-      # - homepage.href=https://${HOMEPAGE_CONTAINER_NAME:-homepage}.${HOST_DOMAIN}
-      # - homepage.description=This page
+      - com.centurylinklabs.watchtower.enable=${HOMEPAGE_WATCHTOWER:-true}
+      - autoheal=${HOMEPAGE_AUTOHEAL:-true}

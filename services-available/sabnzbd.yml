@@ -31,9 +31,9 @@ services:
       timeout: 10s
     labels:
       - joyride.host.name=${SABNZBD_CONTAINER_NAME:-sabnzbd}.${HOST_DOMAIN}
-      - traefik.enable=true
+      - traefik.enable=${SABNZBD_TRAEFIK_ENABLE:-true}
       - traefik.http.routers.sabnzbd.entrypoints=websecure
       - traefik.http.routers.sabnzbd.rule=Host(`${SABNZBD_CONTAINER_NAME:-sabnzbd}.${HOST_DOMAIN}`)
       - traefik.http.services.sabnzbd.loadbalancer.server.port=8080
-      - com.centurylinklabs.watchtower.enable=true
-      - autoheal=true
+      - com.centurylinklabs.watchtower.enable=${SABNZBD_WATCHTOWER_ENABLE:-true}
+      - autoheal=${SABNZBD_AUTOHEAL:-true}

@@ -33,9 +33,9 @@ services:
       timeout: 10s
     labels:
       - joyride.host.name=${RADARR_CONTAINER_NAME:-radarr}.${HOST_DOMAIN}
-      - traefik.enable=true
+      - traefik.enable=${RADARR_TRAEFIK_ENABLE:-true}
       - traefik.http.routers.radarr.entrypoints=websecure
       - traefik.http.routers.radarr.rule=Host(`${RADARR_CONTAINER_NAME:-radarr}.${HOST_DOMAIN}`)
       - traefik.http.services.radarr.loadbalancer.server.port=7878
-      - com.centurylinklabs.watchtower.enable=true
-      - autoheal=true
+      - com.centurylinklabs.watchtower.enable=${RADARR_WATCHTOWER_ENABLE:-true}
+      - autoheal=${RADARR_AUTOHEAL:-true}

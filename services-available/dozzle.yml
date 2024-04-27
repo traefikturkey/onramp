@@ -14,16 +14,16 @@ services:
     networks:
       - traefik
     environment:
+      - TZ=${TZ}
       - DOZZLE_LEVEL=${DOZZLE_LEVEL:-debug}
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
     labels:
       - joyride.host.name=${DOZZLE_CONTAINER_NAME:-dozzle}.${HOST_DOMAIN}
-      - traefik.enable=true
-      - traefik.http.routers.dozzle.rule=Host(`${DOZZLE_CONTAINER_NAME:-dozzle}.${HOST_DOMAIN}`)
+      - traefik.enable=${DOZZLE_TRAEFIK_ENABLE:-true}
       - traefik.http.routers.dozzle.entrypoints=websecure
-      - traefik.http.services.dozzle.loadbalancer.server.scheme=http
+      - traefik.http.routers.dozzle.rule=Host(`${DOZZLE_CONTAINER_NAME:-dozzle}.${HOST_DOMAIN}`)
       - traefik.http.services.dozzle.loadbalancer.server.port=8080
-      - com.centurylinklabs.watchtower.enable=true
-      - autoheal=true
+      - com.centurylinklabs.watchtower.enable=${DOZZLE_WATCHTOWER_ENABLE:-true}
+      - autoheal=${DOZZLE_AUTOHEAL:-true}
