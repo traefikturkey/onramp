@@ -13,7 +13,7 @@ services:
     image: ghcr.io/containrrr/watchtower:${WATCHTOWER_DOCKER_TAG:-latest}
     container_name: ${WATCHTOWER_CONTAINER_NAME:-watchtower}
     restart: ${WATCHTOWER_RESTART:-unless-stopped}
-    # so homepage can talk to it directly
+    mem_limit: ${WATCHTOWER_MEM_LIMIT:-100m}
     networks:
       - traefik
     environment:
