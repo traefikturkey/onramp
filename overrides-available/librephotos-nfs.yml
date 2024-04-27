@@ -1,5 +1,3 @@
-version: '3'
-
 volumes:
   librephotos-nfs-scan:
     labels:
