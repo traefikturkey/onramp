@@ -6,6 +6,7 @@ services:
     image: petersem/monocker:${MONOCKER_DOCKER_TAG:-latest}
     container_name: ${MONOCKER_CONTAINER_NAME:-monocker}
     restart: ${MONOCKER_RESTART:-unless-stopped}
+    mem_limit: ${MONOCKER_MEM_LIMIT:-130m}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /etc/localtime:/etc/localtime:ro

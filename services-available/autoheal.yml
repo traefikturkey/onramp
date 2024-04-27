@@ -6,6 +6,7 @@ services:
     image: willfarrell/autoheal:${AUTOHEAL_DOCKER_TAG:-latest}
     container_name: ${AUTOHEAL_CONTAINER_NAME:-autoheal}
     restart: ${AUTOHEAL_RESTART:-always}
+    mem_limit: ${AUTOHEAL_MEM_LIMIT:-20m}
     environment:
       - AUTOHEAL_CONTAINER_LABEL=${AUTOHEAL_CONTAINER_LABEL:-all}
       - AUTOHEAL_INTERVAL=${AUTOHEAL_INTERVAL_VALUE:-5}
