@@ -12,7 +12,6 @@ services:
       - 19132:19132/udp
     volumes:
       #- ./etc/minecraft-bedrock:/config # <==== this probably needs changed
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       - ./etc/games/${MINECRAFT_BEDROCK_HOSTNAME:-minecraft-bedrock}:/data
     environment:

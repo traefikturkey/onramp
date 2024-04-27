@@ -22,7 +22,6 @@ services:
       - TZ=${TZ}
     volumes:
       - ./etc/nodered:/data
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     labels:
       - joyride.host.name=nodered.${HOST_DOMAIN}

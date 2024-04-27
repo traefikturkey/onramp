@@ -19,7 +19,6 @@ services:
     #   - NET_ADMIN
     volumes:
       - ./etc/pihole:/etc/pihole
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       - ./etc/pihole/dnsmasq:/etc/dnsmasq.d
     environment:

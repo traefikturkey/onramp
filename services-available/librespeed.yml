@@ -17,7 +17,6 @@ services:
       - traefik
     volumes:
       - ./etc/librespeed:/config
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
       - PUID=${PUID:-1000}

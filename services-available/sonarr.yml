@@ -19,7 +19,6 @@ services:
       - ${MEDIA_SHOWS_VOLUME:-./media/shows}:/tv
       - ${MEDIA_DOWNLOADS_VOLUME:-./media/downloads}:/downloads
       - /dev/rtc:/dev/rtc:ro
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     # ports:
     #   - 8989:8989

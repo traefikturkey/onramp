@@ -17,7 +17,6 @@ services:
     volumes:
       - ./etc/cv4pve/data:/app/data
       - ./etc/cv4pve/appsettings.json:/app/appsettings.json
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
       - PUID=${PUID:-1000}

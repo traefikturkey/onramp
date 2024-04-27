@@ -19,7 +19,6 @@ services:
       - ./etc/audiobookshelf/metadata:/metadata
       - ${AUDIOBOOKSHELF_MEDIA_AUDIOBOOKS:-./media/audiobooks}:${AUDIOBOOKSHELF_MEDIA_AUDIOBOOKS_PATH:-/audiobooks}
       - ${AUDIOBOOKSHELF_MEDIA_PODCASTS:-./media/podcasts}:${AUDIOBOOKSHELF_MEDIA_PODCASTS_PATH:-/podcasts}
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
       - AUDIOBOOKSHELF_UID=${PUID:-1000}

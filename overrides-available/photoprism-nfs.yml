@@ -12,7 +12,6 @@ services:
   photoprism:
     volumes:
       - ./etc/photoprism/:/photoprism/config
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       - ./etc/photoprism/storage:/photoprism/storage
       - photoprism-nfs-root:/photoprism/originals/

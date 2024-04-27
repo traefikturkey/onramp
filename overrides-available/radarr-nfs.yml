@@ -23,5 +23,4 @@ services:
       - ${MEDIA_MOVIES_VOLUME:-radarr-nfs-media}:${RADARR_MOVIES_PATH:-/movies}
       - ${MEDIA_DOWNLOADS_VOLUME:-radarr-nfs-downloads}:${RADARR_DOWNLOADS_PATH:-/downloads}
       - /dev/rtc:/dev/rtc:ro
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro

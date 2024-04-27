@@ -17,7 +17,6 @@ services:
     volumes:
       - ./etc/homarr/configs:/app/data/configs
       - ./etc/homarr/icons:/app/public/icons
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       #- /var/run/docker.sock:/var/run/docker.sock #uncomment to enable docker control
     environment:

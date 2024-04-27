@@ -16,7 +16,6 @@ services:
       - traefik
     volumes:
       - ./etc/sablier:/config # <==== this probably needs changed
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:rw
     environment:

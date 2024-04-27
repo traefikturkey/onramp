@@ -23,5 +23,4 @@ services:
       - ${MEDIA_MUSIC_VOLUME:-lidarr-nfs-media}:/music
       - ${MEDIA_DOWNLOADS_VOLUME:-lidarr-nfs-downloads}:/downloads
       - /dev/rtc:/dev/rtc:ro
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro

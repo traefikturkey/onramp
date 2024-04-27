@@ -19,7 +19,6 @@ services:
       - traefik
     volumes:
       - ${IVENTOY_ISO_PATH:-./media/isos}:/app/iso
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     ports:
       - 16000:16000 # iVentoy PXE Service HTTP Server Port
