@@ -22,9 +22,9 @@ services:
       - IS_PERSISTENT=${CHROMADB_IS_PERSISTENT:-TRUE}
     labels:
       - joyride.host.name=${CHROMADB_CONTAINER_NAME:-chromadb}.${HOST_DOMAIN}
-      - traefik.enable=true
+      - traefik.enable=${CHROMADB_TRAEFIK_ENABLE:-true}
       - traefik.http.routers.chromadb.entrypoints=websecure
       - traefik.http.routers.chromadb.rule=Host(`${CHROMADB_CONTAINER_NAME:-chromadb}.${HOST_DOMAIN}`)
       - traefik.http.services.chromadb.loadbalancer.server.port=8000
-      - com.centurylinklabs.watchtower.enable=true
-      - autoheal=true
+      - com.centurylinklabs.watchtower.enable=${CHROMADB_WATCHTOWER_ENABLE:-true}
+      - autoheal=${CHROMADB_AUTOHEAL:-true}
