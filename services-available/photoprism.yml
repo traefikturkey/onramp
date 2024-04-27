@@ -17,7 +17,6 @@ services:
       - traefik
     volumes:
       - ./etc/photoprism/:/photoprism/config
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       - ${PHOTOPRISM_MEDIA_PHOTOS:-./media/photos}:/photoprism/originals/photos
       - ${PHOTOPRISM_MEDIA_VIDEOS:-./media/videos}:/photoprism/originals/videos

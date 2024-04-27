@@ -21,7 +21,6 @@ services:
     volumes:
       - ./etc/airprint:/config
       - ./etc/airprint/services:/services
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     # ports:
     #   - 631:631

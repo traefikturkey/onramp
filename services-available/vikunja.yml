@@ -43,7 +43,6 @@ services:
       - traefik
     volumes:
       - ./etc/vikunja/files:/config
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     depends_on:
       - ${VIKUNJA_DATABASE_CONTAINER_NAME:-vikunja-db}

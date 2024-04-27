@@ -19,7 +19,6 @@ services:
       - /dev/dri:/dev/dri
     volumes:
       - ./etc/firefox:/config
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
       - PUID=${PUID:-1000}

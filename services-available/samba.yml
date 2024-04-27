@@ -31,7 +31,6 @@ services:
       - ${SAMBA_SHARE1_VOLUME:-./media}:/${SAMBA_SHARE1_NAME:-media}
       #- /host/foo:/container/foo
       #- /host/bar:/container/bar
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     labels:
       - traefik.enable=false

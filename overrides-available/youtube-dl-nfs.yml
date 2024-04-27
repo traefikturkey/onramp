@@ -15,5 +15,4 @@ services:
     volumes:
       - ${YOUTUBE_DL_CONFIG_VOLUME:-./etc/youtube-dl}:${YDL_CONFIG_PATH:-/config}
       - ${YOUTUBE_DL_MEDIA_VOLUME:-youtube-dl-nfs-media}:${YOUTUBE_DL_MEDIA_PATH:-/youtube-dl}
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro

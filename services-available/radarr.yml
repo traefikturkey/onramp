@@ -20,7 +20,6 @@ services:
       - ${MEDIA_MOVIES_VOLUME:-./media/movies}:/movies
       - ${MEDIA_DOWNLOADS_VOLUME:-./media/downloads}:/downloads
       - /dev/rtc:/dev/rtc:ro
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     ports:
       - 7878:7878

@@ -17,7 +17,6 @@ services:
     command: --user-data-dir=/config
     volumes:
       - ./etc/super-productivity:/config
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
       - PUID=${PUID:-1000}

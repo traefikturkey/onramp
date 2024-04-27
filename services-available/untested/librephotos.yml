@@ -13,7 +13,6 @@ services:
     volumes:
       - ${LIBREPHOTOS_SCAN_DIRECTORY:-./etc/librephotos/pictures}:/data
       - ${LIBREPHOTOS_DATA_DIRECTORY:-./etc/librephotos/data}/protected_media:/protected_media
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     depends-on:
       - frontend

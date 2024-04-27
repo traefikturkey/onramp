@@ -14,5 +14,4 @@ services:
       - ./etc/syncthing:/config
       - ${SYNCTHING_VOLUME:-syncthing-nfs-media}:/sync
       - /dev/rtc:/dev/rtc:ro
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro

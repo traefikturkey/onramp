@@ -32,7 +32,6 @@ services:
       - "2222:22"
     volumes:
       - ./etc/gitea:/data
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     labels:
       - joyride.host.name=${GITEA_CONTAINER_NAME:-gitea}.${HOST_DOMAIN}

@@ -25,7 +25,6 @@ services:
       - ./etc/syncthing:/config
       - ${SYNCTHING_VOLUME:-./media/sync}:/sync
       - /dev/rtc:/dev/rtc:ro
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     ports:
       #- 8384:8384
