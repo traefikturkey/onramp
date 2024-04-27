@@ -1,5 +1,3 @@
-version: '3'
-
 # https://github.com/tiredofit/docker-traefik-cloudflare-companion
 
 services:

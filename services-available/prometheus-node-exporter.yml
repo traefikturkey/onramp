@@ -1,5 +1,3 @@
-version: '3'
-
 # description: Exposes hardware and os metrics to prometheus
 # Please see Makefile install-node-exporter: to install node-export directly on the host
 # by running: 'make install-node-exporter' as an alternative to using this container

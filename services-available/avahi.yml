@@ -1,5 +1,3 @@
-version: '3'
-
 # description: Implements mdns/dns-sd for local network service discovery
 # https://github.com/MattKobayashi/docker-avahi
 
