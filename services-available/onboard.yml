@@ -30,9 +30,9 @@ services:
       - TZ=${TZ}
     labels:
       - joyride.host.name=${ONBOARD_CONTAINER_NAME:-onboard}.${HOST_DOMAIN}
-      - traefik.enable=true
+      - traefik.enable=${ONBOARD_TRAEFIK_ENABLE:-true}
       - traefik.http.routers.onboard.entrypoints=websecure
       - traefik.http.routers.onboard.rule=Host(`${ONBOARD_CONTAINER_NAME:-onboard}.${HOST_DOMAIN}`)
       - traefik.http.services.onboard.loadbalancer.server.port=9830
-      - com.centurylinklabs.watchtower.enable=true
-      - autoheal=true
+      - com.centurylinklabs.watchtower.enable=${ONBOARD_WATCHTOWER_ENABLE:-true}
+      - autoheal=${ONBOARD_AUTOHEAL:-true}

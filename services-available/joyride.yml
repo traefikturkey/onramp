@@ -16,8 +16,9 @@ services:
     image: ghcr.io/traefikturkey/joyride:${JOYRIDE_DOCKER_TAG:-latest}
     container_name: ${JOYRIDE_CONTAINER_NAME:-joyride}
     restart: ${JOYRIDE_RESTART:-unless-stopped}
-    mem_limit: ${JOYRIDE_MEM_LIMIT:-200g}
+    mem_limit: ${JOYRIDE_MEM_LIMIT:-100m}
     environment:
+      - TZ=${TZ}
       - HOSTIP=${HOSTIP}
       - JOYRIDE_NXDOMAIN_ENABLED=${JOYRIDE_NXDOMAIN_ENABLED:-false}
       - JOYRIDE_LOG_DEBUG=${JOYRIDE_LOG_DEBUG:-false}
@@ -30,4 +31,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./etc/joyride/hosts.d:/etc/hosts.d:ro
     labels:
-      - traefik.enable=false
+      - traefik.enable=${JOYRIDE_TRAEFIK_ENABLE:-false}
+      - com.centurylinklabs.watchtower.enable=${JOYRIDE_WATCHTOWER_ENABLE:-true}
+      - autoheal=${JOYRIDE_AUTOHEAL:-true}

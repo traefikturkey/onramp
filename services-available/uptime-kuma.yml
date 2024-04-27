@@ -18,14 +18,16 @@ services:
     volumes:
       - ./etc/uptime-kuma:/app/data
       - ${UPTIMEKUMA_DOCKER_SOCKET:-/var/run/docker.sock}:/var/run/docker.sock
-    env_file:
-      - .env
+    environment:
+      - TZ=${TZ}
     labels:
       - joyride.host.name=${UPTIMEKUMA_HOST_NAME:-uptimekuma}.${HOST_DOMAIN}
-      - traefik.enable=true
+      - traefik.enable=${UPTIMEKUMA_TRAEFIK_ENABLE:-true}
       - traefik.http.routers.uptimekuma.entrypoints=websecure
       - traefik.http.routers.uptimekuma.rule=Host(`${UPTIMEKUMA_HOST_NAME:-uptimekuma}.${HOST_DOMAIN}`)
       - traefik.http.routers.uptimekuma.tls=true
       - traefik.http.routers.uptimekuma.service=uptimekuma
       - traefik.http.services.uptimekuma.loadbalancer.server.port=3001
       - traefik.docker.network=traefik
+      - com.centurylinklabs.watchtower.enable=${UPTIMEKUMA_WATCHTOWER_ENABLE:-true}
+      - autoheal=${UPTIMEKUMA_AUTOHEAL:-true}

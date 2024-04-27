@@ -14,6 +14,7 @@ services:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
+      TZ: ${TZ}
       # Optional label to preface messages. Handy if you are running multiple versions of Monocker
       SERVER_LABEL: ${MONOCKER_SERVER_LABEL:-${HOST_NAME}}
       # Specify the messaging platform and details, or leave blank if only wanting container logs (pick one only)
@@ -30,6 +31,6 @@ services:
       EXCLUDE_EXITED: ${MONOCKER_EXCLUDE_EXITED:-false}
 
     labels:
-      - traefik.enable=false
-      - com.centurylinklabs.watchtower.enable=true
-      - autoheal=true
+      - traefik.enable=${MONOCKER_TRAEFIK_ENABLE:-true}
+      - com.centurylinklabs.watchtower.enable=${MONOCKER_WATCHTOWER_ENABLE:-true}
+      - autoheal=${MONOCKER_AUTOHEAL:-true}
