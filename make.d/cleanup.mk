@@ -4,10 +4,6 @@
 ##
 #########################################################
 
-clean-acme: ## remove acme certificate file
-	@echo "removing acme certificate file"
-	-sudo rm etc/traefik/letsencrypt/acme.json
-
 prune: ## remove unused docker images
 	docker image prune
 
