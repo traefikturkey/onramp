@@ -21,10 +21,9 @@ services:
       - ./etc/pwndrop:/config
     labels:
       - joyride.host.name=${PWNDROP_CONTAINER_NAME:-pwndrop}.${HOST_DOMAIN}
-      - traefik.enable=true
-      - traefik.docker.network=traefik
-      - traefik.http.routers.pwndrop.rule=Host(`${PWNDROP_CONTAINER_NAME:-pwndrop}.${HOST_DOMAIN}`)
+      - traefik.enable=${PWNDROP_TRAEFIK_ENABLE:-true}
       - traefik.http.routers.pwndrop.entrypoints=websecure
+      - traefik.http.routers.pwndrop.rule=Host(`${PWNDROP_CONTAINER_NAME:-pwndrop}.${HOST_DOMAIN}`)
       - traefik.http.services.pwndrop.loadbalancer.server.port=8080
-      - com.centurylinklabs.watchtower.enable=true
-      - autoheal=true
+      - com.centurylinklabs.watchtower.enable=${PWNDROP_WATCHTOWER_ENABLE:-true}
+      - autoheal=${PWNDROP_AUTOHEAL:-true}
