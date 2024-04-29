@@ -82,4 +82,4 @@ install-nvidia-drivers: install-ansible
 
 # kill all vscode instances running on the server
 make kill-code:
-	ps aux | grep .vscode-server | awk '{print $2}' | xargs kill
+	ps aux | grep .vscode-server | awk '{print $$2}' | xargs kill
