@@ -1,5 +1,5 @@
 # Available Services
-175 services and counting...
+176 services and counting...
 
 
 - [adguard](https://github.com/AdguardTeam/AdGuardHome): Network-wide ad blocker and privacy tool
@@ -13,6 +13,7 @@
 - [avahi](https://github.com/MattKobayashi/docker-avahi): Implements mdns/dns-sd for local network service discovery
 - [basaran](https://github.com/hyperonym/basaran): Container for running basaran, a web-based file manager
 - [bazarr](https://hub.docker.com/r/linuxserver/bazarr): Manages subtitles for media content
+- [bind](https://hub.docker.com/r/ubuntu/bind9): A very flexible, full-featured DNS system
 - [cadvisor](https://hub.docker.com/r/google/cadvisor/): Collects and analyzes resource usage and performance characteristics of running containers
 - [cert-dumper](https://github.com/ldez/traefik-certs-dumper): Extracts ssl certificate information from websites
 - [chromadb](https://github.com/chroma-core/chroma/): Chromecast database and controller
