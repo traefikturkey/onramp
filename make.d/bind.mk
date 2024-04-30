@@ -1,16 +1,6 @@
-setup-bind: netplan-apply
-	$(make) enable-service bind
-	$(make) start-service  bind
+setup-coredns: prep-dns
+	touch ./etc/coredns/Corefile.pihole
 
-netplan-apply: disable-systemd-resolved
-	@echo "Applying netplan"
-	@sudo netplan apply
-
-disable-systemd-resolved: stop-systemd-resolved
-	@echo "Disabling systemd-resolved"
-	@systemctl disable systemd-resolved
-	sudo rm /etc/resolv.conf
-
-stop-systemd-resolved:
-	@echo "Stopping systemd-resolved"
-	@systemctl stop systemd-resolved
+prep-dns: 
+	sudo sed -i 's/#DNSStubListener=yes/DNSStubListener=no/' /etc/systemd/resolved.conf
+	sudo systemctl restart systemd-resolved

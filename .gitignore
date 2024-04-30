@@ -37,23 +37,24 @@ etc/*/*
 etc/*/*/*
 !etc/*/*/.keep
 
+etc/gitea/*
 etc/healthchecks
 etc/immich
-etc/gitea/*
 
+!etc/adguard/conf/AdGuardHome.template
+!etc/authelia/configuration.template
+!etc/coredns/Corefile
+!etc/crowdsec/acquis.yaml
 !etc/grafana/provisioning/*
 !etc/loki/loki-config.yml
+!etc/olivetin/config.yaml
+!etc/pihole/dns.template
 !etc/prometheus/conf-originals/*
+!etc/promtail/promtail-config.yml
+!etc/recyclarr/recyclarr.template
+!etc/searxng/settings.template.yml
 !etc/traefik/available/*
 !etc/traefik/enabled/middleware.yml
-!etc/authelia/configuration.template
-!etc/crowdsec/acquis.yaml
-!etc/adguard/conf/AdGuardHome.template
-!etc/pihole/dns.template
-!etc/searxng/settings.template.yml
-!etc/recyclarr/recyclarr.template
-!etc/promtail/promtail-config.yml
-!etc/olivetin/config.yaml
 
 ansible/roles/
 
