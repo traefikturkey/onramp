@@ -1,0 +1,21 @@
+whoami.{%HOST_DOMAIN%} {
+    errors
+    whoami
+}
+
+. {
+    reload {%COREDNS_RELOAD%}
+
+    hosts {
+        {%HOSTIP%}  {%SERVICE_NAME%}.{%HOST_DOMAIN%}
+        {%HOSTIP%}  {%HOST_NAME%}.{%HOST_DOMAIN%}
+        fallthrough
+    }
+
+    import /config/Corefile.*
+
+    forward . {%UPSTREAM_SERVER_1%} {%UPSTREAM_SERVER_2%} {%UPSTREAM_SERVER_3%}
+    prometheus
+    errors
+    log
+}
