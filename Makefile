@@ -53,8 +53,7 @@ endif
 EMPTY_TARGETS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
 $(eval $(EMPTY_TARGETS):;@:)
 
-# Include all Makefiles in make.d directory
-include $(wildcard make.d/*.mk)
+
 
 #########################################################
 ##
@@ -87,5 +86,5 @@ restart: down start ## restart all services that are enabled
 
 update: down pull start ## update all the services that are enabled and restart them
 
-
-
+# Include all Makefiles in make.d directory
+include $(wildcard make.d/*.mk)
