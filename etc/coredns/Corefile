@@ -4,11 +4,14 @@ whoami.{%HOST_DOMAIN%} {
 }
 
 . {
-    reload {%COREDNS_RELOAD%}
+    reload 10s
+
+    rewrite name regex _joyride_._service_.(.*) _joyride_._service_.{%HOST_DOMAIN%}
 
     hosts {
         {%HOSTIP%}  {%SERVICE_NAME%}.{%HOST_DOMAIN%}
         {%HOSTIP%}  {%HOST_NAME%}.{%HOST_DOMAIN%}
+        {%HOSTIP%}  _joyride_._service_.{%HOST_DOMAIN%}
         fallthrough
     }
 
