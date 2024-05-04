@@ -1,5 +1,5 @@
 # Available Services
-179 services and counting...
+180 services and counting...
 
 
 - [adguard](https://github.com/AdguardTeam/AdGuardHome): Network-wide ad blocker and privacy tool
@@ -103,6 +103,7 @@
 - [openspeedtest](https://github.com/openspeedtest/Docker-Image): Network Performance Estimation Tool
 - [overseerr](https://hub.docker.com/r/linuxserver/overseerr): Request management and notification system for media content
 - [owncast](https://github.com/owncast/owncast): Self-hosted live video streaming server
+- [paperless-ngx-postgres](https://hub.docker.com/r/linuxserver/paperless-ngx): 
 - [paperless-ngx](https://hub.docker.com/r/linuxserver/paperless-ngx): Document management system
 - [pgadmin](https://www.pgadmin.org/): Web-based postgresql administration tool
 - [photoprism](https://github.com/photoprism/photoprism): Personal photo management software
