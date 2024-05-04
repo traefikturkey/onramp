@@ -35,8 +35,8 @@
 - [droneci](https://github.com/harness/drone): Continuous integration and delivery platform
 - [duplicati](https://www.duplicati.com/): Backs up files and folders to various storage destinations
 - [excalidraw](https://excalidraw.com/): Collaborative whiteboard tool
-- [firefly3](https://github.com/firefly-iii/firefly-iii/tree/main): Manages personal finances and budgets
 - [firefly-data-importer](https://github.com/firefly-iii/firefly-iii/tree/main): Imports data into firefly iii, a personal finance manager
+- [firefly3](https://github.com/firefly-iii/firefly-iii/tree/main): Manages personal finances and budgets
 - [firefox](https://github.com/jlesage/docker-firefox): Runs mozilla firefox browser in a container
 - [flame](https://hub.docker.com/r/pawelmalak/flame): Self-hosted music recommendation engine
 - [foundryvtt](https://hub.docker.com/r/felddy/foundryvtt): Virtual tabletop platform for role-playing games
@@ -65,8 +65,8 @@
 - [itflow](https://itflow.org/): Workflow automation tool
 - [iventoy](https://github.com/The-Drobe/iventoy-docker): ventoy as a PXE server (WARNING: This is a DHCP server!!!)
 - [jellyfin](https://hub.docker.com/r/linuxserver/jellyfin): Media server for streaming content
-- [jellyseerr](https://github.com/Fallenbagel/jellyseerr/tree/develop): Container for running jellyseerr, a torrent indexer
 - [jellyseer](https://github.com/Fallenbagel/jellyseerr/tree/develop): 
+- [jellyseerr](https://github.com/Fallenbagel/jellyseerr/tree/develop): Container for running jellyseerr, a torrent indexer
 - [joplin](https://joplinapp.org/): Note-taking and to-do app
 - [joyride](https://github.com/ilude/joyride): dynamic dns server that uses docker labels
 - [kaizoku](https://github.com/oae/kaizoku): Web-based anime downloader
