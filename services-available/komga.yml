@@ -1,5 +1,3 @@
-version: '3'
-
 networks:
   traefik:
     external: true
@@ -18,7 +16,6 @@ services:
       - ${KOMGA_CONFIG_VOLUME:-./etc/komga}:/config
       - ${MEDIA_MANGA_VOLUME:-./media/manga}:/manga
       - ${MEDIA_COMICS_VOLUME:-./media/comics}:/comics
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
       - PUID=${PUID:-1000}

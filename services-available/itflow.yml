@@ -1,5 +1,3 @@
-version: '3'
-
 networks:
   traefik:
     external: true
@@ -18,8 +16,7 @@ services:
     depends_on:
       - itflow-db
     volumes:
-      - ./etc/itflow:/config # <==== this probably needs changed
-      - /etc/timezone:/etc/timezone:ro
+      - ./etc/itflow/www:/var/www/html
       - /etc/localtime:/etc/localtime:ro
     environment:
       - PUID=${PUID:-1000}

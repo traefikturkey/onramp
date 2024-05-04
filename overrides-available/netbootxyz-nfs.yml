@@ -14,5 +14,4 @@ services:
     volumes:
       - ${NETBOOTXYZ_CONFIG_VOLUME:-./etc/netbootxyz:/config}:/config
       - ${NETBOOTXYZ_ASSETS_VOLUME:-netbootxyz-nfs-assets}:${NETBOOTXYZ_ASSETS_PATH:-/assets}
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro

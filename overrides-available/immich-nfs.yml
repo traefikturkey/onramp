@@ -1,5 +1,3 @@
-version: '3'
-
 volumes:
   immich-nfs-upload:
     labels:

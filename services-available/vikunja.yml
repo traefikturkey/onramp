@@ -1,5 +1,3 @@
-version: '3'
-
 networks:
   traefik:
     external: true
@@ -36,7 +34,6 @@ services:
       - traefik
     volumes:
       - ./etc/vikunja/files:/config
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     depends_on:
       - ${VIKUNJA_DATABASE_CONTAINER_NAME:-vikunja-db}

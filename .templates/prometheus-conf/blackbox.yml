@@ -1,0 +1,15 @@
+modules:
+  icmp_ipv4:
+   prober: icmp
+   icmp:
+     preferred_ip_protocol: ip4
+  http_2xx:
+    prober: http
+    http:
+      preferred_ip_protocol: ip4
+  selfsigned_https_2xx:
+    prober: http
+    http:
+      tls_config:
+        insecure_skip_verify: true
+      preferred_ip_protocol: ip4

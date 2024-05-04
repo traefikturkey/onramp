@@ -1,5 +1,3 @@
-version: '3'
-
 networks:
   traefik:
     external: true
@@ -16,7 +14,6 @@ services:
       - traefik
     volumes:
       - ./etc/portainer-ee:/data
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock
     env_file:

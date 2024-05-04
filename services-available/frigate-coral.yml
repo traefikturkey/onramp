@@ -1,5 +1,3 @@
-version: '3'
-
 networks:
   traefik:
     external: true
@@ -10,7 +8,7 @@ networks:
 services:
   frigate-coral:
     image: ghcr.io/blakeblackshear/frigate:${FRIGATE_DOCKER_TAG:-stable}
-    container_name: ${FRIGATE_CONTAINER_NAME:-frigate}
+    container_name: ${FRIGATE_CONTAINER_NAME:-frigate-coral}
     restart: ${FRIGATE_RESTART:-unless-stopped}
     networks:
       - traefik
@@ -19,7 +17,6 @@ services:
     volumes:
       - ./etc/frigate:/config
       - ${FRIGATE_MEDIA_PATH:-./media/frigate}:/media/frigate
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       - type: tmpfs # Optional: 1GB of memory, reduces SSD/SD Card wear
         target: /tmp/cache
@@ -36,9 +33,9 @@ services:
       - FRIGATE_MQTT_PASSWORD=${FRIGATE_MQTT_PASSWORD:-}
     labels:
       - joyride.host.name=${FRIGATE_HOST_NAME:-frigate}.${HOST_DOMAIN}
-      - traefik.enable=true
+      - traefik.enable=${FRIGATE_TRAEFIK_ENABLE:-true}
       - traefik.http.routers.frigate.entrypoints=websecure
       - traefik.http.routers.frigate.rule=Host(`${FRIGATE_HOST_NAME:-frigate}.${HOST_DOMAIN}`)
       - traefik.http.services.frigate.loadbalancer.server.port=5000
-      - com.centurylinklabs.watchtower.enable=true
-      - autoheal=true
+      - com.centurylinklabs.watchtower.enable=${FRIGATE_WATCHTOWER_ENABLE:-true}
+      - autoheal=${FRIGATE_AUTOHEAL:-true}

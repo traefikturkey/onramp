@@ -1,5 +1,3 @@
-version: '3'
-
 networks:
   traefik:
     external: true
@@ -20,7 +18,6 @@ services:
       - ${MEDIA_MOVIES_VOLUME:-./media/movies}:/movies
       - ${MEDIA_DOWNLOADS_VOLUME:-./media/downloads}:/downloads
       - /dev/rtc:/dev/rtc:ro
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     ports:
       - 7878:7878
@@ -36,9 +33,9 @@ services:
       timeout: 10s
     labels:
       - joyride.host.name=${RADARR_CONTAINER_NAME:-radarr}.${HOST_DOMAIN}
-      - traefik.enable=true
+      - traefik.enable=${RADARR_TRAEFIK_ENABLE:-true}
       - traefik.http.routers.radarr.entrypoints=websecure
       - traefik.http.routers.radarr.rule=Host(`${RADARR_CONTAINER_NAME:-radarr}.${HOST_DOMAIN}`)
       - traefik.http.services.radarr.loadbalancer.server.port=7878
-      - com.centurylinklabs.watchtower.enable=true
-      - autoheal=true
+      - com.centurylinklabs.watchtower.enable=${RADARR_WATCHTOWER_ENABLE:-true}
+      - autoheal=${RADARR_AUTOHEAL:-true}

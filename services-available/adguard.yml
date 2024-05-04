@@ -1,5 +1,3 @@
-version: '3'
-
 networks:
   traefik:
     external: true
@@ -27,7 +25,6 @@ services:
     volumes:
       - ./etc/adguard/conf:/opt/adguardhome/conf
       - ./etc/adguard/work:/opt/adguardhome/work
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
       - PUID=${PUID:-1000}

@@ -1,5 +1,3 @@
-version: '3'
-
 networks:
   traefik:
     external: true
@@ -12,6 +10,7 @@ services:
     image: vaultwarden/server:${VAULTWARDEN_DOCKER_TAG:-latest}
     container_name: ${VAULTWARDEN_CONTAINER_NAME:-vaultwarden}
     restart: ${VAULTWARDEN_RESTART:-unless-stopped}
+    mem_limit: ${VAULTWARDEN_MEM_LIMIT:-200m}
     networks:
       - traefik
     volumes:
@@ -36,9 +35,9 @@ services:
 
     labels:
       - joyride.host.name=${VAULTWARDEN_HOSTNAME:-vaultwarden}.${HOST_DOMAIN}
-      - traefik.enable=true
+      - traefik.enable=${VAULTWARDEN_TRAEFIK_ENABLE:-true}
       - traefik.http.routers.vaultwarden.entrypoints=websecure
       - traefik.http.routers.vaultwarden.rule=Host(`${VAULTWARDEN_HOSTNAME:-vaultwarden}.${HOST_DOMAIN}`)
       - traefik.http.services.vaultwarden.loadbalancer.server.port=80
-      - com.centurylinklabs.watchtower.enable=true
-      - autoheal=true
+      - com.centurylinklabs.watchtower.enable=${VAULTWARDEN_WATCHTOWER_ENABLE:-true}
+      - autoheal=${VAULTWARDEN_AUTOHEAL:-true}

@@ -1,5 +1,3 @@
-version: '3'
-
 networks:
   traefik:
     external: true
@@ -18,7 +16,6 @@ services:
     volumes:
       - ${PLEX_CONFIG_VOLUME:-./etc/plex}:/config
       - ${PLEX_MEDIA_VOLUME:-./media}:${PLEX_MEDIA_PATH:-/data}
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     ports:
       #- 32400:32400/tcp
@@ -41,16 +38,9 @@ services:
       - VERSION=docker
     labels:
       - joyride.host.name=${PLEX_CONTAINER_NAME:-plex}.${HOST_DOMAIN}
-      - traefik.enable=true
+      - traefik.enable=${PLEX_TRAEFIK_ENABLE:-true}
       - traefik.http.routers.plex.entrypoints=websecure
       - traefik.http.routers.plex.rule=Host(`${PLEX_CONTAINER_NAME:-plex}.${HOST_DOMAIN}`)
       - traefik.http.services.plex.loadbalancer.server.port=32400
-      - com.centurylinklabs.watchtower.enable=true
-      - autoheal=true
-
-      # Homepage dashboard labels
-      - homepage.group=Media Group
-      - homepage.name=Plex
-      - homepage.icon=plex.svg
-      - homepage.href=https://${PLEX_CONTAINER_NAME:-plex}.${HOST_DOMAIN}
-      - homepage.description=
+      - com.centurylinklabs.watchtower.enable=${PLEX_WATCHTOWER_ENABLE:-true}
+      - autoheal=${PLEX_AUTOHEAL:-true}

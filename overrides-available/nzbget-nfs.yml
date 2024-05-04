@@ -15,5 +15,4 @@ services:
       - ${NZBGET_CONFIG_VOLUME:-./etc/nzbget}:/config
       - ${NZBGET_DOWNLOADS_VOLUME:-nzbget-nfs-downloads}:/downloads
       - /dev/rtc:/dev/rtc:ro
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro

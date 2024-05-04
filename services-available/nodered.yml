@@ -1,5 +1,3 @@
-version: '3'
-
 networks:
   traefik:
     external: true
@@ -22,7 +20,6 @@ services:
       - TZ=${TZ}
     volumes:
       - ./etc/nodered:/data
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     labels:
       - joyride.host.name=${NODERED_CONTAINER_NAME:-nodered}.${HOST_DOMAIN}

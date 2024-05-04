@@ -1,5 +1,3 @@
-version: '3'
-
 networks:
   traefik:
     external: true
@@ -47,9 +45,8 @@ services:
     depends_on:
       - semaphore-db
     volumes:
-      - ./etc/semaphore/inventory:/inventory:ro
-      - ./etc/semaphore/authorized_keys:/authorized_keys:ro
-      - /etc/timezone:/etc/timezone:ro
+      - ./etc/semaphore/inventory.txt:/inventory:ro
+      - ./etc/semaphore/authorized_keys.txt:/authorized_keys:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
       - PUID=${PUID:-1000}

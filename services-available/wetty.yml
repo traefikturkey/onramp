@@ -1,0 +1,42 @@
+networks:
+  traefik:
+    external: true
+
+# description: Terminal in browser over http/https.
+# https://github.com/butlerx/wetty
+# https://linuxiac.com/how-to-set-up-web-based-ssh/
+
+services:
+  wetty:
+    image: wettyoss/wetty:${WETTY_DOCKER_TAG:-latest}
+    container_name: ${WETTY_CONTAINER_NAME:-wetty}
+    restart: ${WETTY_RESTART:-unless-stopped}
+    mem_limit: ${WETTY_MEM_LIMIT:-200g}
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    networks:
+      - traefik
+    volumes:
+      - ${WETTY_SSH_HOST_KEYFILE:-/home/${USER}/.ssh/id_ed25519}:${WETTY_SSH_CONTAINER_KEYFILE:-/ssh/id_ed25519}
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - BASE=${WETTY_BASE:-/}
+      - SSHHOST=${WETTY_SSH_HOST:-host.docker.internal}
+      - SSHPORT=${WETTY_SSH_PORT:-22}
+      - SSHAUTH=${WETTY_SSH_AUTH:-publickey,password}
+      - SSHUSER=${WETTY_SSH_USER:-${USER}}
+      - SSHPASS=${WETTY_SSH_PASS:-}
+      - SSHKEY=${WETTY_SSH_CONTAINER_KEYFILE:-/ssh/id_ed25519}
+      - ALLOWIFRAME=${WETTY_ALLOW_IFRAME:-true}
+      - COMMAND=${WETTY_COMMAND:-}
+    labels:
+      - joyride.host.name=${WETTY_CONTAINER_NAME:-wetty}.${HOST_DOMAIN}
+      - traefik.enable=${WETTY_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.wetty.entrypoints=websecure
+      - traefik.http.routers.wetty.rule=Host(`${WETTY_CONTAINER_NAME:-wetty}.${HOST_DOMAIN}`)
+      - traefik.http.services.wetty.loadbalancer.server.port=3000
+      - com.centurylinklabs.watchtower.enable=${WETTY_WATCHTOWER_ENABLED:-true}
+      - autoheal=${WETTY_AUTOHEAL_ENABLED:-true}

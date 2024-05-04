@@ -1,0 +1,24 @@
+whoami.{%HOST_DOMAIN%} {
+    errors
+    whoami
+}
+
+. {
+    reload 10s
+
+    rewrite name regex _joyride_._service_.(.*) _joyride_._service_.{%HOST_DOMAIN%}
+
+    hosts {
+        {%HOSTIP%}  {%SERVICE_NAME%}.{%HOST_DOMAIN%}
+        {%HOSTIP%}  {%HOST_NAME%}.{%HOST_DOMAIN%}
+        {%HOSTIP%}  _joyride_._service_.{%HOST_DOMAIN%}
+        fallthrough
+    }
+
+    import /config/Corefile.*
+
+    forward . {%UPSTREAM_SERVER_1%} {%UPSTREAM_SERVER_2%} {%UPSTREAM_SERVER_3%}
+    prometheus
+    errors
+    log
+}

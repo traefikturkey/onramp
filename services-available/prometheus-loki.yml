@@ -15,7 +15,6 @@ services:
     restart: unless-stopped
     volumes:
       - ./etc/loki:/etc/loki
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     ports:
       - 3100:3100
@@ -34,7 +33,6 @@ services:
     environment:
       - SYSLOG_HOSTNAME={{.ContainerName}}
     volumes:
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
     labels:

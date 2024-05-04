@@ -1,5 +1,3 @@
-version: '3'
-
 networks:
   traefik:
     external: true
@@ -18,7 +16,6 @@ services:
       - DOZZLE_LEVEL=${DOZZLE_LEVEL:-debug}
       - DOZZLE_BASE=${DOZZLE_BASE:-/logs}
     volumes:
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
     labels:

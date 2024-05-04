@@ -1,5 +1,3 @@
-version: '3'
-
 networks:
   traefik:
     external: true
@@ -17,7 +15,6 @@ services:
     volumes:
       - ./etc/netbootxyz:/config
       - ./media/netbootxyz:/assets
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     ports:
       - 3000:3000

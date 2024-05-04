@@ -1,5 +1,3 @@
-version: '3'
-
 networks:
   traefik:
     external: true
@@ -21,7 +19,6 @@ services:
       - ${OMADA_CONFIG_DIR:-./etc/omada}/data:/opt/tplink/EAPController/data
       - ${OMADA_WORK_DIR:-./etc/omada}/work:/opt/tplink/EAPController/work
       - ${OMADA_LOGS_DIR:-./etc/omada}/logs:/opt/tplink/EAPController/logs
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
       - PUID=${PUID:-1000}

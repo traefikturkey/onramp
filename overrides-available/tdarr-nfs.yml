@@ -24,5 +24,4 @@ services:
       - ./etc/tdarr/config:/app/configs
       - ${TDARR_MEDIA_VOLUME:-tdarr-nfs-media}:${TDARR_MEDIA_PATH:-/media}
       - ${TDARR_TEMP_VOLUME:-tdarr-nfs-temp}:${TDARR_TEMP_PATH:-/temp}
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro

@@ -1,5 +1,3 @@
-version: '3'
-
 networks:
   traefik:
     external: true
@@ -19,7 +17,6 @@ services:
       # - ./etc/frigate/frigate.db:/database/frigate.db
       # - /apps/trt-models/trt-models:/trt-models
       - ${FRIGATE_MEDIA_PATH:-./media/frigate}:/media/frigate
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       - type: tmpfs # Optional: 1GB of memory, reduces SSD/SD Card wear
         target: /tmp/cache

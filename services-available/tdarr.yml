@@ -1,5 +1,3 @@
-version: '3'
-
 networks:
   traefik:
     external: true
@@ -19,7 +17,6 @@ services:
       - ./etc/tdarr/config:/app/configs
       - ${TDARR_MEDIA_VOLUME:-./media}:${TDARR_MEDIA_PATH:-/media}
       - ${TDARR_TEMP_VOLUME:-./media/tdarr-temp}:${TDARR_TEMP_PATH:-/temp}
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     ports:
       #- ${TDARR_WEB_PORT:-8265}:${TDARR_WEB_PORT:-8265} # webUI port

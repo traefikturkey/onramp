@@ -15,5 +15,4 @@ services:
       - ${SABNZBD_CONFIG_VOLUME:-./etc/sabnzbd}:/config
       - ${MEDIA_DOWNLOADS_VOLUME:-sabnzbd-nfs-downloads}:/downloads
       - /dev/rtc:/dev/rtc:ro
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro

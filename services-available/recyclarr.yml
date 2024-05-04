@@ -1,5 +1,3 @@
-version: '3'
-
 networks:
   traefik:
     external: true
@@ -16,7 +14,6 @@ services:
     restart: ${RECYCLARR_RESTART:-unless-stopped}
     volumes:
       - ./etc/recyclarr:/config
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
       - PUID=${PUID:-1000}

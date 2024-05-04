@@ -1,5 +1,3 @@
-version: '3'
-
 # description: Valheim is a game about exploring a huge fantasy world inspired by norse mythology and viking culture
 # https://github.com/lloesche/valheim-server-docker
 # https://github.com/lloesche/valheim-server-docker/blob/main/valheim.env.example
@@ -15,7 +13,6 @@ services:
     volumes:
       - ./etc/games/valheim/config:/config
       - ./etc/games/valheim/data:/opt/valheim
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment: # for more envs to enable look at the example
       - PUID=${PUID:-1000}

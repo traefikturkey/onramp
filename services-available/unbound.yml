@@ -1,5 +1,3 @@
-version: '3'
-
 # description: Dns resolver
 # https://hub.docker.com/r/mvance/unbound
 
@@ -9,7 +7,7 @@ services:
     container_name: ${UNBOUND_CONTAINER_NAME:-unbound}
     restart: ${UNBOUND_RESTART:-unless-stopped}
     volumes:
-      - /etc/timezone:/etc/timezone:ro
+      #- ./etc/unbound:/opt/unbound/etc/unbound/
       - /etc/localtime:/etc/localtime:ro
     environment:
       - PUID=${PUID:-1000}

@@ -1,5 +1,3 @@
-version: '3'
-
 networks:
   traefik:
     external: true
@@ -19,7 +17,6 @@ services:
       - traefik
     volumes:
       - ./etc/newsdash:/config
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
       - REDIS_URL=redis://newsdash-redis:6380

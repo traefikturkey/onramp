@@ -1,5 +1,3 @@
-version: '3'
-
 networks:
   traefik:
     external: true
@@ -12,12 +10,12 @@ services:
     image: ghcr.io/traefikturkey/onboard:${ONBOARD_DOCKER_TAG:-latest}
     container_name: ${ONBOARD_CONTAINER_NAME:-onboard}
     restart: ${ONBOARD_RESTART:-unless-stopped}
+    mem_limit: ${ONBOARD_MEM_LIMIT:-250m}
     networks:
       - traefik
     volumes:
       - ./etc/onboard:/app/configs
       - ./etc/onboard/cache:/cache
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
@@ -29,9 +27,9 @@ services:
       - TZ=${TZ}
     labels:
       - joyride.host.name=${ONBOARD_CONTAINER_NAME:-onboard}.${HOST_DOMAIN}
-      - traefik.enable=true
+      - traefik.enable=${ONBOARD_TRAEFIK_ENABLE:-true}
       - traefik.http.routers.onboard.entrypoints=websecure
       - traefik.http.routers.onboard.rule=Host(`${ONBOARD_CONTAINER_NAME:-onboard}.${HOST_DOMAIN}`)
       - traefik.http.services.onboard.loadbalancer.server.port=9830
-      - com.centurylinklabs.watchtower.enable=true
-      - autoheal=true
+      - com.centurylinklabs.watchtower.enable=${ONBOARD_WATCHTOWER_ENABLE:-true}
+      - autoheal=${ONBOARD_AUTOHEAL:-true}

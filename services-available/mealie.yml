@@ -1,4 +1,3 @@
-version: '3'
 networks:
   traefik:
     external: true
@@ -15,7 +14,6 @@ services:
       - traefik
     volumes:
       - ${MEALIE_CONFIG_VOLUME:-./etc/mealie}:/app/data
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
       - ALLOW_SIGNUP=true

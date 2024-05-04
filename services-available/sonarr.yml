@@ -1,5 +1,3 @@
-version: '3'
-
 networks:
   traefik:
     external: true
@@ -19,7 +17,6 @@ services:
       - ${MEDIA_SHOWS_VOLUME:-./media/shows}:/tv
       - ${MEDIA_DOWNLOADS_VOLUME:-./media/downloads}:/downloads
       - /dev/rtc:/dev/rtc:ro
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     # ports:
     #   - 8989:8989
@@ -35,9 +32,9 @@ services:
       timeout: 10s
     labels:
       - joyride.host.name=${SONARR_CONTAINER_NAME:-sonarr}.${HOST_DOMAIN}
-      - traefik.enable=true
+      - traefik.enable=${SONARR_TRAEFIK_ENABLE:-true}
       - traefik.http.routers.sonarr.entrypoints=websecure
       - traefik.http.routers.sonarr.rule=Host(`${SONARR_CONTAINER_NAME:-sonarr}.${HOST_DOMAIN}`)
       - traefik.http.services.sonarr.loadbalancer.server.port=8989
-      - com.centurylinklabs.watchtower.enable=true
-      - autoheal=true
+      - com.centurylinklabs.watchtower.enable=${SONARR_WATCHTOWER_ENABLE:-true}
+      - autoheal=${SONARR_AUTOHEAL:-true}

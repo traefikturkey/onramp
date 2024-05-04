@@ -1,5 +1,3 @@
-version: '3'
-
 networks:
   traefik:
     name: traefik
@@ -11,6 +9,7 @@ services:
     image: traefik:${TRAEFIK_DOCKER_TAG:-2.10.7} # replace with traefik:latest if you are feeling frisky
     container_name: ${TRAEFIK_CONTAINER_NAME:-traefik}
     restart: ${TRAEFIK_RESTART:-unless-stopped}
+    mem_limit: ${TRAEFIK_MEM_LIMIT:-100m}
     networks:
       - traefik
     extra_hosts:

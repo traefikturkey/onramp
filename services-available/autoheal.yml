@@ -1,5 +1,3 @@
-version: '3'
-
 # description: Restarts unhealthy docker containers automatically
 # https://github.com/willfarrell/docker-autoheal
 
@@ -8,11 +6,13 @@ services:
     image: willfarrell/autoheal:${AUTOHEAL_DOCKER_TAG:-latest}
     container_name: ${AUTOHEAL_CONTAINER_NAME:-autoheal}
     restart: ${AUTOHEAL_RESTART:-always}
+    mem_limit: ${AUTOHEAL_MEM_LIMIT:-20m}
     environment:
+      - TZ=${TZ}
       - AUTOHEAL_CONTAINER_LABEL=${AUTOHEAL_CONTAINER_LABEL:-all}
       - AUTOHEAL_INTERVAL=${AUTOHEAL_INTERVAL_VALUE:-5}
       - AUTOHEAL_DEFAULT_STOP_TIMEOUT=${AUTOHEAL_STOP_TIMEOUT:-10}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     labels:
-      - traefik.enable=false
+      - traefik.enable=${AUTOHEAL_TRAEFIK_ENABLE:-false}

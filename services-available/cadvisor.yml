@@ -1,5 +1,3 @@
-version: '3'
-
 networks:
   traefik:
     external: true
@@ -31,7 +29,6 @@ services:
       - /dev/disk/:/dev/disk:ro
       - /var/run:/var/run:ro
       - /var/lib/docker/:/var/lib/docker:ro
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     labels:
       - org.label-schema.group=monitoring

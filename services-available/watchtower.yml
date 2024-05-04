@@ -1,5 +1,3 @@
-version: '3'
-
 networks:
   traefik:
     external: true
@@ -13,7 +11,7 @@ services:
     image: ghcr.io/containrrr/watchtower:${WATCHTOWER_DOCKER_TAG:-latest}
     container_name: ${WATCHTOWER_CONTAINER_NAME:-watchtower}
     restart: ${WATCHTOWER_RESTART:-unless-stopped}
-    # so homepage can talk to it directly
+    mem_limit: ${WATCHTOWER_MEM_LIMIT:-100m}
     networks:
       - traefik
     environment:
@@ -21,7 +19,7 @@ services:
       - WATCHTOWER_NOTIFICATIONS_HOSTNAME=${WATCHTOWER_NOTIFICATIONS_HOSTNAME:-${HOST_NAME}.${HOST_DOMAIN}}
       - WATCHTOWER_NOTIFICATION_TITLE_TAG=${WATCHTOWER_NOTIFICATION_TITLE_TAG:-watchtower}
       - WATCHTOWER_NOTIFICATIONS=${WATCHTOWER_NOTIFICATIONS:-shoutrrr}
-      - WATCHTOWER_NOTIFICATION_URL=${WATCHTOWER_NOTIFICATION_URL}
+      - WATCHTOWER_NOTIFICATION_URL=${WATCHTOWER_NOTIFICATION_URL:-}
       - WATCHTOWER_SCHEDULE=${WATCHTOWER_SCHEDULE:-0 0 4 * * *}
       - WATCHTOWER_HTTP_API_METRICS=${WATCHTOWER_HTTP_API_METRICS:-false}
       - WATCHTOWER_HTTP_API_TOKEN=${WATCHTOWER_HTTP_API_TOKEN:-watchtower_secret_token}
@@ -29,4 +27,5 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     labels:
-      - traefik.enable=false
+      - traefik.enable=${WATCHTOWER_TRAEFIK_ENABLE:-false}
+      - autoheal=${WATCHTOWER_AUTOHEAL:-true}

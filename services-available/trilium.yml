@@ -1,5 +1,3 @@
-version: '3'
-
 networks:
   traefik:
     external: true
@@ -16,8 +14,7 @@ services:
     networks:
       - traefik
     volumes:
-      - ./etc/trilium:/data
-      - /etc/timezone:/etc/timezone:ro
+      - ./etc/trilium:/home/node/trilium-data
       - /etc/localtime:/etc/localtime:ro
     environment:
       - TRILIUM_DATA_DIR=/data

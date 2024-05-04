@@ -1,0 +1,43 @@
+networks:
+  traefik:
+    external: true
+
+# description: A fast and flexible DNS server with plugin support
+# https://coredns.io/
+# https://github.com/coredns/coredns
+# https://github.com/coredns/coredns/blob/master/coredns.1.md
+
+services:
+  coredns:
+    image: coredns/coredns:${COREDNS_DOCKER_TAG:-latest}
+    container_name: ${COREDNS_CONTAINER_NAME:-coredns}
+    restart: ${COREDNS_RESTART:-unless-stopped}
+    mem_limit: ${COREDNS_MEM_LIMIT:-200g}
+    command: -conf /config/${COREDNS_CONFIG:-Corefile} -dns.port ${COREDNS_PORT:-53}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/coredns:/config
+      - ./etc/coredns/hosts:/etc/hosts
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - ${COREDNS_PORT:-53}:53/udp
+      - ${COREDNS_PORT:-53}:53/tcp
+    environment:
+      - UPSTREAM_SERVER_1=${COREDNS_UPSTREAM_SERVER_1:-1.1.1.1}
+      - UPSTREAM_SERVER_2=${COREDNS_UPSTREAM_SERVER_2:-9.9.9.9}
+      - UPSTREAM_SERVER_3=${COREDNS_UPSTREAM_SERVER_3:-8.8.8.8}
+      - SERVICE_NAME=${COREDNS_CONTAINER_NAME:-coredns}
+      - COREDNS_RELOAD=${COREDNS_RELOAD:-10s}
+      - HOST_DOMAIN=${HOST_DOMAIN}
+      - HOST_NAME=${HOST_NAME}
+      - HOSTIP=${HOSTIP}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=${COREDNS_CONTAINER_NAME:-coredns}.${HOST_DOMAIN}
+      - traefik.enable=${COREDNS_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.coredns.entrypoints=websecure
+      - traefik.http.routers.coredns.rule=Host(`${COREDNS_CONTAINER_NAME:-coredns}.${HOST_DOMAIN}`)
+      - traefik.http.services.coredns.loadbalancer.server.port=80
+      - com.centurylinklabs.watchtower.enable=${COREDNS_WATCHTOWER_ENABLED:-true}
+      - autoheal=${COREDNS_AUTOHEAL_ENABLED:-true}

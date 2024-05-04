@@ -1,5 +1,3 @@
-version: '3'
-
 networks:
   traefik:
     external: true
@@ -16,7 +14,6 @@ services:
       - traefik
     volumes:
       - ./etc/ollama-webui:/app/backend/data
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
       - PUID=${PUID:-1000}
@@ -25,9 +22,9 @@ services:
       - OLLAMA_BASE_URLS=https://${OLLAMA_CONTAINER_NAME:-ollama}.${HOST_DOMAIN}
     labels:
       - joyride.host.name=${OLLAMA_WEBUI_CONTAINER_NAME:-chat}.${HOST_DOMAIN}
-      - traefik.enable=true
+      - traefik.enable=${OLLAMA_WEBUI_TRAEFIK_ENABLE:-true}
       - traefik.http.routers.ollama-webui.entrypoints=websecure
       - traefik.http.routers.ollama-webui.rule=Host(`${OLLAMA_WEBUI_CONTAINER_NAME:-chat}.${HOST_DOMAIN}`)
       - traefik.http.services.ollama-webui.loadbalancer.server.port=8080
-      - com.centurylinklabs.watchtower.enable=true
-      - autoheal=true
+      - com.centurylinklabs.watchtower.enable=${OLLAMA_WEBUI_WATCHTOWER_ENABLE:-true}
+      - autoheal=${OLLAMA_WEBUI_AUTOHEAL:-true}

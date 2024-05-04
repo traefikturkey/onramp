@@ -1,5 +1,5 @@
 # Available Services
-178 services and counting...
+182 services and counting...
 
 
 - [adguard](https://github.com/AdguardTeam/AdGuardHome): Network-wide ad blocker and privacy tool
@@ -13,13 +13,15 @@
 - [avahi](https://github.com/MattKobayashi/docker-avahi): Implements mdns/dns-sd for local network service discovery
 - [basaran](https://github.com/hyperonym/basaran): Container for running basaran, a web-based file manager
 - [bazarr](https://hub.docker.com/r/linuxserver/bazarr): Manages subtitles for media content
+- [bind](https://hub.docker.com/r/ubuntu/bind9): A very flexible, full-featured DNS system
 - [cadvisor](https://hub.docker.com/r/google/cadvisor/): Collects and analyzes resource usage and performance characteristics of running containers
 - [chromadb](https://github.com/chroma-core/chroma/): Chromecast database and controller
-- [cloudflare-ddns](https://github.com/oznu/docker-cloudflare-ddns): 
+- [cloudflare-ddns](https://github.com/oznu/docker-cloudflare-ddns): Updates dns records on cloudflare dynamically
 - [cloudflare-tunnel-gui](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/): Provides a graphical interface for cloudflare tunnel
 - [cloudflare-tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/): Creates secure tunnels to expose local services
 - [code-server](https://github.com/coder/code-server): Runs visual studio code in a web browser
 - [coqui-ai](https://tts.readthedocs.io/en/latest/inference.html): Collection of ai models for speech recognition and synthesis
+- [coredns](https://coredns.io/): A fast and flexible DNS server with plugin support
 - [crowdsec-traefik-bouncer](https://plugins.traefik.io/plugins/6335346ca4caa9ddeffda116/crowdsec-bouncer-traefik-plugin): Traefik Bouncer for CrowdSec
 - [crowdsec](https://github.com/crowdsecurity/crowdsec): Detects and blocks malicious behavior on servers
 - [cv4pve](https://github.com/Corsinvest/cv4pve-admin/tree/main): Container for running clamav on proxmox virtual environment (pve)
@@ -33,8 +35,8 @@
 - [droneci](https://github.com/harness/drone): Continuous integration and delivery platform
 - [duplicati](https://www.duplicati.com/): Backs up files and folders to various storage destinations
 - [excalidraw](https://excalidraw.com/): Collaborative whiteboard tool
-- [firefly-data-importer](https://github.com/firefly-iii/firefly-iii/tree/main): Imports data into firefly iii, a personal finance manager
 - [firefly3](https://github.com/firefly-iii/firefly-iii/tree/main): Manages personal finances and budgets
+- [firefly-data-importer](https://github.com/firefly-iii/firefly-iii/tree/main): Imports data into firefly iii, a personal finance manager
 - [firefox](https://github.com/jlesage/docker-firefox): Runs mozilla firefox browser in a container
 - [flame](https://hub.docker.com/r/pawelmalak/flame): Self-hosted music recommendation engine
 - [foundryvtt](https://hub.docker.com/r/felddy/foundryvtt): Virtual tabletop platform for role-playing games
@@ -50,6 +52,7 @@
 - [go2rtc](https://github.com/AlexxIT/go2rtc): Webrtc gateway for sip
 - [gotify](https://github.com/gotify/server): Self-hosted push notification service
 - [grafana](https://grafana.com/docs/grafana/next/setup-grafana/installation/docker/): Platform for monitoring and observability
+- [guacamole](https://github.com/jwetzell/docker-guacamole): A clientless remote desktop gateway.
 - [healthchecks](https://healthchecks.io/docs/self_hosted_docker/): Monitors cron jobs and sends alerts
 - [heimdall](https://github.com/linuxserver/Heimdall): Dashboard for organizing web applications
 - [homarr](https://github.com/ajnart/homarr): Home automation and remote control system
@@ -62,10 +65,10 @@
 - [itflow](https://itflow.org/): Workflow automation tool
 - [iventoy](https://github.com/The-Drobe/iventoy-docker): ventoy as a PXE server (WARNING: This is a DHCP server!!!)
 - [jellyfin](https://hub.docker.com/r/linuxserver/jellyfin): Media server for streaming content
-- [jellyseer](https://github.com/Fallenbagel/jellyseerr/tree/develop): 
 - [jellyseerr](https://github.com/Fallenbagel/jellyseerr/tree/develop): Container for running jellyseerr, a torrent indexer
+- [jellyseer](https://github.com/Fallenbagel/jellyseerr/tree/develop): 
 - [joplin](https://joplinapp.org/): Note-taking and to-do app
-- [joyride](https://github.com/ilude/joyride): Web-based dashboard for monitoring services
+- [joyride](https://github.com/ilude/joyride): dynamic dns server that uses docker labels
 - [kaizoku](https://github.com/oae/kaizoku): Web-based anime downloader
 - [kasm](https://hub.docker.com/r/linuxserver/kasm): Browser-based access to desktops, applications, and web services
 - [kestra](https://github.com/kestra-io/kestra): <= put a brief description of kestra here =>
@@ -171,6 +174,7 @@
 - [watchyourlan](https://github.com/aceberg/WatchYourLAN): Monitors network devices and services
 - [webmap](https://github.com/SECUREFOREST/WebMap): Web-based network scanner
 - [webtop](https://github.com/linuxserver/docker-webtop): Web-based desktop environment
+- [wetty](https://github.com/butlerx/wetty): Terminal in browser over http/https.
 - [wg-easy](https://github.com/WeeJeWel/wg-easy): Wireguard vpn configuration generator
 - [whoami](https://hub.docker.com/r/traefik/whoami): Simple web service that returns information about the host
 - [wikijs](https://hub.docker.com/r/linuxserver/wikijs): Self-hosted wiki platform

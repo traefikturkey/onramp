@@ -1,5 +1,3 @@
-version: '3'
-
 volumes:
   librephotos-nfs-scan:
     labels:
@@ -21,7 +19,6 @@ services:
     volumes:
       - librephotos-nfs-scan:/data
       - librephotos-nfs-data:/protected_media
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
   db:
     volumes:

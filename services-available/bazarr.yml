@@ -1,5 +1,3 @@
-version: '3'
-
 networks:
   traefik:
     external: true
@@ -18,7 +16,6 @@ services:
       - ./etc/bazarr:/config
       - ${BAZARR_MOVIES_VOLUME:-./media/movies}:/movies
       - ${BAZARR_SHOWS_VOLUME:-./media/shows}:/tv
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     ports:
       - 6767:6767

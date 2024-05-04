@@ -1,5 +1,3 @@
-version: '3'
-
 networks:
   traefik:
     external: true
@@ -30,7 +28,6 @@ services:
     volumes:
       - ./etc/prometheus/conf:/etc/prometheus/conf:ro
       - prometheus:/prometheus
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     extra_hosts:
       - host.docker.internal:host-gateway

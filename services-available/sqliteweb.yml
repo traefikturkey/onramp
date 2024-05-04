@@ -1,5 +1,3 @@
-version: '3'
-
 networks:
   traefik:
     external: true
@@ -18,7 +16,6 @@ services:
     command: ${SQLITEWEB_DATABASE_FILE:-database.db}
     volumes:
       - ${SQLITEWEB_DATA_PATH:-./media/databases/sqliteweb/}:/db
-      - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
       - PUID=${PUID:-1000}
