@@ -53,7 +53,7 @@
 - [go2rtc](https://github.com/AlexxIT/go2rtc): Webrtc gateway for sip
 - [gotify](https://github.com/gotify/server): Self-hosted push notification service
 - [grafana](https://grafana.com/docs/grafana/next/setup-grafana/installation/docker/): Platform for monitoring and observability
-- [guacamole](https://github.com/jwetzell/docker-guacamole): A clientless remote desktop gateway.
+- [guacamole](https://hub.docker.com/r/abesnier/guacamole): A clientless remote desktop gateway.
 - [healthchecks](https://healthchecks.io/docs/self_hosted_docker/): Monitors cron jobs and sends alerts
 - [heimdall](https://github.com/linuxserver/Heimdall): Dashboard for organizing web applications
 - [homarr](https://github.com/ajnart/homarr): Home automation and remote control system
