@@ -66,5 +66,5 @@ services:
       - traefik.http.routers.semaphore.rule=Host(`${SEMAPHORE_CONTAINER_NAME:-semaphore}.${HOST_DOMAIN}`)
       - traefik.http.services.semaphore.loadbalancer.server.scheme=http
       - traefik.http.services.semaphore.loadbalancer.server.port=3000
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${SEMAPHORE_WATCHTOWER_ENABLED:-true}
       - autoheal=true

@@ -27,5 +27,5 @@ services:
       - traefik.http.routers.sftp-server.entrypoints=websecure
       - traefik.http.routers.sftp-server.rule=Host(`${SFTP_SERVER_CONTAINER_NAME:-sftp-server}.${HOST_DOMAIN}`)
       - traefik.http.services.sftp-server.loadbalancer.server.port=8080
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${SFTP_SERVER_WATCHTOWER_ENABLED:-true}
       - autoheal=true

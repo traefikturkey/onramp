@@ -52,5 +52,5 @@ services:
       - traefik.http.routers.omada.rule=Host(`${OMADA_CONTAINER_NAME:-omada}.${HOST_DOMAIN}`)
       - traefik.http.services.omada.loadbalancer.server.scheme=https
       - traefik.http.services.omada.loadbalancer.server.port=443
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${OMADA_WATCHTOWER_ENABLED:-true}
       - autoheal=true

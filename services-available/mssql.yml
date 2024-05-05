@@ -22,5 +22,5 @@ services:
     labels:
       - joyride.host.name=mssql.${HOST_DOMAIN}
       - traefik.enable=false
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${MSSQL_WATCHTOWER_ENABLED:-true}
       - autoheal=true

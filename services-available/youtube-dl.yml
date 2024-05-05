@@ -25,5 +25,5 @@ services:
       - traefik.http.routers.youtube-dl.entrypoints=websecure
       - traefik.http.routers.youtube-dl.rule=Host(`${YOUTUBE_DL_CONTAINER_NAME:-youtube-dl}.${HOST_DOMAIN}`)
       - traefik.http.services.youtube-dl.loadbalancer.server.port=8080
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${YOUTUBE_DL_WATCHTOWER_ENABLED:-true}
       - autoheal=true

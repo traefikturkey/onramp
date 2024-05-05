@@ -16,5 +16,5 @@ services:
     labels:
       - joyride.host.name=${MINDUSTRY_HOSTNAME:-mindustry}.${HOST_DOMAIN}
       - traefik.enable=false
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${MINDUSTRY_WATCHTOWER_ENABLED:-true}
       - autoheal=true

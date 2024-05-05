@@ -9,8 +9,8 @@ networks:
 services:
   librespeed:
     image: lscr.io/linuxserver/librespeed:${LIBRESPEED_DOCKER_TAG:-latest}
-    container_name: librespeed
-    restart: unless-stopped
+    container_name: ${LIBRESPEED_CONTAINER_NAME:-makemkv}
+    restart: ${LIBRESPEED_RESTART:-unless-stopped}
     networks:
       - traefik
     volumes:
@@ -27,5 +27,5 @@ services:
       - traefik.http.routers.librespeed.entrypoints=websecure
       - traefik.http.routers.librespeed.rule=Host(`librespeed.${HOST_DOMAIN}`)
       - traefik.http.services.librespeed.loadbalancer.server.port=80
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${LIBRESPEED_WATCHTOWER_ENABLED:-true}
       - autoheal=true

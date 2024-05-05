@@ -27,5 +27,5 @@ services:
       - traefik.http.routers.overseerr.entrypoints=websecure
       - traefik.http.routers.overseerr.rule=Host(`${OVERSEERR_CONTAINER_NAME:-overseerr}.${HOST_DOMAIN}`)
       - traefik.http.services.overseerr.loadbalancer.server.port=5055
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${OVERSEERR_WATCHTOWER_ENABLED:-true}
       - autoheal=true

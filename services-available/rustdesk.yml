@@ -29,7 +29,7 @@ services:
     labels:
       - joyride.host.name=${RUSTDESK_CONTAINER_NAME:-rustdesk}.${HOST_DOMAIN}
       - traefik.enable=false
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${RUSTDECK_WATCHTOWER_ENABLED:-true}
       - autoheal=true
 
   rustdesk-relay:
@@ -52,5 +52,5 @@ services:
     labels:
       - joyride.host.name=${RUSTDESK_RELAY_CONTAINER_NAME:-rustdesk-relay}.${HOST_DOMAIN}
       - traefik.enable=false
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${RUSTDECK_WATCHTOWER_ENABLED:-true}
       - autoheal=true

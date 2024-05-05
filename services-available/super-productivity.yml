@@ -27,5 +27,5 @@ services:
       - traefik.http.routers.super-productivity.rule=Host(`${SUPER_PRODUCTIVITY_CONTAINER_NAME:-super-productivity}.${HOST_DOMAIN}`)
       #- traefik.http.services.super-productivity.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.super-productivity.loadbalancer.server.port=80
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${SUPER_PRODUCTIVITY_WATCHTOWER_ENABLED:-true}
       - autoheal=true

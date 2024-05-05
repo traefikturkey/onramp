@@ -35,7 +35,7 @@ services:
       - traefik.http.routers.prometheus.rule=Host(`${PROMETHEUS_HOST_NAME:-prometheus}.${HOST_DOMAIN}`)
       - traefik.http.routers.prometheus.entrypoints=websecure
       - traefik.http.services.prometheus.loadbalancer.server.port=9090
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${PROMETHEUS_WATCHTOWER_ENABLED:-true}
       - autoheal=true
 
 volumes:

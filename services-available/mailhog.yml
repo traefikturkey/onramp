@@ -32,7 +32,7 @@ services:
       - traefik.http.routers.mailhog.entrypoints=websecure
       - traefik.http.routers.mailhog.rule=Host(`${MAILHOG_CONTAINER_NAME:-mailhog}.${HOST_DOMAIN}`)
       - traefik.http.services.mailhog.loadbalancer.server.port=8025
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${MAILHOG_WATCHTOWER_ENABLED:-true}
       - autoheal=true
 
 volumes:

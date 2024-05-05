@@ -25,5 +25,5 @@ services:
       - traefik.http.routers.trilium.entrypoints=websecure
       - traefik.http.routers.trilium.rule=Host(`${TRILIUM_CONTAINER_NAME:-trilium}.${HOST_DOMAIN}`)
       - traefik.http.services.trilium.loadbalancer.server.port=8080
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${TRILIUM_WATCHTOWER_ENABLED:-true}
       - autoheal=true

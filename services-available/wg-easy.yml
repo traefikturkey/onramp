@@ -36,5 +36,5 @@ services:
       - traefik.http.routers.wg-easy.entrypoints=websecure
       - traefik.http.routers.wg-easy.rule=Host(`${WG_EASY_CONTAINER_NAME:-wg-easy}.${HOST_DOMAIN}`)
       - traefik.http.services.wg-easy.loadbalancer.server.port=51821
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${WG_EASY_WATCHTOWER_ENABLED:-true}
       - autoheal=true

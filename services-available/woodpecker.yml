@@ -36,7 +36,7 @@ services:
       - traefik.http.routers.woodpecker.entrypoints=websecure
       - traefik.http.routers.woodpecker.rule=Host(`${WOODPECKER_CONTAINER_NAME:-woodpecker}.${HOST_DOMAIN}`)
       - traefik.http.services.woodpecker.loadbalancer.server.port=8000
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${WOODPECKER_WATCHTOWER_ENABLED:-true}
       - autoheal=true
 
 

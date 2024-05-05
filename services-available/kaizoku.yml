@@ -40,7 +40,7 @@ services:
       - traefik.http.routers.kaizoku.rule=Host(`${KAIZOKU_CONTAINER_NAME:-kaizoku}.${HOST_DOMAIN}`)
       - traefik.http.routers.kaizoku.middlewares=default-headers@file
       - traefik.http.services.kaizoku.loadbalancer.server.port=3000
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${KAIZOKU_WATCHTOWER_ENABLED:-true}
       - autoheal=true
 
   kaizoku-redis:

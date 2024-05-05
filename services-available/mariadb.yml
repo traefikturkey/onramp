@@ -27,5 +27,5 @@ services:
     labels:
       - joyride.host.name=${MARIADB_CONTAINER_NAME:-mariadb}.${HOST_DOMAIN}
       - traefik.enable=false
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${MARIADB_WATCHTOWER_ENABLED:-true}
       - autoheal=true

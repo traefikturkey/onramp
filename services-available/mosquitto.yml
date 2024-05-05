@@ -18,4 +18,4 @@ services:
       - autoheal=true
       - traefik.enable=false
       - joyride.host.name=mqtt.${HOST_DOMAIN}
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${MOSQUITTO_WATCHTOWER_ENABLED:-true}
