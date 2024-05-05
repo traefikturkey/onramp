@@ -26,5 +26,5 @@ services:
       - traefik.http.routers.apprise.rule=Host(`${APPRISE_CONTAINER_NAME:-apprise}.${HOST_DOMAIN}`)
       #- traefik.http.services.apprise.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.apprise.loadbalancer.server.port=8000
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${APPRISE_WATCHTOWER_ENABLED:-true}
       - autoheal=true

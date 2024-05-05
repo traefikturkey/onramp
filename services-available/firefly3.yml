@@ -47,7 +47,7 @@ services:
       - traefik.http.routers.firefly3.entrypoints=websecure
       - traefik.http.routers.firefly3.rule=Host(`${FIREFLY3_CONTAINER_NAME:-firefly}.${HOST_DOMAIN}`)
       - traefik.http.services.firefly3.loadbalancer.server.port=8080
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${FIREFLY3_WATCHTOWER_ENABLED:-true}
       - autoheal=true
   db:
     image: mariadb

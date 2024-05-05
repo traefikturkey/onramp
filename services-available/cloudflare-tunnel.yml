@@ -29,5 +29,5 @@ services:
       - /etc/localtime:/etc/localtime:ro
     labels:
       - traefik.enable=${CLOUDFLARE_TUNNEL_TRAEFIK_ENABLED:-false}
-      - com.centurylinklabs.watchtower.enable=true ${CLOUDFLARE_TUNNEL_WATCHTOWER_ENABLED:-true}
+      - com.centurylinklabs.watchtower.enable=${CLOUDFLARE_TUNNEL_WATCHTOWER_ENABLED:-true}
       - autoheal=${CLOUDFLARE_TUNNEL_AUTOHEAL_ENABLED:-true}

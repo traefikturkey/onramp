@@ -35,5 +35,5 @@ services:
       - traefik.http.routers.firefly-data-importer.entrypoints=websecure
       - traefik.http.routers.firefly-data-importer.rule=Host(`${FIREFLY_DATA_IMPORTER_CONTAINER_NAME:-firefly-importer}.${HOST_DOMAIN}`)
       - traefik.http.services.firefly-data-importer.loadbalancer.server.port=8080
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${FIREFLY_DATA_IMPORTER_WATCHTOWER_ENABLED:-true}
       - autoheal=true

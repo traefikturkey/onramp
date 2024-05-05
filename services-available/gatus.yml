@@ -30,5 +30,5 @@ services:
       - traefik.http.routers.gatus.rule=Host(`${GATUS_CONTAINER_NAME:-gatus}.${HOST_DOMAIN}`)
       #- traefik.http.services.gatus.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.gatus.loadbalancer.server.port=8080
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${GATUS_WATCHTOWER_ENABLED:-true}
       - autoheal=true

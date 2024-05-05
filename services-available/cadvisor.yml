@@ -32,7 +32,7 @@ services:
     labels:
       - org.label-schema.group=monitoring
       - joyride.host.name=${CADVISOR_CONTAINER_NAME:-cadvisor}.${HOST_DOMAIN}
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${CADVISOR_WATCHTOWER_ENABLED:-true}
       - traefik.enable=true
       - traefik.http.routers.cadvisor.rule=Host(`${CADVISOR_CONTAINER_NAME:-cadvisor}.${HOST_DOMAIN}`)
       - traefik.http.routers.cadvisor.entrypoints=websecure

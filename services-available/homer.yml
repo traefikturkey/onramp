@@ -25,5 +25,5 @@ services:
       - traefik.http.routers.homer.entrypoints=websecure
       - traefik.http.routers.homer.rule=Host(`${HOMER_CONTAINER_NAME:-homer}.${HOST_DOMAIN}`)
       - traefik.http.services.homer.loadbalancer.server.port=8080
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${HOMER_WATCHTOWER_ENABLED:-true}
       - autoheal=true

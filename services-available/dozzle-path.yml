@@ -24,5 +24,5 @@ services:
       - traefik.http.routers.dozzle.entrypoints=websecure
       - traefik.http.services.dozzle.loadbalancer.server.scheme=http
       - traefik.http.services.dozzle.loadbalancer.server.port=8080
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${DOZZLE_WATCHTOWER_ENABLED:-true}
       - autoheal=true

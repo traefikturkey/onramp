@@ -29,5 +29,5 @@ services:
       - traefik.http.routers.dashdot.entrypoints=websecure
       - traefik.http.routers.dashdot.rule=Host(`${DASHDOT_CONTAINER_NAME:-dashdot}.${HOST_DOMAIN}`)
       - traefik.http.services.dashdot.loadbalancer.server.port=3001
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${DASHDOT_WATCHTOWER_ENABLED:-true}
       - autoheal=true

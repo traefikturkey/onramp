@@ -9,7 +9,7 @@ services:
   gitlab:
     image: gitlab/gitlab-ce:${GITLAB_DOCKER_TAG:-latest}
     container_name: ${GITLAB_CONTAINER_NAME:-gitlab}
-    restart: unless-stopped
+    restart: ${GITLAB_RESTART:-unless-stopped}
     networks:
       - traefik
     volumes:
@@ -36,7 +36,7 @@ services:
       - traefik.http.routers.gitlab.service=gitlab
       - traefik.http.services.gitlab.loadbalancer.server.scheme=https
       - traefik.http.services.gitlab.loadbalancer.server.port=443
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${GITLAB_WATCHTOWER_ENABLED:-true}
       - autoheal=true
 
   # gitlab-runner:
