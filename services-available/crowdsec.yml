@@ -23,5 +23,5 @@ services:
     labels:
       #- joyride.host.name=${CROWDSEC_CONTAINER_NAME:-crowdsec}.${HOST_DOMAIN}
       - traefik.enable=false
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${CROWDSEC_WATCHTOWER_ENABLED:-true}
       - autoheal=true

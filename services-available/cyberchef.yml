@@ -18,5 +18,5 @@ services:
       - traefik.http.routers.cyberchef.entrypoints=websecure
       - traefik.http.routers.cyberchef.rule=Host(`${CYBERCHEF_CONTAINER_NAME:-cyberchef}.${HOST_DOMAIN}`)
       - traefik.http.services.cyberchef.loadbalancer.server.port=8000
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${CYBERCHEF_WATCHTOWER_ENABLED:-true}
       - autoheal=true

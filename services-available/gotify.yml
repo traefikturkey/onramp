@@ -26,5 +26,5 @@ services:
       - traefik.http.routers.gotify.entrypoints=websecure
       - traefik.http.routers.gotify.rule=Host(`${GOTIFY_CONTAINER_NAME:-gotify}.${HOST_DOMAIN}`)
       - traefik.http.services.gotify.loadbalancer.server.port=80
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${GOTIFY_WATCHTOWER_ENABLED:-true}
       - autoheal=true

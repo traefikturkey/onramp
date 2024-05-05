@@ -37,5 +37,5 @@ services:
       - traefik.http.routers.gitea.rule=Host(`${GITEA_CONTAINER_NAME:-gitea}.${HOST_DOMAIN}`)
       - traefik.http.routers.gitea.entrypoints=websecure
       - traefik.http.services.gitea.loadbalancer.server.port=4000
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${GITEA_WATCHTOWER_ENABLED:-true}
       - autoheal=true

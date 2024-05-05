@@ -36,5 +36,5 @@ services:
 
     labels:
       - traefik.enable=false
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${AUTOKUMA_WATCHTOWER_ENABLED:-true}
       - autoheal=true

@@ -30,5 +30,5 @@ services:
       - traefik.http.routers.basaran.rule=Host(`${BASARAN_CONTAINER_NAME:-basaran}.${HOST_DOMAIN}`)
       #- traefik.http.services.basaran.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.basaran.loadbalancer.server.port=80
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${BASARAN_WATCHTOWER_ENABLED:-true}
       - autoheal=true

@@ -31,5 +31,5 @@ services:
       - traefik.http.routers.go2rtc.rule=Host(`${GO2RTC_CONTAINER_NAME:-go2rtc}.${HOST_DOMAIN}`)
       #- traefik.http.services.go2rtc.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.go2rtc.loadbalancer.server.port=1984
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${GO2RTC_WATCHTOWER_ENABLED:-true}
       - autoheal=true
