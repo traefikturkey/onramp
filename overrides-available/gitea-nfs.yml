@@ -1,4 +1,3 @@
-version: '3'
 volumes:
   gitea-nfs-data:
     labels:
