@@ -21,5 +21,5 @@ services:
       - traefik.http.routers.requestrr.entrypoints=websecure
       - traefik.http.routers.requestrr.rule=Host(`requestrr.${HOST_DOMAIN}`)
       - traefik.http.services.requestrr.loadbalancer.server.port=4545
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${REQUESTRR_WATCHTOWER_ENABLED:-true}
       - autoheal=true

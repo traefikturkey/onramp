@@ -26,5 +26,5 @@ services:
       - traefik.http.services.openspeedtest.loadbalancer.server.port=3000
       - traefik.http.middlewares.limit.buffering.maxRequestBodyBytes=10000000000
       - traefik.http.routers.openspeedtest.middlewares=limit
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${OPENSPEEDTEST_WATCHTOWER_ENABLED:-true}
       - autoheal=true

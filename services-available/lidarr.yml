@@ -8,8 +8,8 @@ networks:
 services:
   lidarr:
     image: linuxserver/lidarr
-    container_name: lidarr
-    restart: unless-stopped
+    container_name: ${LIDARR_CONTAINER_NAME:-makemkv}
+    restart: ${LIDARR_RESTART:-unless-stopped}
     networks:
       - traefik
     volumes:
@@ -31,5 +31,5 @@ services:
       - traefik.http.routers.lidarr.entrypoints=websecure
       - traefik.http.routers.lidarr.rule=Host(`lidarr.${HOST_DOMAIN}`)
       - traefik.http.services.lidarr.loadbalancer.server.port=8686
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${LIDARR_WATCHTOWER_ENABLED:-true}
       - autoheal=true

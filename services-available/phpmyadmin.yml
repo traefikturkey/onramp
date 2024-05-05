@@ -27,5 +27,5 @@ services:
       - traefik.http.routers.phpmyadmin.entrypoints=websecure
       - traefik.http.routers.phpmyadmin.rule=Host(`phpmyadmin.${HOST_DOMAIN}`)
       - traefik.http.services.phpmyadmin.loadbalancer.server.port=80
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${PHPMYADMIN_WATCHTOWER_ENABLED:-true}
       - autoheal=true

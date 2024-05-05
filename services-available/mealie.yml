@@ -42,5 +42,5 @@ services:
       - traefik.http.routers.mealie.entrypoints=websecure
       - traefik.http.routers.mealie.rule=Host(`${MEALIE_CONTAINER_NAME:-mealie}.${HOST_DOMAIN}`)
       - traefik.http.services.mealie.loadbalancer.server.port=3000
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${MEALIE_WATCHTOWER_ENABLED:-true}
       - autoheal=true

@@ -31,5 +31,5 @@ services:
       - traefik.http.routers.valheim.entrypoints=websecure
       - traefik.http.routers.valheim.rule=Host(`${VALHEIM_CONTAINER_NAME:-valheim}.${HOST_DOMAIN}`)
       - traefik.http.services.valheim.loadbalancer.server.port=9001
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${VALHEIM_WATCHTOWER_ENABLED:-true}
       - autoheal=true

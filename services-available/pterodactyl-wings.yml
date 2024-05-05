@@ -29,5 +29,5 @@ services:
       - traefik.http.routers.pterodactyl-wings.rule=Host(`${PTERODACTYL_WINGS_CONTAINER_NAME:-pterodactyl-wings}.${HOST_DOMAIN}`)
       #- traefik.http.services.pterodactyl-wings.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.pterodactyl-wings.loadbalancer.server.port=8096
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${PTERODACTYL_WINGS_WATCHTOWER_ENABLED:-true}
       - autoheal=true

@@ -89,5 +89,5 @@ services:
       - traefik.http.routers.paperless-ngx.entrypoints=websecure
       - traefik.http.routers.paperless-ngx.rule=Host(`${PAPERLESS_NGX_CONTAINER_NAME:-paperless-ngx}.${HOST_DOMAIN}`)
       - traefik.http.services.paperless-ngx.loadbalancer.server.port=8000
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${PAPERLESS_NGX_WATCHTOWER_ENABLED:-true}
       - autoheal=true

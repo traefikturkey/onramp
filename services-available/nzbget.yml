@@ -31,5 +31,5 @@ services:
       - traefik.http.routers.nzbget.entrypoints=websecure
       - traefik.http.routers.nzbget.rule=Host(`${NZBGET_CONTAINER_NAME:-nzbget}.${HOST_DOMAIN}`)
       - traefik.http.services.nzbget.loadbalancer.server.port=6789
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${NZBGET_WATCHTOWER_ENABLED:-true}
       - autoheal=true

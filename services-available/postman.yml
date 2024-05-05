@@ -26,5 +26,5 @@ services:
       - traefik.http.routers.postman.rule=Host(`${POSTMAN_CONTAINER_NAME:-postman}.${HOST_DOMAIN}`)
       - traefik.http.services.postman.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.postman.loadbalancer.server.port=6901
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${POSTMAN_WATCHTOWER_ENABLED:-true}
       - autoheal=true

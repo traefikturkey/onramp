@@ -31,5 +31,5 @@ services:
       - traefik.http.routers.makemkv.entrypoints=websecure
       - traefik.http.routers.makemkv.rule=Host(`${MAKEMKV_CONTAINER_NAME:-makemkv}.${HOST_DOMAIN}`)
       - traefik.http.services.makemkv.loadbalancer.server.port=5800
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${MAKEMKV_WATCHTOWER_ENABLED:-true}
       - autoheal=true

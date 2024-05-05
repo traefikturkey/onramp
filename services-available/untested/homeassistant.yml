@@ -27,5 +27,5 @@ services:
       - traefik.http.routers.homeassistant.rule=Host(`${HOMEASSISTANT_CONTAINER_NAME:-homeassistant}.${HOST_DOMAIN}`)
       - traefik.http.services.homeassistant.loadbalancer.server.scheme=https
       - traefik.http.services.homeassistant.loadbalancer.server.port=8123
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${HOMEASSISTANT_WATCHTOWER_ENABLED:-true}
       - autoheal=true

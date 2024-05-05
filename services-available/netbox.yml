@@ -49,7 +49,7 @@ services:
       - traefik.http.services.netbox.loadbalancer.server.scheme=http # enable if the service wants to connect over https
       - traefik.http.routers.netbox.service=netbox
       - traefik.http.services.netbox.loadbalancer.server.port=8000
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${NETBOX_WATCHTOWER_ENABLED:-true}
       - autoheal=true
 
   netbox-postgresql:
@@ -70,7 +70,7 @@ services:
     env_file:
       - .env
     labels:
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${NETBOX_WATCHTOWER_ENABLED:-true}
       - traefik.enable=false
       - autoheal=true
 
@@ -83,6 +83,6 @@ services:
     volumes:
       - netbox-redis:/data
     labels:
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${NETBOX_WATCHTOWER_ENABLED:-true}
       - traefik.enable=false
       - autoheal=true

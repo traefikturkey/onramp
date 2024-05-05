@@ -20,5 +20,5 @@ services:
       - TZ=${TZ}
     labels:
       - traefik.enable=false
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${PLAYIT_DOCKER_WATCHTOWER_ENABLED:-true}
       - autoheal=true

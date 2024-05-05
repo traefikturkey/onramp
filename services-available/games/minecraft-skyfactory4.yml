@@ -34,5 +34,5 @@ services:
     labels:
       - joyride.host.name=${MINECRAFT_HOSTNAME:-minecraft_skyfactory4}.${HOST_DOMAIN}
       - traefik.enable=false
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${SKYFACTORY_MINECRAFT_WATCHTOWER_ENABLED:-true}
       - autoheal=true

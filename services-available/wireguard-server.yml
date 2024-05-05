@@ -30,5 +30,5 @@ services:
     labels:
       - joyride.host.name=${WIREGUARD_SERVER_CONTAINER_NAME:-wireguard-server}.${HOST_DOMAIN}
       - traefik.enable=false
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${WIREGUARD_SERVER_WATCHTOWER_ENABLED:-true}
       - autoheal=true

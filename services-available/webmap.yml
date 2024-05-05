@@ -25,5 +25,5 @@ services:
       - traefik.http.routers.webmap.entrypoints=websecure
       - traefik.http.routers.webmap.rule=Host(`${WEBMAP_CONTAINER_NAME:-webmap}.${HOST_DOMAIN}`)
       - traefik.http.services.webmap.loadbalancer.server.port=8000
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${WEBMAP_WATCHTOWER_ENABLED:-true}
       - autoheal=true

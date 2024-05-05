@@ -25,5 +25,5 @@ services:
       - traefik.http.routers.lychee.entrypoints=websecure
       - traefik.http.routers.lychee.rule=Host(`lychee.${HOST_DOMAIN}`)
       - traefik.http.services.lychee.loadbalancer.server.port=80
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${LYCHEE_WATCHTOWER_ENABLED:-true}
       - autoheal=true

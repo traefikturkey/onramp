@@ -20,7 +20,7 @@ services:
       - 3100:3100
     command: -config.file=/etc/loki/loki-config.yml
     labels:
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${LOKI_WATCHTOWER_ENABLED:-true}
       - traefik.enable=false
 
   logspout:
@@ -36,7 +36,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
     labels:
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${LOKI_WATCHTOWER_ENABLED:-true}
       - traefik.enable=false
 
   promtail:
@@ -48,5 +48,5 @@ services:
       - ./etc/promtail:/etc/promtail
     command: -config.file=/etc/promtail/promtail-config.yml
     labels:
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${LOKI_WATCHTOWER_ENABLED:-true}
       - traefik.enable=false
