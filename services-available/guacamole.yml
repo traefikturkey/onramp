@@ -3,9 +3,9 @@ networks:
     external: true
 
 # description: A clientless remote desktop gateway.
-# https://github.com/jwetzell/docker-guacamole
-# The default username is guacadmin with password guacadmin.
+# https://hub.docker.com/r/abesnier/guacamole
 # https://guacamole.apache.org/doc/gug/
+# The default username is guacadmin with password guacadmin.
 
 services:
   guacamole:
