@@ -34,20 +34,7 @@ services-enabled/$(SERVICE_PASSED_DNCASED).yml:
 ifneq (,$(wildcard ./services-available/$(SERVICE_PASSED_DNCASED).yml))
 	@echo "Enabling $(SERVICE_PASSED_DNCASED)..."
 	@ln -s ../services-available/$(SERVICE_PASSED_DNCASED).yml ./services-enabled/$(SERVICE_PASSED_DNCASED).yml || true
-	# here's where the magic happens
-	# Searches for volume paths in the Docker Compose file associated with the specified service. 
-	# It extracts paths starting with `./etc/` followed by the service name and checks if they 
-	# have an extension. If a path without a forward slash (`/`) and with an extension is found, 
-	# it creates the corresponding directory. 
-	@grep -oE "\./etc/$(SERVICE_PASSED_DNCASED)\S*" services-enabled/$(SERVICE_PASSED_DNCASED).yml | sed 's/:.*//' | while read -r volume; do \
-		if [[ "$$volume" == *.* ]]; then \
-			mkdir -p "$$(dirname "$$volume")"; \
-			touch "$$volume"; \
-		else \
-			mkdir -p "$$volume"; \
-		fi \
-	done
-	@sleep 1
+	@./make.d/scripts/create-etc-volumes.sh $(SERVICE_PASSED_DNCASED)
 else
 	@echo "No such service file ./services-available/$(SERVICE_PASSED_DNCASED).yml!"
 endif
