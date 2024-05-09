@@ -82,7 +82,8 @@ BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),setup-onboard)
 endif
 
 setup-onboard:
-	@mkdir -p ./etc/onboard/cache/icons
+	@mkdir -p ./etc/onboard/cache
+	@mkdir -p ./etc/onboard/icons
 	@sudo chown -R $(USER):$(USER) ./etc/onboard
 
 #$(info "builders.mk loaded")

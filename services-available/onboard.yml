@@ -16,14 +16,17 @@ services:
       - traefik
     volumes:
       - ./etc/onboard:/app/configs
-      - ./etc/onboard/cache:/cache
-      - ./etc/onboard/cache/icons:/app/static/assets/icons
+      - ./etc/onboard/cache:/app/.working/cache
+      - ./etc/onboard/icons:/app/static/assets/icons
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock
+    links:
+      - redis
     environment:
       - OLLAMA_URL=${OLLAMA_URL}
       # ONBOARD_PAGE_TIMEOUT: in seconds - 600 seconds = 10 minutes
       - ONBOARD_PAGE_TIMEOUT=${ONBOARD_PAGE_TIMEOUT:-600}
+      - REDIS_HOST=${REDIS_HOST:-${REDIS_HOST_NAME:-redis}.${HOST_DOMAIN}}
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
