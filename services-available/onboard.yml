@@ -5,17 +5,19 @@ networks:
 # description: An RSS and Bookmarks Dashboard 
 # https://github.com/traefikturkey/onboard
 
+
 services:
   onboard:
     image: ghcr.io/traefikturkey/onboard:${ONBOARD_DOCKER_TAG:-latest}
     container_name: ${ONBOARD_CONTAINER_NAME:-onboard}
     restart: ${ONBOARD_RESTART:-unless-stopped}
-    mem_limit: ${ONBOARD_MEM_LIMIT:-250m}
+    mem_limit: ${ONBOARD_MEM_LIMIT:-1g}
     networks:
       - traefik
     volumes:
       - ./etc/onboard:/app/configs
       - ./etc/onboard/cache:/cache
+      - ./etc/onboard/cache/icons:/app/static/assets/icons
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
