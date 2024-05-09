@@ -32,11 +32,6 @@ else
 	DOCKER_COMPOSE := docker-compose
 endif
 
-ifneq (,$(wildcard ./services-enabled/cloudflare-tunnel.yml))
-	BUILD_DEPENDENCIES += cloudflare-tunnel
-	include make.d/cloudflare.mk
-endif
-
 # setup PLEX_ALLOWED_NETWORKS defaults if they are not already in the .env file
 ifndef PLEX_ALLOWED_NETWORKS
 	export PLEX_ALLOWED_NETWORKS := $(HOSTIP/24)
@@ -49,11 +44,12 @@ else
 	EDITOR := nano
 endif
 
+# prevents circular references, do not remove
+BUILD_DEPENDENCIES :=
+
 # use the rest as arguments as empty targets aka: MAGIC
 EMPTY_TARGETS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
 $(eval $(EMPTY_TARGETS):;@:)
-
-
 
 #########################################################
 ##
