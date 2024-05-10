@@ -49,5 +49,5 @@ services:
       - traefik.http.routers.frigate.entrypoints=websecure
       - traefik.http.routers.frigate.rule=Host(`${FRIGATE_CONTAINER_NAME:-frigate}.${HOST_DOMAIN}`)
       - traefik.http.services.frigate.loadbalancer.server.port=5000
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${FRIGATE_WATCHTOWER_ENABLED:-true}
       - autoheal=true

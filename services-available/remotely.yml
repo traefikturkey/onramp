@@ -25,5 +25,5 @@ services:
       - traefik.http.routers.remotely.entrypoints=websecure
       - traefik.http.routers.remotely.rule=Host(`${REMOTELY_CONTAINER_NAME:-remotely}.${HOST_DOMAIN}`)
       - traefik.http.services.remotely.loadbalancer.server.port=5000
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${REMOTELY_WATCHTOWER_ENABLED:-true}
       - autoheal=true

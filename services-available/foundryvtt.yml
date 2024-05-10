@@ -29,5 +29,5 @@ services:
       - traefik.http.routers.foundryvtt.rule=Host(`${FOUNDRYVTT_CONTAINER_NAME:-foundryvtt}.${HOST_DOMAIN}`)
       #- traefik.http.services.foundryvtt.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.foundryvtt.loadbalancer.server.port=30000
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${FOUNDRYVTT_WATCHTOWER_ENABLED:-true}
       - autoheal=true

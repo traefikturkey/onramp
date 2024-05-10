@@ -1,4 +1,3 @@
-version: '3'
 # used to store downloads from Youtube-DL on NFS server directly instead of local machine storage
 
 volumes:

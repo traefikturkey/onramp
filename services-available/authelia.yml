@@ -33,5 +33,5 @@ services:
       - traefik.http.middlewares.authelia.forwardauth.address=http://authelia:9091/api/verify?rd=https://${AUTHELIA_DOMAINHOST:-auth}.${HOST_DOMAIN}
       - traefik.http.middlewares.authelia.forwardauth.trustForwardHeader=true
       - traefik.http.middlewares.authelia.forwardauth.authResponseHeaders=Remote-User,Remote-Groups,Remote-Name,Remote-Email
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${AUTHELIA_WATCHTOWER_ENABLED:-true}
       - autoheal=true

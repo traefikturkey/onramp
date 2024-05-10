@@ -15,5 +15,5 @@ services:
       - TZ=${TZ}
     labels:
       - traefik.enable=false
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${UNBOUND_WATCHTOWER_ENABLED:-true}
       - autoheal=true

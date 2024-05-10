@@ -25,7 +25,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
     labels:
       - joyride.host.name=${GRAFANA_CONTAINER_NAME:-grafana}.${HOST_DOMAIN}
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${GRAFANA_WATCHTOWER_ENABLED:-true}
       - traefik.enable=true
       - traefik.docker.network=traefik
       - traefik.http.routers.grafana.rule=Host(`${GRAFANA_CONTAINER_NAME:-grafana}.${HOST_DOMAIN}`)

@@ -1,5 +1,5 @@
 # Available Services
-182 services and counting...
+183 services and counting...
 
 
 - [adguard](https://github.com/AdguardTeam/AdGuardHome): Network-wide ad blocker and privacy tool
@@ -35,8 +35,8 @@
 - [droneci](https://github.com/harness/drone): Continuous integration and delivery platform
 - [duplicati](https://www.duplicati.com/): Backs up files and folders to various storage destinations
 - [excalidraw](https://excalidraw.com/): Collaborative whiteboard tool
-- [firefly-data-importer](https://github.com/firefly-iii/firefly-iii/tree/main): Imports data into firefly iii, a personal finance manager
 - [firefly3](https://github.com/firefly-iii/firefly-iii/tree/main): Manages personal finances and budgets
+- [firefly-data-importer](https://github.com/firefly-iii/firefly-iii/tree/main): Imports data into firefly iii, a personal finance manager
 - [firefox](https://github.com/jlesage/docker-firefox): Runs mozilla firefox browser in a container
 - [flame](https://hub.docker.com/r/pawelmalak/flame): Self-hosted music recommendation engine
 - [foundryvtt](https://hub.docker.com/r/felddy/foundryvtt): Virtual tabletop platform for role-playing games
@@ -52,7 +52,7 @@
 - [go2rtc](https://github.com/AlexxIT/go2rtc): Webrtc gateway for sip
 - [gotify](https://github.com/gotify/server): Self-hosted push notification service
 - [grafana](https://grafana.com/docs/grafana/next/setup-grafana/installation/docker/): Platform for monitoring and observability
-- [guacamole](https://github.com/jwetzell/docker-guacamole): A clientless remote desktop gateway.
+- [guacamole](https://hub.docker.com/r/abesnier/guacamole): A clientless remote desktop gateway.
 - [healthchecks](https://healthchecks.io/docs/self_hosted_docker/): Monitors cron jobs and sends alerts
 - [heimdall](https://github.com/linuxserver/Heimdall): Dashboard for organizing web applications
 - [homarr](https://github.com/ajnart/homarr): Home automation and remote control system
@@ -65,8 +65,8 @@
 - [itflow](https://itflow.org/): Workflow automation tool
 - [iventoy](https://github.com/The-Drobe/iventoy-docker): ventoy as a PXE server (WARNING: This is a DHCP server!!!)
 - [jellyfin](https://hub.docker.com/r/linuxserver/jellyfin): Media server for streaming content
-- [jellyseer](https://github.com/Fallenbagel/jellyseerr/tree/develop): 
 - [jellyseerr](https://github.com/Fallenbagel/jellyseerr/tree/develop): Container for running jellyseerr, a torrent indexer
+- [jellyseer](https://github.com/Fallenbagel/jellyseerr/tree/develop): 
 - [joplin](https://joplinapp.org/): Note-taking and to-do app
 - [joyride](https://github.com/ilude/joyride): dynamic dns server that uses docker labels
 - [kaizoku](https://github.com/oae/kaizoku): Web-based anime downloader
@@ -104,6 +104,7 @@
 - [openspeedtest](https://github.com/openspeedtest/Docker-Image): Network Performance Estimation Tool
 - [overseerr](https://hub.docker.com/r/linuxserver/overseerr): Request management and notification system for media content
 - [owncast](https://github.com/owncast/owncast): Self-hosted live video streaming server
+- [paperless-ngx-postgres](https://hub.docker.com/r/linuxserver/paperless-ngx): 
 - [paperless-ngx](https://hub.docker.com/r/linuxserver/paperless-ngx): Document management system
 - [paperlessngx](https://hub.docker.com/r/linuxserver/paperless-ngx): 
 - [pgadmin](https://www.pgadmin.org/): Web-based postgresql administration tool

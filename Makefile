@@ -45,11 +45,12 @@ else
 	EDITOR := nano
 endif
 
+# prevents circular references, do not remove
+BUILD_DEPENDENCIES :=
+
 # use the rest as arguments as empty targets aka: MAGIC
 EMPTY_TARGETS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
 $(eval $(EMPTY_TARGETS):;@:)
-
-
 
 #########################################################
 ##

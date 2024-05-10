@@ -28,5 +28,5 @@ services:
       - traefik.http.routers.minio.rule=Host(`${MINIO_CONTAINER_NAME:-minio}.${HOST_DOMAIN}`)
       #- traefik.http.services.minio.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.minio.loadbalancer.server.port=9001
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${MINIO_WATCHTOWER_ENABLED:-true}
       - autoheal=true

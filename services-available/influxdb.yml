@@ -33,5 +33,5 @@ services:
       - traefik.http.routers.influxdb.entrypoints=websecure
       - traefik.http.routers.influxdb.rule=Host(`${INFLUXDB_CONTAINER_NAME:-influxdb}.${HOST_DOMAIN}`)
       - traefik.http.services.influxdb.loadbalancer.server.port=8086
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${INFLUXDB_WATCHTOWER_ENABLED:-true}
       - autoheal=true

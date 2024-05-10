@@ -43,5 +43,5 @@ services:
       - traefik.http.routers.pterodactyl-panel.entrypoints=websecure
       - traefik.http.routers.pterodactyl-panel.rule=Host(`${PTERODACTYL_PANEL_CONTAINER_NAME:-panel}.${HOST_DOMAIN}`)
       - traefik.http.services.pterodactyl-panel.loadbalancer.server.port=80
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${PTERODACTYL_WATCHTOWER_ENABLED:-true}
       - autoheal=true

@@ -25,5 +25,5 @@ services:
       - traefik.http.routers.watchyourlan.entrypoints=websecure
       - traefik.http.routers.watchyourlan.rule=Host(`${WATCHYOURLAN_CONTAINER_NAME:-watchyourlan}.${HOST_DOMAIN}`)
       - traefik.http.services.watchyourlan.loadbalancer.server.port=8840
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${WATCHYOURLAN_WATCHTOWER_ENABLED:-true}
       - autoheal=true

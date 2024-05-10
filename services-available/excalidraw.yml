@@ -34,5 +34,5 @@ services:
       - traefik.http.routers.excalidraw.rule=Host(`${EXCALIDRAW_CONTAINER_NAME:-excalidraw}.${HOST_DOMAIN}`)
       #- traefik.http.services.excalidraw.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.excalidraw.loadbalancer.server.port=80
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${EXCALIDRAW_WATCHTOWER_ENABLED:-true}
       - autoheal=true

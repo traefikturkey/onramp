@@ -23,7 +23,7 @@ services:
       - traefik.http.routers.vikunja.entrypoints=websecure
       - traefik.http.routers.vikunja.rule=Host(`${VIKUNJA_CONTAINER_NAME:-vikunja}.${HOST_DOMAIN}`)
       #- traefik.http.services.vikunja.loadbalancer.server.scheme=https # enable if the service wants to connect over https
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${VIKUNJA_WATCHTOWER_ENABLED:-true}
       - autoheal=true
 
   api:

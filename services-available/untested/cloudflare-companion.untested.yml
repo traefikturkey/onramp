@@ -20,5 +20,5 @@ services:
       - TZ=${TZ}
     labels:
       - traefik.enable=false
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${CLOUDFLARE_COMPANION_WATCHTOWER_ENABLED:-true}
       - autoheal=true

@@ -30,5 +30,5 @@ services:
       - traefik.http.routers.coqui-ai.rule=Host(`${COQUI_AI_CONTAINER_NAME:-coqui-ai}.${HOST_DOMAIN}`)
       #- traefik.http.services.coqui-ai.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.coqui-ai.loadbalancer.server.port=5002
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${COQUI_WATCHTOWER_ENABLED:-true}
       - autoheal=true

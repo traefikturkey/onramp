@@ -26,7 +26,7 @@ services:
       - traefik.http.routers.newsdash.entrypoints=websecure
       - traefik.http.routers.newsdash.rule=Host(`newsdash.${HOST_DOMAIN}`)
       - traefik.http.services.newsdash.loadbalancer.server.port=3001
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${NEWSDASH_WATCHTOWER_ENABLED:-true}
       - autoheal=true
 
   redis:

@@ -33,7 +33,7 @@ services:
       - host.docker.internal:host-gateway
     labels:
       - joyride.host.name=prometheus.${HOST_DOMAIN}
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${PROMETHEUS_WATCHTOWER_ENABLED:-true}
       - traefik.enable=true
       - traefik.docker.network=traefik
       - traefik.http.routers.prometheus.rule=Host(`prometheus.${HOST_DOMAIN}`)
@@ -69,7 +69,7 @@ services:
       - ./etc/prometheus/conf:/etc/prometheus/conf:ro
     labels:
       - joyride.host.name=blackbox.${HOST_DOMAIN}
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${PROMETHEUS_WATCHTOWER_ENABLED:-true}
       - traefik.enable=true
       - traefik.http.routers.blackbox.rule=Host(`blackbox.${HOST_DOMAIN}`)
       - traefik.http.routers.blackbox.entrypoints=websecure
@@ -94,7 +94,7 @@ services:
       - prometheus:/alertmanager:rw
     labels:
       - joyride.host.name=alertmanager.${HOST_DOMAIN}
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${PROMETHEUS_WATCHTOWER_ENABLED:-true}
       - traefik.enable=true
       - traefik.http.routers.alertmanager.rule=Host(`alertmanager.${HOST_DOMAIN}`)
       - traefik.http.routers.alertmanager.entrypoints=websecure

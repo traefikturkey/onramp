@@ -29,7 +29,7 @@ services:
       - POSTGRES_USER=${AUTHENTIK_POSTGRES_USER:-authentik}
       - POSTGRES_DB=${AUTHENTIK_POSTGRES_DB:-authentik}
     labels:
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${AUTHENTIK_WATCHTOWER_ENABLED:-true}
       - traefik.enable=false
       - autoheal=true
 
@@ -46,7 +46,7 @@ services:
       retries: 5
       timeout: 3s
     labels:
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${AUTHENTIK_WATCHTOWER_ENABLED:-true}
       - traefik.enable=false
       - autoheal=true
 
@@ -86,7 +86,7 @@ services:
       - traefik.http.middlewares.authentik.forwardauth.address=http://authentik-server:9000/outpost.goauthentik.io/auth/traefik
       - traefik.http.middlewares.authentik.forwardauth.trustForwardHeader=true
       - traefik.http.middlewares.authentik.forwardauth.authResponseHeaders=X-authentik-username,X-authentik-groups,X-authentik-email,X-authentik-name,X-authentik-uid,X-authentik-jwt,X-authentik-meta-jwks,X-authentik-meta-outpost,X-authentik-meta-provider,X-authentik-meta-app,X-authentik-meta-version
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${AUTHENTIK_WATCHTOWER_ENABLED:-true}
       - autoheal=true
 
   worker:
@@ -120,7 +120,7 @@ services:
       #- ./etc/authentik/geoip:/geoip
       # Uncomment above to enable the use of the geoipupdate container. This will allow more frequent updates but isn't required.
     labels:
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${AUTHENTIK_WATCHTOWER_ENABLED:-true}
       - traefik.enable=false
       - autoheal=true
 
@@ -134,7 +134,7 @@ services:
   #    - GEOIPUPDATE_ACCOUNT_ID=${GEOIP_ACCOUNT}
   #    - GEOIPUPDATE_LICENSE_KEY=${GEOIP_KEY}
   #  labels:
-  #    - com.centurylinklabs.watchtower.enable=true
+  #    - com.centurylinklabs.watchtower.enable=${AUTHENTIK_WATCHTOWER_ENABLED:-true}
   #    - traefik.enable=false
   #    - autoheal=true
   #  env_file:

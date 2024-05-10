@@ -33,7 +33,7 @@ services:
       - traefik.http.routers.sd-web.entrypoints=websecure
       - traefik.http.routers.sd-web.rule=Host(`${SD_WEB_CONTAINER_NAME:-sd-web}.${HOST_DOMAIN}`)
       - traefik.http.services.sd-web.loadbalancer.server.port=7860
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${SD_WEB_WATCHTOWER_ENABLED:-true}
       - autoheal=true
     deploy:
       resources:

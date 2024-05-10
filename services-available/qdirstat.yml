@@ -30,5 +30,5 @@ services:
       - traefik.http.routers.qdirstat.entrypoints=websecure
       - traefik.http.routers.qdirstat.rule=Host(`${QDIRSTAT_CONTAINER_NAME:-qdirstat}.${HOST_DOMAIN}`)
       - traefik.http.services.qdirstat.loadbalancer.server.port=5800
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${QDIRSTAT_WATCHTOWER_ENABLED:-true}
       - autoheal=true

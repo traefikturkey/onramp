@@ -23,5 +23,5 @@ services:
     labels:
       - joyride.host.name=squad.${HOST_DOMAIN}
       - traefik.enable=false
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${SQUAD_WATCHTOWER_ENABLED:-true}
       - autoheal=true

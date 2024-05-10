@@ -28,5 +28,5 @@ services:
       - traefik.tcp.routers.mailrise.tls=true
       - traefik.tcp.routers.mailrise.tls.certresolver=letsencrypt
       - traefik.tcp.routers.mailrise.entrypoints=mailsecure
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${MAILRISE_WATCHTOWER_ENABLED:-true}
       - autoheal=true

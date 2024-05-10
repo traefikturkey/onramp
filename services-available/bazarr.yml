@@ -29,5 +29,5 @@ services:
       - traefik.http.routers.bazarr.entrypoints=websecure
       - traefik.http.routers.bazarr.rule=Host(`${BAZARR_CONTAINER_NAME:-bazarr}.${HOST_DOMAIN}`)
       - traefik.http.services.bazarr.loadbalancer.server.port=6767
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${BAZARR_WATCHTOWER_ENABLED:-true}
       - autoheal=true

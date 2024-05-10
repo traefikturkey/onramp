@@ -1,5 +1,3 @@
-version: '3'
-
 volumes:
   plex-nfs-media:
     labels:

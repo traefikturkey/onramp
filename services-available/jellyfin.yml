@@ -31,5 +31,5 @@ services:
       - traefik.http.routers.jellyfin.entrypoints=websecure
       - traefik.http.routers.jellyfin.rule=Host(`${JELLYFIN_CONTAINER_NAME:-jellyfin}.${HOST_DOMAIN}`)
       - traefik.http.services.jellyfin.loadbalancer.server.port=8096
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${JELLYFIN_WATCHTOWER_ENABLED:-true}
       - autoheal=true

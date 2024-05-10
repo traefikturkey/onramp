@@ -23,5 +23,5 @@ services:
     labels:
       - joyride.host.name=${POSTFIX_CONTAINER_NAME:-postfix}.${HOST_DOMAIN}
       - traefik.enable=false
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${POSTFIX_WATCHTOWER_ENABLED:-true}
       - autoheal=true

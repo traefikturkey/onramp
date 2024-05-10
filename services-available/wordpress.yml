@@ -33,5 +33,5 @@ services:
       - traefik.http.routers.wordpress.entrypoints=websecure
       - traefik.http.routers.wordpress.rule=Host(`${WORDPRESS_CONTAINER_NAME:-wordpress}.${HOST_DOMAIN}`)
       - traefik.http.services.wordpress.loadbalancer.server.port=80
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${WORDPRESS_WATCHTOWER_ENABLED:-true}
       - autoheal=true

@@ -27,5 +27,5 @@ services:
       - traefik.http.routers.flame.entrypoints=websecure
       - traefik.http.routers.flame.rule=Host(`${FLAME_CONTAINER_NAME:-flame}.${HOST_DOMAIN}`)
       - traefik.http.services.flame.loadbalancer.server.port=5005
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${FLAME_WATCHTOWER_ENABLED:-true}
       - autoheal=true

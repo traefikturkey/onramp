@@ -29,5 +29,5 @@ services:
       - traefik.http.routers.synapse.rule=Host(`${SYNAPSE_CONTAINER_NAME:-synapse}.${HOST_DOMAIN}`)
       #- traefik.http.services.synapse.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.synapse.loadbalancer.server.port=8008
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${SYNAPSE_WATCHTOWER_ENABLED:-true}
       - autoheal=true

@@ -28,7 +28,7 @@ services:
       - traefik.http.routers.librephotos.rule=Host(`${LIBREPHOTOS_CONTAINER_NAME:-librephotos}.${HOST_DOMAIN}`)
       #- traefik.http.services.librephotos.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.librephotos.loadbalancer.server.port=80
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${LIBREPHOTOS_WATCHTOWER_ENABLED:-true}
       - autoheal=true
 
   db:

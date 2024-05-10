@@ -33,5 +33,5 @@ services:
       - traefik.http.routers.wireshark.entrypoints=websecure
       - traefik.http.routers.wireshark.rule=Host(`${WIRESHARK_CONTAINER_NAME:-wireshark}.${HOST_DOMAIN}`)
       - traefik.http.services.wireshark.loadbalancer.server.port=3000
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${WIRESHARK_WATCHTOWER_ENABLED:-true}
       - autoheal=true

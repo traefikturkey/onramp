@@ -28,5 +28,5 @@ services:
       #- traefik.http.routers.whoami.middlewares=authelia@docker
       #- traefik.http.routers.whoami.middlewares=crowdsec-bouncer@file
       #- traefik.http.routers.whoami.middlewares=my-plugindemo@file
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${WHOAMI_WATCHTOWER_ENABLED:-true}
       - autoheal=true

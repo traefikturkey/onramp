@@ -25,5 +25,5 @@ services:
       - traefik.http.routers.webtop.entrypoints=websecure
       - traefik.http.routers.webtop.rule=Host(`${WEBTOP_CONTAINER_NAME:-webtop}.${HOST_DOMAIN}`)
       - traefik.http.services.webtop.loadbalancer.server.port=3000
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${WEBTOP_WATCHTOWER_ENABLED:-true}
       - autoheal=true

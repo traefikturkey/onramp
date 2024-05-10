@@ -34,5 +34,5 @@ services:
       - traefik.http.middlewares.dynamic.plugin.sablier.sablierUrl=http://sablier:10000
       - traefik.http.middlewares.dynamic.plugin.sablier.sessionDuration=1m
       - traefik.http.middlewares.dynamic.plugin.sablier.dynamic.theme=hacker-terminal
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${SABLIER_WATCHTOWER_ENABLED:-true}
       - autoheal=true

@@ -1,5 +1,3 @@
-version: '3'
-
 volumes:
   photoprism-nfs-root:
     labels:

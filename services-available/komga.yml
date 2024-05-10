@@ -27,5 +27,5 @@ services:
       - traefik.http.routers.komga.entrypoints=websecure
       - traefik.http.routers.komga.rule=Host(`${KOMGA_CONTAINER_NAME:-komga}.${HOST_DOMAIN}`)
       - traefik.http.services.komga.loadbalancer.server.port=25600
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${KOMGA_WATCHTOWER_ENABLED:-true}
       - autoheal=true

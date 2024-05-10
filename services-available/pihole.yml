@@ -38,5 +38,5 @@ services:
       - traefik.http.middlewares.piholeredirect.redirectregex.regex=^https?://${PIHOLE_CONTAINER_NAME:-pihole}.${HOST_DOMAIN}/$$
       - traefik.http.middlewares.piholeredirect.redirectregex.replacement=http://${PIHOLE_CONTAINER_NAME:-pihole}.${HOST_DOMAIN}/admin/
       - traefik.http.routers.pihole.middlewares=piholeredirect
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${PIHOLE_WATCHTOWER_ENABLED:-true}
       - autoheal=true

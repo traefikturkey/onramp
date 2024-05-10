@@ -1,5 +1,3 @@
-version: '3'
-
 volumes:
   bazarr-nfs-movies:
     labels:

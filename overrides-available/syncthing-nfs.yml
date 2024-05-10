@@ -1,5 +1,3 @@
-version: '3'
-
 volumes:
   syncthing-nfs-media:
     labels:

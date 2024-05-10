@@ -39,5 +39,5 @@ services:
       - traefik.http.routers.tdarr.entrypoints=websecure
       - traefik.http.routers.tdarr.rule=Host(`${TDARR_CONTAINER_NAME:-tdarr}.${HOST_DOMAIN}`)
       - traefik.http.services.tdarr.loadbalancer.server.port=${TDARR_WEB_PORT:-8265}
-      - com.centurylinklabs.watchtower.enable=true
+      - com.centurylinklabs.watchtower.enable=${TDARR_WATCHTOWER_ENABLED:-true}
       - autoheal=true
