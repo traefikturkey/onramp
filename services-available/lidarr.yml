@@ -8,7 +8,7 @@ networks:
 services:
   lidarr:
     image: linuxserver/lidarr
-    container_name: ${LIDARR_CONTAINER_NAME:-makemkv}
+    container_name: ${LIDARR_CONTAINER_NAME:-lidarr}
     restart: ${LIDARR_RESTART:-unless-stopped}
     networks:
       - traefik
