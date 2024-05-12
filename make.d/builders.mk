@@ -92,8 +92,8 @@ BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),setup-omada)
 endif
 
 setup-omada:
-  @mkdir -p ./etc/omada/data
-  @mkdir -p ./etc/omada/work
-  @mkdir -p ./etc/omada/logs
+	@mkdir -p ./etc/omada/data
+	@mkdir -p ./etc/omada/work
+	@mkdir -p ./etc/omada/logs
 
 #$(info "builders.mk loaded")
