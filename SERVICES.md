@@ -1,5 +1,5 @@
 # Available Services
-183 services and counting...
+184 services and counting...
 
 
 - [adguard](https://github.com/AdguardTeam/AdGuardHome): Network-wide ad blocker and privacy tool
@@ -30,6 +30,7 @@
 - [dashy](https://github.com/Lissy93/dashy): Customizable dashboard for displaying information
 - [docker-proxy](https://github.com/Tecnativa/docker-socket-proxy): Proxy for docker containers
 - [docker-registry](https://hub.docker.com/_/registry): Registry for storing and distributing container images
+- [doku](https://github.com/amerkurev/doku): Disk usage dashboard
 - [dozzle-path](https://github.com/amir20/dozzle): Path-based reverse proxy for dozzle
 - [dozzle](https://github.com/amir20/dozzle): Web-based docker container log viewer
 - [droneci](https://github.com/harness/drone): Continuous integration and delivery platform
