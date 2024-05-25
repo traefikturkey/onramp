@@ -1,5 +1,5 @@
 # Available Services
-181 services and counting...
+182 services and counting...
 
 
 - [adguard](https://github.com/AdguardTeam/AdGuardHome): Network-wide ad blocker and privacy tool
@@ -156,6 +156,7 @@
 - [super-productivity](https://github.com/johannesjo/super-productivity): Time and task management app
 - [surrealdb](https://github.com/surrealdb/surrealdb/blob/main/docker/DOCKER.md): scalable, distributed, collaborative, document-graph database
 - [synapse](https://github.com/matrix-org/synapse): Matrix communication server
+- [synchronet](https://hub.docker.com/r/bbsio/synchronet): Synchronet BBS
 - [syncthing](https://hub.docker.com/r/linuxserver/syncthing): Decentralized file synchronization tool
 - [tautulli](https://hub.docker.com/r/linuxserver/tautulli): Monitors plex usage and provides statistics
 - [tdarr](https://docs.tdarr.io/docs/installation/docker/run-compose): Media optimization and conversion tool
