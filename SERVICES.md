@@ -84,7 +84,7 @@
 - [maintainerr](https://github.com/jorenn92/Maintainerr): managing media library
 - [makemkv](https://hub.docker.com/r/jlesage/makemkv): Fully automated container for MakeMKV with Web GUI
 - [mariadb](https://hub.docker.com/_/mariadb): Popular open-source relational database management system
-- [mealie](https://hay-kot.github.io/mealie/documentation/getting-started/install/): Recipe management system
+- [mealie](https://hub.docker.com/r/hkotel/mealie): Recipe management system
 - [minio](https://github.com/minio/minio): High-performance object storage server
 - [monocker](https://hub.docker.com/r/petersem/monocker): Container for running monero mining software
 - [mosquitto](https://hub.docker.com/_/eclipse-mosquitto): N mqtt broker for iot communication
