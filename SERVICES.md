@@ -1,5 +1,5 @@
 # Available Services
-182 services and counting...
+183 services and counting...
 
 
 - [adguard](https://github.com/AdguardTeam/AdGuardHome): Network-wide ad blocker and privacy tool
@@ -78,6 +78,7 @@
 - [librespeed](https://hub.docker.com/r/linuxserver/librespeed): Self-hosted internet speed test tool
 - [lidarr](https://hub.docker.com/r/linuxserver/lidarr): Manages music collections and downloads
 - [linkding](https://github.com/sissbruecker/linkding): Self-hosted bookmark manager
+- lubelog: <= put a brief description of lubelog here =>
 - [lychee](https://github.com/LycheeOrg/Lychee-Docker): Photo management and sharing platform
 - [mailhog](https://github.com/mailhog/MailHog): Mail testing tool for developers
 - [mailrise](https://github.com/YoRyan/mailrise): Self-hosted email marketing platform
