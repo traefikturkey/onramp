@@ -105,5 +105,13 @@ setup-audiobookshelf:
 	@mkdir -p ./etc/audiobookshelf/config
 	@mkdir -p ./etc/audiobookshelf/metadata
 
+ifneq (,$(wildcard ./services-enabled/uptime-kuma.yml))
+BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),setup-uptime-kuma)
+endif
+
+setup-uptime-kuma:
+	@mkdir -p ./etc/uptime-kuma
+
+
 
 #$(info "builders.mk loaded")
