@@ -15,7 +15,7 @@ volumes:
   #     device: ":${IMMICH_DB_NFS_SERVER_PATH:-${NFS_IMMICH_DATA_PATH}}"
 
 services:
-  immich-server:
+  immich:
     volumes:
       - immich-nfs-upload:/usr/src/app/upload
       - /etc/localtime:/etc/localtime:ro
