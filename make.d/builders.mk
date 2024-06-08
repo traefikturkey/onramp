@@ -96,4 +96,14 @@ setup-omada:
 	@mkdir -p ./etc/omada/work
 	@mkdir -p ./etc/omada/logs
 
+
+ifneq (,$(wildcard ./services-enabled/audiobookshelf.yml))
+BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),setup-audiobookshelf)
+endif
+
+setup-audiobookshelf:
+	@mkdir -p ./etc/audiobookshelf/config
+	@mkdir -p ./etc/audiobookshelf/metadata
+
+
 #$(info "builders.mk loaded")
