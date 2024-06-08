@@ -2,9 +2,8 @@ networks:
   traefik:
     external: true
 
-# description: <= put a brief description of lubelog here =>
-# <================= add links to dockerhub or github repo here =================>
-# <================= add links to other related documentation here =================>
+# description: Self-Hosted, Open-Source, Web-Based Vehicle Maintenance and Fuel Mileage Tracker
+# https://github.com/hargata/lubelog
 
 services:
   lubelog:
@@ -33,12 +32,12 @@ services:
       - TZ=${TZ}
       - LC_ALL=${LUBELOG_LC_ALL:-en_US.UTF-8}
       - LANG=${LUBELOG_LANG:-en_US.UTF-8}
-      - MailConfig__EmailServer="${LUBELOG_MAIL_SERVER}"
-      - MailConfig__EmailFrom="{$LUBELOG_MAIL_FROM}"
-      - MailConfig__UseSSL="${LUBELOG_MAIL_USE_SSL:-false}" # "true"
+      - MailConfig__EmailServer=${LUBELOG_MAIL_SERVER}
+      - MailConfig__EmailFrom=${LUBELOG_MAIL_FROM}
+      - MailConfig__UseSSL=${LUBELOG_MAIL_USE_SSL:-true}
       - MailConfig__Port=${LUBELOG_MAIL_PORT:-587}
-      - MailConfig__Username="${LUBELOG_MAIL_USERNAME}"
-      - MailConfig__Password="${LUBELOG_MAIL_PASSWORD}"
+      - MailConfig__Username=${LUBELOG_MAIL_USERNAME}
+      - MailConfig__Password=${LUBELOG_MAIL_PASSWORD}
       - LOGGING__LOGLEVEL__DEFAULT=${LUBELOG_LOG_LEVEL:-Error}
 
     labels:

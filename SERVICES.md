@@ -78,7 +78,7 @@
 - [librespeed](https://hub.docker.com/r/linuxserver/librespeed): Self-hosted internet speed test tool
 - [lidarr](https://hub.docker.com/r/linuxserver/lidarr): Manages music collections and downloads
 - [linkding](https://github.com/sissbruecker/linkding): Self-hosted bookmark manager
-- lubelog: <= put a brief description of lubelog here =>
+- [lubelog](https://github.com/hargata/lubelog): Self-Hosted, Open-Source, Web-Based Vehicle Maintenance and Fuel Mileage Tracker
 - [lychee](https://github.com/LycheeOrg/Lychee-Docker): Photo management and sharing platform
 - [mailhog](https://github.com/mailhog/MailHog): Mail testing tool for developers
 - [mailrise](https://github.com/YoRyan/mailrise): Self-hosted email marketing platform
