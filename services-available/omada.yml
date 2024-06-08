@@ -13,6 +13,7 @@ services:
     image: mbentley/omada-controller:${OMADA_DOCKER_TAG:-latest}
     container_name: ${OMADA_CONTAINER_NAME:-omada}
     restart: unless-stopped
+    mem_limit: ${OMADA_MEM_LIMIT:-2.5g}
     networks:
       - traefik
     volumes:
