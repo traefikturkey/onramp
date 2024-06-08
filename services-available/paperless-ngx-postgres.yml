@@ -48,7 +48,7 @@ services:
     image: ghcr.io/paperless-ngx/paperless-ngx:${PAPERLESS_NGX_DOCKER_TAG:-latest}
     container_name: ${PAPERLESS_NGX_CONTAINER_NAME:-paperless-ngx-postgres}
     restart: ${PAPERLESS_NGX_RESTART:-unless-stopped}
-    mem_limit: ${PAPERLESS_MEM_LIMIT:-2.5g}
+#    mem_limit: ${PAPERLESS_MEM_LIMIT:-2.5g}
     networks:
       - traefik
     depends_on:
