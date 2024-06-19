@@ -3,7 +3,7 @@
 ## 1. Preparation
 
 <p>
-    This repository makes the assumption that running a debian based distro of linux like ubuntu, so a few of the scripted commands below may need to be adjusted if you are using a different distro or package management. You will need to install docker on your linux host and obtain a cloudflare API token.
+    This repository makes the assumption that you are running a debian based distro of linux like ubuntu, so a few of the scripted commands below may need to be adjusted if you are using a different distro or package management. You will need to install docker on your linux host and obtain a cloudflare API token.
 </p>
 
 - Install Docker
