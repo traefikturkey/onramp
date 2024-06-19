@@ -54,5 +54,6 @@ You will need to install docker on your linux host and obtain a cloudflare API t
 ## 3. Usage
 
 <p>
-    The install script adds shortcuts (redirects) for many commands.  Most of the action happens with the "make" command.
+AFTER AN HOUR... WHY DOES THIS FILE EXIST!!!!! all the updated info is in the README!!!!!!! I'm happy to work on documentation as long as it's not a complete shitshow to start!!!</p>
+
 </p>
