@@ -47,7 +47,7 @@ make
 
 ## Docker Services
 
-Other docker services are included in the ./services-available directory
+Other docker services are included in the ./services-available directory.
 The configuration files include links to the web page for the services which has 
 the available documentation.
 
