@@ -22,12 +22,7 @@ services:
     networks:
       - traefik
       - immich-db
-  immich-microservices:
-    volumes:
-      - immich-nfs-upload:/usr/src/app/upload
-      - /etc/localtime:/etc/localtime:ro
-    networks:
-      - immich-db
+
   # database:
   #   volumes:
   #     - immich-nfs-db:${IMMICH_POSTGRES_DATA_DIR:-/var/lib/postgresql/data}
