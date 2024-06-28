@@ -96,4 +96,22 @@ setup-omada:
 	@mkdir -p ./etc/omada/work
 	@mkdir -p ./etc/omada/logs
 
+
+ifneq (,$(wildcard ./services-enabled/audiobookshelf.yml))
+BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),setup-audiobookshelf)
+endif
+
+setup-audiobookshelf:
+	@mkdir -p ./etc/audiobookshelf/config
+	@mkdir -p ./etc/audiobookshelf/metadata
+
+ifneq (,$(wildcard ./services-enabled/uptime-kuma.yml))
+BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),setup-uptime-kuma)
+endif
+
+setup-uptime-kuma:
+	@mkdir -p ./etc/uptime-kuma
+
+
+
 #$(info "builders.mk loaded")

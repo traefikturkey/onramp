@@ -15,19 +15,14 @@ volumes:
   #     device: ":${IMMICH_DB_NFS_SERVER_PATH:-${NFS_IMMICH_DATA_PATH}}"
 
 services:
-  immich-server:
+  immich:
     volumes:
       - immich-nfs-upload:/usr/src/app/upload
       - /etc/localtime:/etc/localtime:ro
     networks:
       - traefik
       - immich-db
-  immich-microservices:
-    volumes:
-      - immich-nfs-upload:/usr/src/app/upload
-      - /etc/localtime:/etc/localtime:ro
-    networks:
-      - immich-db
+
   # database:
   #   volumes:
   #     - immich-nfs-db:${IMMICH_POSTGRES_DATA_DIR:-/var/lib/postgresql/data}

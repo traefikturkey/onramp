@@ -3,7 +3,7 @@ networks:
     external: true
 
 # description: Recipe management system
-# https://hay-kot.github.io/mealie/documentation/getting-started/install/
+# https://hub.docker.com/r/hkotel/mealie
 
 services:
   mealie:

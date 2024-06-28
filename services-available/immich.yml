@@ -10,7 +10,7 @@ networks:
 services:
   immich:
     container_name: ${IMMICH_CONTAINER_NAME:-immich}
-    image: ghcr.io/immich-app/immich-server:${IMMICH_DOCKER_TAG:-v1.95.1}
+    image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-v1.106.4}
     command: ["start.sh", "immich"]
     volumes:
       - ${IMMICH_UPLOAD_LOCATION:-./etc/immich/upload}:/usr/src/app/upload
@@ -43,38 +43,9 @@ services:
       - com.centurylinklabs.watchtower.enable=${IMMICH_WATCHTOWER_ENABLED:-false}
       - autoheal=true
 
-  immich-microservices:
-    container_name: immich_microservices
-    image: ghcr.io/immich-app/immich-server:${IMMICH_DOCKER_TAG:-v1.95.1}
-    # extends:
-    #   file: hwaccel.yml
-    #   service: hwaccel
-    command: ["start.sh", "microservices"]
-    restart: ${IMMICH_RESTART_POLICY:-unless-stopped}
-    networks:
-      - immich-db
-    user: "1000"
-    environment:
-      - PGID=${PGID:-1000}
-      - PUID=${PUID:-1000}
-      - DB_DATABASE_NAME=${IMMICH_POSTGRES_DB:-immich}
-      - DB_HOSTNAME=${IMMICH_DB_HOSTNAME:-immich_database}
-      - DB_USERNAME=${IMMICH_DB_USERNAME:-postgres}
-      - DB_PASSWORD=${IMMICH_DB_PASSWORD:-123456}
-      - REDIS_HOSTNAME=${IMMICH_REDIS_HOSTNAME:-immich_redis}
-      - TZ=${TZ:-America/New_York}
-      - TYPESENSE_API_KEY=${IMMICH_TYPESENSE_API_KEY:-changeme}
-      - UPLOAD_LOCATION=${IMMICH_UPLOAD_LOCATION:-./etc/immich/upload}
-    volumes:
-      - ${IMMICH_UPLOAD_LOCATION:-./etc/immich/upload}:/usr/src/app/upload
-      - /etc/localtime:/etc/localtime:ro
-    depends_on:
-      - redis
-      - database
-
   immich-machine-learning:
     container_name: immich_machine_learning
-    image: ghcr.io/immich-app/immich-machine-learning:${IMMICH_DOCKER_TAG:-release}
+    image: ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION:-v1.106.4}
     networks:
       - immich-db
     volumes:
@@ -96,11 +67,11 @@ services:
       - immich-db
     # user: "1000"
     environment:
-      - PGID=${PGID:-1000}
-      - PUID=${PUID:-1000}
-      - POSTGRES_PASSWORD=${IMMICH_DB_PASSWORD:-123456}
-      - POSTGRES_USER=${IMMICH_DB_USERNAME:-postgres}
-      - POSTGRES_DB=${IMMICH_DB_DATABASE_NAME:-immich}
+      #- PGID=${PGID:-1000}
+      #- PUID=${PUID:-1000}
+      - POSTGRES_PASSWORD=${IMMICH_POSTGRES_PASSWORD:-123456}
+      - POSTGRES_USER=${IMMICH_POSTGRES_USER:-postgres}
+      - POSTGRES_DB=${IMMICH_POSTGRES_DB:-immich}
     volumes:
       - ${IMMICH_POSTGRES_DB_DIR:-./etc/immich/db}:/var/lib/postgresql/data
     restart: ${IMMICH_RESTART_POLICY:-unless-stopped}

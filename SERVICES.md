@@ -1,5 +1,5 @@
 # Available Services
-184 services and counting...
+186 services and counting...
 
 
 - [adguard](https://github.com/AdguardTeam/AdGuardHome): Network-wide ad blocker and privacy tool
@@ -79,13 +79,14 @@
 - [lidarr](https://hub.docker.com/r/linuxserver/lidarr): Manages music collections and downloads
 - [linkding](https://github.com/sissbruecker/linkding): Self-hosted bookmark manager
 - [loki](https://grafana.com/docs/loki/latest/installation/docker/): 
+- [lubelog](https://github.com/hargata/lubelog): Self-Hosted, Open-Source, Web-Based Vehicle Maintenance and Fuel Mileage Tracker
 - [lychee](https://github.com/LycheeOrg/Lychee-Docker): Photo management and sharing platform
 - [mailhog](https://github.com/mailhog/MailHog): Mail testing tool for developers
 - [mailrise](https://github.com/YoRyan/mailrise): Self-hosted email marketing platform
 - [maintainerr](https://github.com/jorenn92/Maintainerr): managing media library
 - [makemkv](https://hub.docker.com/r/jlesage/makemkv): Fully automated container for MakeMKV with Web GUI
 - [mariadb](https://hub.docker.com/_/mariadb): Popular open-source relational database management system
-- [mealie](https://hay-kot.github.io/mealie/documentation/getting-started/install/): Recipe management system
+- [mealie](https://hub.docker.com/r/hkotel/mealie): Recipe management system
 - [minio](https://github.com/minio/minio): High-performance object storage server
 - [monocker](https://hub.docker.com/r/petersem/monocker): Container for running monero mining software
 - [mosquitto](https://hub.docker.com/_/eclipse-mosquitto): N mqtt broker for iot communication
@@ -158,6 +159,7 @@
 - [super-productivity](https://github.com/johannesjo/super-productivity): Time and task management app
 - [surrealdb](https://github.com/surrealdb/surrealdb/blob/main/docker/DOCKER.md): scalable, distributed, collaborative, document-graph database
 - [synapse](https://github.com/matrix-org/synapse): Matrix communication server
+- [synchronet](https://hub.docker.com/r/bbsio/synchronet): Synchronet BBS
 - [syncthing](https://hub.docker.com/r/linuxserver/syncthing): Decentralized file synchronization tool
 - [tautulli](https://hub.docker.com/r/linuxserver/tautulli): Monitors plex usage and provides statistics
 - [tdarr](https://docs.tdarr.io/docs/installation/docker/run-compose): Media optimization and conversion tool

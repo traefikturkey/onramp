@@ -3,7 +3,11 @@
 ## 1. Preparation
 
 <p>
-    This repository makes the assumption that running a debian based distro of linux like ubuntu, so a few of the scripted commands below may need to be adjusted if you are using a different distro or package management. You will need to install docker on your linux host and obtain a cloudflare API token.
+    This repository makes the assumption that you are running a debian based distro of linux like ubuntu, so a few of the scripted commands below may need to be adjusted if you are using a different distro or package management.
+</p>
+
+<p>
+You will need to install docker on your linux host and obtain a cloudflare API token.
 </p>
 
 - Install Docker
@@ -16,15 +20,14 @@
 
 - Get Cloudflare API Token
 
-<p>You'll need a personal domain that's setup with Cloudflare
-and an API token created like so</p>
+<p>You'll need a personal domain that's setup with Cloudflare and an API token created like so</p>
 
 ![Cloudflare api token](/documentation/assets/cloudflare-api.png)
 
 ## 2. Installation
 
-    After installing docker and getting your Cloudflare API key
-    you can run the following to do the basic setup automagically:
+    After installing docker and getting your Cloudflare API key you can run the following to do the basic setup automagically:
+    
     ```
     sudo apt install git make nano -y
 
@@ -50,3 +53,7 @@ and an API token created like so</p>
 
 ## 3. Usage
 
+<p>
+AFTER AN HOUR... WHY DOES THIS FILE EXIST!!!!! all the updated info is in the README!!!!!!! I'm happy to work on documentation as long as it's not a complete shitshow to start!!!</p>
+
+</p>
