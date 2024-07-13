@@ -1,5 +1,5 @@
 # Available Services
-185 services and counting...
+184 services and counting...
 
 [A](#A)
 [B](#B)
@@ -170,7 +170,6 @@
 - [omada](https://hub.docker.com/r/mbentley/omada-controller): Container for running tp-link omada controller
 - [onboard](https://github.com/traefikturkey/onboard): An RSS and Bookmarks Dashboard 
 - [ongoing](https://github.com/traefikturkey/ongoing): A self hosted url expander (opposite of url shortener)
-- open-webui: User-friendly WebUI for LLMs
 - [openspeedtest](https://github.com/openspeedtest/Docker-Image): Network Performance Estimation Tool
 - [overseerr](https://hub.docker.com/r/linuxserver/overseerr): Request management and notification system for media content
 - [owncast](https://github.com/owncast/owncast): Self-hosted live video streaming server
@@ -287,7 +286,7 @@
 # Available Games
 10 games and counting...
 
-[F](#f-1)
+[F](#F-1)
 [M](#M-1)
 [R](#R-1)
 [S](#S-1)
