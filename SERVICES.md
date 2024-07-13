@@ -287,7 +287,7 @@
 # Available Games
 10 games and counting...
 
-[F](#F-1)
+[F](#f-1)
 [M](#M-1)
 [R](#R-1)
 [S](#S-1)
