@@ -70,7 +70,7 @@ echo "" >> ./SERVICES.md
 
 # Create an index of letters for games
 for letter in "${game_alphabet[@]}"; do
-  echo "[$letter](#$letter)" >> ./SERVICES.md
+  echo "[$letter](#$letter-1)" >> ./SERVICES.md
 done
 echo "" >> ./SERVICES.md
 

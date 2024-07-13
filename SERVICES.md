@@ -287,11 +287,11 @@
 # Available Games
 10 games and counting...
 
-[F](#F)
-[M](#M)
-[R](#R)
-[S](#S)
-[V](#V)
+[F](#F-1)
+[M](#M-1)
+[R](#R-1)
+[S](#S-1)
+[V](#V-1)
 
 ## F
 - [factorio](https://hub.docker.com/r/goofball222/factorio): Factorio is a game about building and managing factories on an alien planet
