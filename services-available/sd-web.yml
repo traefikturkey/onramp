@@ -5,7 +5,7 @@ networks:
     external: true
 
 # description: stable diffusion web interface for ai images
-# https://https://github.com/AUTOMATIC1111/stable-diffusion-webui
+# https://github.com/AUTOMATIC1111/stable-diffusion-webui
 
 services:
   sd-web:
