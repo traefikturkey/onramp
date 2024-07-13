@@ -2,7 +2,7 @@ networks:
   traefik:
     external: true
 
-# description: <= put a brief description of kestra here =>
+# description: Event Driven Orchestration & Scheduling Platform
 # https://github.com/kestra-io/kestra
 # https://github.com/kestra-io/kestra/blob/develop/docker-compose.yml
 # https://kestra.io/docs
