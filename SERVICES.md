@@ -128,7 +128,7 @@
 ## K
 - [kaizoku](https://github.com/oae/kaizoku): Web-based anime downloader
 - [kasm](https://hub.docker.com/r/linuxserver/kasm): Browser-based access to desktops, applications, and web services
-- [kestra](https://github.com/kestra-io/kestra): <= put a brief description of kestra here =>
+- [kestra](https://github.com/kestra-io/kestra): Event Driven Orchestration & Scheduling Platform
 - [kimai](https://github.com/tobybatch/kimai2): Time-tracking software for freelancers and small businesses
 - [komga](https://komga.org/docs/installation/docker/): Web-based comic book server
 
