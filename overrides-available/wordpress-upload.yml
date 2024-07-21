@@ -1,0 +1,4 @@
+services:
+  wordpress:
+    volumes:
+      - ./etc/wordpress/upload.ini:/usr/local/etc/php/conf.d/upload.ini
