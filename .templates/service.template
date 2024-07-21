@@ -22,10 +22,10 @@ services:
       - PGID=${PGID:-1000}
       - TZ=${TZ}
     labels:
-      - joyride.host.name=${${SERVICE_PASSED_UPCASED}_HOSTNAME_NAME:-${SERVICE_PASSED_DNCASED}}.${HOST_DOMAIN}
+      - joyride.host.name=${${SERVICE_PASSED_UPCASED}_HOST_NAME:-${SERVICE_PASSED_DNCASED}}.${HOST_DOMAIN}
       - traefik.enable=${${SERVICE_PASSED_UPCASED}_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.${SERVICE_PASSED_DNCASED}.entrypoints=websecure
-      - traefik.http.routers.${SERVICE_PASSED_DNCASED}.rule=Host(`${${SERVICE_PASSED_UPCASED}_HOSTNAME_NAME:-${SERVICE_PASSED_DNCASED}}.${HOST_DOMAIN}`)
+      - traefik.http.routers.${SERVICE_PASSED_DNCASED}.rule=Host(`${${SERVICE_PASSED_UPCASED}_HOST_NAME:-${SERVICE_PASSED_DNCASED}}.${HOST_DOMAIN}`)
       #- traefik.http.services.${SERVICE_PASSED_DNCASED}.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.${SERVICE_PASSED_DNCASED}.loadbalancer.server.port=8096
       - com.centurylinklabs.watchtower.enable=${${SERVICE_PASSED_UPCASED}_WATCHTOWER_ENABLED:-true}
