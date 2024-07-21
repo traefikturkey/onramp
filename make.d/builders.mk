@@ -112,6 +112,13 @@ endif
 setup-uptime-kuma:
 	@mkdir -p ./etc/uptime-kuma
 
+ifneq (,$(wildcard ./override-enabled/wordpress-upload.yml))
+BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),setup-wordpress-upload)
+endif
+
+setup-wordpress-upload:
+	@mkdir -p ./etc/wordpress
+	cp --no-clobber .templates/wordpress-upload.template .etc/wordpress/upload.ini
 
 
 #$(info "builders.mk loaded")
