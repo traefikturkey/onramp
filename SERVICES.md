@@ -1,5 +1,5 @@
 # Available Services
-184 services and counting...
+188 services and counting...
 
 [A](#A)
 [B](#B)
@@ -41,6 +41,7 @@
 ## B
 - [basaran](https://github.com/hyperonym/basaran): Container for running basaran, a web-based file manager
 - [bazarr](https://hub.docker.com/r/linuxserver/bazarr): Manages subtitles for media content
+- [beszel](https://github.com/henrygd/beszel): A lightweight server monitoring hub with historical data, docker stats, and alerts.
 - [bind](https://hub.docker.com/r/ubuntu/bind9): A very flexible, full-featured DNS system
 
 
@@ -82,6 +83,7 @@
 - [firefly3](https://github.com/firefly-iii/firefly-iii/tree/main): Manages personal finances and budgets
 - [firefox](https://github.com/jlesage/docker-firefox): Runs mozilla firefox browser in a container
 - [flame](https://hub.docker.com/r/pawelmalak/flame): Self-hosted music recommendation engine
+- [fooocus](https://github.com/lllyasviel/Fooocus): Focus on prompting and generating | a generative image generator
 - [foundryvtt](https://hub.docker.com/r/felddy/foundryvtt): Virtual tabletop platform for role-playing games
 - [freshrss](https://christitus.com/why-we-dont-browse-the-internet-anymore/): Self-hosted rss feed reader
 - [frigate-coral](https://docs.frigate.video/frigate/installation/): Container for running frigate with coral edge tpu support
