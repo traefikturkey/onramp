@@ -19,6 +19,17 @@ create-nfs-backup: $(NFS_BACKUP_TMP_DIR) create-backup ## create a backup of the
 	sudo umount $(NFS_BACKUP_TMP_DIR)
 	sudo rm -r $(NFS_BACKUP_TMP_DIR)
 
+create-nfs-backup-direct: $(NFS_BACKUP_TMP_DIR) ## create a backup of the onramp config directly to the nfs server
+	if [ -d $(NFS_BACKUP_TMP_DIR) ]; then
+		sudo mount -t nfs $(NFS_SERVER):$(NFS_BACKUP_PATH) $(NFS_BACKUP_TMP_DIR)
+	else
+		sudo mkdir -p $(NFS_BACKUP_TMP_DIR)
+		sudo mount -t nfs $(NFS_SERVER):$(NFS_BACKUP_PATH) $(NFS_BACKUP_TMP_DIR)
+		fi
+	sudo tar --exclude=.keep $(ONRAMP_BACKUP_EXCLUSIONS:=--exclude=etc/plex/Library) -czf $(NFS_BACKUP_TMP_DIR)/onramp-config-backup-$(HOST_NAME)-$(shell date +'%y-%m-%d-%H%M').tar.gz ./etc ./services-enabled ./overrides-enabled ./environments-enabled $(ONRAMP_BACKUP_INCLUSIONS) || true
+	sudo umount $(NFS_BACKUP_TMP_DIR)
+	sudo rm -r $(NFS_BACKUP_TMP_DIR)	
+
 restore-backup: ## restore the latest backup of the onramp config
 	sudo tar -xvf ./backups/onramp-config-backup-$(HOST_NAME)-*.tar.gz
 
