@@ -1,5 +1,5 @@
 # Available Services
-188 services and counting...
+187 services and counting...
 
 [A](#A)
 [B](#B)
@@ -148,6 +148,7 @@
 - [mailrise](https://github.com/YoRyan/mailrise): Self-hosted email marketing platform
 - [maintainerr](https://github.com/jorenn92/Maintainerr): managing media library
 - [makemkv](https://hub.docker.com/r/jlesage/makemkv): Fully automated container for MakeMKV with Web GUI
+- [manyfold](https://github.com/manyfold3d/manyfold): A self-hosted digital asset manager for 3d print files
 - [mariadb](https://hub.docker.com/_/mariadb): Popular open-source relational database management system
 - [mealie](https://hub.docker.com/r/hkotel/mealie): Recipe management system
 - [minio](https://github.com/minio/minio): High-performance object storage server
