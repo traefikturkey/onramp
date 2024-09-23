@@ -49,7 +49,7 @@ MISSING_PACKAGES := $(foreach exec,$(EXECUTABLES),$(if $(shell dpkg -s "$(exec)"
 addrepo/%:
 	@if [ "$(shell lsb_release -si | tail -n 1)" = "Ubuntu" ]; then \
 		sudo apt-add-repository ppa:$* -y; \
-
+	fi
 addpackage-%:
 	@if ! command -v yq >/dev/null 2>&1; then \
 		# download the yq binary directly rather than via apt.
