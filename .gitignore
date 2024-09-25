@@ -67,3 +67,7 @@ etc/traefik/available/octoprint-sunlu.yml
 overrides-available/bazarr-nfs-extra-rand.yml
 overrides-available/sonarr-nfs-extra-rand.yml
 overrides-available/plex-nfs-extra-rand.yml
+
+
+#randoneerings special settings
+services-enabled/*
