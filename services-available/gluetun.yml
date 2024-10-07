@@ -31,8 +31,8 @@ services:
       - WIREGUARD_ADDRESSES=${GLUETUN_WIREGUARD_ADDRESSES}
       - SERVER_COUNTRIES=${GLUETUN_WIREGUARD_SERVER_COUNTRIES:-Netherlands}
     # OpenVPN Config Options
-      -  OPENVPN_USER=${GLUETUN_OPENVPN_USER}
-      -  OPENVPN_USER=${GLUETUN_OPENVPN_USER}
+      - OPENVPN_USER=${GLUETUN_OPENVPN_USER}
+      - OPENVPN_USER=${GLUETUN_OPENVPN_USER}
     labels:
       - traefik.enable=${GLUETUN_TRAEFIK_ENABLED:-false}
       #- traefik.http.services.gluetun.loadbalancer.server.scheme=https # enable if the service wants to connect over https
