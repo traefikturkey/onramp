@@ -1,0 +1,5 @@
+services:
+  transmission:
+    networks:
+      - traefik
+    network_mode: "container:gluetun"

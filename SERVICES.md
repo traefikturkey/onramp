@@ -1,5 +1,5 @@
 # Available Services
-187 services and counting...
+189 services and counting...
 
 [A](#A)
 [B](#B)
@@ -97,6 +97,7 @@
 - [gitea](https://github.com/go-gitea/gitea): Lightweight git service similar to github
 - [gitlab](https://docs.gitlab.com/ee/install/docker.html): Self-hosted git repository management system
 - [glances](https://github.com/nicolargo/glances): System monitoring tool
+- [gluetun](https://hub.docker.com/r/qmcgaw/gluetun ): VPN Client for Docker Containers and More
 - [go2rtc](https://github.com/AlexxIT/go2rtc): Webrtc gateway for sip
 - [gotify](https://github.com/gotify/server): Self-hosted push notification service
 - [grafana](https://grafana.com/docs/grafana/next/setup-grafana/installation/docker/): Platform for monitoring and observability
@@ -248,6 +249,7 @@
 - [tautulli](https://hub.docker.com/r/linuxserver/tautulli): Monitors plex usage and provides statistics
 - [tdarr](https://docs.tdarr.io/docs/installation/docker/run-compose): Media optimization and conversion tool
 - [transmission-vpn](https://hub.docker.com/r/haugene/transmission-openvpn): Bittorrent client with vpn support
+- [transmission](https://hub.docker.com/r/linuxserver/transmission): Transmission bittorrent client with no VPN. Intended to be used with Gluetun.
 - [trilium](https://github.com/zadam/trilium): Personal knowledge management system
 - [truecommand](https://hub.docker.com/r/ixsystems/truecommand): Management tool for truenas
 
