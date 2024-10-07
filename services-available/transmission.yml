@@ -17,9 +17,9 @@ services:
       - ./etc/transmission:/config
       - /etc/localtime:/etc/localtime:ro
       - ./etc/transmission/downloads:/downloads
-    ports:
-      - 51413:51413
-      - 51413:51413/udp
+    # ports:
+    #   - 51413:51413
+    #   - 51413:51413/udp
     environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}

@@ -12,6 +12,7 @@ services:
     container_name: ${GLUETUN_CONTAINER_NAME:-gluetun}
     restart: ${GLUETUN_RESTART:-unless-stopped}
     mem_limit: ${GLUETUN_MEM_LIMIT:-200g}
+    hostname: gluetun
     networks:
       - traefik
     cap_add:
