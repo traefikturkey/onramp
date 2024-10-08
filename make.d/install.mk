@@ -73,6 +73,10 @@ EXECUTABLES = git nano jq python3-pip yamllint python3-pathspec ansible
 MISSING_PACKAGES := $(foreach exec,$(EXECUTABLES),$(if $(shell dpkg -s "$(exec)" &> /dev/null),,addpackage-$(exec)))
 
 # duck you debian
+addrepo/%:
+	@if [ "$(shell lsb_release -si | tail -n 1)" = "Ubuntu" ]; then \
+		sudo apt-add-repository ppa:$* -y; \
+	fi
 addpackage-%:
 	@if ! command -v yq >/dev/null 2>&1; then \
 		# download the yq binary directly rather than via apt.
