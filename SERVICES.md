@@ -1,5 +1,5 @@
 # Available Services
-189 services and counting...
+190 services and counting...
 
 [A](#A)
 [B](#B)
@@ -235,6 +235,7 @@
 - [sftp-server](https://github.com/drakkan/sftpgo): Secure ftp server
 - [snapdrop](https://hub.docker.com/r/linuxserver/snapdrop): Web-based file sharing tool for local networks
 - [sonarr](https://hub.docker.com/r/linuxserver/sonarr): Manages tv show collections and downloads
+- [spacebin](https://github.com/lukewhrit/spacebin): spacebin: text sharing for the final frontier (Pastebin alternative)
 - [sqliteweb](https://hub.docker.com/r/tomdesinto/sqliteweb/): Web-based SQLite Database Browser
 - [stirling-pdf](https://github.com/Stirling-Tools/Stirling-PDF): Container for running stirling pdf, a web-based pdf viewer
 - [streaming-search](https://github.com/Colaski/global-streaming-search): Container for running streaming search, a media indexer
