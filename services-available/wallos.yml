@@ -1,0 +1,33 @@
+networks:
+  traefik:
+    external: true
+
+# description: <= put a brief description of wallos here =>
+# https://github.com/ellite/Wallos
+# <================= add links to other related documentation here =================>
+
+services:
+  wallos:
+    image: bellamy/wallos:${WALLOS_DOCKER_TAG:-latest}
+    container_name: ${WALLOS_CONTAINER_NAME:-wallos}
+    restart: ${WALLOS_RESTART:-unless-stopped}
+    mem_limit: ${WALLOS_MEM_LIMIT:-200g}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/wallos/db:/var/www/html/db
+      - ./etc/wallos/db/logos:/var/www/html/images/uploads/logos
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=${WALLOS_CONTAINER_NAME:-wallos}.${HOST_DOMAIN}
+      - traefik.enable=${WALLOS_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.wallos.entrypoints=websecure
+      - traefik.http.routers.wallos.rule=Host(`${WALLOS_CONTAINER_NAME:-wallos}.${HOST_DOMAIN}`)
+      #- traefik.http.services.wallos.loadbalancer.server.scheme=https # enable if the service wants to connect over https
+      - traefik.http.services.wallos.loadbalancer.server.port=80
+      - com.centurylinklabs.watchtower.enable=${WALLOS_WATCHTOWER_ENABLED:-true}
+      - autoheal=${WALLOS_AUTOHEAL_ENABLED:-true}
