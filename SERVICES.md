@@ -1,5 +1,5 @@
 # Available Services
-190 services and counting...
+192 services and counting...
 
 [A](#A)
 [B](#B)
@@ -269,6 +269,7 @@
 
 ## W
 - [wallabag](https://github.com/wallabag/wallabag): Self-hosted read-it-later service
+- [wallos](https://github.com/ellite/Wallos): <= put a brief description of wallos here =>
 - [watchtower](https://github.com/containrrr/watchtower): Automatically updates docker containers
 - [watchyourlan](https://github.com/aceberg/WatchYourLAN): Monitors network devices and services
 - [webmap](https://github.com/SECUREFOREST/WebMap): Web-based network scanner
@@ -277,6 +278,7 @@
 - [wg-easy](https://github.com/WeeJeWel/wg-easy): Wireguard vpn configuration generator
 - [whoami](https://hub.docker.com/r/traefik/whoami): Simple web service that returns information about the host
 - [wikijs](https://hub.docker.com/r/linuxserver/wikijs): Self-hosted wiki platform
+- [windows](https://github.com/dockur/windows): Windows inside a Docker container.
 - [wireguard-server](https://hub.docker.com/r/linuxserver/wireguard): Vpn server using wireguard
 - [wireshark](https://hub.docker.com/r/linuxserver/wireshark): Network protocol analyzer
 - [woodpecker](https://woodpecker-ci.org/): Container for running woodpecker, a web-based email client
