@@ -1,5 +1,5 @@
 # Available Services
-192 services and counting...
+193 services and counting...
 
 [A](#A)
 [B](#B)
@@ -186,6 +186,7 @@
 - [photoprism](https://github.com/photoprism/photoprism): Personal photo management software
 - [phpmyadmin](https://hub.docker.com/r/phpmyadmin/phpmyadmin): Web-based mysql and mariadb database management tool
 - [pihole](https://github.com/pi-hole/docker-pi-hole/blob/master/README.md): Network-wide ad blocker and dns sinkhole
+- [pinchflat](https://github.com/kieraneglin/pinchflat): Pinchflat is a self-hosted app for downloading YouTube content built using yt-dlp
 - [pingvin-share](https://github.com/stautonico/pingvin-share): File-sharing platform
 - [playit-docker](https://github.com/mafen/playit-docker): Container for running playit live, a radio automation software
 - [plex](https://github.com/plexinc/pms-docker): Media server for streaming movies, tv shows, and music
