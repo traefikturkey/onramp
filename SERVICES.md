@@ -1,5 +1,5 @@
 # Available Services
-193 services and counting...
+194 services and counting...
 
 [A](#A)
 [B](#B)
@@ -219,6 +219,7 @@
 - [readarr](https://docs.linuxserver.io/images/docker-readarr/#docker-compose-recommended-click-here-for-more-info): Manages ebook collections and downloads
 - [recyclarr](https://hub.docker.com/r/recyclarr/recyclarr): Container for running recyclarr, a media indexer
 - [redis](https://github.com/redis/redis): In-memory data structure store
+- [redlib](https://github.com/redlib-org/redlib?tab=readme-ov-file#Configuration): An open source frontend for reddit.
 - [remotely](https://github.com/immense/Remotely): Remote desktop and support tool
 - [requestrr](https://hub.docker.com/r/darkalfx/requestrr): Integrates with sonarr and radarr for requesting media content
 - [rundeck](https://github.com/rundeck/rundeck): Job scheduler and runbook automation platform
