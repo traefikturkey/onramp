@@ -1,5 +1,5 @@
 # Available Services
-194 services and counting...
+196 services and counting...
 
 [A](#A)
 [B](#B)
@@ -188,6 +188,7 @@
 - [photoprism](https://github.com/photoprism/photoprism): Personal photo management software
 - [phpmyadmin](https://hub.docker.com/r/phpmyadmin/phpmyadmin): Web-based mysql and mariadb database management tool
 - [pihole](https://github.com/pi-hole/docker-pi-hole/blob/master/README.md): Network-wide ad blocker and dns sinkhole
+- [pinchflat](https://github.com/kieraneglin/pinchflat): Pinchflat is a self-hosted app for downloading YouTube content built using yt-dlp
 - [pingvinshare](https://github.com/stautonico/pingvin-share): File-sharing platform
 - [playitdocker](https://github.com/mafen/playit-docker): Container for running playit live, a radio automation software
 - [plex](https://github.com/plexinc/pms-docker): Media server for streaming movies, tv shows, and music
@@ -272,6 +273,7 @@
 
 ## W
 - [wallabag](https://github.com/wallabag/wallabag): Self-hosted read-it-later service
+- [wallos](https://github.com/ellite/Wallos): <= put a brief description of wallos here =>
 - [watchtower](https://github.com/containrrr/watchtower): Automatically updates docker containers
 - [watchyourlan](https://github.com/aceberg/WatchYourLAN): Monitors network devices and services
 - [webmap](https://github.com/SECUREFOREST/WebMap): Web-based network scanner

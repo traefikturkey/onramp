@@ -10,8 +10,7 @@ networks:
 services:
   immich:
     container_name: ${IMMICH_CONTAINER_NAME:-immich}
-    image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-v1.106.4}
-    command: ["start.sh", "immich"]
+    image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-v1.118.0}
     volumes:
       - ${IMMICH_UPLOAD_LOCATION:-./etc/immich/upload}:/usr/src/app/upload
       - /etc/localtime:/etc/localtime:ro
@@ -39,13 +38,14 @@ services:
       - traefik.docker.network=traefik
       - traefik.http.routers.immich.entrypoints=websecure
       - traefik.http.routers.immich.rule=Host(`${IMMICH_CONTAINER_NAME:-immich}.${HOST_DOMAIN}`)
-      - traefik.http.services.immich.loadbalancer.server.port=3001
+      - traefik.http.services.immich.loadbalancer.server.port=2283
       - com.centurylinklabs.watchtower.enable=${IMMICH_WATCHTOWER_ENABLED:-false}
       - autoheal=true
 
   immich-machine-learning:
     container_name: immich_machine_learning
-    image: ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION:-v1.106.4}
+    user: "1000"
+    image: ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION:-v1.118.0}
     networks:
       - immich-db
     volumes:
