@@ -1,5 +1,5 @@
 # Available Services
-196 services and counting...
+197 services and counting...
 
 [A](#A)
 [B](#B)
@@ -78,8 +78,8 @@
 
 
 ## F
-- [firefly3](https://github.com/firefly-iii/firefly-iii/tree/main): Manages personal finances and budgets
 - [firefly-data-importer](https://github.com/firefly-iii/firefly-iii/tree/main): Imports data into firefly iii, a personal finance manager
+- [firefly3](https://github.com/firefly-iii/firefly-iii/tree/main): Manages personal finances and budgets
 - [firefox](https://github.com/jlesage/docker-firefox): Runs mozilla firefox browser in a container
 - [flame](https://hub.docker.com/r/pawelmalak/flame): Self-hosted music recommendation engine
 - [fooocus](https://github.com/lllyasviel/Fooocus): Focus on prompting and generating | a generative image generator
@@ -122,8 +122,8 @@
 
 ## J
 - [jellyfin](https://hub.docker.com/r/linuxserver/jellyfin): Media server for streaming content
-- [jellyseerr](https://github.com/Fallenbagel/jellyseerr/tree/develop): Container for running jellyseerr, a torrent indexer
 - [jellyseer](https://github.com/Fallenbagel/jellyseerr/tree/develop): 
+- [jellyseerr](https://github.com/Fallenbagel/jellyseerr/tree/develop): Container for running jellyseerr, a torrent indexer
 - [joplin](https://joplinapp.org/): Note-taking and to-do app
 - [joyride](https://github.com/ilude/joyride): dynamic dns server that uses docker labels
 
@@ -221,6 +221,7 @@
 - [readarr](https://docs.linuxserver.io/images/docker-readarr/#docker-compose-recommended-click-here-for-more-info): Manages ebook collections and downloads
 - [recyclarr](https://hub.docker.com/r/recyclarr/recyclarr): Container for running recyclarr, a media indexer
 - [redis](https://github.com/redis/redis): In-memory data structure store
+- [redlib](https://github.com/redlib-org/redlib?tab=readme-ov-file#Configuration): An open source frontend for reddit.
 - [remotely](https://github.com/immense/Remotely): Remote desktop and support tool
 - [requestrr](https://hub.docker.com/r/darkalfx/requestrr): Integrates with sonarr and radarr for requesting media content
 - [rundeck](https://github.com/rundeck/rundeck): Job scheduler and runbook automation platform
