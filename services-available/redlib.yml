@@ -29,6 +29,7 @@ services:
       - ENABLE_RSS=${REDLIB_ENABLE_RSS:-off}
       - FULL_URL=${REDLIB_HOST_NAME:-redlib}.${HOST_DOMAIN}} # only used for RSS links.
       - USE_HLS=${REDLIB_USE_HLS:-on}
+      - FIXED_NAVBAR=${REDLIB_FIXED_NAVBAR:-on}
     labels:
       - joyride.host.name=${REDLIB_HOST_NAME:-redlib}.${HOST_DOMAIN}
       - traefik.enable=${REDLIB_TRAEFIK_ENABLED:-true}
