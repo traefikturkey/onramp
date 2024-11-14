@@ -1,5 +1,5 @@
 # Available Services
-197 services and counting...
+198 services and counting...
 
 [A](#A)
 [B](#B)
@@ -78,8 +78,8 @@
 
 
 ## F
-- [firefly-data-importer](https://github.com/firefly-iii/firefly-iii/tree/main): Imports data into firefly iii, a personal finance manager
 - [firefly3](https://github.com/firefly-iii/firefly-iii/tree/main): Manages personal finances and budgets
+- [firefly-data-importer](https://github.com/firefly-iii/firefly-iii/tree/main): Imports data into firefly iii, a personal finance manager
 - [firefox](https://github.com/jlesage/docker-firefox): Runs mozilla firefox browser in a container
 - [flame](https://hub.docker.com/r/pawelmalak/flame): Self-hosted music recommendation engine
 - [fooocus](https://github.com/lllyasviel/Fooocus): Focus on prompting and generating | a generative image generator
@@ -96,6 +96,7 @@
 - [gitea](https://github.com/go-gitea/gitea): Lightweight git service similar to github
 - [gitlab](https://docs.gitlab.com/ee/install/docker.html): Self-hosted git repository management system
 - [glances](https://github.com/nicolargo/glances): System monitoring tool
+- [glance](https://github.com/glanceapp/glance): <= put a brief description of glance here =>
 - [gluetun](https://hub.docker.com/r/qmcgaw/gluetun ): VPN Client for Docker Containers and More
 - [go2rtc](https://github.com/AlexxIT/go2rtc): Webrtc gateway for sip
 - [gotify](https://github.com/gotify/server): Self-hosted push notification service
@@ -122,8 +123,8 @@
 
 ## J
 - [jellyfin](https://hub.docker.com/r/linuxserver/jellyfin): Media server for streaming content
-- [jellyseer](https://github.com/Fallenbagel/jellyseerr/tree/develop): 
 - [jellyseerr](https://github.com/Fallenbagel/jellyseerr/tree/develop): Container for running jellyseerr, a torrent indexer
+- [jellyseer](https://github.com/Fallenbagel/jellyseerr/tree/develop): 
 - [joplin](https://joplinapp.org/): Note-taking and to-do app
 - [joyride](https://github.com/ilude/joyride): dynamic dns server that uses docker labels
 
