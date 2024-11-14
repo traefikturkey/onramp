@@ -1,5 +1,5 @@
 # Available Services
-194 services and counting...
+195 services and counting...
 
 [A](#A)
 [B](#B)
@@ -96,6 +96,7 @@
 - [ghost](https://hub.docker.com/_/ghost): Headless cms for creating blogs and websites
 - [gitea](https://github.com/go-gitea/gitea): Lightweight git service similar to github
 - [gitlab](https://docs.gitlab.com/ee/install/docker.html): Self-hosted git repository management system
+- [glance](https://github.com/glanceapp/glance): <= put a brief description of glance here =>
 - [glances](https://github.com/nicolargo/glances): System monitoring tool
 - [gluetun](https://hub.docker.com/r/qmcgaw/gluetun ): VPN Client for Docker Containers and More
 - [go2rtc](https://github.com/AlexxIT/go2rtc): Webrtc gateway for sip
