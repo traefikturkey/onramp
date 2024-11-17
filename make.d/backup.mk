@@ -22,11 +22,11 @@ create-backup: backups ## create a backup of the onramp config
 	sudo tar --exclude=.keep $(ONRAMP_BACKUP_EXCLUSIONS:=--exclude=etc/plex/Library) -czf ${ONRAMP_BACKUP_LOCATION}/onramp-config-backup-$(HOST_NAME)-$(shell date +'%y-%m-%d-%H%M').tar.gz ./etc ./services-enabled ./overrides-enabled ./environments-enabled $(ONRAMP_BACKUP_INCLUSIONS) || true
 
 create-backup-service: backups ## create a backup of a service 
-ifneq (,$(wildcard ./services-available/$(SERVICE_PASSED_DNCASED).yml))
+ifneq (,$(wildcard ./services-enabled/$(SERVICE_PASSED_DNCASED).yml))
 	@echo "Backing up $(SERVICE_PASSED_DNCASED)..."
 	sudo tar --exclude=.keep $(ONRAMP_BACKUP_EXCLUSIONS:=--exclude=etc/plex/Library) -czf ${ONRAMP_BACKUP_LOCATION}/onramp-config-backup-$(HOST_NAME)-$(SERVICE_PASSED_DNCASED)-$(shell date +'%y-%m-%d-%H%M').tar.gz ./etc/$(SERVICE_PASSED_DNCASED) || true
 else
-	@echo "No such service file ./services-available/$(SERVICE_PASSED_DNCASED).yml!"
+	@echo "No such service file ./services-enabled/$(SERVICE_PASSED_DNCASED).yml!"
 endif
 
 create-nfs-backup: $(NFS_BACKUP_TMP_DIR) create-backup ## create a backup of the onramp config and copy it to the nfs server
