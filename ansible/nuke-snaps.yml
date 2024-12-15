@@ -1,0 +1,30 @@
+- name: Nuke snaps
+  hosts: localhost
+  become: true
+  tasks:
+    - name: Gather package facts
+      ansible.builtin.package_facts:
+
+    - block:
+        - name: Remove lxd snap
+          snap:
+            name: lxd
+            state: absent
+
+        - name: Remove core20 snap
+          snap:
+            name: core20
+            state: absent
+
+        - name: Remove snapd snap
+          snap:
+            name: snapd
+            state: absent
+
+      when: "'snapd' in ansible_facts.packages"
+
+    - name: Purge snapd package
+      apt:
+        name: snapd
+        state: absent
+        purge: yes
