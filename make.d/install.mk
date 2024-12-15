@@ -83,6 +83,10 @@ install-ansible: install-dependencies
 	@echo "Installing ansible roles requirements..."
 	ansible-playbook ansible/ansible-requirements.yml
 
+nuke-snaps: 
+	@echo "Remove the evil that is snaps..."
+	ansible-playbook ansible/nuke-snaps.yml
+
 install-docker: install-ansible
 	ansible-playbook ansible/install-docker.yml
 
