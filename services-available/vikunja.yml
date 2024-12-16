@@ -7,7 +7,7 @@ networks:
 
 services:
   vikunja:
-    image: vikunja/frontend:${VIKUNJA_DOCKER_TAG:-latest}
+    image: vikunja/vikunja:${VIKUNJA_DOCKER_TAG:-latest}
     container_name: ${VIKUNJA_CONTAINER_NAME:-vikunja}
     networks:
       - traefik
@@ -15,45 +15,26 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
-      # - VIKUNJA_API_URL=http://${VIKUNJA_API_CONTAINER_NAME:-vikunja-api}:3456/api/v1
-    restart: ${VIKUNJA_RESTART:-unless-stopped}
-    labels:
-      - joyride.host.name=${VIKUNJA_CONTAINER_NAME:-vikunja}.${HOST_DOMAIN}
-      - traefik.enable=true
-      - traefik.http.routers.vikunja.entrypoints=websecure
-      - traefik.http.routers.vikunja.rule=Host(`${VIKUNJA_CONTAINER_NAME:-vikunja}.${HOST_DOMAIN}`)
-      #- traefik.http.services.vikunja.loadbalancer.server.scheme=https # enable if the service wants to connect over https
-      - com.centurylinklabs.watchtower.enable=${VIKUNJA_WATCHTOWER_ENABLED:-true}
-      - autoheal=true
-
-  api:
-    image: vikunja/api:${VIKUNJA_DOCKER_TAG:-latest}
-    container_name: ${VIKUNJA_API_CONTAINER_NAME:-vikunja-api}
-    restart: ${VIKUNJA_RESTART:-unless-stopped}
-    networks:
-      - traefik
-    volumes:
-      - ./etc/vikunja/files:/config
-      - /etc/localtime:/etc/localtime:ro
-    depends_on:
-      - ${VIKUNJA_DATABASE_CONTAINER_NAME:-vikunja-db}
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.vikunja-api.rule=Host(`${VIKUNJA_CONTAINER_NAME:-vikunja}.${HOST_DOMAIN}`) && (PathPrefix(`/api/v1`) || PathPrefix(`/dav/`) || PathPrefix(`/.well-known/`))
-      - traefik.http.routers.vikunja-api.entrypoints=websecure
-      # - traefik.http.routers.vikunja-api.tls.certResolver=acme
-    environment:
-      - PUID=${PUID:-1000}
-      - PGID=${PGID:-1000}
-      - TZ=${TZ}
+      - VIKUNJA_SERVICE_PUBLICURL=https://${VIKUNJA_CONTAINER_NAME:-vikunja}.${HOST_DOMAIN}
       - VIKUNJA_DATABASE_HOST=${VIKUNJA_DATABASE_HOST:-vikunja-db}
       - VIKUNJA_DATABASE_PASSWORD=${VIKUNJA_DATABASE_PASSWORD:-secret}
       - VIKUNJA_DATABASE_TYPE=${VIKUNJA_DATABASE_TYPE:-mysql}
       - VIKUNJA_DATABASE_USER=${VIKUNJA_DATABASE_USER:-vikunja}
       - VIKUNJA_DATABASE_DATABASE=${VIKUNJA_DATABASE:-vikunja}
       - VIKUNJA_SERVICE_JWTSECRET=${VIKUNJA_SERVICE_JWTSECRET:-<a super secure random secret>}
-      - VIKUNJA_SERVICE_FRONTENDURL=${VIKUNJA_SERVICE_FRONTENDURL:-https://<your public frontend url with slash>/}
-
+    restart: ${VIKUNJA_RESTART:-unless-stopped}
+    depends_on:
+      vikunja-db:
+        condition: service_healthy
+    labels:
+      - joyride.host.name=${VIKUNJA_CONTAINER_NAME:-vikunja}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.vikunja.entrypoints=websecure
+      - traefik.http.routers.vikunja.rule=Host(`${VIKUNJA_CONTAINER_NAME:-vikunja}.${HOST_DOMAIN}`)
+      #- traefik.http.services.vikunja.loadbalancer.server.scheme=https # enable if the service wants to connect over https
+      - traefik.http.services.vikunja.loadbalancer.server.port=3456
+      - com.centurylinklabs.watchtower.enable=${VIKUNJA_WATCHTOWER_ENABLED:-true}
+      - autoheal=true
 
   vikunja-db:
     image: mariadb:10
@@ -69,3 +50,7 @@ services:
     volumes:
       - ./etc/vikunja/db:/var/lib/mysql/data
     restart: ${VIKUNJA_RESTART:-unless-stopped}
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u $$MYSQL_USER --password=$$MYSQL_PASSWORD"]
+      interval: 2s
+      start_period: 30s
