@@ -26,6 +26,8 @@
 # PFSENSE_HOST_NAME=<pfsense_hostname>      # pfsense hostname, normally pfsense
 # PROXMOX_ADDRESS=<ip_or_fqdn>              # proxmox.your_domain.com
 # PROXMOX_HOST_NAME=<pve_hostname>          # proxmox hostname, normally pve
+# PVEDCM_ADDRESS=<ip_or_fqdn>               # pvedcm.your_domain.com
+# PVEDCM_HOST_NAME=<pvedcm_hostname>        # pvedcm hostname, normally pvedcm
 # RANCHER_HOST_NAME=<rancher_hostname>      # rancher.your_domain.com
 # RANCHER_ADDRESS=<ip_or_fqdn>              # rancher hostname, normally rancher
 # SYNOLOGY_HOST_NAME=<synology_hostname>    # synology.your_domain.com
