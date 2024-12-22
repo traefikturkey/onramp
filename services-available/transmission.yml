@@ -1,0 +1,40 @@
+networks:
+  traefik:
+    external: true
+
+# description: Transmission bittorrent client with no VPN. Intended to be used with Gluetun.
+# https://hub.docker.com/r/linuxserver/transmission
+
+services:
+  transmission:
+    image: lscr.io/linuxserver/transmission:${TRANSMISSION_DOCKER_TAG:-latest}
+    container_name: ${TRANSMISSION_CONTAINER_NAME:-transmission}
+    restart: ${TRANSMISSION_RESTART:-unless-stopped}
+    mem_limit: ${TRANSMISSION_MEM_LIMIT:-200g}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/transmission:/config
+      - /etc/localtime:/etc/localtime:ro
+      - ./etc/transmission/downloads:/downloads
+    # ports:
+    #   - 51413:51413
+    #   - 51413:51413/udp
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - USER=${TRANSMISSION_USER:-transmission}
+      - PASS=${TRANSMISSION_PASSWORD:-transmission}
+      - TRANSMISSION_WEB_HOME=${TRANSMISSION_WEB_HOME}
+      - WHITELIST=${TRANSMISSION_WHITELIST}
+      - PEERPORT=${TRANSMISSION_PEERPORT}
+      - HOST_WHITELIST=${TRANSMISSION_HOST_WHITELIST}
+    labels:
+      - joyride.host.name=${TRANSMISSION_HOST_NAME:-transmission}.${HOST_DOMAIN}
+      - traefik.enable=${TRANSMISSION_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.transmission.entrypoints=websecure
+      - traefik.http.routers.transmission.rule=Host(`${TRANSMISSION_HOST_NAME:-transmission}.${HOST_DOMAIN}`)
+      - traefik.http.services.transmission.loadbalancer.server.port=9091
+      - com.centurylinklabs.watchtower.enable=${TRANSMISSION_WATCHTOWER_ENABLED:-true}
+      - autoheal=${TRANSMISSION_AUTOHEAL_ENABLED:-true}

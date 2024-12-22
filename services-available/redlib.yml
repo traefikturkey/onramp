@@ -1,0 +1,45 @@
+networks:
+  traefik:
+    external: true
+
+# description: An open source frontend for reddit.
+# https://github.com/redlib-org/redlib?tab=readme-ov-file#Configuration
+# Note that this application can take a few seconds to start up even on fast hardware.
+# If you're still getting a 404, be patient, wait a minute.
+
+services:
+  redlib:
+    image: quay.io/redlib/redlib:${REDLIB_DOCKER_TAG:-latest}
+    container_name: ${REDLIB_CONTAINER_NAME:-redlib}
+    restart: ${REDLIB_RESTART:-unless-stopped}
+    mem_limit: ${REDLIB_MEM_LIMIT:-200g}
+    networks:
+      - traefik
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - ROBOTS_DISABLE_INDEXING=${REBLIB_DISABLE_INDEXING:-on}
+      - SFW_ONLY=${REDLIB_SFW_ONLY:-off}
+      - THEME=${REDLIB_THEME:-system}
+      - LAYOUT=${REDLIB_LAYOUT:-classic}
+      - WIDE=${REDLIB_WIDE:-on}
+      - ENABLE_RSS=${REDLIB_ENABLE_RSS:-off}
+      - FULL_URL=${REDLIB_HOST_NAME:-redlib}.${HOST_DOMAIN}} # only used for RSS links.
+      - USE_HLS=${REDLIB_USE_HLS:-on}
+      - FIXED_NAVBAR=${REDLIB_FIXED_NAVBAR:-on}
+      - SUBSCRIPTIONS=${REDLIB_SUBSCRIPTIONS} # Should be + separated list of subreddits. e.g. sub1+sub2
+    labels:
+      - joyride.host.name=${REDLIB_HOST_NAME:-redlib}.${HOST_DOMAIN}
+      - traefik.enable=${REDLIB_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.redlib.entrypoints=websecure
+      - traefik.http.routers.redlib.rule=Host(`${REDLIB_HOST_NAME:-redlib}.${HOST_DOMAIN}`)
+      - traefik.http.services.redlib.loadbalancer.server.port=8080
+      - com.centurylinklabs.watchtower.enable=${REDLIB_WATCHTOWER_ENABLED:-true}
+      - autoheal=${REDLIB_AUTOHEAL_ENABLED:-true}
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "--tries=1", "http://localhost:8080/settings"]
+      interval: 5m
+      timeout: 3s

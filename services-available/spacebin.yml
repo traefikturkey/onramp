@@ -1,0 +1,47 @@
+networks:
+  traefik:
+    external: true
+
+# description: spacebin: text sharing for the final frontier (Pastebin alternative)
+# https://github.com/lukewhrit/spacebin
+
+services:
+  spacebin:
+    image: spacebinorg/spirit:${SPACEBIN_DOCKER_TAG:-latest}
+    container_name: ${SPACEBIN_CONTAINER_NAME:-spacebin}
+    restart: ${SPACEBIN_RESTART:-unless-stopped}
+    mem_limit: ${SPACEBIN_MEM_LIMIT:-200g}
+    networks:
+      - traefik
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - SPIRIT_CONNECTION_URI=${SPACEBIN_CONNECTION_URI:-postgres://spacebin:password@spacebin-db:5432/spacebin?sslmode=disable}
+      - SPIRIT_RATELIMITER=${SPACEBIN_RATELIMITER}
+      - SPIRIT_EXPIRATION_AGE=${SPACEBIN_EXPIRATION_IN_DAYS:-90}
+      - SPIRIT_ID_LENGTH=${SPACEBIN_ID_LENGTH:-8}
+      - SPIRIT_ID_TYPE=${SPACEBIN_ID_TYPE:-"key"} # possible values are 'key' or 'phrase'
+    labels:
+      - joyride.host.name=${SPACEBIN_HOST_NAME:-spacebin}.${HOST_DOMAIN}
+      - traefik.enable=${SPACEBIN_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.spacebin.entrypoints=websecure
+      - traefik.http.routers.spacebin.rule=Host(`${SPACEBIN_HOST_NAME:-spacebin}.${HOST_DOMAIN}`)
+      #- traefik.http.services.spacebin.loadbalancer.server.scheme=https # enable if the service wants to connect over https
+      - traefik.http.services.spacebin.loadbalancer.server.port=9000
+      - com.centurylinklabs.watchtower.enable=${SPACEBIN_WATCHTOWER_ENABLED:-true}
+      - autoheal=${SPACEBIN_AUTOHEAL_ENABLED:-true}
+  spacebin-db:
+    image: postgres:16.3-alpine
+    container_name: spacebin-db
+    restart: ${SPACEBIN_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    environment:
+      - POSTGRES_USER=${SPACEBIN_POSTGRES_USER:-spacebin}
+      - POSTGRES_PASSWORD=${SPACEBIN_POSTGRES_PASSWORD:-password}
+      - POSTGRES_DB=${SPACEBIN_POSTGRES_DB:-spacebin}
+    volumes:
+      - ./etc/spacebin/db:/var/lib/postgresql/data

@@ -1,5 +1,5 @@
 # Available Services
-187 services and counting...
+195 services and counting...
 
 [A](#A)
 [B](#B)
@@ -96,7 +96,9 @@
 - [ghost](https://hub.docker.com/_/ghost): Headless cms for creating blogs and websites
 - [gitea](https://github.com/go-gitea/gitea): Lightweight git service similar to github
 - [gitlab](https://docs.gitlab.com/ee/install/docker.html): Self-hosted git repository management system
+- [glance](https://github.com/glanceapp/glance): <= put a brief description of glance here =>
 - [glances](https://github.com/nicolargo/glances): System monitoring tool
+- [gluetun](https://hub.docker.com/r/qmcgaw/gluetun ): VPN Client for Docker Containers and More
 - [go2rtc](https://github.com/AlexxIT/go2rtc): Webrtc gateway for sip
 - [gotify](https://github.com/gotify/server): Self-hosted push notification service
 - [grafana](https://grafana.com/docs/grafana/next/setup-grafana/installation/docker/): Platform for monitoring and observability
@@ -185,6 +187,7 @@
 - [photoprism](https://github.com/photoprism/photoprism): Personal photo management software
 - [phpmyadmin](https://hub.docker.com/r/phpmyadmin/phpmyadmin): Web-based mysql and mariadb database management tool
 - [pihole](https://github.com/pi-hole/docker-pi-hole/blob/master/README.md): Network-wide ad blocker and dns sinkhole
+- [pinchflat](https://github.com/kieraneglin/pinchflat): Pinchflat is a self-hosted app for downloading YouTube content built using yt-dlp
 - [pingvin-share](https://github.com/stautonico/pingvin-share): File-sharing platform
 - [playit-docker](https://github.com/mafen/playit-docker): Container for running playit live, a radio automation software
 - [plex](https://github.com/plexinc/pms-docker): Media server for streaming movies, tv shows, and music
@@ -217,6 +220,7 @@
 - [readarr](https://docs.linuxserver.io/images/docker-readarr/#docker-compose-recommended-click-here-for-more-info): Manages ebook collections and downloads
 - [recyclarr](https://hub.docker.com/r/recyclarr/recyclarr): Container for running recyclarr, a media indexer
 - [redis](https://github.com/redis/redis): In-memory data structure store
+- [redlib](https://github.com/redlib-org/redlib?tab=readme-ov-file#Configuration): An open source frontend for reddit.
 - [remotely](https://github.com/immense/Remotely): Remote desktop and support tool
 - [requestrr](https://hub.docker.com/r/darkalfx/requestrr): Integrates with sonarr and radarr for requesting media content
 - [rundeck](https://github.com/rundeck/rundeck): Job scheduler and runbook automation platform
@@ -234,6 +238,7 @@
 - [sftp-server](https://github.com/drakkan/sftpgo): Secure ftp server
 - [snapdrop](https://hub.docker.com/r/linuxserver/snapdrop): Web-based file sharing tool for local networks
 - [sonarr](https://hub.docker.com/r/linuxserver/sonarr): Manages tv show collections and downloads
+- [spacebin](https://github.com/lukewhrit/spacebin): spacebin: text sharing for the final frontier (Pastebin alternative)
 - [sqliteweb](https://hub.docker.com/r/tomdesinto/sqliteweb/): Web-based SQLite Database Browser
 - [stirling-pdf](https://github.com/Stirling-Tools/Stirling-PDF): Container for running stirling pdf, a web-based pdf viewer
 - [streaming-search](https://github.com/Colaski/global-streaming-search): Container for running streaming search, a media indexer
@@ -248,6 +253,7 @@
 - [tautulli](https://hub.docker.com/r/linuxserver/tautulli): Monitors plex usage and provides statistics
 - [tdarr](https://docs.tdarr.io/docs/installation/docker/run-compose): Media optimization and conversion tool
 - [transmission-vpn](https://hub.docker.com/r/haugene/transmission-openvpn): Bittorrent client with vpn support
+- [transmission](https://hub.docker.com/r/linuxserver/transmission): Transmission bittorrent client with no VPN. Intended to be used with Gluetun.
 - [trilium](https://github.com/zadam/trilium): Personal knowledge management system
 - [truecommand](https://hub.docker.com/r/ixsystems/truecommand): Management tool for truenas
 
@@ -266,6 +272,7 @@
 
 ## W
 - [wallabag](https://github.com/wallabag/wallabag): Self-hosted read-it-later service
+- [wallos](https://github.com/ellite/Wallos): <= put a brief description of wallos here =>
 - [watchtower](https://github.com/containrrr/watchtower): Automatically updates docker containers
 - [watchyourlan](https://github.com/aceberg/WatchYourLAN): Monitors network devices and services
 - [webmap](https://github.com/SECUREFOREST/WebMap): Web-based network scanner
@@ -274,6 +281,7 @@
 - [wg-easy](https://github.com/WeeJeWel/wg-easy): Wireguard vpn configuration generator
 - [whoami](https://hub.docker.com/r/traefik/whoami): Simple web service that returns information about the host
 - [wikijs](https://hub.docker.com/r/linuxserver/wikijs): Self-hosted wiki platform
+- [windows](https://github.com/dockur/windows): Windows inside a Docker container.
 - [wireguard-server](https://hub.docker.com/r/linuxserver/wireguard): Vpn server using wireguard
 - [wireshark](https://hub.docker.com/r/linuxserver/wireshark): Network protocol analyzer
 - [woodpecker](https://woodpecker-ci.org/): Container for running woodpecker, a web-based email client

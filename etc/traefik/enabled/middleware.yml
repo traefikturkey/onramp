@@ -11,5 +11,8 @@ http:
         stsPreload: true
         stsSeconds: 15552000
         customFrameOptionsValue: SAMEORIGIN
+        customResponseHeaders:
+          X-Robots-Tag: "none,noarchive,nosnippet,notranslate,noimageindex,"
+          server: ""
         customRequestHeaders:
           X-Forwarded-Proto: https

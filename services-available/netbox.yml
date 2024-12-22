@@ -53,7 +53,7 @@ services:
       - autoheal=true
 
   netbox-postgresql:
-    image: postgres
+    image: postgres:16.4
     container_name: netbox_postgresql
     restart: unless-stopped
     networks:

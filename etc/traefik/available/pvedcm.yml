@@ -1,0 +1,17 @@
+http:
+  routers:
+    pvedcm:
+      entryPoints:
+        - "websecure"
+      rule: "Host(`{{env "PVEDCM_HOST_NAME"}}.{{env "HOST_DOMAIN"}}`)"
+      middlewares:
+        - default-headers
+      tls: {}
+      service: pvedcm
+
+  services:
+    pvedcm:
+      loadBalancer:
+        servers:
+          - url: "https://{{env "PVEDCM_ADDRESS"}}:8443/"
+        passHostHeader: true

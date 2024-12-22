@@ -1,0 +1,11 @@
+services:
+  transmission:
+    networks: !reset ""
+    network_mode: "container:gluetun"
+    depends_on:
+      - gluetun
+
+  gluetun:
+    ports:
+      - 51413:51413
+      - 51413:51413/udp
