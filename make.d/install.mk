@@ -34,7 +34,7 @@ install: build install-docker
 	cp --no-clobber .templates/env.template .env
 	$(EDITOR) .env
 
-REPOS = ansible/ansible
+REPOS = ansible/ansible rmescandon/yq
 MISSING_REPOS := $(foreach repo,$(REPOS),$(if $(shell apt-cache policy | grep $(repo)),,addrepo/$(repo))) 
 
 # If it's not empty, add a value to it
@@ -50,26 +50,9 @@ addrepo/%:
 	@if [ "$(shell lsb_release -si | tail -n 1)" = "Ubuntu" ]; then \
 		sudo apt-add-repository ppa:$* -y; \
 	fi
-addpackage-%:
-	@if [ "$*" = "jq" ] || [ "$*" = "yq" ]; then \
-		if ! command -v jq >/dev/null 2>&1; then \
-			echo "Installing jq..."; \
-			sudo apt update -qq && sudo apt install jq -y >/dev/null 2>&1; \
-			echo "jq installed successfully."; \
-		fi; \
-		if ! command -v yq >/dev/null 2>&1; then \
-			echo "Downloading the latest version of yq..."; \
-			YQ_URL=$$(curl -s https://api.github.com/repos/mikefarah/yq/releases/latest | \
-				jq -r '.assets[] | select(.name | test("yq_linux_amd64\\.tar\\.gz$$")) | .browser_download_url'); \
-			wget -qO - "$$YQ_URL" | tar xz && sudo mv yq_linux_amd64 /usr/bin/yq; \
-			echo "yq installed successfully."; \
-		fi; \
-	else \
-		sudo apt update -qq && sudo apt install $* -y \
-		echo "$* installed successfully."; \
-	fi
-	
 
+addpackage-%:
+	sudo apt install $* -y 
 
 update-distro:
 	sudo apt update
