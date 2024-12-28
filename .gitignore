@@ -4,6 +4,7 @@
 *.tar.gz
 backups/*
 services-enabled/*.yml
+services-enabled/*
 services-dev/*.yml
 services-test/
 overrides-enabled/*.yml
@@ -69,6 +70,3 @@ overrides-available/bazarr-nfs-extra-rand.yml
 overrides-available/sonarr-nfs-extra-rand.yml
 overrides-available/plex-nfs-extra-rand.yml
 
-
-#randoneerings special settings
-services-enabled/*
