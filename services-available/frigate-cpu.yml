@@ -2,13 +2,12 @@ networks:
   traefik:
     external: true
 
-# description: Container for running frigate with coral edge tpu support
 # https://docs.frigate.video/frigate/installation/
 
 services:
-  frigate-coral:
+  frigate-cpu:
     image: ghcr.io/blakeblackshear/frigate:${FRIGATE_DOCKER_TAG:-stable}
-    container_name: ${FRIGATE_CONTAINER_NAME:-frigate-coral}
+    container_name: ${FRIGATE_CONTAINER_NAME:-frigate-cpu}
     restart: ${FRIGATE_RESTART:-unless-stopped}
     networks:
       - traefik
