@@ -1,5 +1,5 @@
 # Available Services
-195 services and counting...
+196 services and counting...
 
 [A](#A)
 [B](#B)
@@ -79,8 +79,8 @@
 
 
 ## F
-- [firefly-data-importer](https://github.com/firefly-iii/firefly-iii/tree/main): Imports data into firefly iii, a personal finance manager
 - [firefly3](https://github.com/firefly-iii/firefly-iii/tree/main): Manages personal finances and budgets
+- [firefly-data-importer](https://github.com/firefly-iii/firefly-iii/tree/main): Imports data into firefly iii, a personal finance manager
 - [firefox](https://github.com/jlesage/docker-firefox): Runs mozilla firefox browser in a container
 - [flame](https://hub.docker.com/r/pawelmalak/flame): Self-hosted music recommendation engine
 - [fooocus](https://github.com/lllyasviel/Fooocus): Focus on prompting and generating | a generative image generator
@@ -96,8 +96,8 @@
 - [ghost](https://hub.docker.com/_/ghost): Headless cms for creating blogs and websites
 - [gitea](https://github.com/go-gitea/gitea): Lightweight git service similar to github
 - [gitlab](https://docs.gitlab.com/ee/install/docker.html): Self-hosted git repository management system
-- [glance](https://github.com/glanceapp/glance): <= put a brief description of glance here =>
 - [glances](https://github.com/nicolargo/glances): System monitoring tool
+- [glance](https://github.com/glanceapp/glance): <= put a brief description of glance here =>
 - [gluetun](https://hub.docker.com/r/qmcgaw/gluetun ): VPN Client for Docker Containers and More
 - [go2rtc](https://github.com/AlexxIT/go2rtc): Webrtc gateway for sip
 - [gotify](https://github.com/gotify/server): Self-hosted push notification service
@@ -236,6 +236,7 @@
 - [searxng](https://github.com/searxng/searxng-docker): Self-hosted metasearch engine
 - [semaphore](https://docs.ansible-semaphore.com/): Continuous integration and deployment service
 - [sftp-server](https://github.com/drakkan/sftpgo): Secure ftp server
+- [shlink](https://shlink.io/documentation/install-docker-image/): Self-Hosted URL shortener.
 - [snapdrop](https://hub.docker.com/r/linuxserver/snapdrop): Web-based file sharing tool for local networks
 - [sonarr](https://hub.docker.com/r/linuxserver/sonarr): Manages tv show collections and downloads
 - [spacebin](https://github.com/lukewhrit/spacebin): spacebin: text sharing for the final frontier (Pastebin alternative)
