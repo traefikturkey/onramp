@@ -1,0 +1,35 @@
+networks:
+  traefik:
+    external: true
+
+# description: Self-Hosted URL shortener.
+# https://shlink.io/documentation/install-docker-image/
+
+services:
+  shlink:
+    image: ghcr.io/shlinkio/shlink:${SHLINK_DOCKER_TAG:-latest}
+    container_name: ${SHLINK_CONTAINER_NAME:-shlink}
+    restart: ${SHLINK_RESTART:-unless-stopped}
+    mem_limit: ${SHLINK_MEM_LIMIT:-200g}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/shlink:/etc/shlink/data
+      - /etc/localtime:/etc/localtime:ro
+    user: ${PUID}
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - DEFAULT_DOMAIN=${SHLINK_DEFAULT_DOMAIN:-shlink}.${HOST_DOMAIN}
+      - IS_HTTPS_ENABLED=${SHLINK_HTTPS_ENABLED:-true}
+      - GEOLITE_LICENSE_KEY=${SHLINK_GEOLITE_KEY} # optional
+    labels:
+      - joyride.host.name=${SHLINK_HOST_NAME:-shlink}.${HOST_DOMAIN}
+      - traefik.enable=${SHLINK_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.shlink.entrypoints=websecure
+      - traefik.http.routers.shlink.rule=Host(`${SHLINK_HOST_NAME:-shlink}.${HOST_DOMAIN}`)
+      #- traefik.http.services.shlink.loadbalancer.server.scheme=https # enable if the service wants to connect over https
+      - traefik.http.services.shlink.loadbalancer.server.port=8080
+      - com.centurylinklabs.watchtower.enable=${SHLINK_WATCHTOWER_ENABLED:-true}
+      - autoheal=${SHLINK_AUTOHEAL_ENABLED:-true}
