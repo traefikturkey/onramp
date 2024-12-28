@@ -64,8 +64,11 @@ addpackage-%:
 			wget -qO - "$$YQ_URL" | tar xz && sudo mv yq_linux_amd64 /usr/bin/yq; \
 			echo "yq installed successfully."; \
 		fi; \
+	else \
+		sudo apt update -qq && sudo apt install $* -y \
+		echo "$* installed successfully."; \
 	fi
-	sudo apt install $* -y
+	
 
 
 update-distro:
