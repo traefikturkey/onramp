@@ -1,5 +1,5 @@
 # Available Services
-198 services and counting...
+200 services and counting...
 
 [A](#A)
 [B](#B)
@@ -86,6 +86,7 @@
 - [foundryvtt](https://hub.docker.com/r/felddy/foundryvtt): Virtual tabletop platform for role-playing games
 - [freshrss](https://christitus.com/why-we-dont-browse-the-internet-anymore/): Self-hosted rss feed reader
 - [frigate-coral](https://docs.frigate.video/frigate/installation/): Container for running frigate with coral edge tpu support
+- [frigate-cpu](https://docs.frigate.video/frigate/installation/): 
 - [frigate-nvidia](https://docs.frigate.video/frigate/installation/): Container for running frigate with nvidia gpu support
 - [fulltext-rss](https://christitus.com/why-we-dont-browse-the-internet-anymore/): Generates full-text rss feeds from partial feeds
 
@@ -238,6 +239,7 @@
 - [searxng](https://github.com/searxng/searxng-docker): Self-hosted metasearch engine
 - [semaphore](https://docs.ansible-semaphore.com/): Continuous integration and deployment service
 - [sftp-server](https://github.com/drakkan/sftpgo): Secure ftp server
+- [shlink](https://shlink.io/documentation/install-docker-image/): Self-Hosted URL shortener.
 - [snapdrop](https://hub.docker.com/r/linuxserver/snapdrop): Web-based file sharing tool for local networks
 - [sonarr](https://hub.docker.com/r/linuxserver/sonarr): Manages tv show collections and downloads
 - [spacebin](https://github.com/lukewhrit/spacebin): spacebin: text sharing for the final frontier (Pastebin alternative)
