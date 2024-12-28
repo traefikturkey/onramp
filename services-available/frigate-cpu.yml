@@ -1,0 +1,38 @@
+networks:
+  traefik:
+    external: true
+
+# https://docs.frigate.video/frigate/installation/
+
+services:
+  frigate-cpu:
+    image: ghcr.io/blakeblackshear/frigate:${FRIGATE_DOCKER_TAG:-stable}
+    container_name: ${FRIGATE_CONTAINER_NAME:-frigate-cpu}
+    restart: ${FRIGATE_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/frigate:/config
+      - ${FRIGATE_MEDIA_PATH:-./media/frigate}:/media/frigate
+      - /etc/localtime:/etc/localtime:ro
+      - type: tmpfs # Optional: 1GB of memory, reduces SSD/SD Card wear
+        target: /tmp/cache
+        tmpfs:
+          size: 1000000000
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - PLUS_API_KEY=${FRIGATE_PLUS_API_KEY:-}
+      - FRIGATE_RTSP_USER=${FRIGATE_RTSP_USER:-}
+      - FRIGATE_RTSP_PASSWORD=${FRIGATE_RTSP_PASSWORD:-}
+      - FRIGATE_MQTT_USER=${FRIGATE_MQTT_USER:-}
+      - FRIGATE_MQTT_PASSWORD=${FRIGATE_MQTT_PASSWORD:-}
+    labels:
+      - joyride.host.name=${FRIGATE_HOST_NAME:-frigate}.${HOST_DOMAIN}
+      - traefik.enable=${FRIGATE_TRAEFIK_ENABLE:-true}
+      - traefik.http.routers.frigate.entrypoints=websecure
+      - traefik.http.routers.frigate.rule=Host(`${FRIGATE_HOST_NAME:-frigate}.${HOST_DOMAIN}`)
+      - traefik.http.services.frigate.loadbalancer.server.port=5000
+      - com.centurylinklabs.watchtower.enable=${FRIGATE_WATCHTOWER_ENABLE:-true}
+      - autoheal=${FRIGATE_AUTOHEAL:-true}
