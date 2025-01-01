@@ -1,8 +1,8 @@
 # description: Exposes hardware and os metrics to prometheus
+# https://github.com/prometheus/node_exporter
 # Please see Makefile install-node-exporter: to install node-export directly on the host
 # by running: 'make install-node-exporter' as an alternative to using this container
-#
-# https://github.com/prometheus/node_exporter
+
 services:
   nodeexporter:
     image: prom/node-exporter:${NODE_EXPORTER_DOCKER_TAG:-latest}
