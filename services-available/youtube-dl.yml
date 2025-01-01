@@ -2,7 +2,7 @@ networks:
   traefik:
     external: true
 
-# description: Command-line program to download videos from youtube and other sites
+# description: Web UI for youtube-dl to download videos from youtube and other sites
 # https://github.com/nbr23/youtube-dl-server
 
 services:
