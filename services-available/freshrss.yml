@@ -3,6 +3,7 @@ networks:
     external: true
 
 # description: Self-hosted rss feed reader
+# https://github.com/FreshRSS/FreshRSS
 # https://christitus.com/why-we-dont-browse-the-internet-anymore/
 # https://www.youtube.com/watch?v=nxV0CPNeFxY
 

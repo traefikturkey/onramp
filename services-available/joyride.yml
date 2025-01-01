@@ -1,5 +1,5 @@
 # description: dynamic dns server that uses docker labels
-# https://github.com/ilude/joyride
+# https://github.com/traefikturkey/joyride
 
 # if you want to run joyride on port 53
 # run the following commands on ubuntu
