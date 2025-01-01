@@ -2,7 +2,7 @@ networks:
   traefik:
     external: true
 
-# description: Webrtc gateway for sip
+# description: Webrtc gateway for camera restreaming 
 # https://github.com/AlexxIT/go2rtc
 
 services:
