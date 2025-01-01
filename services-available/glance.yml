@@ -2,7 +2,7 @@ networks:
   traefik:
     external: true
 
-# description: <= put a brief description of glance here =>
+# description: A self-hosted dashboard that puts all your feeds in one place
 # https://github.com/glanceapp/glance
 
 services:
