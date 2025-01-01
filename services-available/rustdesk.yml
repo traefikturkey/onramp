@@ -3,7 +3,6 @@ networks:
     external: true
 
 # description: Remote desktop software
-# description: Remote desktop software
 # https://rustdesk.com/docs/en/self-host/install/
 
 services:
