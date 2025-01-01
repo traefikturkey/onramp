@@ -2,9 +2,8 @@ networks:
   traefik:
     external: true
 
-# description: <= put a brief description of wallos here =>
+# description: Open-Source Personal Subscription Tracker
 # https://github.com/ellite/Wallos
-# <================= add links to other related documentation here =================>
 
 services:
   wallos:

@@ -2,6 +2,7 @@ networks:
   traefik:
     external: true
 
+# description: frigate nvr with cpu only
 # https://docs.frigate.video/frigate/installation/
 
 services:
