@@ -2,9 +2,9 @@ networks:
   traefik:
     external: true
 
-# description: Dashboard for managing self-hosted services
-# https://hay-kot.github.io/homebox/
-# https://hay-kot.github.io/homebox/quick-start/
+# description: Inventory and organization system for your home
+# https://github.com/sysadminsmedia/homebox
+# https://homebox.software/en/
 
 services:
   homebox:
