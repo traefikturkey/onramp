@@ -27,6 +27,6 @@ services:
       - traefik.http.routers.ittools.entrypoints=websecure
       - traefik.http.routers.ittools.rule=Host(`${ITTOOLS_HOST_NAME:-ittools}.${HOST_DOMAIN}`)
       #- traefik.http.services.ittools.loadbalancer.server.scheme=https # enable if the service wants to connect over https
-      - traefik.http.services.ittools.loadbalancer.server.port=8096
+      - traefik.http.services.ittools.loadbalancer.server.port=80
       - com.centurylinklabs.watchtower.enable=${ITTOOLS_WATCHTOWER_ENABLED:-true}
       - autoheal=${ITTOOLS_AUTOHEAL_ENABLED:-true}
