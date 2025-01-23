@@ -2,7 +2,7 @@ networks:
   traefik:
     external: true
 
-# description: Container for running woodpecker, a web-based email client
+# description: CI/CD server and agent runner, a fork of Drone CI
 # https://woodpecker-ci.org/
 # https://woodpecker-ci.org/docs/intro
 

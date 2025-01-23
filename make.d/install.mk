@@ -61,7 +61,7 @@ environments-enabled/onramp-external.env:
 environments-enabled/onramp-nfs.env:
 	cp --no-clobber ./environments-available/onramp-nfs.template ./environments-enabled/onramp-nfs.env
 
-REPOS = ansible/ansible rmescandon/yq
+REPOS = ansible/ansible
 MISSING_REPOS := $(foreach repo,$(REPOS),$(if $(shell apt-cache policy | grep $(repo)),,addrepo/$(repo))) 
 
 # If it's not empty, add a value to it
@@ -69,7 +69,7 @@ ifneq ($(strip $(MISSING_REPOS)),)
 		MISSING_REPOS += update-distro
 endif
 
-EXECUTABLES = git nano jq yq python3-pip yamllint python3-pathspec ansible 
+EXECUTABLES = git nano jq python3-pip yamllint python3-pathspec ansible 
 MISSING_PACKAGES := $(foreach exec,$(EXECUTABLES),$(if $(shell dpkg -s "$(exec)" &> /dev/null),,addpackage-$(exec)))
 
 # duck you debian

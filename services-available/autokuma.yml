@@ -2,7 +2,7 @@ networks:
   traefik:
     external: true
 
-# description: Kubernetes monitoring and alerting tool
+# description: Automate the setup of Uptime Kuma using docker labels
 # https://github.com/BigBoot/AutoKuma
 
 services:

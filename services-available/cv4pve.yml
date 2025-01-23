@@ -2,7 +2,7 @@ networks:
   traefik:
     external: true
 
-# description: Container for running clamav on proxmox virtual environment (pve)
+# description: managment and monitoring solution for proxmox virtual environment (pve)
 # https://github.com/Corsinvest/cv4pve-admin/tree/main
 
 services:

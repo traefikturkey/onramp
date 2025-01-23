@@ -3,7 +3,6 @@ networks:
     external: true
 
 # description: Integrates with sonarr and radarr for requesting media content
-# description: Integrates with sonarr and radarr for requesting media content
 # https://hub.docker.com/r/darkalfx/requestrr
 
 services:

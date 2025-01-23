@@ -3,7 +3,6 @@ networks:
     external: true
 
 # description: Container for running radarr with postgresql
-# description: Container for running radarr with postgresql
 # https://hub.docker.com/_/postgres
 # https://wiki.servarr.com/radarr/postgres-setup
 

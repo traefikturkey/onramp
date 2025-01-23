@@ -4,7 +4,6 @@ networks:
 
 # description: Windows inside a Docker container.
 # https://github.com/dockur/windows
-# <================= add links to other related documentation here =================>
 
 services:
   windows:

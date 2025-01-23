@@ -3,7 +3,6 @@ networks:
     external: true
 
 # description: Manages ebook collections and downloads
-# description: Manages ebook collections and downloads
 # https://docs.linuxserver.io/images/docker-readarr/#docker-compose-recommended-click-here-for-more-info
 
 services:

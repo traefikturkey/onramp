@@ -2,7 +2,7 @@ networks:
   traefik:
     external: true
 
-# description: Workflow automation tool
+# description: IT documentation, ticketing and accounting system.
 # https://itflow.org/
 
 services:

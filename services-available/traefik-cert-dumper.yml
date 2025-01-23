@@ -1,4 +1,4 @@
-# description: Extracts ssl certificate information from websites
+# description: Extracts ssl certificate information from traefik acme.json file
 # https://github.com/ldez/traefik-certs-dumper
 
 services:

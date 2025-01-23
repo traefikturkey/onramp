@@ -2,7 +2,7 @@ networks:
   traefik:
     external: true
 
-# description: Wireguard vpn configuration generator
+# description: Wireguard vpn configuration generator and server
 # https://github.com/WeeJeWel/wg-easy
 
 services:
