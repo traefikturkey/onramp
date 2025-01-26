@@ -7,7 +7,7 @@ networks:
 
 services:
   wg-easy:
-    image: weejewel/wg-easy:${WG_EASY_DOCKER_TAG:-latest}
+    image: ghcr.io/wg-easy/wg-easy:${WG_EASY_DOCKER_TAG:-latest}
     container_name: ${WG_EASY_CONTAINER_NAME:-wg-easy}
     restart: ${WG_EASY_RESTART:-unless-stopped}
     networks:
