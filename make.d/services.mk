@@ -53,3 +53,10 @@ create-service: ## create a service file from the template and open it in the ed
 create-game: ## create a game service using the service template and open it in the editor
 	envsubst '$${SERVICE_PASSED_DNCASED},$${SERVICE_PASSED_UPCASED}' < ./.templates/service.template > ./services-available/games/$(SERVICE_PASSED_DNCASED).yml
 	$(EDITOR) ./services-available/games/$(SERVICE_PASSED_DNCASED).yml
+
+edit-service:
+ifneq (,$(wildcard ./services-available/$(SERVICE_PASSED_DNCASED).yml))
+	@$(EDITOR) services-available/$(SERVICE_PASSED_DNCASED).yml
+else
+	@echo "No such service file ./services-available/$(SERVICE_PASSED_DNCASED).yml!"
+endif
