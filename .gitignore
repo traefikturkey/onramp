@@ -66,8 +66,5 @@ etc/traefik/available/idrac1.yml
 etc/traefik/available/idrac2.yml
 etc/traefik/available/octoprint-ender.yml
 etc/traefik/available/octoprint-sunlu.yml
-overrides-available/bazarr-nfs-extra-rand.yml
-overrides-available/sonarr-nfs-extra-rand.yml
-overrides-available/plex-nfs-extra-rand.yml
-overrides-available/radarr-nfs-rand.yml
-overrides-available/sabnzbd-nfs-rand.yml
+overrides-available/*-rand.yml
+
