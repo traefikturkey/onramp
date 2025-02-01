@@ -41,6 +41,8 @@ endif
 # check what editor is available
 ifdef VSCODE_IPC_HOOK_CLI
 	EDITOR := code
+else ifdef EDITOR
+	EDITOR := $(EDITOR)
 else
 	EDITOR := nano
 endif
