@@ -9,7 +9,7 @@ networks:
 services:
   librespeed:
     image: lscr.io/linuxserver/librespeed:${LIBRESPEED_DOCKER_TAG:-latest}
-    container_name: ${LIBRESPEED_CONTAINER_NAME:-makemkv}
+    container_name: ${LIBRESPEED_CONTAINER_NAME:-librespeed}
     restart: ${LIBRESPEED_RESTART:-unless-stopped}
     networks:
       - traefik
