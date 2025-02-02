@@ -3,12 +3,12 @@ networks:
     external: true
 
 # description: Automatically updates docker containers
-# https://github.com/containrrr/watchtower
-# https://containrrr.dev/watchtower/notifications/
+# https://github.com/beatkind/watchtower
+# https://watchtower.devcdn.net
 
 services:
   watchtower:
-    image: ghcr.io/containrrr/watchtower:${WATCHTOWER_DOCKER_TAG:-latest}
+    image: beatkind/watchtower:${WATCHTOWER_DOCKER_TAG:-latest}
     container_name: ${WATCHTOWER_CONTAINER_NAME:-watchtower}
     restart: ${WATCHTOWER_RESTART:-unless-stopped}
     mem_limit: ${WATCHTOWER_MEM_LIMIT:-100m}
