@@ -7,7 +7,7 @@ networks:
 
 services:
   homarr:
-    image: ghcr.io/ajnart/homarr:${HOMARR_DOCKER_TAG:-dev}
+    image: ghcr.io/ajnart/homarr:${HOMARR_DOCKER_TAG:-latest}
     container_name: ${HOMARR_CONTAINER_NAME:-homarr}
     restart: unless-stopped
     networks:
