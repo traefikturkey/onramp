@@ -1,5 +1,5 @@
 # Available Services
-198 services and counting...
+200 services and counting...
 
 [A](#A)
 [B](#B)
@@ -66,6 +66,7 @@
 - [dashy](https://github.com/Lissy93/dashy): Customizable dashboard for displaying information
 - [docker-proxy](https://github.com/Tecnativa/docker-socket-proxy): Proxy for docker containers
 - [docker-registry](https://hub.docker.com/_/registry): Registry for storing and distributing container images
+- dockerizalo: 
 - [docmost](https://github.com/docmost/docmost): Docmost is an open-source collaborative wiki and documentation software.
 - [doku](https://github.com/amerkurev/doku): Disk usage dashboard
 - [dozzle-path](https://github.com/amir20/dozzle): Path-based reverse proxy for dozzle
@@ -133,6 +134,7 @@
 
 ## K
 - [kaizoku](https://github.com/oae/kaizoku): Web-based anime downloader
+- [kapowarr](https://github.com/Casvt/Kapowarr): Manages comic book collections and downloads
 - [kasm](https://hub.docker.com/r/linuxserver/kasm): Browser-based access to desktops, applications, and web services
 - [kestra](https://github.com/kestra-io/kestra): Event Driven Orchestration & Scheduling Platform
 - [kimai](https://github.com/kevinpapst/kimai2): Time-tracking software for freelancers and small businesses
