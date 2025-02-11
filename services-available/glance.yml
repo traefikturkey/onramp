@@ -4,6 +4,8 @@ networks:
 
 # description: A self-hosted dashboard that puts all your feeds in one place
 # https://github.com/glanceapp/glance
+#
+# Breaking change for v0.7.0  https://github.com/glanceapp/glance/blob/main/docs/v0.7.0-upgrade.md
 
 services:
   glance:
@@ -14,7 +16,7 @@ services:
     networks:
       - traefik
     volumes:
-      - ./etc/glance/glance.yml:/app/glance.yml
+      - ./etc/glance/:/app/config
       - /etc/localtime:/etc/localtime:ro
     environment:
       - PUID=${PUID:-1000}

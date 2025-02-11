@@ -1,0 +1,70 @@
+networks:
+  traefik:
+    external: true
+  dockerizalo-db:
+
+services:
+  dockerizalo:
+    image: ghcr.io/undernightcore/dockerizalo-proxy:latest
+    container_name: ${DOCKERIZALO_PROXY_CONTAINER_NAME:-dockerizalo}
+    networks:
+      - dockerizalo-db
+      - traefik
+    depends_on:
+      - api
+      - ui
+    labels:
+      - joyride.host.name=${DOCKERIZALO_PROXY_CONTAINER_NAME:-dockerizalo}.${HOST_DOMAIN}
+      - traefik.enable=${DOCKERIZALO_PROXY_TRAEFIK_ENABLED:-true}
+      - traefik.docker.network=traefik
+      - traefik.http.routers.dockerizalo.entrypoints=websecure
+      - traefik.http.routers.dockerizalo.rule=Host(`${DOCKERIZALO_PROXY_CONTAINER_NAME:-dockerizalo}.${HOST_DOMAIN}`)
+      - traefik.http.services.dockerizalo.loadbalancer.server.port=8080
+      - com.centurylinklabs.watchtower.enable=${DOCKERIZALO_PROXY_WATCHTOWER_ENABLED:-true}
+      - autoheal=${DOCKERIZALO_PROXY_AUTOHEAL_ENABLED:-true}
+
+  ui:
+    image: ghcr.io/undernightcore/dockerizalo-ui:latest
+    container_name: ${DOCKERIZALO_UI_CONTAINER_NAME:-ui}
+    networks:
+      - dockerizalo-db
+    labels:
+      - traefik.enable=false
+
+  api:
+    image: ghcr.io/undernightcore/dockerizalo:latest
+    container_name: ${DOCKERIZALO_API_CONTAINER_NAME:-api}
+    volumes:
+      - ./etc/dockerizalo/api:/data/dockerizalo
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - dockerizalo-db
+    environment:
+      DATABASE_URL: postgresql://dockerizalo:dockerizalo@dockerizalo-db:5432/dockerizalo?schema=public
+      APP_SECRET: hitthekeyboardwithyourheadhere
+    depends_on:
+      dockerizalo-db:
+        condition: service_healthy
+    labels:
+      - traefik.enable=false        
+
+  dockerizalo-db:
+    image: postgres
+    container_name: ${DOCKERIZALO_DB_CONTAINER_NAME:-dockerizalo-db}
+    restart: unless-stopped
+    volumes:
+      - ./etc/dockerizalo/db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: dockerizalo
+      POSTGRES_USER: dockerizalo
+      POSTGRES_DB: dockerizalo
+    networks:
+      - dockerizalo-db
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    labels:
+      - traefik.enable=false      
+

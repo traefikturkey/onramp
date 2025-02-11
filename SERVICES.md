@@ -1,5 +1,5 @@
 # Available Services
-202 services and counting...
+203 services and counting...
 
 [A](#A)
 [B](#B)
@@ -63,6 +63,7 @@
 ## D
 - [dashdot](https://github.com/MauriceNino/dashdot): Dashboard for monitoring docker containers
 - [dashy](https://github.com/Lissy93/dashy): Customizable dashboard for displaying information
+- dockerizalo: 
 - [docker-proxy](https://github.com/Tecnativa/docker-socket-proxy): Proxy for docker containers
 - [docker-registry](https://hub.docker.com/_/registry): Registry for storing and distributing container images
 - [docmost](https://github.com/docmost/docmost): Docmost is an open-source collaborative wiki and documentation software.
