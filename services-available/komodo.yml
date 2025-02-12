@@ -1,0 +1,98 @@
+---
+
+# Komodo is a web app to provide structure for managing your servers, builds, deployments, and automated procedures
+# https://komo.do/docs/intro
+# https://github.com/moghtech/komodo
+
+
+networks:
+  traefik:
+    external: true
+  komodo-db:
+
+services:
+  komodo-db:
+    image: postgres
+    container_name: ${KOMODO_DB_CONTAINER_NAME:-komodo-db}
+    labels:
+      - traefik.enable=false       
+      - komodo.skip=true # Prevent Komodo from stopping with StopAllContainers
+    env_file: ./.env      
+    restart: unless-stopped
+    logging:
+      driver: ${COMPOSE_LOGGING_DRIVER:-local}
+    networks:
+      - komodo-db
+    volumes:
+      - ./etc/komodo/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=${KOMODO_DB_USERNAME}
+      - POSTGRES_PASSWORD=${KOMODO_DB_PASSWORD}
+      - POSTGRES_DB=${KOMODO_DATABASE_DB_NAME:-komodo}
+    
+
+  komodo-ferretdb:
+    image: ghcr.io/ferretdb/ferretdb
+    container_name: ${KOMODO_FERRET_CONTAINER_NAME:-komodo-ferretdb}
+    labels:
+      - traefik.enable=false       
+      - komodo.skip=true # Prevent Komodo from stopping with StopAllContainers
+    restart: unless-stopped
+    depends_on:
+      - komodo-db
+    logging:
+      driver: ${COMPOSE_LOGGING_DRIVER:-local}
+    networks:
+      - komodo-db
+    environment:
+      - FERRETDB_POSTGRESQL_URL=postgres://komodo-db:5432/${KOMODO_DATABASE_DB_NAME:-komodo}
+    env_file: ./.env     
+   
+  
+  komodo:
+    image: ghcr.io/mbecker20/komodo:${COMPOSE_KOMODO_IMAGE_TAG:-latest}
+    container_name: ${KOMODO_CORE_CONTAINER_NAME:-komodo}
+    restart: unless-stopped
+    depends_on:
+      - komodo-ferretdb
+    logging:
+      driver: ${COMPOSE_LOGGING_DRIVER:-local}
+    networks:
+      - traefik
+      - komodo-db
+    environment:
+      KOMODO_DATABASE_URI: mongodb://${KOMODO_DB_USERNAME}:${KOMODO_DB_PASSWORD}@komodo-ferretdb:27017/${KOMODO_DATABASE_DB_NAME:-komodo}?authMechanism=PLAIN
+    env_file: ./.env      
+    volumes:
+      - ./etc/komodo/core:/repo-cache
+    labels:
+      - joyride.host.name=${KOMODO_CORE_CONTAINER_NAME:-komodo}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.docker.network=traefik
+      - traefik.http.routers.komodo.entrypoints=websecure
+      - traefik.http.routers.komodo.rule=Host(`${KOMODO_CORE_CONTAINER_NAME:-komodo}.${HOST_DOMAIN}`)
+      - traefik.http.services.komodo.loadbalancer.server.port=9120
+      - com.centurylinklabs.watchtower.enable=${KOMODO_WATCHTOWER_ENABLED:-false}
+      - komodo.skip=true  
+      - autoheal=true
+
+  periphery:
+    image: ghcr.io/mbecker20/periphery:${COMPOSE_KOMODO_IMAGE_TAG:-latest}
+    container_name: ${KOMODO_PERIPHERY_CONTAINER_NAME:-komodo-periphery}
+    labels:
+      - traefik.enable=false       
+      - komodo.skip=true # Prevent Komodo from stopping with StopAllContainers
+    restart: unless-stopped
+    logging:
+      driver: ${COMPOSE_LOGGING_DRIVER:-local}
+    networks:
+      - komodo-db
+    environment:
+      PERIPHERY_REPO_DIR: ${PERIPHERY_ROOT_DIRECTORY}/repos
+      PERIPHERY_STACK_DIR: ${PERIPHERY_ROOT_DIRECTORY}/stacks
+      PERIPHERY_SSL_KEY_FILE: ${PERIPHERY_ROOT_DIRECTORY}/ssl/key.pem
+      PERIPHERY_SSL_CERT_FILE: ${PERIPHERY_ROOT_DIRECTORY}/ssl/cert.pem
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /proc:/proc
+      - ${PERIPHERY_ROOT_DIRECTORY}:${PERIPHERY_ROOT_DIRECTORY}
