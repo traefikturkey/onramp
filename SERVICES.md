@@ -1,5 +1,5 @@
 # Available Services
-201 services and counting...
+203 services and counting...
 
 [A](#A)
 [B](#B)
@@ -27,6 +27,7 @@
 [Y](#Y)
 
 ## A
+- [actual](https://actualbudget.org/docs/install/docker): Money Management software
 - [adguard](https://github.com/AdguardTeam/AdGuardHome): Network-wide ad blocker and privacy tool
 - [airprint](https://github.com/chuckcharlie/cups-avahi-airprint): Enables apple airprint functionality for non-airprint printers using CUPS and Avahi
 - [apprise](https://hub.docker.com/r/linuxserver/apprise-api): Notification framework that supports various services
@@ -64,9 +65,9 @@
 ## D
 - [dashdot](https://github.com/MauriceNino/dashdot): Dashboard for monitoring docker containers
 - [dashy](https://github.com/Lissy93/dashy): Customizable dashboard for displaying information
-- dockerizalo: 
 - [docker-proxy](https://github.com/Tecnativa/docker-socket-proxy): Proxy for docker containers
 - [docker-registry](https://hub.docker.com/_/registry): Registry for storing and distributing container images
+- dockerizalo: 
 - [docmost](https://github.com/docmost/docmost): Docmost is an open-source collaborative wiki and documentation software.
 - [doku](https://github.com/amerkurev/doku): Disk usage dashboard
 - [dozzle-path](https://github.com/amir20/dozzle): Path-based reverse proxy for dozzle
@@ -80,8 +81,8 @@
 
 
 ## F
-- [firefly3](https://github.com/firefly-iii/firefly-iii/tree/main): Manages personal finances and budgets
 - [firefly-data-importer](https://github.com/firefly-iii/firefly-iii/tree/main): Imports data into firefly iii, a personal finance manager
+- [firefly3](https://github.com/firefly-iii/firefly-iii/tree/main): Manages personal finances and budgets
 - [firefox](https://github.com/jlesage/docker-firefox): Runs mozilla firefox browser in a container
 - [flame](https://hub.docker.com/r/pawelmalak/flame): Self-hosted music recommendation engine
 - [fooocus](https://github.com/lllyasviel/Fooocus): Focus on prompting and generating | a generative image generator
@@ -98,8 +99,8 @@
 - [ghost](https://hub.docker.com/_/ghost): Headless cms for creating blogs and websites
 - [gitea](https://github.com/go-gitea/gitea): Lightweight git service similar to github
 - [gitlab](https://docs.gitlab.com/ee/install/docker.html): Self-hosted git repository management system
-- [glances](https://github.com/nicolargo/glances): System monitoring tool
 - [glance](https://github.com/glanceapp/glance): A self-hosted dashboard that puts all your feeds in one place
+- [glances](https://github.com/nicolargo/glances): System monitoring tool
 - [gluetun](https://hub.docker.com/r/qmcgaw/gluetun ): VPN Client for Docker Containers and More
 - [go2rtc](https://github.com/AlexxIT/go2rtc): Webrtc gateway for camera restreaming 
 - [gotify](https://github.com/gotify/server): Self-hosted push notification service
@@ -290,6 +291,7 @@
 - [windows](https://github.com/dockur/windows): Windows inside a Docker container.
 - [wireguard-server](https://hub.docker.com/r/linuxserver/wireguard): Vpn server using wireguard
 - [wireshark](https://hub.docker.com/r/linuxserver/wireshark): Network protocol analyzer
+- [wizarr](https://github.com/wizarrrr/wizarr): Wizarr is an advanced user invitation and management system for Jellyfin, Plex, Emby etc.
 - [woodpecker](https://woodpecker-ci.org/): CI/CD server and agent runner, a fork of Drone CI
 - [wordpress](https://wordpress.com/): Popular content management system (cms)
 

@@ -1,0 +1,32 @@
+networks:
+  traefik:
+    external: true
+
+# description: Wizarr is an advanced user invitation and management system for Jellyfin, Plex, Emby etc.
+# https://github.com/wizarrrr/wizarr
+# https://docs.wizarr.dev/
+
+services:
+  wizarr:
+    image: ghcr.io/wizarrrr/wizarr:${WIZARR_DOCKER_TAG:-latest}
+    container_name: ${WIZARR_CONTAINER_NAME:-wizarr}
+    restart: ${WIZARR_RESTART:-unless-stopped}
+    mem_limit: ${WIZARR_MEM_LIMIT:-200g}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/wizarr:/data/database
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=${WIZARR_HOST_NAME:-wizarr}.${HOST_DOMAIN}
+      - traefik.enable=${WIZARR_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.wizarr.entrypoints=websecure
+      - traefik.http.routers.wizarr.rule=Host(`${WIZARR_HOST_NAME:-wizarr}.${HOST_DOMAIN}`)
+      #- traefik.http.services.wizarr.loadbalancer.server.scheme=https # enable if the service wants to connect over https
+      - traefik.http.services.wizarr.loadbalancer.server.port=5690
+      - com.centurylinklabs.watchtower.enable=${WIZARR_WATCHTOWER_ENABLED:-true}
+      - autoheal=${WIZARR_AUTOHEAL_ENABLED:-true}
