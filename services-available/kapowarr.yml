@@ -13,7 +13,7 @@ services:
     networks:
       - traefik
     volumes:
-      - ${KAPOWARR_CONFIG_VOLUME:-./etc/kapowarr/db}:/app/db
+      - ./etc/kapowarr/db:/app/db
       - ${MEDIA_COMICS_VOLUME:-./media/comics}:/comics-1
       - ${MEDIA_DOWNLOADS_VOLUME:-./media/downloads}:/app/temp_downloads
       - /dev/rtc:/dev/rtc:ro

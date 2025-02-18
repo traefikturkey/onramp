@@ -65,9 +65,9 @@
 ## D
 - [dashdot](https://github.com/MauriceNino/dashdot): Dashboard for monitoring docker containers
 - [dashy](https://github.com/Lissy93/dashy): Customizable dashboard for displaying information
+- dockerizalo: 
 - [docker-proxy](https://github.com/Tecnativa/docker-socket-proxy): Proxy for docker containers
 - [docker-registry](https://hub.docker.com/_/registry): Registry for storing and distributing container images
-- dockerizalo: 
 - [docmost](https://github.com/docmost/docmost): Docmost is an open-source collaborative wiki and documentation software.
 - [doku](https://github.com/amerkurev/doku): Disk usage dashboard
 - [dozzle-path](https://github.com/amir20/dozzle): Path-based reverse proxy for dozzle
@@ -81,8 +81,8 @@
 
 
 ## F
-- [firefly-data-importer](https://github.com/firefly-iii/firefly-iii/tree/main): Imports data into firefly iii, a personal finance manager
 - [firefly3](https://github.com/firefly-iii/firefly-iii/tree/main): Manages personal finances and budgets
+- [firefly-data-importer](https://github.com/firefly-iii/firefly-iii/tree/main): Imports data into firefly iii, a personal finance manager
 - [firefox](https://github.com/jlesage/docker-firefox): Runs mozilla firefox browser in a container
 - [flame](https://hub.docker.com/r/pawelmalak/flame): Self-hosted music recommendation engine
 - [fooocus](https://github.com/lllyasviel/Fooocus): Focus on prompting and generating | a generative image generator
@@ -99,8 +99,8 @@
 - [ghost](https://hub.docker.com/_/ghost): Headless cms for creating blogs and websites
 - [gitea](https://github.com/go-gitea/gitea): Lightweight git service similar to github
 - [gitlab](https://docs.gitlab.com/ee/install/docker.html): Self-hosted git repository management system
-- [glance](https://github.com/glanceapp/glance): A self-hosted dashboard that puts all your feeds in one place
 - [glances](https://github.com/nicolargo/glances): System monitoring tool
+- [glance](https://github.com/glanceapp/glance): A self-hosted dashboard that puts all your feeds in one place
 - [gluetun](https://hub.docker.com/r/qmcgaw/gluetun ): VPN Client for Docker Containers and More
 - [go2rtc](https://github.com/AlexxIT/go2rtc): Webrtc gateway for camera restreaming 
 - [gotify](https://github.com/gotify/server): Self-hosted push notification service

@@ -13,7 +13,7 @@ services:
     networks:
       - traefik
     volumes:
-      - ${SONARR_CONFIG_VOLUME:-./etc/sonarr}:/config
+      - ./etc/sonarr:/config
       - ${MEDIA_SHOWS_VOLUME:-./media/shows}:/tv
       - ${MEDIA_DOWNLOADS_VOLUME:-./media/downloads}:/downloads
       - /dev/rtc:/dev/rtc:ro

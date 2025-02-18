@@ -14,7 +14,7 @@ services:
     networks:
       - traefik
     volumes:
-      - ${PLEX_CONFIG_VOLUME:-./etc/plex}:/config
+      - ./etc/plex:/config
       - ${PLEX_MEDIA_VOLUME:-./media}:${PLEX_MEDIA_PATH:-/data}
       - /etc/localtime:/etc/localtime:ro
     ports:

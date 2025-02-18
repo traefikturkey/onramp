@@ -13,7 +13,7 @@ services:
     networks:
       - traefik
     volumes:
-      - ${KOMGA_CONFIG_VOLUME:-./etc/komga}:/config
+      - ./etc/komga:/config
       - ${MEDIA_MANGA_VOLUME:-./media/manga}:/manga
       - ${MEDIA_COMICS_VOLUME:-./media/comics}:/comics
       - /etc/localtime:/etc/localtime:ro
