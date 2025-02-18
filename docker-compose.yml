@@ -6,7 +6,7 @@ networks:
 
 services:
   traefik:
-    image: traefik:${TRAEFIK_DOCKER_TAG:-2.11} # replace with traefik:latest if you are feeling frisky
+    image: traefik:${TRAEFIK_DOCKER_TAG:-v3} # replace with traefik:latest if you are feeling frisky
     container_name: ${TRAEFIK_CONTAINER_NAME:-traefik}
     restart: ${TRAEFIK_RESTART:-unless-stopped}
     mem_limit: ${TRAEFIK_MEM_LIMIT:-100m}
@@ -57,6 +57,7 @@ services:
     labels:
       - joyride.host.name=${HOST_NAME}.${HOST_DOMAIN}
       - traefik.enable=true
+      - traefik.http.routers.traefik.ruleSyntax=v2
       - traefik.http.routers.traefik.entrypoints=websecure
       - traefik.http.routers.traefik.service=api@internal
       #- traefik.http.routers.traefik.rule=Host(`traefik.${HOST_DOMAIN}`)
