@@ -13,7 +13,7 @@ services:
     networks:
       - traefik
     volumes:
-      - ${RADARR_CONFIG_VOLUME:-./etc/radarr}:/config
+      - -./etc/radarr:/config
       - ${MEDIA_MOVIES_VOLUME:-./media/movies}:/movies
       - ${MEDIA_DOWNLOADS_VOLUME:-./media/downloads}:/downloads
       - /dev/rtc:/dev/rtc:ro

@@ -13,7 +13,7 @@ services:
     networks:
       - traefik
     volumes:
-      - ${READARR_CONFIG_VOLUME:-./etc/readarr}:/config
+      - ./etc/readarr:/config
       - ${MEDIA_BOOKS_VOLUME:-./media/books}:/books
       - ${MEDIA_DOWNLOADS_VOLUME:-./media/downloads}:/downloads
       - /etc/localtime:/etc/localtime:ro

@@ -13,7 +13,7 @@ services:
     networks:
       - traefik
     volumes:
-      - ${NEXTCLOUD_CONFIG_VOLUME:-./etc/nextcloud}:/config
+      - /etc/nextcloud:/config
       - ${NEXTCLOUD_DATA_VOLUME:-./media/nextcloud/}:${NEXTCLOUD_DATA_PATH:-/data}
     environment:
       - PUID=${PUID:-1000}
