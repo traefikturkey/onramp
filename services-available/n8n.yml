@@ -57,9 +57,9 @@ services:
       - com.centurylinklabs.watchtower.enable=${N8N_WATCHTOWER_ENABLED:-true}
       - autoheal=${N8N_AUTOHEAL_ENABLED:-true}
     depends_on:
-      - db
+      - n8n_postgres
 
-  db:
+  n8n_postgres:
     image: postgres:12
     container_name: n8n_postgres
     networks:
