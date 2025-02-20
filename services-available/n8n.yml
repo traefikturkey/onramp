@@ -1,0 +1,73 @@
+networks:
+  traefik:
+    external: true
+
+# description: workflow automation platform with native AI capabilities
+# https://github.com/n8n-io/n8n
+
+services:
+  n8n:
+    image: n8nio/n8n:${N8N_DOCKER_TAG:-latest}
+    container_name: ${N8N_CONTAINER_NAME:-n8n}
+    restart: ${N8N_RESTART:-unless-stopped}
+    mem_limit: ${N8N_MEM_LIMIT:-200g}
+    networks:
+      - traefik
+    ports:
+      - "5678:5678"
+    #volumes:
+    #  - ./etc/n8n/:/home/node/.n8n
+
+    environment:
+      # Basic auth
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER=${N8N_BASIC_AUTH_USER:-user}
+      - N8N_BASIC_AUTH_PASSWORD=${N8N_BASIC_AUTH_PASSWORD:-password}
+
+      # Database config
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_HOST=db
+      - DB_POSTGRESDB_PORT=5432
+      - DB_POSTGRESDB_DATABASE=${POSTGRES_DB_N8N:-n8n}
+      - DB_POSTGRESDB_USER=${POSTGRES_USER_N8N:-n8n}
+      - DB_POSTGRESDB_PASSWORD=${POSTGRES_PASSWORD_N8N:-n8n}
+
+      - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true # Enforce settings file permissions
+
+      # Allow these node modules to be imported in Function nodes
+      - NODE_FUNCTION_ALLOW_EXTERNAL=axios,qs
+
+      # Cookie security (false if behind SSL-terminating proxy or for local usage)
+      - N8N_SECURE_COOKIE=false
+
+      # (Optional) Encryption key for credentials (makes them portable) 
+      # - N8N_ENCRYPTION_KEY=some-32-char-random-string
+
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      # Set timezone for the container (logs and internal usage)
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=${N8N_HOST_NAME:-n8n}.${HOST_DOMAIN}
+      - traefik.enable=${N8N_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.n8n.entrypoints=websecure
+      - traefik.http.routers.n8n.rule=Host(`${N8N_HOST_NAME:-n8n}.${HOST_DOMAIN}`)
+      #- traefik.http.services.n8n.loadbalancer.server.scheme=https # enable if the service wants to connect over https
+      - traefik.http.services.n8n.loadbalancer.server.port=5678
+      - com.centurylinklabs.watchtower.enable=${N8N_WATCHTOWER_ENABLED:-true}
+      - autoheal=${N8N_AUTOHEAL_ENABLED:-true}
+    depends_on:
+      - db
+
+  db:
+    image: postgres:12
+    container_name: n8n_postgres
+    networks:
+      - traefik
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER_N8N:-n8n}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD_N8N:-n8n}
+      - POSTGRES_DB=${POSTGRES_DB_N8N:-n8n}
+    volumes:
+      - ./etc/n8n/postgresql:/var/lib/postgresql/data
+    restart: unless-stopped
