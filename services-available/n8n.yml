@@ -14,9 +14,11 @@ services:
     networks:
       - traefik
     #ports:
-    #  - "5678:5678"
-    #volumes:
-    #  - ./etc/n8n/:/home/node/.n8n
+    #  - 5678:5678
+    #expose:
+    #  - 5678
+    volumes:
+      - ./etc/n8n/:/home/node/.n8n/
 
     environment:
       # Basic auth
@@ -28,8 +30,8 @@ services:
       - DB_TYPE=postgresdb
       - DB_POSTGRESDB_HOST=n8n_postgres
       - DB_POSTGRESDB_PORT=5432
-      - DB_POSTGRESDB_DATABASE=${POSTGRES_DB_N8N:-n8n}
-      - DB_POSTGRESDB_USER=${POSTGRES_USER_N8N:-n8n}
+      - DB_POSTGRESDB_DATABASE=${N8N_POSTGRES_DB:-n8n}
+      - DB_POSTGRESDB_USER=${N8N_POSTGRES_USER:-n8n}
       - DB_POSTGRESDB_PASSWORD=${POSTGRES_PASSWORD_N8N:-n8n}
 
       - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true # Enforce settings file permissions
@@ -52,7 +54,7 @@ services:
       - traefik.enable=${N8N_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.n8n.entrypoints=websecure
       - traefik.http.routers.n8n.rule=Host(`${N8N_HOST_NAME:-n8n}.${HOST_DOMAIN}`)
-      #- traefik.http.services.n8n.loadbalancer.server.scheme=https # enable if the service wants to connect over https
+      # - traefik.http.services.n8n.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.n8n.loadbalancer.server.port=5678
       - com.centurylinklabs.watchtower.enable=${N8N_WATCHTOWER_ENABLED:-true}
       - autoheal=${N8N_AUTOHEAL_ENABLED:-true}
@@ -65,9 +67,9 @@ services:
     networks:
       - traefik
     environment:
-      - POSTGRES_USER=${POSTGRES_USER_N8N:-n8n}
+      - POSTGRES_USER=${N8N_POSTGRES_USER:-n8n}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD_N8N:-n8n}
-      - POSTGRES_DB=${POSTGRES_DB_N8N:-n8n}
+      - POSTGRES_DB=${N8N_POSTGRES_DB:-n8n}
     volumes:
       - ./etc/n8n/postgresql:/var/lib/postgresql/data
     restart: unless-stopped
