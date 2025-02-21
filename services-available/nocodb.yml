@@ -39,6 +39,11 @@ services:
   nocode_postgres:
     image: postgres:12.17-alpine
     container_name: nocode_postgres
+    restart: ${NOCODB_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/nocodb/postgresql:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: ${NOCODE_POSTGRES_DB}
       POSTGRES_PASSWORD: ${NOCODE_POSTGRES_DB_PW}
@@ -48,8 +53,3 @@ services:
       retries: 10
       test: pg_isready -U ${NOCODE_POSTGRES_USER} -d ${NOCODE_POSTGRES_DB}
       timeout: 2s
-    networks:
-      - traefik
-    volumes:
-      - ./etc/nocodb/postgresql:/var/lib/postgresql/data
-    restart: always
