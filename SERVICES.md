@@ -1,5 +1,5 @@
 # Available Services
-203 services and counting...
+208 services and counting...
 
 [A](#A)
 [B](#B)
@@ -27,6 +27,7 @@
 [Y](#Y)
 
 ## A
+- [actual](https://actualbudget.org/docs/install/docker): Money Management software
 - [adguard](https://github.com/AdguardTeam/AdGuardHome): Network-wide ad blocker and privacy tool
 - [airprint](https://github.com/chuckcharlie/cups-avahi-airprint): Enables apple airprint functionality for non-airprint printers using CUPS and Avahi
 - [apprise](https://hub.docker.com/r/linuxserver/apprise-api): Notification framework that supports various services
@@ -139,6 +140,7 @@
 - [kestra](https://github.com/kestra-io/kestra): Event Driven Orchestration & Scheduling Platform
 - [kimai](https://github.com/kevinpapst/kimai2): Time-tracking software for freelancers and small businesses
 - [komga](https://komga.org/docs/installation/docker/): Web-based comic book server
+- [komodo](https://komo.do/docs/intro): 
 
 
 ## L
@@ -165,10 +167,12 @@
 
 
 ## N
+- [n8n](https://github.com/n8n-io/n8n): workflow automation platform with native AI capabilities
 - [netbootxyz](https://docs.linuxserver.io/images/docker-netbootxyz): Network boot server for various operating systems
 - [netbox](https://docs.linuxserver.io/images/docker-netbox): Web-based ip address management (ipam) and data center infrastructure management (dcim) tool
 - [newsdash](https://github.com/buzz/newsdash): Self-hosted rss feed reader and dashboard
 - [nextcloud](https://github.com/linuxserver/docker-nextcloud): Powerful self-hosted file sync and sharing platform
+- [nocodb](https://github.com/nocodb/nocodb): Databases As Spreadsheets
 - [nodered](https://hub.docker.com/r/nodered/node-red/): Flow-based development tool for visual programming
 - [nzbget](https://hub.docker.com/r/linuxserver/nzbget): Binary newsgrabber for usenet
 
@@ -292,6 +296,7 @@
 - [windows](https://github.com/dockur/windows): Windows inside a Docker container.
 - [wireguard-server](https://hub.docker.com/r/linuxserver/wireguard): Vpn server using wireguard
 - [wireshark](https://hub.docker.com/r/linuxserver/wireshark): Network protocol analyzer
+- [wizarr](https://github.com/wizarrrr/wizarr): Wizarr is an advanced user invitation and management system for Jellyfin, Plex, Emby etc.
 - [woodpecker](https://woodpecker-ci.org/): CI/CD server and agent runner, a fork of Drone CI
 - [wordpress](https://wordpress.com/): Popular content management system (cms)
 

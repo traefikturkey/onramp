@@ -1,0 +1,55 @@
+networks:
+  traefik:
+    external: true
+
+# description: Databases As Spreadsheets
+# https://github.com/nocodb/nocodb
+
+services:
+  nocodb:
+    image: nocodb/nocodb:${NOCODB_DOCKER_TAG:-latest}
+    container_name: ${NOCODB_CONTAINER_NAME:-nocodb}
+    restart: ${NOCODB_RESTART:-unless-stopped}
+    mem_limit: ${NOCODB_MEM_LIMIT:-200g}
+    networks:
+      - traefik
+    depends_on:
+      - nocode_postgres
+    volumes:
+      - ./etc/nocodb/data:/usr/app/data
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - NC_DB=pg://nocode_postgres:5432?u=${NOCODE_POSTGRES_USER}&p=${NOCODE_POSTGRES_DB_PW}&d=${NOCODE_POSTGRES_DB}
+      - NC_PUBLIC_URL=https://${NOCODB_HOST_NAME:-nocodb}.${HOST_DOMAIN}
+      - NC_DISABLE_TELE=true
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=${NOCODB_HOST_NAME:-nocodb}.${HOST_DOMAIN}
+      - traefik.enable=${NOCODB_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.nocodb.entrypoints=websecure
+      - traefik.http.routers.nocodb.rule=Host(`${NOCODB_HOST_NAME:-nocodb}.${HOST_DOMAIN}`)
+      #- traefik.http.services.nocodb.loadbalancer.server.scheme=https # enable if the service wants to connect over https
+      - traefik.http.services.nocodb.loadbalancer.server.port=8080
+      - com.centurylinklabs.watchtower.enable=${NOCODB_WATCHTOWER_ENABLED:-true}
+      - autoheal=${NOCODB_AUTOHEAL_ENABLED:-true}
+
+
+  nocode_postgres:
+    image: postgres:12.17-alpine
+    container_name: nocode_postgres
+    restart: ${NOCODB_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/nocodb/postgresql:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${NOCODE_POSTGRES_DB}
+      POSTGRES_PASSWORD: ${NOCODE_POSTGRES_DB_PW}
+      POSTGRES_USER: ${NOCODE_POSTGRES_USER}
+    healthcheck:
+      interval: 10s
+      retries: 10
+      test: pg_isready -U ${NOCODE_POSTGRES_USER} -d ${NOCODE_POSTGRES_DB}
+      timeout: 2s

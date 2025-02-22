@@ -6,7 +6,7 @@ networks:
 
 services:
   traefik:
-    image: traefik:${TRAEFIK_DOCKER_TAG:-3.3.1} # replace with traefik:latest if you are feeling frisky
+    image: traefik:${TRAEFIK_DOCKER_TAG:-3.3.3} # replace with traefik:latest if you are feeling frisky
     container_name: ${TRAEFIK_CONTAINER_NAME:-traefik}
     restart: ${TRAEFIK_RESTART:-unless-stopped}
     mem_limit: ${TRAEFIK_MEM_LIMIT:-100m}
@@ -28,6 +28,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     command:
       - --api
+      - --api.insecure=${TRAEFIK_API_INSECURE:-true}
       - --api.dashboard=${TRAEFIK_DASHBOARD_ENABLE:-true}
       - --log.level=${TRAEFIK_LOG_LEVEL:-ERROR}
       - --accesslog=${TRAEFIK_ACCESSLOG:-false}
@@ -36,9 +37,6 @@ services:
       - --providers.docker
       - --providers.file.watch=true
       - --providers.file.directory=/enabled
-      # - --providers.docker.allowEmptyServices=true
-      # - --experimental.plugins.sablier.moduleName=github.com/acouvreur/sablier
-      # - --experimental.plugins.sablier.version=v1.6.0
       - --entrypoints.web.address=:80
       - --entrypoints.websecure.address=:443
       - --entrypoints.web.http.redirections.entrypoint.to=websecure
@@ -59,9 +57,10 @@ services:
       - joyride.host.name=${HOST_NAME}.${HOST_DOMAIN}
       - traefik.enable=true
       - traefik.http.routers.traefik.entrypoints=websecure
-      - traefik.http.routers.traefik.service=api@internal
-      #- traefik.http.routers.traefik.rule=Host(`traefik.${HOST_DOMAIN}`)
-      # comment the following three(3) lines if using the rule=Host line above
-      - traefik.http.routers.traefik.rule=Host(`${HOST_NAME}.${HOST_DOMAIN}`)  && (PathPrefix(`/traefik`) || PathPrefix(`/api`))
-      - traefik.http.routers.traefik.middlewares=traefik_strip
-      - traefik.http.middlewares.traefik_strip.stripprefix.prefixes=/traefik
+      - traefik.http.routers.dashboard.service=api@internal
+      - traefik.http.routers.dashboard.rule=Host(`${HOST_NAME}.${HOST_DOMAIN}`)
+      # https://doc.traefik.io/traefik/operations/dashboard/#insecure-mode
+      # insecure mode is incompatible with the custom API base path option.
+      # we will need to use a custom override if you want the dashboard behind authentication
+
+
