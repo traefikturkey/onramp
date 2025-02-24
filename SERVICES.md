@@ -1,5 +1,5 @@
 # Available Services
-203 services and counting...
+206 services and counting...
 
 [A](#A)
 [B](#B)
@@ -139,6 +139,7 @@
 - [kasm](https://hub.docker.com/r/linuxserver/kasm): Browser-based access to desktops, applications, and web services
 - [kestra](https://github.com/kestra-io/kestra): Event Driven Orchestration & Scheduling Platform
 - [kimai](https://github.com/kevinpapst/kimai2): Time-tracking software for freelancers and small businesses
+- kitchenowl: 
 - [komga](https://komga.org/docs/installation/docker/): Web-based comic book server
 - [komodo](https://komo.do/docs/intro): 
 
@@ -166,10 +167,12 @@
 
 
 ## N
+- [n8n](https://github.com/n8n-io/n8n): workflow automation platform with native AI capabilities
 - [netbootxyz](https://docs.linuxserver.io/images/docker-netbootxyz): Network boot server for various operating systems
 - [netbox](https://docs.linuxserver.io/images/docker-netbox): Web-based ip address management (ipam) and data center infrastructure management (dcim) tool
 - [newsdash](https://github.com/buzz/newsdash): Self-hosted rss feed reader and dashboard
 - [nextcloud](https://github.com/linuxserver/docker-nextcloud): Powerful self-hosted file sync and sharing platform
+- [nocodb](https://github.com/nocodb/nocodb): Databases As Spreadsheets
 - [nodered](https://hub.docker.com/r/nodered/node-red/): Flow-based development tool for visual programming
 - [nzbget](https://hub.docker.com/r/linuxserver/nzbget): Binary newsgrabber for usenet
 

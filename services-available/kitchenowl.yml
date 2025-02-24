@@ -1,0 +1,38 @@
+networks:
+  traefik:
+    external: true
+  kitchenowl-db:
+
+services:
+  kitchenowl_app:
+    image: tombursch/kitchenowl:latest
+    container_name: ${KITCHENOWL_CONTAINER_NAME:-kitchenowl_app}
+    restart: unless-stopped
+    environment:
+      JWT_SECRET_KEY: 9koWfquhnsUjKWT7xSjvgBhf
+    networks:
+      - kitchenowl-db     
+    volumes:
+      - ./etc/kitchenowl/app:/data
+    # labels:
+    #   - traefik.enable=false
+  
+  kitchenowl_web:
+    image: tombursch/kitchenowl-web:latest
+    container_name: ${KITCHENOWL_CONTAINER_NAME:-kitchenowl}
+    restart: unless-stopped
+    environment:
+      - BACK_URL=kitchenowl_app:5000 # Change this if you rename the containers
+    networks:
+      - traefik
+      - kitchenowl-db
+    depends_on:
+      - kitchenowl_app
+    labels:
+      - joyride.host.name=${KITCHENOWL_CONTAINER_NAME:-kitchenowl}.${HOST_DOMAIN}
+      - traefik.enable=${KITCHENOWL_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.kitchenowl.entrypoints=websecure
+      - traefik.http.routers.kitchenowl.rule=Host(`${KITCHENOWL_CONTAINER_NAME:-kitchenowl}.${HOST_DOMAIN}`)
+      - traefik.http.services.kitchenowl.loadbalancer.server.port=80
+      - com.centurylinklabs.watchtower.enable=${KITCHENOWL_WATCHTOWER_ENABLED:-true}
+      - autoheal=${KITCHENOWL_AUTOHEAL_ENABLED:-true}  
