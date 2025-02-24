@@ -54,12 +54,14 @@ services:
       - --certificatesresolvers.letsencrypt.acme.caserver=${ACME_CASERVER:-https://acme-v02.api.letsencrypt.org/directory}
     labels:
       - joyride.host.name=${HOST_NAME}.${HOST_DOMAIN}
+      - traefik.http.routers.traefik.rule=Host(`${HOST_NAME}.${HOST_DOMAIN}`)  && (PathPrefix(`/traefik`) || PathPrefix(`/api`))
+      - traefik.http.routers.traefik.middlewares=traefik_strip
+      - traefik.http.middlewares.traefik_strip.stripprefix.prefixes=/traefik
+      - joyride.host.name=${HOST_NAME}.${HOST_DOMAIN}
       - traefik.enable=true
       - traefik.http.routers.traefik.entrypoints=websecure
-      - traefik.http.routers.dashboard.service=api@internal
-      - traefik.http.routers.dashboard.rule=Host(`${HOST_NAME}.${HOST_DOMAIN}`)
+      - traefik.http.routers.traefik.service=api@internal
+      - traefik.http.routers.traefik.rule=Host(`${HOST_NAME}.${HOST_DOMAIN}`)
       # https://doc.traefik.io/traefik/operations/dashboard/#insecure-mode
       # insecure mode is incompatible with the custom API base path option.
       # we will need to use a custom override if you want the dashboard behind authentication
-
-
