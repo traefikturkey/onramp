@@ -58,7 +58,6 @@ services:
       - traefik.http.routers.traefik.rule=Host(`${HOST_NAME}.${HOST_DOMAIN}`)  && (PathPrefix(`/traefik`) || PathPrefix(`/api`))
       - traefik.http.routers.traefik.middlewares=traefik_strip
       - traefik.http.middlewares.traefik_strip.stripprefix.prefixes=/traefik
-      - joyride.host.name=${HOST_NAME}.${HOST_DOMAIN}
       - traefik.enable=true
       - traefik.http.routers.traefik.entrypoints=websecure
       - traefik.http.routers.traefik.service=api@internal
