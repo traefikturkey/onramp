@@ -73,7 +73,7 @@ nuke-snaps:
 	@echo "Remove the evil that is snaps..."
 	ansible-playbook ansible/nuke-snaps.yml
 
-install-docker: install-ansible
+install-docker: install-ansible 
 	ansible-playbook ansible/install-docker.yml
 
 update-hosts:
