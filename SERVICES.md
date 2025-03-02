@@ -1,5 +1,5 @@
 # Available Services
-209 services and counting...
+210 services and counting...
 
 [A](#A)
 [B](#B)
@@ -169,6 +169,7 @@
 
 ## N
 - [n8n](https://github.com/n8n-io/n8n): workflow automation platform with native AI capabilities
+- [nebula-sync](https://github.com/lovelaze/nebula-sync): Synchronize Pi-hole v6.x configuration to replicas.
 - [netbootxyz](https://docs.linuxserver.io/images/docker-netbootxyz): Network boot server for various operating systems
 - [netbox](https://docs.linuxserver.io/images/docker-netbox): Web-based ip address management (ipam) and data center infrastructure management (dcim) tool
 - [newsdash](https://github.com/buzz/newsdash): Self-hosted rss feed reader and dashboard
