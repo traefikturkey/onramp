@@ -15,7 +15,7 @@ http:
     pihole:
       loadBalancer:
         servers:
-          - url: "http://{{env "PIHOLE_ADDRESS"}}:80"
+          - url: "https://{{env "PIHOLE_ADDRESS"}}:443"
         passHostHeader: true
 
   middlewares:
