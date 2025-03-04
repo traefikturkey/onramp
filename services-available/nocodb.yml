@@ -18,7 +18,7 @@ services:
       - ./etc/nocodb/data:/usr/app/data
       - /etc/localtime:/etc/localtime:ro
     environment:
-      - NC_DB=pg://nocode_postgres:5432?u=${NOCODE_POSTGRES_USER}&p=${NOCODE_POSTGRES_DB_PW}&d=${NOCODE_POSTGRES_DB}
+      - NC_DB=pg://nocode_postgres:5432?u=${NOCODB_POSTGRES_USER}&p=${NOCODB_POSTGRES_DB_PW}&d=${NOCODB_POSTGRES_DB}
       - NC_PUBLIC_URL=https://${NOCODB_HOST_NAME:-nocodb}.${HOST_DOMAIN}
       - NC_DISABLE_TELE=true
       - NC_ATTACHMENT_FIELD_SIZE=${NOCODE_ATTACHMENT_FIELD_SIZE}
@@ -48,11 +48,11 @@ services:
     volumes:
       - ./etc/nocodb/postgresql:/var/lib/postgresql/data
     environment:
-      POSTGRES_DB: ${NOCODE_POSTGRES_DB}
-      POSTGRES_PASSWORD: ${NOCODE_POSTGRES_DB_PW}
-      POSTGRES_USER: ${NOCODE_POSTGRES_USER}
+      POSTGRES_DB: ${NOCODB_POSTGRES_DB}
+      POSTGRES_PASSWORD: ${NOCODB_POSTGRES_DB_PW}
+      POSTGRES_USER: ${NOCODB_POSTGRES_USER}
     healthcheck:
       interval: 10s
       retries: 10
-      test: pg_isready -U ${NOCODE_POSTGRES_USER} -d ${NOCODE_POSTGRES_DB}
+      test: pg_isready -U ${NOCODB_POSTGRES_USER} -d ${NOCODB_POSTGRES_DB}
       timeout: 2s
