@@ -93,7 +93,7 @@ services:
       
       # Declare the service name as minio-admin-backend
       - traefik.http.services.minio-admin-backend.loadbalancer.server.scheme=http
-      - traefik.http.services.minio-admin-backend.loadbalancer.server.port=9001
+      - traefik.http.services.minio-admin-backend.loadbalancer.server.port=${MINIO_DASHBOARD_PORT}
       
       - com.centurylinklabs.watchtower.enable=${MINIO_WATCHTOWER_ENABLED:-true}
       - autoheal=true
