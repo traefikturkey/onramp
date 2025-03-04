@@ -17,66 +17,61 @@
 
   tasks:
     # https://code.visualstudio.com/docs/setup/linux#_visual-studio-code-is-unable-to-watch-for-file-changes-in-this-large-workspace-error-enospc
-    - name: Create sysctl configuration file
-      copy:
-        dest: /etc/sysctl.d/99-onramp.conf
-        content: |
-          fs.inotify.max_user_watches=524288
-          net.core.somaxconn=1024
-          vm.max_map_count=262144
-          vm.overcommit_memory=1
-          vm.swappiness=1
-        mode: '0644'
-      become: true
-      register: sysctl_file
-    
-    # Check if hugepage paths exist
-    - name: Check if transparent hugepage files exist
-      command: "ls -la /sys/kernel/mm/transparent_hugepage/enabled"
-      register: thp_check
-      changed_when: false
-      check_mode: no
+    - name: Set fs.inotify.max_user_watches
+      sysctl:
+        name: fs.inotify.max_user_watches
+        value: '524288'
+        sysctl_file: /etc/sysctl.conf
 
+    - name: Set net.core.somaxconn
+      sysctl:
+        name: net.core.somaxconn
+        value: '1024'
+        sysctl_file: /etc/sysctl.conf
+
+    - name: Set vm.max_map_count
+      sysctl:
+        name: vm.max_map_count
+        value: '262144'
+        sysctl_file: /etc/sysctl.conf
+
+    - name: Set vm.overcommit_memory
+      sysctl:
+        name: vm.overcommit_memory
+        value: '1'
+        sysctl_file: /etc/sysctl.conf
+
+    - name: Set vm.swappiness
+      sysctl:
+        name: vm.swappiness
+        value: '1'
+        sysctl_file: /etc/sysctl.conf
+    
     - name: Create disable-hugepages.service file
       become: true
-      copy:
-        dest: /etc/systemd/system/disable-hugepages.service
-        content: |
+      lineinfile:
+        path: /etc/systemd/system/disable-hugepages.service
+        line: |
           [Unit]
           Description="Disable Transparent Hugepage"
           Before=docker.service
-          ConditionPathExists=/sys/kernel/mm/transparent_hugepage/enabled
-          
           [Service]
           Type=oneshot
-          RemainAfterExit=yes
-          ExecStart=/bin/bash -c 'echo never > /sys/kernel/mm/transparent_hugepage/enabled || exit 0'
-          ExecStart=/bin/bash -c 'echo never > /sys/kernel/mm/transparent_hugepage/defrag || exit 0'
-          
+          ExecStart=/bin/bash -c 'echo never > /sys/kernel/mm/transparent_hugepage/enabled'
+          ExecStart=/bin/bash -c 'echo never > /sys/kernel/mm/transparent_hugepage/defrag'
           [Install]
-          WantedBy=docker.service
+          RequiredBy=docker.service
+        create: yes
         mode: '0644'
-      register: service_file
-      when: thp_check.rc == 0
 
-    # Must reload systemd before enabling/starting services
+    - name: Enable and start disable-hugepages.service
+      become: true
+      systemd:
+        name: disable-hugepages
+        enabled: true
+        state: started
+
     - name: Reload systemd
       become: true
       systemd:
-        daemon_reload: yes
-      when: service_file is changed
-      
-    # Only try to enable/start if the service file was created and paths exist
-    - name: Enable disable-hugepages service
-      become: true
-      systemd:
-        name: disable-hugepages
-        enabled: yes
-      when: thp_check.rc == 0 and service_file is changed      
-    # Start as a separate task with error handling
-    - name: Start disable-hugepages service
-      become: true
-      systemd:
-        name: disable-hugepages
-        state: started
-      when: thp_check.rc == 0 and service_file is changed
+        daemon_reload: true
