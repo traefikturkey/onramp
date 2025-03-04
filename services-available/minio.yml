@@ -13,19 +13,87 @@ services:
     networks:
       - traefik
     volumes:
-      - ./etc/minio:/data
+      - ./etc/minio/data:/data
+      - ./etc/minio/config:/root/.minio
+    extra_hosts:
+      - "${MINIO_API_HOST}.${HOST_DOMAIN}:127.0.0.1"
+      - "${MINIO_DASHBOARD_HOST}.${HOST_DOMAIN}:127.0.0.1"
+
+    healthcheck:
+      # refs:
+      # - https://min.io/docs/minio/linux/reference/minio-mc/mc-ready.html
+      # - https://github.com/minio/minio/issues/18389
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 3s
+      timeout: 10s
+      retries: 12
+
     environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
-      - MINIO_ROOT_USER=${MINIO_USER}
-      - MINIO_ROOT_PASSWORD=${MINIO_PASSWORD}
-    command: server --console-address ":9001" /data
+      # refs: https://min.io/docs/minio/linux/reference/minio-server/settings/core.html
+      - MINIO_DOMAIN=${MINIO_API_HOST}.${HOST_DOMAIN}
+      - MINIO_COMPRESSION_ENABLE=on
+      - MINIO_COMPRESSION_ALLOW_ENCRYPTION=off
+       # refs: https://min.io/docs/minio/linux/reference/minio-server/settings/root-credentials.html
+      - MINIO_ROOT_USER=${MINIO_ADMIN_USER}
+      - MINIO_ROOT_PASSWORD=${MINIO_ADMIN_PASSWORD}
+      - MINIO_API_ROOT_ACCESS=on
+
+      # refs: https://min.io/docs/minio/linux/reference/minio-server/settings/console.html
+      - MINIO_BROWSER=on
+      - MINIO_BROWSER_LOGIN_ANIMATION=off
+      - MINIO_BROWSER_REDIRECT=false
+      - MINIO_BROWSER_SESSION_DURATION=365d
+
+
+    # refs: https://min.io/docs/minio/linux/reference/minio-server/minio-server.html
+    command: server /data --address=":${MINIO_API_PORT}" --console-address=":${MINIO_DASHBOARD_PORT}"
     labels:
       - joyride.host.name=${MINIO_CONTAINER_NAME:-minio}.${HOST_DOMAIN}
       - traefik.enable=true
-      - traefik.http.routers.minio.entrypoints=websecure
-      - traefik.http.routers.minio.rule=Host(`${MINIO_CONTAINER_NAME:-minio}.${HOST_DOMAIN}`)
-      - traefik.http.services.minio.loadbalancer.server.port=9001
+
+      # Define middlewares
+      - traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https
+      - traefik.http.middlewares.redirect-to-https.redirectscheme.permanent=true
+      - traefik.http.middlewares.gzip-compress.compress=true
+
+      # MinIO API service settings
+      # - HTTP-related settings:
+      - traefik.http.routers.minio-http.entrypoints=web
+      - traefik.http.routers.minio-http.middlewares=redirect-to-https@docker
+      - traefik.http.routers.minio-http.rule=Host(`${MINIO_API_HOST}.${HOST_DOMAIN}`)
+      - traefik.http.routers.minio-http.service=noop@internal
+      
+      # - HTTPS-related settings:
+      - traefik.http.routers.minio-https.entrypoints=websecure
+      - traefik.http.routers.minio-https.tls=true
+      - traefik.http.routers.minio-https.middlewares=gzip-compress@docker
+      - traefik.http.routers.minio-https.rule=Host(`${MINIO_API_HOST}.${HOST_DOMAIN}`)
+      - traefik.http.routers.minio-https.service=minio-backend
+      
+      # Declare the service name as minio-backend
+      - traefik.http.services.minio-backend.loadbalancer.server.scheme=http
+      - traefik.http.services.minio-backend.loadbalancer.server.port=${MINIO_API_PORT}
+      
+      # MinIO Admin service settings
+      # - HTTP-related settings:
+      - traefik.http.routers.minio-admin-http.entrypoints=web
+      - traefik.http.routers.minio-admin-http.middlewares=redirect-to-https@docker
+      - traefik.http.routers.minio-admin-http.rule=Host(`${MINIO_DASHBOARD_HOST}.${HOST_DOMAIN}`)
+      - traefik.http.routers.minio-admin-http.service=noop@internal
+      
+      # - HTTPS-related settings:
+      - traefik.http.routers.minio-admin-https.entrypoints=websecure
+      - traefik.http.routers.minio-admin-https.tls=true
+      - traefik.http.routers.minio-admin-https.middlewares=gzip-compress@docker
+      - traefik.http.routers.minio-admin-https.rule=Host(`${MINIO_DASHBOARD_HOST}.${HOST_DOMAIN}`)
+      - traefik.http.routers.minio-admin-https.service=minio-admin-backend
+      
+      # Declare the service name as minio-admin-backend
+      - traefik.http.services.minio-admin-backend.loadbalancer.server.scheme=http
+      - traefik.http.services.minio-admin-backend.loadbalancer.server.port=${MINIO_DASHBOARD_PORT}
+      
       - com.centurylinklabs.watchtower.enable=${MINIO_WATCHTOWER_ENABLED:-true}
       - autoheal=true
