@@ -1,5 +1,5 @@
 # Available Services
-206 services and counting...
+208 services and counting...
 
 [A](#A)
 [B](#B)
@@ -65,9 +65,9 @@
 ## D
 - [dashdot](https://github.com/MauriceNino/dashdot): Dashboard for monitoring docker containers
 - [dashy](https://github.com/Lissy93/dashy): Customizable dashboard for displaying information
-- dockerizalo: 
 - [docker-proxy](https://github.com/Tecnativa/docker-socket-proxy): Proxy for docker containers
 - [docker-registry](https://hub.docker.com/_/registry): Registry for storing and distributing container images
+- dockerizalo: 
 - [docmost](https://github.com/docmost/docmost): Docmost is an open-source collaborative wiki and documentation software.
 - [doku](https://github.com/amerkurev/doku): Disk usage dashboard
 - [dozzle-path](https://github.com/amir20/dozzle): Path-based reverse proxy for dozzle
@@ -99,8 +99,8 @@
 - [ghost](https://hub.docker.com/_/ghost): Headless cms for creating blogs and websites
 - [gitea](https://github.com/go-gitea/gitea): Lightweight git service similar to github
 - [gitlab](https://docs.gitlab.com/ee/install/docker.html): Self-hosted git repository management system
-- [glances](https://github.com/nicolargo/glances): System monitoring tool
 - [glance](https://github.com/glanceapp/glance): A self-hosted dashboard that puts all your feeds in one place
+- [glances](https://github.com/nicolargo/glances): System monitoring tool
 - [gluetun](https://hub.docker.com/r/qmcgaw/gluetun ): VPN Client for Docker Containers and More
 - [go2rtc](https://github.com/AlexxIT/go2rtc): Webrtc gateway for camera restreaming 
 - [gotify](https://github.com/gotify/server): Self-hosted push notification service
@@ -168,12 +168,14 @@
 
 ## N
 - [n8n](https://github.com/n8n-io/n8n): workflow automation platform with native AI capabilities
+- [nebula-sync](https://github.com/lovelaze/nebula-sync): Synchronize Pi-hole v6.x configuration to replicas.
 - [netbootxyz](https://docs.linuxserver.io/images/docker-netbootxyz): Network boot server for various operating systems
 - [netbox](https://docs.linuxserver.io/images/docker-netbox): Web-based ip address management (ipam) and data center infrastructure management (dcim) tool
 - [newsdash](https://github.com/buzz/newsdash): Self-hosted rss feed reader and dashboard
 - [nextcloud](https://github.com/linuxserver/docker-nextcloud): Powerful self-hosted file sync and sharing platform
 - [nocodb](https://github.com/nocodb/nocodb): Databases As Spreadsheets
 - [nodered](https://hub.docker.com/r/nodered/node-red/): Flow-based development tool for visual programming
+- [nutify](https://github.com/DartSteven/Nutify>): UPS Monitoring System
 - [nzbget](https://hub.docker.com/r/linuxserver/nzbget): Binary newsgrabber for usenet
 
 
