@@ -1,0 +1,71 @@
+networks:
+  traefik:
+    external: true
+
+# description: UPS Monitoring System
+# https://github.com/DartSteven/Nutify>
+
+services:
+  nutify:
+    image: dartsteven/nutify:${NUTIFY_DOCKER_TAG:-latest}
+    container_name: ${NUTIFY_CONTAINER_NAME:-nutify}
+    restart: ${NUTIFY_RESTART:-unless-stopped}
+    mem_limit: ${NUTIFY_MEM_LIMIT:-200g}
+    networks:
+      - traefik
+    ports:
+      - 3493:3493                                       # NUT server port
+    volumes:
+      - ./etc/nutify:/var/run/nut
+      - ./etc/nutify/logs:/app/nutify/logs
+      - ./etc/nutify/instance:/app/nutify/instance
+      - /etc/localtime:/etc/localtime:ro
+    privileged: true                                   
+    cap_add:                                           
+      - SYS_ADMIN                                      
+      - SYS_RAWIO                                      
+      - MKNOD                                          
+    devices:                                           
+      - /dev/bus/usb:/dev/bus/usb:rwm                  
+    device_cgroup_rules:                               
+      - 'c 189:* rwm'            
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+
+      # ===== SERVER CONFIGURATION =====
+      - SERVER_NAME=${NUTIFY_SERVER_NAME:-Nutify}       # Name of the server (displayed in UI)
+      - SERVER_PORT=${NUTIFY_PORT:-5050}                # Port for web interface
+      - SERVER_HOST=${NUTIFY_HOST:-0.0.0.0}             # Host address to bind web server (0.0.0.0 = all interfaces)
+      - ENCRYPTION_KEY=${NUTIFY_ENCRYPTION_KEY:-secretkey} # Secret key for data encryption for mail password (MUST be set) and should be at least 32 characters long for security
+      
+      # ===== UPS CONNECTION SETTINGS =====
+      - UPS_HOST=${NUTIFY_UPS_HOST:-nutifyups}                      # IP/hostname of UPS (leave empty for local USB connection)
+      - UPS_NAME=${NUTIFY_UPS_NAME:-ups}                            # Name of the UPS in NUT configuration
+      - UPS_DRIVER=${NUTIFY_UPS_DRIVER:-usbhid-ups}                 # NUT driver for UPS (usbhid-ups for USB connected UPS)
+      - UPS_PORT=${NUTIFY_UPS_PORT:-auto}                           # Port for UPS connection (auto = automatic detection)
+      - UPS_REALPOWER_NOMINAL=${NUTIFY_UPS_NOMINAL:-1000}           # Nominal power of UPS in watts
+      
+      # ===== UPS AUTHENTICATION =====
+      - UPS_USER=${NUTIFY_UPS_USER:-admin}                          # Username for UPS authentication
+      - UPS_PASSWORD=${NUTIFY_UPS_PASSWORD:-hunter2}                # Password for UPS authentication
+      
+      # ===== UPS COMMAND SETTINGS =====
+      - UPSCMD_USER=${NUTIFY_UPSCMD_USER:-admin}                    # Username for sending commands to UPS
+      - UPSCMD_PASSWORD=${NUTIFY_UPSCMD_PASSWORD:-hunter2}          # Password for sending commands to UPS
+      
+      # ===== LOGGING CONFIGURATION =====
+      - LOG_LEVEL=${NUTIFY_LOGLEVEL:-DEBUG}                         # Log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+      - LOG_WERKZEUG=${NUTIFY_WERKZEUG:-false}                      # Enable/disable Flask's Werkzeug logs
+      - ENABLE_LOG_STARTUP=${NUTIFY_ENABLE_LOG_STARTUP:-N}          # Enables/disables essential startup logs (set to Y to enable)
+      
+    labels:
+      - joyride.host.name=${NUTIFY_HOST_NAME:-nutify}.${HOST_DOMAIN}
+      - traefik.enable=${NUTIFY_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.nutify.entrypoints=websecure
+      - traefik.http.routers.nutify.rule=Host(`${NUTIFY_HOST_NAME:-nutify}.${HOST_DOMAIN}`)
+      #- traefik.http.services.nutify.loadbalancer.server.scheme=https # enable if the service wants to connect over https
+      - traefik.http.services.nutify.loadbalancer.server.port=5050
+      - com.centurylinklabs.watchtower.enable=${NUTIFY_WATCHTOWER_ENABLED:-true}
+      - autoheal=${NUTIFY_AUTOHEAL_ENABLED:-true}
