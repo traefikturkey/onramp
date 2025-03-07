@@ -1,5 +1,5 @@
 # Available Services
-210 services and counting...
+211 services and counting...
 
 [A](#A)
 [B](#B)
@@ -176,6 +176,7 @@
 - [nextcloud](https://github.com/linuxserver/docker-nextcloud): Powerful self-hosted file sync and sharing platform
 - [nocodb](https://github.com/nocodb/nocodb): Databases As Spreadsheets
 - [nodered](https://hub.docker.com/r/nodered/node-red/): Flow-based development tool for visual programming
+- [nutify](https://github.com/DartSteven/Nutify>): UPS Monitoring System
 - [nzbget](https://hub.docker.com/r/linuxserver/nzbget): Binary newsgrabber for usenet
 
 
