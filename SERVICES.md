@@ -167,6 +167,7 @@
 
 
 ## N
+- [navidrome](https://github.com/navidrome/navidrome): Personal, self-hosting Music Streaming Service
 - [n8n](https://github.com/n8n-io/n8n): workflow automation platform with native AI capabilities
 - [nebula-sync](https://github.com/lovelaze/nebula-sync): Synchronize Pi-hole v6.x configuration to replicas.
 - [netbootxyz](https://docs.linuxserver.io/images/docker-netbootxyz): Network boot server for various operating systems
