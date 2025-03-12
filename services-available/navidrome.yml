@@ -12,7 +12,7 @@ services:
     ports:
       - 4533:4533
     volumes:
-      - ./etc/navidrome:/app/data
+      - /etc/navidrome:/app/data
       - /etc/localtime:/etc/localtime:ro
     environment:
       - PUID=${PUID:-1000}
