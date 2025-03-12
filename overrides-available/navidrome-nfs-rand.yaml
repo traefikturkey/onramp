@@ -1,0 +1,25 @@
+volumes:
+  navidrome-nfs-media:
+    labels:
+      - remove_volume_on=down
+    driver_opts:
+      type: nfs
+      o: "addr=${NAVIDROME_MEDIA_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
+      device: ":${NAVIDROME_MEDIA_NFS_SERVER_PATH:-${NFS_MUSIC_PATH}}"
+
+  navidrome-nfs-downloads:
+    labels:
+      - remove_volume_on=down
+    driver_opts:
+      type: nfs
+      o: "addr=${NAVIDROME_MEDIA_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
+      device: ":${NAVIDROME_MEDIA_NFS_DOWNLOADS_PATH:-${NFS_DOWNLOADS_PATH}}"
+
+services:
+  navidrome:
+    volumes:
+      - ${NAVIDROME_CONFIG_VOLUME:-./etc/lidarr}:/config
+      - ${MEDIA_MUSIC_VOLUME:-navidrome-nfs-media}:/music
+      - /downloads:${NAVIDROME_DOWNLOADS_PATH:-/downloads}
+      - /dev/rtc:/dev/rtc:ro
+      - /etc/localtime:/etc/localtime:ro
