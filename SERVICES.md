@@ -86,14 +86,12 @@
 - [firefly3](https://github.com/firefly-iii/firefly-iii/tree/main) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/firefly3.yml)): Manages personal finances and budgets
 - [firefox](https://github.com/jlesage/docker-firefox) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/firefox.yml)): Runs mozilla firefox browser in a container
 - [flame](https://hub.docker.com/r/pawelmalak/flame) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/flame.yml)): Self-hosted music recommendation engine
-- [flux-ui](https://github.com/frefrik/comfyui-flux/tree/main) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/flux-ui.yml)): ComfyUI with FLUX.1 models
 - [fooocus](https://github.com/lllyasviel/Fooocus) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/fooocus.yml)): Focus on prompting and generating | a generative image generator
 - [foundryvtt](https://hub.docker.com/r/felddy/foundryvtt) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/foundryvtt.yml)): Virtual tabletop platform for role-playing games
 - [freshrss](https://github.com/FreshRSS/FreshRSS) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/freshrss.yml)): Self-hosted rss feed reader
 - [frigate-coral](https://docs.frigate.video/frigate/installation/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/frigate-coral.yml)): Container for running frigate with coral edge tpu support
 - [frigate-cpu](https://docs.frigate.video/frigate/installation/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/frigate-cpu.yml)): frigate nvr with cpu only
 - [frigate-nvidia](https://docs.frigate.video/frigate/installation/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/frigate-nvidia.yml)): Container for running frigate with nvidia gpu support
-- [frigate](https://docs.frigate.video/frigate/installation/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/frigate.yml)): Container for running frigate with coral edge tpu support
 - [fulltext-rss](https://christitus.com/why-we-dont-browse-the-internet-anymore/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/fulltext-rss.yml)): Generates full-text rss feeds from partial feeds
 
 
@@ -151,7 +149,6 @@
 - [librespeed](https://hub.docker.com/r/linuxserver/librespeed) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/librespeed.yml)): Self-hosted internet speed test tool
 - [lidarr](https://hub.docker.com/r/linuxserver/lidarr) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/lidarr.yml)): Manages music collections and downloads
 - [linkding](https://github.com/sissbruecker/linkding) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/linkding.yml)): Self-hosted bookmark manager
-- [logitechmediaserver](https://github.com/traefikturkey/onramp/tree/master/services-available/logitechmediaserver.yml): <= put a brief description of logitechmediaserver here =>
 - [lubelog](https://github.com/hargata/lubelog) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/lubelog.yml)): Self-Hosted, Open-Source, Web-Based Vehicle Maintenance and Fuel Mileage Tracker
 - [lychee](https://github.com/LycheeOrg/Lychee-Docker) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/lychee.yml)): Photo management and sharing platform
 
