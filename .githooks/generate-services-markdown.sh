@@ -1,5 +1,8 @@
 #!/usr/bin/bash
 
+# Set the base URL for GitHub repository
+GITHUB_BASE_URL="https://github.com/traefikturkey/onramp/tree/master/services-available"
+
 # Initialize variables for services
 declare -A services_map
 service_count=0
@@ -12,8 +15,11 @@ for file in ./services-available/*.yml; do
   service_link=$(sed -n '/^# \+https/p' "$file" | sed 's/^#\s*//g' | head -n 1)
   description=$(sed -n 's/^# \+description: //p' "$file" | head -n 1)
   initial=$(echo "$service_name" | head -c 1 | tr '[:lower:]' '[:upper:]')
-  entry="- $service_name: $description"
-  [ -n "$service_link" ] && entry="- [$service_name]($service_link): $description"
+  file_link="$GITHUB_BASE_URL/$service_name.yml"
+  
+  entry="- [$service_name]($file_link): $description"
+  [ -n "$service_link" ] && entry="- [$service_name]($service_link) ([yml]($file_link)): $description"
+  
   services_map["$initial"]+="$entry\n"
   [[ ! " ${alphabet[@]} " =~ " ${initial} " ]] && alphabet+=("$initial")
 done
@@ -52,8 +58,11 @@ for file in ./services-available/games/*.yml; do
   service_link=$(sed -n '/^# \+https/p' "$file" | sed 's/^#\s*//g' | head -n 1)
   description=$(sed -n 's/^# \+description: //p' "$file" | head -n 1)
   initial=$(echo "$service_name" | head -c 1 | tr '[:lower:]' '[:upper:]')
-  entry="- $service_name: $description"
-  [ -n "$service_link" ] && entry="- [$service_name]($service_link): $description"
+  file_link="$GITHUB_BASE_URL/games/$service_name.yml"
+  
+  entry="- [$service_name]($file_link): $description"
+  [ -n "$service_link" ] && entry="- [$service_name]($service_link) ([yml]($file_link)): $description"
+  
   games_map["$initial"]+="$entry\n"
   [[ ! " ${game_alphabet[@]} " =~ " ${initial} " ]] && game_alphabet+=("$initial")
 done
