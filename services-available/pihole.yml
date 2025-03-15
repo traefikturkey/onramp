@@ -23,7 +23,7 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
-      - WEBPASSWORD=${PIHOLE_WEBPASSWORD}
+      - WEBPASSWORD=${PIHOLE_WEBPASSWORD:-password}
     ports:
       - "53:53/tcp"
       - "53:53/udp"
@@ -34,7 +34,8 @@ services:
       - traefik.enable=true
       - traefik.http.routers.pihole.entrypoints=websecure
       - traefik.http.routers.pihole.rule=Host(`${PIHOLE_CONTAINER_NAME:-pihole}.${HOST_DOMAIN}`)
-      - traefik.http.services.pihole.loadbalancer.server.port=80
+      - traefik.http.services.pihole.loadbalancer.server.port=443
+      - traefik.http.services.pihole.loadbalancer.server.scheme=https
       - traefik.http.middlewares.piholeredirect.redirectregex.regex=^https?://${PIHOLE_CONTAINER_NAME:-pihole}.${HOST_DOMAIN}/$$
       - traefik.http.middlewares.piholeredirect.redirectregex.replacement=http://${PIHOLE_CONTAINER_NAME:-pihole}.${HOST_DOMAIN}/admin/
       - traefik.http.routers.pihole.middlewares=piholeredirect

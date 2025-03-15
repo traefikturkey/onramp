@@ -79,3 +79,6 @@ ifneq (,$(wildcard ./services-available/$(SERVICE_PASSED_DNCASED).yml))
 else
 	@echo "No such service file ./services-available/$(SERVICE_PASSED_DNCASED).yml!"
 endif
+
+generate-service-md:
+	./githooks/generate-services-markdown.sh
