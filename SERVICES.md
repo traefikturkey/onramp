@@ -1,5 +1,5 @@
 # Available Services
-213 services and counting...
+211 services and counting...
 
 [A](#A)
 [B](#B)
@@ -59,6 +59,7 @@
 - [coredns](https://coredns.io/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/coredns.yml)): A fast and flexible DNS server with plugin support
 - [crowdsec-traefik-bouncer](https://plugins.traefik.io/plugins/6335346ca4caa9ddeffda116/crowdsec-bouncer-traefik-plugin) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/crowdsec-traefik-bouncer.yml)): Traefik Bouncer for CrowdSec
 - [crowdsec](https://github.com/crowdsecurity/crowdsec) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/crowdsec.yml)): Detects and blocks malicious behavior on servers
+- [cup](https://github.com/sergi0g/cup) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/cup.yml)): The easiest way to manage your container updates.
 - [cv4pve](https://github.com/Corsinvest/cv4pve-admin/tree/main) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/cv4pve.yml)): managment and monitoring solution for proxmox virtual environment (pve)
 - [cyberchef](https://github.com/gchq/CyberChef/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/cyberchef.yml)): Web app for data analysis and transformation
 
