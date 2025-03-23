@@ -12,7 +12,7 @@ prune: ## remove unused docker images
 	docker image prune
 
 prune-force: ## remove unused docker images with force
-	docker image prune -f
+	docker image prune -a -f
 
 prune-update: prune-force update ## remove unused docker images with force and update
 
