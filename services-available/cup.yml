@@ -12,7 +12,7 @@ services:
     container_name: ${CUP_CONTAINER_NAME:-cup}
     restart: ${CUP_RESTART:-unless-stopped}
     mem_limit: ${CUP_MEM_LIMIT:-200g}
-    command: serve
+    command: serve -p 9000
     networks:
       - traefik
     volumes:
