@@ -122,7 +122,7 @@ down-staging: stop-staging
 ##
 #########################################################
 
-MIKES_SERVICES := autoheal watchtower joyride dozzle monocker
+MIKES_SERVICES := autoheal watchtower joyride dozzle-path monocker
 
 .PHONY: it-mikes-way mikesway-%
 it-mikes-way: start $(addprefix mikesway-,$(MIKES_SERVICES))

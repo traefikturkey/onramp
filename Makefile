@@ -79,6 +79,7 @@ remove-orphans: build
 up: build
 	$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) up --force-recreate --remove-orphans --abort-on-container-exit
 
+stop: down
 down: ## stop all services and remove all containers and networks
 	-$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) down --remove-orphans
 	-docker volume ls --quiet --filter "label=remove_volume_on=down" | xargs -r docker volume rm 

@@ -112,6 +112,13 @@ endif
 setup-uptime-kuma:
 	@mkdir -p ./etc/uptime-kuma
 
+ifneq (,$(wildcard ./services-enabled/joyride.yml))
+BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),setup-joyride)
+endif
+
+setup-joyride:
+	@mkdir -p ./etc/joyride/hosts.d
+
 ifneq (,$(wildcard ./override-enabled/wordpress-upload.yml))
 BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),setup-wordpress-upload)
 endif
