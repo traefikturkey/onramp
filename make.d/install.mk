@@ -3,47 +3,31 @@
 ## install commands
 ##
 #########################################################
-ACME_JSON_FILE := ./etc/traefik/letsencrypt/acme.json
-ACME_JSON_PERMS := 600
-export DEBIAN_FRONTEND = noninteractive
-
 
 # Silence absent and/or empty Ansible inventory warnings
 # https://stackoverflow.com/a/59940796/1973777
 export ANSIBLE_LOCALHOST_WARNING = False
 export ANSIBLE_INVENTORY_UNPARSED_WARNING = False
 
-ifneq (,$(wildcard $(ACME_JSON_FILE)))
-BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),fix-acme-json-permissions)
-endif
-
-fix-acme-json-permissions:
-	@if [ -e $(ACME_JSON_FILE) ]; then \
-		if [ $$(stat -c %a $(ACME_JSON_FILE)) != "$(ACME_JSON_PERMS)" ]; then \
-			echo "Fixing permissions on $(ACME_JSON_FILE)"; \
-			sudo chmod $(ACME_JSON_PERMS) $(ACME_JSON_FILE); \
-		fi \
-	fi
-
-build: install-dependencies .env $(BUILD_DEPENDENCIES)
-#@echo "build steps completed"
-
-install: build install-docker
-
-.env:
-	cp --no-clobber .templates/env.template .env
-	$(EDITOR) .env
-
 REPOS = ansible/ansible
 MISSING_REPOS := $(foreach repo,$(REPOS),$(if $(shell apt-cache policy | grep $(repo)),,addrepo/$(repo))) 
 
 # If it's not empty, add a value to it
 ifneq ($(strip $(MISSING_REPOS)),)
-		MISSING_REPOS += update-distro
+	MISSING_REPOS += update-distro
 endif
 
 EXECUTABLES = git nano jq python3-pip yamllint python3-pathspec ansible 
 MISSING_PACKAGES := $(foreach exec,$(EXECUTABLES),$(if $(shell dpkg -s "$(exec)" &> /dev/null),,addpackage-$(exec)))
+
+# Check for podman command
+ifneq ($(shell command -v podman >/dev/null 2>&1 && echo found),found)
+    # If podman is not found, check for docker command
+    ifneq ($(shell command -v docker >/dev/null 2>&1 && echo found),found)
+        # If neither podman nor docker is found, add install-docker to BUILD_DEPENDENCIES
+        BUILD_DEPENDENCIES += install-docker
+    endif
+endif
 
 # duck you debian
 addrepo/%:
@@ -54,18 +38,26 @@ addrepo/%:
 addpackage-%:
 	sudo apt install $* -y 
 
+export DEBIAN_FRONTEND = noninteractive
+
 update-distro:
 	sudo apt update
 	sudo apt full-upgrade -y
 	sudo apt autoremove -y
 
-install-dependencies: .gitconfig $(MISSING_REPOS) $(MISSING_PACKAGES) 
+install: update-distro build 
+
+build: .env .gitconfig $(BUILD_DEPENDENCIES) $(MISSING_REPOS) $(MISSING_PACKAGES) 
+
+.env:
+	cp --no-clobber .templates/env.template .env
+	$(EDITOR) .env
 
 .gitconfig:
 	git config -f .gitconfig core.hooksPath .githooks
 	git config --local include.path $(shell pwd)/.gitconfig
 
-install-ansible: install-dependencies
+install-ansible-requirements: 
 	@echo "Installing ansible roles requirements..."
 	ansible-playbook ansible/ansible-requirements.yml
 
@@ -73,17 +65,17 @@ nuke-snaps:
 	@echo "Remove the evil that is snaps..."
 	ansible-playbook ansible/nuke-snaps.yml
 
-install-docker: install-ansible
+install-docker: install-ansible-requirements
 	ansible-playbook ansible/install-docker.yml
+
+install-node-exporter: install-ansible-requirements
+	ansible-playbook ansible/install-node-exporter.yml
+
+install-nvidia-drivers: install-ansible-requirements
+	ansible-playbook ansible/install-nvidia-drivers.yml
 
 update-hosts:
 	ansible-playbook ansible/update-hosts.yml
-
-install-node-exporter: install-ansible
-	ansible-playbook ansible/install-node-exporter.yml
-
-install-nvidia-drivers: install-ansible
-	ansible-playbook ansible/install-nvidia-drivers.yml
 
 # kill all vscode instances running on the server
 make kill-code:

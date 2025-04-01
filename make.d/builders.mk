@@ -121,4 +121,11 @@ setup-wordpress-upload:
 	cp --no-clobber .templates/wordpress-upload.template .etc/wordpress/upload.ini
 
 
+ifneq (,$(wildcard ./etc/traefik/letsencrypt/acme.json))
+BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),fix-acme-json-permissions)
+endif
+
+fix-acme-json-permissions:
+	sudo chmod 600 ./etc/traefik/letsencrypt/acme.json
+
 #$(info "builders.mk loaded")
