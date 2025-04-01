@@ -112,16 +112,14 @@ endif
 setup-uptime-kuma:
 	@mkdir -p ./etc/uptime-kuma
 
+<<<<<<< HEAD
 ifneq (,$(wildcard ./services-enabled/joyride.yml))
 BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),setup-joyride)
 endif
 
 setup-joyride:
 	@mkdir -p ./etc/joyride/hosts.d
-ifneq (,$(wildcard ./services-enabled/rundeck.yml))
-BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),setup-rundeck)
-endif
-
+=======
 ifneq (,$(wildcard ./services-enabled/rundeck.yml))
 BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),setup-rundeck)
 endif
@@ -129,6 +127,7 @@ endif
 setup-rundeck:
 	@mkdir -p ./etc/rundeck/db
 	@mkdir -p ./etc/rundeck/config
+>>>>>>> origin/master
 
 ifneq (,$(wildcard ./override-enabled/wordpress-upload.yml))
 BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),setup-wordpress-upload)
