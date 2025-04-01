@@ -74,7 +74,7 @@ services:
     volumes:
       - ./etc/authentik/media:/media
       - ./etc/authentik/certs:/certs
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ${DOCKER_SOCKET:-/var/run/docker.sock}:/var/run/docker.sock:ro
       # - ./etc/authentik/geoip:/geoip
       # Uncomment above to enable the use of the geoipupdate container. This will allow more frequent updates but isn't required.
     labels:
@@ -113,7 +113,7 @@ services:
     volumes:
       - ./etc/authentik/media:/media
       - ./etc/authentik/certs:/certs
-      - /var/run/docker.sock:/var/run/docker.sock
+      - ${DOCKER_SOCKET:-/var/run/docker.sock}:/var/run/docker.sock
       - ./etc/authentik/custom-templates:/templates
       #- ./etc/authentik/geoip:/geoip
       # Uncomment above to enable the use of the geoipupdate container. This will allow more frequent updates but isn't required.

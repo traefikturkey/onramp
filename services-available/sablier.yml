@@ -15,7 +15,7 @@ services:
     volumes:
       - ./etc/sablier:/config # <==== this probably needs changed
       - /etc/localtime:/etc/localtime:ro
-      - /var/run/docker.sock:/var/run/docker.sock:rw
+      - ${DOCKER_SOCKET:-/var/run/docker.sock}:/var/run/docker.sock:rw
     environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}

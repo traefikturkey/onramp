@@ -14,7 +14,7 @@ services:
       - ./etc/crowdsec:/etc/crowdsec/
       - ./etc/crowdsec/db:/var/lib/crowdsec/data/
       - /etc/localtime:/etc/localtime:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ${DOCKER_SOCKET:-/var/run/docker.sock}:/var/run/docker.sock:ro
     environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}

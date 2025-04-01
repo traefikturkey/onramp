@@ -8,13 +8,13 @@ clean-acme: ## remove acme certificate file
 	@echo "removing acme certificate file"
 	-sudo rm etc/traefik/letsencrypt/acme.json
 
-prune: ## remove unused docker images
-	docker image prune
+prune: ## remove unused container images
+	$(DOCKER_COMMAND) image prune
 
-prune-force: ## remove unused docker images with force
-	docker image prune -a -f
+prune-force: ## remove unused container images with force
+	$(DOCKER_COMMAND) image prune -a -f
 
-prune-update: prune-force update ## remove unused docker images with force and update
+prune-update: prune-force update ## remove unused container images with force and update
 
 remove-etc:  ## remove etc folder of a given service
 	rm -rf ./etc/$(or $(SERVICE_PASSED_DNCASED),no_service_passed)/

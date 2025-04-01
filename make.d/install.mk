@@ -18,16 +18,17 @@ ifneq ($(strip $(MISSING_REPOS)),)
 endif
 
 EXECUTABLES = git nano jq python3-pip yamllint python3-pathspec ansible 
-MISSING_PACKAGES := $(foreach exec,$(EXECUTABLES),$(if $(shell dpkg -s "$(exec)" &> /dev/null),,addpackage-$(exec)))
+MISSING_PACKAGES := $(foreach exec,$(EXECUTABLES),$(if $(shell dpkg -s "$(exec)" >/dev/null 2>&1),,addpackage-$(exec)))
 
-# Check for podman command
-ifneq ($(shell command -v podman >/dev/null 2>&1 && echo found),found)
-    # If podman is not found, check for docker command
-    ifneq ($(shell command -v docker >/dev/null 2>&1 && echo found),found)
-        # If neither podman nor docker is found, add install-docker to BUILD_DEPENDENCIES
-        BUILD_DEPENDENCIES += install-docker
-    endif
+# Check for podman and docker commands
+# if none found install docker
+ifeq ($(shell command -v podman || command -v docker),)
+    BUILD_DEPENDENCIES += install-docker
 endif
+
+$(info "BUILD_DEPENDENCIES: $(BUILD_DEPENDENCIES)")
+$(info "MISSING_REPOS: $(MISSING_REPOS)")
+$(info "MISSING_PACKAGES: $(MISSING_PACKAGES)")
 
 # duck you debian
 addrepo/%:
@@ -38,9 +39,8 @@ addrepo/%:
 addpackage-%:
 	sudo apt install $* -y 
 
-export DEBIAN_FRONTEND = noninteractive
-
-update-distro:
+DEBIAN_FRONTEND = noninteractive
+update-distro: 
 	sudo apt update
 	sudo apt full-upgrade -y
 	sudo apt autoremove -y
@@ -78,7 +78,7 @@ update-hosts:
 	ansible-playbook ansible/update-hosts.yml
 
 # kill all vscode instances running on the server
-make kill-code:
+kill-code:
 	ps aux | grep .vscode-server | awk '{print $$2}' | xargs kill
 
 #########################################################
@@ -102,7 +102,7 @@ start-staging: build ## start the staging and wait for the acme staging certs to
 	@echo "and check that you have a staging cert from LetsEncrypt!"
 	@echo ""
 	@echo "if you don't get a LetsEncrypt staging cert run the following command and look for error messages:"
-	@echo "docker compose logs | grep acme"
+	@echo "$(DOCKER_COMPOSE) logs | grep acme"
 	@echo ""
 	@echo "otherwise run the following command if you successfully got a staging certificate:"
 	@echo "make down-staging"

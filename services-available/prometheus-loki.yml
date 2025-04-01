@@ -34,7 +34,7 @@ services:
       - SYSLOG_HOSTNAME={{.ContainerName}}
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ${DOCKER_SOCKET:-/var/run/docker.sock}:/var/run/docker.sock:ro
     labels:
       - com.centurylinklabs.watchtower.enable=${LOKI_WATCHTOWER_ENABLED:-true}
       - traefik.enable=false

@@ -16,7 +16,7 @@ services:
       - traefik
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ${DOCKER_SOCKET:-/var/run/docker.sock}:/var/run/docker.sock:ro
       - /:/hostroot:ro
     environment:
       - PUID=${PUID:-1000}

@@ -15,7 +15,7 @@ services:
     volumes:
       - ./etc/flame:/app/data
       - /etc/localtime:/etc/localtime:ro
-      - /var/run/docker.sock:/var/run/docker.sock
+      - ${DOCKER_SOCKET:-/var/run/docker.sock}:/var/run/docker.sock
     environment:
       - PASSWORD=${FLAME_PASSWORD:-you_should_really_consider_changing_this}
       - PUID=${PUID:-1000}

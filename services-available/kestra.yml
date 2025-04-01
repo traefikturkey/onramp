@@ -20,7 +20,7 @@ services:
       - ./etc/kestra/storage:/app/storage
       - /tmp/kestra-wd:/tmp
       - /etc/localtime:/etc/localtime:ro
-      - /var/run/docker.sock:/var/run/docker.sock
+      - ${DOCKER_SOCKET:-/var/run/docker.sock}:/var/run/docker.sock
     environment:
       TZ: ${TZ}
     ports:

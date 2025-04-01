@@ -18,7 +18,7 @@ services:
       - DOZZLE_LEVEL=${DOZZLE_LEVEL:-debug}
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ${DOCKER_SOCKET:-/var/run/docker.sock}:/var/run/docker.sock:ro
     labels:
       - joyride.host.name=${DOZZLE_CONTAINER_NAME:-dozzle}.${HOST_DOMAIN}
       - traefik.enable=${DOZZLE_TRAEFIK_ENABLE:-true}

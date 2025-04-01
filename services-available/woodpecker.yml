@@ -47,7 +47,7 @@ services:
     depends_on:
       - woodpecker
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - ${DOCKER_SOCKET:-/var/run/docker.sock}:/var/run/docker.sock
     environment:
       - WOODPECKER_SERVER=woodpecker:9000
       - WOODPECKER_AGENT_SECRET=${WOODPECKER_AGENT_SECRET}

@@ -8,7 +8,7 @@ services:
     restart: ${MONOCKER_RESTART:-unless-stopped}
     mem_limit: ${MONOCKER_MEM_LIMIT:-130m}
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ${DOCKER_SOCKET:-/var/run/docker.sock}:/var/run/docker.sock:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
       TZ: ${TZ}

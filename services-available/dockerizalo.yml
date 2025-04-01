@@ -36,7 +36,7 @@ services:
     container_name: ${DOCKERIZALO_API_CONTAINER_NAME:-api}
     volumes:
       - ./etc/dockerizalo/api:/data/dockerizalo
-      - /var/run/docker.sock:/var/run/docker.sock
+      - ${DOCKER_SOCKET:-/var/run/docker.sock}:/var/run/docker.sock
     networks:
       - dockerizalo-db
     environment:

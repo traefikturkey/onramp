@@ -25,12 +25,21 @@ export PGID 	:= $(shell id -g)
 export HOST_NAME := $(or $(HOST_NAME), $(shell hostname))
 export CF_RESOLVER_WAITTIME := $(strip $(or $(CF_RESOLVER_WAITTIME), 60))
 
-# check if we should use docker-compose or docker compose
-ifeq (, $(shell which docker-compose))
+# check if we should use podman compose or docker compose
+# no one should be using docker-compose anymore
+ifeq (, $(shell which podman))
 	DOCKER_COMPOSE := docker compose
+	DOCKER_COMMAND := docker
+	DOCKER_SOCKET := /var/run/docker.sock
 else
-	DOCKER_COMPOSE := docker-compose
+	DOCKER_COMPOSE := podman compose
+	DOCKER_COMMAND := podman
+	DOCKER_SOCKET := $(XDG_RUNTIME_DIR)/podman/podman.sock
 endif
+
+export DOCKER_COMPOSE
+export DOCKER_COMMAND
+export DOCKER_SOCKET
 
 # setup PLEX_ALLOWED_NETWORKS defaults if they are not already in the .env file
 ifndef PLEX_ALLOWED_NETWORKS

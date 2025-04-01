@@ -37,7 +37,7 @@ services:
     volumes:
       - ./etc/droneci:/data
       - /etc/localtime:/etc/localtime:ro
-      - /var/run/docker.sock:/var/run/docker.sock
+      - ${DOCKER_SOCKET:-/var/run/docker.sock}:/var/run/docker.sock
     labels:
       - joyride.host.name=${DRONE_CONTAINER_NAME:-drone}.${HOST_DOMAIN}
       - traefik.enable=true
@@ -67,4 +67,4 @@ services:
       - 4003:3000
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - /var/run/docker.sock:/var/run/docker.sock
+      - ${DOCKER_SOCKET:-/var/run/docker.sock}:/var/run/docker.sock

@@ -46,7 +46,7 @@ services:
   #   depends_on:
   #     - gitlab
   #   volumes:
-  #     - /var/run/docker.sock:/var/run/docker.sock
+  #     - ${DOCKER_SOCKET:-/var/run/docker.sock}:/var/run/docker.sock
   #     - ./etc/gitlab/gitlab-runner:/etc/gitlab-runner
   #   # networks:
   #   #   - gitlab

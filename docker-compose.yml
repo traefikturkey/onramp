@@ -24,7 +24,7 @@ services:
       - ./etc/traefik/enabled:/enabled
       - /etc/localtime:/etc/localtime:ro
       - /usr/share/zoneinfo:/usr/share/zoneinfo:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ${DOCKER_SOCKET:-/var/run/docker.sock}:/var/run/docker.sock:ro
     command:
       - --api
       - --api.insecure=${TRAEFIK_API_INSECURE:-true}

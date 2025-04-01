@@ -26,7 +26,7 @@ services:
     #   - ${JOYRIDE_PORT:-54}:54/udp
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ${DOCKER_SOCKET:-/var/run/docker.sock}:/var/run/docker.sock:ro
       - ./etc/joyride/hosts.d:/etc/hosts.d:ro
     labels:
       - traefik.enable=${JOYRIDE_TRAEFIK_ENABLE:-false}

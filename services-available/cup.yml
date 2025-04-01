@@ -18,7 +18,7 @@ services:
     volumes:
       - ./etc/cup:/config
       - /etc/localtime:/etc/localtime:ro
-      - /var/run/docker.sock:/var/run/docker.sock
+      - ${DOCKER_SOCKET:-/var/run/docker.sock}:/var/run/docker.sock
     environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}

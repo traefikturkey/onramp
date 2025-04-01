@@ -29,7 +29,7 @@ services:
       - WATCHTOWER_HTTP_API_TOKEN=${WATCHTOWER_HTTP_API_TOKEN:-watchtower_secret_token}
       - WATCHTOWER_CLEANUP=${WATCHTOWER_CLEANUP:-false}
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - ${DOCKER_SOCKET:-/var/run/docker.sock}:/var/run/docker.sock
     labels:
       - traefik.enable=${WATCHTOWER_TRAEFIK_ENABLE:-false}
       - autoheal=${WATCHTOWER_AUTOHEAL:-true}

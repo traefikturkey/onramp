@@ -16,7 +16,7 @@ services:
       - ./etc/homarr/configs:/app/data/configs
       - ./etc/homarr/icons:/app/public/icons
       - /etc/localtime:/etc/localtime:ro
-      #- /var/run/docker.sock:/var/run/docker.sock #uncomment to enable docker control
+      #- ${DOCKER_SOCKET:-/var/run/docker.sock}:/var/run/docker.sock #uncomment to enable docker control
     environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}

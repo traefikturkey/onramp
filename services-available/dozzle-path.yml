@@ -17,7 +17,7 @@ services:
       - DOZZLE_BASE=${DOZZLE_BASE:-/logs}
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ${DOCKER_SOCKET:-/var/run/docker.sock}:/var/run/docker.sock:ro
     labels:
       - traefik.enable=true
       - traefik.http.routers.dozzle.rule=PathPrefix(`${DOZZLE_BASE:-/logs}`)

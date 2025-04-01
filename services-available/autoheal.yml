@@ -13,6 +13,6 @@ services:
       - AUTOHEAL_INTERVAL=${AUTOHEAL_INTERVAL_VALUE:-5}
       - AUTOHEAL_DEFAULT_STOP_TIMEOUT=${AUTOHEAL_STOP_TIMEOUT:-10}
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - ${DOCKER_SOCKET:-/var/run/docker.sock}:/var/run/docker.sock
     labels:
       - traefik.enable=${AUTOHEAL_TRAEFIK_ENABLE:-false}
