@@ -1,0 +1,21 @@
+# Remember to add the host name to the unifi admin page so that you wont get a DNS rebind error
+# See https://github.com/traefikturkey/guides/blob/master/unifi-configuration-traefik.md for tips 
+
+http:
+ #region routers 
+  routers:
+    unifi:
+      entryPoints:
+        - "websecure"
+      rule: "Host(`{{env "UNIFI_HOST_NAME"}}.{{env "HOST_DOMAIN"}}`)"
+      middlewares:
+        - default-headers
+      tls: {}
+      service: unifi
+
+  services:
+    unifi:
+      loadBalancer:
+        servers:
+          - url: "https://{{env "UNIFI_ADDRESS"}}/"
+        passHostHeader: true
