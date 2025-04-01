@@ -21,8 +21,8 @@ services:
       - traefik
     environment:
       - TZ=${TZ}
-      - DOZZLE_LEVEL=${DOZZLE_LOG_LEVEL:-info}
       - DOZZLE_BASE=${DOZZLE_BASE:-/logs}
+      - DOZZLE_LEVEL=${DOZZLE_LOG_LEVEL:-info}
       - DOZZLE_REMOTE_AGENT=${DOZZLE_REMOTE_AGENT:-}
     volumes:
       - /etc/localtime:/etc/localtime:ro
