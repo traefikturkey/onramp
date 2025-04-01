@@ -71,7 +71,7 @@ install-docker: install
 	ansible-playbook ansible/install-docker.yml
 
 install-podman: install
-	ansible-playbook ansible/install-podman.yml
+	curl -s "https://raw.githubusercontent.com/traefikturkey/onvoy/refs/heads/main/ubuntu/bash/podman_server_setup.sh?$(date +%s)" | /bin/bash -s
 
 install-node-exporter: install-ansible-requirements
 	ansible-playbook ansible/install-node-exporter.yml

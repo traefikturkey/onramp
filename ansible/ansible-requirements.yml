@@ -12,4 +12,3 @@
         - geerlingguy.node_exporter
         - nvidia.nvidia_driver
         - nvidia.nvidia_docker
-        #- dmotte.podman #enable to install podman
