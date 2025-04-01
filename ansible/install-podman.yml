@@ -4,13 +4,12 @@
   vars:
     podman_compose: true
     #podman_auto_update_event_expr: Mon 01:00
-    podman_ip_unprivileged_port_start: 80
+    podman_ip_unprivileged_port_start: 53
     podman_users:
       - name: "{{ ansible_user_id }}"
         set_linger: true
         socket: true
         #auto_update_event_expr: Tue 02:00
-        kube_extra_args: "--net slirp4netns:port_handler=slirp4netns,\
-          enable_ipv6=false"
+        kube_extra_args: "--net slirp4netns:port_handler=slirp4netns,enable_ipv6=false"
   roles:
     - dmotte.podman

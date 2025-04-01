@@ -47,7 +47,7 @@ install-echo:
 	@echo  "MISSING_REPOS: $(MISSING_REPOS)"
 	@echo  "MISSING_PACKAGES: $(MISSING_PACKAGES)"
 
-install: update-distro $(MISSING_REPOS) $(MISSING_PACKAGES) build 
+install: update-distro $(MISSING_REPOS) $(MISSING_PACKAGES) install-ansible-requirements build 
 
 build: .env .gitconfig $(BUILD_DEPENDENCIES) 
 
@@ -67,8 +67,11 @@ nuke-snaps:
 	@echo "Remove the evil that is snaps..."
 	ansible-playbook ansible/nuke-snaps.yml
 
-install-docker: install-ansible-requirements
+install-docker: install
 	ansible-playbook ansible/install-docker.yml
+
+install-podman: install
+	ansible-playbook ansible/install-podman.yml
 
 install-node-exporter: install-ansible-requirements
 	ansible-playbook ansible/install-node-exporter.yml
