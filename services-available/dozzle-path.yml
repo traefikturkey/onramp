@@ -4,25 +4,34 @@ networks:
 
 # description: Path-based reverse proxy for dozzle
 # https://github.com/amir20/dozzle
+# https://dozzle.dev/
 
 services:
   dozzle-path:
     image: amir20/dozzle:${DOZZLE_DOCKER_TAG:-latest}
     container_name: ${DOZZLE_CONTAINER_NAME:-dozzle}
     restart: ${DOZZLE_RESTART:-unless-stopped}
+    healthcheck:
+      test: ["CMD", "/dozzle", "healthcheck"]
+      interval: 3s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
     networks:
       - traefik
     environment:
+      - TZ=${TZ}
       - DOZZLE_LEVEL=${DOZZLE_LEVEL:-debug}
       - DOZZLE_BASE=${DOZZLE_BASE:-/logs}
+      - DOZZLE_REMOTE_AGENT=${DOZZLE_REMOTE_AGENT}
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKER_SOCKET:-/var/run/docker.sock}:/var/run/docker.sock:ro
     labels:
-      - traefik.enable=true
-      - traefik.http.routers.dozzle.rule=PathPrefix(`${DOZZLE_BASE:-/logs}`)
+      - traefik.enable=${DOZZLE_TRAEFIK_ENABLE:-true}
+      - traefik.http.routers.dozzle.rule=Host(`${HOST_NAME}.${HOST_DOMAIN}`)  && (PathPrefix(`${DOZZLE_BASE:-/logs}`) )
       - traefik.http.routers.dozzle.entrypoints=websecure
       - traefik.http.services.dozzle.loadbalancer.server.scheme=http
       - traefik.http.services.dozzle.loadbalancer.server.port=8080
       - com.centurylinklabs.watchtower.enable=${DOZZLE_WATCHTOWER_ENABLED:-true}
-      - autoheal=true
+      - autoheal=${DOZZLE_AUTOHEAL:-true}

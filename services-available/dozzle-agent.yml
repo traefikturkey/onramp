@@ -1,0 +1,29 @@
+
+# description: Web-based docker container log viewer agent
+# https://github.com/amir20/dozzle
+# https://dozzle.dev/
+
+services:
+  dozzle-agent:
+    image: amir20/dozzle:${DOZZLE_AGENT_DOCKER_TAG:-latest}
+    container_name: ${DOZZLE_AGENT_CONTAINER_NAME:-dozzle-agent}
+    restart: ${DOZZLE_AGENT_RESTART:-unless-stopped}
+    mem_limit: ${DOZZLE_AGENT_MEM_LIMIT:-200g}
+    healthcheck:
+      test: ["CMD", "/dozzle", "healthcheck"]
+      interval: 3s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKER_SOCKET:-/var/run/docker.sock}:/var/run/docker.sock:ro
+    environment:
+      - TZ=${TZ}
+      - DOZZLE_LEVEL=${DOZZLE_LEVEL:-debug}
+    ports:
+      - ${DOZZLE_AGENT_PORT:-7007}:7007
+    labels:
+      - traefik.enable=${DOZZLE_AGENT_TRAEFIK_ENABLED:-false}
+      - com.centurylinklabs.watchtower.enable=${DOZZLE_AGENT_WATCHTOWER_ENABLED:-true}
+      - autoheal=${DOZZLE_AGENT_AUTOHEAL_ENABLED:-true}

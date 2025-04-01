@@ -4,6 +4,7 @@ networks:
 
 # description: Web-based docker container log viewer
 # https://github.com/amir20/dozzle
+# https://dozzle.dev/
 
 services:
   dozzle:
@@ -13,9 +14,16 @@ services:
     mem_limit: ${DOZZLE_MEM_LIMIT:-50m}
     networks:
       - traefik
+    healthcheck:
+      test: ["CMD", "/dozzle", "healthcheck"]
+      interval: 3s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
     environment:
       - TZ=${TZ}
       - DOZZLE_LEVEL=${DOZZLE_LEVEL:-debug}
+      - DOZZLE_REMOTE_AGENT=${DOZZLE_REMOTE_AGENT}
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${DOCKER_SOCKET:-/var/run/docker.sock}:/var/run/docker.sock:ro
