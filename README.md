@@ -36,7 +36,7 @@ make start-staging
 Traefik will start and attempt to obtain a staging certificate, wait and then follow the on screen directions.
 
 ```bash
-make down-staging
+make stop-staging
 ```
 
 You are now ready to bring things up with the production certificates

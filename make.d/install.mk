@@ -18,17 +18,13 @@ ifneq ($(strip $(MISSING_REPOS)),)
 endif
 
 EXECUTABLES = git nano jq python3-pip yamllint python3-pathspec ansible 
-MISSING_PACKAGES := $(foreach exec,$(EXECUTABLES),$(if $(shell dpkg -s "$(exec)" >/dev/null 2>&1),,addpackage-$(exec)))
+MISSING_PACKAGES := $(foreach exec,$(EXECUTABLES),$(if $(shell dpkg -s $(exec) >/dev/null 2>&1 && echo found),,addpackage-$(exec)))
 
 # Check for podman and docker commands
 # if none found install docker
 ifeq ($(shell command -v podman || command -v docker),)
     BUILD_DEPENDENCIES += install-docker
 endif
-
-$(info "BUILD_DEPENDENCIES: $(BUILD_DEPENDENCIES)")
-$(info "MISSING_REPOS: $(MISSING_REPOS)")
-$(info "MISSING_PACKAGES: $(MISSING_PACKAGES)")
 
 # duck you debian
 addrepo/%:
@@ -45,9 +41,15 @@ update-distro:
 	sudo apt full-upgrade -y
 	sudo apt autoremove -y
 
-install: update-distro build 
+# for debugging	purposes
+install-echo:
+	@echo "BUILD_DEPENDENCIES: $(BUILD_DEPENDENCIES)"
+	@echo  "MISSING_REPOS: $(MISSING_REPOS)"
+	@echo  "MISSING_PACKAGES: $(MISSING_PACKAGES)"
 
-build: .env .gitconfig $(BUILD_DEPENDENCIES) $(MISSING_REPOS) $(MISSING_PACKAGES) 
+install: update-distro $(MISSING_REPOS) $(MISSING_PACKAGES) build 
+
+build: .env .gitconfig $(BUILD_DEPENDENCIES) 
 
 .env:
 	cp --no-clobber .templates/env.template .env
@@ -105,11 +107,14 @@ start-staging: build ## start the staging and wait for the acme staging certs to
 	@echo "$(DOCKER_COMPOSE) logs | grep acme"
 	@echo ""
 	@echo "otherwise run the following command if you successfully got a staging certificate:"
-	@echo "make down-staging"
+	@echo "make stop-staging"
 
-down-staging: ## stop the staging and delete the acme staging certs
+## stop the staging and delete the acme staging certs
+stop-staging: 
 	$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) down
 	$(MAKE) clean-acme
+
+down-staging: stop-staging
 
 #########################################################
 ##

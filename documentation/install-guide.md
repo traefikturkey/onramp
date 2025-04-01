@@ -43,7 +43,7 @@ You will need to install docker on your linux host and obtain a cloudflare API t
     edit the .env file to include cloudflare credenitals your domain and the hostname of the current machine save the file by typing ctrl-x followed by the letter  traefik will start and attempt to obtain a staging certificate wait and then follow the on screen directions
 
     ```
-    make down-staging
+    make stop-staging
     ```
     you are now ready to bring things up with the production certificates
 
