@@ -44,8 +44,6 @@ services:
     restart: ${NOCODB_RESTART:-unless-stopped}
     networks:
       - traefik
-    ports:
-      - "${NOCODB_POSTGRES_DB_PORT:-5432}:5432"
     volumes:
       - ./etc/nocodb/postgresql:/var/lib/postgresql/data
     environment:
