@@ -112,6 +112,14 @@ endif
 setup-uptime-kuma:
 	@mkdir -p ./etc/uptime-kuma
 
+ifneq (,$(wildcard ./services-enabled/rundeck.yml))
+BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),setup-rundeck)
+endif
+
+setup-rundeck:
+	@mkdir -p ./etc/rundeck/db
+	@mkdir -p ./etc/rundeck/config
+
 ifneq (,$(wildcard ./override-enabled/wordpress-upload.yml))
 BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),setup-wordpress-upload)
 endif

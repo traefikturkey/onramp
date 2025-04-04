@@ -15,6 +15,9 @@ stop-service:
 
 restart-service: down-service start-service
 
+attach-service:
+	$(DOCKER_COMPOSE) $(SERVICE_FLAGS) exec $(SERVICE_PASSED_DNCASED) bash
+
 update-service: down-service pull-service start-service
 pull-service: 
 	$(DOCKER_COMPOSE) $(SERVICE_FLAGS) pull $(SERVICE_PASSED_DNCASED)
