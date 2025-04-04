@@ -24,7 +24,7 @@ cd /apps
 git clone https://github.com/traefikturkey/onramp.git onramp
 cd onramp
 
-make install
+make install-podman
 ```
 
 Edit the .env file to include Cloudflare credentials, your domain and the hostname of the current machine, save the file and exit. 
