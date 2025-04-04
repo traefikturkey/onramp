@@ -21,7 +21,7 @@ sudo apt install git make -y
 sudo mkdir /apps
 sudo chown -R $USER:$USER /apps
 cd /apps
-git clone https://github.com/traefikturkey/onramp.git onramp
+git clone -b podman https://github.com/traefikturkey/onramp.git onramp
 cd onramp
 
 make install-podman
