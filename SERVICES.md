@@ -1,5 +1,5 @@
 # Available Services
-216 services and counting...
+217 services and counting...
 
 [A](#A)
 [B](#B)
@@ -44,6 +44,7 @@
 - [bazarr](https://hub.docker.com/r/linuxserver/bazarr) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/bazarr.yml)): Manages subtitles for media content
 - [beszel](https://github.com/henrygd/beszel) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/beszel.yml)): A lightweight server monitoring hub with historical data, docker stats, and alerts.
 - [bind](https://hub.docker.com/r/ubuntu/bind9) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/bind.yml)): A very flexible, full-featured DNS system
+- [booklore](https://github.com/adityachandelgit/BookLore) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/booklore.yml)): BookLore is a self-hosted web app for organizing and managing your personal book collection. 
 
 
 ## C
