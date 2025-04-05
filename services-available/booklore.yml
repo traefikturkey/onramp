@@ -35,18 +35,18 @@ services:
       - autoheal=${BOOKLORE_AUTOHEAL_ENABLED:-true}
 
   mariadb:
-      image: lscr.io/linuxserver/mariadb:${BOOKLORE_MARIADB_TAG:-11.4.5}
-      container_name: booklore-db
-      environment:
-        - PUID=${PUID:-1000}
-        - PGID=${PGID:-1000}
-        - TZ=${TZ}
-        - MYSQL_ROOT_PASSWORD=${BOOKLORE_MARIADB_PASSWORD:-supersecretpassword}
-      volumes:
-        - ./etc/booklore/db:/config
-      restart: unless-stopped
-      healthcheck:
-        test: ["CMD", "mariadb-admin", "ping", "-h", "localhost"]
-        interval: 5s 
-        timeout: 5s
-        retries: 10
+    image: lscr.io/linuxserver/mariadb:${BOOKLORE_MARIADB_TAG:-11.4.5}
+    container_name: booklore-db
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - MYSQL_ROOT_PASSWORD=${BOOKLORE_MARIADB_PASSWORD:-supersecretpassword}
+    volumes:
+      - ./etc/booklore/db:/config
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mariadb-admin", "ping", "-h", "localhost"]
+      interval: 5s 
+      timeout: 5s
+      retries: 10
