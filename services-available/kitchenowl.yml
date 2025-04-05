@@ -5,7 +5,7 @@ networks:
 
 services:
   kitchenowl_app:
-    image: tombursch/kitchenowl:latest
+    image: tombursch/kitchenowl-backend:latest
     container_name: ${KITCHENOWL_CONTAINER_NAME:-kitchenowl_app}
     restart: unless-stopped
     environment:
@@ -22,7 +22,7 @@ services:
     container_name: ${KITCHENOWL_CONTAINER_NAME:-kitchenowl}
     restart: unless-stopped
     environment:
-      - BACK_URL=kitchenowl_app:8080 # Change this if you rename the containers
+      - BACK_URL=kitchenowl_app:5000 # Change this if you rename the containers
     networks:
       - traefik
       - kitchenowl-db
