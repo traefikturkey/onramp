@@ -3,6 +3,9 @@ networks:
     external: true
   kitchenowl-db:
 
+# description: Grocery list and recipe manager
+# https://github.com/TomBursch/kitchenowl
+
 services:
   kitchenowl_app:
     image: tombursch/kitchenowl-backend:latest

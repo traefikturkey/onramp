@@ -71,12 +71,12 @@
 - [dashy](https://github.com/Lissy93/dashy) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/dashy.yml)): Customizable dashboard for displaying information
 - [docker-proxy](https://github.com/Tecnativa/docker-socket-proxy) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/docker-proxy.yml)): Proxy for docker containers
 - [docker-registry](https://hub.docker.com/_/registry) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/docker-registry.yml)): Registry for storing and distributing container images
-- [dockerizalo](https://github.com/traefikturkey/onramp/tree/master/services-available/dockerizalo.yml): 
+- [dockerizalo](https://github.com/undernightcore/dockerizalo) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/dockerizalo.yml)): Docker build and deployment platform 
 - [docmost](https://github.com/docmost/docmost) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/docmost.yml)): Docmost is an open-source collaborative wiki and documentation software.
 - [doku](https://github.com/amerkurev/doku) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/doku.yml)): Disk usage dashboard
 - [dozzle-path](https://github.com/amir20/dozzle) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/dozzle-path.yml)): Path-based reverse proxy for dozzle
 - [dozzle](https://github.com/amir20/dozzle) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/dozzle.yml)): Web-based docker container log viewer
-- [drawio](https://github.com/jgraph/docker-drawio ) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/drawio.yml)): 
+- [drawio](https://github.com/jgraph/docker-drawio ) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/drawio.yml)): A client side editor for "general" diagramming
 - [droneci](https://github.com/harness/drone) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/droneci.yml)): Continuous integration and delivery platform
 - [duplicati](https://www.duplicati.com/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/duplicati.yml)): Backs up files and folders to various storage destinations
 
@@ -144,9 +144,9 @@
 - [kasm](https://hub.docker.com/r/linuxserver/kasm) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/kasm.yml)): Browser-based access to desktops, applications, and web services
 - [kestra](https://github.com/kestra-io/kestra) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/kestra.yml)): Event Driven Orchestration & Scheduling Platform
 - [kimai](https://github.com/kevinpapst/kimai2) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/kimai.yml)): Time-tracking software for freelancers and small businesses
-- [kitchenowl](https://github.com/traefikturkey/onramp/tree/master/services-available/kitchenowl.yml): 
+- [kitchenowl](https://github.com/TomBursch/kitchenowl) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/kitchenowl.yml)): Grocery list and recipe manager
 - [komga](https://komga.org/docs/installation/docker/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/komga.yml)): Web-based comic book server
-- [komodo](https://komo.do/docs/intro) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/komodo.yml)): 
+- [komodo](https://komo.do/docs/intro) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/komodo.yml)): A web app to provide structure for managing your servers, builds, deployments, and automated procedures
 
 
 ## L
@@ -173,7 +173,7 @@
 
 ## N
 - [n8n](https://github.com/n8n-io/n8n) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/n8n.yml)): workflow automation platform with native AI capabilities
-- [navidrome](https://github.com/traefikturkey/onramp/tree/master/services-available/navidrome.yml): 
+- [navidrome](https://www.navidrome.org/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/navidrome.yml)): A music collection server and web client for streaming your music
 - [nebula-sync](https://github.com/lovelaze/nebula-sync) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/nebula-sync.yml)): Synchronize Pi-hole v6.x configuration to replicas.
 - [netbootxyz](https://docs.linuxserver.io/images/docker-netbootxyz) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/netbootxyz.yml)): Network boot server for various operating systems
 - [netbox](https://docs.linuxserver.io/images/docker-netbox) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/netbox.yml)): Web-based ip address management (ipam) and data center infrastructure management (dcim) tool
