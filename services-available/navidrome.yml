@@ -2,6 +2,10 @@ networks:
   traefik:
     external: true
 
+# description: A music collection server and web client for streaming your music
+# https://www.navidrome.org/
+# https://github.com/navidrome/navidrome/
+
 services:
   navidrome:
     image: deluan/navidrome:${NAVIDROME_DOCKER_TAG:-latest}
