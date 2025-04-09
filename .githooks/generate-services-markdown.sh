@@ -10,6 +10,10 @@ alphabet=()
 
 # Process each service file
 for file in ./services-available/*.yml; do
+  # Check if service should be skipped
+  if grep -q "^# skip_services_file: true" "$file"; then
+    continue
+  fi
   ((service_count++))
   service_name=$(basename "$file" .yml)
   service_link=$(sed -n '/^# \+https/p' "$file" | sed 's/^#\s*//g' | head -n 1)
