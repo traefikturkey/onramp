@@ -5,6 +5,10 @@ Here is a complete list of [available services](SERVICES.md) and [available game
 
 This repo assumes that you are running a debian linux disto like Ubuntu!
 
+A podman version is available as a branch here: [https://github.com/traefikturkey/onramp/tree/podman](https://github.com/traefikturkey/onramp/tree/podman)
+This branch is in testing and may have bugs/issues that are not present in main branch
+Testing and PR's are welcome and encouraged!
+
 You'll need a personal domain that's setup with Cloudflare
 and an scoped API token created like shown below, [https://dash.cloudflare.com/profile/api-tokens](https://dash.cloudflare.com/profile/api-tokens) 
 

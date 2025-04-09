@@ -1,0 +1,52 @@
+networks:
+  traefik:
+    external: true
+
+# description: BookLore is a self-hosted web app for organizing and managing your personal book collection. 
+# https://github.com/adityachandelgit/BookLore
+
+services:
+  booklore:
+    image: ghcr.io/adityachandelgit/booklore-app:${BOOKLORE_DOCKER_TAG:-latest}
+    container_name: ${BOOKLORE_CONTAINER_NAME:-booklore}
+    restart: ${BOOKLORE_RESTART:-unless-stopped}
+    mem_limit: ${BOOKLORE_MEM_LIMIT:-200g}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/booklore/data:/app/data 
+      - ./etc/booklore/books:/app/books
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    depends_on:
+      booklore-db:
+        condition: service_healthy
+    labels:
+      - joyride.host.name=${BOOKLORE_HOST_NAME:-booklore}.${HOST_DOMAIN}
+      - traefik.enable=${BOOKLORE_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.booklore.entrypoints=websecure
+      - traefik.http.routers.booklore.rule=Host(`${BOOKLORE_HOST_NAME:-booklore}.${HOST_DOMAIN}`)
+      #- traefik.http.services.booklore.loadbalancer.server.scheme=https # enable if the service wants to connect over https
+      - traefik.http.services.booklore.loadbalancer.server.port=6060
+      - com.centurylinklabs.watchtower.enable=${BOOKLORE_WATCHTOWER_ENABLED:-true}
+      - autoheal=${BOOKLORE_AUTOHEAL_ENABLED:-true}
+
+  mariadb:
+    image: lscr.io/linuxserver/mariadb:${BOOKLORE_MARIADB_TAG:-11.4.5}
+    container_name: booklore-db
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - MYSQL_ROOT_PASSWORD=${BOOKLORE_MARIADB_PASSWORD:-supersecretpassword}
+    volumes:
+      - ./etc/booklore/db:/config
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mariadb-admin", "ping", "-h", "localhost"]
+      interval: 5s 
+      timeout: 5s
+      retries: 10
