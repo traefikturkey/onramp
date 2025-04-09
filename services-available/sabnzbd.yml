@@ -23,6 +23,7 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
+      - HAS_IPV6=${SABNZBD_HAS_IPV6:-true}
     healthcheck:
       test: curl --fail http://localhost:8080 || exit 1
       interval: 60s
