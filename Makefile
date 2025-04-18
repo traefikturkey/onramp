@@ -39,7 +39,9 @@ ifndef PLEX_ALLOWED_NETWORKS
 endif
 
 # check what editor is available
-ifdef VSCODE_IPC_HOOK_CLI
+ifdef VSCODE_REMOTE_SSH
+	EDITOR := nano
+else ifdef VSCODE_IPC_HOOK_CLI
 	EDITOR := code
 else ifdef EDITOR
 	EDITOR := $(EDITOR)

@@ -1,5 +1,5 @@
 # Available Services
-217 services and counting...
+220 services and counting...
 
 [A](#A)
 [B](#B)
@@ -45,11 +45,13 @@
 - [beszel](https://github.com/henrygd/beszel) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/beszel.yml)): A lightweight server monitoring hub with historical data, docker stats, and alerts.
 - [bind](https://hub.docker.com/r/ubuntu/bind9) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/bind.yml)): A very flexible, full-featured DNS system
 - [booklore](https://github.com/adityachandelgit/BookLore) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/booklore.yml)): BookLore is a self-hosted web app for organizing and managing your personal book collection. 
+- [bytebase](https://www.bytebase.com) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/bytebase.yml)): Database CI/CD and Security at Scale
 
 
 ## C
 - [cadvisor](https://hub.docker.com/r/google/cadvisor/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/cadvisor.yml)): Collects and analyzes resource usage and performance characteristics of running containers
 - [chromadb](https://github.com/chroma-core/chroma/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/chromadb.yml)): open-source embedding database for LLM/AI applications
+- [cloudbeaver](https://dbeaver.com/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/cloudbeaver.yml)): CloudBeaver is a lightweight web application designed for efficient and secure data management. It supports a wide range of databases, including SQL, NoSQL, and cloud databases, all accessible through a web browser.
 - [cloudflare-ddns](https://github.com/oznu/docker-cloudflare-ddns) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/cloudflare-ddns.yml)): Updates dns records on cloudflare dynamically
 - [cloudflare-tunnel-gui](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/cloudflare-tunnel-gui.yml)): Provides a graphical interface for cloudflare tunnel
 - [cloudflare-tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/cloudflare-tunnel.yml)): Creates secure tunnels to expose local services
@@ -68,14 +70,14 @@
 ## D
 - [dashdot](https://github.com/MauriceNino/dashdot) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/dashdot.yml)): Dashboard for monitoring docker containers
 - [dashy](https://github.com/Lissy93/dashy) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/dashy.yml)): Customizable dashboard for displaying information
-- [dockerizalo](https://github.com/traefikturkey/onramp/tree/master/services-available/dockerizalo.yml): 
+- [dockerizalo](https://github.com/undernightcore/dockerizalo) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/dockerizalo.yml)): Docker build and deployment platform 
 - [docker-proxy](https://github.com/Tecnativa/docker-socket-proxy) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/docker-proxy.yml)): Proxy for docker containers
 - [docker-registry](https://hub.docker.com/_/registry) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/docker-registry.yml)): Registry for storing and distributing container images
 - [docmost](https://github.com/docmost/docmost) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/docmost.yml)): Docmost is an open-source collaborative wiki and documentation software.
 - [doku](https://github.com/amerkurev/doku) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/doku.yml)): Disk usage dashboard
 - [dozzle-path](https://github.com/amir20/dozzle) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/dozzle-path.yml)): Path-based reverse proxy for dozzle
 - [dozzle](https://github.com/amir20/dozzle) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/dozzle.yml)): Web-based docker container log viewer
-- [drawio](https://github.com/jgraph/docker-drawio ) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/drawio.yml)): 
+- [drawio](https://github.com/jgraph/docker-drawio ) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/drawio.yml)): A client side editor for "general" diagramming
 - [droneci](https://github.com/harness/drone) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/droneci.yml)): Continuous integration and delivery platform
 - [duplicati](https://www.duplicati.com/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/duplicati.yml)): Backs up files and folders to various storage destinations
 
@@ -144,9 +146,9 @@
 - [kasm](https://hub.docker.com/r/linuxserver/kasm) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/kasm.yml)): Browser-based access to desktops, applications, and web services
 - [kestra](https://github.com/kestra-io/kestra) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/kestra.yml)): Event Driven Orchestration & Scheduling Platform
 - [kimai](https://github.com/kevinpapst/kimai2) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/kimai.yml)): Time-tracking software for freelancers and small businesses
-- [kitchenowl](https://github.com/traefikturkey/onramp/tree/master/services-available/kitchenowl.yml): 
+- [kitchenowl](https://github.com/TomBursch/kitchenowl) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/kitchenowl.yml)): Grocery list and recipe manager
 - [komga](https://komga.org/docs/installation/docker/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/komga.yml)): Web-based comic book server
-- [komodo](https://komo.do/docs/intro) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/komodo.yml)): 
+- [komodo](https://komo.do/docs/intro) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/komodo.yml)): A web app to provide structure for managing your servers, builds, deployments, and automated procedures
 
 
 ## L
@@ -174,7 +176,7 @@
 
 ## N
 - [n8n](https://github.com/n8n-io/n8n) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/n8n.yml)): workflow automation platform with native AI capabilities
-- [navidrome](https://github.com/traefikturkey/onramp/tree/master/services-available/navidrome.yml): 
+- [navidrome](https://www.navidrome.org/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/navidrome.yml)): A music collection server and web client for streaming your music
 - [nebula-sync](https://github.com/lovelaze/nebula-sync) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/nebula-sync.yml)): Synchronize Pi-hole v6.x configuration to replicas.
 - [netbootxyz](https://docs.linuxserver.io/images/docker-netbootxyz) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/netbootxyz.yml)): Network boot server for various operating systems
 - [netbox](https://docs.linuxserver.io/images/docker-netbox) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/netbox.yml)): Web-based ip address management (ipam) and data center infrastructure management (dcim) tool
@@ -187,6 +189,7 @@
 
 
 ## O
+- [odoo](https://github.com/traefikturkey/onramp/tree/master/services-available/odoo.yml): 
 - [olivetin](https://github.com/OliveTin/OliveTin) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/olivetin.yml)): Access predefined shell commands from a web interface.
 - [ollama-webui](https://github.com/open-webui/open-webui) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/ollama-webui.yml)): Web-based user interface for ollama, a media indexer
 - [ollama](https://hub.docker.com/r/ollama/ollama) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/ollama.yml)): Eeasy way to run large language models locally - Nvidia GPU

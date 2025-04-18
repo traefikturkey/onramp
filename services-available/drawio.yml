@@ -2,12 +2,13 @@ networks:
   traefik:
     external: true
 
+# description: A client side editor for "general" diagramming
+
 ## Dockerized draw.io 
 # https://github.com/jgraph/docker-drawio 
 
 ## Original project 
-# https://github.com/jgraph/drawio 
-# A client side editor for "general" diagramming.                
+# https://github.com/jgraph/drawio               
 
 services:
   drawio:

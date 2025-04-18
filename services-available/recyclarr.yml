@@ -26,6 +26,8 @@ services:
       - com.centurylinklabs.watchtower.enable=false
       - autoheal=true
 
+
+# make enable-service recyclarr
 # copy the API keys for sonarr & radarr
 # edit ./etc/recyclarr/recyclarr.yml with the following entries
 
@@ -42,5 +44,5 @@ services:
 #     api_key: <RADARR_API_KEY>
 
 # then run the commands to sync the services:
-# docker exec recyclarr recyclarr sonarr --debug
-# docker exec recyclarr recyclarr radarr --debug
+# make start-service recyclarr
+# docker exec recyclarr recyclarr sync --debug

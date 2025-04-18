@@ -3,6 +3,9 @@ networks:
     external: true
   dockerizalo-db:
 
+# description: Docker build and deployment platform 
+# https://github.com/undernightcore/dockerizalo
+
 services:
   dockerizalo:
     image: ghcr.io/undernightcore/dockerizalo-proxy:latest
