@@ -1,0 +1,84 @@
+networks:
+  traefik:
+    external: true
+
+# description: A self-hostable bookmark-everything app (links, notes and images) with AI-based automatic tagging and full text search
+# https://github.com/karakeep-app/karakeep
+# https://docs.karakeep.app/
+
+services:
+  karakeep:
+    image: ghcr.io/karakeep-app/karakeep:${KARAKEEP_VERSION:-release}
+    container_name: ${KARAKEEP_CONTAINER_NAME:-karakeep}
+    restart: ${KARAKEEP_RESTART:-unless-stopped}
+    mem_limit: ${KARAKEEP_MEM_LIMIT:-200g}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/karakeep/data:/data
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      # Required
+      - DATA_DIR=/data
+      # this can be generated with openssl rand -base64 36
+      - NEXTAUTH_SECRET=${KARAKEEP_NEXTAUTH_SECRET}
+      - NEXTAUTH_URL=${KARAKEEP_HOST_NAME:-karakeep}.${HOST_DOMAIN}
+      - MEILI_ADDR="http://karakeep-meilisearch:7700"
+      # this can be generated with openssl rand -base64 36
+      - MEILI_MASTER_KEY=${KARAKEEP_MEILI_MASTER_KEY}
+      - BROWSER_WEB_URL="http://karakeep-chrome:9222"
+      # Optional
+      - DISABLE_SIGNUPS=${KARAKEEP_DISABLE_SIGNUPS:-false}
+      - OAUTH_CLIENT_SECRET=${KARAKEEP_OAUTH_CLIENT_SECRET}
+      - OAUTH_CLIENT_ID=${KARAKEEP_OAUTH_CLIENT_ID}
+      - OAUTH_WELLKNOWN_URL=${KARAKEEP_OAUTH_WELLKNOWN_URL}
+      - OAUTH_PROVIDER_NAME=${KARAKEEP_OAUTH_PROVIDER_NAME}
+      - OAUTH_SCOPE="openid email profile"
+      - MEILI_NO_ANALYTICS=${KARAKEEP_MEILI_NO_ANALYTICS:-true}
+      - MAX_ASSET_SIZE_MB=${KARAKEEP_MAX_ASSET_SIZE:-50}
+      ####################################
+      # AI Stuff, for automatic tagging, etc
+      # View https://docs.karakeep.app/configuration/ for more details on what is required for your specific model.
+      ####################################
+      - OPENAI_API_KEY=${KARAKEEP_OPENAI_KEY}
+      - OPENAI_BASE_URL=${KARAKEEP_OPENAI_URL}
+      - OLLAMA_BASE_URL=${KARAKEEP_OLLAMA_URL}
+      - OLLAMA_KEEP_ALIVE=${KARAKEEP_OLLAMA_KEEPALIVE}
+      - INFERENCE_TEXT_MODEL=${KARAKEEP_INFERENCE_TEXT_MODEL}
+      - INFERENCE_IMAGE_MODEL=${KARAKEEP_INFERENCE_IMAGE_MODEL}
+      - EMBEDDING_TEXT_MODEL=${KARAKEEP_EMBEDDING_TEXT_MODEL}
+      - INFERENCE_CONTEXT_LENGTH=${KARAKEEP_INFERENCE_CONTEXT_LENGTH}
+      - INFERENCE_LANG=${KARAKEEP_INFERENCE_LANG:-ENGLISH}
+    labels:
+      - joyride.host.name=${KARAKEEP_HOST_NAME:-karakeep}.${HOST_DOMAIN}
+      - traefik.enable=${KARAKEEP_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.karakeep.entrypoints=websecure
+      - traefik.http.routers.karakeep.rule=Host(`${KARAKEEP_HOST_NAME:-karakeep}.${HOST_DOMAIN}`)
+      - traefik.http.services.karakeep.loadbalancer.server.port=3000
+      - com.centurylinklabs.watchtower.enable=${KARAKEEP_WATCHTOWER_ENABLED:-true}
+      - autoheal=${KARAKEEP_AUTOHEAL_ENABLED:-true}
+  chrome:
+    image: gcr.io/zenika-hub/alpine-chrome:123
+    restart: unless-stopped
+    container_name: karakeep-chrome
+    networks:
+      - traefik
+    command:
+      - --no-sandbox
+      - --disable-gpu
+      - --disable-dev-shm-usage
+      - --remote-debugging-address=0.0.0.0
+      - --remote-debugging-port=9222
+      - --hide-scrollbars
+  meilisearch:
+    container_name: karakeep-meilisearch
+    networks:
+      - traefik
+    image: getmeili/meilisearch:v1.13.3
+    restart: unless-stopped
+    volumes:
+      - ./etc/karakeep/meilisearch:/meili_data
+
