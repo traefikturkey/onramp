@@ -1,5 +1,5 @@
 # Available Services
-218 services and counting...
+219 services and counting...
 
 [A](#A)
 [B](#B)
@@ -167,6 +167,7 @@
 - [makemkv](https://hub.docker.com/r/jlesage/makemkv) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/makemkv.yml)): Fully automated container for MakeMKV with Web GUI
 - [manyfold](https://github.com/manyfold3d/manyfold) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/manyfold.yml)): A self-hosted digital asset manager for 3d print files
 - [mariadb](https://hub.docker.com/_/mariadb) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/mariadb.yml)): Popular open-source relational database management system
+- [mazanoke](https://github.com/civilblur/mazanoke) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/mazanoke.yml)): A self-hosted local image optimizer that runs in your browser.
 - [mealie](https://hub.docker.com/r/hkotel/mealie) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/mealie.yml)): Recipe management system
 - [minio](https://github.com/minio/minio) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/minio.yml)): High-performance object storage server
 - [monocker](https://hub.docker.com/r/petersem/monocker) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/monocker.yml)): Monitors container states, and sends notifications at state change

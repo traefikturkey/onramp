@@ -1,0 +1,28 @@
+networks:
+  traefik:
+    external: true
+
+# description: A self-hosted local image optimizer that runs in your browser.
+# https://github.com/civilblur/mazanoke
+# https://mazanoke.com/
+
+services:
+  mazanoke:
+    image: ghcr.io/civilblur/mazanoke:${MAZANOKE_DOCKER_TAG:-latest}
+    container_name: ${MAZANOKE_CONTAINER_NAME:-mazanoke}
+    restart: ${MAZANOKE_RESTART:-unless-stopped}
+    mem_limit: ${MAZANOKE_MEM_LIMIT:-200g}
+    networks:
+      - traefik
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=${MAZANOKE_HOST_NAME:-mazanoke}.${HOST_DOMAIN}
+      - traefik.enable=${MAZANOKE_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.mazanoke.entrypoints=websecure
+      - traefik.http.routers.mazanoke.rule=Host(`${MAZANOKE_HOST_NAME:-mazanoke}.${HOST_DOMAIN}`)
+      - traefik.http.services.mazanoke.loadbalancer.server.port=80
+      - com.centurylinklabs.watchtower.enable=${MAZANOKE_WATCHTOWER_ENABLED:-true}
+      - autoheal=${MAZANOKE_AUTOHEAL_ENABLED:-true}
