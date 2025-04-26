@@ -1,5 +1,5 @@
 # Available Services
-220 services and counting...
+222 services and counting...
 
 [A](#A)
 [B](#B)
@@ -143,6 +143,7 @@
 ## K
 - [kaizoku](https://github.com/oae/kaizoku) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/kaizoku.yml)): Web-based anime downloader
 - [kapowarr](https://github.com/Casvt/Kapowarr) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/kapowarr.yml)): Manages comic book collections and downloads
+- [karakeep](https://github.com/karakeep-app/karakeep) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/karakeep.yml)): A self-hostable bookmark-everything app (links, notes and images) with AI-based automatic tagging and full text search
 - [kasm](https://hub.docker.com/r/linuxserver/kasm) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/kasm.yml)): Browser-based access to desktops, applications, and web services
 - [kestra](https://github.com/kestra-io/kestra) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/kestra.yml)): Event Driven Orchestration & Scheduling Platform
 - [kimai](https://github.com/kevinpapst/kimai2) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/kimai.yml)): Time-tracking software for freelancers and small businesses
@@ -167,6 +168,7 @@
 - [makemkv](https://hub.docker.com/r/jlesage/makemkv) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/makemkv.yml)): Fully automated container for MakeMKV with Web GUI
 - [manyfold](https://github.com/manyfold3d/manyfold) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/manyfold.yml)): A self-hosted digital asset manager for 3d print files
 - [mariadb](https://hub.docker.com/_/mariadb) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/mariadb.yml)): Popular open-source relational database management system
+- [mazanoke](https://github.com/civilblur/mazanoke) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/mazanoke.yml)): A self-hosted local image optimizer that runs in your browser.
 - [mealie](https://hub.docker.com/r/hkotel/mealie) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/mealie.yml)): Recipe management system
 - [minio](https://github.com/minio/minio) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/minio.yml)): High-performance object storage server
 - [monocker](https://hub.docker.com/r/petersem/monocker) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/monocker.yml)): Monitors container states, and sends notifications at state change
