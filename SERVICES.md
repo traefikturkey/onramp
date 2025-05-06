@@ -187,6 +187,7 @@
 - [nodered](https://hub.docker.com/r/nodered/node-red/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/nodered.yml)): Flow-based development tool for visual programming
 - [nutify](https://github.com/DartSteven/Nutify>) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/nutify.yml)): UPS Monitoring System
 - [nzbget](https://hub.docker.com/r/linuxserver/nzbget) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/nzbget.yml)): Binary newsgrabber for usenet
+- [nightscount](https://github.com/nightscout/cgm-remote-monitor) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/nightscout.yml)): self-hosted service for Coninuous Gluose Monitoring result sharing
 
 
 ## O

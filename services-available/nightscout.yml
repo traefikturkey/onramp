@@ -1,0 +1,45 @@
+networks:
+  traefik:
+    external: true
+  ns-db:
+
+# description:  web-based CGM (Continuous Glucose Monitor) 
+# https://github.com/nightscout/cgm-remote-monitor
+# https://hub.docker.com/r/nightscout/cgm-remote-monitor
+
+services:
+  ns-mongo:
+    image: mongo:${NSMONGO_VERSION:-4.4}
+    container_name: ${NSMONGO_CONTAINER_NAME:-ns-mongo}
+    restart: ${NIGHTSCOUT_RESTART_POLICY:-unless-stopped}
+    volumes:
+      - ${NS_MONGO_DATA_DIR:-./etc/ns-mongo-data}:/data/db:cached
+    networks:
+      - ns-db
+
+  nightscout:
+    image: nightscout/cgm-remote-monitor:${NSWEB_VERSION:-latest}
+    container_name: ${NSWEB_CONTAINER_NAME:-nightscount}
+    restart: ${NIGHTSCOUT_RESTART_POLICY:-unless-stopped}
+    depends_on:
+      - ns-mongo
+    environment:
+      - NODE_ENV=production
+      - TZ=${TZ}
+      - INSECURE_USE_HTTP=true # Set this to true if using reverse proxy for SSL
+      - MONGO_CONNECTION=mongodb://ns-mongo:27017/nightscout
+      - API_SECRET=${NS_API_SECRET}
+      - ENABLE=${NSWEB_ENABLED_SVCS}
+      - AUTH_DEFAULT_ROLES=${NSWEB_DEFAULT_ROLES:-denied}
+    networks:
+      - traefik
+      - ns-db
+    labels:
+      - joyride.host.name=${NIGHTSCOUNT_CONTAINER_NAME:-nightscout}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.docker.network=traefik
+      - traefik.http.routers.nightscout.entrypoints=websecure
+      - traefik.http.routers.nightscout.rule=Host(`${NIGHTSCOUNT_CONTAINER_NAME:-nightscout}.${HOST_DOMAIN}`)
+      - traefik.http.services.nightscout.loadbalancer.server.port=1337
+      - com.centurylinklabs.watchtower.enable=${NIGHTSCOUNT_WATCHTOWER_ENABLED:-false}
+      - autoheal=true
