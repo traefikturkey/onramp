@@ -31,6 +31,7 @@ services:
       - traefik.http.routers.spacebin.rule=Host(`${SPACEBIN_HOST_NAME:-spacebin}.${HOST_DOMAIN}`)
       #- traefik.http.services.spacebin.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.spacebin.loadbalancer.server.port=9000
+      - traefik.http.routers.spacebin.middlewares=default-headers@file
       - com.centurylinklabs.watchtower.enable=${SPACEBIN_WATCHTOWER_ENABLED:-true}
       - autoheal=${SPACEBIN_AUTOHEAL_ENABLED:-true}
   spacebin-db:
