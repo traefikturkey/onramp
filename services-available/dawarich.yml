@@ -57,7 +57,7 @@ services:
         max-size: "100m"
         max-file: "5"
     healthcheck:
-      test: [ "CMD-SHELL", "wget -qO - http://127.0.0.1:3000/api/v1/health | grep -q '\"status\"\\s*:\\s*\"ok\"'" ]
+      test: ["CMD-SHELL", "wget -qO - http://127.0.0.1:3000/api/v1/health | grep -q '\"status\"\\s*:\\s*\"ok\"'"]
       interval: 10s
       retries: 30
       start_period: 30s
@@ -103,8 +103,8 @@ services:
       - REDIS_URL=redis://dawarich_redis:6379/0
       - DATABASE_HOST=dawarich_db
       - DATABASE_PORT=5432
-      - DATABASE_USERNAME=postgres
-      - DATABASE_PASSWORD=password
+      - DATABASE_USER=${DAWARICH_POSTGRES_USER:-postgres} 
+      - DATABASE_PASSWORD=${DAWARICH_POSTGRES_PW:-password} 
       - DATABASE_NAME=dawarich_production
       - APPLICATION_HOSTS=localhost,::1,127.0.0.1
       - BACKGROUND_PROCESSING_CONCURRENCY=10
@@ -121,7 +121,7 @@ services:
         max-size: "100m"
         max-file: "5"
     healthcheck:
-      test: [ "CMD-SHELL", "bundle exec sidekiqmon processes | grep $${HOSTNAME}" ]
+      test: ["CMD-SHELL", "bundle exec sidekiqmon processes | grep $${HOSTNAME}"]
       interval: 10s
       retries: 30
       start_period: 30s
@@ -152,7 +152,7 @@ services:
       - ./etc/dawarich/redis:/var/shared/redis
     restart: always
     healthcheck:
-      test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
       interval: 10s
       retries: 5
       start_period: 30s
@@ -172,7 +172,7 @@ services:
       - POSTGRES_DB=dawarich_production
     restart: always
     healthcheck:
-      test: [ "CMD", "pg_isready", "-U", "postgres" ]
+      test: ["CMD", "pg_isready", "-U", "postgres"]
       interval: 10s
       retries: 5
       start_period: 30s
