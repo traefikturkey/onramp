@@ -34,7 +34,7 @@ services:
       - DATABASE_PASSWORD=${DAWARICH_POSTGRES_PW:-password} 
       - DATABASE_NAME=dawarich_production
       - MIN_MINUTES_SPENT_IN_CITY=${DAWARICH_MIN_MINS:-30}
-      - APPLICATION_HOSTS=localhost,::1,127.0.0.1,${DAWARICH_CONTAINER_NAME:-dawarich}.${HOST_DOMAIN}
+      - APPLICATION_HOSTS=localhost,::1,127.0.0.1,${DAWARICH_HOST_NAME:-dawarich}.${HOST_DOMAIN}
       - TIME_ZONE=${TZ}
       - APPLICATION_PROTOCOL=http
       # Can be either km or mi
