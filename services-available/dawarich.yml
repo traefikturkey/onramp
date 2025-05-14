@@ -1,0 +1,179 @@
+networks:
+  traefik:
+    external: true
+
+# description: Self-hostable alternative to Google Location History (Google Maps Timeline)
+# https://github.com/Freika/dawarich
+# https://dawarich.app/docs/intro
+# The default login for the first start of this application are 'demo@dawarich.app' and 'password'
+# Also, there is no way to make a user an administrator through the GUI.
+# You have to do it through the console. See https://dawarich.app/docs/FAQ/#how-to-make-a-user-an-admin
+
+services:
+  dawarich:
+    image: freikin/dawarich:${DAWARICH_DOCKER_TAG:-latest}
+    container_name: ${DAWARICH_CONTAINER_NAME:-dawarich}
+    restart: ${DAWARICH_RESTART:-unless-stopped}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - traefik
+    ports:
+      - 3000:3000
+      # - 9394:9394 # Prometheus exporter, uncomment if needed
+    stdin_open: true
+    tty: true
+    entrypoint: web-entrypoint.sh
+    command: ['bin/rails', 'server', '-p', '3000', '-b', '::']
+    environment:
+      - RAILS_ENV=production
+      - REDIS_URL=redis://dawarich_redis:6379/0
+      - DATABASE_HOST=dawarich_db
+      - DATABASE_PORT=5432
+      - DATABASE_USERNAME=${DAWARICH_POSTGRES_USER:-postgres} 
+      - DATABASE_PASSWORD=${DAWARICH_POSTGRES_PW:-password} 
+      - DATABASE_NAME=dawarich_production
+      - MIN_MINUTES_SPENT_IN_CITY=${DAWARICH_MIN_MINS:-30}
+      - APPLICATION_HOSTS=localhost,::1,127.0.0.1,${DAWARICH_CONTAINER_NAME:-dawarich}.${HOST_DOMAIN}
+      - TIME_ZONE=${TZ}
+      - APPLICATION_PROTOCOL=http
+      # Can be either km or mi
+      - DISTANCE_UNIT=${DAWARICH_DISTANCE_UNIT:-mi}
+      - PROMETHEUS_EXPORTER_ENABLED=false
+      - PROMETHEUS_EXPORTER_HOST=0.0.0.0
+      - PROMETHEUS_EXPORTER_PORT=9394
+      - SECRET_KEY_BASE=1234567890
+      - RAILS_LOG_TO_STDOUT="true"
+      # SMTP settings
+      - SMTP_SERVER=${DAWARICH_SMTP_SERVER}
+      - SMTP_PORT=${DAWARICH_SMTP_PORT}
+      - SMTP_USERNAME=${DAWARICH_SMTP_USERNAME}
+      - SMTP_PASSWORD=${DAWARICH_SMTP_PASSWORD}
+      - SMTP_FROM=${DAWARICH_SMTP_FROM}
+      - SMTP_DOMAIN=${DAWARICH_SMTP_DOMAIN}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "5"
+    healthcheck:
+      test: [ "CMD-SHELL", "wget -qO - http://127.0.0.1:3000/api/v1/health | grep -q '\"status\"\\s*:\\s*\"ok\"'" ]
+      interval: 10s
+      retries: 30
+      start_period: 30s
+      timeout: 10s
+    depends_on:
+      dawarich_db:
+        condition: service_healthy
+        restart: true
+      dawarich_redis:
+        condition: service_healthy
+        restart: true
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'    # Limit CPU usage to 50% of one core
+          memory: '4G'    # Limit memory usage to 2GB
+    labels:
+      - joyride.host.name=${DAWARICH_HOST_NAME:-dawarich}.${HOST_DOMAIN}
+      - traefik.enable=${DAWARICH_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.dawarich.entrypoints=websecure
+      - traefik.http.routers.dawarich.rule=Host(`${DAWARICH_HOST_NAME:-dawarich}.${HOST_DOMAIN}`)
+      # - traefik.http.services.dawarich.loadbalancer.server.scheme=https # enable if the service wants to connect over https
+      - traefik.http.services.dawarich.loadbalancer.server.port=3000
+      - com.centurylinklabs.watchtower.enable=${DAWARICH_WATCHTOWER_ENABLED:-true}
+      - autoheal=${DAWARICH_AUTOHEAL_ENABLED:-true}
+
+  dawarich_sidekiq:
+    image: freikin/dawarich:${DAWARICH_DOCKER_TAG:-latest}
+    container_name: dawarich_sidekiq
+    volumes:
+      - ./etc/dawarich/public:/var/app/public
+      - ./etc/dawarich/watched:/var/app/tmp/imports/watched
+      - ./etc/dawrich/storage:/var/app/storage
+    networks:
+      - traefik
+    stdin_open: true
+    tty: true
+    entrypoint: sidekiq-entrypoint.sh
+    command: ['bundle', 'exec', 'sidekiq']
+    restart: on-failure
+    environment:
+      - RAILS_ENV=production
+      - REDIS_URL=redis://dawarich_redis:6379/0
+      - DATABASE_HOST=dawarich_db
+      - DATABASE_PORT=5432
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=password
+      - DATABASE_NAME=dawarich_production
+      - APPLICATION_HOSTS=localhost,::1,127.0.0.1
+      - BACKGROUND_PROCESSING_CONCURRENCY=10
+      - APPLICATION_PROTOCOL=http
+      - DISTANCE_UNIT=km
+      - PROMETHEUS_EXPORTER_ENABLED=false
+      - PROMETHEUS_EXPORTER_HOST=dawarich
+      - PROMETHEUS_EXPORTER_PORT=9394
+      - SECRET_KEY_BASE=1234567890
+      - RAILS_LOG_TO_STDOUT="true"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "5"
+    healthcheck:
+      test: [ "CMD-SHELL", "bundle exec sidekiqmon processes | grep $${HOSTNAME}" ]
+      interval: 10s
+      retries: 30
+      start_period: 30s
+      timeout: 10s
+    depends_on:
+      dawarich_db:
+        condition: service_healthy
+        restart: true
+      dawarich_redis:
+        condition: service_healthy
+        restart: true
+      dawarich:
+        condition: service_healthy
+        restart: true
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'    # Limit CPU usage to 50% of one core
+          memory: '4G'    # Limit memory usage to 2GB
+
+  dawarich_redis:
+    image: redis:7.4-alpine
+    container_name: dawarich_redis
+    command: redis-server
+    networks:
+      - traefik
+    volumes:
+      - ./etc/dawarich/redis:/var/shared/redis
+    restart: always
+    healthcheck:
+      test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+
+  dawarich_db:
+    image: postgis/postgis:17-3.5-alpine
+    shm_size: 1G
+    container_name: dawarich_db
+    volumes:
+      - ./etc/dawarich/db:/var/lib/postgresql/data
+    networks:
+      - traefik
+    environment:
+      - POSTGRES_USER=${DAWARICH_POSTGRES_USER:-postgres} 
+      - POSTGRES_PASSWORD=${DAWARICH_POSTGRES_PW:-password} 
+      - POSTGRES_DB=dawarich_production
+    restart: always
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "postgres" ]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
