@@ -18,9 +18,6 @@ services:
       - /etc/localtime:/etc/localtime:ro
     networks:
       - traefik
-    ports:
-      - 3000:3000
-      # - 9394:9394 # Prometheus exporter, uncomment if needed
     stdin_open: true
     tty: true
     entrypoint: web-entrypoint.sh
@@ -42,7 +39,7 @@ services:
       - PROMETHEUS_EXPORTER_ENABLED=false
       - PROMETHEUS_EXPORTER_HOST=0.0.0.0
       - PROMETHEUS_EXPORTER_PORT=9394
-      - SECRET_KEY_BASE=1234567890
+      - SECRET_KEY_BASE=${DAWARICH_SECRET_KEY_BASE:-1234567890}
       - RAILS_LOG_TO_STDOUT="true"
       # SMTP settings
       - SMTP_SERVER=${DAWARICH_SMTP_SERVER}
