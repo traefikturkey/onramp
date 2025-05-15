@@ -100,7 +100,7 @@ services:
       - REDIS_URL=redis://dawarich_redis:6379/0
       - DATABASE_HOST=dawarich_db
       - DATABASE_PORT=5432
-      - DATABASE_USER=${DAWARICH_POSTGRES_USER:-postgres} 
+      - DATABASE_USERNAME=${DAWARICH_POSTGRES_USER:-postgres} 
       - DATABASE_PASSWORD=${DAWARICH_POSTGRES_PW:-password} 
       - DATABASE_NAME=dawarich_production
       - APPLICATION_HOSTS=localhost,::1,127.0.0.1,${DAWARICH_HOST_NAME:-dawarich}.${HOST_DOMAIN}
