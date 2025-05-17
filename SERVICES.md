@@ -288,6 +288,8 @@
 - [unbound](https://hub.docker.com/r/mvance/unbound) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/unbound.yml)): Dns resolver
 - [unifi](https://github.com/goofball222/unifi) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/unifi.yml)): Network management controller for ubiquiti devices
 - [uptime-kuma](https://github.com/louislam/uptime-kuma) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/uptime-kuma.yml)): Self-hosted uptime monitoring tool
+- [unimus](https://unimus.net) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/unimus.yml)): Multi-vendor network device configuration backup and management solution
+
 
 
 ## V
