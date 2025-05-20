@@ -1,5 +1,5 @@
 # Available Services
-221 services and counting...
+223 services and counting...
 
 [A](#A)
 [B](#B)
@@ -52,6 +52,7 @@
 - [cadvisor](https://hub.docker.com/r/google/cadvisor/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/cadvisor.yml)): Collects and analyzes resource usage and performance characteristics of running containers
 - [cert-dumper](https://github.com/ldez/traefik-certs-dumper) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/cert-dumper.yml)): Extracts ssl certificate information from traefik acme.json file
 - [chromadb](https://github.com/chroma-core/chroma/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/chromadb.yml)): open-source embedding database for LLM/AI applications
+- [cially](https://github.com/skellgreco/cially) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/cially.yml)): Cially is a powerful, open-source dashboard designed to provide in-depth insights, real-time analytics, and detailed statistics for your Discord server.
 - [cloudbeaver](https://dbeaver.com/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/cloudbeaver.yml)): CloudBeaver is a lightweight web application designed for efficient and secure data management. It supports a wide range of databases, including SQL, NoSQL, and cloud databases, all accessible through a web browser.
 - [cloudflare-ddns](https://github.com/oznu/docker-cloudflare-ddns) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/cloudflare-ddns.yml)): Updates dns records on cloudflare dynamically
 - [cloudflare-tunnel-gui](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/cloudflare-tunnel-gui.yml)): Provides a graphical interface for cloudflare tunnel
@@ -287,9 +288,8 @@
 - [ubuntu](https://hub.docker.com/_/ubuntu) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/ubuntu.yml)): ubuntu base image
 - [unbound](https://hub.docker.com/r/mvance/unbound) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/unbound.yml)): Dns resolver
 - [unifi](https://github.com/goofball222/unifi) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/unifi.yml)): Network management controller for ubiquiti devices
+- [unimus](https://github.com/crocandr/docker-unimus) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/unimus.yml)): contianer for multi-vendor network device configuration backup and management solution
 - [uptime-kuma](https://github.com/louislam/uptime-kuma) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/uptime-kuma.yml)): Self-hosted uptime monitoring tool
-- [unimus](https://unimus.net) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/unimus.yml)): Multi-vendor network device configuration backup and management solution
-
 
 
 ## V

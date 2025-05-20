@@ -1,0 +1,85 @@
+networks:
+  traefik:
+    external: true
+
+# description: Cially is a powerful, open-source dashboard designed to provide in-depth insights, real-time analytics, and detailed statistics for your Discord server.
+# https://github.com/skellgreco/cially
+# There are additional steps required on the Discord side for this application to work. See the instructions on the projects
+# Github page on how to create a new application in the Discord Developer Portal.
+
+services:
+  cially:
+    image: ghcr.io/skellgreco/cially-bot:${CIALLY_DOCKER_TAG:-latest}
+    container_name: ${CIALLY_CONTAINER_NAME:-cially}
+    restart: ${CIALLY_RESTART:-unless-stopped}
+    mem_limit: ${CIALLY_MEM_LIMIT:-200g}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/cially/config:/config
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - TOKEN=${CIALLY_BOT_TOKEN}
+      - CLIENT_ID=${CIALLY_BOT_CLIENT_ID}
+      - API_URL=http://cially:3001
+      - DEBUGGING=${CIALLY_BOT_DEBUGGING:-FALSE}
+      - POCKETBASE_URL=http://pocketbase:8090
+      - GUILD_COLLECTION=guilds
+      - MESSAGE_COLLECTION=messages
+      - INVITE_COLLECTION=invites
+      - MEMBER_LEAVES_COLLECTION=member_leaves
+      - MEMBER_JOINS_COLLECTION=member_joins
+      - PORT=3001
+    depends_on:
+      - pocketbase
+      - cially-web
+    labels:
+      - com.centurylinklabs.watchtower.enable=${CIALLY_WATCHTOWER_ENABLED:-true}
+      - autoheal=${CIALLY_AUTOHEAL_ENABLED:-true}
+
+  cially-web:
+    image: ghcr.io/skellgreco/cially-web:latest
+    container_name: cially-web
+    restart: unless-stopped
+    environment:
+      # Runtime environment variables
+      - NEXT_PUBLIC_BOT_API_URL=http://cially:3001
+      - POCKETBASE_URL=http://pocketbase:8090
+      - MESSAGE_COLLECTION=messages
+      - INVITE_COLLECTION=invites
+      - MEMBER_LEAVES_COLLECTION=member_leaves
+      - MEMBER_JOINS_COLLECTION=member_joins
+      - GUILDS_COLLECTION=guilds
+    depends_on:
+      - pocketbase
+    labels:
+      - joyride.host.name=${CIALLY_HOST_NAME:-cially}.${HOST_DOMAIN}
+      - traefik.enable=${CIALLY_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.cially.entrypoints=websecure
+      - traefik.http.routers.cially.rule=Host(`${CIALLY_HOST_NAME:-cially}.${HOST_DOMAIN}`)
+      - traefik.http.services.cially.loadbalancer.server.port=3000
+      - com.centurylinklabs.watchtower.enable=${CIALLY_WATCHTOWER_ENABLED:-true}
+      - autoheal=${CIALLY_AUTOHEAL_ENABLED:-true}
+    networks:
+      - traefik
+
+  # Need to expose this via Traefik as well since the user needs to log into Pocketbase and configure it.
+  pocketbase:
+    image: ghcr.io/keksiqc/pocketbase:0.26.6
+    container_name: cially-pocketbase
+    restart: unless-stopped
+    volumes:
+      - ./etc/cially/pocketbase-data:/pb/pb_data
+    networks:
+      - traefik
+    labels:
+      - joyride.host.name=${CIALLY_POCKETBASE_HOST_NAME:-cially-pb}.${HOST_DOMAIN}
+      - traefik.enable=${CIALLY_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.cially-pb.entrypoints=websecure
+      - traefik.http.routers.cially-pb.rule=Host(`${CIALLY_POCKETBASE_HOST_NAME:-cially-pb}.${HOST_DOMAIN}`)
+      - traefik.http.services.cially-pb.loadbalancer.server.port=8090
+      - com.centurylinklabs.watchtower.enable=${CIALLY_WATCHTOWER_ENABLED:-true}
+      - autoheal=${CIALLY_AUTOHEAL_ENABLED:-true}
