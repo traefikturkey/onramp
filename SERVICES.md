@@ -1,5 +1,5 @@
 # Available Services
-222 services and counting...
+227 services and counting...
 
 [A](#A)
 [B](#B)
@@ -51,6 +51,7 @@
 ## C
 - [cadvisor](https://hub.docker.com/r/google/cadvisor/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/cadvisor.yml)): Collects and analyzes resource usage and performance characteristics of running containers
 - [chromadb](https://github.com/chroma-core/chroma/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/chromadb.yml)): open-source embedding database for LLM/AI applications
+- [cially](https://github.com/skellgreco/cially) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/cially.yml)): Cially is a powerful, open-source dashboard designed to provide in-depth insights, real-time analytics, and detailed statistics for your Discord server.
 - [cloudbeaver](https://dbeaver.com/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/cloudbeaver.yml)): CloudBeaver is a lightweight web application designed for efficient and secure data management. It supports a wide range of databases, including SQL, NoSQL, and cloud databases, all accessible through a web browser.
 - [cloudflare-ddns](https://github.com/oznu/docker-cloudflare-ddns) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/cloudflare-ddns.yml)): Updates dns records on cloudflare dynamically
 - [cloudflare-tunnel-gui](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/cloudflare-tunnel-gui.yml)): Provides a graphical interface for cloudflare tunnel
@@ -70,6 +71,7 @@
 ## D
 - [dashdot](https://github.com/MauriceNino/dashdot) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/dashdot.yml)): Dashboard for monitoring docker containers
 - [dashy](https://github.com/Lissy93/dashy) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/dashy.yml)): Customizable dashboard for displaying information
+- [dawarich](https://github.com/Freika/dawarich) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/dawarich.yml)): Self-hostable alternative to Google Location History (Google Maps Timeline)
 - [dockerizalo](https://github.com/undernightcore/dockerizalo) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/dockerizalo.yml)): Docker build and deployment platform 
 - [docker-proxy](https://github.com/Tecnativa/docker-socket-proxy) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/docker-proxy.yml)): Proxy for docker containers
 - [docker-registry](https://hub.docker.com/_/registry) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/docker-registry.yml)): Registry for storing and distributing container images
@@ -184,6 +186,7 @@
 - [netbox](https://docs.linuxserver.io/images/docker-netbox) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/netbox.yml)): Web-based ip address management (ipam) and data center infrastructure management (dcim) tool
 - [newsdash](https://github.com/buzz/newsdash) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/newsdash.yml)): Self-hosted rss feed reader and dashboard
 - [nextcloud](https://github.com/linuxserver/docker-nextcloud) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/nextcloud.yml)): Powerful self-hosted file sync and sharing platform
+- [nightscout](https://github.com/nightscout/cgm-remote-monitor) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/nightscout.yml)):  web-based CGM (Continuous Glucose Monitor) 
 - [nocodb](https://github.com/nocodb/nocodb) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/nocodb.yml)): Databases As Spreadsheets
 - [nodered](https://hub.docker.com/r/nodered/node-red/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/nodered.yml)): Flow-based development tool for visual programming
 - [nutify](https://github.com/DartSteven/Nutify>) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/nutify.yml)): UPS Monitoring System
@@ -204,6 +207,7 @@
 
 
 ## P
+- [paperless-ai](https://github.com/clusterzx/paperless-ai# <================= add links to other related documentation here =================>) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/paperless-ai.yml)): <= put a brief description of paperless-ai here =>
 - [paperless-ngx-postgres](https://hub.docker.com/r/linuxserver/paperless-ngx) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/paperless-ngx-postgres.yml)): paperless-ngx with postgres instead of mariadb
 - [paperless-ngx](https://hub.docker.com/r/linuxserver/paperless-ngx) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/paperless-ngx.yml)): Document management system
 - [paperlessngx](https://hub.docker.com/r/linuxserver/paperless-ngx) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/paperlessngx.yml)): 
@@ -288,6 +292,7 @@
 - [ubuntu](https://hub.docker.com/_/ubuntu) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/ubuntu.yml)): ubuntu base image
 - [unbound](https://hub.docker.com/r/mvance/unbound) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/unbound.yml)): Dns resolver
 - [unifi](https://github.com/goofball222/unifi) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/unifi.yml)): Network management controller for ubiquiti devices
+- [unimus](https://github.com/crocandr/docker-unimus) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/unimus.yml)): contianer for multi-vendor network device configuration backup and management solution
 - [uptime-kuma](https://github.com/louislam/uptime-kuma) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/uptime-kuma.yml)): Self-hosted uptime monitoring tool
 
 

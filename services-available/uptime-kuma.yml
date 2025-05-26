@@ -25,6 +25,7 @@ services:
       - traefik.http.routers.uptimekuma.rule=Host(`${UPTIMEKUMA_CONTAINER_NAME:-uptimekuma}.${HOST_DOMAIN}`)
       - traefik.http.routers.uptimekuma.tls=true
       - traefik.http.routers.uptimekuma.service=uptimekuma
+      - traefik.http.routers.uptimekuma.middlewares=default-headers@file
       - traefik.http.services.uptimekuma.loadbalancer.server.port=3001
       - traefik.docker.network=traefik
       - com.centurylinklabs.watchtower.enable=${UPTIMEKUMA_WATCHTOWER_ENABLE:-true}
