@@ -7,7 +7,7 @@ networks:
 
 services:
   mealie:
-    image: hkotel/mealie:${MEALIE_DOCKER_TAG:-omni-nightly}
+    image: hkotel/mealie:${MEALIE_DOCKER_TAG:-latest}
     container_name: ${MEALIE_CONTAINER_NAME:-mealie}
     restart: ${MEALIE_RESTART:-unless-stopped}
     networks:
@@ -41,6 +41,6 @@ services:
       - traefik.enable=true
       - traefik.http.routers.mealie.entrypoints=websecure
       - traefik.http.routers.mealie.rule=Host(`${MEALIE_CONTAINER_NAME:-mealie}.${HOST_DOMAIN}`)
-      - traefik.http.services.mealie.loadbalancer.server.port=3000
+      - traefik.http.services.mealie.loadbalancer.server.port=9000
       - com.centurylinklabs.watchtower.enable=${MEALIE_WATCHTOWER_ENABLED:-true}
       - autoheal=true
