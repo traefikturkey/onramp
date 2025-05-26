@@ -1,5 +1,5 @@
 # Available Services
-223 services and counting...
+224 services and counting...
 
 [A](#A)
 [B](#B)
@@ -206,6 +206,7 @@
 
 
 ## P
+- [paperless-ai](https://github.com/clusterzx/paperless-ai# <================= add links to other related documentation here =================>) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/paperless-ai.yml)): <= put a brief description of paperless-ai here =>
 - [paperless-ngx-postgres](https://hub.docker.com/r/linuxserver/paperless-ngx) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/paperless-ngx-postgres.yml)): paperless-ngx with postgres instead of mariadb
 - [paperless-ngx](https://hub.docker.com/r/linuxserver/paperless-ngx) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/paperless-ngx.yml)): Document management system
 - [pgadmin](https://www.pgadmin.org/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/pgadmin.yml)): Web-based postgresql administration tool
