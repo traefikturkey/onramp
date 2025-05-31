@@ -63,16 +63,14 @@ services:
 
   database:
     container_name: immich_database
-    image: tensorchord/pgvecto-rs:pg14-v0.2.0@sha256:90724186f0a3517cf6914295b5ab410db9ce23190a2d9d0b9dd6463e3fa298f0
+    image: ghcr.io/immich-app/postgres:14-vectorchord0.3.0-pgvectors0.2.0
     networks:
       - immich-db
-    # user: "1000"
     environment:
-      #- PGID=${PGID:-1000}
-      #- PUID=${PUID:-1000}
       - POSTGRES_PASSWORD=${IMMICH_POSTGRES_PASSWORD:-123456}
       - POSTGRES_USER=${IMMICH_POSTGRES_USER:-postgres}
       - POSTGRES_DB=${IMMICH_POSTGRES_DB:-immich}
+      - POSTGRES_INITDB_ARGS='--data-checksums'
     volumes:
       - ${IMMICH_POSTGRES_DB_DIR:-./etc/immich/db}:/var/lib/postgresql/data
     restart: ${IMMICH_RESTART_POLICY:-unless-stopped}
