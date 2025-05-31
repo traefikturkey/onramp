@@ -56,9 +56,10 @@ services:
     container_name: immich_redis
     networks:
       - immich-db
-    image: redis:6.2-alpine@sha256:80cc8518800438c684a53ed829c621c94afd1087aaeb59b0d4343ed3e7bcf6c5
+    image: docker.io/valkey/valkey:8-bookworm@sha256:42cba146593a5ea9a622002c1b7cba5da7be248650cbb64ecb9c6c33d29794b1
+    healthcheck:
+      test: redis-cli ping || exit 1
     restart: ${IMMICH_RESTART_POLICY:-unless-stopped}
-
 
   database:
     container_name: immich_database
