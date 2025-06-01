@@ -1,3 +1,4 @@
+
 # description: dynamic dns server that uses docker labels
 # https://github.com/traefikturkey/joyride
 
@@ -21,6 +22,7 @@ services:
       - JOYRIDE_NXDOMAIN_ENABLED=${JOYRIDE_NXDOMAIN_ENABLED:-false}
       - JOYRIDE_LOG_DEBUG=${JOYRIDE_LOG_DEBUG:-false}
       - JOYRIDE_LOG_QUERIES=${JOYRIDE_LOG_QUERIES:-false}
+      - DNS_OPTION=${JOYRIDE_AAAA:-false}
     network_mode: host
     # ports:
     #   - ${JOYRIDE_PORT:-54}:54/udp
