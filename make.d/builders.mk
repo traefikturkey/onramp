@@ -35,6 +35,14 @@ endif
 etc/pihole/dnsmasq/03-custom-dns-names.conf:
 	envsubst '$${HOST_DOMAIN}, $${HOSTIP} ' < .templates/pihole_joyride.template > ./etc/pihole/dnsmasq/03-custom-dns-names.conf
 
+ifneq (,$(wildcard ./services-enabled/joyride.yml))
+BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),etc/joyride/hosts.d/hosts)
+endif
+
+etc/joyride/hosts.d/hosts:
+	mkdir -p ./etc/joyride/hosts.d
+	touch ./etc/joyride/hosts.d/hosts
+
 ifneq (,$(wildcard ./services-enabled/dashy.yml))
 BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),etc/dashy/dashy-config.yml)
 endif
