@@ -4,9 +4,7 @@ http:
       entryPoints:
         - websecure
       rule: "Host(`{{env "HOMEASSISTANT_HOST_NAME"}}.{{env "HOST_DOMAIN"}}`)"
-      
-# Default variable subsitution is not occuring. Results of below line are:  ".domain.tld"
-#      rule: "Host(`{{env "HOMEASSISTANT_HOST_NAME:-homeassistant"}}.{{env "HOST_DOMAIN"}}`)"
+
       middlewares:
         - default-headers
       tls: {}
@@ -16,9 +14,22 @@ http:
     homeassistant:
       loadBalancer:
         servers:
-          - url: "http://{{env "HOMEASSISTANT_ADDRESS"}}:{{env "HOMEASSISTANT_PORT"}}"
+          - url: "http://{{env "HOMEASSISTANT_ADDRESS"}}:8123"
         passHostHeader: true
-        
-# code 400 ?
-# https://community.home-assistant.io/t/home-assistant-400-bad-request-docker-proxy-solution/322163/7
-#
+
+## if getting a 'Bad Request' or HTTP error code 400, enable reverse proxy in Home assistant config/confiuration.yaml
+## comment these lines:
+## #automation: !include automations.yaml
+## #script: !include scripts.yaml
+## #scene: !include scenes.yaml
+## add these lines at the bottom:
+## http:
+##   use_x_forwarded_for: true
+##   trusted_proxies:
+##     - <YOUR TRAEFIK INSTANCE IP EX: 192.168.1.5>
+## reboot HA instance
+
+
+
+
+
