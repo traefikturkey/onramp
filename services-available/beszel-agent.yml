@@ -1,7 +1,4 @@
-# networks:
-#   traefik:
-#     external: true
-
+---
 # Beszel is a lightweight server monitoring platform that includes Docker statistics, historical data, and alert functions.
 
 # https://beszel.dev/guide/agent-installation
@@ -12,25 +9,17 @@ services:
     image: ghcr.io/henrygd/beszel/beszel-agent:${BESZEL_AGENT_DOCKER_TAG:-latest}
     container_name: ${BESZEL_AGENT_CONTAINER_NAME:-beszel-agent}
     restart: ${BESZEL_AGENT_RESTART:-unless-stopped}
-    # mem_limit: ${BESZEL_AGENT_MEM_LIMIT:-200g}
-    # networks:
-    #   - traefik
     network_mode: host
     volumes:
-      - ./etc/beszel-agent/:/bezel_socket
+      - ./etc/beszel-agent:/beszel_socket
       - /var/run/docker.sock:/var/run/docker.sock:ro
     environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
-      - LISTEN=45876
+      - LISTEN=45876 # for remote systems
       - KEY=${BESZEL_PUBLIC_KEY} #copy from "Add System" dialog from beszel-hub
     labels:
-      # - joyride.host.name=${BESZEL_AGENT_HOST_NAME:-beszel-agent}.${HOST_DOMAIN}
       - traefik.enable=${BESZEL_AGENT_TRAEFIK_ENABLED:-false}
-      # - traefik.http.routers.beszel-agent.entrypoints=websecure
-      # - traefik.http.routers.beszel-agent.rule=Host(`${BESZEL_AGENT_HOST_NAME:-beszel-agent}.${HOST_DOMAIN}`)
-      # #- traefik.http.services.beszel-agent.loadbalancer.server.scheme=https # enable if the service wants to connect over https
-      # - traefik.http.services.beszel-agent.loadbalancer.server.port=8096
       - com.centurylinklabs.watchtower.enable=${BESZEL_AGENT_WATCHTOWER_ENABLED:-true}
       - autoheal=${BESZEL_AGENT_AUTOHEAL_ENABLED:-true}
