@@ -15,7 +15,7 @@ services:
     # mem_limit: ${BESZEL_AGENT_MEM_LIMIT:-200g}
     # networks:
     #   - traefik
-    netowkr_mode: host
+    network_mode: host
     volumes:
       - ./etc/beszel-agent/:/bezel_socket
       - /var/run/docker.sock:/var/run/docker.sock:ro
