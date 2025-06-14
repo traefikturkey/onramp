@@ -1,5 +1,5 @@
 # Available Services
-224 services and counting...
+225 services and counting...
 
 [A](#A)
 [B](#B)
@@ -42,7 +42,8 @@
 ## B
 - [basaran](https://github.com/hyperonym/basaran) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/basaran.yml)): Container for running basaran, a web-based file manager
 - [bazarr](https://hub.docker.com/r/linuxserver/bazarr) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/bazarr.yml)): Manages subtitles for media content
-- [beszel](https://github.com/henrygd/beszel) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/beszel.yml)): A lightweight server monitoring hub with historical data, docker stats, and alerts.
+- [beszel-agent](https://beszel.dev/guide/agent-installation) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/beszel-agent.yml)): 
+- [beszel-hub](https://github.com/henrygd/beszel) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/beszel-hub.yml)): 
 - [bind](https://hub.docker.com/r/ubuntu/bind9) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/bind.yml)): A very flexible, full-featured DNS system
 - [booklore](https://github.com/adityachandelgit/BookLore) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/booklore.yml)): BookLore is a self-hosted web app for organizing and managing your personal book collection. 
 - [bytebase](https://www.bytebase.com) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/bytebase.yml)): Database CI/CD and Security at Scale
