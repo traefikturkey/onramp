@@ -62,5 +62,7 @@ etc/**/postgres
 ansible/roles/
 
 #rands personal customizations
-*-rand.yml
+etc/traefik/available/*-rand.yml
+overrides-available/*-rand.yml
+services-available/*-rand.yml
 
