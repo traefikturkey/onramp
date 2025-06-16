@@ -16,7 +16,7 @@ services:
     environment:
       - TZ=${TZ}
       - DOZZLE_LEVEL=${DOZZLE_LEVEL:-debug}
-      - DOZZLE_REMOTE_AGENT=10.10.2.202:7007,10.10.2.210:7007
+      - DOZZLE_REMOTE_AGENT=10.10.2.210:7007
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
