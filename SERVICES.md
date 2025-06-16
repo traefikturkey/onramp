@@ -1,5 +1,5 @@
 # Available Services
-225 services and counting...
+226 services and counting...
 
 [A](#A)
 [B](#B)
@@ -80,6 +80,7 @@
 - [docmost](https://github.com/docmost/docmost) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/docmost.yml)): Docmost is an open-source collaborative wiki and documentation software.
 - [doku](https://github.com/amerkurev/doku) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/doku.yml)): Disk usage dashboard
 - [dozzle-path](https://github.com/amir20/dozzle) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/dozzle-path.yml)): Path-based reverse proxy for dozzle
+- [dozzle-rand](https://github.com/amir20/dozzle) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/dozzle-rand.yml)): Web-based docker container log viewer
 - [dozzle](https://github.com/amir20/dozzle) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/dozzle.yml)): Web-based docker container log viewer
 - [drawio](https://github.com/jgraph/docker-drawio ) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/drawio.yml)): A client side editor for "general" diagramming
 - [droneci](https://github.com/harness/drone) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/droneci.yml)): Continuous integration and delivery platform
