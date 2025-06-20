@@ -1,0 +1,33 @@
+networks:
+  traefik:
+    external: true
+
+# description: docker mirror / registry for caching docker images
+# https://hub.docker.com/_/registry
+# https://docs.docker.com/docker-hub/image-library/mirror/
+
+services:
+  docker-mirror:
+    image: registry:${DOCKER_MIRROR_DOCKER_TAG:-2}
+    container_name: ${DOCKER_MIRROR_CONTAINER_NAME:-docker-mirror}
+    restart: ${DOCKER_MIRROR_RESTART:-unless-stopped}
+    mem_limit: ${DOCKER_MIRROR_MEM_LIMIT:-200g}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/docker-mirror/registry:/etc/docker/registry
+      - /etc/localtime:/etc/localtime:ro
+      - ${DOCKER_MIRROR_DATA_PATH:-./etc/docker-mirror/registry_data}:/var/lib/registry
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=${DOCKER_MIRROR_HOST_NAME:-docker-mirror}.${HOST_DOMAIN}
+      - traefik.enable=${DOCKER_MIRROR_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.docker-mirror.entrypoints=websecure
+      - traefik.http.routers.docker-mirror.rule=Host(`${DOCKER_MIRROR_HOST_NAME:-docker-mirror}.${HOST_DOMAIN}`)
+      #- traefik.http.services.docker-mirror.loadbalancer.server.scheme=https # enable if the service wants to connect over https
+      - traefik.http.services.docker-mirror.loadbalancer.server.port=5000
+      - com.centurylinklabs.watchtower.enable=${DOCKER_MIRROR_WATCHTOWER_ENABLED:-true}
+      - autoheal=${DOCKER_MIRROR_AUTOHEAL_ENABLED:-true}
