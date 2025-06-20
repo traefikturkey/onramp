@@ -143,5 +143,13 @@ endif
 setup-tandoor:
 	envsubst '$${TANDOOR_HOST_NAME}, $${HOST_DOMAIN} ' < ./.templates/recipes.conf.nginx.template > ./etc/tandoor/nginx/recipes.conf
 	
+ifneq (,$(wildcard ./services-enabled/docker-mirror.yml))
+BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),setup-tandoor)
+endif
+
+setup-docker-mirror:
+	@mkdir -p ./etc/docker-mirror/registry
+	@mkdir -p ./etc/docker-mirror/registry_data
+	cp --no-clobber .templates/docker-mirror-config.template ./etc/docker-mirror/config.json
 
 #$(info "builders.mk loaded")
