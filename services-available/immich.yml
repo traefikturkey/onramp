@@ -10,7 +10,7 @@ networks:
 services:
   immich:
     container_name: ${IMMICH_CONTAINER_NAME:-immich}
-    image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-v1.125.7}
+    image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-v1.134.0}
     volumes:
       - ${IMMICH_UPLOAD_LOCATION:-./etc/immich/upload}:/usr/src/app/upload
       - /etc/localtime:/etc/localtime:ro
@@ -45,7 +45,7 @@ services:
   immich-machine-learning:
     container_name: immich_machine_learning
     user: "1000"
-    image: ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION:-v1.125.7}
+    image: ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION:-v1.134.0}
     networks:
       - immich-db
     volumes:
@@ -56,22 +56,21 @@ services:
     container_name: immich_redis
     networks:
       - immich-db
-    image: redis:6.2-alpine@sha256:80cc8518800438c684a53ed829c621c94afd1087aaeb59b0d4343ed3e7bcf6c5
+    image: docker.io/valkey/valkey:8-bookworm@sha256:42cba146593a5ea9a622002c1b7cba5da7be248650cbb64ecb9c6c33d29794b1
+    healthcheck:
+      test: redis-cli ping || exit 1
     restart: ${IMMICH_RESTART_POLICY:-unless-stopped}
-
 
   database:
     container_name: immich_database
-    image: tensorchord/pgvecto-rs:pg14-v0.2.0@sha256:90724186f0a3517cf6914295b5ab410db9ce23190a2d9d0b9dd6463e3fa298f0
+    image: ghcr.io/immich-app/postgres:14-vectorchord0.3.0-pgvectors0.2.0
     networks:
       - immich-db
-    # user: "1000"
     environment:
-      #- PGID=${PGID:-1000}
-      #- PUID=${PUID:-1000}
       - POSTGRES_PASSWORD=${IMMICH_POSTGRES_PASSWORD:-123456}
       - POSTGRES_USER=${IMMICH_POSTGRES_USER:-postgres}
       - POSTGRES_DB=${IMMICH_POSTGRES_DB:-immich}
+      - POSTGRES_INITDB_ARGS='--data-checksums'
     volumes:
       - ${IMMICH_POSTGRES_DB_DIR:-./etc/immich/db}:/var/lib/postgresql/data
     restart: ${IMMICH_RESTART_POLICY:-unless-stopped}

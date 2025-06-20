@@ -1,5 +1,5 @@
 # Available Services
-227 services and counting...
+229 services and counting...
 
 [A](#A)
 [B](#B)
@@ -42,7 +42,8 @@
 ## B
 - [basaran](https://github.com/hyperonym/basaran) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/basaran.yml)): Container for running basaran, a web-based file manager
 - [bazarr](https://hub.docker.com/r/linuxserver/bazarr) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/bazarr.yml)): Manages subtitles for media content
-- [beszel](https://github.com/henrygd/beszel) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/beszel.yml)): A lightweight server monitoring hub with historical data, docker stats, and alerts.
+- [beszel-agent](https://beszel.dev/guide/agent-installation) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/beszel-agent.yml)): 
+- [beszel-hub](https://github.com/henrygd/beszel) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/beszel-hub.yml)): 
 - [bind](https://hub.docker.com/r/ubuntu/bind9) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/bind.yml)): A very flexible, full-featured DNS system
 - [booklore](https://github.com/adityachandelgit/BookLore) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/booklore.yml)): BookLore is a self-hosted web app for organizing and managing your personal book collection. 
 - [bytebase](https://www.bytebase.com) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/bytebase.yml)): Database CI/CD and Security at Scale
@@ -113,6 +114,7 @@
 - [go2rtc](https://github.com/AlexxIT/go2rtc) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/go2rtc.yml)): Webrtc gateway for camera restreaming 
 - [gotify](https://github.com/gotify/server) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/gotify.yml)): Self-hosted push notification service
 - [grafana](https://grafana.com/docs/grafana/next/setup-grafana/installation/docker/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/grafana.yml)): Platform for monitoring and observability
+- [grocy](https://github.com/grocy/grocy) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/grocy.yml)): Web-based docker container grocery/household mgmt app
 - [guacamole](https://hub.docker.com/r/abesnier/guacamole) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/guacamole.yml)): A clientless remote desktop gateway.
 
 
@@ -182,7 +184,7 @@
 - [n8n](https://github.com/n8n-io/n8n) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/n8n.yml)): workflow automation platform with native AI capabilities
 - [navidrome](https://www.navidrome.org/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/navidrome.yml)): A music collection server and web client for streaming your music
 - [nebula-sync](https://github.com/lovelaze/nebula-sync) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/nebula-sync.yml)): Synchronize Pi-hole v6.x configuration to replicas.
-- [netbootxyz](https://docs.linuxserver.io/images/docker-netbootxyz) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/netbootxyz.yml)): Network boot server for various operating systems
+- [netbootxyz](https://github.com/netbootxyz/docker-netbootxyz) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/netbootxyz.yml)): Network boot server for various operating systems
 - [netbox](https://docs.linuxserver.io/images/docker-netbox) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/netbox.yml)): Web-based ip address management (ipam) and data center infrastructure management (dcim) tool
 - [newsdash](https://github.com/buzz/newsdash) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/newsdash.yml)): Self-hosted rss feed reader and dashboard
 - [nextcloud](https://github.com/linuxserver/docker-nextcloud) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/nextcloud.yml)): Powerful self-hosted file sync and sharing platform

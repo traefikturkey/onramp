@@ -3,11 +3,11 @@ networks:
     external: true
 
 # description: Network boot server for various operating systems
-# https://docs.linuxserver.io/images/docker-netbootxyz
+# https://github.com/netbootxyz/docker-netbootxyz
 
 services:
   netbootxyz:
-    image: linuxserver/netbootxyz:${NETBOOTXYZ_DOCKER_TAG:-latest}
+    image: ghcr.io/netbootxyz/netbootxyz:${NETBOOTXYZ_DOCKER_TAG:-latest}
     container_name: ${NETBOOTXYZ_CONTAINER_NAME:-netbootxyz}
     restart: ${NETBOOTXYZ_RESTART:-unless-stopped}
     networks:

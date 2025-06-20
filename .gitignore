@@ -59,13 +59,11 @@ etc/**/postgres
 !etc/searxng/settings.template.yml
 !etc/traefik/available/*
 !etc/traefik/enabled/middleware.yml
+!etc/beszl-hub/socket
 
 ansible/roles/
 
 #rands personal customizations
-etc/traefik/available/idrac1.yml
-etc/traefik/available/idrac2.yml
-etc/traefik/available/octoprint-ender.yml
-etc/traefik/available/octoprint-sunlu.yml
+etc/traefik/available/*-rand.yml
 overrides-available/*-rand.yml
-
+services-available/*-rand.yml

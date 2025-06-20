@@ -24,7 +24,7 @@ services:
       # - 8096:8096 # http web gui
       # - 8920:8920 # https web gui
       - 7359:7359/udp # Jellyfin client discovery
-      - 1900:1900/udp # DNLA discovery
+      # - 1900:1900/udp # DNLA discovery uncomment if required
     labels:
       - joyride.host.name=${JELLYFIN_CONTAINER_NAME:-jellyfin}.${HOST_DOMAIN}
       - traefik.enable=true
