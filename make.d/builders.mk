@@ -64,7 +64,7 @@ BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),etc/recyclarr/recyclarr
 endif
 
 etc/recyclarr/recyclarr.yml:
-	cp --no-clobber .templates/recyclarr.template .etc/recyclarr/recyclarr.yml
+	cp --no-clobber .templates/recyclarr.template ./etc/recyclarr/recyclarr.yml
 
 
 ifneq (,$(wildcard ./services-enabled/gatus.yml))
@@ -72,7 +72,7 @@ BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),etc/gatus/config.yaml)
 endif
 
 etc/gatus/config.yaml:
-	cp --no-clobber .templates/gatus.template .etc/gatus/config.yaml
+	cp --no-clobber .templates/gatus.template ./etc/gatus/config.yaml
 
 ifneq (,$(wildcard ./services-enabled/olivetin.yml))
 BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),etc/olivetin/config.yaml)
@@ -134,7 +134,14 @@ endif
 
 setup-wordpress-upload:
 	@mkdir -p ./etc/wordpress
-	cp --no-clobber .templates/wordpress-upload.template .etc/wordpress/upload.ini
+	cp --no-clobber .templates/wordpress-upload.template ./etc/wordpress/upload.ini
 
+ifneq (,$(wildcard ./services-enabled/tandoor.yml))
+BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),setup-tandoor)
+endif
+
+setup-tandoor:
+	envsubst '$${TANDOOR_HOST_NAME}, $${HOST_DOMAIN} ' < ./.templates/recipes.conf.nginx.template > ./etc/tandoor/nginx/recipes.conf
+	
 
 #$(info "builders.mk loaded")
