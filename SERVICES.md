@@ -116,6 +116,7 @@
 - [go2rtc](https://github.com/AlexxIT/go2rtc) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/go2rtc.yml)): Webrtc gateway for camera restreaming 
 - [gotify](https://github.com/gotify/server) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/gotify.yml)): Self-hosted push notification service
 - [grafana](https://grafana.com/docs/grafana/next/setup-grafana/installation/docker/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/grafana.yml)): Platform for monitoring and observability
+- [grocy] (https://github.com/grocy/grocy) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/grocy.yml)): Self-hosted grocery adn household mgmt app
 - [guacamole](https://hub.docker.com/r/abesnier/guacamole) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/guacamole.yml)): A clientless remote desktop gateway.
 
 

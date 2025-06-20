@@ -1,0 +1,29 @@
+networks:
+  traefik:
+    external: true
+
+# description: Web-based docker container grocery/household mgmt app
+# https://github.com/grocy/grocy
+# https://hub.docker.com/r/linuxserver/grocy
+
+services:
+  grocy:
+    image: lscr.io/linuxserver/grocy:${GROCY_DOCKER_TAG:-latest}
+    container_name: ${GROCY_CONTAINER_NAME:-grocy}
+    networks:
+      - traefik
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=${TZ}
+    volumes:
+      - ./etc/grocy/config:/config
+      - /etc/localtime:/etc/localtime:ro      
+    labels:
+      - joyride.host.name=${GROCY_CONTAINER_NAME:-dozzle}.${HOST_DOMAIN}
+      - traefik.enable=${GROCY_TRAEFIK_ENABLE:-true}
+      - traefik.http.routers.dozzle.entrypoints=websecure
+      - traefik.http.routers.dozzle.rule=Host(`${GROCY_CONTAINER_NAME:-dozzle}.${HOST_DOMAIN}`)
+      - traefik.http.services.dozzle.loadbalancer.server.port=80
+      - com.centurylinklabs.watchtower.enable=${GROCY_WATCHTOWER_ENABLE:-true}
+      - autoheal=${GROCY_AUTOHEAL:-true}
