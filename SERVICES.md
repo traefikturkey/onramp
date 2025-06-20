@@ -1,5 +1,5 @@
 # Available Services
-227 services and counting...
+228 services and counting...
 
 [A](#A)
 [B](#B)
@@ -74,6 +74,7 @@
 - [dashdot](https://github.com/MauriceNino/dashdot) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/dashdot.yml)): Dashboard for monitoring docker containers
 - [dashy](https://github.com/Lissy93/dashy) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/dashy.yml)): Customizable dashboard for displaying information
 - [dawarich](https://github.com/Freika/dawarich) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/dawarich.yml)): Self-hostable alternative to Google Location History (Google Maps Timeline)
+- [docker-mirror](https://hub.docker.com/_/registry) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/docker-mirror.yml)): docker mirror / registry for caching docker images
 - [docker-proxy](https://github.com/Tecnativa/docker-socket-proxy) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/docker-proxy.yml)): Proxy for docker containers
 - [docker-registry](https://hub.docker.com/_/registry) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/docker-registry.yml)): Registry for storing and distributing container images
 - [dockerizalo](https://github.com/undernightcore/dockerizalo) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/dockerizalo.yml)): Docker build and deployment platform 
