@@ -58,6 +58,7 @@ etc/**/postgres
 !etc/searxng/settings.template.yml
 !etc/traefik/available/*
 !etc/traefik/enabled/middleware.yml
+!etc/beszl-hub/socket
 
 ansible/roles/
 
@@ -65,4 +66,3 @@ ansible/roles/
 etc/traefik/available/*-rand.yml
 overrides-available/*-rand.yml
 services-available/*-rand.yml
-
