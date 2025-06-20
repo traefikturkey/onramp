@@ -3,7 +3,7 @@ networks:
   traefik:
     external: true
 
-# description: docker container for managing recipes, shopping lists meal planning
+# description: Recipe Management, meal-planning, shopping lists
 # https://github.com/TandoorRecipes/recipes
 # https://docs.tandoor.dev/
 # https://tandoor.dev/

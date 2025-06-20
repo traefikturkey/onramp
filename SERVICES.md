@@ -1,5 +1,5 @@
 # Available Services
-226 services and counting...
+227 services and counting...
 
 [A](#A)
 [B](#B)
@@ -279,7 +279,7 @@
 
 
 ## T
-- [tandoor](https://github.com/TandoorRecipes/recipes/tree/master) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/tandoor.yml)): Recipe Management, meal-planning, shopping lists
+- [tandoor](https://github.com/TandoorRecipes/recipes) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/tandoor.yml)): Recipe Management, meal-planning, shopping lists
 - [tautulli](https://hub.docker.com/r/linuxserver/tautulli) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/tautulli.yml)): Monitors plex usage and provides statistics
 - [tdarr](https://docs.tdarr.io/docs/installation/docker/run-compose) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/tdarr.yml)): Media optimization and conversion tool
 - [transmission-vpn](https://hub.docker.com/r/haugene/transmission-openvpn) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/transmission-vpn.yml)): Bittorrent client with vpn support
