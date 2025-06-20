@@ -84,4 +84,4 @@ else
 endif
 
 generate-service-md:
-	./githooks/generate-services-markdown.sh
+	./.githooks/generate-services-markdown.sh
