@@ -74,14 +74,13 @@
 - [dashdot](https://github.com/MauriceNino/dashdot) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/dashdot.yml)): Dashboard for monitoring docker containers
 - [dashy](https://github.com/Lissy93/dashy) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/dashy.yml)): Customizable dashboard for displaying information
 - [dawarich](https://github.com/Freika/dawarich) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/dawarich.yml)): Self-hostable alternative to Google Location History (Google Maps Timeline)
-- [dockerizalo](https://github.com/undernightcore/dockerizalo) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/dockerizalo.yml)): Docker build and deployment platform 
 - [docker-mirror](https://hub.docker.com/_/registry) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/docker-mirror.yml)): docker mirror / registry for caching docker images
 - [docker-proxy](https://github.com/Tecnativa/docker-socket-proxy) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/docker-proxy.yml)): Proxy for docker containers
 - [docker-registry](https://hub.docker.com/_/registry) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/docker-registry.yml)): Registry for storing and distributing container images
+- [dockerizalo](https://github.com/undernightcore/dockerizalo) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/dockerizalo.yml)): Docker build and deployment platform 
 - [docmost](https://github.com/docmost/docmost) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/docmost.yml)): Docmost is an open-source collaborative wiki and documentation software.
 - [doku](https://github.com/amerkurev/doku) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/doku.yml)): Disk usage dashboard
 - [dozzle-path](https://github.com/amir20/dozzle) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/dozzle-path.yml)): Path-based reverse proxy for dozzle
-- [dozzle-rand](https://github.com/amir20/dozzle) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/dozzle-rand.yml)): Web-based docker container log viewer
 - [dozzle](https://github.com/amir20/dozzle) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/dozzle.yml)): Web-based docker container log viewer
 - [drawio](https://github.com/jgraph/docker-drawio ) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/drawio.yml)): A client side editor for "general" diagramming
 - [droneci](https://github.com/harness/drone) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/droneci.yml)): Continuous integration and delivery platform
@@ -93,8 +92,8 @@
 
 
 ## F
-- [firefly3](https://github.com/firefly-iii/firefly-iii/tree/main) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/firefly3.yml)): Manages personal finances and budgets
 - [firefly-data-importer](https://github.com/firefly-iii/firefly-iii/tree/main) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/firefly-data-importer.yml)): Imports data into firefly iii, a personal finance manager
+- [firefly3](https://github.com/firefly-iii/firefly-iii/tree/main) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/firefly3.yml)): Manages personal finances and budgets
 - [firefox](https://github.com/jlesage/docker-firefox) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/firefox.yml)): Runs mozilla firefox browser in a container
 - [flame](https://hub.docker.com/r/pawelmalak/flame) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/flame.yml)): Self-hosted music recommendation engine
 - [fooocus](https://github.com/lllyasviel/Fooocus) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/fooocus.yml)): Focus on prompting and generating | a generative image generator
@@ -111,10 +110,11 @@
 - [ghost](https://hub.docker.com/_/ghost) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/ghost.yml)): Headless cms for creating blogs and websites
 - [gitea](https://github.com/go-gitea/gitea) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/gitea.yml)): Lightweight git service similar to github
 - [gitlab](https://docs.gitlab.com/ee/install/docker.html) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/gitlab.yml)): Self-hosted git repository management system
-- [glances](https://github.com/nicolargo/glances) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/glances.yml)): System monitoring tool
 - [glance](https://github.com/glanceapp/glance) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/glance.yml)): A self-hosted dashboard that puts all your feeds in one place
+- [glances](https://github.com/nicolargo/glances) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/glances.yml)): System monitoring tool
 - [gluetun](https://hub.docker.com/r/qmcgaw/gluetun ) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/gluetun.yml)): VPN Client for Docker Containers and More
 - [go2rtc](https://github.com/AlexxIT/go2rtc) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/go2rtc.yml)): Webrtc gateway for camera restreaming 
+- [gollum](https://github.com/gollum/gollum) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/gollum.yml)): A simple, Git-powered wiki with a local frontend and support for many kinds of markup and content.
 - [gotify](https://github.com/gotify/server) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/gotify.yml)): Self-hosted push notification service
 - [grafana](https://grafana.com/docs/grafana/next/setup-grafana/installation/docker/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/grafana.yml)): Platform for monitoring and observability
 - [grocy](https://github.com/grocy/grocy) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/grocy.yml)): Web-based docker container grocery/household mgmt app
@@ -210,7 +210,7 @@
 
 
 ## P
-- [paperless-ai](https://github.com/clusterzx/paperless-ai# <================= add links to other related documentation here =================>) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/paperless-ai.yml)): <= put a brief description of paperless-ai here =>
+- [paperless-ai](https://github.com/clusterzx/paperless-ai) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/paperless-ai.yml)): An automated document analyzer for Paperless-ngx using OpenAI API
 - [paperless-ngx-postgres](https://hub.docker.com/r/linuxserver/paperless-ngx) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/paperless-ngx-postgres.yml)): paperless-ngx with postgres instead of mariadb
 - [paperless-ngx](https://hub.docker.com/r/linuxserver/paperless-ngx) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/paperless-ngx.yml)): Document management system
 - [pgadmin](https://www.pgadmin.org/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/pgadmin.yml)): Web-based postgresql administration tool
