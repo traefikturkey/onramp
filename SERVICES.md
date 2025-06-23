@@ -299,6 +299,7 @@
 
 
 ## V
+- [vault](https://github.com/hashicorp/vault) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/vault.yml)): A tool for secrets management, encryption as a service, and privileged access management
 - [vaultwarden](https://github.com/dani-garcia/vaultwarden) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/vaultwarden.yml)): Self-hosted bitwarden password manager
 - [vikunja](https://vikunja.io/docs/full-docker-example/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/vikunja.yml)): Task and time management app
 
