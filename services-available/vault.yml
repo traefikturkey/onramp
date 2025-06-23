@@ -31,12 +31,10 @@ services:
       - PGID=${PGID:-1000}
       - TZ=${TZ}
       - 'VAULT_LOCAL_CONFIG=
-          {"storage": 
-            {"file": {"path": "/vault/file"}},
-          "listener": 
-            [{"tcp": { "address": "0.0.0.0:8200", "tls_disable":true}}], 
-            "default_lease_ttl": "168h", 
-            "max_lease_ttl": "720h"}'
+          {"storage": {"file": {"path": "/vault/file"}},
+          "listener": [{"tcp": { "address": "0.0.0.0:8200", "tls_disable":true}}], 
+          "default_lease_ttl": "${VAULT_DEFAULT_LEASE_TTL:-168h}", 
+          "max_lease_ttl": "${VAULT_MAX_LEASE_TTL:-720h}"}'
     command: server
     cap_add:
       - IPC_LOCK
