@@ -4,6 +4,7 @@ networks:
 
 # description: E-commerce platform
 # https://hub.docker.com/r/prestashop/prestashop/
+# https://github.com/PrestaShop/PrestaShop
 # https://www.prestashop.com/en
 
 services:

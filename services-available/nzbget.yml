@@ -4,6 +4,7 @@ networks:
 
 # description: Binary newsgrabber for usenet
 # https://hub.docker.com/r/linuxserver/nzbget
+# https://github.com/linuxserver/docker-nzbget
 
 services:
   nzbget:

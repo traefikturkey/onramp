@@ -4,6 +4,7 @@ networks:
 
 # description: Manages movie collections and downloads
 # https://hub.docker.com/r/linuxserver/radarr
+# https://github.com/linuxserver/docker-radarr
 
 services:
   radarr:
