@@ -1,5 +1,5 @@
 # Available Services
-229 services and counting...
+231 services and counting...
 
 [A](#A)
 [B](#B)
@@ -92,6 +92,7 @@
 
 
 ## F
+- [feishin](https://github.com/jeffvli/feishin) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/feishin.yml)): A modern self-hosted music player.
 - [firefly-data-importer](https://github.com/firefly-iii/firefly-iii/tree/main) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/firefly-data-importer.yml)): Imports data into firefly iii, a personal finance manager
 - [firefly3](https://github.com/firefly-iii/firefly-iii/tree/main) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/firefly3.yml)): Manages personal finances and budgets
 - [firefox](https://github.com/jlesage/docker-firefox) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/firefox.yml)): Runs mozilla firefox browser in a container
