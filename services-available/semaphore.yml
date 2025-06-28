@@ -2,7 +2,7 @@ networks:
   traefik:
     external: true
 
-# description: Continuous integration and deployment service
+# description: UI and API for Ansible,Terraform/OpenTofu/Terragrunt
 # https://docs.ansible-semaphore.com/
 
 services:

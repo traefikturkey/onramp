@@ -2,7 +2,7 @@ networks:
   traefik:
     external: true
 
-# description: Network Performance Estimation Tool
+# description: web-based speed test application
 # https://github.com/openspeedtest/Docker-Image
 
 services:
