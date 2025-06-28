@@ -20,10 +20,10 @@ services:
       - ./etc/grocy/config:/config
       - /etc/localtime:/etc/localtime:ro      
     labels:
-      - joyride.host.name=${GROCY_CONTAINER_NAME:-dozzle}.${HOST_DOMAIN}
+      - joyride.host.name=${GROCY_CONTAINER_NAME:-grocy}.${HOST_DOMAIN}
       - traefik.enable=${GROCY_TRAEFIK_ENABLE:-true}
-      - traefik.http.routers.dozzle.entrypoints=websecure
-      - traefik.http.routers.dozzle.rule=Host(`${GROCY_CONTAINER_NAME:-dozzle}.${HOST_DOMAIN}`)
-      - traefik.http.services.dozzle.loadbalancer.server.port=80
+      - traefik.http.routers.grocy.entrypoints=websecure
+      - traefik.http.routers.grocy.rule=Host(`${GROCY_CONTAINER_NAME:-grocy}.${HOST_DOMAIN}`)
+      - traefik.http.services.grocy.loadbalancer.server.port=80
       - com.centurylinklabs.watchtower.enable=${GROCY_WATCHTOWER_ENABLE:-true}
       - autoheal=${GROCY_AUTOHEAL:-true}
