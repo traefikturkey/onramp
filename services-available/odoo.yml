@@ -2,6 +2,9 @@ networks:
   traefik:
     external: true
 
+# description: a suite of applications used in managing a business, including CRM, ERP, and more.
+# https://github.com/odoo/odoo
+
 services:
   odoo:
     image: odoo:${ODOO_DOCKER_TAG:-latest}
