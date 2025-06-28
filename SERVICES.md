@@ -197,10 +197,10 @@
 
 
 ## O
-- [odoo](https://github.com/traefikturkey/onramp/tree/master/services-available/odoo.yml): 
+- [odoo](https://github.com/odoo/odoo) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/odoo.yml)): a suite of applications used in managing a business, including CRM, ERP, and more.
 - [olivetin](https://github.com/OliveTin/OliveTin) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/olivetin.yml)): Access predefined shell commands from a web interface.
-- [ollama-webui](https://github.com/open-webui/open-webui) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/ollama-webui.yml)): Web-based user interface for ollama, a media indexer
-- [ollama](https://hub.docker.com/r/ollama/ollama) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/ollama.yml)): Eeasy way to run large language models locally - Nvidia GPU
+- [ollama-webui](https://github.com/open-webui/open-webui) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/ollama-webui.yml)): Web-based user interface for ollama LLM and others
+- [ollama](https://hub.docker.com/r/ollama/ollama) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/ollama.yml)): Easy way to run large language models locally - Nvidia GPU
 - [omada](https://hub.docker.com/r/mbentley/omada-controller) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/omada.yml)): Container for running tp-link omada controller
 - [onboard](https://github.com/traefikturkey/onboard) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/onboard.yml)): An RSS and Bookmarks Dashboard 
 - [ongoing](https://github.com/traefikturkey/ongoing) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/ongoing.yml)): A self hosted url expander (opposite of url shortener)
@@ -219,7 +219,7 @@
 - [pihole](https://github.com/pi-hole/docker-pi-hole/blob/master/README.md) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/pihole.yml)): Network-wide ad blocker and dns sinkhole
 - [pinchflat](https://github.com/kieraneglin/pinchflat) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/pinchflat.yml)): Pinchflat is a self-hosted app for downloading YouTube content built using yt-dlp
 - [pingvin-share](https://github.com/stautonico/pingvin-share) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/pingvin-share.yml)): File-sharing platform
-- [playit-docker](https://github.com/mafen/playit-docker) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/playit-docker.yml)): An agent to expose local game servers to the interne
+- [playit-docker](https://github.com/mafen/playit-docker) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/playit-docker.yml)): An agent to expose local game servers to the internet using playit proxy service.
 - [plex](https://github.com/plexinc/pms-docker) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/plex.yml)): Media server for streaming movies, tv shows, and music
 - [portainer-ee](https://github.com/portainer/portainer) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/portainer-ee.yml)): Commercial version of portainer, a container management tool
 - [portainer](https://github.com/portainer/portainer) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/portainer.yml)): Lightweight container management ui
@@ -237,7 +237,7 @@
 - [prowlarr](https://hub.docker.com/r/linuxserver/prowlarr) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/prowlarr.yml)): Container for running prowlarr, a media indexer
 - [pterodactyl-panel](https://github.com/pterodactyl/panel/blob/develop/docker-compose.example.yml) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/pterodactyl-panel.yml)): Game server management panel
 - [pterodactyl-wings](https://pterodactyl.io/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/pterodactyl-wings.yml)): Daemon for managing game servers
-- [pwndrop](https://hub.docker.com/r/linuxserver/pwndrop) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/pwndrop.yml)): Self-hosted file-sharing platform
+- [pwndrop](https://github.com/linuxserver/docker-pwndrop) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/pwndrop.yml)): Self-hosted file-sharing platform
 
 
 ## Q
@@ -272,7 +272,7 @@
 - [spacebin](https://github.com/lukewhrit/spacebin) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/spacebin.yml)): spacebin: text sharing for the final frontier (Pastebin alternative)
 - [sqliteweb](https://hub.docker.com/r/tomdesinto/sqliteweb/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/sqliteweb.yml)): Web-based SQLite Database Browser
 - [stirling-pdf](https://github.com/Stirling-Tools/Stirling-PDF) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/stirling-pdf.yml)): Container for running stirling pdf, a web-based pdf viewer
-- [streaming-search](https://github.com/Colaski/global-streaming-search) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/streaming-search.yml)): Container for running streaming search, a media indexer
+- [streaming-search](https://github.com/Colaski/global-streaming-search) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/streaming-search.yml)): (Archived Project) Global Streaming Search Service
 - [super-productivity](https://github.com/johannesjo/super-productivity) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/super-productivity.yml)): Time and task management app
 - [surrealdb](https://github.com/surrealdb/surrealdb/blob/main/docker/DOCKER.md) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/surrealdb.yml)): scalable, distributed, collaborative, document-graph database
 - [synapse](https://github.com/matrix-org/synapse) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/synapse.yml)): Matrix communication server

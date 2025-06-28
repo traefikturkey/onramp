@@ -3,7 +3,9 @@ networks:
     external: true
 
 # description: Self-hosted file-sharing platform
-# https://hub.docker.com/r/linuxserver/pwndrop
+# https://github.com/linuxserver/docker-pwndrop
+# https://docs.linuxserver.io/images/docker-pwndrop/
+# https://github.com/kgretzky/pwndrop
 
 services:
   pwndrop:

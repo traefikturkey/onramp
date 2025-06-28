@@ -2,7 +2,7 @@ networks:
   traefik:
     external: true
 
-# description: Container for running streaming search, a media indexer
+# description: (Archived Project) Global Streaming Search Service
 # https://github.com/Colaski/global-streaming-search
 
 services:

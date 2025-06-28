@@ -2,7 +2,7 @@ networks:
   traefik:
     external: true
 
-# description: Web-based user interface for ollama, a media indexer
+# description: Web-based user interface for ollama LLM and others
 # https://github.com/open-webui/open-webui
 
 services:
