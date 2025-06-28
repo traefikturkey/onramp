@@ -2,7 +2,7 @@ networks:
   traefik:
     external: true
 
-# description: Eeasy way to run large language models locally - Nvidia GPU
+# description: Easy way to run large language models locally - Nvidia GPU
 # https://hub.docker.com/r/ollama/ollama
 # https://github.com/ollama/ollama
 
