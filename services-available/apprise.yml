@@ -3,6 +3,7 @@ networks:
     external: true
 
 # description: Notification framework that supports various services
+# https://github.com/linuxserver/docker-apprise-api
 # https://hub.docker.com/r/linuxserver/apprise-api
 
 services:

@@ -3,8 +3,8 @@ networks:
     external: true
 
 # description: Self-hosted internet speed test tool
-# https://hub.docker.com/r/linuxserver/librespeed
 # https://github.com/linuxserver/docker-librespeed
+# https://hub.docker.com/r/linuxserver/librespeed
 
 services:
   librespeed:
