@@ -3,8 +3,8 @@ networks:
     external: true
 
 # description: VPN Client for Docker Containers and More
-# https://hub.docker.com/r/qmcgaw/gluetun 
 # https://github.com/qdm12/gluetun
+# https://hub.docker.com/r/qmcgaw/gluetun 
 
 services:
   gluetun:

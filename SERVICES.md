@@ -30,8 +30,8 @@
 - [actual](https://actualbudget.org/docs/install/docker) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/actual.yml)): Money Management software
 - [adguard](https://github.com/AdguardTeam/AdGuardHome) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/adguard.yml)): Network-wide ad blocker and privacy tool
 - [airprint](https://github.com/chuckcharlie/cups-avahi-airprint) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/airprint.yml)): Enables apple airprint functionality for non-airprint printers using CUPS and Avahi
-- [apprise](https://hub.docker.com/r/linuxserver/apprise-api) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/apprise.yml)): Notification framework that supports various services
-- [audiobookshelf](https://hub.docker.com/r/advplyr/audiobookshelf) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/audiobookshelf.yml)): Manages and serves audiobooks
+- [apprise](https://github.com/linuxserver/docker-apprise-api) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/apprise.yml)): Notification framework that supports various services
+- [audiobookshelf](https://github.com/advplyr/audiobookshelf) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/audiobookshelf.yml)): Manages and serves audiobooks
 - [authelia](https://github.com/authelia/authelia) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/authelia.yml)): Provides single sign-on (sso) and two-factor authentication (2fa) for web applications
 - [authentik](https://goauthentik.io/docs/installation/docker-compose) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/authentik.yml)): identity and access management solution
 - [autoheal](https://github.com/willfarrell/docker-autoheal) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/autoheal.yml)): Restarts unhealthy docker containers automatically
@@ -41,7 +41,7 @@
 
 ## B
 - [basaran](https://github.com/hyperonym/basaran) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/basaran.yml)): ( archived ) Container for running basaran, a lightweight LLM server
-- [bazarr](https://hub.docker.com/r/linuxserver/bazarr) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/bazarr.yml)): Manages subtitles for media content
+- [bazarr](https://github.com/linuxserver/docker-bazarr) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/bazarr.yml)): Manages subtitles for media content
 - [beszel-agent](https://beszel.dev/guide/agent-installation) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/beszel-agent.yml)): agent to connect to the Beszel hub for monitoring of docker containers and servers.
 - [beszel-hub](https://github.com/henrygd/beszel) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/beszel-hub.yml)): lightweight server monitoring platform that includes Docker statistics, historical data, and alert functions.
 - [bind](https://hub.docker.com/r/ubuntu/bind9) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/bind.yml)): A very flexible, full-featured DNS system
@@ -50,7 +50,7 @@
 
 
 ## C
-- [cadvisor](https://hub.docker.com/r/google/cadvisor/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/cadvisor.yml)): Collects and analyzes resource usage and performance characteristics of running containers
+- [cadvisor](https://github.com/google/cadvisor) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/cadvisor.yml)): Collects and analyzes resource usage and performance characteristics of running containers
 - [cert-dumper](https://github.com/ldez/traefik-certs-dumper) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/cert-dumper.yml)): Extracts ssl certificate information from traefik acme.json file
 - [chromadb](https://github.com/chroma-core/chroma/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/chromadb.yml)): open-source embedding database for LLM/AI applications
 - [cially](https://github.com/skellgreco/cially) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/cially.yml)): Cially is a powerful, open-source dashboard designed to provide in-depth insights, real-time analytics, and detailed statistics for your Discord server.
@@ -113,7 +113,7 @@
 - [gitlab](https://docs.gitlab.com/ee/install/docker.html) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/gitlab.yml)): Self-hosted git repository management system
 - [glance](https://github.com/glanceapp/glance) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/glance.yml)): A self-hosted dashboard that puts all your feeds in one place
 - [glances](https://github.com/nicolargo/glances) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/glances.yml)): System monitoring tool
-- [gluetun](https://hub.docker.com/r/qmcgaw/gluetun ) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/gluetun.yml)): VPN Client for Docker Containers and More
+- [gluetun](https://github.com/qdm12/gluetun) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/gluetun.yml)): VPN Client for Docker Containers and More
 - [go2rtc](https://github.com/AlexxIT/go2rtc) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/go2rtc.yml)): Webrtc gateway for camera restreaming 
 - [gotify](https://github.com/gotify/server) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/gotify.yml)): Self-hosted push notification service
 - [grafana](https://grafana.com/docs/grafana/next/setup-grafana/installation/docker/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/grafana.yml)): Platform for monitoring and observability
@@ -128,7 +128,7 @@
 - [homebox](https://github.com/sysadminsmedia/homebox) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/homebox.yml)): Inventory and organization system for your home
 - [homepage](https://github.com/gethomepage/homepage/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/homepage.yml)): Customizable start page for web browsers
 - [homer](https://hub.docker.com/r/b4bz/homer) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/homer.yml)): Self-hosted bookmark manager
-- [huginn](https://hub.docker.com/r/huginn/huginn/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/huginn.yml)): Create agents that monitor and act on your behalf
+- [huginn](https://github.com/huginn/huginn) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/huginn.yml)): Create agents that monitor and act on your behalf
 
 
 ## I
@@ -140,7 +140,7 @@
 
 
 ## J
-- [jellyfin](https://hub.docker.com/r/linuxserver/jellyfin) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/jellyfin.yml)): Media server for streaming content
+- [jellyfin](https://github.com/linuxserver/docker-jellyfin) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/jellyfin.yml)): Media server for streaming content
 - [jellyseerr](https://github.com/Fallenbagel/jellyseerr/tree/develop) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/jellyseerr.yml)): Container for running jellyseerr, a torrent indexer
 - [joplin](https://joplinapp.org/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/joplin.yml)): Note-taking and to-do app
 - [joyride](https://github.com/traefikturkey/joyride) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/joyride.yml)): dynamic dns server that uses docker labels
@@ -150,7 +150,7 @@
 - [kaizoku](https://github.com/oae/kaizoku) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/kaizoku.yml)): Web-based anime downloader
 - [kapowarr](https://github.com/Casvt/Kapowarr) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/kapowarr.yml)): Manages comic book collections and downloads
 - [karakeep](https://github.com/karakeep-app/karakeep) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/karakeep.yml)): A self-hostable bookmark-everything app (links, notes and images) with AI-based automatic tagging and full text search
-- [kasm](https://hub.docker.com/r/linuxserver/kasm) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/kasm.yml)): Browser-based access to desktops, applications, and web services
+- [kasm](https://github.com/linuxserver/docker-kasm) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/kasm.yml)): Browser-based access to desktops, applications, and web services
 - [kestra](https://github.com/kestra-io/kestra) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/kestra.yml)): Event Driven Orchestration & Scheduling Platform
 - [kimai](https://github.com/kevinpapst/kimai2) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/kimai.yml)): Time-tracking software for freelancers and small businesses
 - [kitchenowl](https://github.com/TomBursch/kitchenowl) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/kitchenowl.yml)): Grocery list and recipe manager
@@ -159,8 +159,8 @@
 
 
 ## L
-- [librespeed](https://hub.docker.com/r/linuxserver/librespeed) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/librespeed.yml)): Self-hosted internet speed test tool
-- [lidarr](https://hub.docker.com/r/linuxserver/lidarr) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/lidarr.yml)): Manages music collections and downloads
+- [librespeed](https://github.com/linuxserver/docker-librespeed) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/librespeed.yml)): Self-hosted internet speed test tool
+- [lidarr](https://github.com/linuxserver/docker-lidarr) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/lidarr.yml)): Manages music collections and downloads
 - [linkding](https://github.com/sissbruecker/linkding) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/linkding.yml)): Self-hosted bookmark manager
 - [lubelog](https://github.com/hargata/lubelog) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/lubelog.yml)): Self-Hosted, Open-Source, Web-Based Vehicle Maintenance and Fuel Mileage Tracker
 - [lychee](https://github.com/LycheeOrg/Lychee-Docker) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/lychee.yml)): Photo management and sharing platform
@@ -170,11 +170,11 @@
 - [mailhog](https://github.com/mailhog/MailHog) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/mailhog.yml)): Mail testing tool for developers
 - [mailrise](https://github.com/YoRyan/mailrise) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/mailrise.yml)): email smtp relay service for apprise notifications
 - [maintainerr](https://github.com/jorenn92/Maintainerr) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/maintainerr.yml)): managing media library
-- [makemkv](https://hub.docker.com/r/jlesage/makemkv) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/makemkv.yml)): Fully automated container for MakeMKV with Web GUI
+- [makemkv](https://github.com/jlesage/docker-makemkv) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/makemkv.yml)): Fully automated container for MakeMKV with Web GUI
 - [manyfold](https://github.com/manyfold3d/manyfold) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/manyfold.yml)): A self-hosted digital asset manager for 3d print files
 - [mariadb](https://hub.docker.com/_/mariadb) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/mariadb.yml)): Popular open-source relational database management system
 - [mazanoke](https://github.com/civilblur/mazanoke) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/mazanoke.yml)): A self-hosted local image optimizer that runs in your browser.
-- [mealie](https://hub.docker.com/r/hkotel/mealie) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/mealie.yml)): Recipe management system
+- [mealie](https://github.com/mealie-recipes/mealie) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/mealie.yml)): Recipe management system
 - [minio](https://github.com/minio/minio) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/minio.yml)): High-performance object storage server
 - [monocker](https://hub.docker.com/r/petersem/monocker) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/monocker.yml)): Monitors container states, and sends notifications at state change
 - [mosquitto](https://hub.docker.com/_/eclipse-mosquitto) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/mosquitto.yml)): N mqtt broker for iot communication
@@ -211,8 +211,8 @@
 
 ## P
 - [paperless-ai](https://github.com/clusterzx/paperless-ai) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/paperless-ai.yml)): An automated document analyzer for Paperless-ngx using OpenAI API
-- [paperless-ngx-postgres](https://hub.docker.com/r/linuxserver/paperless-ngx) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/paperless-ngx-postgres.yml)): paperless-ngx with postgres instead of mariadb
-- [paperless-ngx](https://hub.docker.com/r/linuxserver/paperless-ngx) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/paperless-ngx.yml)): Document management system
+- [paperless-ngx-postgres](https://github.com/paperless-ngx/paperless-ngx) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/paperless-ngx-postgres.yml)): paperless-ngx with postgres instead of mariadb
+- [paperless-ngx](https://github.com/paperless-ngx/paperless-ngx) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/paperless-ngx.yml)): Document management system
 - [pgadmin](https://www.pgadmin.org/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/pgadmin.yml)): Web-based postgresql administration tool
 - [photoprism](https://github.com/photoprism/photoprism) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/photoprism.yml)): Personal photo management software
 - [phpmyadmin](https://hub.docker.com/r/phpmyadmin/phpmyadmin) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/phpmyadmin.yml)): Web-based mysql and mariadb database management tool
@@ -248,7 +248,7 @@
 - [radarr-postgres](https://hub.docker.com/_/postgres) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/radarr-postgres.yml)): Container for running radarr with postgresql
 - [radarr](https://hub.docker.com/r/linuxserver/radarr) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/radarr.yml)): Manages movie collections and downloads
 - [readarr](https://docs.linuxserver.io/images/docker-readarr/#docker-compose-recommended-click-here-for-more-info) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/readarr.yml)): Manages ebook collections and downloads
-- [recyclarr](https://hub.docker.com/r/recyclarr/recyclarr) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/recyclarr.yml)): Container for running recyclarr, a media indexer
+- [recyclarr](https://github.com/recyclarr/recyclarr# ) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/recyclarr.yml)): Container for running recyclarr, a media indexer
 - [redis](https://github.com/redis/redis) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/redis.yml)): In-memory data structure store
 - [redlib](https://github.com/redlib-org/redlib?tab=readme-ov-file#Configuration) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/redlib.yml)): An open source frontend for reddit.
 - [remotely](https://github.com/immense/Remotely) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/remotely.yml)): Remote desktop and support tool

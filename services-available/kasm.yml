@@ -3,6 +3,7 @@ networks:
     external: true
 
 # description: Browser-based access to desktops, applications, and web services
+# https://github.com/linuxserver/docker-kasm
 # https://hub.docker.com/r/linuxserver/kasm
 
 services:

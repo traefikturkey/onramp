@@ -5,8 +5,8 @@ networks:
     external: true
 
 # description: paperless-ngx with postgres instead of mariadb
-# https://hub.docker.com/r/linuxserver/paperless-ngx
 # https://github.com/paperless-ngx/paperless-ngx
+# https://hub.docker.com/r/linuxserver/paperless-ngx
 # https://docs.paperless-ngx.com/
 
 services:

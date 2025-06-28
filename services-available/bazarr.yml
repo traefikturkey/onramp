@@ -3,6 +3,7 @@ networks:
     external: true
 
 # description: Manages subtitles for media content
+# https://github.com/linuxserver/docker-bazarr
 # https://hub.docker.com/r/linuxserver/bazarr
 
 services:

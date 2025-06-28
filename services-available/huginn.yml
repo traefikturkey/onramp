@@ -3,8 +3,8 @@ networks:
     external: true
 
 # description: Create agents that monitor and act on your behalf
-# https://hub.docker.com/r/huginn/huginn/
 # https://github.com/huginn/huginn
+# https://hub.docker.com/r/huginn/huginn/
 # https://www.youtube.com/watch?v=PzyvTHrLmQk
 
 services:

@@ -3,6 +3,7 @@ networks:
     external: true
 
 # description: Container for running recyclarr, a media indexer
+# https://github.com/recyclarr/recyclarr# 
 # https://hub.docker.com/r/recyclarr/recyclarr
 # https://recyclarr.dev/wiki/installation/
 

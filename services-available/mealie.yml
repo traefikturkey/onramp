@@ -3,6 +3,7 @@ networks:
     external: true
 
 # description: Recipe management system
+# https://github.com/mealie-recipes/mealie
 # https://hub.docker.com/r/hkotel/mealie
 
 services:

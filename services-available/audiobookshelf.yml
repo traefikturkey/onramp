@@ -3,7 +3,9 @@ networks:
     external: true
 
 # description: Manages and serves audiobooks
+# https://github.com/advplyr/audiobookshelf
 # https://hub.docker.com/r/advplyr/audiobookshelf
+# https://www.audiobookshelf.org/docs/
 
 services:
   audiobookshelf:
