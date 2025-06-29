@@ -48,7 +48,7 @@ services:
     networks:
       - traefik
     volumes:
-      - ./etc/vikunja/db:/var/lib/mysql/data
+      - ./etc/vikunja/db:/var/lib/mysql
     restart: ${VIKUNJA_RESTART:-unless-stopped}
     healthcheck:
       test: ["CMD-SHELL", "mysqladmin ping -h localhost -u $$MYSQL_USER --password=$$MYSQL_PASSWORD"]

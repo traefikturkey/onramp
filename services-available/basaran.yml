@@ -2,7 +2,7 @@ networks:
   traefik:
     external: true
 
-# description: Container for running basaran, a web-based file manager
+# description: ( archived ) Container for running basaran, a lightweight LLM server
 # https://github.com/hyperonym/basaran
 # https://huggingface.co/bigscience/bloomz-560m
 

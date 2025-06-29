@@ -4,7 +4,6 @@ networks:
 
 # description: Useful tools for developer and people working in IT.
 # https://github.com/CorentinTh/it-tools
-# <================= add links to other related documentation here =================>
 
 services:
   ittools:

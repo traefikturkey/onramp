@@ -2,7 +2,7 @@ networks:
   traefik:
     external: true
 
-# description: Web-based user interface for ollama, a media indexer
+# description: Web-based user interface for ollama LLM and others
 # https://github.com/open-webui/open-webui
 
 services:
@@ -19,7 +19,8 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
-      - OLLAMA_BASE_URLS=https://${OLLAMA_CONTAINER_NAME:-ollama}.${HOST_DOMAIN}
+      - OLLAMA_BASE_URLS=http://${OLLAMA_CONTAINER_NAME:-ollama}:11434
+      # .${HOST_DOMAIN}
     labels:
       - joyride.host.name=${OLLAMA_WEBUI_CONTAINER_NAME:-chat}.${HOST_DOMAIN}
       - traefik.enable=${OLLAMA_WEBUI_TRAEFIK_ENABLE:-true}

@@ -3,6 +3,7 @@ networks:
     external: true
 
 # description: Media server for streaming content
+# https://github.com/linuxserver/docker-jellyfin
 # https://hub.docker.com/r/linuxserver/jellyfin
 
 services:

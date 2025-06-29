@@ -4,6 +4,7 @@ networks:
 
 # description: Flow-based development tool for visual programming
 # https://hub.docker.com/r/nodered/node-red/
+# https://github.com//node-red/node-red-docker
 
 services:
   nodered:

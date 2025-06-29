@@ -1,0 +1,35 @@
+networks:
+  traefik:
+    external: true
+
+# description: A modern self-hosted music player.
+# https://github.com/jeffvli/feishin
+
+services:
+  feishin:
+    image: ghcr.io/jeffvli/feishin:${FEISHIN_DOCKER_TAG:-latest}
+    container_name: ${FEISHIN_CONTAINER_NAME:-feishin}
+    restart: ${FEISHIN_RESTART:-unless-stopped}
+    mem_limit: ${FEISHIN_MEM_LIMIT:-200g}
+    networks:
+      - traefik
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - SERVER_NAME=${FEISHIN_SERVER_NAME:-jellyfin} # pre defined server name
+      - SERVER_LOCK=${FEISHIN_SERVER_LOCK:-true} # When true AND name/type/url are set, only username/password can be toggled
+      - SERVER_TYPE=${FEISHIN_SERVER_TYPE:-jellyfin} # Can be either jellyfin or navidrome
+      - SERVER_URL=${FEISHIN_SERVER_URL:-http://jellyfin:8096}
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - UMASK=002
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=${FEISHIN_HOST_NAME:-feishin}.${HOST_DOMAIN}
+      - traefik.enable=${FEISHIN_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.feishin.entrypoints=websecure
+      - traefik.http.routers.feishin.rule=Host(`${FEISHIN_HOST_NAME:-feishin}.${HOST_DOMAIN}`)
+      - traefik.http.routers.feishin.middlewares=default-headers@file
+      - traefik.http.services.feishin.loadbalancer.server.port=9180
+      - com.centurylinklabs.watchtower.enable=${FEISHIN_WATCHTOWER_ENABLED:-true}
+      - autoheal=${FEISHIN_AUTOHEAL_ENABLED:-true}

@@ -4,7 +4,7 @@ networks:
   traefik:
     external: true
 
-# description: Self-hosted email marketing platform
+# description: email smtp relay service for apprise notifications
 # https://github.com/YoRyan/mailrise
 
 services:

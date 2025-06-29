@@ -3,6 +3,7 @@ networks:
     external: true
 
 # description: Manages music collections and downloads
+# https://github.com/linuxserver/docker-lidarr
 # https://hub.docker.com/r/linuxserver/lidarr
 
 services:

@@ -4,6 +4,7 @@ networks:
 
 # description: Container for running prowlarr, a media indexer
 # https://hub.docker.com/r/linuxserver/prowlarr
+# https://github.com/linuxserver/docker-prowlarr
 
 services:
   prowlarr:

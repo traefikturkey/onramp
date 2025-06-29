@@ -2,7 +2,8 @@ networks:
   traefik:
     external: true
 
-# description: Self-hosted music recommendation engine
+# description: homepage/dashboard for docker containers and services
+# https://github.com/pawelmalak/flame
 # https://hub.docker.com/r/pawelmalak/flame
 
 services:

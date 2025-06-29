@@ -40,13 +40,13 @@ endif
 
 # check what editor is available
 ifdef VSCODE_REMOTE_SSH
-	EDITOR := nano
+	EDITOR := $(EDITOR)
 else ifdef VSCODE_IPC_HOOK_CLI
 	EDITOR := code
 else ifdef EDITOR
 	EDITOR := $(EDITOR)
 else
-	EDITOR := nano
+	EDITOR := vim
 endif
 
 # prevents circular references, do not remove

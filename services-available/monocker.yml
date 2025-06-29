@@ -1,5 +1,6 @@
 # description: Monitors container states, and sends notifications at state change
 # https://hub.docker.com/r/petersem/monocker
+# https://github.com/petersem/monocker
 
 services:
   monocker:

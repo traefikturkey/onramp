@@ -2,8 +2,8 @@ networks:
   traefik:
     external: true
 
-# description: <= put a brief description of paperless-ai here =>
-# https://github.com/clusterzx/paperless-ai# <================= add links to other related documentation here =================>
+# description: An automated document analyzer for Paperless-ngx using OpenAI API
+# https://github.com/clusterzx/paperless-ai
 
 services:
   paperless-ai:
