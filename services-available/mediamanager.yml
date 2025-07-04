@@ -1,0 +1,106 @@
+networks:
+  mm-internal:
+  traefik:
+    external: true
+
+# description: MediaManager is modern software to manage your TV and movie library
+# https://github.com/maxdorninger/MediaManager
+# https://maxdorninger.github.io/MediaManager/introduction.html
+
+services:
+  mediamanager-db:
+    image: postgres:latest
+    container_name: ${MEDIAMANAGER_DB_NAME:-mediamanager-db}
+    restart: ${MEDIAMANAGER_RESTART:-unless-stopped}
+    volumes:
+      - ./etc/mediamanager/db:/var/lib/postgresql/data
+      - /etc/localtime:/etc/localtime:ro      
+    environment:
+      - POSTGRES_USER=${MM_POSTGRES_USER:-onramp}
+      - POSTGRES_DB=${MM_POSTGRES_DB:-MediaManager}
+      - POSTGRES_PASSWORD=${MM_POSTGRES_PASSWORD:-MediaManager}
+    networks:
+      - mm-internal
+
+  mediamanager-backend:
+    image: ghcr.io/maxdorninger/mediamanager/backend:${MEDIAMANAGERBACKEND_DOCKER_TAG:-latest}
+    container_name: ${MEDIAMANAGER_CONTAINER_NAME:-mediamanager-backend}
+    restart: ${MEDIAMANAGER_RESTART:-unless-stopped}
+    # mem_limit: ${MEDIAMANAGER_MEM_LIMIT:-200g}
+    networks:
+      - mm-internal
+    volumes:
+      - ./etc/mediamanager/backend:/data # <==== this probably needs changed
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      
+      - QBITTORRENT_PASSWORD=
+      - QBITTORRENT_HOST=
+      - QBITTORRENT_USERNAME=
+      - QBITTORRENT_PORT=
+      - CORS_URLS=["http://localhost:3000","${MEDIAMANAGER_HOST_NAME:-mediamanager}.${HOST_DOMAIN}"]
+      - DB_HOST=mediamanager-db
+      - FRONTEND_URL=${MEDIAMANAGER_HOST_NAME:-mediamanager}.${HOST_DOMAIN}
+
+      # if using external DB service      
+      - DB_USER=${MM_POSTGRES_USER:-MediaManager}
+      - DB_PORT=5432
+      - DB_PASSWORD=${MM_POSTGRES_PASSWORD:-MediaManager}
+      - DB_DBNAME=${MM_POSTGRES_DB:-MediaManager}
+
+      # For Prowlarr integration
+      - PROWLARR_ENABLED=${MM_PROWLARR_ENABLED:-false}
+      - PROWLARR_URL=http://prowlarr:9696
+      - PROWLARR_API_KEY=${MM_PROWLARR_API_KEY}
+
+      # for Jacket integration
+      - JACKETT_ENABLED=${MM_JACKETT_ENABLED:-false}
+      - JACKETT_URL=http://jackett:9117
+      - JACKETT_API_KEY=${MM_JACKETT_API_KEY}
+      - JACKETT_INDEXERS=["all"]
+
+      # generate a random string with "openssl rand -hex 32"
+      - AUTH_TOKEN_SECRET=${MM_TOKEN:-supersecretpassword}
+      # this should be your email address
+      - AUTH_ADMIN_EMAIL=["${MM_ADMIN_EMAIL}" , "admin@example.com"]
+
+      # if you forget your password you can request a link and get it via email, you must have the email settings configured for this to work obviously
+      - AUTH_EMAIL_PASSWORD_RESETS=${MM_AUTH_EMAIL_PASSWORD_RESETS:-false}
+      # to enable email usage, uncomment below variables after filling them out in the .env and restart the backend service
+      #- EMAIL_SMTP_HOST=${MM_EMAIL_SMTP_HOST}
+      #- EMAIL_SMTP_PORT=${MM_EMAIL_SMTP_PORT}
+      #- EMAIL_SMTP_USER=${MM_EMAIL SMTP_USER}
+      #- EMAIL_SMTP_PASSWORD=${MM_EMAIL_SMTP_PASSWORD}
+      #- EMAIL_FROM_EMAIL=${MM_EMAIL_FROM_EMAIL}
+      #- EMAIL_USE_TLS=${MM_EMAIL_USE_TLS}
+      #- NOTIFICATION_EMAIL=notify@example.com
+      - OPENID_ENABLED=${MM_OPENID_ENABLED:-false}
+      - OPENID_CLIENT_ID=${MM_OPENID_CLIENT_ID}
+      - OPENID_CLIENT_SECRET=${MM_OPENID_CLIENT_SECRET}
+      - OPENID_CONFIGURATION_ENDPOINT=${MM_OPENID_CONFIGURATION_ENDPOINT}
+      - OPENID_NAME=${MM_OPENID_NAME}
+      - AUTH_SESSION_LIFETIME=${MM_AUTH_SESSION_LIFETIME:-10}
+
+  mediamanager-frontend:
+    image: ghcr.io/maxdorninger/mediamanager/frontend:${MEDIAMANAGERFRONTEND_DOCKER_TAG:-latest}
+    container_name: ${MEDIAMANAGERFRONT_CONTAINER_NAME:-mediamanager-frontend}
+    restart: ${MEDIAMANAGER_RESTART:-unless-stopped}    
+    environment:
+      - PUBLIC_API_URL=http://mediamanager-backend:8000/api/v1
+    depends_on:
+      - mediamanager-backend
+    networks:
+      - traefik
+      - mm-internal
+    labels:
+      - joyride.host.name=${MEDIAMANAGER_HOST_NAME:-mediamanager}.${HOST_DOMAIN}
+      - traefik.enable=${MEDIAMANAGER_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.mediamanager.entrypoints=websecure
+      - traefik.http.routers.mediamanager.rule=Host(`${MEDIAMANAGER_HOST_NAME:-mediamanager}.${HOST_DOMAIN}`)
+      #- traefik.http.services.mediamanager.loadbalancer.server.scheme=https # enable if the service wants to connect over https
+      - traefik.http.services.mediamanager.loadbalancer.server.port=3000
+      - com.centurylinklabs.watchtower.enable=${MEDIAMANAGER_WATCHTOWER_ENABLED:-true}
+      - autoheal=${MEDIAMANAGER_AUTOHEAL_ENABLED:-true}
