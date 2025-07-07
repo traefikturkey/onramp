@@ -18,6 +18,7 @@ volumes:
 services:
   lazylibrarian:
     volumes:
+      - ${MEDIA_BOOKS_VOLUME:-lazylibrarian-nfs-media}:${LAZYLIBRARIAN_BOOKS_PATH:-/books}
       - lazylibrarian-nfs-downloads:/downloads
-      - ./etc/lazylibrarian:/config
-      - /etc/localtime:/etc/localtime:ro
+      - ${LAZYLIBRARIAN_CONFIG_VOLUME:-./etc/lazylibrarian}:/config
+      - /etc/localtime:/etc/localtime:ro      
