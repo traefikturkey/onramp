@@ -1,0 +1,15 @@
+volumes:
+  lazylibrarian-nfs-downloads:
+    labels:
+      - remove_volume_on=down
+    driver_opts:
+      type: nfs
+      o: "addr=${LAZYLIBRARIAN_ROOT_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
+      device: ":${LAZYLIBRARIAN_ROOT_NFS_SERVER_PATH:-${NFS_DOWNLOADS_PATH}}"
+
+services:
+  lazylibrarian:
+    volumes:
+      - lazylibrarian-nfs-downloads:/downloads
+      - ./etc/lazylibrarian:/config
+      - /etc/localtime:/etc/localtime:ro
