@@ -1,11 +1,19 @@
 volumes:
+  lazylibrarian-nfs-media:
+    labels:
+      - remove_volume_on=down
+    driver_opts:
+      type: nfs
+      o: "addr=${LAZYLIBRARIAN_MEDIA_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
+      device: ":${LAZYLIBRARIAN_MEDIA_NFS_SERVER_PATH:-${NFS_BOOKS_PATH}}"
+
   lazylibrarian-nfs-downloads:
     labels:
       - remove_volume_on=down
     driver_opts:
       type: nfs
-      o: "addr=${LAZYLIBRARIAN_ROOT_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
-      device: ":${LAZYLIBRARIAN_ROOT_NFS_SERVER_PATH:-${NFS_DOWNLOADS_PATH}}"
+      o: "addr=${LAZYLIBRARIAN_MEDIA_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
+      device: ":${LAZYLIBRARIAN_MEDIA_NFS_DOWNLOADS_PATH:-${NFS_DOWNLOADS_PATH}}"
 
 services:
   lazylibrarian:
