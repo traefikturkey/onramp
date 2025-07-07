@@ -1,5 +1,5 @@
 # Available Services
-234 services and counting...
+235 services and counting...
 
 [A](#A)
 [B](#B)
@@ -159,6 +159,7 @@
 
 
 ## L
+- [lazylibrarian](https://gitlab.com/LazyLibrarian/LazyLibrarian) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/lazylibrarian.yml)): LazyLibrarian is a SickBeard, CouchPotato, Headphones-like application for ebooks, audiobooks and magazines
 - [librespeed](https://github.com/linuxserver/docker-librespeed) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/librespeed.yml)): Self-hosted internet speed test tool
 - [lidarr](https://github.com/linuxserver/docker-lidarr) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/lidarr.yml)): Manages music collections and downloads
 - [linkding](https://github.com/sissbruecker/linkding) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/linkding.yml)): Self-hosted bookmark manager
