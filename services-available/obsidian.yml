@@ -1,0 +1,31 @@
+networks:
+  traefik:
+    external: true
+
+# description: self hosted Notes app
+# https://obsidian.md/community
+
+services:
+  obsidian:
+    image: linuxserver/obsidian:${OBSIDIAN_DOCKER_TAG:-latest}
+    container_name: ${OBSIDIAN_CONTAINER_NAME:-obsidian}
+    restart: ${OBSIDIAN_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/obsidian/config:/config
+      - ./etc/obsidian/data:/data
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=${OBSIDIAN_HOST_NAME:-obsidian}.${HOST_DOMAIN}
+      - traefik.enable=${OBSIDIAN_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.obsidian.entrypoints=websecure
+      - traefik.http.routers.obsidian.rule=Host(`${OBSIDIAN_HOST_NAME:-obsidian}.${HOST_DOMAIN}`)
+      #- traefik.http.services.obsidian.loadbalancer.server.scheme=https # enable if the service wants to connect over https
+      - traefik.http.services.obsidian.loadbalancer.server.port=3000
+      - com.centurylinklabs.watchtower.enable=${OBSIDIAN_WATCHTOWER_ENABLED:-true}
+      - autoheal=${OBSIDIAN_AUTOHEAL_ENABLED:-true}
