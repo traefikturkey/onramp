@@ -8,7 +8,7 @@ networks:
 
 services:
   headphones:
-    image: linuxserver/headphones:${HEADPHONES_DOCKER_TAG:-latest}
+    image: alonlivne/headphones:${HEADPHONES_DOCKER_TAG:-latest}
     container_name: ${HEADPHONES_CONTAINER_NAME:-headphones}
     restart: ${HEADPHONES_RESTART:-unless-stopped}
     networks:
