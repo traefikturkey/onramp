@@ -121,6 +121,7 @@
 
 
 ## H
+- [headphones](https://github.com/rembo10/headphones) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/headphones.yml)): Headphones is an automated music downloader for NZB and Torrent, written in Python
 - [healthchecks](https://healthchecks.io/docs/self_hosted_docker/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/healthchecks.yml)): Monitors cron jobs and sends alerts
 - [heimdall](https://github.com/linuxserver/Heimdall) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/heimdall.yml)): Dashboard for organizing web applications
 - [homarr](https://github.com/ajnart/homarr) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/homarr.yml)): Home automation and remote control system
@@ -200,6 +201,7 @@
 
 
 ## O
+- [obsidian](https://obsidian.md/community) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/obsidian.yml)): self hosted Notes app
 - [odoo](https://github.com/odoo/odoo) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/odoo.yml)): a suite of applications used in managing a business, including CRM, ERP, and more.
 - [olivetin](https://github.com/OliveTin/OliveTin) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/olivetin.yml)): Access predefined shell commands from a web interface.
 - [ollama-webui](https://github.com/open-webui/open-webui) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/ollama-webui.yml)): Web-based user interface for ollama LLM and others
