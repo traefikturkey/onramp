@@ -13,6 +13,7 @@ docker-compose.*.yml
 .restore_latest
 
 .env
+.venv/
 .hosts
 envs/*
 hosts*
