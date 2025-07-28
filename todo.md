@@ -1,6 +1,7 @@
 # To do
 
-- [ ] Recreate the env template into a yaml format.
+- [x] Recreate the env template into a yaml format.
+- [ ] Rewrite tasks and services definitions such that the Docker compose files are in a separate directory path than the persistent data. (/apps/etc and /apps/services)
 - [ ] Rewrite service definitions to use jinja variables.
 - [ ] Create roles to handle the various onramp tasks (starting all containers, stopping all, creating backups, updating containers.)
 - [ ] Consider helper scripts for creating external services.
