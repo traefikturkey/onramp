@@ -15,5 +15,5 @@
     name: "Onramp - Weekly docker system cleanup."
     minute: "0"
     hour: "3"
-    day: "2"
+    weekday: "2"
     job: "docker system prune -a"
