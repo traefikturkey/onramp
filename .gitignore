@@ -11,6 +11,7 @@ overrides-enabled/*.yml
 docker-compose.*.yml
 .vscode
 .restore_latest
+environment.yml
 
 .env
 .venv/
