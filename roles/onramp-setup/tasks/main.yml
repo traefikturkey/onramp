@@ -1,0 +1,19 @@
+- name: Install Docker using Jeff Geerling's Ansible Galaxy role.
+  ansible.builtin.include_role:
+    name: geerlingguy.docker
+
+- name: Create the apps directory.
+  ansible.builtin.file:
+    path: /apps
+    owner: {{ onramp_uid }}
+    group: {{ onramp_gid }}
+    mode: '0755'
+    state: directory
+
+- name: Create a cron job to clean up unused container images.
+  ansible.builtin.cron:
+    name: "Onramp - Weekly docker system cleanup."
+    minute: "0"
+    hour: "3"
+    day: "2"
+    job: "docker system prune -a"
