@@ -1,0 +1,15 @@
+---
+
+- name: Create onramp backup directory.
+  ansible.builtin.file:
+    path: /apps/backups
+    owner: "{{ PUID }}"
+    group: "{{ PGID }}"
+    mode: "0755"
+    state: directory
+
+- name: Create backup archive.
+  community.general.archive:
+    path: /apps/etc/*
+    dest: /apps/backups/onramp-config-backup-{{ host.name }}-{{ '%y-%m-%d-%H%M' | strftime() }}.tar.gz
+    format: gz

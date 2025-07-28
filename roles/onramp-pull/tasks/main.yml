@@ -1,0 +1,18 @@
+---
+
+- name: Make sure that the /apps directory exists.
+  ansible.builtin.stat:
+    path: /apps
+  register: apps_dir
+
+- name: Fail immediately if the target directory doesn't exist.
+  ansible.builtin.fail:
+    msg: "The /apps directory does not exist!"
+  when: not apps_dir.stat.exist
+
+- name: Pull down updated container images and restart.
+  ansible.builtin.shell: >
+    cd /apps/{{ item }}
+    docker compose pull
+    docker compose up -d --force-recreate
+  loop: "{{ services-enabled }}"
