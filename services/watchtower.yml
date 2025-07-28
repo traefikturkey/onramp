@@ -1,0 +1,35 @@
+networks:
+  traefik:
+    external: true
+
+# description: Automatically updates docker containers
+# for beatkind version
+# https://github.com/beatkind/watchtower
+# https://watchtower.devcdn.net
+# for containrrr version
+# https://github.com/containrrr/watchtower
+# https://containrrr.dev/watchtower/notifications/
+
+services:
+  watchtower:
+    image: ${WATCHTOWER_IMAGE:-containrrr/watchtower}:${WATCHTOWER_DOCKER_TAG:-latest}
+    container_name: ${WATCHTOWER_CONTAINER_NAME:-watchtower}
+    restart: ${WATCHTOWER_RESTART:-unless-stopped}
+    mem_limit: ${WATCHTOWER_MEM_LIMIT:-100m}
+    networks:
+      - traefik
+    environment:
+      - TZ=${TZ}
+      - WATCHTOWER_NOTIFICATIONS_HOSTNAME=${WATCHTOWER_NOTIFICATIONS_HOSTNAME:-${HOST_NAME}.${HOST_DOMAIN}}
+      - WATCHTOWER_NOTIFICATION_TITLE_TAG=${WATCHTOWER_NOTIFICATION_TITLE_TAG:-watchtower}
+      - WATCHTOWER_NOTIFICATIONS=${WATCHTOWER_NOTIFICATIONS:-shoutrrr}
+      - WATCHTOWER_NOTIFICATION_URL=${WATCHTOWER_NOTIFICATION_URL:-}
+      - WATCHTOWER_SCHEDULE=${WATCHTOWER_SCHEDULE:-0 0 4 * * *}
+      - WATCHTOWER_HTTP_API_METRICS=${WATCHTOWER_HTTP_API_METRICS:-false}
+      - WATCHTOWER_HTTP_API_TOKEN=${WATCHTOWER_HTTP_API_TOKEN:-watchtower_secret_token}
+      - WATCHTOWER_CLEANUP=${WATCHTOWER_CLEANUP:-false}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    labels:
+      - traefik.enable=${WATCHTOWER_TRAEFIK_ENABLE:-false}
+      - autoheal=${WATCHTOWER_AUTOHEAL:-true}

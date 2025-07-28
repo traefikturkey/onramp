@@ -1,0 +1,43 @@
+networks:
+  traefik:
+    external: true
+
+# description: Enables apple airprint functionality for non-airprint printers using CUPS and Avahi
+# https://github.com/chuckcharlie/cups-avahi-airprint
+
+services:
+  airprint:
+    image: chuckcharlie/cups-avahi-airprint:${AIRPRINT_DOCKER_TAG:-latest}
+    container_name: ${AIRPRINT_CONTAINER_NAME:-airprint}
+    restart: unless-stopped
+    networks:
+      - traefik
+    # Host mode is needed for AirPrint © Apple TM to work
+    # This is required to support multicasting which is needed for AirPrint © Apple TM.
+    # Can be disabled an replaced with the port for manual operation
+    network_mode: "host"
+    volumes:
+      - ./etc/airprint:/config
+      - ./etc/airprint/services:/services
+      - /etc/localtime:/etc/localtime:ro
+    # ports:
+    #   - 631:631
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - CUPSADMIN=${AIRPRINT_ADMIN_USER}
+      - CUPSPASSWORD=${AIRPRINT_ADMIN_PASS}
+    labels:
+      - joyride.host.name=${AIRPRINT_CONTAINER_NAME:-airprint}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.airprint.entrypoints=websecure
+      - traefik.http.routers.airprint.rule=Host(`${AIRPRINT_CONTAINER_NAME:-airprint}.${HOST_DOMAIN}`)
+      - traefik.http.services.airprint.loadbalancer.server.port=631
+      - com.centurylinklabs.watchtower.enable=${AIRPRINT_WATCHTOWER_ENABLED:-true}
+      - autoheal=true
+
+    devices:
+      # your usb device forwarding to the docker image
+      # Here you will need to passthru the USB of your printer to the VM
+      - /dev/bus/usb:/dev/bus/usb

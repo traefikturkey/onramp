@@ -1,0 +1,65 @@
+networks:
+  traefik:
+    external: true
+
+# description: Monitors cron jobs and sends alerts
+# https://healthchecks.io/docs/self_hosted_docker/
+
+services:
+  healthchecks:
+    image: healthchecks/healthchecks:${HEALTHCHECKS_DOCKER_TAG:-latest}
+    container_name: ${HEALTHCHECKS_CONTAINER_NAME:-healthchecks}
+    restart: ${HEALTHCHECKS_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    depends_on:
+      - hc-postgres
+    environment:
+      - APPRISE_ENABLED=False
+      - DB=postgres
+      - DB_CONN_MAX_AGE=0
+      - DB_HOST=hc-postgres
+      - DB_NAME=${HEALTHCHECKS_DB_NAME:-healthchecks}
+      - DB_PASSWORD=${HEALTHCHECKS_DB_PASS:-changeme}
+      - DB_PORT=5432
+      - DB_SSLMODE=allow
+      - DB_TARGET_SESSION_ATTRS=any
+      - DB_USER=${HEALTHCHECKS_DB_USER:-dbadmin}
+      - DEBUG=False
+      - DEFAULT_FROM_EMAIL=${HEALTHCHECKS_EMAIL:-healthchecks@example.org}
+      - INTEGRATIONS_ALLOW_PRIVATE_IPS=False
+      - PING_BODY_LIMIT=10000
+      - PING_EMAIL_DOMAIN=localhost
+      - PING_ENDPOINT=https://${HEALTHCHECKS_CONTAINER_NAME:-healthchecks}.${HOST_DOMAIN}/ping/
+      - PUSHOVER_API_TOKEN=${PUSHOVER_API_TOKEN:-changeme}
+      - PUSHOVER_EMERGENCY_EXPIRATION=86400
+      - PUSHOVER_EMERGENCY_RETRY_DELAY=300
+      - PUSHOVER_SUBSCRIPTION_URL=${PUSHOVER_SUBSCRIPTION_URL:-https://changeme.example.com}
+      - REGISTRATION_OPEN=True
+      - SECRET_KEY=${HEALTHCHECKS_SECRET_KEY:-123456}
+      - SHELL_ENABLED=False
+      - SITE_LOGO_URL=https://healthchecks.io/static/img/logo-full-ua.svg
+      - SITE_NAME=${HEALTHCHECKS_SITE_NAME:-healthchecks}
+      - SITE_ROOT=https://${HEALTHCHECKS_CONTAINER_NAME:-healthchecks}.${HOST_DOMAIN}
+    labels:
+      - joyride.host.name=${HEALTHCHECKS_CONTAINER_NAME:-healthchecks}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.healthchecks.entrypoints=websecure
+      - traefik.http.routers.healthchecks.rule=Host(`${HEALTHCHECKS_CONTAINER_NAME:-healthchecks}.${HOST_DOMAIN}`)
+      - traefik.http.services.healthchecks.loadbalancer.server.port=8000
+      - traefik.http.routers.healthchecks.middlewares=default-headers@file
+      - com.centurylinklabs.watchtower.enable=${HEALTHCHECKS_WATCHTOWER_ENABLED:-true}
+      - autoheal=true
+
+  hc-postgres:
+    image: postgres:${HEALTHCHECKS_DOCKER_TAG:-16.0}
+    container_name: hc-postgres
+    networks:
+      - traefik
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${HEALTHCHECKS_DB_USER:-dbadmin}
+      POSTGRES_PASSWORD: ${HEALTHCHECKS_DB_PASS:-changeme}
+      POSTGRES_DB: healthchecks
+    volumes:
+      - ./etc/healthchecks:/var/lib/postgresql/data

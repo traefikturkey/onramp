@@ -1,0 +1,32 @@
+networks:
+  traefik:
+    external: true
+
+# description: Request management and notification system for media content
+# https://hub.docker.com/r/linuxserver/overseerr
+# https://github.com/linuxserver/docker-overseerr
+
+services:
+  overseerr:
+    image: linuxserver/overseerr:${OVERSEERR_DOCKER_TAG:-latest}
+    container_name: ${OVERSEERR_CONTAINER_NAME:-overseerr}
+    restart: unless-stopped
+    networks:
+      - traefik
+    volumes:
+      - ./etc/overseerr:/config
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 5055:5055
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=${OVERSEERR_CONTAINER_NAME:-overseerr}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.overseerr.entrypoints=websecure
+      - traefik.http.routers.overseerr.rule=Host(`${OVERSEERR_CONTAINER_NAME:-overseerr}.${HOST_DOMAIN}`)
+      - traefik.http.services.overseerr.loadbalancer.server.port=5055
+      - com.centurylinklabs.watchtower.enable=${OVERSEERR_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

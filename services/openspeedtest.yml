@@ -1,0 +1,30 @@
+networks:
+  traefik:
+    external: true
+
+# description: web-based speed test application
+# https://github.com/openspeedtest/Docker-Image
+
+services:
+  openspeedtest:
+    image: openspeedtest/${OPENSPEEDTEST_DOCKER_TAG:-latest}
+    container_name: ${OPENSPEEDTEST_CONTAINER_NAME:-openspeedtest}
+    restart: ${OPENSPEEDTEST_RESTART:-unless-stopped}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    networks:
+      - traefik
+    labels:
+      - joyride.host.name=${OPENSPEEDTEST_CONTAINER_NAME:-openspeedtest}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.openspeedtest.entrypoints=websecure
+      - traefik.http.routers.openspeedtest.rule=Host(`${OPENSPEEDTEST_CONTAINER_NAME:-openspeedtest}.${HOST_DOMAIN}`)
+      - traefik.http.services.openspeedtest.loadbalancer.server.port=3000
+      - traefik.http.middlewares.limit.buffering.maxRequestBodyBytes=10000000000
+      - traefik.http.routers.openspeedtest.middlewares=limit
+      - com.centurylinklabs.watchtower.enable=${OPENSPEEDTEST_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

@@ -1,0 +1,32 @@
+networks:
+  traefik:
+    external: true
+
+# description: Self-hosted uptime monitoring tool
+# https://github.com/louislam/uptime-kuma
+
+services:
+  uptime-kuma:
+    image: louislam/uptime-kuma:${UPTIMEKUMA_DOCKER_TAG:-latest}
+    container_name: ${UPTIMEKUMA_CONTAINER_NAME:-uptimekuma}
+    restart: unless-stopped
+    mem_limit: ${UPTIMEKUMA_MEM_LIMIT:-500m}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/uptime-kuma:/app/data
+      - ${UPTIMEKUMA_DOCKER_SOCKET:-/var/run/docker.sock}:/var/run/docker.sock
+    environment:
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=${UPTIMEKUMA_HOST_NAME:-uptimekuma}.${HOST_DOMAIN}
+      - traefik.enable=${UPTIMEKUMA_TRAEFIK_ENABLE:-true}
+      - traefik.http.routers.uptimekuma.entrypoints=websecure
+      - traefik.http.routers.uptimekuma.rule=Host(`${UPTIMEKUMA_HOST_NAME:-uptimekuma}.${HOST_DOMAIN}`)
+      - traefik.http.routers.uptimekuma.tls=true
+      - traefik.http.routers.uptimekuma.service=uptimekuma
+      - traefik.http.routers.uptimekuma.middlewares=default-headers@file
+      - traefik.http.services.uptimekuma.loadbalancer.server.port=3001
+      - traefik.docker.network=traefik
+      - com.centurylinklabs.watchtower.enable=${UPTIMEKUMA_WATCHTOWER_ENABLE:-true}
+      - autoheal=${UPTIMEKUMA_AUTOHEAL:-true}

@@ -1,0 +1,40 @@
+networks:
+  traefik:
+    external: true
+
+# description: Manages tv show collections and downloads
+# https://hub.docker.com/r/linuxserver/sonarr
+
+services:
+  sonarr:
+    image: linuxserver/sonarr:${SONARR_DOCKER_TAG:-latest}
+    container_name: ${SONARR_CONTAINER_NAME:-sonarr}
+    restart: ${SONARR_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/sonarr:/config
+      - ${MEDIA_SHOWS_VOLUME:-./media/shows}:/tv
+      - ${MEDIA_DOWNLOADS_VOLUME:-./media/downloads}:/downloads
+      - /dev/rtc:/dev/rtc:ro
+      - /etc/localtime:/etc/localtime:ro
+    # ports:
+    #   - 8989:8989
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    healthcheck:
+      test: curl --fail http://localhost:8989 || exit 1
+      interval: 60s
+      retries: 5
+      start_period: 20s
+      timeout: 10s
+    labels:
+      - joyride.host.name=${SONARR_CONTAINER_NAME:-sonarr}.${HOST_DOMAIN}
+      - traefik.enable=${SONARR_TRAEFIK_ENABLE:-true}
+      - traefik.http.routers.sonarr.entrypoints=websecure
+      - traefik.http.routers.sonarr.rule=Host(`${SONARR_CONTAINER_NAME:-sonarr}.${HOST_DOMAIN}`)
+      - traefik.http.services.sonarr.loadbalancer.server.port=8989
+      - com.centurylinklabs.watchtower.enable=${SONARR_WATCHTOWER_ENABLE:-true}
+      - autoheal=${SONARR_AUTOHEAL:-true}

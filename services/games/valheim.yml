@@ -1,0 +1,35 @@
+# description: Valheim is a game about exploring a huge fantasy world inspired by norse mythology and viking culture
+# https://github.com/lloesche/valheim-server-docker
+# https://github.com/lloesche/valheim-server-docker/blob/main/valheim.env.example
+
+services:
+  valheim:
+    image: ghcr.io/lloesche/valheim-server:${VALHEIM_DOCKER_TAG:-latest}
+    container_name: ${VALHEIM_CONTAINER_NAME:-valheim}
+    restart: ${VALHEIM_RESTART:-unless-stopped}
+    #enabling this below is optional https://github.com/lloesche/valheim-server-docker#basic-docker-usage
+    # cap_add:
+    #   - sys_nice
+    volumes:
+      - ./etc/games/valheim/config:/config
+      - ./etc/games/valheim/data:/opt/valheim
+      - /etc/localtime:/etc/localtime:ro
+    environment: # for more envs to enable look at the example
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - SUPERVISOR_HTTP=true
+      - SERVER_NAME=${VALHEIM_SERVER_NAME:-Valheim server run by Docker}
+      - WORLD_NAME=${VALHEIM_WORLD_NAME:-valheim} # server will crash if the there are any upper case letters in the world name
+      - SERVER_PASS=${VALHEIM_SERVER_PASS:-Valheim}
+    ports:
+      - "2456-2457:2456-2457/udp"
+      #- "9001:9001/tcp"
+    labels:
+      - joyride.host.name=${VALHEIM_CONTAINER_NAME:-valheim}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.valheim.entrypoints=websecure
+      - traefik.http.routers.valheim.rule=Host(`${VALHEIM_CONTAINER_NAME:-valheim}.${HOST_DOMAIN}`)
+      - traefik.http.services.valheim.loadbalancer.server.port=9001
+      - com.centurylinklabs.watchtower.enable=${VALHEIM_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

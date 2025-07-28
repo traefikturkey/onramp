@@ -1,0 +1,21 @@
+# description: N mqtt broker for iot communication
+# https://hub.docker.com/_/eclipse-mosquitto
+
+services:
+  mosquitto-mqtt:
+    image: eclipse-mosquitto:${MOSQITTO_MQTT_DOCKER_TAG:-latest}
+    container_name: mosquitto-mqtt
+    restart: unless-stopped
+    user: ${PUID:-1000}:${PGID:-1000}
+    volumes:
+      - ./etc/mosquitto/config:/mosquitto/config
+      - ./etc/mosquitto/data:/mosquitto/data
+      - ./etc/mosquitto/log:/mosquitto/log
+    ports:
+      - 1883:1883
+      - 9001:9001
+    labels:
+      - autoheal=true
+      - traefik.enable=false
+      - joyride.host.name=mqtt.${HOST_DOMAIN}
+      - com.centurylinklabs.watchtower.enable=${MOSQUITTO_WATCHTOWER_ENABLED:-true}

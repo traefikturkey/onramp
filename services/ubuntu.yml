@@ -1,0 +1,10 @@
+# description: ubuntu base image
+# https://hub.docker.com/_/ubuntu
+
+services:
+  ubuntu:
+    image: ubuntu
+    container_name: ubuntu
+    restart: on-failure
+    volumes:
+      - ${UBUNTU_TEST_VOLUME:-.}:/mnt

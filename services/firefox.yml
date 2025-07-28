@@ -1,0 +1,35 @@
+networks:
+  traefik:
+    external: true
+
+# description: Runs mozilla firefox browser in a container
+# https://github.com/jlesage/docker-firefox
+
+services:
+  firefox:
+    image: jlesage/firefox:${FIREFOX_DOCKER_TAG:-latest}
+    container_name: ${FIREFOX_CONTAINER_NAME:-firefox}
+    restart: ${FIREFOX_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    devices:
+      # - /dev/snd:/dev/snd
+      - /dev/dri:/dev/dri
+    volumes:
+      - ./etc/firefox:/config
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    #ports:
+    #- ${FIREFOX_PORT:-5900}:5900
+    labels:
+      - joyride.host.name=${FIREFOX_CONTAINER_NAME:-firefox}.${HOST_DOMAIN}
+      - traefik.enable=${FIREFOX_TRAEFIK_ENABLE:-true}
+      - traefik.http.routers.firefox.entrypoints=websecure
+      - traefik.http.routers.firefox.rule=Host(`${FIREFOX_CONTAINER_NAME:-firefox}.${HOST_DOMAIN}`)
+      #- traefik.http.services.firefox.loadbalancer.server.scheme=https # enable if the service wants to connect over https
+      - traefik.http.services.firefox.loadbalancer.server.port=5800
+      - com.centurylinklabs.watchtower.enable=${FIREFOX_WATCHTOWER_ENABLE:-true}
+      - autoheal=${FIREFOX_AUTOHEAL:-true}

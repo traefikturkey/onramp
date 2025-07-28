@@ -1,0 +1,29 @@
+services:
+  traefik:
+    ports:
+      - 5900:5900
+    command:
+      # Below line required for idrac console redirection
+      - --entryPoints.idrac-console-entrypoint.address=:5900
+
+      - --api
+      - --entryPoints.metrics.address=:8082
+      - --metrics.prometheus.entryPoint=metrics
+      - --providers.docker
+      - --providers.file.watch=true
+      - --providers.file.directory=/enabled
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      - --entrypoints.web.http.redirections.entrypoint.to=websecure
+      - --entrypoints.web.http.redirections.entrypoint.scheme=https
+      - --entrypoints.websecure.http.tls=true
+      - --entrypoints.websecure.http.tls.certResolver=letsencrypt
+      - --entrypoints.websecure.http.tls.domains[0].main=${HOST_DOMAIN}
+      - --entrypoints.websecure.http.tls.domains[0].sans=*.${HOST_DOMAIN}
+      - --serverstransport.insecureskipverify=true
+      - --certificatesresolvers.letsencrypt.acme.dnschallenge=true
+      - --certificatesresolvers.letsencrypt.acme.dnschallenge.provider=cloudflare
+      - --certificatesresolvers.letsencrypt.acme.email=${CF_API_EMAIL}
+      - --certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json
+      - --certificatesresolvers.letsencrypt.acme.dnschallenge.resolvers=1.1.1.1:53,1.0.0.1:53
+      - --certificatesresolvers.letsencrypt.acme.caserver=${ACME_CASERVER:-https://acme-v02.api.letsencrypt.org/directory}

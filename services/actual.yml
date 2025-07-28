@@ -1,0 +1,47 @@
+networks:
+  traefik:
+    external: true
+
+# description: Money Management software
+# https://actualbudget.org/docs/install/docker
+# https://github.com/actualbudget/actual
+
+services:
+  actual:
+    image: actualbudget/actual-server:{{ actualbudget_docker_tag | default('latest') }}
+    container_name: {{ actual_container_name | default('actual') }}
+    restart: {{ actual_restart | default('unless-stopped') }}
+    networks:
+      - traefik
+    environment:
+      - UID={{ PUID }}
+      - GID={{ PGID }}
+      - TZ={{ timezone }}
+      - hostname={{ actual_container_name | default('actual') }}.{{ host.domain }}
+      # Uncomment any of the lines below to set configuration options.
+      # - ACTUAL_HTTPS_KEY=/data/selfhost.key
+      # - ACTUAL_HTTPS_CERT=/data/selfhost.crt
+      # - ACTUAL_PORT=5006
+      # - ACTUAL_UPLOAD_FILE_SYNC_SIZE_LIMIT_MB=20
+      # - ACTUAL_UPLOAD_SYNC_ENCRYPTED_FILE_SYNC_SIZE_LIMIT_MB=50
+      # - ACTUAL_UPLOAD_FILE_SIZE_LIMIT_MB=20
+      # See all options and more details at https://actualbudget.github.io/docs/Installing/Configuration
+      # !! If you are not using any of these options, remove the 'environment:' tag entirely.
+      # if your network uses a different subnet other than the standard like [10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, fc00::/7, ::1/128]
+      # use the option of 'trustedProxies' 
+    volumes:
+      - ./etc/actual/data:/data
+    healthcheck:
+      # Enable health check for the instance
+      test: ['CMD-SHELL', 'node src/scripts/health-check.js']
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    labels:
+      - joyride.host.name={{ actual_container_name | default('actual') }}.{{ host.domain }}      - traefik.enable=${ACTUAL_TRAEFIK_ENABLE:-true}
+      - traefik.http.routers.actual.entrypoints=websecure
+      - traefik.http.routers.actual.rule=Host(`{{ actual_container_name | default('actual') }}.{{ host.domain }}`)
+      - traefik.http.services.actual.loadbalancer.server.port=5006
+      - com.centurylinklabs.watchtower.enable={{ actual_watchtower_enable | default('true') }}
+      - autoheal={{ actual_autoheal | default('true') }}

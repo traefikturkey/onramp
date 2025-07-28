@@ -1,0 +1,29 @@
+networks:
+  traefik:
+    external: true
+
+# description: Web-based docker container log viewer
+# https://github.com/amir20/dozzle
+
+services:
+  dozzle:
+    image: amir20/dozzle:{{ DOZZLE_DOCKER_TAG | default('latest') }}
+    container_name: {{ DOZZLE_CONTAINER_NAME | default ('dozzle') }}
+    restart: {{ DOZZLE_RESTART | default('unless-stopped') }}
+    mem_limit: {{ DOZZLE_MEM_LIMIT | default('50m') }}
+    networks:
+      - traefik
+    environment:
+      - TZ={{ timezone }}
+      - DOZZLE_LEVEL={{ DOZZLE_LEVEL | default('debug') }}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    labels:
+      - joyride.host.name={{ DOZZLE_CONTAINER_NAME | default('dozzle') }}.{{ host.domain }}
+      - traefik.enable={{ DOZZLE_TRAEFIK_ENABLE | default('true') }}
+      - traefik.http.routers.dozzle.entrypoints=websecure
+      - traefik.http.routers.dozzle.rule=Host(`{{ DOZZLE_CONTAINER_NAME | default('dozzle') }}.{{ host.domain }}`)
+      - traefik.http.services.dozzle.loadbalancer.server.port=8080
+      - com.centurylinklabs.watchtower.enable={{ DOZZLE_WATCHTOWER_ENABLE | default('true') }}
+      - autoheal={{ DOZZLE_AUTOHEAL | default('true') }}

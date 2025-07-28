@@ -1,0 +1,27 @@
+# description: Microsoft sql server container
+# https://hub.docker.com/_/microsoft-mssql-server
+# https://github.com/microsoft/mssql-docker
+# https://docs.microsoft.com/en-us/sql/linux/sql-server-linux-overview?view=sql-server-ver16
+
+services:
+  mssql:
+    image: mcr.microsoft.com/mssql/server:${MSSQL_DOCKER_TAG:-2022-latest}
+    user: root # Required for container to correctly interact with the volume.
+    container_name: mssql
+    restart: unless-stopped
+    volumes:
+      - ${MSSQL_DB_DIR:-./media/databases/mssql}:/var/opt/mssql/data # paths will have to be researched futher
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=${MSSQL_SA_PASSWORD}
+    ports:
+      - 1433:1433
+    labels:
+      - joyride.host.name=mssql.${HOST_DOMAIN}
+      - traefik.enable=false
+      - com.centurylinklabs.watchtower.enable=${MSSQL_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

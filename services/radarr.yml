@@ -1,0 +1,41 @@
+networks:
+  traefik:
+    external: true
+
+# description: Manages movie collections and downloads
+# https://hub.docker.com/r/linuxserver/radarr
+# https://github.com/linuxserver/docker-radarr
+
+services:
+  radarr:
+    image: linuxserver/radarr:${RADARR_DOCKER_TAG:-latest}
+    container_name: ${RADARR_CONTAINER_NAME:-radarr}
+    restart: ${RADARR_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - -./etc/radarr:/config
+      - ${MEDIA_MOVIES_VOLUME:-./media/movies}:/movies
+      - ${MEDIA_DOWNLOADS_VOLUME:-./media/downloads}:/downloads
+      - /dev/rtc:/dev/rtc:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 7878:7878
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    healthcheck:
+      test: curl --fail http://localhost:7878 || exit 1
+      interval: 60s
+      retries: 5
+      start_period: 30s
+      timeout: 30s
+    labels:
+      - joyride.host.name=${RADARR_CONTAINER_NAME:-radarr}.${HOST_DOMAIN}
+      - traefik.enable=${RADARR_TRAEFIK_ENABLE:-true}
+      - traefik.http.routers.radarr.entrypoints=websecure
+      - traefik.http.routers.radarr.rule=Host(`${RADARR_CONTAINER_NAME:-radarr}.${HOST_DOMAIN}`)
+      - traefik.http.services.radarr.loadbalancer.server.port=7878
+      - com.centurylinklabs.watchtower.enable=${RADARR_WATCHTOWER_ENABLE:-true}
+      - autoheal=${RADARR_AUTOHEAL:-true}

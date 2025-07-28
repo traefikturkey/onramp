@@ -1,0 +1,40 @@
+networks:
+  traefik:
+    external: true
+
+# description: Personal photo management software
+# https://github.com/photoprism/photoprism
+# https://hub.docker.com/r/photoprism/photoprism
+
+services:
+  photoprism:
+    image: photoprism/photoprism:${PHOTOPRISM_DOCKER_TAG:-latest}
+    container_name: ${PHOTOPRISM_CONTAINER_NAME:-photoprism}
+    restart: unless-stopped
+    networks:
+      - traefik
+    volumes:
+      - ./etc/photoprism/:/photoprism/config
+      - /etc/localtime:/etc/localtime:ro
+      - ${PHOTOPRISM_MEDIA_PHOTOS:-./media/photos}:/photoprism/originals/photos
+      - ${PHOTOPRISM_MEDIA_VIDEOS:-./media/videos}:/photoprism/originals/videos
+      - ./etc/photoprism/storage:/photoprism/storage
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - PHOTOPRISM_UID=${PUID:-1000}
+      - PHOTOPRISM_GID=${PGID:-1000}
+      - TZ=${TZ}
+      - PHOTOPRISM_CONFIG_PATH=/photoprism/config
+      - PHOTOPRISM_AUTH_MODE=password
+      - PHOTOPRISM_ADMIN_PASSWORD=${PHOTOPRISM_ADMIN_PASSWORD:-insecure}
+      - PHOTOPRISM_ORIGINALS_PATH=/photoprism/originals
+      - PHOTOPRISM_SITE_URL=https://${PHOTOPRISM_CONTAINER_NAME:-photoprism}.${HOST_DOMAIN}
+    labels:
+      - joyride.host.name=${PHOTOPRISM_CONTAINER_NAME:-photoprism}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.photoprism.entrypoints=websecure
+      - traefik.http.routers.photoprism.rule=Host(`${PHOTOPRISM_CONTAINER_NAME:-photoprism}.${HOST_DOMAIN}`)
+      - traefik.http.services.photoprism.loadbalancer.server.port=2342
+      - com.centurylinklabs.watchtower.enable=${PHOTOPRISM_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

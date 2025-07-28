@@ -1,0 +1,40 @@
+networks:
+  traefik:
+    external: true
+
+# description: Network-wide ad blocker and privacy tool
+# https://github.com/AdguardTeam/AdGuardHome
+
+services:
+  adguard:
+    image: adguard/adguardhome:{{ adguard_docker_tag | default('latest') }}
+    container_name: {{ ADGUARD_CONTAINER_NAME | default('adguard') }}
+    restart: {{ ADGUARD_RESTART_POLICY | default('unless-stopped') }}
+    networks:
+      - traefik
+    ports:
+      - "53:53"
+      - "67:67/udp"
+      - "68:68/udp"
+      - "853:853"
+      - "784:784/udp"
+      - "853:853/tcp"
+      - "3000:3000/tcp"
+      - "5443:5443"
+      - "8853:8853/udp"
+    volumes:
+      - ./etc/adguard/conf:/opt/adguardhome/conf
+      - ./etc/adguard/work:/opt/adguardhome/work
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID={{ PUID | default('1000') }}
+      - PGID={{ PGID | default('1000') }}
+      - TZ={{ timezone }}
+    labels:
+      - joyride.host.name={{ ADGUARD_CONTAINER_NAME | default('adguard') }}.{{ host.domain }}
+      - traefik.enable={{ ADGUARD_TRAEFIK_ENABLED | default ('true') }}
+      - traefik.http.routers.adguard.entrypoints=websecure
+      - traefik.http.routers.adguard.rule=Host(`{{ ADGUARD_CONTAINER_NAME | default('true') }}`)
+      - traefik.http.services.adguard.loadbalancer.server.port=80
+      - com.centurylinklabs.watchtower.enable={{ ADGUARD_WATCHTOWER_ENABLED | default('true') }}
+      - autoheal=true

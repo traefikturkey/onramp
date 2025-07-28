@@ -1,0 +1,35 @@
+networks:
+  traefik:
+    external: true
+
+# description: Event Driven Orchestration & Scheduling Platform
+# https://github.com/kestra-io/kestra
+# https://github.com/kestra-io/kestra/blob/develop/docker-compose.yml
+# https://kestra.io/docs
+
+services:
+  kestra:
+    image: kestra/kestra:${KESTRA_DOCKER_TAG:-latest-full}
+    container_name: ${KESTRA_CONTAINER_NAME:-kestra}
+    restart: ${KESTRA_RESTART:-unless-stopped}
+    user: "${KESTRA_USER:-root}"
+    command: ${KESTRA_COMMAND:-server local}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/kestra/storage:/app/storage
+      - /tmp/kestra-wd:/tmp
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      TZ: ${TZ}
+    ports:
+      - 4040:8080
+    labels:
+      - joyride.host.name=${KESTRA_CONTAINER_NAME:-kestra}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.kestra.entrypoints=websecure
+      - traefik.http.routers.kestra.rule=Host(`${KESTRA_CONTAINER_NAME:-kestra}.${HOST_DOMAIN}`)\
+      - traefik.http.services.kestra.loadbalancer.server.port=8080
+      - com.centurylinklabs.watchtower.enable=${KESTRA_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

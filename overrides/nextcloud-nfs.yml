@@ -1,0 +1,16 @@
+volumes:
+  nextcloud-nfs-data:
+    labels:
+      - remove_volume_on=down
+    driver_opts:
+      type: nfs
+      o: "addr=${NEXTCLOUD_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
+      device: ":${NEXTCLOUD_NFS_SERVER_PATH:-${NFS_NEXTCLOUD_PATH}}"
+
+services:
+  nextcloud:
+    volumes:
+      # you should not put plex config directory on nfs, there are serious performance issues
+      - ./etc/nextcloud:/config
+      - ${NEXTCLOUD_DATA_VOLUME:-nextcloud-nfs-data}:${NEXTCLOUD_DATA_PATH:-/data}
+      - /etc/localtime:/etc/localtime:ro

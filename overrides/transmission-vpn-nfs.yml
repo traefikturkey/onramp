@@ -1,0 +1,16 @@
+volumes:
+  transmission-nfs-media:
+    labels:
+      - remove_volume_on=down
+    driver_opts:
+      type: nfs
+      o: "addr=${TRANSMISSION_MEDIA_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
+      device: ":${TRANSMISSION_MEDIA_NFS_SERVER_PATH:-${NFS_DOWNLOADS_PATH}}"
+
+services:
+  transmission-vpn:
+    volumes:
+      - ${TRANSMISSION_CONFIG_VOLUME:-./etc/transmission-vpn}:/data
+      - ${TRANSMISSION_DOWNLOADS_VOLUME:-transmission-nfs-media}:/downloads
+      - /dev/rtc:/dev/rtc:ro
+      - /etc/localtime:/etc/localtime:ro

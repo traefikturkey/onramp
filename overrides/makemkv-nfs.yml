@@ -1,0 +1,15 @@
+volumes:
+  makemkv-nfs-media:
+    labels:
+      - remove_volume_on=down
+    driver_opts:
+      type: nfs
+      o: "addr=${MAKEMKV_MEDIA_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
+      device: ":${MAKEMKV_MEDIA_NFS_SERVER_PATH:-${NFS_DOWNLOADS_PATH}}"
+
+services:
+  makemkv:
+    volumes:
+      - ./etc/makemkv:/config
+      - ${MAKEMKV_MEDIA_VOLUME:-makemkv-nfs-media}:${MAKEMKV_MEDIA_PATH:-/output}
+      - /etc/localtime:/etc/localtime:ro

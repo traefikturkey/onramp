@@ -1,0 +1,21 @@
+# description: Factorio is a game about building and managing factories on an alien planet
+# https://hub.docker.com/r/goofball222/factorio
+
+services:
+  factorio:
+    image: goofball222/factorio:${FACTORIO_VERSION:-latest}
+    container_name: ${FACTORIO_CONTAINER_NAME:-factorio}
+    restart: ${FACTORIO_RESTART_POLICY:-unless-stopped}
+    hostname: ${FACTORIO_HOSTNAME:-factorio}
+    ports:
+      - ${FACTORIO_PORT_27015:-27015}:27015
+      - ${FACTORIO_PORT_34197:-34197}:34197/udp
+    volumes:
+      - ./etc/games/${FACTORIO_HOSTNAME:-factorio}:/factorio
+    environment:
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=${FACTORIO_HOSTNAME:-factorio}.${HOST_DOMAIN}
+      - traefik.enable=false
+      - com.centurylinklabs.watchtower.enable=${FACTORIO_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

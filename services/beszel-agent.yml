@@ -1,0 +1,24 @@
+---
+# description: agent to connect to the Beszel hub for monitoring of docker containers and servers.
+# https://beszel.dev/guide/agent-installation
+# https://github.com/henrygd/beszel
+
+services:
+  beszel-agent:
+    image: ghcr.io/henrygd/beszel/beszel-agent:${BESZEL_AGENT_DOCKER_TAG:-latest}
+    container_name: ${BESZEL_AGENT_CONTAINER_NAME:-beszel-agent}
+    restart: ${BESZEL_AGENT_RESTART:-unless-stopped}
+    network_mode: host
+    volumes:
+      - ./etc/beszel-agent:/beszel_socket
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - LISTEN=45876 # for remote systems
+      - KEY=${BESZEL_PUBLIC_KEY} #copy from "Add System" dialog from beszel-hub
+    labels:
+      - traefik.enable=${BESZEL_AGENT_TRAEFIK_ENABLED:-false}
+      - com.centurylinklabs.watchtower.enable=${BESZEL_AGENT_WATCHTOWER_ENABLED:-true}
+      - autoheal=${BESZEL_AGENT_AUTOHEAL_ENABLED:-true}

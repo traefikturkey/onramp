@@ -1,0 +1,31 @@
+networks:
+  traefik:
+    external: true
+
+# description: Self-hosted rss feed reader
+# https://github.com/FreshRSS/FreshRSS
+# https://christitus.com/why-we-dont-browse-the-internet-anymore/
+# https://www.youtube.com/watch?v=nxV0CPNeFxY
+
+services:
+  freshrss:
+    image: lscr.io/linuxserver/freshrss:${FRESHRSS_DOCKER_TAG:-latest}
+    container_name: ${FRESHRSS_CONTAINER_NAME:-freshrss}
+    restart: ${FRESHRSS_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/freshrss:/config
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=${FRESHRSS_CONTAINER_NAME:-freshrss}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.freshrss.entrypoints=websecure
+      - traefik.http.routers.freshrss.rule=Host(`${FRESHRSS_CONTAINER_NAME:-freshrss}.${HOST_DOMAIN}`)
+      - traefik.http.services.freshrss.loadbalancer.server.port=80
+      - com.centurylinklabs.watchtower.enable=${FRESHRSS_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

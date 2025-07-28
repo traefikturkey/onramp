@@ -1,0 +1,35 @@
+networks:
+  traefik:
+    external: true
+
+# description: A music collection server and web client for streaming your music
+# https://www.navidrome.org/
+# https://github.com/navidrome/navidrome/
+
+services:
+  navidrome:
+    image: deluan/navidrome:${NAVIDROME_DOCKER_TAG:-latest}
+    container_name: ${NAVIDROME_CONTAINER_NAME:-navidrome}
+    restart: ${NAVIDROME_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    ports:
+      - 4533:4533
+    volumes:
+      - /etc/navidrome:/data
+      - /etc/localtime:/etc/localtime:ro
+      - ${NAVIDROME_MUSIC_VOLUME:-./media/music}:${NAVIDROME_MUSIC_PATH:-/music}
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=${NAVIDROME_CONTAINER_NAME:-navidrome}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.navidrome.entrypoints=websecure
+      - traefik.http.routers.navidrome.rule=Host(`${NAVIDROME_CONTAINER_NAME:-navidrome}.${HOST_DOMAIN}`)
+      - traefik.http.services.navidrome.loadbalancer.server.port=4533
+      - com.centurylinklabs.watchtower.enable=${NAVIDROME_WATCHTOWER_ENABLED:-true}
+      - autoheal=true
+
+

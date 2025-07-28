@@ -1,0 +1,34 @@
+networks:
+  traefik:
+    external: true
+
+# description: Manages subtitles for media content
+# https://github.com/linuxserver/docker-bazarr
+# https://hub.docker.com/r/linuxserver/bazarr
+
+services:
+  bazarr:
+    image: linuxserver/bazarr:${BAZARR_DOCKER_TAG:-latest}
+    container_name: ${BAZARR_CONTAINER_NAME:-bazarr}
+    restart: unless-stopped
+    networks:
+      - traefik
+    volumes:
+      - ./etc/bazarr:/config
+      - ${BAZARR_MOVIES_VOLUME:-./media/movies}:/movies
+      - ${BAZARR_SHOWS_VOLUME:-./media/shows}:/tv
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 6767:6767
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=${BAZARR_CONTAINER_NAME:-bazarr}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.bazarr.entrypoints=websecure
+      - traefik.http.routers.bazarr.rule=Host(`${BAZARR_CONTAINER_NAME:-bazarr}.${HOST_DOMAIN}`)
+      - traefik.http.services.bazarr.loadbalancer.server.port=6767
+      - com.centurylinklabs.watchtower.enable=${BAZARR_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

@@ -1,0 +1,38 @@
+networks:
+  traefik:
+    external: true
+
+# description: Container for running prowlarr, a media indexer
+# https://hub.docker.com/r/linuxserver/prowlarr
+# https://github.com/linuxserver/docker-prowlarr
+
+services:
+  prowlarr:
+    image: linuxserver/prowlarr:${PROWLARR_DOCKER_TAG:-develop}
+    container_name: ${PROWLARR_CONTAINER_NAME:-prowlarr}
+    restart: ${PROWLARR_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/prowlarr:/config
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 9696:9696
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    healthcheck:
+      test: curl --fail http://localhost:9696 || exit 1
+      interval: 60s
+      retries: 5
+      start_period: 30s
+      timeout: 30s
+    labels:
+      - joyride.host.name=${PROWLARR_CONTAINER_NAME:-prowlarr}.${HOST_DOMAIN}
+      - traefik.enable=${PROWLARR_TRAEFIK_ENABLE:-true}
+      - traefik.http.routers.prowlarr.entrypoints=websecure
+      - traefik.http.routers.prowlarr.rule=Host(`${PROWLARR_CONTAINER_NAME:-prowlarr}.${HOST_DOMAIN}`)
+      - traefik.http.services.prowlarr.loadbalancer.server.port=9696
+      - com.centurylinklabs.watchtower.enable=${PROWLARR_WATCHTOWER_ENABLE:-true}
+      - autoheal=${PROWLARR_AUTOHEAL:-true}

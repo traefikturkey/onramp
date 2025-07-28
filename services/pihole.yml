@@ -1,0 +1,43 @@
+networks:
+  traefik:
+    external: true
+
+# description: Network-wide ad blocker and dns sinkhole
+# https://github.com/pi-hole/docker-pi-hole/blob/master/README.md
+
+services:
+  pihole:
+    image: pihole/pihole:${PIHOLE_DOCKER_TAG:-latest}
+    container_name: ${PIHOLE_CONTAINER_NAME:-pihole}
+    restart: unless-stopped
+    networks:
+      - traefik
+    #network_mode: "host"
+    # cap_add:
+    #   - NET_ADMIN
+    volumes:
+      - ./etc/pihole:/etc/pihole
+      - /etc/localtime:/etc/localtime:ro
+      - ./etc/pihole/dnsmasq:/etc/dnsmasq.d
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - WEBPASSWORD=${PIHOLE_WEBPASSWORD:-password}
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+    #   - "67:67/udp"
+    #   - "8080:80/tcp"
+    labels:
+      - joyride.host.name=${PIHOLE_CONTAINER_NAME:-pihole}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.pihole.entrypoints=websecure
+      - traefik.http.routers.pihole.rule=Host(`${PIHOLE_CONTAINER_NAME:-pihole}.${HOST_DOMAIN}`)
+      - traefik.http.services.pihole.loadbalancer.server.port=443
+      - traefik.http.services.pihole.loadbalancer.server.scheme=https
+      - traefik.http.middlewares.piholeredirect.redirectregex.regex=^https?://${PIHOLE_CONTAINER_NAME:-pihole}.${HOST_DOMAIN}/$$
+      - traefik.http.middlewares.piholeredirect.redirectregex.replacement=http://${PIHOLE_CONTAINER_NAME:-pihole}.${HOST_DOMAIN}/admin/
+      - traefik.http.routers.pihole.middlewares=piholeredirect
+      - com.centurylinklabs.watchtower.enable=${PIHOLE_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

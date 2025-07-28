@@ -1,0 +1,56 @@
+networks:
+  traefik:
+    external: true
+
+# description: lightweight server monitoring platform that includes Docker statistics, historical data, and alert functions.
+# https://github.com/henrygd/beszel
+# https://beszel.dev
+
+services:
+  beszel-hub:
+    image: ghcr.io/henrygd/beszel/beszel:${BESZEL_HUB_DOCKER_TAG:-latest}
+    container_name: ${BESZEL_HUB_CONTAINER_NAME:-beszel-hub}
+    restart: ${BESZEL_HUB_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/beszel-hub/data:/beszel_data
+      - ./etc/beszel-hub/socket:/beszel_socket
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro      
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=${BESZEL_HUB_HOST_NAME:-beszel}.${HOST_DOMAIN}
+      - traefik.enable=${BESZEL_HUB_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.beszel-hub.entrypoints=websecure
+      - traefik.http.routers.beszel-hub.rule=Host(`${BESZEL_HUB_HOST_NAME:-beszel}.${HOST_DOMAIN}`)
+      #- traefik.http.services.beszel-hub.loadbalancer.server.scheme=https # enable if the service wants to connect over https
+      - traefik.http.services.beszel-hub.loadbalancer.server.port=8090
+      - com.centurylinklabs.watchtower.enable=${BESZEL_HUB_WATCHTOWER_ENABLED:-true}
+      - autoheal=${BESZEL_HUB_AUTOHEAL_ENABLED:-true}
+
+  beszel-local-agent:
+    image: ghcr.io/henrygd/beszel/beszel-agent:${BESZEL_AGENT_DOCKER_TAG:-latest}
+    container_name: ${BESZEL_AGENT_CONTAINER_NAME:-beszel-local-agent}
+    restart: ${BESZEL_AGENT_RESTART:-unless-stopped}
+    network_mode: host
+    volumes:
+      - ./etc/beszel-hub/socket:/beszel_socket
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - LISTEN=/beszel_socket/beszel.sock
+      - KEY=${BESZEL_PUBLIC_KEY} #copy from "Add System" dialog from beszel-hub, enter into your .env file and run 'make down' then 'make start' to get new variables
+    labels:
+      - traefik.enable=${BESZEL_AGENT_TRAEFIK_ENABLED:-false}
+      - com.centurylinklabs.watchtower.enable=${BESZEL_AGENT_WATCHTOWER_ENABLED:-true}
+      - autoheal=${BESZEL_AGENT_AUTOHEAL_ENABLED:-true}
+
+## NOTES:
+## for remote systems in the 'Add System' dialog, use the NetBIOS or IP in the Host/IP field in the Web UI
+## to monitor the lcoal system where the hub is located, user '/beszel_socket/beszel.sock' in the Host/IP field in the Web UI

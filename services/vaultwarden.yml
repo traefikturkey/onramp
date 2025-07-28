@@ -1,0 +1,43 @@
+networks:
+  traefik:
+    external: true
+
+# description: Self-hosted bitwarden password manager
+# https://github.com/dani-garcia/vaultwarden
+
+services:
+  vaultwarden:
+    image: vaultwarden/server:${VAULTWARDEN_DOCKER_TAG:-latest}
+    container_name: ${VAULTWARDEN_CONTAINER_NAME:-vaultwarden}
+    restart: unless-stopped
+    mem_limit: ${VAULTWARDEN_MEM_LIMIT:-200m}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/vaultwarden:/data
+      - /dev/rtc:/dev/rtc:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      # docker run --rm -it vaultwarden/server /vaultwarden hash --preset owasp
+      - ADMIN_TOKEN=${VAULTWARDEN_ADMIN_TOKEN}
+      - SIGNUPS_ALLOWED=${VAULTWARDEN_SIGNUPS_ALLOWED:-true}
+      - DOMAIN=https://${VAULTWARDEN_HOSTNAME:-vaultwarden}.${HOST_DOMAIN}
+      - SMTP_HOST=${VAULTWARDEN_SMTP_HOST:-smtp.domain.tld}
+      - SMTP_FROM=${VAULTWARDEN_SMTP_FROM:-vaultwarden@domain.tld}
+      - SMTP_FROM_NAME=${VAULTWARDEN_SMTP_FROM_NAME:-Vaultwarden}
+      - SMTP_SECURITY=${VAULTWARDEN_SMTP_SECURITY:-starttls}
+      - SMTP_PORT=${VAULTWARDEN_SMTP_PORT:-587}
+      - SMTP_USERNAME=${VAULTWARDEN_SMTP_USERNAME:-username}
+      - SMTP_PASSWORD=${VAULTWARDEN_SMTP_PASSWORD:-password}
+      - SMTP_TIMEOUT=15
+
+    labels:
+      - joyride.host.name=${VAULTWARDEN_HOSTNAME:-vaultwarden}.${HOST_DOMAIN}
+      - traefik.enable=${VAULTWARDEN_TRAEFIK_ENABLE:-true}
+      - traefik.http.routers.vaultwarden.entrypoints=websecure
+      - traefik.http.routers.vaultwarden.rule=Host(`${VAULTWARDEN_HOSTNAME:-vaultwarden}.${HOST_DOMAIN}`)
+      - traefik.http.services.vaultwarden.loadbalancer.server.port=80
+      - com.centurylinklabs.watchtower.enable=${VAULTWARDEN_WATCHTOWER_ENABLE:-true}
+      - autoheal=${VAULTWARDEN_AUTOHEAL:-true}

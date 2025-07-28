@@ -1,0 +1,25 @@
+# description: Minecraft Bedrock Edition designed for various platforms including mobile and console
+# https://hub.docker.com/r/itzg/minecraft-bedrock-server
+
+services:
+  minecraft-bedrock:
+    image: itzg/minecraft-bedrock-server:${MINECRAFT_BEDROCK_DOCKER_TAG:-latest}
+    container_name: ${MINECRAFT_BEDROCK_CONTAINER_NAME:-minecraft-bedrock}
+    restart: unless-stopped
+    ports:
+      - 19132:19132/udp
+    volumes:
+      #- ./etc/minecraft-bedrock:/config # <==== this probably needs changed
+      - /etc/localtime:/etc/localtime:ro
+      - ./etc/games/${MINECRAFT_BEDROCK_HOSTNAME:-minecraft-bedrock}:/data
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - EULA=TRUE
+      - GAMEMODE=survival
+      - DIFFICULTY=normal
+    labels:
+      - joyride.host.name=${MINECRAFT_BEDROCK_CONTAINER_NAME:-minecraft-bedrock}.${HOST_DOMAIN}
+      - traefik.enable=false
+      - autoheal=true

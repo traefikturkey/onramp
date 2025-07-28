@@ -1,0 +1,28 @@
+networks:
+  traefik:
+    external: true
+
+# description: Monitors plex usage and provides statistics
+# https://hub.docker.com/r/linuxserver/tautulli
+
+services:
+  tautulli:
+    image: lscr.io/linuxserver/tautulli:${TAUTULLI_DOCKER_TAG:-latest}
+    container_name: tautulli
+    restart: unless-stopped
+    networks:
+      - traefik
+    volumes:
+      - ./etc/tautulli:/config
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=tautulli.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.tautulli.entrypoints=websecure
+      - traefik.http.routers.tautulli.rule=Host(`tautulli.${HOST_DOMAIN}`)
+      - traefik.http.services.tautulli.loadbalancer.server.port=8181
+      - com.centurylinklabs.watchtower.enable=${TAUTULLI_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

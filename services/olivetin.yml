@@ -1,0 +1,24 @@
+networks:
+  traefik:
+    external: true
+
+# description: Access predefined shell commands from a web interface.
+# https://github.com/OliveTin/OliveTin
+
+services:
+  olivetin:
+    image: jamesread/olivetin:${OLIVETIN_DOCKER_TAG:-latest}
+    container_name: ${OLIVETIN_CONTAINER_NAME:-olivetin}
+    restart: ${OLIVETIN_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/olivetin:/config # replace host path or volume as needed
+    labels:
+      - joyride.host.name=${OLIVETIN_HOST_NAME:-olivetin}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.olivetin.entrypoints=websecure
+      - traefik.http.routers.olivetin.rule=Host(`${OLIVETIN_HOST_NAME:-olivetin}.${HOST_DOMAIN}`)
+      - traefik.http.services.olivetin.loadbalancer.server.port=1337
+      - com.centurylinklabs.watchtower.enable=${OLIVETIN_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

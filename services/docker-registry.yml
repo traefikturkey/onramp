@@ -1,0 +1,34 @@
+networks:
+  traefik:
+    external: true
+
+# description: Registry for storing and distributing container images
+# https://hub.docker.com/_/registry
+# https://docs.docker.com/registry/
+
+services:
+  docker-registry:
+    image: registry:${DOCKER_REGISTRY_DOCKER_TAG:-2}
+    container_name: ${DOCKER_REGISTRY_CONTAINER_NAME:-docker-registry}
+    restart: ${DOCKER_REGISTRY_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - ${DOCKER_REGISTRY_PATH:-./etc/docker-registry}:/var/lib/registry
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - REGISTRY_STORAGE_DELETE_ENABLED=${DOCKER_REGISTRY_STORAGE_DELETE_ENABLED:-true}
+      - REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY=${DOCKER_REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY:-/var/lib/registry}
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=${DOCKER_REGISTRY_CONTAINER_NAME:-registry}.${HOST_DOMAIN}
+      - traefik.enable=${DOCKER_REGISTRY_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.registry.entrypoints=websecure
+      - traefik.http.routers.registry.rule=Host(`${DOCKER_REGISTRY_CONTAINER_NAME:-registry}.${HOST_DOMAIN}`)
+      - traefik.http.services.registry.loadbalancer.server.port=5000
+      # https://bcrypt-generator.com/ Generate DOCKER_REGISTRY_AUTH_PASS - make sure you double up the $$ to escape them
+      - traefik.http.middlewares.auth.basicauth.users=${DOCKER_REGISTRY_AUTH_USER:-admin}:${DOCKER_REGISTRY_AUTH_PASS:-password}}
+      - com.centurylinklabs.watchtower.enable=${DOCKER_REGISTRY_WATCHTOWER_ENABLED:-true}
+      - autoheal=${DOCKER_REGISTRY_AUTOHEAL_ENABLED:-true}

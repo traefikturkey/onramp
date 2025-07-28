@@ -1,0 +1,38 @@
+networks:
+  traefik:
+    external: true
+
+# description: Container for running sablier, a web-based timer
+# https://github.com/acouvreur/sablier
+
+services:
+  sablier:
+    image: ghcr.io/acouvreur/sablier:${SABLIER_DOCKER_TAG:-latest}
+    container_name: ${SABLIER_CONTAINER_NAME:-sablier}
+    restart: ${SABLIER_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/sablier:/config # <==== this probably needs changed
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:rw
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    command:
+      - start
+      - --provider.name=docker
+    labels:
+      - joyride.host.name=${SABLIER_CONTAINER_NAME:-sablier}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.sablier.entrypoints=websecure
+      - traefik.http.routers.sablier.rule=Host(`${SABLIER_CONTAINER_NAME:-sablier}.${HOST_DOMAIN}`)
+      #- traefik.http.services.sablier.loadbalancer.server.scheme=https # enable if the service wants to connect over https
+      - traefik.http.services.sablier.loadbalancer.server.port=10000
+      - traefik.http.middlewares.dynamic.plugin.sablier.names=sablier_whoami_1
+      - traefik.http.middlewares.dynamic.plugin.sablier.sablierUrl=http://sablier:10000
+      - traefik.http.middlewares.dynamic.plugin.sablier.sessionDuration=1m
+      - traefik.http.middlewares.dynamic.plugin.sablier.dynamic.theme=hacker-terminal
+      - com.centurylinklabs.watchtower.enable=${SABLIER_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

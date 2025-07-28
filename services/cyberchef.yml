@@ -1,0 +1,22 @@
+networks:
+  traefik:
+    external: true
+
+# description: Web app for data analysis and transformation
+# https://github.com/gchq/CyberChef/
+
+services:
+  cyberchef:
+    image: mpepping/cyberchef:${CYBERCHEF_DOCKER_TAG:-latest}
+    container_name: ${CYBERCHEF_CONTAINER_NAME:-cyberchef}
+    restart: unless-stopped
+    networks:
+      - traefik
+    labels:
+      - joyride.host.name=${CYBERCHEF_CONTAINER_NAME:-cyberchef}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.cyberchef.entrypoints=websecure
+      - traefik.http.routers.cyberchef.rule=Host(`${CYBERCHEF_CONTAINER_NAME:-cyberchef}.${HOST_DOMAIN}`)
+      - traefik.http.services.cyberchef.loadbalancer.server.port=8000
+      - com.centurylinklabs.watchtower.enable=${CYBERCHEF_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

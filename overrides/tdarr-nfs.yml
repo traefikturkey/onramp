@@ -1,0 +1,25 @@
+volumes:
+  tdarr-nfs-media:
+    labels:
+      - remove_volume_on=down
+    driver_opts:
+      type: nfs
+      o: "addr=${TDARR_MEDIA_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
+      device: ":${TDARR_MEDIA_NFS_SERVER_PATH:-${NFS_MEDIA_PATH}}"
+
+  tdarr-nfs-temp:
+    labels:
+      - remove_volume_on=down
+    driver_opts:
+      type: nfs
+      o: "addr=${TDARR_MEDIA_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
+      device: ":${TDARR_TEMP_NFS_SERVER_PATH:-${NFS_DOWNLOADS_PATH}}"
+
+services:
+  tdarr:
+    volumes:
+      - ./etc/tdarr/server:/app/server
+      - ./etc/tdarr/config:/app/configs
+      - ${TDARR_MEDIA_VOLUME:-tdarr-nfs-media}:${TDARR_MEDIA_PATH:-/media}
+      - ${TDARR_TEMP_VOLUME:-tdarr-nfs-temp}:${TDARR_TEMP_PATH:-/temp}
+      - /etc/localtime:/etc/localtime:ro

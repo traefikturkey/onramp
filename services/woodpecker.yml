@@ -1,0 +1,53 @@
+networks:
+  traefik:
+    external: true
+
+# description: CI/CD server and agent runner, a fork of Drone CI
+# https://woodpecker-ci.org/
+# https://woodpecker-ci.org/docs/intro
+
+
+services:
+  woodpecker:
+    image: woodpeckerci/woodpecker-server:${WOODPECKER_DOCKER_TAG:-latest}
+    container_name: ${WOODPECKER_CONTAINER_NAME:-woodpecker}
+    restart: unless-stopped
+    networks:
+      - traefik
+      - default
+    volumes:
+      - ./etc/woodpecker:/var/lib/woodpecker
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      #- WOODPECKER_OPEN=true
+      - WOODPECKER_ADMIN=${WOODPECKER_ADMIN}
+      - WOODPECKER_HOST=http://${WOODPECKER_CONTAINER_NAME:-woodpecker}.${HOST_DOMAIN}
+      - WOODPECKER_GITEA=true
+      - WOODPECKER_GITEA_URL=${GITEA_CONTAINER_NAME:-gitea}.${HOST_DOMAIN}
+      - WOODPECKER_AGENT_SECRET=${WOODPECKER_AGENT_SECRET}
+      - WOODPECKER_GITEA_CLIENT=${WOODPECKER_GITEA_CLIENT}
+      - WOODPECKER_GITEA_SECRET=${WOODPECKER_GITEA_SECRET}
+    labels:
+      - joyride.host.name=${WOODPECKER_CONTAINER_NAME:-woodpecker}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.woodpecker.entrypoints=websecure
+      - traefik.http.routers.woodpecker.rule=Host(`${WOODPECKER_CONTAINER_NAME:-woodpecker}.${HOST_DOMAIN}`)
+      - traefik.http.services.woodpecker.loadbalancer.server.port=8000
+      - com.centurylinklabs.watchtower.enable=${WOODPECKER_WATCHTOWER_ENABLED:-true}
+      - autoheal=true
+
+
+  woodpecker-agent:
+    image: woodpeckerci/woodpecker-agent:latest
+    command: agent
+    restart: unless-stopped
+    depends_on:
+      - woodpecker
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - WOODPECKER_SERVER=woodpecker:9000
+      - WOODPECKER_AGENT_SECRET=${WOODPECKER_AGENT_SECRET}

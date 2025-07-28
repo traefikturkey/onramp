@@ -1,0 +1,39 @@
+networks:
+  traefik:
+    external: true
+
+# description: Collects and analyzes resource usage and performance characteristics of running containers
+# https://github.com/google/cadvisor
+
+services:
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:${CADVISOR_DOCKER_TAG:-latest}
+    container_name: ${CADVISOR_CONTAINER_NAME:-cadvisor}
+    restart: ${CADVISOR_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    command:
+      - -allow_dynamic_housekeeping=false
+      - -housekeeping_interval=30s
+      - -storage_duration=1m0s
+      - -docker_only=true
+      #- -disable_metrics=accelerator,cpu_topology,disk,memory_numa,hugetlb,cpuset,advtcp,memory_numa
+    #privileged: true
+    devices:
+      - /dev/kmsg:/dev/kmsg
+    volumes:
+      - /:/rootfs:ro
+      - /sys:/sys:ro
+      - /sys/fs/cgroup:/cgroup:ro
+      - /dev/disk/:/dev/disk:ro
+      - /var/run:/var/run:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /etc/localtime:/etc/localtime:ro
+    labels:
+      - org.label-schema.group=monitoring
+      - joyride.host.name=${CADVISOR_CONTAINER_NAME:-cadvisor}.${HOST_DOMAIN}
+      - com.centurylinklabs.watchtower.enable=${CADVISOR_WATCHTOWER_ENABLED:-true}
+      - traefik.enable=true
+      - traefik.http.routers.cadvisor.rule=Host(`${CADVISOR_CONTAINER_NAME:-cadvisor}.${HOST_DOMAIN}`)
+      - traefik.http.routers.cadvisor.entrypoints=websecure
+      - traefik.http.services.cadvisor.loadbalancer.server.port=8080

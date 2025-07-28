@@ -1,0 +1,41 @@
+networks:
+  traefik:
+    external: true
+
+# description: Lightweight git service similar to github
+# https://github.com/go-gitea/gitea
+# https://docs.gitea.io/en-us/install-with-docker/#environments-variables
+
+services:
+  gitea:
+    image: gitea/gitea:${GITEA_DOCKER_TAG:-latest}
+    container_name: ${GITEA_CONTAINER_NAME:-gitea}
+    restart: unless-stopped
+    networks:
+      - traefik
+    environment:
+      - APP_NAME=${GITEA_REPOSITORY_NAME:-Gitea}
+      - USER_UID=${PUID:-1000}
+      - USER_GID=${PGID:-1000}
+      - RUN_MODE=prod
+      - DOMAIN=${GITEA_CONTAINER_NAME:-gitea}.${HOST_DOMAIN}
+      - SSH_DOMAIN=${GITEA_CONTAINER_NAME:-gitea}.${HOST_DOMAIN}
+      - HTTP_PORT=4000
+      - ROOT_URL=https://${GITEA_CONTAINER_NAME:-gitea}.${HOST_DOMAIN}
+      - SSH_PORT=${GITEA_SSH_PORT:-2222}
+      - SSH_LISTEN_PORT=22
+      - DB_TYPE=sqlite3
+    ports:
+      # - 4000:4000
+      - "2222:22"
+    volumes:
+      - ./etc/gitea:/data
+      - /etc/localtime:/etc/localtime:ro
+    labels:
+      - joyride.host.name=${GITEA_CONTAINER_NAME:-gitea}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.gitea.rule=Host(`${GITEA_CONTAINER_NAME:-gitea}.${HOST_DOMAIN}`)
+      - traefik.http.routers.gitea.entrypoints=websecure
+      - traefik.http.services.gitea.loadbalancer.server.port=4000
+      - com.centurylinklabs.watchtower.enable=${GITEA_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

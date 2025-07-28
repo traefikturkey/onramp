@@ -1,0 +1,36 @@
+networks:
+  traefik:
+    external: true
+
+# description: Network boot server for various operating systems
+# https://github.com/netbootxyz/docker-netbootxyz
+
+services:
+  netbootxyz:
+    image: ghcr.io/netbootxyz/netbootxyz:${NETBOOTXYZ_DOCKER_TAG:-latest}
+    container_name: ${NETBOOTXYZ_CONTAINER_NAME:-netbootxyz}
+    restart: unless-stopped
+    networks:
+      - traefik
+    volumes:
+      - ./etc/netbootxyz:/config
+      - ./media/netbootxyz:/assets
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 3000:3000
+      - 69:69/udp
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      # - MENU_VERSION=1.9.9
+      # - PORT_RANGE=30000:30010
+      # - SUBFOLDER=/
+    labels:
+      - joyride.host.name=${NETBOOTXYZ_CONTAINER_NAME:-netbootxyz}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.netbootxyz.entrypoints=websecure
+      - traefik.http.routers.netbootxyz.rule=Host(`${NETBOOTXYZ_CONTAINER_NAME:-netbootxyz}.${HOST_DOMAIN}`)
+      - traefik.http.services.netbootxyz.loadbalancer.server.port=3000
+      - com.centurylinklabs.watchtower.enable=${NETBOOTXYZ_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

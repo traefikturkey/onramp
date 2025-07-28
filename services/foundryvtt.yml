@@ -1,0 +1,32 @@
+networks:
+  traefik:
+    external: true
+
+# description: Virtual tabletop platform for role-playing games
+# https://hub.docker.com/r/felddy/foundryvtt
+
+services:
+  foundryvtt:
+    image: felddy/foundryvtt:${FOUNDRYVTT_DOCKER_TAG:-release}
+    container_name: ${FOUNDRYVTT_CONTAINER_NAME:-foundryvtt}
+    restart: ${FOUNDRYVTT_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/foundryvtt:/data
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - FOUNDRY_PASSWORD=${FOUNDRYVTT_PASSWORD}
+      - FOUNDRY_USERNAME=${FOUNDRYVTT_USERNAME}
+      - FOUNDRY_ADMIN_KEY=${FOUNDRYVTT_ADMINKEY}
+
+    labels:
+      - joyride.host.name=${FOUNDRYVTT_CONTAINER_NAME:-foundryvtt}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.foundryvtt.entrypoints=websecure
+      - traefik.http.routers.foundryvtt.rule=Host(`${FOUNDRYVTT_CONTAINER_NAME:-foundryvtt}.${HOST_DOMAIN}`)
+      - traefik.http.services.foundryvtt.loadbalancer.server.port=30000
+      - com.centurylinklabs.watchtower.enable=${FOUNDRYVTT_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

@@ -1,0 +1,32 @@
+networks:
+  traefik:
+    external: true
+
+# description: Disk usage dashboard
+# https://github.com/amerkurev/doku
+#https://docker-disk.space/
+
+services:
+  doku:
+    image: amerkurev/doku:${DOKU_DOCKER_TAG:-latest}
+    container_name: ${DOKU_CONTAINER_NAME:-doku}
+    restart: ${DOKU_RESTART:-unless-stopped}
+    mem_limit: ${DOKU_MEM_LIMIT:-200g}
+    networks:
+      - traefik
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /:/hostroot:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=${DOKU_CONTAINER_NAME:-doku}.${HOST_DOMAIN}
+      - traefik.enable=${DOKU_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.doku.entrypoints=websecure
+      - traefik.http.routers.doku.rule=Host(`${DOKU_CONTAINER_NAME:-doku}.${HOST_DOMAIN}`)
+      - traefik.http.services.doku.loadbalancer.server.port=9090
+      - com.centurylinklabs.watchtower.enable=${DOKU_WATCHTOWER_ENABLED:-true}
+      - autoheal=${DOKU_AUTOHEAL_ENABLED:-true}

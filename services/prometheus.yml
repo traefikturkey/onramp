@@ -1,0 +1,43 @@
+networks:
+  traefik:
+    external: true
+
+# description: Monitoring and alerting toolkit
+# https://github.com/prometheus/prometheus
+
+services:
+  prometheus:
+    image: prom/prometheus:${PROMETHEUS_DOCKER_TAG:-latest}
+    container_name: ${PROMETHEUS_CONTAINER_NAME:-prometheus}
+    restart: unless-stopped
+    networks:
+      - traefik
+      - default
+    command:
+      - --config.file=/etc/prometheus/conf/prometheus.yml
+      - --storage.tsdb.path=/prometheus/data
+      - --log.level=${PROMETHEUS_LOG_LEVEL:-debug}
+      - --web.enable-admin-api
+      - --web.external-url=http://${PROMETHEUS_HOST_NAME:-prometheus}.${HOST_DOMAIN}/
+      - --web.route-prefix=/
+    # ports:
+    #   - 9090:9090
+    volumes:
+      - ./etc/prometheus/conf:/etc/prometheus/conf:ro
+      - prometheus:/prometheus
+      - /etc/localtime:/etc/localtime:ro
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    labels:
+      - joyride.host.name=${PROMETHEUS_HOST_NAME:-prometheus}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.docker.network=traefik # required
+      - traefik.http.routers.prometheus.rule=Host(`${PROMETHEUS_HOST_NAME:-prometheus}.${HOST_DOMAIN}`)
+      - traefik.http.routers.prometheus.entrypoints=websecure
+      - traefik.http.services.prometheus.loadbalancer.server.port=9090
+      - com.centurylinklabs.watchtower.enable=${PROMETHEUS_WATCHTOWER_ENABLED:-true}
+      - autoheal=true
+
+volumes:
+  prometheus:
+    external: false

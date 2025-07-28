@@ -1,0 +1,52 @@
+version: "3"
+
+# description: Horizontally scalable, highly available log aggregation system
+# https://grafana.com/docs/loki/latest/installation/docker/
+# https://github.com/gliderlabs/logspout
+# https://grafana.com/docs/loki/latest/clients/promtail/
+
+# if you are going to send syslogs from an external source run the following:
+# make enable-override promtail-syslog
+
+services:
+  prometheus-loki:
+    image: grafana/loki:${LOKI_DOCKER_TAG:-latest}
+    container_name: ${LOKI_CONTAINER_NAME:-prometheus-loki}
+    restart: unless-stopped
+    volumes:
+      - ./etc/loki:/etc/loki
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 3100:3100
+    command: -config.file=/etc/loki/loki-config.yml
+    labels:
+      - com.centurylinklabs.watchtower.enable=${LOKI_WATCHTOWER_ENABLED:-true}
+      - traefik.enable=false
+
+  logspout:
+    image: gliderlabs/logspout:${LOGSPOUT_DOCKER_TAG:-latest}
+    container_name: logspout
+    restart: unless-stopped
+    command: syslog+tcp://promtail:1514
+    depends_on:
+      - promtail
+    environment:
+      - SYSLOG_HOSTNAME={{.ContainerName}}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    labels:
+      - com.centurylinklabs.watchtower.enable=${LOKI_WATCHTOWER_ENABLED:-true}
+      - traefik.enable=false
+
+  promtail:
+    image: grafana/promtail:${PROMTAIL_DOCKER_TAG:-latest}
+    container_name: promtail
+    restart: unless-stopped
+    volumes:
+      - /var/log:/var/log
+      - ./etc/promtail:/etc/promtail
+    command: -config.file=/etc/promtail/promtail-config.yml
+    labels:
+      - com.centurylinklabs.watchtower.enable=${LOKI_WATCHTOWER_ENABLED:-true}
+      - traefik.enable=false

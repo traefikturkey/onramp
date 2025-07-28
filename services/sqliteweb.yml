@@ -1,0 +1,31 @@
+networks:
+  traefik:
+    external: true
+
+# description: Web-based SQLite Database Browser
+# https://hub.docker.com/r/tomdesinto/sqliteweb/
+# https://charlesleifer.com/blog/web-based-sqlite-database-browser-using-flask/
+
+services:
+  sqliteweb:
+    image: tomdesinto/sqliteweb:${SQLITEWEB_DOCKER_TAG:-latest}
+    container_name: ${SQLITEWEB_CONTAINER_NAME:-sqliteweb}
+    restart: ${SQLITEWEB_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    command: ${SQLITEWEB_DATABASE_FILE:-database.db}
+    volumes:
+      - ${SQLITEWEB_DATA_PATH:-./media/databases/sqliteweb/}:/db
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=${SQLITEWEB_CONTAINER_NAME:-sqliteweb}.${HOST_DOMAIN}
+      - traefik.enable=${SQLITEWEB_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.sqliteweb.entrypoints=websecure
+      - traefik.http.routers.sqliteweb.rule=Host(`${SQLITEWEB_CONTAINER_NAME:-sqliteweb}.${HOST_DOMAIN}`)
+      - traefik.http.services.sqliteweb.loadbalancer.server.port=8080
+      - com.centurylinklabs.watchtower.enable=${SQLITEWEB_WATCHTOWER_ENABLED:-true}
+      - autoheal=${SQLITEWEB_AUTOHEAL_ENABLED:-true}

@@ -1,0 +1,59 @@
+networks:
+  traefik:
+    external: true
+
+# description: Self-hosted metasearch engine
+# https://github.com/searxng/searxng-docker
+# Copy the settings template in etc/searxng and save it as settings.yml in the same directory.
+# Make sure you change the secret key.
+
+services:
+  searxng:
+    image: searxng/searxng:${SEARXNG_DOCKER_TAG:-latest}
+    container_name: ${SEARXNG_CONTAINER_NAME:-searxng}
+    restart: unless-stopped
+    networks:
+      - traefik
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - UMASK=022
+      - SEARXNG_BASE_URL=https://${SEARXNG_HOSTNAME:-searxng}/
+    volumes:
+      - ${SEARXNG_VOLUME-./etc/searxng}:/etc/searxng:rw
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - SETGID
+      - SETUID
+      - DAC_OVERRIDE
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
+        max-file: "1"
+    labels:
+      - joyride.host.name=${SEARXNG_CONTAINER_NAME:-searxng}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.searxng.entrypoints=websecure
+      - traefik.http.routers.searxng.rule=Host(`${SEARXNG_CONTAINER_NAME:-searxng}.${HOST_DOMAIN}`)
+      - traefik.http.services.searxng.loadbalancer.server.port=8080
+      - com.centurylinklabs.watchtower.enable=${SEARXNG_WATCHTOWER_ENABLED:-true}
+      - autoheal=true
+
+
+  redis:
+    container_name: searxng-redis
+    image: "redis:alpine"
+    command: redis-server --save "" --appendonly "no"
+    tmpfs:
+      - /var/lib/redis
+    cap_drop:
+      - ALL
+    cap_add:
+      - SETGID
+      - SETUID
+      - DAC_OVERRIDE
+    restart: unless-stopped

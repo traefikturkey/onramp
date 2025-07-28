@@ -1,0 +1,32 @@
+networks:
+  traefik:
+    external: true
+
+# description: System monitoring tool
+# https://github.com/nicolargo/glances
+
+services:
+  glances:
+    image: nicolargo/glances:${GLANCES_DOCKER_TAG:-latest}
+    container_name: ${GLANCES_CONTAINER_NAME:-glances}
+    restart: ${GLANCES_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    pid: host
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./etc/glances:/config # <==== this probably needs changed
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - GLANCES_OPT=-w
+    labels:
+      - joyride.host.name=${GLANCES_CONTAINER_NAME:-glances}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.glances.entrypoints=websecure
+      - traefik.http.routers.glances.rule=Host(`${GLANCES_CONTAINER_NAME:-glances}.${HOST_DOMAIN}`)
+      - traefik.http.services.glances.loadbalancer.server.port=61208
+      - com.centurylinklabs.watchtower.enable=${GLANCES_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

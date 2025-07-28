@@ -1,0 +1,35 @@
+networks:
+  traefik:
+    external: true
+
+# description: Headless cms for creating blogs and websites
+# https://hub.docker.com/_/ghost
+
+services:
+  ghost:
+    image: ghost:${GHOST_DOCKER_TAG:-alpine}
+    container_name: ${GHOST_CONTAINER_NAME:-ghost}
+    restart: ${GHOST_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/ghost:/var/lib/ghost/content
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - url=${GHOST_URL}
+      - database__client=mysql
+      - database__connection__host=${GHOST_DATABASE_HOST:-mariadb}
+      - database__connection__user=${GHOST_DATABASE_USER:-ghost}
+      - database__connection__password=${GHOST_DATABASE_PASSWORD:-you_should_really_consider_changing_this}
+      - database__connection__database=${GHOST_DATABASE_NAME:-ghost}
+    labels:
+      - joyride.host.name=${GHOST_CONTAINER_NAME:-ghost}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.ghost.entrypoints=websecure
+      - traefik.http.routers.ghost.rule=Host(`${GHOST_CONTAINER_NAME:-ghost}.${HOST_DOMAIN}`)
+      - traefik.http.services.ghost.loadbalancer.server.port=2368
+      - com.centurylinklabs.watchtower.enable=${GHOST_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

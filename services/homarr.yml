@@ -1,0 +1,32 @@
+networks:
+  traefik:
+    external: true
+
+# description: Home automation and remote control system
+# https://github.com/ajnart/homarr
+
+services:
+  homarr:
+    image: ghcr.io/ajnart/homarr:${HOMARR_DOCKER_TAG:-latest}
+    container_name: ${HOMARR_CONTAINER_NAME:-homarr}
+    restart: unless-stopped
+    networks:
+      - traefik
+    volumes:
+      - ./etc/homarr/configs:/app/data/configs
+      - ./etc/homarr/icons:/app/public/icons
+      - /etc/localtime:/etc/localtime:ro
+      #- /var/run/docker.sock:/var/run/docker.sock #uncomment to enable docker control
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - BASE_URL=${HOMARR_CONTAINER_NAME:-homarr}.${HOST_DOMAIN}
+    labels:
+      - joyride.host.name=${HOMARR_CONTAINER_NAME:-homarr}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.homarr.entrypoints=websecure
+      - traefik.http.routers.homarr.rule=Host(`${HOMARR_CONTAINER_NAME:-homarr}.${HOST_DOMAIN}`)
+      - traefik.http.services.homarr.loadbalancer.server.port=7575
+      - com.centurylinklabs.watchtower.enable=${HOMARR_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

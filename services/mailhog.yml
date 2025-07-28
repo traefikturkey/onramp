@@ -1,0 +1,39 @@
+networks:
+  traefik:
+    external: true
+
+# description: Mail testing tool for developers
+# https://github.com/mailhog/MailHog
+
+services:
+  mailhog:
+    image: mailhog/mailhog:${MAILHOG_DOCKER_TAG:-latest}
+    container_name: ${MAILHOG_CONTAINER_NAME:-mailhog}
+    restart: unless-stopped
+    networks:
+      - traefik
+    ports:
+      - ${MH_SMTP_PORT:-1025}:${MH_SMTP_PORT:-1025}
+    volumes:
+      - mailhog_storage:/home/mailhog
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - MH_HOSTNAME=${MAILHOG_CONTAINER_NAME:-mailhog}.${HOST_DOMAIN}
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - MH_SMTP_BIND_ADDR=${MH_SMTP_BIND_ADDR:-0.0.0.0:1025}
+      - MH_MAILDIR_PATH=maildir
+      - MH_STORAGE=maildir
+      # - MH_OUTGOING_SMTP={'server name': {'name': 'Mailhog','host': 'postfix.${HOST_DOMAIN}','port': '25','email': 'noreply@${HOST_DOMAIN}' } }
+    labels:
+      - joyride.host.name=${MAILHOG_CONTAINER_NAME:-mailhog}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.mailhog.entrypoints=websecure
+      - traefik.http.routers.mailhog.rule=Host(`${MAILHOG_CONTAINER_NAME:-mailhog}.${HOST_DOMAIN}`)
+      - traefik.http.services.mailhog.loadbalancer.server.port=8025
+      - com.centurylinklabs.watchtower.enable=${MAILHOG_WATCHTOWER_ENABLED:-true}
+      - autoheal=true
+
+volumes:
+  mailhog_storage:

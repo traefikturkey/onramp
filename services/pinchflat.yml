@@ -1,0 +1,33 @@
+networks:
+  traefik:
+    external: true
+
+# description: Pinchflat is a self-hosted app for downloading YouTube content built using yt-dlp
+# https://github.com/kieraneglin/pinchflat
+
+services:
+  pinchflat:
+    image: ghcr.io/kieraneglin/pinchflat:${PINCHFLAT_DOCKER_TAG:-latest}
+    container_name: ${PINCHFLAT_CONTAINER_NAME:-pinchflat}
+    restart: ${PINCHFLAT_RESTART:-unless-stopped}
+    mem_limit: ${PINCHFLAT_MEM_LIMIT:-200g}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/pinchflat:/config
+      - /etc/localtime:/etc/localtime:ro
+      - ./media/downloads:/downloads
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=${PINCHFLAT_HOST_NAME:-pinchflat}.${HOST_DOMAIN}
+      - traefik.enable=${PINCHFLAT_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.pinchflat.entrypoints=websecure
+      - traefik.http.routers.pinchflat.rule=Host(`${PINCHFLAT_HOST_NAME:-pinchflat}.${HOST_DOMAIN}`)
+      - traefik.http.routers.pinchflat.middlewares=default-headers@file
+      #- traefik.http.services.pinchflat.loadbalancer.server.scheme=https # enable if the service wants to connect over https
+      - traefik.http.services.pinchflat.loadbalancer.server.port=8945
+      - com.centurylinklabs.watchtower.enable=${PINCHFLAT_WATCHTOWER_ENABLED:-true}
+      - autoheal=${PINCHFLAT_AUTOHEAL_ENABLED:-true}

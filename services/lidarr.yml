@@ -1,0 +1,43 @@
+networks:
+  traefik:
+    external: true
+
+# description: Manages music collections and downloads
+# https://github.com/linuxserver/docker-lidarr
+# https://hub.docker.com/r/linuxserver/lidarr
+
+services:
+  lidarr:
+    # image: linuxserver/lidarr #uses musicbrainz with caching server for metadata
+    image: ghcr.io/hotio/lidarr:${LIDARR_DOCKER_TAG:-latest} #uses slskd as metadata
+    container_name: ${LIDARR_CONTAINER_NAME:-lidarr}
+    restart: ${LIDARR_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/lidarr:/config
+      - ${LIDARR_MUSIC_VOLUME:-./media/music}:/music
+      - ${LIDARR_DOWNLOADS_VOLUME:-./media/downloads}:/downloads
+      # - /dev/rtc:/dev/rtc:ro
+      # - /etc/timezone:/etc/timezone:ro
+      # - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 8686:8686
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    healthcheck:
+      test: curl --fail http://localhost:8686 || exit 1
+      interval: 60s
+      retries: 5
+      start_period: 20s
+      timeout: 10s
+    labels:
+      - joyride.host.name=lidarr.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.lidarr.entrypoints=websecure
+      - traefik.http.routers.lidarr.rule=Host(`lidarr.${HOST_DOMAIN}`)
+      - traefik.http.services.lidarr.loadbalancer.server.port=8686
+      - com.centurylinklabs.watchtower.enable=${LIDARR_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

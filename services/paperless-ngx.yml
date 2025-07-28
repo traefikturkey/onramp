@@ -1,0 +1,93 @@
+networks:
+  traefik:
+    external: true
+
+# description: Document management system
+# https://github.com/paperless-ngx/paperless-ngx
+# https://hub.docker.com/r/linuxserver/paperless-ngx
+# https://docs.paperless-ngx.com/
+
+services:
+  broker:
+    image: docker.io/library/redis:7
+    restart: unless-stopped
+    networks:
+      - traefik
+    volumes:
+      - ./etc/paperless-ngx/redisdata:/data
+
+  db:
+    image: docker.io/library/mariadb:10
+    restart: unless-stopped
+    volumes:
+      - ./etc/paperless-ngx/dbdata:/var/lib/mysql
+    networks:
+      - traefik
+    environment:
+      - MARIADB_HOST=${PAPERLESS_DB_HOST:-paperless}
+      - MARIADB_DATABASE=${PAPERLESS_DB_NAME:-paperless}
+      - MARIADB_USER=${PAPERLESS_DB_USER:-paperless}
+      - MARIADB_PASSWORD=${PAPERLESS_DB_PASS:-paperless}
+      - MARIADB_ROOT_PASSWORD=${PAPERLESS_DB_ROOTPASS:-paperless}
+    ports:
+      - "3306:3306"
+
+  gotenberg:
+    image: docker.io/gotenberg/gotenberg:7.6
+    restart: unless-stopped
+    networks:
+      - traefik
+    command:
+      - "gotenberg"
+      - "--chromium-disable-routes=true"
+
+  tika:
+    image: ghcr.io/paperless-ngx/tika:latest
+    restart: unless-stopped
+    networks:
+      - traefik
+
+  paperless-ngx:
+    image: ghcr.io/paperless-ngx/paperless-ngx:${PAPERLESS_NGX_DOCKER_TAG:-latest}
+    container_name: ${PAPERLESS_NGX_CONTAINER_NAME:-paperless-ngx}
+    restart: ${PAPERLESS_NGX_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    depends_on:
+      - broker
+      - db
+      - gotenberg
+      - tika
+    volumes:
+      - ./etc/paperless-ngx/data:/usr/src/paperless/data
+      - ./etc/paperless-ngx/media:/usr/src/paperless/media
+      - ./etc/paperless-ngx/export:/usr/src/paperless/export
+      - ./etc/paperless-ngx/consume:/usr/src/paperless/consume
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+       #PAPERLESS_URL Required for proper authentication behind traefik
+      - PAPERLESS_URL=https://${PAPERLESS_NGX_CONTAINER_NAME:-paperless-ngx}.${HOST_DOMAIN}
+      - PAPERLESS_REDIS=redis://broker:6379
+      - PAPERLESS_TIKA_ENABLED=1
+      - PAPERLESS_TIKA_GOTENBERG_ENDPOINT=http://gotenberg:3000
+      - PAPERLESS_TIKA_ENDPOINT=http://tika:9998
+      - PAPERLESS_DBENGINE=${PAPERLESS_DB_ENGINE:-mariadb}
+      - PAPERLESS_DBPORT=${PAPERLESS_DB_PORT:-3306}
+      - PAPERLESS_DBHOST=${PAPERLESS_DB_HOST:-db}
+      - PAPERLESS_DBNAME=${PAPERLESS_DB_NAME:-paperless}
+      - PAPERLESS_DBUSER=${PAPERLESS_DB_USER:-paperless}
+      - PAPERLESS_DBPASS=${PAPERLESS_DB_PASS:-paperless}
+      - PAPERLESS_ADMIN_USER=${PAPERLESS_ADMINUSER:-admin}
+      - PAPERLESS_ADMIN_MAIL=${PAPERLESS_ADMINMAIL:-admin@yourmail.com}
+      - PAPERLESS_ADMIN_PASSWORD=${PAPERLESS_ADMINPASSWORD:-admin}
+    labels:
+      - joyride.host.name=${PAPERLESS_NGX_CONTAINER_NAME:-paperless-ngx}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.paperless-ngx.entrypoints=websecure
+      - traefik.http.routers.paperless-ngx.rule=Host(`${PAPERLESS_NGX_CONTAINER_NAME:-paperless-ngx}.${HOST_DOMAIN}`)
+      - traefik.http.services.paperless-ngx.loadbalancer.server.port=8000
+      - com.centurylinklabs.watchtower.enable=${PAPERLESS_NGX_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

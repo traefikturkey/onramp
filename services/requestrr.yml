@@ -1,0 +1,24 @@
+networks:
+  traefik:
+    external: true
+
+# description: Integrates with sonarr and radarr for requesting media content
+# https://hub.docker.com/r/darkalfx/requestrr
+
+services:
+  requestrr:
+    image: darkalfx/requestrr:${REQUESTRR_DOCKER_TAG:-latest}
+    container_name: requestrr
+    restart: unless-stopped
+    networks:
+      - traefik
+    volumes:
+      - ./etc/requestrr:/root/config
+    labels:
+      - joyride.host.name=requestrr.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.requestrr.entrypoints=websecure
+      - traefik.http.routers.requestrr.rule=Host(`requestrr.${HOST_DOMAIN}`)
+      - traefik.http.services.requestrr.loadbalancer.server.port=4545
+      - com.centurylinklabs.watchtower.enable=${REQUESTRR_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

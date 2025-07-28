@@ -1,0 +1,51 @@
+networks:
+  traefik:
+    external: true
+
+# description: Container for running recyclarr, a media indexer
+# https://github.com/recyclarr/recyclarr# 
+# https://hub.docker.com/r/recyclarr/recyclarr
+# https://recyclarr.dev/wiki/installation/
+
+services:
+  recyclarr:
+    image: ghcr.io/recyclarr/recyclarr:${RECYCLARR_DOCKER_TAG:-latest}
+    container_name: ${RECYCLARR_CONTAINER_NAME:-recyclarr}
+    restart: ${RECYCLARR_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/recyclarr:/config
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      # run cron to sync every Saturday at midnight
+      - CRON_SCHEDULE=0 0 * * 6
+      - RECYCLARR_CREATE_CONFIG=true
+    labels:
+      - traefik.enable=false
+      - com.centurylinklabs.watchtower.enable=false
+      - autoheal=true
+
+
+# make enable-service recyclarr
+# copy the API keys for sonarr & radarr
+# edit ./etc/recyclarr/recyclarr.yml with the following entries
+
+# sonarr:
+#   series:
+#     # Set the URL/API Key to your actual instance
+#     base_url: http://sonarr:8989
+#     api_key: <SONARR_API_KEY>
+
+# radarr:
+#   movies:
+#     # Set the URL/API Key to your actual instance
+#     base_url: http://radarr:7878
+#     api_key: <RADARR_API_KEY>
+
+# then run the commands to sync the services:
+# make start-service recyclarr
+# docker exec recyclarr recyclarr sync --debug

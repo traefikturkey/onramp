@@ -1,0 +1,32 @@
+networks:
+  traefik:
+    external: true
+
+# description: Flow-based development tool for visual programming
+# https://hub.docker.com/r/nodered/node-red/
+# https://github.com//node-red/node-red-docker
+
+services:
+  nodered:
+    image: nodered/node-red:${NODERED_DOCKER_TAG:-latest}
+    container_name: nodered
+    restart: unless-stopped
+    networks:
+      - traefik
+    # uncomment the network_mode: host line if nodered needs
+    # to be auto discovered by Amazon Alexa or Google Home
+    # network_mode: host
+    user: ${PUID:-1000}:${PGID:-1000}
+    environment:
+      - TZ=${TZ}
+    volumes:
+      - ./etc/nodered:/data
+      - /etc/localtime:/etc/localtime:ro
+    labels:
+      - joyride.host.name=nodered.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.nodered.entrypoints=websecure
+      - traefik.http.routers.nodered.rule=Host(`nodered.${HOST_DOMAIN}`)
+      - traefik.http.services.nodered.loadbalancer.server.port=1880
+      - com.centurylinklabs.watchtower.enable=${NODERED_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

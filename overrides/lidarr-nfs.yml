@@ -1,0 +1,25 @@
+volumes:
+  lidarr-nfs-media:
+    labels:
+      - remove_volume_on=down
+    driver_opts:
+      type: nfs
+      o: "addr=${LIDARR_MEDIA_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
+      device: ":${LIDARR_MEDIA_NFS_SERVER_PATH:-${NFS_MUSIC_PATH}}"
+
+  lidarr-nfs-downloads:
+    labels:
+      - remove_volume_on=down
+    driver_opts:
+      type: nfs
+      o: "addr=${LIDARR_MEDIA_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
+      device: ":${LIDARR_MEDIA_NFS_DOWNLOADS_PATH:-${NFS_DOWNLOADS_PATH}}"
+
+services:
+  lidarr:
+    volumes:
+      - ${LIDARR_CONFIG_VOLUME:-./etc/lidarr}:/config
+      - ${MEDIA_MUSIC_VOLUME:-lidarr-nfs-media}:/music
+      - ${MEDIA_DOWNLOADS_VOLUME:-lidarr-nfs-downloads}:/downloads
+      - /dev/rtc:/dev/rtc:ro
+      - /etc/localtime:/etc/localtime:ro

@@ -1,0 +1,30 @@
+networks:
+  traefik:
+    external: true
+
+# description: Generates full-text rss feeds from partial feeds
+# https://christitus.com/why-we-dont-browse-the-internet-anymore/
+# https://www.youtube.com/watch?v=nxV0CPNeFxY
+
+services:
+  fulltext-rss:
+    image: heussd/fivefilters-full-text-rss:${FULLTEXT_RSS_DOCKER_TAG:-latest}
+    container_name: ${FULLTEXT_RSS_CONTAINER_NAME:-fulltext-rss}
+    restart: ${FULLTEXT_RSS_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/fulltext-rss:/config # <==== this probably needs changed
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=${FULLTEXT_RSS_CONTAINER_NAME:-fulltext-rss}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.fulltext-rss.entrypoints=websecure
+      - traefik.http.routers.fulltext-rss.rule=Host(`${FULLTEXT_RSS_CONTAINER_NAME:-fulltext-rss}.${HOST_DOMAIN}`)
+      - traefik.http.services.fulltext-rss.loadbalancer.server.port=8096
+      - com.centurylinklabs.watchtower.enable=${FULLTEXT_RSS_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

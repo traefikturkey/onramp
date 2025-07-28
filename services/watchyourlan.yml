@@ -1,0 +1,29 @@
+# description: Monitors network devices and services
+# https://github.com/aceberg/WatchYourLAN
+
+services:
+  watchyourlan:
+    image: aceberg/watchyourlan:${WATCHYOURLAN_DOCKER_TAG:-latest}
+    container_name: ${WATCHYOURLAN_CONTAINER_NAME:-watchyourlan}
+    restart: ${WATCHYOURLAN_RESTART:-unless-stopped}
+    network_mode: host # required to arpscan interfaces defined below
+    volumes:
+      - ./etc/watchyourlan:/data
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - IFACE=${WATCHYOURLAN_IFACE:-eth0} # can support multiple interfaces seperated by a space
+      - GUIIP=${WATCHYOURLAN_GUIIP:-0.0.0.0} # probably don't need to mess with this, works with traefik as is
+      - THEME=${WATCHYOURLAN_THEME:-darkly} # Any theme name from https://bootswatch.com in lowcase
+      - TIMEOUT=${WATCHYOURLAN_TIMEOUT:-600} # seconds to rescan, 600 = 10 minutes
+      - SHOUTRRR_URL=${WATCHYOURLAN_SHOUTRRR_URL:- } # Url to any notification service supported by Shoutrrr (gotify, email, telegram and others)
+    labels:
+      - joyride.host.name=${WATCHYOURLAN_CONTAINER_NAME:-watchyourlan}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.watchyourlan.entrypoints=websecure
+      - traefik.http.routers.watchyourlan.rule=Host(`${WATCHYOURLAN_CONTAINER_NAME:-watchyourlan}.${HOST_DOMAIN}`)
+      - traefik.http.services.watchyourlan.loadbalancer.server.port=8840
+      - com.centurylinklabs.watchtower.enable=${WATCHYOURLAN_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

@@ -1,0 +1,29 @@
+networks:
+  traefik:
+    external: true
+
+# description: (Archived Project) Global Streaming Search Service
+# https://github.com/Colaski/global-streaming-search
+
+services:
+  streaming-search:
+    image: colaski/global-streaming-search:${STREAMING_SEARCH_DOCKER_TAG:-latest}
+    container_name: ${STREAMING_SEARCH_CONTAINER_NAME:-streaming-search}
+    restart: ${STREAMING_SEARCH_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      #- ./etc/streaming-search:/config
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=${STREAMING_SEARCH_CONTAINER_NAME:-streaming-search}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.streaming-search.entrypoints=websecure
+      - traefik.http.routers.streaming-search.rule=Host(`${STREAMING_SERACH_CONTAINER_NAME:-streaming-search}.${HOST_DOMAIN}`)
+      - traefik.http.services.streaming-search.loadbalancer.server.port=8000
+      - com.centurylinklabs.watchtower.enable=${STREAMING_SEARCH_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

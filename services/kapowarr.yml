@@ -1,0 +1,40 @@
+networks:
+  traefik:
+    external: true
+
+# description: Manages comic book collections and downloads
+# https://github.com/Casvt/Kapowarr
+
+services:
+  kapowarr:
+    image: mrcas/kapowarr:${KAPOWARR_DOCKER_TAG:-latest}
+    container_name: ${KAPOWARR_CONTAINER_NAME:-kapowarr}
+    restart: ${KAPOWARR_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/kapowarr/db:/app/db
+      - ${MEDIA_COMICS_VOLUME:-./media/comics}:/comics-1
+      - ${MEDIA_DOWNLOADS_VOLUME:-./media/downloads}:/app/temp_downloads
+      - /dev/rtc:/dev/rtc:ro
+      - /etc/localtime:/etc/localtime:ro
+    # ports:
+    #   - 5656:5656
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    # healthcheck:
+    #   test: curl --fail http://localhost:5656 || exit 1
+    #   interval: 60s
+    #   retries: 5
+    #   start_period: 20s
+    #   timeout: 10s
+    labels:
+      - joyride.host.name=${KAPOWARR_CONTAINER_NAME:-kapowarr}.${HOST_DOMAIN}
+      - traefik.enable=${KAPOWARR_TRAEFIK_ENABLE:-true}
+      - traefik.http.routers.kapowarr.entrypoints=websecure
+      - traefik.http.routers.kapowarr.rule=Host(`${KAPOWARR_CONTAINER_NAME:-kapowarr}.${HOST_DOMAIN}`)
+      - traefik.http.services.kapowarr.loadbalancer.server.port=5656
+      - com.centurylinklabs.watchtower.enable=${KAPOWARR_WATCHTOWER_ENABLE:-true}
+      - autoheal=${KAPOWARR_AUTOHEAL:-true}

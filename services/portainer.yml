@@ -1,0 +1,30 @@
+networks:
+  traefik:
+    external: true
+
+# description: Lightweight container management ui
+# https://github.com/portainer/portainer
+
+services:
+  portainer:
+    image: portainer/portainer-${PORTAINER_VERSION:-ce}:${PORTAINER_DOCKER_TAG:-latest}
+    container_name: ${PORTAINER_CONTAINER_NAME:-portainer}
+    restart: unless-stopped
+    networks:
+      - traefik
+    volumes:
+      - ./etc/portainer:/data
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - PORTAINER_LICENSE_KEY=${PORTAINER_LICENSE_KEY:-}
+    env_file:
+      - .env
+    labels:
+      - joyride.host.name=${PORTAINER_CONTAINER_NAME:-portainer}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.portainer.entrypoints=websecure
+      - traefik.http.routers.portainer.rule=Host(`${PORTAINER_CONTAINER_NAME:-portainer}.${HOST_DOMAIN}`)
+      - traefik.http.services.portainer.loadbalancer.server.port=9000
+      - com.centurylinklabs.watchtower.enable=${PORTAINER_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

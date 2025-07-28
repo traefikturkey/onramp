@@ -1,0 +1,26 @@
+volumes:
+  audiobookshelf-nfs-media:
+    labels:
+      - remove_volume_on=down
+    driver_opts:
+      type: nfs
+      o: "addr=${AUDIOBOOKSHELF_MEDIA_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
+      device: ":${AUDIOBOOKSHELF_MEDIA_NFS_SERVER_PATH:-${NFS_BOOKS_PATH}}"
+
+  audiobookshelf-nfs-podcasts:
+    labels:
+      - remove_volume_on=down
+    driver_opts:
+      type: nfs
+      o: "addr=${AUDIOBOOKSHELF_MEDIA_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
+      device: ":${AUDIOBOOKSHELF_MEDIA_NFS_PODCASTS_PATH:-${NFS_PODCASTS_PATH}}"
+
+services:
+  audiobookshelf:
+    volumes:
+      - ./etc/audiobookshelf/config:/config
+      - ./etc/audiobookshelf/metadata:/metadata
+      - ${MEDIA_BOOKS_VOLUME:-audiobookshelf-nfs-media}:${AUDIOBOOKSHELF_MEDIA_AUDIOBOOKS_PATH:-/audiobooks}
+      - ${MEDIA_PODCASTS_VOLUME:-audiobookshelf-nfs-podcasts}:${AUDIOBOOKSHELF_MEDIA_PODCASTS_PATH:-/podcasts}
+      - /dev/rtc:/dev/rtc:ro
+      - /etc/localtime:/etc/localtime:ro

@@ -1,0 +1,28 @@
+networks:
+  traefik:
+    external: true
+
+# description: Powerful open-source relational database system
+# https://hub.docker.com/_/postgres
+
+services:
+  postgres:
+    image: postgres
+    container_name: postgres
+    restart: unless-stopped
+    volumes:
+      - ${POSTGRES_DIR:-./media/databases/postgres/data}:/var/lib/postgresql/data
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - POSTGRES_PASSWORD=${PG_PASS:?database password required}
+      - POSTGRES_USER=${PG_USER:-admin}
+      - POSTGRES_DB=${PG_DB:-admin}
+    ports:
+      - 5432:5432
+    labels:
+      - joyride.host.name=${POSTGRES_CONTAINER_NAME:-postgres}.${HOST_DOMAIN}
+      - traefik.enable=false
+      - com.centurylinklabs.watchtower.enable=${PG_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

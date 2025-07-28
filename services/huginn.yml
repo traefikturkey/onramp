@@ -1,0 +1,37 @@
+networks:
+  traefik:
+    external: true
+
+# description: Create agents that monitor and act on your behalf
+# https://github.com/huginn/huginn
+# https://hub.docker.com/r/huginn/huginn/
+# https://www.youtube.com/watch?v=PzyvTHrLmQk
+
+services:
+  huginn:
+    image: ghcr.io/huginn/huginn:${HUGINN_DOCKER_TAG:-latest}
+    container_name: ${HUGINN_CONTAINER_NAME:-huginn}
+    restart: ${HUGINN_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - huginn:/var/lib/mysql
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - SKIP_INVITATION_CODE=${HUGINN_SKIP_INVITATION_CODE:-true}
+      - EMAIL_FROM_ADDRESS=${HUGINN_EMAIL_FROM_ADDRESS:-huginn@${HOST_DOMAIN}}
+    labels:
+      - joyride.host.name=${HUGINN_CONTAINER_NAME:-huginn}.${HOST_DOMAIN}
+      - traefik.enable=${HUGINN_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.huginn.entrypoints=websecure
+      - traefik.http.routers.huginn.rule=Host(`${HUGINN_CONTAINER_NAME:-huginn}.${HOST_DOMAIN}`)
+      - traefik.http.services.huginn.loadbalancer.server.port=3000
+      - com.centurylinklabs.watchtower.enable=${HUGINN_WATCHTOWER_ENABLED:-true}
+      - autoheal=${HUGINN_AUTOHEAL_ENABLED:-true}
+
+volumes:
+  huginn:
+    

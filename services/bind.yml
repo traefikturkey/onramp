@@ -1,0 +1,27 @@
+networks:
+  traefik:
+    external: true
+
+# description: A very flexible, full-featured DNS system
+# https://hub.docker.com/r/ubuntu/bind9
+
+services:
+  bind:
+    image: ubuntu/bind9:${BIND_DOCKER_TAG:-latest}
+    container_name: ${BIND_CONTAINER_NAME:-bind}
+    restart: ${BIND_RESTART:-unless-stopped}
+    mem_limit: ${BIND_MEM_LIMIT:-200g}
+    volumes:
+      - ./etc/bind/config:/etc/bind
+      - ./etc/bind/cache:/var/cache/bind
+      - ./etc/bind/records:/var/lib/bind
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - BIND9_USER=${BIND_USER:-root}
+      - TZ=${TZ}
+    ports:
+      - ${BIND_PORT:-53}:53/tcp
+      - ${BIND_PORT:-53}:53/udp
+    labels:
+      - com.centurylinklabs.watchtower.enable=${BIND_WATCHTOWER_ENABLED:-true}
+      - autoheal=${BIND_AUTOHEAL_ENABLED:-true}

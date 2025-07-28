@@ -1,0 +1,32 @@
+networks:
+  traefik:
+    external: true
+
+# description: Powerful self-hosted file sync and sharing platform
+# https://github.com/linuxserver/docker-nextcloud
+
+services:
+  nextcloud:
+    image: lscr.io/linuxserver/nextcloud:${NEXTCLOUD_DOCKER_TAG:-latest}
+    container_name: ${NEXTCLOUD_CONTAINER_NAME:-nextcloud}
+    restart: ${NEXTCLOUD_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - /etc/nextcloud:/config
+      - ${NEXTCLOUD_DATA_VOLUME:-./media/nextcloud/}:${NEXTCLOUD_DATA_PATH:-/data}
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=${NEXTCLOUD_CONTAINER_NAME:-nextcloud}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.nextcloud.entrypoints=websecure
+      - traefik.http.routers.nextcloud.rule=Host(`${NEXTCLOUD_CONTAINER_NAME:-nextcloud}.${HOST_DOMAIN}`)
+      - traefik.http.routers.nextcloud.tls=true
+      - traefik.http.routers.nextcloud.service=nextcloud
+      - traefik.http.services.nextcloud.loadbalancer.server.scheme=https
+      - traefik.http.services.nextcloud.loadbalancer.server.port=443
+      - com.centurylinklabs.watchtower.enable=${NEXTCLOUD_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

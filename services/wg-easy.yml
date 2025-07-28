@@ -1,0 +1,40 @@
+networks:
+  traefik:
+    external: true
+
+# description: Wireguard vpn configuration generator and server
+# https://github.com/WeeJeWel/wg-easy
+
+services:
+  wg-easy:
+    image: ghcr.io/wg-easy/wg-easy:${WG_EASY_DOCKER_TAG:-latest}
+    container_name: ${WG_EASY_CONTAINER_NAME:-wg-easy}
+    restart: ${WG_EASY_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/wg-easy:/etc/wireguard
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - WG_HOST=${WG_EASY_HOST}
+      - WG_ALLOWED_IPS=${WG_EASY_ALLOWED_IPS:-10.8.0.0/24}
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    sysctls:
+      - net.ipv4.ip_forward=1
+      - net.ipv4.conf.all.src_valid_mark=1
+    ports:
+      - "51820:51820/udp"
+      #- "51821:51821/tcp"
+    labels:
+      - joyride.host.name=${WG_EASY_CONTAINER_NAME:-wg-easy}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.wg-easy.entrypoints=websecure
+      - traefik.http.routers.wg-easy.rule=Host(`${WG_EASY_CONTAINER_NAME:-wg-easy}.${HOST_DOMAIN}`)
+      - traefik.http.services.wg-easy.loadbalancer.server.port=51821
+      - com.centurylinklabs.watchtower.enable=${WG_EASY_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

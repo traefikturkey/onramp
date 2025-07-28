@@ -1,0 +1,38 @@
+networks:
+  traefik:
+    external: true
+
+# description: Decentralized file synchronization tool
+# https://hub.docker.com/r/linuxserver/syncthing
+# https://docs.linuxserver.io/images/docker-syncthing
+
+services:
+  syncthing:
+    image: linuxserver/syncthing:${SYNCTHING_DOCKER_TAG:-latest}
+    container_name: ${SYNCTHING_CONTAINER_NAME:-syncthing}
+    restart: ${SYNCTHING_RESTART:-unless-stopped}
+    mem_limit: ${SYNCTHING_MEM_LIMIT:-200m}
+    networks:
+      - traefik
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - UMASK=022
+    volumes:
+      - ./etc/syncthing:/config
+      - ${SYNCTHING_VOLUME:-./media/sync}:/sync
+      - /dev/rtc:/dev/rtc:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      #- 8384:8384
+      - 22000:22000
+      - 21027:21027/udp
+    labels:
+      - joyride.host.name=${SYNCTHING_CONTAINER_NAME:-syncthing}.${HOST_DOMAIN}
+      - traefik.enable=${SYNCTHING_TRAEFIK_ENABLE:-true}
+      - traefik.http.routers.sync.entrypoints=websecure
+      - traefik.http.routers.sync.rule=Host(`${SYNCTHING_CONTAINER_NAME:-syncthing}.${HOST_DOMAIN}`)
+      - traefik.http.services.sync.loadbalancer.server.port=8384
+      - com.centurylinklabs.watchtower.enable=${SYNCTHING_WATCHTOWER_ENABLE:-true}
+      - autoheal=${SYNCTHING_AUTOHEAL:-true}

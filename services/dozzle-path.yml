@@ -1,0 +1,28 @@
+networks:
+  traefik:
+    external: true
+
+# description: Path-based reverse proxy for dozzle
+# https://github.com/amir20/dozzle
+
+services:
+  dozzle-path:
+    image: amir20/dozzle:${DOZZLE_DOCKER_TAG:-latest}
+    container_name: ${DOZZLE_CONTAINER_NAME:-dozzle}
+    restart: ${DOZZLE_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    environment:
+      - DOZZLE_LEVEL=${DOZZLE_LEVEL:-debug}
+      - DOZZLE_BASE=${DOZZLE_BASE:-/logs}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.dozzle.rule=PathPrefix(`${DOZZLE_BASE:-/logs}`)
+      - traefik.http.routers.dozzle.entrypoints=websecure
+      - traefik.http.services.dozzle.loadbalancer.server.scheme=http
+      - traefik.http.services.dozzle.loadbalancer.server.port=8080
+      - com.centurylinklabs.watchtower.enable=${DOZZLE_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

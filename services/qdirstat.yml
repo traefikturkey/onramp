@@ -1,0 +1,33 @@
+networks:
+  traefik:
+    external: true
+
+# description: Disk space analyzer and cleanup tool
+# https://github.com/jlesage/docker-qdirstat
+
+services:
+  qdirstat:
+    image: jlesage/qdirstat:${QDIRSTAT_DOCKER_TAG:-latest}
+    container_name: ${QDIRSTAT_CONTAINER_NAME:-qdirstat}
+    restart: unless-stopped
+    networks:
+      - traefik
+    cap_add:
+      - SYS_NICE
+    environment:
+      - USER_ID=${PUID:-1000}
+      - GROUP_ID=${PGID:-1000}
+      - TZ=${TZ}
+      - KEEP_APP_RUNNING=1
+      - APP_NICENESS=10
+    volumes:
+      - ./etc/qdirstat:/config
+      - ${QDIRSTAT_MEDIA_VOLUME:-./media}:/storage
+    labels:
+      - joyride.host.name=${QDIRSTAT_CONTAINER_NAME:-qdirstat}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.qdirstat.entrypoints=websecure
+      - traefik.http.routers.qdirstat.rule=Host(`${QDIRSTAT_CONTAINER_NAME:-qdirstat}.${HOST_DOMAIN}`)
+      - traefik.http.services.qdirstat.loadbalancer.server.port=5800
+      - com.centurylinklabs.watchtower.enable=${QDIRSTAT_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

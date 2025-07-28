@@ -1,0 +1,35 @@
+
+# description: dynamic dns server that uses docker labels
+# https://github.com/traefikturkey/joyride
+
+# if you want to run joyride on port 53
+# run the following commands on ubuntu
+# sudo systemctl disable systemd-resolved.service
+# sudo systemctl stop systemd-resolved
+#
+# then add your primary dns servers ip address
+# to /etc/resolv.conf
+
+services:
+  joyride:
+    image: ghcr.io/traefikturkey/joyride:${JOYRIDE_DOCKER_TAG:-latest}
+    container_name: ${JOYRIDE_CONTAINER_NAME:-joyride}
+    restart: ${JOYRIDE_RESTART:-unless-stopped}
+    mem_limit: ${JOYRIDE_MEM_LIMIT:-100m}
+    environment:
+      - TZ=${TZ}
+      - HOSTIP=${HOSTIP}
+      - JOYRIDE_NXDOMAIN_ENABLED=${JOYRIDE_NXDOMAIN_ENABLED:-false}
+      - JOYRIDE_LOG_DEBUG=${JOYRIDE_LOG_DEBUG:-false}
+      - JOYRIDE_LOG_QUERIES=${JOYRIDE_LOG_QUERIES:-false}
+    network_mode: host
+    # ports:
+    #   - ${JOYRIDE_PORT:-54}:54/udp
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./etc/joyride/hosts.d:/etc/hosts.d:ro
+    labels:
+      - traefik.enable=${JOYRIDE_TRAEFIK_ENABLE:-false}
+      - com.centurylinklabs.watchtower.enable=${JOYRIDE_WATCHTOWER_ENABLE:-true}
+      - autoheal=${JOYRIDE_AUTOHEAL:-true}

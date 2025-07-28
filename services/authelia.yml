@@ -1,0 +1,39 @@
+networks:
+  traefik:
+    external: true
+
+# description: Provides single sign-on (sso) and two-factor authentication (2fa) for web applications
+# https://github.com/authelia/authelia
+
+services:
+  authelia:
+    image: authelia/authelia:${AUTHELIA_DOCKER_TAG:-latest}
+    container_name: authelia
+    restart: unless-stopped
+    networks:
+      - traefik
+    volumes:
+      - ./etc/authelia:/config
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - AUTHELIA_LOG_LEVEL=trace
+      - AUTHELIA_DEFAULT_REDIRECTION_URL=${AUTHELIA_REDIR_DOMAIN}
+      - AUTHELIA_JWT_SECRET=${AUTHELIA_JWT_SECRET}
+      - AUTHELIA_SESSION_DOMAIN=${HOST_DOMAIN}
+    env_file:
+      - .env
+    labels:
+      - joyride.host.name=${AUTHELIA_AUTH_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.authelia.rule=Host(`${AUTHELIA_AUTH_DOMAIN}`)
+      - traefik.http.routers.authelia.entrypoints=websecure
+      - traefik.http.middlewares.authelia.forwardauth.address=http://authelia:9091/api/verify?rd=${AUTHELIA_REDIR_DOMAIN}
+      - traefik.http.middlewares.authelia.forwardauth.trustForwardHeader=true
+      - traefik.http.middlewares.authelia.forwardauth.authResponseHeaders=Remote-User,Remote-Groups,Remote-Name,Remote-Email
+      - com.centurylinklabs.watchtower.enable=${AUTHELIA_WATCHTOWER_ENABLED:-true}
+      - autoheal=true
+    expose:
+      - 9091

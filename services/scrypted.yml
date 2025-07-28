@@ -1,0 +1,39 @@
+networks:
+  traefik:
+    external: true
+
+# description: Home automation platform
+# https://github.com/koush/scrypted
+# https://docs.technotim.live/posts/scrypted-home-hub/
+
+services:
+  scrypted:
+    image: koush/scrypted:${SCRYPTED_DOCKER_TAG:-latest}
+    container_name: ${SCRYPTED_CONTAINER_NAME:-scrypted}
+    restart: ${SCRYPTED_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/scrypted:/server/volume # <==== this probably needs changed
+      - ./media/videos/scrypted:/media/external
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - SCRYPTED_WEBHOOK_UPDATE_AUTHORIZATION=${SCRYPTED_WEBHOOK_UPDATE_AUTHORIZATION}
+      - SCRYPTED_WEBHOOK_UPDATE=${SCRYPTED_WEBHOOK_UPDATE:-http://localhost:10444/v1/update}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "10"
+    labels:
+      - joyride.host.name=${SCRYPTED_CONTAINER_NAME:-scrypted}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.scrypted.entrypoints=websecure
+      - traefik.http.routers.scrypted.rule=Host(`${SCRYPTED_CONTAINER_NAME:-scrypted}.${HOST_DOMAIN}`)
+      - traefik.http.services.scrypted.loadbalancer.server.port=10444
+      - traefik.http.services.scrypted.loadbalancer.server.scheme=https
+      - com.centurylinklabs.watchtower.enable=${SCRYPTED_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

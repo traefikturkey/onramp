@@ -1,0 +1,93 @@
+---
+# description: Container for running immich, a self-hosted Google Photos alternative.
+# https://immich.app/docs/install/environment-variables
+
+networks:
+  traefik:
+    external: true
+  immich-db:
+
+services:
+  immich:
+    container_name: ${IMMICH_CONTAINER_NAME:-immich}
+    image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-v1.134.0}
+    volumes:
+      - ${IMMICH_UPLOAD_LOCATION:-./etc/immich/upload}:/usr/src/app/upload
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - traefik
+      - immich-db
+    user: "${PUID:-1000}"
+    environment:
+      - PGID=${PGID:-1000}
+      - PUID=${PUID:-1000}
+      - DB_PASSWORD=${IMMICH_POSTGRES_PASSWORD:-123456}
+      - DB_HOSTNAME=${IMMICH_DB_HOSTNAME:-immich_database}
+      - DB_USERNAME=${IMMICH_POSTGRES_USER:-postgres}
+      - DB_DATABASE_NAME=${IMMICH_POSTGRES_DB:-immich}
+      - REDIS_HOSTNAME=${IMMICH_REDIS_CONTAINER_NAME:-immich_redis}
+      - UPLOAD_LOCATION=${IMMICH_UPLOAD_LOCATION:-./etc/immich/upload}
+      - TYPESENSE_API_KEY=${IMMICH_TYPESENSE_API_KEY:-changeme}
+    depends_on:
+      - redis
+      - database
+    restart: ${IMMICH_RESTART_POLICY:-unless-stopped}
+    labels:
+      - joyride.host.name=${IMMICH_CONTAINER_NAME:-immich}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.docker.network=traefik
+      - traefik.http.routers.immich.entrypoints=websecure
+      - traefik.http.routers.immich.rule=Host(`${IMMICH_CONTAINER_NAME:-immich}.${HOST_DOMAIN}`)
+      - traefik.http.services.immich.loadbalancer.server.port=2283
+      - com.centurylinklabs.watchtower.enable=${IMMICH_WATCHTOWER_ENABLED:-false}
+      - autoheal=true
+
+  immich-machine-learning:
+    container_name: immich_machine_learning
+    user: "1000"
+    image: ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION:-v1.134.0}
+    networks:
+      - immich-db
+    volumes:
+      - ${IMMICH_MODEL_CACHE_DIR:-./etc/immich/model-cache}:/cache
+    restart: ${IMMICH_RESTART_POLICY:-unless-stopped}
+
+  redis:
+    container_name: immich_redis
+    networks:
+      - immich-db
+    image: docker.io/valkey/valkey:8-bookworm@sha256:42cba146593a5ea9a622002c1b7cba5da7be248650cbb64ecb9c6c33d29794b1
+    healthcheck:
+      test: redis-cli ping || exit 1
+    restart: ${IMMICH_RESTART_POLICY:-unless-stopped}
+
+  database:
+    container_name: immich_database
+    image: ghcr.io/immich-app/postgres:14-vectorchord0.3.0-pgvectors0.2.0
+    networks:
+      - immich-db
+    environment:
+      - POSTGRES_PASSWORD=${IMMICH_POSTGRES_PASSWORD:-123456}
+      - POSTGRES_USER=${IMMICH_POSTGRES_USER:-postgres}
+      - POSTGRES_DB=${IMMICH_POSTGRES_DB:-immich}
+      - POSTGRES_INITDB_ARGS='--data-checksums'
+    volumes:
+      - ${IMMICH_POSTGRES_DB_DIR:-./etc/immich/db}:/var/lib/postgresql/data
+    restart: ${IMMICH_RESTART_POLICY:-unless-stopped}
+
+
+  # backup:
+  #   container_name: immich_db_backup
+  #   image: prodrigestivill/postgres-backup-local
+  #   environment:
+  #     - POSTGRES_HOST= ${IMMICH_DB_HOSTNAME:-immich_database}
+  #     - POSTGRES_DB= ${IMMICH_POSTGRES_DB:-immich}
+  #     - POSTGRES_USER= ${IMMICH_POSTGRES_USER:-postgres}
+  #     - POSTGRES_PASSWORD= ${IMMICH_POSTGRES_PASSWORD:-123456}
+  #     - SCHEDULE= ${IMMICH_BACKUP_SCHEDULE:-"@daily"}
+  #     - BACKUP_NUM_KEEP= ${IMMICH_BACKUP_RETENTION:-7}
+  #     - BACKUP_DIR= /db_dumps
+  #   volumes:
+  #     - ${IMMICH_POSTGRES_DB_BACKUP_DIR:-./etc/immich/db-dump}:/db_dumps
+  #   depends_on:
+  #     - database

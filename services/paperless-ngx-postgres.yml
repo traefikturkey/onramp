@@ -1,0 +1,93 @@
+version: '3'
+
+networks:
+  traefik:
+    external: true
+
+# description: paperless-ngx with postgres instead of mariadb
+# https://github.com/paperless-ngx/paperless-ngx
+# https://hub.docker.com/r/linuxserver/paperless-ngx
+# https://docs.paperless-ngx.com/
+
+services:
+  broker:
+    image: docker.io/library/redis:6.0 #pinned for kitty
+    restart: unless-stopped
+    networks:
+      - traefik
+    volumes:
+      - ./etc/paperless-ngx-postgres/redisdata:/data
+
+  db:
+    image: postgres:13
+    restart: unless-stopped
+    volumes:
+      - ./etc/paperless-ngx-postgres/pgdata:/var/lib/postgresql/data
+    networks:
+      - traefik
+    environment:
+      POSTGRES_DB: paperless
+      POSTGRES_USER: paperless
+      POSTGRES_PASSWORD: paperless
+
+  gotenberg:
+    image: docker.io/gotenberg/gotenberg:7.4 #pinned for kitty
+    restart: unless-stopped
+    networks:
+      - traefik
+    command:
+      - "gotenberg"
+      - "--chromium-disable-routes=true"
+
+  tika:
+    image: ghcr.io/paperless-ngx/tika:latest
+    restart: unless-stopped
+    networks:
+      - traefik
+
+  paperless-ngx-postgres:
+    image: ghcr.io/paperless-ngx/paperless-ngx:${PAPERLESS_NGX_DOCKER_TAG:-latest}
+    container_name: ${PAPERLESS_NGX_CONTAINER_NAME:-paperless-ngx-postgres}
+    restart: ${PAPERLESS_NGX_RESTART:-unless-stopped}
+#    mem_limit: ${PAPERLESS_MEM_LIMIT:-2.5g}
+    networks:
+      - traefik
+    depends_on:
+      - broker
+      - db
+      - gotenberg
+      - tika
+    volumes:
+      - ./etc/paperless-ngx-postgres/data:/usr/src/paperless/data
+      - ./etc/paperless-ngx-postgres/media:/usr/src/paperless/media
+      - ./etc/paperless-ngx-postgres/export:/usr/src/paperless/export
+      - ./etc/paperless-ngx-postgres/consume:/usr/src/paperless/consume
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+       #PAPERLESS_URL Required for proper authentication behind traefik
+      - PAPERLESS_URL=https://${PAPERLESS_NGX_CONTAINER_NAME:-paperless}.${HOST_DOMAIN}
+      - PAPERLESS_REDIS=redis://broker:6379
+      - PAPERLESS_TIKA_ENABLED=1
+      - PAPERLESS_TIKA_GOTENBERG_ENDPOINT=http://gotenberg:3000
+      - PAPERLESS_TIKA_ENDPOINT=http://tika:9998
+      - PAPERLESS_DBENGINE=${PAPERLESS_DB_ENGINE:-postgres}
+      # - PAPERLESS_DBPORT=${PAPERLESS_DB_PORT:-3306}
+      - PAPERLESS_DBHOST=${PAPERLESS_DB_HOST:-db}
+      - PAPERLESS_DBNAME=${PAPERLESS_DB_NAME:-paperless}
+      - PAPERLESS_DBUSER=${PAPERLESS_DB_USER:-paperless}
+      - PAPERLESS_DBPASS=${PAPERLESS_DB_PASS:-paperless}
+      - PAPERLESS_ADMIN_USER=${PAPERLESS_ADMINUSER:-admin}
+      - PAPERLESS_ADMIN_MAIL=${PAPERLESS_ADMINMAIL:-admin@yourmail.com}
+      - PAPERLESS_ADMIN_PASSWORD=${PAPERLESS_ADMINPASSWORD:-admin}
+    labels:
+      - joyride.host.name=${PAPERLESS_NGX_CONTAINER_NAME:-paperless-ngx-postgres}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.paperless-ngx-postgres.entrypoints=websecure
+      - traefik.http.routers.paperless-ngx-postgres.rule=Host(`${PAPERLESS_NGX_CONTAINER_NAME:-paperless}.${HOST_DOMAIN}`)
+      - traefik.http.services.paperless-ngx-postgres.loadbalancer.server.port=8000
+      - com.centurylinklabs.watchtower.enable=${PAPERLESS_NGX_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

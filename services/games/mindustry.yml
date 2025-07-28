@@ -1,0 +1,20 @@
+# description: Mindustry is a sandbox tower defense game
+# https://github.com/ich777/docker-mindustry
+
+services:
+  mindustry:
+    image: ich777/mindustry-server:${MINDUSTRY_VERSION:-latest}
+    container_name: ${MINDUSTRY_CONTAINER_NAME:-mindustry}
+    hostname: ${MINDUSTRY_HOSTNAME:-mindustry}
+    restart: ${MINDUSTRY_RESTART_POLICY:-unless-stopped}
+    environment:
+      - SRV_NAME="${MINDUSTRY_SRV_NAME:-MindustryServer}"
+      - UID=${PUID:-1000}
+      - GID=${PGID:-1000}
+    volumes:
+      - ./etc/games/${MINDUSTRY_HOSTNAME:-mindustry}:/config
+    labels:
+      - joyride.host.name=${MINDUSTRY_HOSTNAME:-mindustry}.${HOST_DOMAIN}
+      - traefik.enable=false
+      - com.centurylinklabs.watchtower.enable=${MINDUSTRY_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

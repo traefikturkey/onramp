@@ -1,0 +1,29 @@
+networks:
+  traefik:
+    external: true
+
+# description: Web-based network scanner
+# https://github.com/SECUREFOREST/WebMap
+
+services:
+  webmap:
+    image: secureforest/webmap:${WEBMAP_DOCKER_TAG:-latest}
+    container_name: ${WEBMAP_CONTAINER_NAME:-webmap}
+    restart: unless-stopped
+    networks:
+      - traefik
+    volumes:
+      - ${WEBMAP_CONFIG_PATH:-./etc/webmap}:/opt/xml
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=${WEBMAP_CONTAINER_NAME:-webmap}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.webmap.entrypoints=websecure
+      - traefik.http.routers.webmap.rule=Host(`${WEBMAP_CONTAINER_NAME:-webmap}.${HOST_DOMAIN}`)
+      - traefik.http.services.webmap.loadbalancer.server.port=8000
+      - com.centurylinklabs.watchtower.enable=${WEBMAP_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

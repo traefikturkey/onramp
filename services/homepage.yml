@@ -1,0 +1,35 @@
+networks:
+  traefik:
+    external: true
+
+# description: Customizable start page for web browsers
+# https://github.com/gethomepage/homepage/
+
+# To use the docker integration with labels, have a look here, as it needs seperate config
+# https://github.com/gethomepage/homepage//wiki/Docker-Integration
+# https://github.com/gethomepage/homepage//wiki/Service-Discovery
+
+services:
+  homepage:
+    image: ghcr.io/gethomepage/homepage:${HOMEPAGE_DOCKER_TAG:-latest}
+    container_name: ${HOMEPAGE_CONTAINER_NAME:-homepage}
+    restart: ${HOMEPAGE_RESTART:-unless-stopped}
+    mem_limit: ${HOMEPAGE_MEM_LIMIT:-200m}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/homepage:/app/config
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=${HOMEPAGE_CONTAINER_NAME:-homepage}.${HOST_DOMAIN}
+      - traefik.enable=${HOMEPAGE_TRAEFIK_ENABLE:-true}
+      - traefik.http.routers.homepage.entrypoints=websecure
+      - traefik.http.routers.homepage.rule=Host(`${HOMEPAGE_CONTAINER_NAME:-homepage}.${HOST_DOMAIN}`)
+      - traefik.http.services.homepage.loadbalancer.server.port=3000
+      - com.centurylinklabs.watchtower.enable=${HOMEPAGE_WATCHTOWER:-true}
+      - autoheal=${HOMEPAGE_AUTOHEAL:-true}

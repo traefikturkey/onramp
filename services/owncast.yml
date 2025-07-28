@@ -1,0 +1,31 @@
+networks:
+  traefik:
+    external: true
+
+# description: Self-hosted live video streaming server
+# https://github.com/owncast/owncast
+
+services:
+  owncast:
+    image: owncast/owncast:${OWNCAST_DOCKER_TAG:-latest}
+    container_name: ${OWNCAST_CONTAINER_NAME:-owncast}
+    restart: ${OWNCAST_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/owncast:/app/data
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 1935:1935
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=${OWNCAST_CONTAINER_NAME:-owncast}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.owncast.entrypoints=websecure
+      - traefik.http.routers.owncast.rule=Host(`${OWNCAST_CONTAINER_NAME:-owncast}.${HOST_DOMAIN}`)
+      - traefik.http.services.owncast.loadbalancer.server.port=8080
+      - com.centurylinklabs.watchtower.enable=${OWNCAST_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

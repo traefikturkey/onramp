@@ -1,0 +1,17 @@
+# used to store downloads from Youtube-DL on NFS server directly instead of local machine storage
+
+volumes:
+  youtube-dl-nfs-media:
+    labels:
+      - remove_volume_on=down
+    driver_opts:
+      type: nfs
+      o: "addr=${YOUTUBE_DL_MEDIA_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
+      device: ":${YOUTUBE_DL_MEDIA_NFS_SERVER_PATH:-${NFS_YT_PATH}}"
+
+services:
+  youtube-dl:
+    volumes:
+      - ${YOUTUBE_DL_CONFIG_VOLUME:-./etc/youtube-dl}:${YDL_CONFIG_PATH:-/config}
+      - ${YOUTUBE_DL_MEDIA_VOLUME:-youtube-dl-nfs-media}:${YOUTUBE_DL_MEDIA_PATH:-/youtube-dl}
+      - /etc/localtime:/etc/localtime:ro

@@ -1,0 +1,32 @@
+networks:
+  traefik:
+    external: true
+    
+# description: Simple web service that returns information about the host
+# https://hub.docker.com/r/traefik/whoami
+
+services:
+  whoami:
+    image: traefik/whoami:${WHOAMI_DOCKER_TAG:-latest}
+    container_name: ${WHOAMI_CONTAINER_NAME:-whoami}
+    restart: unless-stopped
+    networks:
+      - traefik
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=${WHOAMI_CONTAINER_NAME:-whoami}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.whoami.entrypoints=websecure
+      - traefik.http.routers.whoami.rule=Host(`${WHOAMI_CONTAINER_NAME:-whoami}.${HOST_DOMAIN}`)
+      - traefik.http.services.whoami.loadbalancer.server.port=80
+      #- traefik.http.routers.whoami.middlewares=authentik@docker
+      #- traefik.http.routers.whoami.middlewares=authelia@docker
+      #- traefik.http.routers.whoami.middlewares=crowdsec-bouncer@file
+      #- traefik.http.routers.whoami.middlewares=my-plugindemo@file
+      - com.centurylinklabs.watchtower.enable=${WHOAMI_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

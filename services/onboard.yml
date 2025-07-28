@@ -1,0 +1,37 @@
+networks:
+  traefik:
+    external: true
+
+# description: An RSS and Bookmarks Dashboard 
+# https://github.com/traefikturkey/onboard
+
+
+services:
+  onboard:
+    image: ghcr.io/traefikturkey/onboard:${ONBOARD_DOCKER_TAG:-latest}
+    container_name: ${ONBOARD_CONTAINER_NAME:-onboard}
+    restart: ${ONBOARD_RESTART:-unless-stopped}
+    mem_limit: ${ONBOARD_MEM_LIMIT:-1g}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/onboard:/app/configs
+      - ./etc/onboard/cache:/app/.working/cache
+      - ./etc/onboard/icons:/app/static/assets/icons
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - OLLAMA_URL=${OLLAMA_URL}
+      # ONBOARD_PAGE_TIMEOUT: in seconds - 600 seconds = 10 minutes
+      - ONBOARD_PAGE_TIMEOUT=${ONBOARD_PAGE_TIMEOUT:-600}
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=${ONBOARD_CONTAINER_NAME:-onboard}.${HOST_DOMAIN}
+      - traefik.enable=${ONBOARD_TRAEFIK_ENABLE:-true}
+      - traefik.http.routers.onboard.entrypoints=websecure
+      - traefik.http.routers.onboard.rule=Host(`${ONBOARD_CONTAINER_NAME:-onboard}.${HOST_DOMAIN}`)
+      - traefik.http.services.onboard.loadbalancer.server.port=9830
+      - com.centurylinklabs.watchtower.enable=${ONBOARD_WATCHTOWER_ENABLE:-true}
+      - autoheal=${ONBOARD_AUTOHEAL:-true}

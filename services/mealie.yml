@@ -1,0 +1,47 @@
+networks:
+  traefik:
+    external: true
+
+# description: Recipe management system
+# https://github.com/mealie-recipes/mealie
+# https://hub.docker.com/r/hkotel/mealie
+
+services:
+  mealie:
+    image: hkotel/mealie:${MEALIE_DOCKER_TAG:-latest}
+    container_name: ${MEALIE_CONTAINER_NAME:-mealie}
+    restart: ${MEALIE_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/mealie:/app/data
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - ALLOW_SIGNUP=true
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - BASE_URL=${MEALIE_CONTAINER_NAME:-mealie}.${HOST_DOMAIN}
+      - RECIPE_PUBLIC=true
+      - RECIPE_SHOW_NUTRITION=true
+      - RECIPE_SHOW_ASSETS=true
+      - RECIPE_LANDSCAPE_VIEW=true
+      - RECIPE_DISABLE_COMMENTS=false
+      - RECIPE_DISABLE_AMOUNT=false
+      # =====================================
+      # Email Configuration
+      # SMTP_HOST=
+      # SMTP_PORT=587
+      # SMTP_FROM_NAME=Mealie
+      # SMTP_AUTH_STRATEGY=TLS # Options: 'TLS', 'SSL', 'NONE'
+      # SMTP_FROM_EMAIL=
+      # SMTP_USER=
+      # SMTP_PASSWORD=
+    labels:
+      - joyride.host.name=${MEALIE_CONTAINER_NAME:-mealie}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.mealie.entrypoints=websecure
+      - traefik.http.routers.mealie.rule=Host(`${MEALIE_CONTAINER_NAME:-mealie}.${HOST_DOMAIN}`)
+      - traefik.http.services.mealie.loadbalancer.server.port=9000
+      - com.centurylinklabs.watchtower.enable=${MEALIE_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

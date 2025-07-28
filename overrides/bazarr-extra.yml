@@ -1,0 +1,34 @@
+volumes:
+  bazarr-nfs-movies:
+    labels:
+      - remove_volume_on=down
+    driver_opts:
+      type: nfs
+      o: "addr=${BAZARR_MEDIA_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
+      device: ":${BAZARR_MEDIA_MOVIES_PATH:-${NFS_MOVIES_PATH}}"
+
+  bazarr-nfs-shows:
+    labels:
+      - remove_volume_on=down
+    driver_opts:
+      type: nfs
+      o: "addr=${BAZARR_MEDIA_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
+      device: ":${BAZARR_MEDIA_SHOWS_PATH:-${NFS_SHOWS_PATH}}"
+
+  bazarr-nfs-extra:
+    labels:
+      - remove_volume_on=down
+    driver_opts:
+      type: nfs
+      o: "addr=${BAZARR_MEDIA_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
+      device: ":${BAZARR_MEDIA_NFS_EXTRA_PATH:-${NFS_EXTRA_PATH}}"
+
+services:
+  bazarr:
+    volumes:
+      - ${BAZARR_CONFIG_VOLUME:-./etc/bazarr}:/config
+      - ${MEDIA_SHOWS_VOLUME:-bazarr-nfs-shows}:/tv
+      - ${MEDIA_SHOWS_VOLUME:-bazarr-nfs-extra}:/anime
+      - ${MEDIA_DOWNLOADS_VOLUME:-bazarr-nfs-movies}:/movies
+      - /dev/rtc:/dev/rtc:ro
+      - /etc/localtime:/etc/localtime:ro

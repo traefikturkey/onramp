@@ -1,0 +1,25 @@
+# description: Synchronize Pi-hole v6.x configuration to replicas.
+# https://github.com/lovelaze/nebula-sync
+
+
+services:
+  nebula-sync:
+    image: ghcr.io/lovelaze/nebula-sync:${NEBULA_SYNC_DOCKER_TAG:-latest}
+    container_name: ${NEBULA_SYNC_CONTAINER_NAME:-nebula-sync}
+    restart: ${NEBULA_SYNC_RESTART:-unless-stopped}
+    mem_limit: ${NEBULA_SYNC_MEM_LIMIT:-200g}
+    volumes:
+      - ./etc/nebula-sync:/config # <==== this probably needs changed
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - PRIMARY=${NEBULA_SYNC_PRIMARY:-https://127.0.0.1|password}
+      - REPLICAS=${NEBULA_SYNC_REPLICAS:-https://127.0.0.1|password}
+      - FULL_SYNC=${NEBULA_SYNC_FULL_SYNC:-true}
+      - CLIENT_SKIP_TLS_VERIFICATION=${NEBULA_SYNC_CLIENT_SKIP_TLS_VERIFICATION:-true}
+      - CRON=${NEBULA_SYNC_CRON:-*/30 * * * *}
+    labels:
+      - com.centurylinklabs.watchtower.enable=${NEBULA_SYNC_WATCHTOWER_ENABLED:-true}
+      - autoheal=${NEBULA_SYNC_AUTOHEAL_ENABLED:-true}

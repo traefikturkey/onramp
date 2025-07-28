@@ -1,0 +1,71 @@
+networks:
+  tandoor-int:
+  traefik:
+    external: true
+
+# description: Recipe Management, meal-planning, shopping lists
+# https://github.com/TandoorRecipes/recipes
+# https://docs.tandoor.dev/
+# https://tandoor.dev/
+
+services:
+  tandoor-db:
+    restart: ${TANDOOR_RESTART:-unless-stopped}
+    container_name: ${TANDOORDB_CONTAINER_NAME:-tandoor-db}
+    image: postgres:16-alpine
+    volumes:
+      - ./etc/tandoor/db:/config 
+    networks:
+      - tandoor-int      
+    environment:
+      - POSTGRES_DB=${TANDOOR_POSTGRES_DB:-djangodb}
+      - POSTGRES_USER=${TANDOOR_POSTGRES_USER:-djangouser}
+      - POSTGRES_PASSWORD=${TANDOOR_POSTGRES_PASSWORD:-djangopassword}
+      - TZ=${TZ}
+
+  tandoor-web:
+    image: vabene1111/recipes:${TANDOOR_DOCKER_TAG:-latest}
+    container_name: ${TANDOOR_CONTAINER_NAME:-tandoor-web}
+    restart: ${TANDOOR_RESTART:-unless-stopped}
+    networks:
+      - tandoor-int
+    volumes:
+      - ./etc/tandoor/static:/opt/recipes/staticfiles
+      - ./etc/tandoor/media:/opt/recipes/mediafiles      
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - DB_ENGINE=${TANDOOR_DB_ENGINE:-django.db.backends.postgresql}
+      - POSTGRES_HOST=${TANDOOR_POSTGRES_HOST:-tandoor-db}
+      - POSTGRES_DB=${TANDOOR_POSTGRES_DB:-djangodb}
+      - POSTGRES_PORT=${TANDOOR_POSTGRES_PORT:-5432}
+      - POSTGRES_USER=${TANDOOR_POSTGRES_USER:-djangouser}
+      - POSTGRES_PASSWORD=${TANDOOR_POSTGRES_PASSWORD:-djangopassword}
+      - SECRET_KEY=${TANDOOR_SECRET_KEY}
+    depends_on:
+      - tandoor-db
+
+  tandoor-nginx:
+    image: nginx:mainline-alpine
+    container_name: ${TANDOOR_CONTAINER_NAME:-tandoor-nginx}
+    volumes:
+      - ./etc/tandoor/nginx:/etc/nginx/conf.d:ro
+      - ./etc/tandoor/static:/opt/recipes/staticfiles:ro
+      - ./etc/tandoor/media:/media:ro
+    depends_on:
+      - tandoor-web
+    networks:
+      - traefik
+      - tandoor-int
+    labels:
+      - joyride.host.name=${TANDOOR_HOST_NAME:-recipe}.${HOST_DOMAIN}
+      - traefik.enable=${TANDOOR_TRAEFIK_ENABLED:-true}
+      - traefik.docker.network=traefik
+      - traefik.http.routers.tandoor.entrypoints=websecure
+      - traefik.http.routers.tandoor.rule=Host(`${TANDOOR_HOST_NAME:-recipe}.${HOST_DOMAIN}`)
+      #- traefik.http.services.tandoor.loadbalancer.server.scheme=https # enable if the service wants to connect over https
+      - com.centurylinklabs.watchtower.enable=${TANDOOR_WATCHTOWER_ENABLED:-true}
+      - traefik.http.services.tandoor.loadbalancer.server.port=80
+      - autoheal=${TANDOOR_AUTOHEAL_ENABLED:-true}   

@@ -1,0 +1,47 @@
+networks:
+  traefik:
+    external: true
+
+# description: Game server management panel
+# https://github.com/pterodactyl/panel/blob/develop/docker-compose.example.yml
+# https://github.com/EdyTheCow/docker-pterodactyl/blob/master/panel/compose/docker-compose.yml
+
+services:
+  pterodactyl-panel:
+    image: ghcr.io/pterodactyl/panel:${PTERODACTYL_PANEL_DOCKER_TAG:-latest}
+    container_name: ${PTERODACTYL_PANEL_CONTAINER_NAME:-pterodactyl-panel}
+    restart: ${PTERODACTYL_PANEL_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - "./etc/pterodactyl-panel:/config"
+      - /etc/localtime:/etc/localtime:ro
+      - "./etc/pterodactyl-panel/var/:/app/var/"
+      - "./etc/pterodactyl-panel/logs/:/app/storage/logs"
+      - "./etc/pterodactyl-panel/nginx/:/etc/nginx/conf.d/"
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - DB_PASSWORD=${PTERODACTYL_PANEL_DB_PASSWORD}
+      - DB_USERNAME=${PTERODACTYL_PANEL_DB_USERNAME:-pterodactyl}
+      - DB_DATABASE=${PTERODACTYL_PANEL_DB_DATABASE:-pterodactyl}
+      - RECAPTCHA_ENABLED=${PTERODACTYL_PANEL_RECAPTCHA_ENABLED:-false}
+      - APP_ENV="production"
+      - APP_ENVIRONMENT_ONLY="true"
+      - CACHE_DRIVER="redis"
+      - SESSION_DRIVER="redis"
+      - QUEUE_DRIVER="redis"
+      - REDIS_HOST="redis"
+      - DB_HOST=mariadb
+      - TRUSTED_PROXIES="*"
+      - APP_URL="https://${PTERODACTYL_PANEL_CONTAINER_NAME:-panel}.${HOST_DOMAIN}"
+      - APP_TIMEZONE="UTC"
+    labels:
+      - joyride.host.name=${PTERODACTYL_PANEL_CONTAINER_NAME:-panel}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.pterodactyl-panel.entrypoints=websecure
+      - traefik.http.routers.pterodactyl-panel.rule=Host(`${PTERODACTYL_PANEL_CONTAINER_NAME:-panel}.${HOST_DOMAIN}`)
+      - traefik.http.services.pterodactyl-panel.loadbalancer.server.port=80
+      - com.centurylinklabs.watchtower.enable=${PTERODACTYL_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

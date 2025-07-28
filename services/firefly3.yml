@@ -1,0 +1,83 @@
+networks:
+  firefly_iii:
+    driver: bridge
+  traefik:
+    external: true
+volumes:
+  firefly_upload:
+  firefly_db:
+
+# description: Manages personal finances and budgets
+# https://github.com/firefly-iii/firefly-iii/tree/main
+
+services:
+  firefly3:
+    image: fireflyiii/core:${FIREFLY3_DOCKER_TAG:-latest}
+    container_name: ${FIREFLY3_CONTAINER_NAME:-firefly}
+    restart: ${FIREFLY3_RESTART:-unless-stopped}
+    depends_on:
+      - db
+    networks:
+      - traefik
+      - firefly_iii
+    ports:
+      - '82:8080'
+    volumes:
+      - firefly_upload:/var/www/html/storage/upload
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - APP_URL=https://${FIREFLY3_CONTAINER_NAME:-firefly}.${HOST_DOMAIN}
+      - TRUSTED_PROXIES=*
+      # echo "FIREFLY_CRON_TOKEN='$(openssl rand -base64 32 | tr -d /=+ | cut -c -32)'"  >> .env
+      - APP_KEY=${FIREFLY_CRON_TOKEN}
+      - DB_CONNECTION=${FIREFLY_DB_CONNECTION:-mysql}
+      - DB_HOST=${FIREFLY_DB_HOST:-db}
+      - DB_PORT=${FIREFLY_DB_PORT:-3306}
+      - DB_DATABASE=${FIREFLY_DB_DATABASE:-firefly}
+      - DB_USERNAME=${FIREFLY_DB_USERNAME:-firefly}
+      # echo "FIREFLY_DB_PASSWORD=$(openssl rand -base64 16 | tr -d /=+ | cut -c -16)"  >> .env
+      - DB_PASSWORD=${FIREFLY_DB_PASSWORD:-super_secure_password_change_me}
+    labels:
+      - joyride.host.name=${FIREFLY3_CONTAINER_NAME:-firefly}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.docker.network=traefik
+      - traefik.http.routers.firefly3.entrypoints=websecure
+      - traefik.http.routers.firefly3.rule=Host(`${FIREFLY3_CONTAINER_NAME:-firefly}.${HOST_DOMAIN}`)
+      - traefik.http.services.firefly3.loadbalancer.server.port=8080
+      - com.centurylinklabs.watchtower.enable=${FIREFLY3_WATCHTOWER_ENABLED:-true}
+      - autoheal=true
+  db:
+    image: mariadb
+    hostname: db
+    container_name: ${FIREFLY_DB_CONTAINER_NAME:-firefly_db}
+    restart: ${FIREFLY3_RESTART:-unless-stopped}
+    environment:
+      - MYSQL_DATABASE=${FIREFLY_DB_DATABASE:-firefly}
+      - MYSQL_USER=${FIREFLY_DB_USERNAME:-firefly}
+      - MYSQL_PASSWORD=${FIREFLY_DB_PASSWORD:-super_secure_password_change_me}
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
+    networks:
+      - firefly_iii
+    volumes:
+      - firefly_db:/var/lib/mysql
+    labels:
+      - traefik.enable=false
+  cron:
+    #
+    # To make this work, set STATIC_CRON_TOKEN in your .env file or as an environment variable and replace REPLACEME below
+    # The STATIC_CRON_TOKEN must be *exactly* 32 characters long
+    #
+    image: alpine
+    restart: ${FIREFLY3_RESTART:-unless-stopped}
+    environment:
+      # echo "FIREFLY_CRON_TOKEN='$(openssl rand -base64 32 | tr -d /=+ | cut -c -32)'" >> .env
+      - APP_KEY=${FIREFLY_CRON_TOKEN}
+    container_name: firefly_cron
+    command: sh -c "echo \"0 3 * * * wget -qO- http://${FIREFLY3_CONTAINER_NAME:-firefly}.${HOST_DOMAIN}/api/v1/cron/$$APP_KEY\" | crontab - && crond -f -L /dev/stdout"
+    networks:
+      - firefly_iii
+    labels:
+      - traefik.enable=false

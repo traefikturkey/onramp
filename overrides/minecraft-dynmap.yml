@@ -1,0 +1,7 @@
+services:
+  minecraft:
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.minecraft-dynmap.entrypoints=websecure
+      - traefik.http.routers.minecraft-dynmap.rule=Host(`${MINECRAFT_DYNMAP_NAME:-map}.${HOST_DOMAIN}`)
+      - traefik.http.services.minecraft-dynmap.loadbalancer.server.port=8123

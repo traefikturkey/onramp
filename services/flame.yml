@@ -1,0 +1,32 @@
+networks:
+  traefik:
+    external: true
+
+# description: homepage/dashboard for docker containers and services
+# https://github.com/pawelmalak/flame
+# https://hub.docker.com/r/pawelmalak/flame
+
+services:
+  flame:
+    image: pawelmalak/flame:${FLAME_DOCKER_TAG:-latest}
+    container_name: ${FLAME_CONTAINER_NAME:-flame}
+    restart: unless-stopped
+    networks:
+      - traefik
+    volumes:
+      - ./etc/flame:/app/data
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - PASSWORD=${FLAME_PASSWORD:-you_should_really_consider_changing_this}
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=${FLAME_CONTAINER_NAME:-flame}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.flame.entrypoints=websecure
+      - traefik.http.routers.flame.rule=Host(`${FLAME_CONTAINER_NAME:-flame}.${HOST_DOMAIN}`)
+      - traefik.http.services.flame.loadbalancer.server.port=5005
+      - com.centurylinklabs.watchtower.enable=${FLAME_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

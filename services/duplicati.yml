@@ -1,0 +1,33 @@
+networks:
+  traefik:
+    external: true
+
+# description: Backs up files and folders to various storage destinations
+# https://www.duplicati.com/
+
+services:
+  duplicati:
+    image: lscr.io/linuxserver/duplicati:${DUPLICATI_DOCKER_TAG:-latest}
+    container_name: ${DUPLICATI_CONTAINER_NAME:-duplicati}
+    restart: ${DUPLICATI_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/duplicati:/config
+      - ./media/backups:/backups
+      - ./:/mnt/onramp
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - SETTINGS_ENCRYPTION_KEY=${DUPLICATI_SETTINGS_ENCRYPTION_KEY}
+      - DUPLICATI_PASS=${DUPLICATI_PASS}
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=${DUPLICATI_HOST_NAME:-duplicati}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.duplicati.entrypoints=websecure
+      - traefik.http.routers.duplicati.rule=Host(`${DUPLICATI_HOST_NAME:-duplicati}.${HOST_DOMAIN}`)
+      - traefik.http.services.duplicati.loadbalancer.server.port=8200
+      - com.centurylinklabs.watchtower.enable=${DUPLICATI_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

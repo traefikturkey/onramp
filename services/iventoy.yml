@@ -1,0 +1,37 @@
+networks:
+  traefik:
+    external: true
+
+# description: ventoy as a PXE server (WARNING: This is a DHCP server!!!)
+# https://github.com/The-Drobe/iventoy-docker
+# https://hub.docker.com/r/thedrobe/iventoy-docker
+# https://www.iventoy.com/en/index.html
+
+services:
+  iventoy:
+    image: thedrobe/iventoy-docker:${IVENTOY_DOCKER_TAG:-latest}
+    container_name: ${IVENTOY_CONTAINER_NAME:-iventoy}
+    restart: ${IVENTOY_RESTART:-unless-stopped}
+    privileged: true #must be true
+    networks:
+      - traefik
+    volumes:
+      - ${IVENTOY_ISO_PATH:-./media/isos}:/app/iso
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 16000:16000 # iVentoy PXE Service HTTP Server Port
+      - 10809:10809 # NBD Server Port
+      - 67:67/udp # DHCP Server Port
+      - 69:69/udp # TFTP Server Port
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=${IVENTOY_CONTAINER_NAME:-iventoy}.${HOST_DOMAIN}
+      - traefik.enable=${IVENTOY_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.iventoy.entrypoints=websecure
+      - traefik.http.routers.iventoy.rule=Host(`${IVENTOY_CONTAINER_NAME:-iventoy}.${HOST_DOMAIN}`)
+      - traefik.http.services.iventoy.loadbalancer.server.port=26000
+      - com.centurylinklabs.watchtower.enable=${IVENTOY_WATCHTOWER_ENABLED:-true}
+      - autoheal=${IVENTOY_AUTOHEAL_ENABLED:-true}

@@ -1,0 +1,26 @@
+# https://github.com/cocktailpeanut/dalai
+# This file does requiere it's own setup and image as there is no image out there, it has to be build localy
+# https://www.youtube.com/watch?v=PyZPyqQqkLE here for reference
+
+# This service does have a remote code execution vulnerability, so use it with caution
+
+services:
+  dalai:
+    image: dalai-dalai:${DALAI_DOCKER_TAG:-latest}
+    container_name: ${DALAI_CONTAINER_NAME:-dalai}
+    restart: ${DALAI_RESTART:-unless-stopped}
+    volumes:
+      - ./etc/dalai:/root/dalai/ # <==== this probably needs changed
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=${DALAI_CONTAINER_NAME:-dalai}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.dalai.entrypoints=websecure
+      - traefik.http.routers.dalai.rule=Host(`${DALAI_CONTAINER_NAME:-dalai}.${HOST_DOMAIN}`)
+      - traefik.http.services.dalai.loadbalancer.server.port=3000
+      - com.centurylinklabs.watchtower.enable=${DALAI_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

@@ -1,0 +1,44 @@
+networks:
+  traefik:
+    external: true
+
+# description: Network management controller for ubiquiti devices
+# https://github.com/goofball222/unifi
+
+services:
+  unifi:
+    image: ghcr.io/goofball222/unifi:${UNIFI_DOCKER_TAG:-latest-ubuntu}
+    container_name: ${UNIFI_CONTAINER_NAME:-unifi}
+    restart: ${UNIFI_RESTART:-unless-stopped}
+    mem_limit: ${UNIFI_MEM_LIMIT:-2g}
+    networks:
+      - traefik
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - DB_MONGO_LOCAL=true
+    ports:
+      #- 8443:8443 # web admin
+      #- 8880:8880 # guest portal redirect
+      #- 1900:1900/udp # l2 discovery
+      - 3478:3478/udp # stun port
+      - 5514:5514/udp # remote syslog port
+      - 6789:6789 # mobile throughput test
+      - 8080:8080 # required for device communication
+      - 10001:10001/udp # AP discovery
+    volumes:
+      - ./etc/unifi/data:/usr/lib/unifi/data
+      - ./etc/unifi/cert:/usr/lib/unifi/cert
+      - ./etc/unifi/logs:/usr/lib/unifi/logs
+      - /etc/localtime:/etc/localtime:ro
+    labels:
+      - joyride.host.name=${UNIFI_CONTAINER_NAME:-unifi}.${HOST_DOMAIN}
+      - traefik.enable=${UNIFI_TRAEFIK_ENABLE:-true}
+      - traefik.http.routers.unifi.entrypoints=websecure
+      - traefik.http.routers.unifi.rule=Host(`${UNIFI_CONTAINER_NAME:-unifi}.${HOST_DOMAIN}`)
+      - traefik.http.services.unifi.loadbalancer.server.scheme=https
+      - traefik.http.services.unifi.loadbalancer.server.port=8443
+      - com.centurylinklabs.watchtower.enable=${UNIFI_WATCHTOWER_ENABLE:-true}
+      - autoheal=${UNIFI_AUTOHEAL:-true}
+      - autoheal.stop.timeout=${UNIFI_AUTOHEAL_TIMEOUT:-180}

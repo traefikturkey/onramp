@@ -1,0 +1,40 @@
+networks:
+  traefik:
+    external: true
+
+# description: Binary newsgrabber for usenet
+# https://hub.docker.com/r/linuxserver/sabnzbd
+
+services:
+  sabnzbd:
+    image: linuxserver/sabnzbd:${SABNZBD_DOCKER_TAG:-latest}
+    container_name: ${SABNZBD_CONTAINER_NAME:-sabnzbd}
+    restart: ${SABNZBD_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/sabnzbd:/config
+      - ${MEDIA_DOWNLOADS_VOLUME:-./media/downloads}:/downloads
+      - /dev/rtc:/dev/rtc:ro
+      - /etc/localtime:/etc/localtime:ro
+    # ports:
+    #   - 8181:8080 # needed to do a fresh setup because of hostname whitelist
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - HAS_IPV6=${SABNZBD_HAS_IPV6:-true}
+    healthcheck:
+      test: curl --fail http://localhost:8080 || exit 1
+      interval: 60s
+      retries: 5
+      start_period: 20s
+      timeout: 10s
+    labels:
+      - joyride.host.name=${SABNZBD_CONTAINER_NAME:-sabnzbd}.${HOST_DOMAIN}
+      - traefik.enable=${SABNZBD_TRAEFIK_ENABLE:-true}
+      - traefik.http.routers.sabnzbd.entrypoints=websecure
+      - traefik.http.routers.sabnzbd.rule=Host(`${SABNZBD_CONTAINER_NAME:-sabnzbd}.${HOST_DOMAIN}`)
+      - traefik.http.services.sabnzbd.loadbalancer.server.port=8080
+      - com.centurylinklabs.watchtower.enable=${SABNZBD_WATCHTOWER_ENABLE:-true}
+      - autoheal=${SABNZBD_AUTOHEAL:-true}

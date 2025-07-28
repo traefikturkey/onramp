@@ -1,0 +1,38 @@
+version: '3.8'
+
+networks:
+  default:
+    name: ${SKYFACTORY_MINECRAFT_NETWORK:-games}
+
+# description: SkyFactory 4 is a Feed The Beast modpack for Minecraft 1.12.2
+# https://hub.docker.com/r/itzg/minecraft-server
+
+services:
+  minecraft-skyfactory4:
+    image: itzg/minecraft-server:${SKYFACTORY_MINECRAFT_VERSION:-latest}
+    container_name: ${SKYFACTORY_MINECRAFT_CONTAINER_NAME:-minecraft_skyfactory4}
+    hostname: ${SKYFACTORY_MINECRAFT_HOSTNAME:-minecraft_skyfactory4}
+    restart: ${SKYFACTORY_MINECRAFT_RESTART_POLICY:-unless-stopped}
+    environment:
+      - EULA=true
+      - ENABLE_RCON=${SKYFACTORY_MINECRAFT_ENABLE_RCON:-true}
+      - CF_SERVER_MOD=SkyFactory-4_Server_4_2_4.zip
+      - TYPE=${SKYFACTORY_MINECRAFT_TYPE:-CURSEFORGE}
+      - VIEW_DISTANCE=${SKYFACTORY_MINECRAFT_VIEW_DISTANCE:-10}
+      - MEMORY=${SKYFACTORY_MINECRAFT_MEMORY:-4G}
+      - INIT_MEMORY=8G
+      - MAX_MEMORY=12G
+      - USE_AIKAR_FLAGS=true
+      - USE_LARGE_PAGES=true
+      - CONSOLE=${SKYFACTORY_MINECRAFT_CONSOLE:-false}
+    ports:
+      - ${SKYFACTORY_MINECRAFT_PORT:-25565}:25565
+      # uncomment if you have flood gate installed
+      #- ${MINECRAFT_FLOODGATE_PORT:-19132}:19132/udp
+    volumes:
+      - ./etc/games/${SKYFACTORY_MINECRAFT_HOSTNAME:-minecraft_skyfactory4}:/data
+    labels:
+      - joyride.host.name=${MINECRAFT_HOSTNAME:-minecraft_skyfactory4}.${HOST_DOMAIN}
+      - traefik.enable=false
+      - com.centurylinklabs.watchtower.enable=${SKYFACTORY_MINECRAFT_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

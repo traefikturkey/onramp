@@ -1,0 +1,28 @@
+# description: Barotrauma is a 2D online multiplayer game
+# https://hub.docker.com/r/yanwk/barotrauma-server
+
+volumes:
+  barotrauma:
+
+services:
+  barotrauma:
+    image: yanwk/barotrauma-server:dockerful
+    container_name: barotrauma
+    restart: unless-stopped
+    ports:
+      - 27015:27015/udp
+      - 27016:27016/udp
+    volumes:
+      - barotrauma:/config # <==== this probably needs changed ====>
+    environment:
+      - DEFAULT_SERVERNAME=AABBCC
+      - DEFAULT_PASSWORD=112233
+      - DEFAULT_PUBLICITY=true
+      - DEFAULT_LANGUAGE="English"
+      - DEFAULT_OWNER_STEAMNAME="S0m3_b0dy"
+      - DEFAULT_OWNER_STEAMID=5566778899
+    labels:
+      - joyride.host.name=barotrauma.${HOST_DOMAIN}
+      - traefik.enable=false
+      - com.centurylinklabs.watchtower.enable=${BAROTRAUMA_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

@@ -1,0 +1,43 @@
+networks:
+  traefik:
+    external: true
+
+# description: Media optimization and conversion tool
+# https://docs.tdarr.io/docs/installation/docker/run-compose
+
+services:
+  tdarr:
+    image: ghcr.io/haveagitgat/tdarr:${TDARR_DOCKER_TAG:-latest}
+    container_name: ${TDARR_CONTAINER_NAME:-tdarr}
+    restart: ${TDARR_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/tdarr/server:/app/server
+      - ./etc/tdarr/config:/app/configs
+      - ${TDARR_MEDIA_VOLUME:-./media}:${TDARR_MEDIA_PATH:-/media}
+      - ${TDARR_TEMP_VOLUME:-./media/tdarr-temp}:${TDARR_TEMP_PATH:-/temp}
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      #- ${TDARR_WEB_PORT:-8265}:${TDARR_WEB_PORT:-8265} # webUI port
+      - ${TDARR_SERVER_PORT:-8266}:${TDARR_SERVER_PORT:-8266} # server port
+      #- 8267:8267 # Internal node port
+      #- 8268:8268 # Example extra node port
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - serverIP=0.0.0.0
+      - UMASK_SET=${TDARR_UMASK:-002}
+      - serverPort=${TDARR_SERVER_PORT:-8266}
+      - webUIPort=${TDARR_WEB_PORT:-8265}
+      - internalNode=${TDARR_INTERNAL_NODE:-true}
+      - nodeID=${TDARR_NODE_ID:-TdarrInternalNode}
+    labels:
+      - joyride.host.name=${TDARR_CONTAINER_NAME:-tdarr}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.tdarr.entrypoints=websecure
+      - traefik.http.routers.tdarr.rule=Host(`${TDARR_CONTAINER_NAME:-tdarr}.${HOST_DOMAIN}`)
+      - traefik.http.services.tdarr.loadbalancer.server.port=${TDARR_WEB_PORT:-8265}
+      - com.centurylinklabs.watchtower.enable=${TDARR_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

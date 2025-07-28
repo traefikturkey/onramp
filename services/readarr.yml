@@ -1,0 +1,40 @@
+networks:
+  traefik:
+    external: true
+
+# description: Manages ebook collections and downloads
+# https://docs.linuxserver.io/images/docker-readarr/#docker-compose-recommended-click-here-for-more-info
+
+services:
+  readarr:
+    image: lscr.io/linuxserver/readarr:${READARR_DOCKER_TAG:-nightly}
+    container_name: ${READARR_CONTAINER_NAME:-readarr}
+    restart: ${READARR_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/readarr:/config
+      - ${MEDIA_BOOKS_VOLUME:-./media/books}:/books
+      - ${MEDIA_DOWNLOADS_VOLUME:-./media/downloads}:/downloads
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 8787:8787
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    healthcheck:
+      test: curl --fail http://localhost:8787 || exit 1
+      interval: 60s
+      retries: 5
+      start_period: 20s
+      timeout: 10s
+    labels:
+      - joyride.host.name=${READARR_CONTAINER_NAME:-readarr}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.readarr.entrypoints=websecure
+      - traefik.http.routers.readarr.rule=Host(`${READARR_CONTAINER_NAME:-readarr}.${HOST_DOMAIN}`)
+      #- traefik.http.services.readarr.loadbalancer.server.scheme=https # enable if the service wants to connect over https
+      - traefik.http.services.readarr.loadbalancer.server.port=8787
+      - com.centurylinklabs.watchtower.enable=${READARR_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

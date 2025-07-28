@@ -1,0 +1,27 @@
+networks:
+  traefik:
+    external: true
+
+# description: Detects and blocks malicious behavior on servers
+# https://github.com/crowdsecurity/crowdsec
+
+services:
+  crowdsec:
+    image: ghcr.io/crowdsecurity/crowdsec:${CROWDSEC_DOCKER_TAG:-latest}
+    container_name: ${CROWDSEC_CONTAINER_NAME:-crowdsec}
+    restart: unless-stopped
+    volumes:
+      - ./etc/crowdsec:/etc/crowdsec/
+      - ./etc/crowdsec/db:/var/lib/crowdsec/data/
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - COLLECTIONS="crowdsecurity/linux crowdsecurity/traefik"
+    labels:
+      #- joyride.host.name=${CROWDSEC_CONTAINER_NAME:-crowdsec}.${HOST_DOMAIN}
+      - traefik.enable=false
+      - com.centurylinklabs.watchtower.enable=${CROWDSEC_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

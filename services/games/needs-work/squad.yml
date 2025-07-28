@@ -1,0 +1,27 @@
+# PLEASE NOTE: This needs more work, not sure how to connect clients
+# description: Squad is a tactical first-person shooter
+# https://hub.docker.com/r/cm2network/squad/
+
+services:
+  squad:
+    image: cm2network/squad
+    container_name: squad
+    restart: unless-stopped
+    volumes:
+      - ./etc/squad:/home/steam/squad-dedicated/
+    ports:
+      - 7787:7787/udp
+      - 27165:27165
+      - 21114:21114
+    environment:
+      - PORT=7787
+      - QUERYPORT=27165
+      - RCONPORT=21114
+      - FIXEDMAXPLAYERS=80
+      - FIXEDMAXTICKRATE=50
+      - RANDOM=NONE
+    labels:
+      - joyride.host.name=squad.${HOST_DOMAIN}
+      - traefik.enable=false
+      - com.centurylinklabs.watchtower.enable=${SQUAD_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

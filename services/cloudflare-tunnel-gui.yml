@@ -1,0 +1,28 @@
+networks:
+  traefik:
+    external: true
+
+# description: Provides a graphical interface for cloudflare tunnel
+# https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/
+# https://hub.docker.com/r/cloudflare/cloudflared
+# https://github.com/cloudflare/cloudflared
+
+services:
+  cloudflare-tunnel-gui:
+    image: cloudflare/cloudflared:${CLOUDFLARE_TUNNEL_DOCKER_TAG:-latest}
+    container_name: ${CLOUDFLARE_TUNNEL_CONTAINER_NAME:-cloudflare-tunnel-gui}
+    restart: ${CLOUDFLARE_TUNNEL_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/cloudflared:/cloudflared
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    command: tunnel run --token ${CLOUDFLARED_TOKEN}
+    labels:
+      - traefik.enable=${CLOUDFLARE_TUNNEL_TRAEFIK_ENABLED:-false}
+      - com.centurylinklabs.watchtower.enable=${CLOUDFLARE_TUNNEL_WATCHTOWER_ENABLED:-true}
+      - autoheal=${CLOUDFLARE_TUNNEL_AUTOHEAL_ENABLED:-true}

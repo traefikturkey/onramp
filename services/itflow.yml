@@ -1,0 +1,56 @@
+networks:
+  traefik:
+    external: true
+
+# description: IT documentation, ticketing and accounting system.
+# https://itflow.org/
+
+services:
+  itflow-db:
+    hostname: itflow-db
+    container_name: itflow-db
+    image: mariadb:10.6.11
+    restart: unless-stopped
+    networks:
+      - traefik
+    environment:
+      - MARIADB_RANDOM_ROOT_PASSWORD=true
+      - MARIADB_DATABASE=${ITFLOW_DB_NAME:-itflow}
+      - MARIADB_USER=${ITFLOW_DB_USER:-itflow}
+      - MARIADB_PASSWORD=${ITFLOW_DB_PASS:-itflowpass}
+    volumes:
+      - ./etc/itflow/data:/var/lib/mysql/
+
+  itflow:
+    image: lued/itflow:${ITFLOW_DOCKER_TAG:-latest}
+    container_name: ${ITFLOW_CONTAINER_NAME:-itflow}
+    hostname: ${ITFLOW_HOSTNAME:-itflow}
+    restart: ${ITFLOW_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    depends_on:
+      - itflow-db
+    volumes:
+      - ./etc/itflow/www:/var/www/html
+      - /etc/localtime:/etc/localtime:ro
+    user: "33"
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - ITFLOW_NAME=ITFlow
+      - ITFLOW_URL=${ITFLOW_CONTAINER_NAME:-itflow}.${HOST_DOMAIN}
+      - ITFLOW_PORT=8080
+      - ITFLOW_REPO=github.com/itflow-org/itflow
+      - ITFLOW_REPO_BRANCH=master
+      - ITFLOW_LOG_LEVEL=info
+      - ITFLOW_DB_HOST=itflow-db
+      - ITFLOW_DB_PASS=${ITFLOW_DB_PASS:-itflow}
+    labels:
+      - joyride.host.name=${ITFLOW_CONTAINER_NAME:-itflow}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.itflow.entrypoints=websecure
+      - traefik.http.routers.itflow.rule=Host(`${ITFLOW_CONTAINER_NAME:-itflow}.${HOST_DOMAIN}`)
+      - traefik.http.services.itflow.loadbalancer.server.port=8080
+      - com.centurylinklabs.watchtower.enable=${ITFLOW_WATCHTOWER_ENABLED:-true}
+      - autoheal=true
