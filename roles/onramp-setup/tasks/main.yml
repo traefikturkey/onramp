@@ -5,8 +5,8 @@
 - name: Create the apps directory.
   ansible.builtin.file:
     path: /apps
-    owner: {{ onramp_uid }}
-    group: {{ onramp_gid }}
+    owner: "{{ onramp_uid }}"
+    group: "{{ onramp_gid }}"
     mode: '0755'
     state: directory
 
