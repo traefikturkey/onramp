@@ -1,0 +1,22 @@
+---
+
+- name: Set the playbook to use the Let's Encrypt staging environment.
+  ansible.builtin.set_fact:
+    lets_encrypt_env: "https://acme-staging-v02.api.letsencrypt.org/directory"
+  tags:
+    - never
+    - start-staging
+    - down-staging
+
+- name: Create Traefik and all other enabled containers.
+  become: true
+
+  tasks:
+
+    - name: Task 1..
+
+- name: Restart Traefik and all other containers.
+  become: true
+  tags:
+    - never
+    - restart
