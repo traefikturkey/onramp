@@ -1,6 +1,7 @@
 networks:
   traefik:
     external: true
+  bl_int:
 
 # description: BookLore is a self-hosted web app for organizing and managing your personal book collection. 
 # https://github.com/adityachandelgit/BookLore
@@ -13,14 +14,18 @@ services:
     mem_limit: ${BOOKLORE_MEM_LIMIT:-200g}
     networks:
       - traefik
+      - bl_int
     volumes:
       - ./etc/booklore/data:/app/data 
-      - ./etc/booklore/books:/app/books
+      - ./media/books:/app/books
       - /etc/localtime:/etc/localtime:ro
     environment:
+      - DATABASE_URL=jdbc:mariadb://booklore-db:3306/${BL_MYSQL_DATABASE}    
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
+      - DATABASE_USERNAME=${BL_MYSQL_USER:-boooklore}
+      - DATABASE_PASSWORD=${BL_MYSQL_PASSWORD:-onrampstdpass1234}      
     depends_on:
       booklore-db:
         condition: service_healthy
@@ -34,17 +39,22 @@ services:
       - com.centurylinklabs.watchtower.enable=${BOOKLORE_WATCHTOWER_ENABLED:-true}
       - autoheal=${BOOKLORE_AUTOHEAL_ENABLED:-true}
 
-  mariadb:
+  booklore-db:
     image: lscr.io/linuxserver/mariadb:${BOOKLORE_MARIADB_TAG:-11.4.5}
     container_name: booklore-db
     environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
-      - MYSQL_ROOT_PASSWORD=${BOOKLORE_MARIADB_PASSWORD:-supersecretpassword}
+      - MYSQL_ROOT_PASSWORD=${BL_MYSQL_ROOT_PASSWORD:-onramprulez}
+      - MYSQL_DATABASE=${BL_MYSQL_DATABASE:-booklore}
+      - MYSQL_USER=${BL_MYSQL_USER:-booklore}
+      - MYSQL_PASSWORD=${BL_MYSQL_PASSWORD:-onrampstdpass1234}
     volumes:
       - ./etc/booklore/db:/config
     restart: unless-stopped
+    networks:
+      - bl_int    
     healthcheck:
       test: ["CMD", "mariadb-admin", "ping", "-h", "localhost"]
       interval: 5s 
