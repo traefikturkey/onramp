@@ -11,5 +11,5 @@ services:
   booklore:
     volumes:
       - ${MEDIA_BOOKS_VOLUME:-booklore-nfs-media}:${BOOKLORE_BOOKS_PATH:-/books}
-      - ${BOOKLORE_CONFIG_VOLUME:-./etc/booklore/data}:/config
+      - ./etc/booklore/data:/config
       - /etc/localtime:/etc/localtime:ro      
