@@ -38,6 +38,7 @@ services:
       - traefik.http.services.booklore.loadbalancer.server.port=6060
       - com.centurylinklabs.watchtower.enable=${BOOKLORE_WATCHTOWER_ENABLED:-true}
       - autoheal=${BOOKLORE_AUTOHEAL_ENABLED:-true}
+      - traefik.docker.network=traefik
 
   booklore-db:
     image: lscr.io/linuxserver/mariadb:${BOOKLORE_MARIADB_TAG:-11.4.5}
