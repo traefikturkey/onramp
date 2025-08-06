@@ -9,7 +9,9 @@ services-dev/*.yml
 services-test/
 overrides-enabled/*.yml
 docker-compose.*.yml
-.vscode
+.vscode/
+.specstory/
+.chat/
 .restore_latest
 
 .env
