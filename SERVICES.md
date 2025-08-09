@@ -82,7 +82,6 @@
 - [docmost](https://github.com/docmost/docmost) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/docmost.yml)): Docmost is an open-source collaborative wiki and documentation software.
 - [doku](https://github.com/amerkurev/doku) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/doku.yml)): Disk usage dashboard
 - [dozzle-path](https://github.com/amir20/dozzle) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/dozzle-path.yml)): Path-based reverse proxy for dozzle
-- [dozzle-rand](https://github.com/amir20/dozzle) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/dozzle-rand.yml)): Web-based docker container log viewer
 - [dozzle](https://github.com/amir20/dozzle) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/dozzle.yml)): Web-based docker container log viewer
 - [drawio](https://github.com/jgraph/docker-drawio ) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/drawio.yml)): A client side editor for "general" diagramming
 - [droneci](https://github.com/harness/drone) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/droneci.yml)): Continuous integration and delivery platform
@@ -228,6 +227,7 @@
 - [pingvin-share](https://github.com/stautonico/pingvin-share) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/pingvin-share.yml)): File-sharing platform
 - [playit-docker](https://github.com/mafen/playit-docker) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/playit-docker.yml)): An agent to expose local game servers to the internet using playit proxy service.
 - [plex](https://github.com/plexinc/pms-docker) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/plex.yml)): Media server for streaming movies, tv shows, and music
+- [pocketbase](https://pocketbase.io/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/pocketbase.yml)): Open Source realtime backend in 1 file
 - [portainer-ee](https://github.com/portainer/portainer) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/portainer-ee.yml)): Commercial version of portainer, a container management tool
 - [portainer](https://github.com/portainer/portainer) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/portainer.yml)): Lightweight container management ui
 - [postfix](https://github.com/juanluisbaptiste/docker-postfix) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/postfix.yml)): Mail transfer agent (mta) for sending and receiving emails
