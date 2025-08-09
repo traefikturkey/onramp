@@ -1,5 +1,5 @@
 # Available Services
-235 services and counting...
+240 services and counting...
 
 [A](#A)
 [B](#B)
@@ -60,6 +60,7 @@
 - [code-server](https://github.com/coder/code-server) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/code-server.yml)): Runs visual studio code in a web browser
 - [comfyui](https://github.com/frefrik/comfyui-flux/tree/main) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/comfyui.yml)): ComfyUI with FLUX.1 models
 - [convertx](https://github.com/C4illin/ConvertX) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/convertx.yml)): A self-hosted online file converter.
+- [copyparty](https://github.com/9001/copyparty) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/copyparty.yml)): Portable file server with accelerated resumable uploads, dedup, WebDAV, FTP, TFTP, zeroconf, media indexer, thumbnails
 - [coqui-ai](https://tts.readthedocs.io/en/latest/inference.html) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/coqui-ai.yml)): Collection of ai models for speech recognition and synthesis
 - [coredns](https://coredns.io/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/coredns.yml)): A fast and flexible DNS server with plugin support
 - [crowdsec-traefik-bouncer](https://plugins.traefik.io/plugins/6335346ca4caa9ddeffda116/crowdsec-bouncer-traefik-plugin) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/crowdsec-traefik-bouncer.yml)): Traefik Bouncer for CrowdSec
@@ -97,6 +98,7 @@
 - [firefox](https://github.com/jlesage/docker-firefox) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/firefox.yml)): Runs mozilla firefox browser in a container
 - [flame](https://github.com/pawelmalak/flame) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/flame.yml)): homepage/dashboard for docker containers and services
 - [fooocus](https://github.com/lllyasviel/Fooocus) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/fooocus.yml)): Focus on prompting and generating | a generative image generator
+- [fossflow](https://hub.docker.com/r/fitzzz/fossflow) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/fossflow.yml)): Open-source Progressive Web App (PWA) for creating isometric diagrams.
 - [foundryvtt](https://hub.docker.com/r/felddy/foundryvtt) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/foundryvtt.yml)): Virtual tabletop platform for role-playing games
 - [freshrss](https://github.com/FreshRSS/FreshRSS) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/freshrss.yml)): Self-hosted rss feed reader
 - [frigate-coral](https://docs.frigate.video/frigate/installation/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/frigate-coral.yml)): Container for running frigate with coral edge tpu support
@@ -227,6 +229,7 @@
 - [pingvinshare](https://github.com/stautonico/pingvin-share) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/pingvinshare.yml)): File-sharing platform
 - [playitdocker](https://github.com/mafen/playit-docker) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/playitdocker.yml)): An agent to expose local game servers to the internet using playit proxy service.
 - [plex](https://github.com/plexinc/pms-docker) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/plex.yml)): Media server for streaming movies, tv shows, and music
+- [pocketbase](https://pocketbase.io/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/pocketbase.yml)): Open Source realtime backend in 1 file
 - [portainer-ee](https://github.com/portainer/portainer) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/portainer-ee.yml)): Commercial version of portainer, a container management tool
 - [portainer](https://github.com/portainer/portainer) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/portainer.yml)): Lightweight container management ui
 - [postfix](https://github.com/juanluisbaptiste/docker-postfix) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/postfix.yml)): Mail transfer agent (mta) for sending and receiving emails

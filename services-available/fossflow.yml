@@ -1,0 +1,33 @@
+networks:
+  traefik:
+    external: true
+
+# description: Open-source Progressive Web App (PWA) for creating isometric diagrams.
+# https://hub.docker.com/r/fitzzz/fossflow
+# https://github.com/stan-smith/FossFLOW
+# https://github.com/TheFitzZZ/FossFLOWDocker
+
+services:
+  fossflow:
+    image: fitzzz/fossflow:${FOSSFLOW_DOCKER_TAG:-latest}
+    container_name: ${FOSSFLOW_CONTAINER_NAME:-fossflow}
+    restart: ${FOSSFLOW_RESTART:-unless-stopped}
+    mem_limit: ${FOSSFLOW_MEM_LIMIT:-200g}
+    networks:
+      - traefik
+    volumes:
+      # - ./etc/fossflow:/opt/openflow
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=${FOSSFLOW_HOST_NAME:-fossflow}.${HOST_DOMAIN}
+      - traefik.enable=${FOSSFLOW_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.fossflow.entrypoints=websecure
+      - traefik.http.routers.fossflow.rule=Host(`${FOSSFLOW_HOST_NAME:-fossflow}.${HOST_DOMAIN}`)
+      #- traefik.http.services.fossflow.loadbalancer.server.scheme=https # enable if the service wants to connect over https
+      - traefik.http.services.fossflow.loadbalancer.server.port=3000
+      - com.centurylinklabs.watchtower.enable=${FOSSFLOW_WATCHTOWER_ENABLED:-true}
+      - autoheal=${FOSSFLOW_AUTOHEAL_ENABLED:-true}
