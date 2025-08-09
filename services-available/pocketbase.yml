@@ -1,0 +1,36 @@
+networks:
+  traefik:
+    external: true
+
+# description: Open Source realtime backend in 1 file
+# https://pocketbase.io/
+# https://github.com/pocketbase/pocketbase
+# https://pocketbase.io/docs/
+
+services:
+  pocketbase:
+    image: ghcr.io/muchobien/pocketbase:${POCKETBASE_DOCKER_TAG:-latest}
+    container_name: ${POCKETBASE_CONTAINER_NAME:-pocketbase}
+    restart: ${POCKETBASE_RESTART:-unless-stopped}
+    mem_limit: ${POCKETBASE_MEM_LIMIT:-200g}
+    networks:
+      - traefik
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./etc/pocketbase/data:/pb_data
+      - ./etc/pocketbase/public:/pb_public
+      - ./etc/pocketbase/hooks:/pb_hooks
+    environment:
+      - BASE_URL=https://${POCKETBASE_HOST_NAME:-pocketbase}.${HOST_DOMAIN}/
+      - ENCRYPTION=${POCKETBASE_ENCRYPTION_KEY:-}
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=${POCKETBASE_HOST_NAME:-pocketbase}.${HOST_DOMAIN}
+      - traefik.enable=${POCKETBASE_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.pocketbase.entrypoints=websecure
+      - traefik.http.routers.pocketbase.rule=Host(`${POCKETBASE_HOST_NAME:-pocketbase}.${HOST_DOMAIN}`)
+      - traefik.http.services.pocketbase.loadbalancer.server.port=8090
+      - com.centurylinklabs.watchtower.enable=${POCKETBASE_WATCHTOWER_ENABLED:-true}
+      - autoheal=${POCKETBASE_AUTOHEAL_ENABLED:-true}
