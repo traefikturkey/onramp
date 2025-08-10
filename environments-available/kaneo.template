@@ -15,11 +15,45 @@
 # Template: 'make edit-env-template kaneo'
 # Env:      'make edit-env kaneo'
 
+###############################################
+# General Settings
+###############################################
 
-#KANEO_DOCKER_TAG=$KANEO_DOCKER_TAG
-#KANEO_CONTAINER_NAME=$KANEO_CONTAINER_NAME
-#KANEO_RESTART=$KANEO_RESTART
+# KANEO_RESTART=$KANEO_RESTART
+# KANEO_DOCKER_TAG=$KANEO_DOCKER_TAG
+# KANEO_CONTAINER_NAME=$KANEO_CONTAINER_NAME
 
-# KANEO_POSTGRES_USER=kaneo_user
-# KANEO_POSTGRES_PASSWORD=kaneo_password
-# KANEO_POSTGRES_DB=kaneo
+###############################################
+# Database Settings
+###############################################
+
+# KANEO_POSTGRES_CONTAINER_NAME=$KANEO_POSTGRES_CONTAINER_NAME
+# KANEO_POSTGRES_USER=$KANEO_POSTGRES_USER
+# KANEO_POSTGRES_PASSWORD=$KANEO_POSTGRES_PASSWORD
+# KANEO_POSTGRES_DB=$KANEO_POSTGRES_DB
+# KANEO_POSTGRES_DIR=$KANEO_POSTGRES_DIR
+
+###############################################
+# Backend Settings
+###############################################
+
+# KANEO_BACKEND_DOCKER_TAG=$KANEO_BACKEND_DOCKER_TAG
+# KANEO_BACKEND_CONTAINER_NAME=$KANEO_BACKEND_CONTAINER_NAME
+# KANEO_API_HOST_NAME=$KANEO_API_HOST_NAME
+# JWT_ACCESS=$JWT_ACCESS
+
+###############################################
+# Frontend Settings
+###############################################
+
+# KANEO_FRONTEND_DOCKER_TAG=$KANEO_FRONTEND_DOCKER_TAG
+# KANEO_FRONTEND_CONTAINER_NAME=$KANEO_FRONTEND_CONTAINER_NAME
+# KANEO_HOST_NAME=$KANEO_HOST_NAME
+
+###############################################
+# Traefik and Monitoring Settings
+###############################################
+
+# KANEO_TRAEFIK_ENABLED=$KANEO_TRAEFIK_ENABLED
+# KANEO_WATCHTOWER_ENABLED=$KANEO_WATCHTOWER_ENABLED
+# KANEO_AUTOHEAL_ENABLED=$KANEO_AUTOHEAL_ENABLED
