@@ -27,7 +27,7 @@ services:
     container_name: ${KANEO_BACKEND_CONTAINER_NAME:-kaneo-backend}
     restart: ${KANEO_RESTART:-unless-stopped}
     environment:
-      - JWT_ACCESS=hotmomsdotcom
+      - JWT_ACCESS=${KANEO_JWT_ACCESS:-hotmomsdotcom}
       - DATABASE_URL=postgresql://${KANEO_POSTGRES_USER:-kaneo_user}:${KANEO_POSTGRES_PASSWORD:-kaneo_password}@${KANEO_POSTGRES_CONTAINER_NAME:-kaneo-postgres}:5432/kaneo
     networks:
       - traefik
