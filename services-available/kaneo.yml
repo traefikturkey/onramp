@@ -1,67 +1,69 @@
 networks:
-    traefik:
-        external: true
-    kaneo_int:
+  traefik:
+    external: true
+  kaneo_int:
 
-# description: Self-hosted Project management
-# https://kaneo.app/docs/deployments/traefik
+# Description: Self-hosted Project Management
+# Documentation: https://kaneo.app/docs/deployments/traefik
 
 services:
-    kaneo-postgres:
-        image: postgres:16-alpine
-        container_name: ${KANEO_POSTGRES_CONTAINER_NAME:-kaneo-postgres}
-        restart: ${KANEO_RESTART:-unless-stopped}
-        ports:
-          - "5432:5432"
-        environment:
-            - POSTGRES_USER=${KANEO_POSTGRES_USER:-kaneo_user}
-            - POSTGRES_DB=${KANEO_POSTGRES_DB:-kaneo}
-            - POSTGRES_PASSWORD=${KANEO_POSTGRES_PASSWORD:-kaneo_password}
-        networks:
-            - kaneo_int
-        volumes:
-            - ${KANEO_POSTGRES_DIR:-./etc/kaneo/db}:/var/lib/postgresql/data
+  kaneo-postgres:
+    image: postgres:16-alpine
+    container_name: ${KANEO_POSTGRES_CONTAINER_NAME:-kaneo-postgres}
+    restart: ${KANEO_RESTART:-unless-stopped}
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=${KANEO_POSTGRES_USER:-kaneo_user}
+      - POSTGRES_DB=${KANEO_POSTGRES_DB:-kaneo}
+      - POSTGRES_PASSWORD=${KANEO_POSTGRES_PASSWORD:-kaneo_password}
+    networks:
+      - kaneo_int
+    volumes:
+      - ${KANEO_POSTGRES_DIR:-./etc/kaneo/db}:/var/lib/postgresql/data
 
-    kaneo-backend:
-        image: ghcr.io/usekaneo/api:${KANEO_BACKEND_DOCKER_TAG:-latest}
-        container_name: ${KANEO_BACKEND_CONTAINER_NAME:-kaneo-backend}
-        restart: ${KANEO_RESTART:-unless-stopped}
-        environment:
-            - JWT_ACCESS=hotmomsdotcom
-            - DATABASE_URL=postgresql://${KANEO_POSTGRES_USER:-kaneo_user}:${KANEO_POSTGRES_PASSWORD:-kaneo_password}@${KANEO_POSTGRES_CONTAINER_NAME:-kaneo-postgres}:5432/kaneo
-        networks:
-            - traefik
-            - kaneo_int
-        depends_on:
-            - kaneo-postgres
-        labels:
-            - joyride.host.name=${KANEO_API_HOST_NAME:-kaneo-api}.${HOST_DOMAIN}
-            - traefik.enable=${KANEO_TRAEFIK_ENABLED:-true}
-            - traefik.http.routers.kaneo-api.entrypoints=websecure
-            - traefik.http.routers.kaneo-api.rule=Host(`${KANEO_API_HOST_NAME:-kaneo-api}.${HOST_DOMAIN}`)
-            #- traefik.http.services.kaneo.loadbalancer.server.scheme=https # enable if the service wants to connect over https
-            - traefik.http.services.kaneo-api.loadbalancer.server.port=1337
-            - com.centurylinklabs.watchtower.enable=${KANEO_WATCHTOWER_ENABLED:-true}
-            - autoheal=${KANEO_AUTOHEAL_ENABLED:-true}
-            - traefik.docker.network=traefik
+  kaneo-backend:
+    image: ghcr.io/usekaneo/api:${KANEO_BACKEND_DOCKER_TAG:-latest}
+    container_name: ${KANEO_BACKEND_CONTAINER_NAME:-kaneo-backend}
+    restart: ${KANEO_RESTART:-unless-stopped}
+    environment:
+      - JWT_ACCESS=${KANEO_JWT_ACCESS:-hotmomsdotcom}
+      - DATABASE_URL=postgresql://${KANEO_POSTGRES_USER:-kaneo_user}:${KANEO_POSTGRES_PASSWORD:-kaneo_password}@${KANEO_POSTGRES_CONTAINER_NAME:-kaneo-postgres}:5432/kaneo
+    networks:
+      - traefik
+      - kaneo_int
+    depends_on:
+      - kaneo-postgres
+    labels:
+      - joyride.host.name=${KANEO_API_HOST_NAME:-kaneo-api}.${HOST_DOMAIN}
+      - traefik.enable=${KANEO_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.kaneo-api.entrypoints=websecure
+      - traefik.http.routers.kaneo-api.rule=Host(`${KANEO_API_HOST_NAME:-kaneo-api}.${HOST_DOMAIN}`)
+      # Uncomment the following line if the service wants to connect over HTTPS
+      # - traefik.http.services.kaneo.loadbalancer.server.scheme=https
+      - traefik.http.services.kaneo-api.loadbalancer.server.port=1337
+      - com.centurylinklabs.watchtower.enable=${KANEO_WATCHTOWER_ENABLED:-true}
+      - autoheal=${KANEO_AUTOHEAL_ENABLED:-true}
+      - traefik.docker.network=traefik
 
-    kaneo-frontend:
-        image: ghcr.io/usekaneo/web:${KANEO_FRONTEND_DOCKER_TAG:-latest}
-        container_name: ${KANEO_FRONTEND_CONTAINER_NAME:-kaneo-frontend}
-        restart: ${KANEO_RESTART:-unless-stopped}
-        environment:
-            - KANEO_API_URL=https://${KANEO_API_HOST_NAME:-kaneo-api}.${HOST_DOMAIN}
-        networks:
-            - traefik
-        depends_on:
-            - kaneo-backend
-        labels:
-            - joyride.host.name=${KANEO_HOST_NAME:-kaneo}.${HOST_DOMAIN}
-            - traefik.enable=${KANEO_TRAEFIK_ENABLED:-true}
-            - traefik.http.routers.kaneo.entrypoints=websecure
-            - traefik.http.routers.kaneo.rule=Host(`${KANEO_HOST_NAME:-kaneo}.${HOST_DOMAIN}`)
-            #- traefik.http.services.kaneo.loadbalancer.server.scheme=https # enable if the service wants to connect over https
-            - traefik.http.services.kaneo.loadbalancer.server.port=5173
-            - com.centurylinklabs.watchtower.enable=${KANEO_WATCHTOWER_ENABLED:-true}
-            - autoheal=${KANEO_AUTOHEAL_ENABLED:-true}
-            - traefik.docker.network=traefik
+  kaneo-frontend:
+    image: ghcr.io/usekaneo/web:${KANEO_FRONTEND_DOCKER_TAG:-latest}
+    container_name: ${KANEO_FRONTEND_CONTAINER_NAME:-kaneo-frontend}
+    restart: ${KANEO_RESTART:-unless-stopped}
+    environment:
+      - KANEO_API_URL=https://${KANEO_API_HOST_NAME:-kaneo-api}.${HOST_DOMAIN}
+    networks:
+      - traefik
+    depends_on:
+      - kaneo-backend
+    labels:
+      - joyride.host.name=${KANEO_HOST_NAME:-kaneo}.${HOST_DOMAIN}
+      - traefik.enable=${KANEO_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.kaneo.entrypoints=websecure
+      - traefik.http.routers.kaneo.rule=Host(`${KANEO_HOST_NAME:-kaneo}.${HOST_DOMAIN}`)
+      # Uncomment the following line if the service wants to connect over HTTPS
+      # - traefik.http.services.kaneo.loadbalancer.server.scheme=https
+      - traefik.http.services.kaneo.loadbalancer.server.port=5173
+      - com.centurylinklabs.watchtower.enable=${KANEO_WATCHTOWER_ENABLED:-true}
+      - autoheal=${KANEO_AUTOHEAL_ENABLED:-true}
+      - traefik.docker.network=traefik
