@@ -1,5 +1,5 @@
 # Available Services
-240 services and counting...
+241 services and counting...
 
 [A](#A)
 [B](#B)
@@ -151,6 +151,7 @@
 
 ## K
 - [kaizoku](https://github.com/oae/kaizoku) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/kaizoku.yml)): Web-based anime downloader
+- [kaneo](https://github.com/traefikturkey/onramp/tree/master/services-available/kaneo.yml): 
 - [kapowarr](https://github.com/Casvt/Kapowarr) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/kapowarr.yml)): Manages comic book collections and downloads
 - [karakeep](https://github.com/karakeep-app/karakeep) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/karakeep.yml)): A self-hostable bookmark-everything app (links, notes and images) with AI-based automatic tagging and full text search
 - [kasm](https://github.com/linuxserver/docker-kasm) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/kasm.yml)): Browser-based access to desktops, applications, and web services

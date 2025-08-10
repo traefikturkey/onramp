@@ -203,3 +203,5 @@ UNIFI_DOCKER_TAG=latest-ubuntu-beta
 This will enable pulling the latest-ubuntu-beta version of the unifi container instead of the default stable version
 
 Please see https://docs.docker.com/compose/environment-variables/ for more information about environment variable in docker compose
+
+![Alt](https://repobeats.axiom.co/api/embed/1f05fd9a7be98c1958a107a05bd450049b2e9eb7.svg "Repobeats analytics image")

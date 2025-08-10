@@ -170,4 +170,14 @@ setup-docker-mirror:
 	@mkdir -p ./etc/docker-mirror/registry_data
 	cp --no-clobber .templates/docker-mirror-config.template ./etc/docker-mirror/config.json
 
+ifneq (,$(wildcard ./services-enabled/kaneo.yml))
+BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),build_kaneo_dirs)
+endif
+
+build_kaneo_dirs:
+	mkdir -p ./etc/kaneo/db
+	chown -R $USER:$USER ./etc/kaneo
+	chmod g+s ./etc/kaneo
+
+
 #$(info "builders.mk loaded")
