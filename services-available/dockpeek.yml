@@ -1,0 +1,45 @@
+networks:
+  traefik:
+    external: true
+
+# description: Docker Port Dashboard for Easy Container Access
+# https://github.com/dockpeek/dockpeek
+
+services:
+  dockpeek:
+    image: ghcr.io/dockpeek/dockpeek:${DOCKPEEK_DOCKER_TAG:-latest}
+    container_name: ${DOCKPEEK_CONTAINER_NAME:-dockpeek}
+    restart: ${DOCKPEEK_RESTART:-unless-stopped}
+    mem_limit: ${DOCKPEEK_MEM_LIMIT:-200g}
+    networks:
+      - traefik
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - SECRET_KEY=${DOCKPEEK_SECRET_KEY:-my_secret_key}
+      - USERNAME=${DOCKPEEK_USERNAME:-admin}
+      - PASSWORD=${DOCKPEEK_PASSWORD:-admin}
+
+    # Optional: Add extra Docker hosts by setting these variables.
+
+      # Docker Host 1
+      # - DOCKER_HOST_1_URL=unix:///var/run/docker.sock    # Docker socket URL
+      # - DOCKER_HOST_1_NAME=MyServer1                     # Name shown in the UI
+      # - DOCKER_HOST_1_PUBLIC_HOSTNAME=                   # (Optional) public adress; if empty, inferred from URL
+      
+      # Docker Host 2
+      # - DOCKER_HOST_2_URL=tcp://192.168.1.168:2375     
+      # - DOCKER_HOST_2_NAME=Synology                    
+      # - DOCKER_HOST_2_PUBLIC_HOSTNAME=NAS      
+    labels:
+      - joyride.host.name=${DOCKPEEK_HOST_NAME:-dockpeek}.${HOST_DOMAIN}
+      - traefik.enable=${DOCKPEEK_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.dockpeek.entrypoints=websecure
+      - traefik.http.routers.dockpeek.rule=Host(`${DOCKPEEK_HOST_NAME:-dockpeek}.${HOST_DOMAIN}`)
+      #- traefik.http.services.dockpeek.loadbalancer.server.scheme=https # enable if the service wants to connect over https
+      - traefik.http.services.dockpeek.loadbalancer.server.port=8000
+      - com.centurylinklabs.watchtower.enable=${DOCKPEEK_WATCHTOWER_ENABLED:-true}
+      - autoheal=${DOCKPEEK_AUTOHEAL_ENABLED:-true}
