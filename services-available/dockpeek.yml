@@ -22,6 +22,18 @@ services:
       - SECRET_KEY=${DOCKPEEK_SECRET_KEY:-my_secret_key}
       - USERNAME=${DOCKPEEK_USERNAME:-admin}
       - PASSWORD=${DOCKPEEK_PASSWORD:-admin}
+
+    # Optional: Add extra Docker hosts by setting these variables.
+
+      # Docker Host 1
+      # - DOCKER_HOST_1_URL=unix:///var/run/docker.sock    # Docker socket URL
+      # - DOCKER_HOST_1_NAME=MyServer1                     # Name shown in the UI
+      # - DOCKER_HOST_1_PUBLIC_HOSTNAME=                   # (Optional) public adress; if empty, inferred from URL
+      
+      # Docker Host 2
+      # - DOCKER_HOST_2_URL=tcp://192.168.1.168:2375     
+      # - DOCKER_HOST_2_NAME=Synology                    
+      # - DOCKER_HOST_2_PUBLIC_HOSTNAME=NAS      
     labels:
       - joyride.host.name=${DOCKPEEK_HOST_NAME:-dockpeek}.${HOST_DOMAIN}
       - traefik.enable=${DOCKPEEK_TRAEFIK_ENABLED:-true}

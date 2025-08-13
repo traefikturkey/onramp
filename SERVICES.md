@@ -1,5 +1,5 @@
 # Available Services
-239 services and counting...
+240 services and counting...
 
 [A](#A)
 [B](#B)
@@ -79,6 +79,7 @@
 - [docker-proxy](https://github.com/Tecnativa/docker-socket-proxy) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/docker-proxy.yml)): Proxy for docker containers
 - [docker-registry](https://hub.docker.com/_/registry) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/docker-registry.yml)): Registry for storing and distributing container images
 - [dockerizalo](https://github.com/undernightcore/dockerizalo) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/dockerizalo.yml)): Docker build and deployment platform 
+- [dockpeek-socket-proxy](https://github.com/dockpeek/dockpeek) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/dockpeek-socket-proxy.yml)): Proxy service for Dockpeek
 - [dockpeek](https://github.com/dockpeek/dockpeek) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/dockpeek.yml)): Docker Port Dashboard for Easy Container Access
 - [docmost](https://github.com/docmost/docmost) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/docmost.yml)): Docmost is an open-source collaborative wiki and documentation software.
 - [doku](https://github.com/amerkurev/doku) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/doku.yml)): Disk usage dashboard
