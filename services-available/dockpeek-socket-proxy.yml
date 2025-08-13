@@ -1,0 +1,35 @@
+networks:
+  traefik:
+    external: true
+
+# description: Proxy service for Dockpeek
+# https://github.com/dockpeek/dockpeek
+
+services:
+  dockpeek-socket-proxy:
+    image: lscr.io/linuxserver/socket-proxy:${DOCKPEEK_SOCKET_PROXY_DOCKER_TAG:-latest}
+    container_name: ${DOCKPEEK_SOCKET_PROXY_CONTAINER_NAME:-dockpeek-socket-proxy}
+    restart: ${DOCKPEEK_SOCKET_PROXY_RESTART:-unless-stopped}
+    mem_limit: ${DOCKPEEK_SOCKET_PROXY_MEM_LIMIT:-200g}
+    networks:
+      - traefik
+    ports:
+      - "2375:2375"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - CONTAINERS=1 
+      - IMAGES=1     
+      - PING=1       
+      - VERSION=1    
+      - INFO=1
+      - POST=1       # <-- This is needed for "Check for updates" operations      
+    read_only: true
+    tmpfs:
+      - /run
+    labels:
+      - com.centurylinklabs.watchtower.enable=${DOCKPEEK_SOCKET_PROXY_WATCHTOWER_ENABLED:-true}
+      - autoheal=${DOCKPEEK_SOCKET_PROXY_AUTOHEAL_ENABLED:-true}
