@@ -23,7 +23,7 @@ services:
       - joyride.host.name=${STREAMING_SEARCH_CONTAINER_NAME:-streaming-search}.${HOST_DOMAIN}
       - traefik.enable=true
       - traefik.http.routers.streaming-search.entrypoints=websecure
-      - traefik.http.routers.streaming-search.rule=Host(`${STREAMING_SERACH_CONTAINER_NAME:-streaming-search}.${HOST_DOMAIN}`)
+      - traefik.http.routers.streaming-search.rule=Host(`${STREAMING_SEARCH_CONTAINER_NAME:-streaming-search}.${HOST_DOMAIN}`)
       - traefik.http.services.streaming-search.loadbalancer.server.port=8000
       - com.centurylinklabs.watchtower.enable=${STREAMING_SEARCH_WATCHTOWER_ENABLED:-true}
       - autoheal=true
