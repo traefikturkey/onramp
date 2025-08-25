@@ -1,0 +1,16 @@
+services:
+  dozzle-agent:
+    image: amir20/dozzle:latest
+    command: agent
+    restart: ${DOZZLE_RESTART:-unless-stopped}
+    container_name: dozzle-agent
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - DOZZLE_HOSTNAME=$hostname
+    ports:
+      - 7007:7007
+
+# on host running dozzle, include the environment variable `DOZZLE_REMOTE_AGENT=IP1:7007,IP2:7007`
+# EXAMPLE:
+# - DOZZLE_REMOTE_AGENT=192.168.1.5:7007,192.168.1..50:7007,192.168.1..114:7007,192.168.1.102:7007
