@@ -1,0 +1,31 @@
+---
+
+networks:
+  traefik:
+    external: true
+
+# description: Self Hosted whiteboard app
+# https://github.com/lovasoa/whitebophir
+
+services:
+  wbo:
+    image: lovasoa/wbo:${WBO_DOCKER_TAG:-latest}
+    container_name: ${WBO_CONTAINER_NAME:-wbo}    
+    networks:
+      - traefik
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    volumes:
+      - ./etc/wbo/server-data:/opt/app/server-data
+    restart: ${WBO_RESTART:-unless-stopped}
+    labels:
+      - joyride.host.name=${WBO_CONTAINER_NAME:-wbo}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.wbo.entrypoints=websecure
+      - traefik.http.routers.wbo.rule=Host(`${WBO_CONTAINER_NAME:-wbo}.${HOST_DOMAIN}`)
+      #- traefik.http.services.wbo.loadbalancer.server.scheme=https # enable if the service wants to connect over https
+      - traefik.http.services.wbo.loadbalancer.server.port=80
+      - com.centurylinklabs.watchtower.enable=${WBO_WATCHTOWER_ENABLED:-true}
+      - autoheal=true    
