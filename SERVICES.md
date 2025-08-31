@@ -1,5 +1,5 @@
 # Available Services
-243 services and counting...
+246 services and counting...
 
 [A](#A)
 [B](#B)
@@ -82,6 +82,7 @@
 - [dockpeek](https://github.com/dockpeek/dockpeek) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/dockpeek.yml)): Docker Port Dashboard for Easy Container Access
 - [docmost](https://github.com/docmost/docmost) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/docmost.yml)): Docmost is an open-source collaborative wiki and documentation software.
 - [doku](https://github.com/amerkurev/doku) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/doku.yml)): Disk usage dashboard
+- [dozzle-agent](https://github.com/traefikturkey/onramp/tree/master/services-available/dozzle-agent.yml): 
 - [dozzle-path](https://github.com/amir20/dozzle) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/dozzle-path.yml)): Path-based reverse proxy for dozzle
 - [dozzle](https://github.com/amir20/dozzle) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/dozzle.yml)): Web-based docker container log viewer
 - [drawio](https://github.com/jgraph/docker-drawio ) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/drawio.yml)): A client side editor for "general" diagramming
@@ -320,8 +321,10 @@
 ## W
 - [wallabag](https://github.com/wallabag/wallabag) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/wallabag.yml)): Self-hosted read-it-later service
 - [wallos](https://github.com/ellite/Wallos) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/wallos.yml)): Open-Source Personal Subscription Tracker
+- [watcharr](https://watcharr.app/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/watcharr.yml)): Self-hostable watched list
 - [watchtower](https://github.com/beatkind/watchtower) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/watchtower.yml)): Automatically updates docker containers
 - [watchyourlan](https://github.com/aceberg/WatchYourLAN) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/watchyourlan.yml)): Monitors network devices and services
+- [wbo](https://github.com/lovasoa/whitebophir) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/wbo.yml)): Self Hosted whiteboard app
 - [webmap](https://github.com/SECUREFOREST/WebMap) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/webmap.yml)): Web-based network scanner
 - [webtop](https://github.com/linuxserver/docker-webtop) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/webtop.yml)): Web-based desktop environment
 - [wetty](https://github.com/butlerx/wetty) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/wetty.yml)): Terminal in browser over http/https.

@@ -10,7 +10,7 @@ networks:
 services:
   immich:
     container_name: ${IMMICH_CONTAINER_NAME:-immich}
-    image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-v1.134.0}
+    image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-v1.140.0}
     volumes:
       - ${IMMICH_UPLOAD_LOCATION:-./etc/immich/upload}:/usr/src/app/upload
       - /etc/localtime:/etc/localtime:ro
@@ -45,7 +45,7 @@ services:
   immich-machine-learning:
     container_name: immich_machine_learning
     user: "1000"
-    image: ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION:-v1.134.0}
+    image: ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION:-v1.140.0}
     networks:
       - immich-db
     volumes:
