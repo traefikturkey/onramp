@@ -14,12 +14,16 @@ services:
     networks:
       - traefik
     volumes:
-      - ./etc/pulse:/data # <==== this probably needs changed
+      - ./etc/pulse:/data
       - /etc/localtime:/etc/localtime:ro
     environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
+      - NODE_ENV=production
+      - IGNORE_SSL_ERRORS=true
+      - NODE_TLS_REJECT_UNAUTHORIZED=0
+      - ALLOWED_ORIGINS=*
     labels:
       - joyride.host.name=${PULSE_HOST_NAME:-pulse}.${HOST_DOMAIN}
       - traefik.enable=${PULSE_TRAEFIK_ENABLED:-true}
