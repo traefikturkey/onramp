@@ -1,5 +1,5 @@
 # Available Services
-245 services and counting...
+244 services and counting...
 
 [A](#A)
 [B](#B)
@@ -308,6 +308,7 @@
 - [unbound](https://hub.docker.com/r/mvance/unbound) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/unbound.yml)): Dns resolver
 - [unifi](https://github.com/goofball222/unifi) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/unifi.yml)): Network management controller for ubiquiti devices
 - [unimus](https://github.com/crocandr/docker-unimus) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/unimus.yml)): contianer for multi-vendor network device configuration backup and management solution
+- [unmanic](https://github.com/Unmanic/unmanic) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/unmanic.yml)): Unmanic is a simple tool for optimising your file library
 - [uptime-kuma](https://github.com/louislam/uptime-kuma) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/uptime-kuma.yml)): Self-hosted uptime monitoring tool
 
 
