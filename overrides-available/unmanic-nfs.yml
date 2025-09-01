@@ -1,0 +1,16 @@
+volumes:
+  unmanic-nfs-media:
+    labels:
+      - remove_volume_on=down
+    driver_opts:
+      type: nfs
+      o: "addr=${UNMANIC_MEDIA_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
+      device: ":${UNMANIC_MEDIA_NFS_SERVER_PATH:-${NFS_MEDIA_PATH}}"
+
+services:
+  unmanic:
+    volumes:
+      - ${UNMANIC_CONFIG_VOLUME:-./etc/unmanic}:/config
+      - ${UNMANIC_MEDIA_VOLUME:-unmanic-nfs-media}:${UNMANIC_MEDIA_PATH:-/library}
+      - ./etc/unmanic/cache:/tmp/unmanic
+      - /etc/localtime:/etc/localtime:ro
