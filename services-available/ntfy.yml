@@ -1,0 +1,60 @@
+networks:
+  traefik:
+    external: true
+
+# description: Send push notifications to your phone or desktop using PUT/POST
+# https://github.com/binwiederhier/ntfy
+# https://docs.ntfy.sh/
+
+services:
+  ntfy:
+    image: binwiederhier/ntfy:${NTFY_DOCKER_TAG:-latest}
+    container_name: ${NTFY_CONTAINER_NAME:-ntfy}
+    restart: ${NTFY_RESTART:-unless-stopped}
+    mem_limit: ${NTFY_MEM_LIMIT:-200g}
+    command:
+      - serve
+    networks:
+      - traefik
+    volumes:
+      - ./etc/ntfy/config:/etc/ntfy
+      - ./etc/ntfy/cache:/var/cache/ntfy
+      # This volume has persistent data like attachments, etc.
+      - ./etc/ntfy/persistent:/var/lib/ntfy
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - NTFY_BASE_URL=https://${NTFY_HOST_NAME:-ntfy}.${HOST_DOMAIN}
+      - NTFY_CACHE_FILE=/var/lib/ntfy/cache.db
+      - NTFY_CACHE_DURATION=24h
+      - NTFY_AUTH_FILE=/var/lib/ntfy/auth.db
+      - NTFY_AUTH_DEFAULT_ACCESS=deny-all
+      - NTFY_BEHIND_PROXY=true
+      - NTFY_ATTACHMENT_CACHE_DIR=/var/lib/ntfy/attachments
+      # The ntfy user command allows you to add/remove/change users in the ntfy user database, as well as change passwords or roles (user or admin).
+      # In practice, you'll often just create one admin user with ntfy user add --role=admin <username> https://docs.ntfy.sh/config/?h=web+push#users-and-roles
+      - NTFY_ENABLE_LOGIN=${NTFY_LOGIN:-true}
+      - NTFY_UPSTREAM_BASE_URL=${NTFY_UPSTREAM:-https://ntfy.sh}
+      # You must configure web-push-public/private key, web-push-file, and web-push-email-address below to enable Web Push.
+      # Run "ntfy webpush keys" to generate the keys. You can do this by shelling into the container: docker exec -it ntfy /bin/sh
+      - NTFY_WEB_PUSH_PUBLIC_KEY=${NTFY_WP_PUBLIC_KEY}
+      - NTFY_WEB_PUSH_PRIVATE_KEY=${NTFY_WP_PRIVATE_KEY}
+      - NTFY_WEB_PUSH_FILE=/var/lib/ntfy/webpush.db
+      - NTFY_WEB_PUSH_EMAIL_ADDRESS=${NTFY_WEB_PUSH_EMAIL:-sysadmin@example.com}
+      - NTFY_LOG_LEVEL=${NTFY_LOG_LEVEL:-info}
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --tries=1 http://localhost:80/v1/health -O - | grep -Eo '\"healthy\"\\s*:\\s*true' || exit 1"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    labels:
+      - joyride.host.name=${NTFY_HOST_NAME:-ntfy}.${HOST_DOMAIN}
+      - traefik.enable=${NTFY_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.ntfy.entrypoints=websecure
+      - traefik.http.routers.ntfy.rule=Host(`${NTFY_HOST_NAME:-ntfy}.${HOST_DOMAIN}`)
+      - traefik.http.services.ntfy.loadbalancer.server.port=80
+      - com.centurylinklabs.watchtower.enable=${NTFY_WATCHTOWER_ENABLED:-true}
+      - autoheal=${NTFY_AUTOHEAL_ENABLED:-true}
