@@ -29,6 +29,6 @@ services:
       - traefik.http.routers.couchdb.entrypoints=websecure
       - traefik.http.routers.couchdb.rule=Host(`${COUCHDB_HOST_NAME:-couchdb}.${HOST_DOMAIN}`)
       #- traefik.http.services.couchdb.loadbalancer.server.scheme=https # enable if the service wants to connect over https
-      - traefik.http.services.couchdb.loadbalancer.server.port=5894
+      - traefik.http.services.couchdb.loadbalancer.server.port=5984
       - com.centurylinklabs.watchtower.enable=${COUCHDB_WATCHTOWER_ENABLED:-true}
       - autoheal=${COUCHDB_AUTOHEAL_ENABLED:-true}
