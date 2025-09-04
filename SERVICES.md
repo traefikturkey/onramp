@@ -1,5 +1,5 @@
 # Available Services
-248 services and counting...
+250 services and counting...
 
 [A](#A)
 [B](#B)
@@ -63,6 +63,7 @@
 - [copyparty](https://github.com/9001/copyparty) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/copyparty.yml)): Portable file server with accelerated resumable uploads, dedup, WebDAV, FTP, TFTP, zeroconf, media indexer, thumbnails
 - [coqui-ai](https://tts.readthedocs.io/en/latest/inference.html) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/coqui-ai.yml)): Collection of ai models for speech recognition and synthesis
 - [coredns](https://coredns.io/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/coredns.yml)): A fast and flexible DNS server with plugin support
+- [couchdb](https://hub.docker.com/_/couchdb) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/couchdb.yml)): CouchDB is a database that uses JSON for documents, an HTTP API, & JavaScript/declarative indexing
 - [crowdsec-traefik-bouncer](https://plugins.traefik.io/plugins/6335346ca4caa9ddeffda116/crowdsec-bouncer-traefik-plugin) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/crowdsec-traefik-bouncer.yml)): Traefik Bouncer for CrowdSec
 - [crowdsec](https://github.com/crowdsecurity/crowdsec) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/crowdsec.yml)): Detects and blocks malicious behavior on servers
 - [cup](https://github.com/sergi0g/cup) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/cup.yml)): The easiest way to manage your container updates.
@@ -202,6 +203,7 @@
 - [nightscout](https://github.com/nightscout/cgm-remote-monitor) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/nightscout.yml)):  web-based CGM (Continuous Glucose Monitor) 
 - [nocodb](https://github.com/nocodb/nocodb) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/nocodb.yml)): Databases As Spreadsheets
 - [nodered](https://hub.docker.com/r/nodered/node-red/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/nodered.yml)): Flow-based development tool for visual programming
+- [ntfy](https://github.com/binwiederhier/ntfy) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/ntfy.yml)): Send push notifications to your phone or desktop using PUT/POST
 - [nutify](https://github.com/DartSteven/Nutify>) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/nutify.yml)): UPS Monitoring System
 - [nzbget](https://hub.docker.com/r/linuxserver/nzbget) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/nzbget.yml)): Binary newsgrabber for usenet
 
