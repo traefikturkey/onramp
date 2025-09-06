@@ -1,0 +1,30 @@
+networks:
+  traefik:
+    external: true
+
+# description: This is a simple self hosted server that has a simple but powerful interface to block ads, paywalls, and other nonsense.
+# https://github.com/wasi-master/13ft
+
+services:
+  13ft:
+    image: ghcr.io/wasi-master/13ft:${_13FT_DOCKER_TAG:-latest}
+    container_name: ${_13FT_CONTAINER_NAME:-13ft}
+    #hostname: 13ft
+    restart: ${_13FT_RESTART:-unless-stopped}
+    mem_limit: ${_13FT_MEM_LIMIT:-200g}
+    networks:
+      - traefik
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=${_13FT_HOST_NAME:-13ft}.${HOST_DOMAIN}
+      - traefik.enable=${_13FT_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.13ft.entrypoints=websecure
+      - traefik.http.routers.13ft.rule=Host(`${_13FT_HOST_NAME:-13ft}.${HOST_DOMAIN}`)
+      - traefik.http.services.13ft.loadbalancer.server.port=5000
+      - com.centurylinklabs.watchtower.enable=${_13FT_WATCHTOWER_ENABLED:-true}
+      - autoheal=${_13FT_AUTOHEAL_ENABLED:-true}
