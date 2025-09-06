@@ -1,5 +1,5 @@
 # Available Services
-247 services and counting...
+248 services and counting...
 
 [A](#A)
 [B](#B)
@@ -170,6 +170,7 @@
 - [lazylibrarian](https://gitlab.com/LazyLibrarian/LazyLibrarian) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/lazylibrarian.yml)): LazyLibrarian is a SickBeard, CouchPotato, Headphones-like application for ebooks, audiobooks and magazines
 - [librespeed](https://github.com/linuxserver/docker-librespeed) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/librespeed.yml)): Self-hosted internet speed test tool
 - [lidarr](https://github.com/linuxserver/docker-lidarr) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/lidarr.yml)): Manages music collections and downloads
+- [lidify](https://github.com/TheWicklowWolf/Lidify) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/lidify.yml)):  Music discovery tool that provides recommendations based on selected Lidarr artists, using Spotify or LastFM.
 - [linkding](https://github.com/sissbruecker/linkding) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/linkding.yml)): Self-hosted bookmark manager
 - [lubelog](https://github.com/hargata/lubelog) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/lubelog.yml)): Self-Hosted, Open-Source, Web-Based Vehicle Maintenance and Fuel Mileage Tracker
 - [lychee](https://github.com/LycheeOrg/Lychee-Docker) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/lychee.yml)): Photo management and sharing platform
