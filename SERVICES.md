@@ -1,6 +1,7 @@
 # Available Services
-250 services and counting...
+252 services and counting...
 
+[1](#1)
 [A](#A)
 [B](#B)
 [C](#C)
@@ -25,6 +26,10 @@
 [V](#V)
 [W](#W)
 [Y](#Y)
+
+## 1
+- [13ft](https://github.com/wasi-master/13ft) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/13ft.yml)): This is a simple self hosted server that has a simple but powerful interface to block ads, paywalls, and other nonsense.
+
 
 ## A
 - [actual](https://actualbudget.org/docs/install/docker) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/actual.yml)): Money Management software
@@ -170,6 +175,7 @@
 - [lazylibrarian](https://gitlab.com/LazyLibrarian/LazyLibrarian) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/lazylibrarian.yml)): LazyLibrarian is a SickBeard, CouchPotato, Headphones-like application for ebooks, audiobooks and magazines
 - [librespeed](https://github.com/linuxserver/docker-librespeed) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/librespeed.yml)): Self-hosted internet speed test tool
 - [lidarr](https://github.com/linuxserver/docker-lidarr) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/lidarr.yml)): Manages music collections and downloads
+- [lidify](https://github.com/TheWicklowWolf/Lidify) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/lidify.yml)):  Music discovery tool that provides recommendations based on selected Lidarr artists, using Spotify or LastFM.
 - [linkding](https://github.com/sissbruecker/linkding) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/linkding.yml)): Self-hosted bookmark manager
 - [loki](https://grafana.com/docs/loki/latest/installation/docker/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/loki.yml)): 
 - [lubelog](https://github.com/hargata/lubelog) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/lubelog.yml)): Self-Hosted, Open-Source, Web-Based Vehicle Maintenance and Fuel Mileage Tracker
