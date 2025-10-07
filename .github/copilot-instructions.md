@@ -5,3 +5,4 @@
 - If the user asks for a new file but does not specify a name, use your best judgment to name the file appropriately.
 - If a task appears to require a new file but no explicit approval is given, pause, summarize the need, and ask the user for confirmation.
 - When file creation is declined or unclear, offer alternative approaches that reuse existing files whenever possible.
+- When the user asks for a commit and push, ensure all modified files are committed and pushed so that `git status` reports a clean working tree when you finish.
