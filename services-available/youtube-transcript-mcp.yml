@@ -1,0 +1,39 @@
+networks:
+  traefik:
+    external: true
+
+# description: Model Context Protocol server that retrieves YouTube video transcripts.
+# https://hub.docker.com/mcp/server/youtube_transcript/overview
+# https://github.com/jkawamoto/mcp-youtube-transcript
+
+services:
+  youtube-transcript-mcp:
+    image: mcp/youtube-transcript:${YOUTUBE_TRANSCRIPT_MCP_DOCKER_TAG:-latest}
+    container_name: ${YOUTUBE_TRANSCRIPT_MCP_CONTAINER_NAME:-youtube-transcript-mcp}
+    restart: ${YOUTUBE_TRANSCRIPT_MCP_RESTART:-unless-stopped}
+    mem_limit: ${YOUTUBE_TRANSCRIPT_MCP_MEM_LIMIT:-512m}
+    stdin_open: true
+    networks:
+      - traefik
+    environment:
+      - TZ=${TZ}
+    command:
+      - fastmcp
+      - run
+      - mcp_youtube_transcript
+      - --transport
+      - http
+      - --host
+      - 0.0.0.0
+      - --port
+      - ${YOUTUBE_TRANSCRIPT_MCP_PORT:-8080}
+    labels:
+      - joyride.host.name=${YOUTUBE_TRANSCRIPT_MCP_HOST_NAME:-youtube-transcript}.${HOST_DOMAIN}
+      - traefik.enable=${YOUTUBE_TRANSCRIPT_MCP_TRAEFIK_ENABLE:-true}
+      - traefik.http.routers.youtube-transcript-mcp.entrypoints=websecure
+      - traefik.http.routers.youtube-transcript-mcp.rule=Host(`${YOUTUBE_TRANSCRIPT_MCP_HOST_NAME:-youtube-transcript}.${HOST_DOMAIN}`)
+      - traefik.http.routers.youtube-transcript-mcp.tls=true
+      - traefik.http.services.youtube-transcript-mcp.loadbalancer.server.port=${YOUTUBE_TRANSCRIPT_MCP_PORT:-8080}
+      - traefik.docker.network=traefik
+      - com.centurylinklabs.watchtower.enable=${YOUTUBE_TRANSCRIPT_MCP_WATCHTOWER_ENABLED:-true}
+      - autoheal=${YOUTUBE_TRANSCRIPT_MCP_AUTOHEAL_ENABLED:-true}
