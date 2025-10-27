@@ -15,9 +15,9 @@ services:
     networks:
       - traefik
     volumes:
-      - ./etc/onboard:/app/configs
-      - ./etc/onboard/cache:/app/.working/cache
-      - ./etc/onboard/icons:/app/static/assets/icons
+      - ./etc/onboard:/srv/app/configs
+      - ./etc/onboard/cache:/srv/app/.working/cache
+      - ./etc/onboard/icons:/srv/app/static/assets/icons
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
