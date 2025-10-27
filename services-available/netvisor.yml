@@ -19,8 +19,8 @@ services:
       - traefik.http.services.netvisor.loadbalancer.server.port=8096
       - com.centurylinklabs.watchtower.enable=${NETVISOR_WATCHTOWER_ENABLED:-true}
       - autoheal=${NETVISOR_AUTOHEAL_ENABLED:-true}
-      
-  postgres:
+
+  netvisor-db:
     image: postgres:17-alpine
     environment:
       POSTGRES_DB: netvisor
