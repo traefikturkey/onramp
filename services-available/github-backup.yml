@@ -1,0 +1,41 @@
+# description: Runs GitHub Backup to periodically archive GitHub repositories and releases
+# https://github-backup.sierrasoftworks.com/
+# https://github-backup.sierrasoftworks.com/guide/
+# https://github.com/SierraSoftworks/github-backup
+
+services:
+  github-backup:
+    image: ${GITHUB_BACKUP_IMAGE:-ghcr.io/SierraSoftworks/github-backup}:${GITHUB_BACKUP_DOCKER_TAG:-latest}
+    container_name: ${GITHUB_BACKUP_CONTAINER_NAME:-github-backup}
+    restart: ${GITHUB_BACKUP_RESTART_POLICY:-unless-stopped}
+    mem_limit: ${GITHUB_BACKUP_MEM_LIMIT:-512m}
+    volumes:
+      # Mount your configuration file into the container.  This should contain
+      # the schedule and list of backups to perform.  See the upstream docs for
+      # examples.
+      - ${GITHUB_BACKUP_CONFIG:-./etc/github-backup/config.yaml}:/config.yaml:ro
+      # Directory where backups will be written to.  Make sure this path has
+      # sufficient space to store your repository archives.
+      - ${GITHUB_BACKUP_BACKUPS:-./etc/github-backup/backups}:/backups
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      # GitHub PAT used by github‑backup.  You should generate a token with
+      # appropriate permissions and export it as an environment variable on the
+      # host.  See the upstream docs for required scopes.
+      - GITHUB_PERSONAL_ACCESS_TOKEN=${GITHUB_PERSONAL_ACCESS_TOKEN}
+    # Instruct github‑backup to use the provided configuration file.  Without
+    # this command the image will look for a default config in /config.yaml.
+    command: --config /config.yaml
+    labels:
+      # Even though this service does not expose a web UI, we specify a host
+      # name for consistency with the other services.
+      - joyride.host.name=${GITHUB_BACKUP_CONTAINER_NAME:-github-backup}.${HOST_DOMAIN}
+      # Disable Traefik for this service since it has no web interface.
+      - traefik.enable=${GITHUB_BACKUP_TRAEFIK_ENABLED:-false}
+      # Enable automatic upgrades via watchtower unless explicitly disabled.
+      - com.centurylinklabs.watchtower.enable=${GITHUB_BACKUP_WATCHTOWER_ENABLED:-true}
+      # Enable autohealing to restart the container if it becomes unhealthy.
+      - autoheal=${GITHUB_BACKUP_AUTOHEAL_ENABLED:-true}
