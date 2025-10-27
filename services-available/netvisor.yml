@@ -60,7 +60,7 @@ services:
       - TZ=${TZ}
       - NETVISOR_SERVER_PORT=${NETVISOR_SERVER_PORT:-60072}
       - NETVISOR_LOG_LEVEL=${NETVISOR_LOG_LEVEL:-info}
-      - NETVISOR_DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD:-password}@netvisor-db:5432/netvisor
+      - NETVISOR_DATABASE_URL=postgresql://netvisor-db:${POSTGRES_PASSWORD:-password}@postgres:5432/netvisor
       - NETVISOR_WEB_EXTERNAL_PATH=${NETVISOR_WEB_EXTERNAL_PATH:-/app/static}
     labels:
       - com.centurylinklabs.watchtower.enable=${NETVISOR_WATCHTOWER_ENABLED:-true}
