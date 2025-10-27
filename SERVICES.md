@@ -1,5 +1,5 @@
 # Available Services
-252 services and counting...
+258 services and counting...
 
 [1](#1)
 [A](#A)
@@ -120,6 +120,7 @@
 - [gatus](https://github.com/TwiN/gatus) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/gatus.yml)): Monitors services and sends alerts
 - [ghost](https://hub.docker.com/_/ghost) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/ghost.yml)): Headless cms for creating blogs and websites
 - [gitea](https://github.com/go-gitea/gitea) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/gitea.yml)): Lightweight git service similar to github
+- [github-backup](https://github-backup.sierrasoftworks.com/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/github-backup.yml)): Runs GitHub Backup to periodically archive GitHub repositories and releases
 - [gitlab](https://docs.gitlab.com/ee/install/docker.html) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/gitlab.yml)): Self-hosted git repository management system
 - [glances](https://github.com/nicolargo/glances) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/glances.yml)): System monitoring tool
 - [glance](https://github.com/glanceapp/glance) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/glance.yml)): A self-hosted dashboard that puts all your feeds in one place
@@ -204,6 +205,8 @@
 - [nebula-sync](https://github.com/lovelaze/nebula-sync) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/nebula-sync.yml)): Synchronize Pi-hole v6.x configuration to replicas.
 - [netbootxyz](https://github.com/netbootxyz/docker-netbootxyz) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/netbootxyz.yml)): Network boot server for various operating systems
 - [netbox](https://docs.linuxserver.io/images/docker-netbox) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/netbox.yml)): Web-based ip address management (ipam) and data center infrastructure management (dcim) tool
+- [netvisor-daemon](https://github.com/mayanayza/netvisor) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/netvisor-daemon.yml)): Discovery daemon for Netvisor service visualization.
+- [netvisor](https://github.com/mayanayza/netvisor) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/netvisor.yml)): Tool that creates a visualization of your services through discovery.
 - [newsdash](https://github.com/buzz/newsdash) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/newsdash.yml)): Self-hosted rss feed reader and dashboard
 - [nextcloud](https://github.com/linuxserver/docker-nextcloud) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/nextcloud.yml)): Powerful self-hosted file sync and sharing platform
 - [nightscout](https://github.com/nightscout/cgm-remote-monitor) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/nightscout.yml)):  web-based CGM (Continuous Glucose Monitor) 
@@ -277,6 +280,7 @@
 - [requestrr](https://hub.docker.com/r/darkalfx/requestrr) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/requestrr.yml)): Integrates with sonarr and radarr for requesting media content
 - [rundeck](https://github.com/rundeck/rundeck) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/rundeck.yml)): Job scheduler and runbook automation platform
 - [rustdesk](https://rustdesk.com/docs/en/self-host/install/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/rustdesk.yml)): Remote desktop software
+- [rwmarkable](https://github.com/fccview/rwMarkable) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/rwmarkable.yml)): A simple, self-hosted app for your checklists and notes
 
 
 ## S
@@ -351,7 +355,9 @@
 
 ## Y
 - [yacht](https://github.com/SelfhostedPro/Yacht) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/yacht.yml)): Web interface for managing docker containers
+- [yamtrack](https://github.com/FuzzyGrim/Yamtrack) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/yamtrack.yml)):  A self hosted media tracker.
 - [youtube-dl](https://github.com/nbr23/youtube-dl-server) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/youtube-dl.yml)): Web UI for youtube-dl to download videos from youtube and other sites
+- [youtube-transcript-mcp](https://hub.docker.com/mcp/server/youtube_transcript/overview) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/youtube-transcript-mcp.yml)): Model Context Protocol server that retrieves YouTube video transcripts.
 
 
 

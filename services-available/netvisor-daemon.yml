@@ -1,0 +1,36 @@
+# description: Discovery daemon for Netvisor service visualization.
+# https://github.com/mayanayza/netvisor
+
+services:
+  netvisor-daemon:
+    image: mayanayza/netvisor-daemon:${NETVISOR_DAEMON_DOCKER_TAG:-latest}
+    container_name: ${NETVISOR_DAEMON_CONTAINER_NAME:-netvisor-daemon}
+    restart: ${NETVISOR_DAEMON_RESTART:-unless-stopped}
+    mem_limit: ${NETVISOR_DAEMON_MEM_LIMIT:-200g}
+    network_mode: host
+    privileged: true
+    volumes:
+      - ./etc/netvisor-daemon:/root/.config/netvisor/daemon
+      - /etc/localtime:/etc/localtime:ro
+      # Uncomment this if you want the daemon to be able to run docker discovery on the host it's running on
+      # - /var/run/docker.sock:/var/run/docker.sock:ro
+
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+
+      # Server connection
+      - NETVISOR_SERVER_TARGET=${NETVISOR_SERVER_TARGET:-127.0.0.1}
+      - NETVISOR_SERVER_PORT=${NETVISOR_SERVER_PORT:-60072}
+      
+      # Daemon configuration
+      - NETVISOR_PORT=${NETVISOR_PORT:-60073}
+      - NETVISOR_BIND_ADDRESS=${NETVISOR_BIND_ADDRESS:-0.0.0.0}
+      - NETVISOR_NAME=${NETVISOR_NAME:-netvisor-daemon}
+      - NETVISOR_LOG_LEVEL=${NETVISOR_LOG_LEVEL:-info}
+      - NETVISOR_HEARTBEAT_INTERVAL=${NETVISOR_HEARTBEAT_INTERVAL:-30}
+
+    labels:
+      - com.centurylinklabs.watchtower.enable=${NETVISOR_DAEMON_WATCHTOWER_ENABLED:-true}
+      - autoheal=${NETVISOR_DAEMON_AUTOHEAL_ENABLED:-true}
