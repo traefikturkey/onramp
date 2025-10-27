@@ -16,8 +16,9 @@ services:
 
   netvisor-db:
     image: postgres:17-alpine
-    networks:
-      - traefik
+    container_name: ${NETVISOR_POSTGRES_CONTAINER_NAME:-netvisor-db}
+    ports:
+      - "5432:5432"
     environment:
       POSTGRES_DB: netvisor
       POSTGRES_USER: postgres
@@ -30,7 +31,6 @@ services:
       timeout: 5s
       retries: 5
     restart: unless-stopped
-
 
   netvisor:
     image: mayanayza/netvisor-server:${NETVISOR_DOCKER_TAG:-latest}
