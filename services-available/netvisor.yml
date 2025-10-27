@@ -11,17 +11,13 @@ services:
     volumes:
       - ./etc/netvisor/ui:/app/build
     labels:
-      - joyride.host.name=${NETVISOR_HOST_NAME:-netvisor}.${HOST_DOMAIN}
-      - traefik.enable=${NETVISOR_TRAEFIK_ENABLED:-true}
-      - traefik.http.routers.netvisor.entrypoints=websecure
-      - traefik.http.routers.netvisor.rule=Host(`${NETVISOR_HOST_NAME:-netvisor}.${HOST_DOMAIN}`)
-      #- traefik.http.services.netvisor.loadbalancer.server.scheme=https # enable if the service wants to connect over https
-      - traefik.http.services.netvisor.loadbalancer.server.port=8096
       - com.centurylinklabs.watchtower.enable=${NETVISOR_WATCHTOWER_ENABLED:-true}
       - autoheal=${NETVISOR_AUTOHEAL_ENABLED:-true}
 
   netvisor-db:
     image: postgres:17-alpine
+    networks:
+      - traefik
     environment:
       POSTGRES_DB: netvisor
       POSTGRES_USER: postgres
@@ -60,8 +56,14 @@ services:
       - TZ=${TZ}
       - NETVISOR_SERVER_PORT=${NETVISOR_SERVER_PORT:-60072}
       - NETVISOR_LOG_LEVEL=${NETVISOR_LOG_LEVEL:-info}
-      - NETVISOR_DATABASE_URL=postgresql://netvisor-db:${POSTGRES_PASSWORD:-password}@postgres:5432/netvisor
+      - NETVISOR_DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD:-password}@netvisor-db:5432/netvisor
       - NETVISOR_WEB_EXTERNAL_PATH=${NETVISOR_WEB_EXTERNAL_PATH:-/app/static}
     labels:
+      - joyride.host.name=${NETVISOR_HOST_NAME:-netvisor}.${HOST_DOMAIN}
+      - traefik.enable=${NETVISOR_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.netvisor.entrypoints=websecure
+      - traefik.http.routers.netvisor.rule=Host(`${NETVISOR_HOST_NAME:-netvisor}.${HOST_DOMAIN}`)
+      #- traefik.http.services.netvisor.loadbalancer.server.scheme=https # enable if the service wants to connect over https
+      - traefik.http.services.netvisor.loadbalancer.server.port=60072
       - com.centurylinklabs.watchtower.enable=${NETVISOR_WATCHTOWER_ENABLED:-true}
       - autoheal=${NETVISOR_AUTOHEAL_ENABLED:-true}
