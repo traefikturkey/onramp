@@ -25,7 +25,7 @@ services:
     command: ['bin/rails', 'server', '-p', '3000', '-b', '::']
     environment:
       - RAILS_ENV=production
-      - REDIS_URL=redis://dawarich_redis:6379/0
+      - REDIS_URL=redis://dawarich_redis:6379
       - DATABASE_HOST=dawarich_db
       - DATABASE_PORT=5432
       - DATABASE_USERNAME=${DAWARICH_POSTGRES_USER:-postgres} 
