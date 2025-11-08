@@ -119,7 +119,7 @@ services:
         max-size: "100m"
         max-file: "5"
     healthcheck:
-      test: ["CMD-SHELL", "bundle exec sidekiqmon processes | grep $${HOSTNAME}"]
+      test: [ "CMD-SHELL", "pgrep -f sidekiq" ]
       interval: 10s
       retries: 30
       start_period: 30s
