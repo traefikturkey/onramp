@@ -1,0 +1,32 @@
+networks:
+  traefik:
+    external: true
+
+# description: TaskTrove is a modern Todo Manager that is fully self-hostable.
+# https://github.com/dohsimpson/TaskTrove
+# https://docs.tasktrove.io
+
+services:
+  tasktrove:
+    image: ghcr.io/dohsimpson/tasktrove:${TASKTROVE_DOCKER_TAG:-latest}
+    container_name: ${TASKTROVE_CONTAINER_NAME:-tasktrove}
+    restart: ${TASKTROVE_RESTART:-unless-stopped}
+    mem_limit: ${TASKTROVE_MEM_LIMIT:-200g}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/tasktrove:/app/data
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - AUTH_SECRET=${TASKTROVE_AUTH_SECRET:-changeme} # openssl rand -hex 32
+    labels:
+      - joyride.host.name=${TASKTROVE_HOST_NAME:-tasktrove}.${HOST_DOMAIN}
+      - traefik.enable=${TASKTROVE_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.tasktrove.entrypoints=websecure
+      - traefik.http.routers.tasktrove.rule=Host(`${TASKTROVE_HOST_NAME:-tasktrove}.${HOST_DOMAIN}`)
+      - traefik.http.services.tasktrove.loadbalancer.server.port=3000
+      - com.centurylinklabs.watchtower.enable=${TASKTROVE_WATCHTOWER_ENABLED:-true}
+      - autoheal=${TASKTROVE_AUTOHEAL_ENABLED:-true}
