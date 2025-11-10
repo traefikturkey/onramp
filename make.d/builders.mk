@@ -179,5 +179,16 @@ build_kaneo_dirs:
 	chown -R $USER:$USER ./etc/kaneo
 	chmod g+s ./etc/kaneo
 
+ifneq (,$(wildcard ./services-enabled/radarr.yml))
+BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),build_radarr_dirs)
+endif
+
+build_radarr_dirs:
+	mkdir -p ./etc/radarr/custom-services.d
+	mkdir -p ./etc/radarr/custom-cont-init.d
+	cp --no-clobber --recursive	.templates/radarr_extended.template etc/radarr/extended.conf
+	# wget -P ./etc/radarr/custom-cont-init.d https://raw.githubusercontent.com/RandomNinjaAtk/arr-scripts/main/radarr/scripts_init.bash
+	chown -R $USER:$USER ./etc/radarr
+	chmod g+s ./etc/radarr
 
 #$(info "builders.mk loaded")
