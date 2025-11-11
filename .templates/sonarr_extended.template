@@ -1,20 +1,23 @@
-##### RADARR EXTENDED SCRIPTS SETTINGS #####
-### info found at https://github.com/RandomNinjaAtk/arr-scripts/blob/main/radarr/readme.md
+##### SONARR EXTENDED SCRIPTS SETTINGS #####
+### info found at https://github.com/RandomNinjaAtk/arr-scripts/blob/main/sonarr/readme.md
+
 
 ##### SCRIPT ENABLEMENT
 enableAutoConfig="false" # true = enabled :: Enables AutoConfig script to run after startup
 enableExtras="false" # true = enabled :: Enables Extras and AutoExtras scripts to run in the background and during import process
+enableYoutubeSeriesDownloader="false" # true = enabled :: Enables YoutubeSeriesDownloader script to run
+enableInvalidSeriesAutoCleaner="false" # true = enabled :: Enables InvalidSeriesAutoCleaner script to run
+enableDailySeriesEpisodeTrimmer="false" # true = enabled :: Enables DailySeriesEpisodeTrimmer script to run
 enableRecyclarr="false" # true = enabled :: Enables Recyclarr to run
 enableQueueCleaner="false" # true = enabled :: Enables QueueCleaner Script that automatically removes stuck downloads that cannot be automatically imported
-enableUnmappedFolderCleaner="false" # true = enabled :: Purges any folders that are considered Unmapped in Radarr
-enableInvalidMoviesAutoCleaner="false" # true = enabled :: Enables InvalidMoviesAutoCleaner script to run, removes movies that are no longer mapped to TMDB site
+enableUnmappedFolderCleaner="false" # true = enabled :: Purges any folders that are considered Unmapped in Sonarr
 
 ##### SCRIPT INTERVALS
 autoExtrasScriptInterval=24h #s or #m or #h or #d :: s = seconds, m = minutes, h = hours, d = days :: Amount of time between each script run, when script is enabled
-unmappedFolderCleanerScriptInterval=1h #s or #m or #h or #d :: s = seconds, m = minutes, h = hours, d = days :: Amount of time between each script run, when script is enabled
+youtubeSeriesDownloaderScriptInterval=1h #s or #m or #h or #d :: s = seconds, m = minutes, h = hours, d = days :: Amount of time between each script run, when script is enabled
+invalidSeriesAutoCleanerScriptInterval=1h #s or #m or #h or #d :: s = seconds, m = minutes, h = hours, d = days :: Amount of time between each script run, when script is enabled
 recyclarrScriptInterval=6h #s or #m or #h or #d :: s = seconds, m = minutes, h = hours, d = days :: Amount of time between each script run, when script is enabled
 queueCleanerScriptInterval=15m #s or #m or #h or #d :: s = seconds, m = minutes, h = hours, d = days :: Amount of time between each script run, when script is enabled
-invalidMoviesAutoCleanerScriptInterval=1h #s or #m or #h or #d :: s = seconds, m = minutes, h = hours, d = days :: Amount of time between each script run, when script is enabled
 
 ##### AUTOCONFIG SCRIPT SETTINGS
 configureMediaManagement="false"
@@ -27,8 +30,12 @@ configureNaming="false"
 extrasLanguages="en-US" # Set the desired language for Extras, all languages will be processed... (this is a "," separated list of TMDB language codes, get the code from there sites language opitons, example: en-US)
 extrasType="all" # all or trailers :: all downloads all available videos (trailers, clips, featurette, etc...) :: trailers only downloads trailers
 extrasOfficialOnly="false" # true = enabled :: Skips extras that are not considered/marked as Official from TMDB site.
-extrasKodiCompatibility="false" # true = enabled :: Only works if "extrasSingle" is set to true, names trailer in a kodi compatible naming scheme (movie-trailer.mkv)
-extrasSingle="false" # true = enabled :: Only downloads the first available trailer, does not download any other extras
+
+##### DailySeriesEpisodeTrimmer SCRIPT
+maximumDailyEpisodes="7" # number of episodes to keep when using DailySeriesEpisodeTrimmer script
+sonarrSeriesEpisodeTrimmerTag="" # set to a single sonarr series tag (case sensitive). This allows the script to process non-daily series type series that have a matching tag. For non-daily series, the entire season is kept and the maximum episodes setting is ignored.
+
+#### YT-DLP SETTINGS
 videoFormat="bestvideo*+bestaudio/best" # OPTIONAL - yt-dlp video selection paramater, do not change unless you know what your doing....
 
 ##### RECYCLARR SCRIPT
