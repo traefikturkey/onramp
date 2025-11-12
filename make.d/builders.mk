@@ -183,6 +183,7 @@ ifneq (,$(wildcard ./services-enabled/radarr.yml))
 BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),build_radarr_dirs)
 endif
 
+build_radarr_dirs:
 	if [ -z "$$(ls -A ./etc/radarr/custom-services.d 2>/dev/null)" ]; then \
 		echo "custom-services.d is empty → downloading scripts_init.bash"; \
 		wget -q -P ./etc/radarr/custom-cont-init.d \
