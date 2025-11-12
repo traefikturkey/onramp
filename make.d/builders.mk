@@ -165,6 +165,14 @@ ifneq (,$(wildcard ./services-enabled/docker-mirror.yml))
 BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),setup-docker-mirror)
 endif
 
+ifneq (,$(wildcard ./services-enabled/geopulse.yml))
+BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),generate-geopulse-keys)
+endif
+
+generate-geopulse-keys:
+	@mkdir -p ./etc/geopulse/keys
+	./make.d/scripts/generate-geopulse-keys.sh
+
 setup-docker-mirror:
 	@mkdir -p ./etc/docker-mirror/registry
 	@mkdir -p ./etc/docker-mirror/registry_data
