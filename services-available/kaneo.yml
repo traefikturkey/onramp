@@ -29,6 +29,8 @@ services:
     environment:
       - JWT_ACCESS=${KANEO_JWT_ACCESS:-hotmomsdotcom}
       - DATABASE_URL=postgresql://${KANEO_POSTGRES_USER:-kaneo_user}:${KANEO_POSTGRES_PASSWORD:-kaneo_password}@${KANEO_POSTGRES_CONTAINER_NAME:-kaneo-postgres}:5432/kaneo
+      - KANEO_CLIENT_URL=https://${KANEO_HOST_NAME:-kaneo}.${HOST_DOMAIN}
+      - CORS_ORIGINS=https://${KANEO_HOST_NAME:-kaneo}.${HOST_DOMAIN}
     networks:
       - traefik
       - kaneo_int
@@ -52,6 +54,7 @@ services:
     restart: ${KANEO_RESTART:-unless-stopped}
     environment:
       - KANEO_API_URL=https://${KANEO_API_HOST_NAME:-kaneo-api}.${HOST_DOMAIN}
+      - KANEO_CLIENT_URL=https://${KANEO_HOST_NAME:-kaneo}.${HOST_DOMAIN}
     networks:
       - traefik
     depends_on:
