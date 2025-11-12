@@ -7,7 +7,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     environment:
-      - DOZZLE_HOSTNAME=$hostname
+      - DOZZLE_HOSTNAME=${HOST_NAME}
     ports:
       - 7007:7007
 
