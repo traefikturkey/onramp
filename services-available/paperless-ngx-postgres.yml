@@ -40,7 +40,7 @@ services:
       - "--chromium-disable-routes=true"
 
   tika:
-    image: ghcr.io/paperless-ngx/tika:latest
+    image: docker.io/apache/tika:latest
     restart: unless-stopped
     networks:
       - traefik
