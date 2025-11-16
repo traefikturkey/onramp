@@ -77,7 +77,7 @@ down: ## stop all services and remove all containers and networks
 	-docker volume ls --quiet --filter "label=remove_volume_on=down" | xargs -r docker volume rm 
 
 pull:
-	$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) pull
+	$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) pull --ignore-pull-failures
 
 logs: ## show logs for a service or all services if no service is passed
 	$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) logs -f $(SERVICE_PASSED_DNCASED)
