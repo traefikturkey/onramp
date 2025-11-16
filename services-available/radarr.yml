@@ -15,6 +15,8 @@ services:
       - traefik
     volumes:
       - ./etc/radarr:/config
+      - ./etc/radarr/custom-services.d:/custom-services.d
+      - ./etc/radarr/custom-cont-init.d:/custom-cont-init.d
       - ${MEDIA_MOVIES_VOLUME:-./media/movies}:/movies
       - ${MEDIA_DOWNLOADS_VOLUME:-./media/downloads}:/downloads
       - /dev/rtc:/dev/rtc:ro

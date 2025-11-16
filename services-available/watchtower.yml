@@ -20,6 +20,7 @@ services:
       - traefik
     environment:
       - TZ=${TZ}
+      - DOCKER_API_VERSION=${WATCHTOWER_DOCKER_API_VERSION:-1.44}
       - WATCHTOWER_NOTIFICATIONS_HOSTNAME=${WATCHTOWER_NOTIFICATIONS_HOSTNAME:-${HOST_NAME}.${HOST_DOMAIN}}
       - WATCHTOWER_NOTIFICATION_TITLE_TAG=${WATCHTOWER_NOTIFICATION_TITLE_TAG:-watchtower}
       # - WATCHTOWER_NOTIFICATIONS=${WATCHTOWER_NOTIFICATIONS:-shoutrrr}    ### Notification related values have been moved to environments-available/watchtower.template
