@@ -183,16 +183,16 @@ BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),build_kaneo_dirs)
 endif
 
 build_kaneo_dirs:
-	mkdir -p ./etc/kaneo/db
-	chown -R $USER:$USER ./etc/kaneo
-	chmod g+s ./etc/kaneo
+	@mkdir -p ./etc/kaneo/db
+	@chown -R $$USER:$$USER ./etc/kaneo 2>/dev/null || true
+	@chmod g+s ./etc/kaneo
 
 ifneq (,$(wildcard ./services-enabled/radarr.yml))
 BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),build_radarr_dirs)
 endif
 
 build_radarr_dirs:
-	if [ -z "$$(ls -A ./etc/radarr/custom-services.d 2>/dev/null)" ]; then \
+	@if [ -z "$$(ls -A ./etc/radarr/custom-services.d 2>/dev/null)" ]; then \
 		echo "custom-services.d is empty → downloading scripts_init.bash"; \
 		wget -q -P ./etc/radarr/custom-cont-init.d \
 			https://raw.githubusercontent.com/RandomNinjaAtk/arr-scripts/main/radarr/scripts_init.bash; \
@@ -204,14 +204,14 @@ build_radarr_dirs:
 		fi; \
 	fi
 
-	if [ ! -f ./etc/radarr/extended.conf ]; then \
+	@if [ ! -f ./etc/radarr/extended.conf ]; then \
 		echo "extended.conf not found → creating from template"; \
-		cp ./templates/radarr_extended.template ./etc/radarr/extended.conf; \
+		cp ./.templates/radarr_extended.template ./etc/radarr/extended.conf; \
 	else \
 		echo "extended.conf already exists → skipping creation"; \
 	fi
-	chown -R $USER:$USER ./etc/radarr
-	chmod g+s ./etc/radarr
+	@chown -R $$USER:$$USER ./etc/radarr 2>/dev/null || true
+	@chmod g+s ./etc/radarr
 
 ifneq (,$(wildcard ./services-enabled/sonarr.yml))
 BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),build_sonarr_dirs)
@@ -219,10 +219,10 @@ endif
 
 build_sonarr_dirs:
 	@echo "Creating sonarr directories..."
-	mkdir -p ./etc/sonarr/custom-services.d
-	mkdir -p ./etc/sonarr/custom-cont-init.d
+	@mkdir -p ./etc/sonarr/custom-services.d
+	@mkdir -p ./etc/sonarr/custom-cont-init.d
 
-	if [ -z "$$(ls -A ./etc/sonarr/custom-services.d 2>/dev/null)" ]; then \
+	@if [ -z "$$(ls -A ./etc/sonarr/custom-services.d 2>/dev/null)" ]; then \
 		echo "custom-services.d is empty → downloading scripts_init.bash"; \
 		wget -q -P ./etc/sonarr/custom-cont-init.d \
 			https://raw.githubusercontent.com/RandomNinjaAtk/arr-scripts/main/sonarr/scripts_init.bash; \
@@ -234,13 +234,13 @@ build_sonarr_dirs:
 		fi; \
 	fi
 
-	if [ ! -f ./etc/sonarr/extended.conf ]; then \
+	@if [ ! -f ./etc/sonarr/extended.conf ]; then \
 		echo "extended.conf not found → creating from template"; \
-		cp ./templates/sonarr_extended.template ./etc/sonarr/extended.conf; \
+		cp ./.templates/sonarr_extended.template ./etc/sonarr/extended.conf; \
 	else \
 		echo "extended.conf already exists → skipping creation"; \
 	fi
-	chown -R $USER:$USER ./etc/sonarr
-	chmod g+s ./etc/sonarr
+	@chown -R $$USER:$$USER ./etc/sonarr 2>/dev/null || true
+	@chmod g+s ./etc/sonarr
 
 #$(info "builders.mk loaded")
