@@ -14,7 +14,7 @@ services:
       - default
     user: ${PUID:-1000}
     env_file:
-      - .env
+      - services-enabled/.env
     environment:
       - GF_INSTALL_PLUGINS=camptocamp-prometheus-alertmanager-datasource
     # ports:

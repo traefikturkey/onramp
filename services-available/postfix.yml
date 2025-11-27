@@ -17,7 +17,7 @@ services:
       - PGID=${PGID:-1000}
       - TZ=${TZ}
     env_file:
-      - .env
+      - services-enabled/.env
     labels:
       - joyride.host.name=${POSTFIX_CONTAINER_NAME:-postfix}.${HOST_DOMAIN}
       - traefik.enable=false

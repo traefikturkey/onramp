@@ -1,5 +1,5 @@
 # Include environment files from services-enabled (new modular system)
-ENVIRONMENT_FILES := $(wildcard ./services-enabled/*.env)
+ENVIRONMENT_FILES := $(wildcard ./services-enabled/.env) $(wildcard ./services-enabled/*.env)
 ifneq (,$(ENVIRONMENT_FILES))
     include $(ENVIRONMENT_FILES)
     export
