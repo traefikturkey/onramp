@@ -26,15 +26,24 @@ sietch-shell: sietch-build ## Open a shell in the Sietch container
 
 #########################################################
 ##
-## Legacy .env Migration
+## Environment Migration
+##
+## Supports two migration paths:
+## 1. Legacy master: .env -> services-enabled/*.env
+## 2. Feature branch: environments-enabled/*.env -> services-enabled/*.env
 ##
 #########################################################
 
-# Migration runs automatically if .env exists and services-enabled/.env doesn't
+# Migration runs automatically based on detected source
 migrate-legacy-env: sietch-build
-	@if [ -f .env ] && [ ! -f services-enabled/.env ]; then \
-		echo "Legacy .env detected. Migrating..."; \
-		$(SIETCH_RUN) python /scripts/migrate-env.py; \
+	@if [ ! -f services-enabled/.env ]; then \
+		if [ -f .env ]; then \
+			echo "Legacy .env detected. Migrating..."; \
+			$(SIETCH_RUN) python /scripts/migrate-env.py; \
+		elif [ -d environments-enabled ]; then \
+			echo "Feature branch environments-enabled/ detected. Migrating..."; \
+			$(SIETCH_RUN) python /scripts/migrate-env.py; \
+		fi \
 	fi
 
 migrate-env-dry-run: sietch-build ## Show what migration would do without making changes

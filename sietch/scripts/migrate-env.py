@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 """
-migrate-env.py - Legacy .env migration for OnRamp
+migrate-env.py - Environment migration for OnRamp
 
-Migrates from a monolithic .env file to the modular environment system:
-- services-enabled/.env (global vars: DOMAINNAME, PUID, PGID, TZ, CF_*, etc.)
-- services-enabled/<service>.env (service-specific vars)
-- services-enabled/custom.env (unmapped variables)
+Supports two migration paths:
+1. Legacy master branch: monolithic .env -> modular services-enabled/*.env
+2. Feature branch (onramp-rework-env): environments-enabled/*.env -> services-enabled/*.env
 
-Trigger condition:
-  .env exists AND services-enabled/.env missing -> migrate
+Detection logic:
+  .env exists AND services-enabled/.env missing -> legacy migration
+  environments-enabled/ exists AND services-enabled/.env missing -> feature branch migration
 """
 
 import argparse
@@ -141,18 +141,49 @@ SERVICE_PREFIXES = {
 }
 
 
+# Feature branch ONRAMP_ prefixed variables that map to global vars
+ONRAMP_PREFIX_MAPPING = {
+    "ONRAMP_CF_API_EMAIL": "CF_API_EMAIL",
+    "ONRAMP_CF_DNS_API_TOKEN": "CF_DNS_API_TOKEN",
+    "ONRAMP_HOST_NAME": "HOST_NAME",
+    "ONRAMP_HOST_DOMAIN": "HOST_DOMAIN",
+    "ONRAMP_TZ": "TZ",
+    "ONRAMP_PUID": "PUID",
+    "ONRAMP_PGID": "PGID",
+    "ONRAMP_DNS_CHALLENGE_PROVIDER": "DNS_CHALLENGE_PROVIDER",
+    "ONRAMP_TRAEFIK_ACCESSLOG": "TRAEFIK_ACCESSLOG",
+    "ONRAMP_TRAEFIK_LOG_LEVEL": "TRAEFIK_LOG_LEVEL",
+    "ONRAMP_BACKUP_LOCATION_ENV": "ONRAMP_BACKUP_LOCATION_ENV",
+    "ONRAMP_BACKUP_EXCLUSIONS": "ONRAMP_BACKUP_EXCLUSIONS",
+    "ONRAMP_BACKUP_INCLUSIONS": "ONRAMP_BACKUP_INCLUSIONS",
+}
+
+
 class EnvMigrator:
-    """Handles migration from legacy .env to modular environment system."""
+    """Handles migration from legacy .env or feature branch to modular environment system."""
 
     def __init__(self, base_dir: str = "/app"):
         self.base_dir = Path(base_dir)
         self.legacy_env = self.base_dir / ".env"
+        self.environments_enabled = self.base_dir / "environments-enabled"
         self.services_enabled = self.base_dir / "services-enabled"
         self.backups_dir = self.base_dir / "backups"
 
-    def should_migrate(self) -> bool:
-        """Check if migration should run."""
+    def should_migrate_legacy(self) -> bool:
+        """Check if legacy .env migration should run."""
         return self.legacy_env.exists() and not (self.services_enabled / ".env").exists()
+
+    def should_migrate_feature_branch(self) -> bool:
+        """Check if feature branch migration should run."""
+        return (
+            self.environments_enabled.exists()
+            and any(self.environments_enabled.glob("*.env"))
+            and not (self.services_enabled / ".env").exists()
+        )
+
+    def should_migrate(self) -> bool:
+        """Check if any migration should run (legacy compatibility)."""
+        return self.should_migrate_legacy() or self.should_migrate_feature_branch()
 
     def parse_env_file(self, path: Path) -> dict[str, tuple[str, list[str]]]:
         """
@@ -218,17 +249,121 @@ class EnvMigrator:
                 # Write the variable
                 f.write(f"{var_name}={value}\n")
 
-    def migrate(self, dry_run: bool = False) -> bool:
-        """Perform the migration."""
-        if not self.should_migrate():
-            if not self.legacy_env.exists():
-                print("No legacy .env file found. Nothing to migrate.")
-                return True
-            if (self.services_enabled / ".env").exists():
-                print("services-enabled/.env already exists. Migration already complete.")
-                return True
+    def migrate_feature_branch(self, dry_run: bool = False) -> bool:
+        """Migrate from feature branch environments-enabled/ structure."""
+        print("Starting migration from feature branch (environments-enabled/)...")
+
+        # Collect all variables
+        global_vars: dict[str, tuple[str, list[str]]] = {}
+        service_vars: dict[str, dict[str, tuple[str, list[str]]]] = {}
+        custom_vars: dict[str, tuple[str, list[str]]] = {}
+
+        # Process onramp.env for global vars
+        onramp_env = self.environments_enabled / "onramp.env"
+        if onramp_env.exists():
+            all_vars = self.parse_env_file(onramp_env)
+            for var_name, var_data in all_vars.items():
+                # Map ONRAMP_ prefixed vars to standard names
+                if var_name in ONRAMP_PREFIX_MAPPING:
+                    new_name = ONRAMP_PREFIX_MAPPING[var_name]
+                    global_vars[new_name] = var_data
+                elif var_name.startswith("ONRAMP_"):
+                    # Strip ONRAMP_ prefix for other vars
+                    new_name = var_name[7:]  # Remove "ONRAMP_" prefix
+                    if new_name in GLOBAL_VARS:
+                        global_vars[new_name] = var_data
+                    else:
+                        custom_vars[var_name] = var_data
+                elif var_name in GLOBAL_VARS:
+                    global_vars[var_name] = var_data
+                else:
+                    custom_vars[var_name] = var_data
+            print(f"  Processed: onramp.env ({len(all_vars)} vars)")
+
+        # Process other env files (onramp-external.env, onramp-nfs.env, service-specific)
+        for env_file in self.environments_enabled.glob("*.env"):
+            if env_file.name == "onramp.env":
+                continue  # Already processed
+
+            all_vars = self.parse_env_file(env_file)
+
+            # Determine service name from filename
+            service_name = env_file.stem
+            if service_name.startswith("onramp-"):
+                # onramp-external.env -> .env.external, onramp-nfs.env -> .env.nfs
+                suffix = service_name[7:]  # Remove "onramp-"
+                for var_name, var_data in all_vars.items():
+                    # These go to custom.env since they're specialized configs
+                    custom_vars[var_name] = var_data
+            else:
+                # Service-specific env file
+                if service_name not in service_vars:
+                    service_vars[service_name] = {}
+                for var_name, var_data in all_vars.items():
+                    service_vars[service_name][var_name] = var_data
+            print(f"  Processed: {env_file.name} ({len(all_vars)} vars)")
+
+        print(f"  Global vars: {len(global_vars)}")
+        print(f"  Service-specific vars: {sum(len(v) for v in service_vars.values())} across {len(service_vars)} services")
+        print(f"  Custom/unmapped vars: {len(custom_vars)}")
+
+        if dry_run:
+            print("\nDry run - no changes made")
+            print("\nGlobal vars would be written to services-enabled/.env:")
+            for var in sorted(global_vars.keys()):
+                print(f"  {var}")
+            print("\nService vars:")
+            for service, svars in sorted(service_vars.items()):
+                print(f"  {service}.env: {', '.join(sorted(svars.keys()))}")
+            if custom_vars:
+                print("\nCustom vars would be written to services-enabled/custom.env:")
+                for var in sorted(custom_vars.keys()):
+                    print(f"  {var}")
             return True
 
+        # Create services-enabled directory
+        self.services_enabled.mkdir(parents=True, exist_ok=True)
+
+        # Write global config
+        if global_vars:
+            header = "# OnRamp Global Configuration\n# Migrated from feature branch on " + datetime.now().strftime(
+                "%Y-%m-%d %H:%M:%S"
+            )
+            self.write_env_file(self.services_enabled / ".env", global_vars, header)
+            print(f"  Created: services-enabled/.env ({len(global_vars)} vars)")
+
+        # Write service-specific configs
+        for service, svars in service_vars.items():
+            header = f"# {service.upper()} Configuration\n# Migrated from feature branch on " + datetime.now().strftime(
+                "%Y-%m-%d %H:%M:%S"
+            )
+            self.write_env_file(self.services_enabled / f"{service}.env", svars, header)
+            print(f"  Created: services-enabled/{service}.env ({len(svars)} vars)")
+
+        # Write unmapped variables to custom.env
+        if custom_vars:
+            header = "# Custom/Unmapped Variables\n# Migrated from feature branch on " + datetime.now().strftime(
+                "%Y-%m-%d %H:%M:%S"
+            )
+            self.write_env_file(self.services_enabled / "custom.env", custom_vars, header)
+            print(f"  Created: services-enabled/custom.env ({len(custom_vars)} vars)")
+
+        # Backup and remove environments-enabled/
+        self.backups_dir.mkdir(parents=True, exist_ok=True)
+        backup_path = self.backups_dir / "environments-enabled.legacy"
+        if backup_path.exists():
+            shutil.rmtree(backup_path)
+        shutil.copytree(self.environments_enabled, backup_path)
+        print(f"  Backed up: environments-enabled/ -> {backup_path}")
+
+        shutil.rmtree(self.environments_enabled)
+        print("  Removed: environments-enabled/")
+
+        print("\nMigration complete!")
+        return True
+
+    def migrate_legacy(self, dry_run: bool = False) -> bool:
+        """Migrate from legacy monolithic .env file."""
         print("Starting migration from legacy .env...")
 
         # Parse the legacy env file
@@ -307,6 +442,18 @@ class EnvMigrator:
         print("  Removed: .env")
 
         print("\nMigration complete!")
+        return True
+
+    def migrate(self, dry_run: bool = False) -> bool:
+        """Route to appropriate migration based on detected source."""
+        if (self.services_enabled / ".env").exists():
+            print("services-enabled/.env already exists. Migration already complete.")
+            return True
+        if self.should_migrate_feature_branch():
+            return self.migrate_feature_branch(dry_run)
+        if self.should_migrate_legacy():
+            return self.migrate_legacy(dry_run)
+        print("No migration source found (.env or environments-enabled/).")
         return True
 
 

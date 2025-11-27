@@ -72,3 +72,6 @@ ansible/roles/
 etc/traefik/available/*-rand.yml
 overrides-available/*-rand.yml
 services-available/*-rand.yml
+
+
+.claude/settings.local.json
