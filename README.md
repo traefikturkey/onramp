@@ -3,6 +3,10 @@
 
 Here is a complete list of [available services](SERVICES.md) and [available games](SERVICES.md#available-games)
 
+For detailed documentation, see the [docs/](docs/) folder:
+- [Scaffolding Guide](docs/scaffolding.md) - Convention-based service configuration
+- [Migration Guide](docs/main-branch-announcement.md) - Switching from master to main
+
 This repo assumes that you are running a debian linux disto like Ubuntu!
 
 A podman version is available as a branch here: [https://github.com/traefikturkey/onramp/tree/podman](https://github.com/traefikturkey/onramp/tree/podman)
@@ -161,6 +165,16 @@ And disabled with the following:
 make disable-external proxmox
 make restart
 ```
+
+## Scaffolding
+
+OnRamp uses convention-based scaffolding to auto-generate service configurations. When you enable a service that has templates in `services-scaffold/`, configs are automatically created in `etc/<service>/`.
+
+See [docs/scaffolding.md](docs/scaffolding.md) for details on:
+- How to add scaffolding to a service
+- Template file conventions
+- The difference between `disable-service` and `nuke-service`
+
 ## Backing up Configuration
 
 ### Disaster Recovery Philosophy
