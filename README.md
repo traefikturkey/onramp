@@ -156,6 +156,16 @@ make restart
 ```
 ## Backing up Configuration
 
+### Disaster Recovery Philosophy
+Instead of complex High Availability (HA) setups (like Docker Swarm or Kubernetes) which can be overkill for a home lab, OnRamp encourages a "Disaster Recovery" (DR) approach. The goal is to be able to rebuild your entire stack from scratch in minutes using backups and automation.
+
+**The 3-2-1 Backup Strategy:**
+- **3** copies of your data
+- **2** different media types
+- **1** offsite copy
+
+By backing up your configuration and using tools like Ansible to provision the base OS, you can restore your services quickly on new hardware if a failure occurs.
+
 ### Create backup file
 ```
 make create-backup
