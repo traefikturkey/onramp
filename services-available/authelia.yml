@@ -24,7 +24,7 @@ services:
       - AUTHELIA_JWT_SECRET=${AUTHELIA_JWT_SECRET}
       - AUTHELIA_SESSION_DOMAIN=${HOST_DOMAIN}
     env_file:
-      - .env
+      - services-enabled/.env
     labels:
       - joyride.host.name=${AUTHELIA_AUTH_DOMAIN}
       - traefik.enable=true

@@ -46,7 +46,7 @@ services:
     container_name: proxmox-exporter
     restart: unless-stopped
     env_file:
-      - .env
+      - services-enabled/.env
     # ports:
     #   - 9221:9221
     labels:

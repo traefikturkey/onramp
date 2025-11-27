@@ -17,7 +17,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock
     env_file:
-      - .env
+      - services-enabled/.env
     labels:
       - joyride.host.name=portainer-ee.${HOST_DOMAIN}
       - traefik.enable=true

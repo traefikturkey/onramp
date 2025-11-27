@@ -19,7 +19,7 @@ services:
     environment:
       - PORTAINER_LICENSE_KEY=${PORTAINER_LICENSE_KEY:-}
     env_file:
-      - .env
+      - services-enabled/.env
     labels:
       - joyride.host.name=${PORTAINER_CONTAINER_NAME:-portainer}.${HOST_DOMAIN}
       - traefik.enable=true

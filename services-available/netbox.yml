@@ -68,7 +68,7 @@ services:
       - POSTGRES_USER=${PG_USER:-netbox}
       - POSTGRES_DB=${PG_DB:-netbox}
     env_file:
-      - .env
+      - services-enabled/.env
     labels:
       - com.centurylinklabs.watchtower.enable=${NETBOX_WATCHTOWER_ENABLED:-true}
       - traefik.enable=false
