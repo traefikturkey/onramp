@@ -33,7 +33,13 @@ cd onramp
 make install
 ```
 
-Edit the .env file to include Cloudflare credentials, your domain and the hostname of the current machine, save the file and exit. 
+Edit the environment file (`services-enabled/.env`) to include Cloudflare credentials, your domain and the hostname of the current machine, save the file and exit.
+
+```bash
+make edit-env-onramp
+```
+
+Then start the staging environment:
 
 ```bash
 make start-staging
@@ -70,7 +76,8 @@ They can be enabled by running the following commands:
 make enable-service uptime-kuma
 make restart
 ```
-> Note: this creates a symlink file in ./services-enabled to the service.yml file in ./services-available
+> Note: This creates a symlink file in `./services-enabled` to the service.yml file in `./services-available`.
+> If the service has templates in `services-scaffold/`, a configuration file will also be generated at `services-enabled/<service>.env`.
 
 and disabled with the following:
 ```
@@ -199,18 +206,45 @@ make; make logs
 ```
 ## Environment Variables
 
-Many parts of the available services, overrides and games can be customized using variables set in your .env file
-If you open an available file and view it you will likely see many variables such as ${UNIFI_DOCKER_TAG:-latest-ubuntu}
+OnRamp uses a modular environment system where configuration is split into separate files:
 
-UNIFI_DOCKER_TAG is the variable name 
-latest-ubuntu is the default value
+- **Global config:** `services-enabled/.env` - Core settings (domain, Cloudflare credentials, timezone, etc.)
+- **Service-specific:** `services-enabled/<service>.env` - Settings for individual services
+- **NFS config:** `services-enabled/.env.nfs` - NFS mount settings (optional)
+- **External services:** `services-enabled/.env.external` - External service proxy settings (optional)
 
-You can override this value by placing the following line in your .env file
+### Editing Environment Files
+
+```bash
+make edit-env-onramp      # Edit global configuration
+make edit-env <service>   # Edit service-specific config (e.g., make edit-env adguard)
+make edit-env-nfs         # Edit NFS configuration
+make edit-env-external    # Edit external services config
+```
+
+### Variable Syntax
+
+If you open a service file, you'll see variables like `${UNIFI_DOCKER_TAG:-latest-ubuntu}`:
+- `UNIFI_DOCKER_TAG` is the variable name
+- `latest-ubuntu` is the default value
+
+Override by adding to the appropriate env file:
 ```
 UNIFI_DOCKER_TAG=latest-ubuntu-beta
 ```
-This will enable pulling the latest-ubuntu-beta version of the unifi container instead of the default stable version
 
-Please see https://docs.docker.com/compose/environment-variables/ for more information about environment variable in docker compose
+### Migrating from Legacy .env
+
+If you have an existing OnRamp installation with a monolithic `.env` file, the migration happens automatically on the first `make` command. Your old `.env` will be:
+1. Split into appropriate `services-enabled/*.env` files
+2. Backed up to `backups/.env.legacy`
+3. Removed
+
+To preview what migration would do:
+```bash
+make migrate-env-dry-run
+```
+
+Please see https://docs.docker.com/compose/environment-variables/ for more information about environment variables in docker compose
 
 ![Alt](https://repobeats.axiom.co/api/embed/1f05fd9a7be98c1958a107a05bd450049b2e9eb7.svg "Repobeats analytics image")

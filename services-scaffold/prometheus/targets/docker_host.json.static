@@ -1,0 +1,11 @@
+[
+  {
+    "Targets": [
+      "host.docker.internal:9100"
+    ],
+    "Labels": {
+      "type": "linux",
+      "alert": "true"
+    }
+  }
+]

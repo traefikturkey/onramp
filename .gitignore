@@ -4,7 +4,7 @@
 *.tar.gz
 backups/*
 services-enabled/*.yml
-services-enabled/*
+services-enabled/*.env
 services-dev/*.yml
 services-test/
 overrides-enabled/*.yml
@@ -14,11 +14,15 @@ docker-compose.*.yml
 .chat/
 .restore_latest
 
+# Legacy environment file (migrated to services-enabled/)
 .env
 .hosts
 envs/*
 hosts*
 x-local*
+
+# Sietch container build marker
+sietch/.built
 
 
 # https://theapache64.github.io/git-do-not-ignore/

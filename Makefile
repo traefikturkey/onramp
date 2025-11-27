@@ -1,4 +1,11 @@
-# include .env variable in the current environment
+# Include environment files from services-enabled (new modular system)
+ENVIRONMENT_FILES := $(wildcard ./services-enabled/*.env)
+ifneq (,$(ENVIRONMENT_FILES))
+    include $(ENVIRONMENT_FILES)
+    export
+endif
+
+# Fallback: include legacy .env if it exists (migration pending)
 ifneq (,$(wildcard ./.env))
     include .env
     export
@@ -47,6 +54,12 @@ else ifdef EDITOR
 else
 	EDITOR := vim
 endif
+
+# Sietch container configuration
+SIETCH_IMAGE := sietch
+SIETCH_MARKER := sietch/.built
+SIETCH_FILES := $(shell find sietch/ -type f 2>/dev/null)
+SIETCH_RUN := docker run --rm -v $(shell pwd):/app -u $(PUID):$(PGID) $(SIETCH_IMAGE)
 
 # prevents circular references, do not remove
 BUILD_DEPENDENCIES :=
