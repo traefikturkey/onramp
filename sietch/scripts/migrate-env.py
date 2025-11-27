@@ -53,6 +53,38 @@ GLOBAL_VARS = {
     "PLEX_ALLOWED_NETWORKS",
 }
 
+# NFS-related variable prefixes -> services-enabled/.env.nfs
+NFS_PREFIXES = {
+    "NFS_",
+    "SAMBA_",
+}
+
+# External service variable prefixes -> services-enabled/.env.external
+# These are for proxying to external devices/services not managed by OnRamp
+EXTERNAL_PREFIXES = {
+    "HOMEASSISTANT_",
+    "IDRAC_",
+    "MINECRAFT_DYNMAP_",
+    "MJPG_STREAMER_",
+    "OME_",
+    "OPNSENSE_",
+    "OPENSENSE_",  # Typo variant in template
+    "PBS_",
+    "PFSENSE_",
+    "PROXMOX_",
+    "PVEDCM_",
+    "RANCHER_",
+    "SYNOLOGY_",
+    "TRUENAS_",
+}
+
+# Special case: these look like service vars but are actually external proxying
+# PIHOLE_ADDRESS/PIHOLE_HOST_NAME are for external pihole, not the container
+EXTERNAL_SPECIFIC_VARS = {
+    "PIHOLE_ADDRESS",
+    "PIHOLE_HOST_NAME",
+}
+
 # Service prefix to service name mapping
 SERVICE_PREFIXES = {
     "ADGUARD": "adguard",
@@ -362,6 +394,16 @@ class EnvMigrator:
         print("\nMigration complete!")
         return True
 
+    def _is_nfs_var(self, var_name: str) -> bool:
+        """Check if variable belongs to NFS/SAMBA configuration."""
+        return any(var_name.startswith(prefix) for prefix in NFS_PREFIXES)
+
+    def _is_external_var(self, var_name: str) -> bool:
+        """Check if variable belongs to external service proxying."""
+        if var_name in EXTERNAL_SPECIFIC_VARS:
+            return True
+        return any(var_name.startswith(prefix) for prefix in EXTERNAL_PREFIXES)
+
     def migrate_legacy(self, dry_run: bool = False) -> bool:
         """Migrate from legacy monolithic .env file."""
         print("Starting migration from legacy .env...")
@@ -372,22 +414,30 @@ class EnvMigrator:
 
         # Sort variables into buckets
         global_vars: dict[str, tuple[str, list[str]]] = {}
+        nfs_vars: dict[str, tuple[str, list[str]]] = {}
+        external_vars: dict[str, tuple[str, list[str]]] = {}
         service_vars: dict[str, dict[str, tuple[str, list[str]]]] = {}
         custom_vars: dict[str, tuple[str, list[str]]] = {}
 
         for var_name, var_data in all_vars.items():
-            service = self.get_service_for_var(var_name)
-
-            if service is None and var_name in GLOBAL_VARS:
+            if var_name in GLOBAL_VARS:
                 global_vars[var_name] = var_data
-            elif service:
-                if service not in service_vars:
-                    service_vars[service] = {}
-                service_vars[service][var_name] = var_data
+            elif self._is_nfs_var(var_name):
+                nfs_vars[var_name] = var_data
+            elif self._is_external_var(var_name):
+                external_vars[var_name] = var_data
             else:
-                custom_vars[var_name] = var_data
+                service = self.get_service_for_var(var_name)
+                if service:
+                    if service not in service_vars:
+                        service_vars[service] = {}
+                    service_vars[service][var_name] = var_data
+                else:
+                    custom_vars[var_name] = var_data
 
         print(f"  Global vars: {len(global_vars)}")
+        print(f"  NFS vars: {len(nfs_vars)}")
+        print(f"  External service vars: {len(external_vars)}")
         print(f"  Service-specific vars: {sum(len(v) for v in service_vars.values())} across {len(service_vars)} services")
         print(f"  Custom/unmapped vars: {len(custom_vars)}")
 
@@ -396,6 +446,14 @@ class EnvMigrator:
             print("\nGlobal vars would be written to services-enabled/.env:")
             for var in sorted(global_vars.keys()):
                 print(f"  {var}")
+            if nfs_vars:
+                print("\nNFS vars would be written to services-enabled/.env.nfs:")
+                for var in sorted(nfs_vars.keys()):
+                    print(f"  {var}")
+            if external_vars:
+                print("\nExternal vars would be written to services-enabled/.env.external:")
+                for var in sorted(external_vars.keys()):
+                    print(f"  {var}")
             print("\nService vars:")
             for service, svars in sorted(service_vars.items()):
                 print(f"  {service}.env: {', '.join(sorted(svars.keys()))}")
@@ -407,28 +465,35 @@ class EnvMigrator:
 
         # Create services-enabled directory
         self.services_enabled.mkdir(parents=True, exist_ok=True)
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         # Write global config
         if global_vars:
-            header = "# OnRamp Global Configuration\n# Migrated from legacy .env on " + datetime.now().strftime(
-                "%Y-%m-%d %H:%M:%S"
-            )
+            header = f"# OnRamp Global Configuration\n# Migrated from legacy .env on {timestamp}"
             self.write_env_file(self.services_enabled / ".env", global_vars, header)
             print(f"  Created: services-enabled/.env ({len(global_vars)} vars)")
 
+        # Write NFS config
+        if nfs_vars:
+            header = f"# NFS/SAMBA Configuration\n# Migrated from legacy .env on {timestamp}"
+            self.write_env_file(self.services_enabled / ".env.nfs", nfs_vars, header)
+            print(f"  Created: services-enabled/.env.nfs ({len(nfs_vars)} vars)")
+
+        # Write external services config
+        if external_vars:
+            header = f"# External Service Proxying\n# Migrated from legacy .env on {timestamp}"
+            self.write_env_file(self.services_enabled / ".env.external", external_vars, header)
+            print(f"  Created: services-enabled/.env.external ({len(external_vars)} vars)")
+
         # Write service-specific configs
         for service, svars in service_vars.items():
-            header = f"# {service.upper()} Configuration\n# Migrated from legacy .env on " + datetime.now().strftime(
-                "%Y-%m-%d %H:%M:%S"
-            )
+            header = f"# {service.upper()} Configuration\n# Migrated from legacy .env on {timestamp}"
             self.write_env_file(self.services_enabled / f"{service}.env", svars, header)
             print(f"  Created: services-enabled/{service}.env ({len(svars)} vars)")
 
         # Write unmapped variables to custom.env
         if custom_vars:
-            header = "# Custom/Unmapped Variables\n# Migrated from legacy .env on " + datetime.now().strftime(
-                "%Y-%m-%d %H:%M:%S"
-            )
+            header = f"# Custom/Unmapped Variables\n# Migrated from legacy .env on {timestamp}"
             self.write_env_file(self.services_enabled / "custom.env", custom_vars, header)
             print(f"  Created: services-enabled/custom.env ({len(custom_vars)} vars)")
 
