@@ -37,14 +37,14 @@ ensure-env: services-enabled/.env
 # Create services-enabled/.env from template if needed
 # Handles three migration paths:
 # 1. Legacy master: .env exists -> migrated during build
-# 2. Feature branch: environments-enabled/ exists -> migrated during build
+# 2. Feature branch: environments-enabled/ OR environments-available/ exists -> migrated during build
 # 3. Fresh install: scaffold from template
 services-enabled/.env:
 	@mkdir -p services-enabled
 	@if [ -f .env ]; then \
 		echo "Legacy .env found - will be migrated during build"; \
-	elif [ -d environments-enabled ]; then \
-		echo "Feature branch environments-enabled/ found - will be migrated during build"; \
+	elif [ -d environments-enabled ] || [ -d environments-available ]; then \
+		echo "Feature branch detected - will be migrated during build"; \
 	elif [ -f services-scaffold/onramp/.env.template ]; then \
 		echo "Creating initial environment configuration..."; \
 		$(MAKE) scaffold-build onramp || cp services-scaffold/onramp/.env.template services-enabled/.env; \

@@ -4,7 +4,7 @@
 ##
 ## The Sietch container provides Python-based tooling for:
 ## - Convention-based scaffolding (scaffold.py)
-## - Legacy .env migration (migrate-env.py)
+## - Environment migration from legacy .env or feature branch (migrate-env.py)
 ##
 #########################################################
 
@@ -35,13 +35,15 @@ sietch-shell: sietch-build ## Open a shell in the Sietch container
 #########################################################
 
 # Migration runs automatically based on detected source
+# Feature branch indicators: environments-available/*.template OR environments-enabled/*.env
+# Legacy indicator: .env file at root
 migrate-legacy-env: sietch-build
 	@if [ ! -f services-enabled/.env ]; then \
 		if [ -f .env ]; then \
 			echo "Legacy .env detected. Migrating..."; \
 			$(SIETCH_RUN) python /scripts/migrate-env.py; \
-		elif [ -d environments-enabled ]; then \
-			echo "Feature branch environments-enabled/ detected. Migrating..."; \
+		elif [ -d environments-enabled ] || [ -d environments-available ]; then \
+			echo "Feature branch detected. Migrating..."; \
 			$(SIETCH_RUN) python /scripts/migrate-env.py; \
 		fi \
 	fi

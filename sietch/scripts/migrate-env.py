@@ -6,13 +6,16 @@ Supports two migration paths:
 1. Legacy master branch: monolithic .env -> modular services-enabled/*.env
 2. Feature branch (onramp-rework-env): environments-enabled/*.env -> services-enabled/*.env
 
+Feature branch structure:
+  environments-available/*.template  - Source templates (deleted after migration)
+  environments-enabled/*.env         - Generated env files (migrated then deleted)
+
 Detection logic:
   .env exists AND services-enabled/.env missing -> legacy migration
   environments-enabled/ exists AND services-enabled/.env missing -> feature branch migration
 """
 
 import argparse
-import os
 import re
 import shutil
 import sys
@@ -140,22 +143,11 @@ SERVICE_PREFIXES = {
     "YOURLS": "yourls",
 }
 
-
-# Feature branch ONRAMP_ prefixed variables that map to global vars
-ONRAMP_PREFIX_MAPPING = {
-    "ONRAMP_CF_API_EMAIL": "CF_API_EMAIL",
-    "ONRAMP_CF_DNS_API_TOKEN": "CF_DNS_API_TOKEN",
-    "ONRAMP_HOST_NAME": "HOST_NAME",
-    "ONRAMP_HOST_DOMAIN": "HOST_DOMAIN",
-    "ONRAMP_TZ": "TZ",
-    "ONRAMP_PUID": "PUID",
-    "ONRAMP_PGID": "PGID",
-    "ONRAMP_DNS_CHALLENGE_PROVIDER": "DNS_CHALLENGE_PROVIDER",
-    "ONRAMP_TRAEFIK_ACCESSLOG": "TRAEFIK_ACCESSLOG",
-    "ONRAMP_TRAEFIK_LOG_LEVEL": "TRAEFIK_LOG_LEVEL",
-    "ONRAMP_BACKUP_LOCATION_ENV": "ONRAMP_BACKUP_LOCATION_ENV",
-    "ONRAMP_BACKUP_EXCLUSIONS": "ONRAMP_BACKUP_EXCLUSIONS",
-    "ONRAMP_BACKUP_INCLUSIONS": "ONRAMP_BACKUP_INCLUSIONS",
+# Feature branch special file mappings
+# environments-enabled/onramp-X.env -> services-enabled/.env.X
+FEATURE_BRANCH_SPECIAL_FILES = {
+    "onramp-external": ".env.external",
+    "onramp-nfs": ".env.nfs",
 }
 
 
@@ -166,6 +158,7 @@ class EnvMigrator:
         self.base_dir = Path(base_dir)
         self.legacy_env = self.base_dir / ".env"
         self.environments_enabled = self.base_dir / "environments-enabled"
+        self.environments_available = self.base_dir / "environments-available"
         self.services_enabled = self.base_dir / "services-enabled"
         self.backups_dir = self.base_dir / "backups"
 
@@ -174,12 +167,24 @@ class EnvMigrator:
         return self.legacy_env.exists() and not (self.services_enabled / ".env").exists()
 
     def should_migrate_feature_branch(self) -> bool:
-        """Check if feature branch migration should run."""
-        return (
+        """
+        Check if feature branch migration should run.
+
+        Feature branch indicators:
+        - environments-available/*.template files (strong indicator)
+        - environments-enabled/*.env files (generated configs)
+
+        Either indicator is sufficient to trigger feature branch migration.
+        """
+        has_templates = (
+            self.environments_available.exists()
+            and any(self.environments_available.glob("*.template"))
+        )
+        has_env_files = (
             self.environments_enabled.exists()
             and any(self.environments_enabled.glob("*.env"))
-            and not (self.services_enabled / ".env").exists()
         )
+        return (has_templates or has_env_files) and not (self.services_enabled / ".env").exists()
 
     def should_migrate(self) -> bool:
         """Check if any migration should run (legacy compatibility)."""
@@ -202,7 +207,7 @@ class EnvMigrator:
                     current_comments.append(line)
                     continue
 
-                # Variable assignment (handles commented-out vars too)
+                # Variable assignment
                 match = re.match(r"^([A-Z][A-Z0-9_]*)=(.*)$", line)
                 if match:
                     var_name, value = match.groups()
@@ -250,114 +255,109 @@ class EnvMigrator:
                 f.write(f"{var_name}={value}\n")
 
     def migrate_feature_branch(self, dry_run: bool = False) -> bool:
-        """Migrate from feature branch environments-enabled/ structure."""
-        print("Starting migration from feature branch (environments-enabled/)...")
+        """
+        Migrate from feature branch environments-enabled/ structure.
 
-        # Collect all variables
-        global_vars: dict[str, tuple[str, list[str]]] = {}
-        service_vars: dict[str, dict[str, tuple[str, list[str]]]] = {}
-        custom_vars: dict[str, tuple[str, list[str]]] = {}
+        Feature branch layout:
+          environments-available/*.template       -> templates (backed up and removed)
+          environments-enabled/onramp.env         -> services-enabled/.env (global)
+          environments-enabled/onramp-external.env -> services-enabled/.env.external
+          environments-enabled/onramp-nfs.env     -> services-enabled/.env.nfs
+          environments-enabled/{service}.env      -> services-enabled/{service}.env
 
-        # Process onramp.env for global vars
-        onramp_env = self.environments_enabled / "onramp.env"
-        if onramp_env.exists():
-            all_vars = self.parse_env_file(onramp_env)
-            for var_name, var_data in all_vars.items():
-                # Map ONRAMP_ prefixed vars to standard names
-                if var_name in ONRAMP_PREFIX_MAPPING:
-                    new_name = ONRAMP_PREFIX_MAPPING[var_name]
-                    global_vars[new_name] = var_data
-                elif var_name.startswith("ONRAMP_"):
-                    # Strip ONRAMP_ prefix for other vars
-                    new_name = var_name[7:]  # Remove "ONRAMP_" prefix
-                    if new_name in GLOBAL_VARS:
-                        global_vars[new_name] = var_data
-                    else:
-                        custom_vars[var_name] = var_data
-                elif var_name in GLOBAL_VARS:
-                    global_vars[var_name] = var_data
+        Handles cases where:
+        - Only templates exist (no env files generated yet)
+        - Only env files exist (templates already cleaned up)
+        - Both exist (full feature branch state)
+        """
+        print("Starting migration from feature branch...")
+
+        # Check what exists
+        has_env_dir = self.environments_enabled.exists()
+        has_env_files = has_env_dir and any(self.environments_enabled.glob("*.env"))
+        has_templates = self.environments_available.exists() and any(
+            self.environments_available.glob("*.template")
+        )
+
+        if has_templates:
+            template_count = len(list(self.environments_available.glob("*.template")))
+            print(f"  Found {template_count} template files in environments-available/")
+
+        # Track files to migrate
+        migrations: list[tuple[Path, Path, str]] = []  # (source, dest, description)
+
+        # Process all .env files if they exist
+        if has_env_files:
+            for env_file in sorted(self.environments_enabled.glob("*.env")):
+                stem = env_file.stem
+
+                if stem == "onramp":
+                    # Global config -> .env
+                    dest = self.services_enabled / ".env"
+                    migrations.append((env_file, dest, "global config"))
+                elif stem in FEATURE_BRANCH_SPECIAL_FILES:
+                    # Special files like onramp-external -> .env.external
+                    dest_name = FEATURE_BRANCH_SPECIAL_FILES[stem]
+                    dest = self.services_enabled / dest_name
+                    migrations.append((env_file, dest, f"special config ({dest_name})"))
                 else:
-                    custom_vars[var_name] = var_data
-            print(f"  Processed: onramp.env ({len(all_vars)} vars)")
+                    # Service-specific files -> {service}.env
+                    dest = self.services_enabled / f"{stem}.env"
+                    migrations.append((env_file, dest, f"service config ({stem})"))
 
-        # Process other env files (onramp-external.env, onramp-nfs.env, service-specific)
-        for env_file in self.environments_enabled.glob("*.env"):
-            if env_file.name == "onramp.env":
-                continue  # Already processed
-
-            all_vars = self.parse_env_file(env_file)
-
-            # Determine service name from filename
-            service_name = env_file.stem
-            if service_name.startswith("onramp-"):
-                # onramp-external.env -> .env.external, onramp-nfs.env -> .env.nfs
-                suffix = service_name[7:]  # Remove "onramp-"
-                for var_name, var_data in all_vars.items():
-                    # These go to custom.env since they're specialized configs
-                    custom_vars[var_name] = var_data
-            else:
-                # Service-specific env file
-                if service_name not in service_vars:
-                    service_vars[service_name] = {}
-                for var_name, var_data in all_vars.items():
-                    service_vars[service_name][var_name] = var_data
-            print(f"  Processed: {env_file.name} ({len(all_vars)} vars)")
-
-        print(f"  Global vars: {len(global_vars)}")
-        print(f"  Service-specific vars: {sum(len(v) for v in service_vars.values())} across {len(service_vars)} services")
-        print(f"  Custom/unmapped vars: {len(custom_vars)}")
+            print(f"  Found {len(migrations)} environment files to migrate:")
+            for source, dest, desc in migrations:
+                print(f"    {source.name} -> {dest.name} ({desc})")
+        else:
+            print("  No environment files found in environments-enabled/")
+            if has_templates:
+                print("  Will clean up templates directory only")
 
         if dry_run:
             print("\nDry run - no changes made")
-            print("\nGlobal vars would be written to services-enabled/.env:")
-            for var in sorted(global_vars.keys()):
-                print(f"  {var}")
-            print("\nService vars:")
-            for service, svars in sorted(service_vars.items()):
-                print(f"  {service}.env: {', '.join(sorted(svars.keys()))}")
-            if custom_vars:
-                print("\nCustom vars would be written to services-enabled/custom.env:")
-                for var in sorted(custom_vars.keys()):
-                    print(f"  {var}")
             return True
 
-        # Create services-enabled directory
-        self.services_enabled.mkdir(parents=True, exist_ok=True)
-
-        # Write global config
-        if global_vars:
-            header = "# OnRamp Global Configuration\n# Migrated from feature branch on " + datetime.now().strftime(
-                "%Y-%m-%d %H:%M:%S"
-            )
-            self.write_env_file(self.services_enabled / ".env", global_vars, header)
-            print(f"  Created: services-enabled/.env ({len(global_vars)} vars)")
-
-        # Write service-specific configs
-        for service, svars in service_vars.items():
-            header = f"# {service.upper()} Configuration\n# Migrated from feature branch on " + datetime.now().strftime(
-                "%Y-%m-%d %H:%M:%S"
-            )
-            self.write_env_file(self.services_enabled / f"{service}.env", svars, header)
-            print(f"  Created: services-enabled/{service}.env ({len(svars)} vars)")
-
-        # Write unmapped variables to custom.env
-        if custom_vars:
-            header = "# Custom/Unmapped Variables\n# Migrated from feature branch on " + datetime.now().strftime(
-                "%Y-%m-%d %H:%M:%S"
-            )
-            self.write_env_file(self.services_enabled / "custom.env", custom_vars, header)
-            print(f"  Created: services-enabled/custom.env ({len(custom_vars)} vars)")
-
-        # Backup and remove environments-enabled/
+        # Create backup directory
         self.backups_dir.mkdir(parents=True, exist_ok=True)
-        backup_path = self.backups_dir / "environments-enabled.legacy"
-        if backup_path.exists():
-            shutil.rmtree(backup_path)
-        shutil.copytree(self.environments_enabled, backup_path)
-        print(f"  Backed up: environments-enabled/ -> {backup_path}")
 
-        shutil.rmtree(self.environments_enabled)
-        print("  Removed: environments-enabled/")
+        # Perform env file migrations if any
+        if migrations:
+            # Create services-enabled directory
+            self.services_enabled.mkdir(parents=True, exist_ok=True)
+
+            timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            for source, dest, desc in migrations:
+                content = source.read_text()
+                header = f"# OnRamp Configuration\n# Migrated from feature branch on {timestamp}\n# Original: {source.name}\n"
+
+                with open(dest, "w") as f:
+                    f.write(header)
+                    f.write("\n")
+                    f.write(content)
+
+                print(f"  Created: {dest.name}")
+
+        # Backup and remove environments-enabled/ if it exists
+        if has_env_dir:
+            backup_path = self.backups_dir / "environments-enabled.legacy"
+            if backup_path.exists():
+                shutil.rmtree(backup_path)
+            shutil.copytree(self.environments_enabled, backup_path)
+            print(f"  Backed up: environments-enabled/ -> backups/environments-enabled.legacy/")
+
+            shutil.rmtree(self.environments_enabled)
+            print("  Removed: environments-enabled/")
+
+        # Clean up environments-available/ templates if they exist
+        if has_templates:
+            templates_backup = self.backups_dir / "environments-available.legacy"
+            if templates_backup.exists():
+                shutil.rmtree(templates_backup)
+            shutil.copytree(self.environments_available, templates_backup)
+            print(f"  Backed up: environments-available/ -> backups/environments-available.legacy/")
+
+            shutil.rmtree(self.environments_available)
+            print("  Removed: environments-available/")
 
         print("\nMigration complete!")
         return True
@@ -397,8 +397,8 @@ class EnvMigrator:
             for var in sorted(global_vars.keys()):
                 print(f"  {var}")
             print("\nService vars:")
-            for service, vars in sorted(service_vars.items()):
-                print(f"  {service}.env: {', '.join(sorted(vars.keys()))}")
+            for service, svars in sorted(service_vars.items()):
+                print(f"  {service}.env: {', '.join(sorted(svars.keys()))}")
             if custom_vars:
                 print("\nCustom vars would be written to services-enabled/custom.env:")
                 for var in sorted(custom_vars.keys()):
@@ -417,12 +417,12 @@ class EnvMigrator:
             print(f"  Created: services-enabled/.env ({len(global_vars)} vars)")
 
         # Write service-specific configs
-        for service, vars in service_vars.items():
+        for service, svars in service_vars.items():
             header = f"# {service.upper()} Configuration\n# Migrated from legacy .env on " + datetime.now().strftime(
                 "%Y-%m-%d %H:%M:%S"
             )
-            self.write_env_file(self.services_enabled / f"{service}.env", vars, header)
-            print(f"  Created: services-enabled/{service}.env ({len(vars)} vars)")
+            self.write_env_file(self.services_enabled / f"{service}.env", svars, header)
+            print(f"  Created: services-enabled/{service}.env ({len(svars)} vars)")
 
         # Write unmapped variables to custom.env
         if custom_vars:
