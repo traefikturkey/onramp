@@ -39,6 +39,31 @@ Core configuration variables are extracted to the global env file:
 | `AZURE_*` | Azure DNS settings |
 | `ONRAMP_BACKUP_*` | Backup configuration |
 
+### NFS Variables → `services-enabled/.env.nfs`
+
+NFS and SAMBA mount configuration variables:
+
+| Prefix | Description |
+|--------|-------------|
+| `NFS_*` | NFS server and path settings |
+| `SAMBA_*` | SAMBA share settings |
+
+### External Service Variables → `services-enabled/.env.external`
+
+Variables for proxying to external devices/services not managed by OnRamp:
+
+| Prefix | Description |
+|--------|-------------|
+| `HOMEASSISTANT_*` | Home Assistant proxy |
+| `IDRAC_*` | Dell iDRAC proxy |
+| `PROXMOX_*` | Proxmox VE proxy |
+| `TRUENAS_*` | TrueNAS proxy |
+| `SYNOLOGY_*` | Synology NAS proxy |
+| `PFSENSE_*` / `OPNSENSE_*` | Firewall proxies |
+| `PBS_*` | Proxmox Backup Server |
+| `RANCHER_*` | Rancher proxy |
+| `PIHOLE_ADDRESS` / `PIHOLE_HOST_NAME` | External Pi-hole proxy |
+
 ### Service Variables → `services-enabled/<service>.env`
 
 Variables are automatically categorized by their prefix:
@@ -48,7 +73,7 @@ Variables are automatically categorized by their prefix:
 | `ADGUARD_*` | `adguard.env` |
 | `PLEX_*` | `plex.env` |
 | `JELLYFIN_*` | `jellyfin.env` |
-| `PIHOLE_*` | `pihole.env` |
+| `PIHOLE_*` (except ADDRESS/HOST_NAME) | `pihole.env` |
 | `NEXTCLOUD_*` | `nextcloud.env` |
 | `POSTGRES_*` | `postgres.env` |
 | ... | ... |
@@ -57,7 +82,7 @@ Over 80 service prefixes are recognized. See `sietch/scripts/migrate-env.py` for
 
 ### Unmapped Variables → `services-enabled/custom.env`
 
-Any variables that don't match a known global or service pattern are preserved in `custom.env`. This ensures no configuration is lost during migration.
+Any variables that don't match a known global, NFS, external, or service pattern are preserved in `custom.env`. This ensures no configuration is lost during migration.
 
 ## Backup Location
 
@@ -72,7 +97,7 @@ The backup preserves the exact contents of your original file, including comment
 
 1. **Detection**: System detects `.env` exists and `services-enabled/.env` doesn't
 2. **Parsing**: All variables are read, preserving comments
-3. **Categorization**: Variables sorted into global, service-specific, or custom buckets
+3. **Categorization**: Variables sorted into global, NFS, external, service-specific, or custom buckets
 4. **Writing**: New modular files created with migration headers
 5. **Backup**: Original `.env` copied to `backups/.env.legacy`
 6. **Cleanup**: Original `.env` removed
@@ -86,7 +111,9 @@ make migrate-env-dry-run
 ```
 
 This shows:
-- Which variables would go to global config
+- Which variables would go to global config (`.env`)
+- Which variables would go to NFS config (`.env.nfs`)
+- Which variables would go to external config (`.env.external`)
 - Which variables would go to each service file
 - Which variables would go to custom.env
 
@@ -105,9 +132,11 @@ This removes `services-enabled/.env` and runs migration again.
 After migration completes:
 
 1. **Verify global config**: `make edit-env-onramp`
-2. **Check service configs**: `make edit-env <service>`
-3. **Review custom variables**: `make edit-env-custom`
-4. **Test your setup**: `make start-staging`
+2. **Check NFS config**: `make edit-env-nfs`
+3. **Check external services**: `make edit-env-external`
+4. **Check service configs**: `make edit-env <service>`
+5. **Review custom variables**: `make edit-env-custom`
+6. **Test your setup**: `make start-staging`
 
 ## Example Migration
 
@@ -119,6 +148,14 @@ CF_DNS_API_TOKEN=abc123
 HOST_NAME=server
 HOST_DOMAIN=example.com
 TZ=US/Eastern
+
+# NFS settings
+NFS_SERVER=nfs.example.com
+NFS_MEDIA_PATH=/mnt/media
+
+# External services
+PROXMOX_ADDRESS=192.168.1.100
+PROXMOX_HOST_NAME=pve
 
 # Plex settings
 PLEX_CLAIM=claim-xxxxx
@@ -143,6 +180,24 @@ CF_DNS_API_TOKEN=abc123
 HOST_NAME=server
 HOST_DOMAIN=example.com
 TZ=US/Eastern
+```
+
+**`services-enabled/.env.nfs`**
+```bash
+# NFS/SAMBA Configuration
+# Migrated from legacy .env on 2024-01-15 10:30:00
+
+NFS_SERVER=nfs.example.com
+NFS_MEDIA_PATH=/mnt/media
+```
+
+**`services-enabled/.env.external`**
+```bash
+# External Service Proxying
+# Migrated from legacy .env on 2024-01-15 10:30:00
+
+PROXMOX_ADDRESS=192.168.1.100
+PROXMOX_HOST_NAME=pve
 ```
 
 **`services-enabled/plex.env`**
