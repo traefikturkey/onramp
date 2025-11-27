@@ -25,14 +25,35 @@ fix-acme-json-permissions:
 		fi \
 	fi
 
-build: install-dependencies .env $(BUILD_DEPENDENCIES)
+build: install-dependencies ensure-env migrate-legacy-env $(BUILD_DEPENDENCIES)
 #@echo "build steps completed"
 
 install: build install-docker
 
+# Ensure environment is configured (new modular system or legacy)
+ensure-env: services-enabled/.env
+	@true
+
+# Create services-enabled/.env from template if needed
+services-enabled/.env:
+	@mkdir -p services-enabled
+	@if [ -f .env ]; then \
+		echo "Legacy .env found - will be migrated during build"; \
+	elif [ -f services-scaffold/onramp/.env.template ]; then \
+		echo "Creating initial environment configuration..."; \
+		$(MAKE) scaffold-build onramp || cp services-scaffold/onramp/.env.template services-enabled/.env; \
+		$(EDITOR) services-enabled/.env; \
+	else \
+		echo "No environment template found. Creating minimal .env..."; \
+		touch services-enabled/.env; \
+	fi
+
+# Legacy .env target for backwards compatibility
 .env:
-	cp --no-clobber .templates/env.template .env
-	$(EDITOR) .env
+	@if [ ! -f services-enabled/.env ]; then \
+		cp --no-clobber .templates/env.template .env; \
+		$(EDITOR) .env; \
+	fi
 
 REPOS = ansible/ansible
 MISSING_REPOS := $(foreach repo,$(REPOS),$(if $(shell apt-cache policy | grep $(repo)),,addrepo/$(repo))) 
