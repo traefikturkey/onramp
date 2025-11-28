@@ -126,6 +126,8 @@ BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),build_radarr_dirs)
 endif
 
 build_radarr_dirs:
+	@mkdir -p ./etc/radarr/custom-services.d
+	@mkdir -p ./etc/radarr/custom-cont-init.d
 	@if [ -z "$$(ls -A ./etc/radarr/custom-services.d 2>/dev/null)" ]; then \
 		echo "custom-services.d is empty → downloading scripts_init.bash"; \
 		wget -q -P ./etc/radarr/custom-cont-init.d \
@@ -136,13 +138,6 @@ build_radarr_dirs:
 			rm -f ./etc/radarr/custom-cont-init.d/scripts_init.bash; \
 			echo "Removed ./etc/radarr/custom-cont-init.d/scripts_init.bash"; \
 		fi; \
-	fi
-
-	@if [ ! -f ./etc/radarr/extended.conf ]; then \
-		echo "extended.conf not found → creating from template"; \
-		cp ./.templates/radarr_extended.template ./etc/radarr/extended.conf; \
-	else \
-		echo "extended.conf already exists → skipping creation"; \
 	fi
 	@chown -R $$USER:$$USER ./etc/radarr 2>/dev/null || true
 	@chmod g+s ./etc/radarr
