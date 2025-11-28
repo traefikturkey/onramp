@@ -93,16 +93,17 @@ async def service_detail(request: Request, name: str):
     docker = request.app.state.docker
 
     service = services_mgr.get_service_info(name)
-    
+
     # Handle core services (like traefik) that aren't in services-available
     if not service and name in CORE_SERVICES:
         container = docker.get_container(name)
         if container:
             # Check for etc/ directory
             from pathlib import Path
+
             base_dir = Path("/app")
             has_etc = (base_dir / "etc" / name).exists()
-            
+
             service = {
                 "name": name,
                 "description": f"Core service - {name}",

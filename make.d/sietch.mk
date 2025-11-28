@@ -24,6 +24,12 @@ sietch-rebuild: ## Force rebuild of Sietch container
 sietch-shell: sietch-build ## Open a shell in the Sietch container
 	docker run --rm -it -v $(shell pwd):/app -u $(PUID):$(PGID) $(SIETCH_IMAGE) /bin/bash
 
+sietch-test: ## Run dashboard unit tests
+	@./sietch/run-tests.sh
+
+sietch-test-cov: ## Run dashboard tests with coverage report
+	@./sietch/run-tests.sh -v --cov=/dashboard --cov-report=term-missing
+
 #########################################################
 ##
 ## Environment Migration

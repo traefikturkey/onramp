@@ -1,4 +1,4 @@
-FROM python:3.12-slim
+FROM python:3.14-slim
 
 LABEL maintainer="OnRamp Project"
 LABEL description="Tool container for OnRamp scaffolding and dashboard"
