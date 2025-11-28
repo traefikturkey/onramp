@@ -14,4 +14,4 @@ services:
     environment:
       - PYTHONDONTWRITEBYTECODE=1
     entrypoint: ["/app/.venv/bin/pytest"]
-    command: ["-v", "/tests"]
+    command: ["-v", "-p", "no:cacheprovider", "/tests"]
