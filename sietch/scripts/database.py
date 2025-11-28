@@ -22,32 +22,38 @@ Features:
 import argparse
 import os
 import secrets
-import subprocess
 import sys
 from pathlib import Path
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from ports.docker import DockerExecutor
 
 
 class DatabaseManager:
     """Manages MariaDB operations via docker exec."""
 
-    def __init__(self, container_name: str = "mariadb", base_dir: str = "/app"):
+    def __init__(
+        self,
+        container_name: str = "mariadb",
+        base_dir: str = "/app",
+        docker: "DockerExecutor | None" = None,
+    ):
         self.container_name = container_name
         self.base_dir = Path(base_dir)
         self.password_file = self.base_dir / ".generated_passwords"
 
+        # Use injected docker executor or create default
+        if docker is not None:
+            self._docker = docker
+        else:
+            from adapters.docker_subprocess import SubprocessDockerExecutor
+
+            self._docker = SubprocessDockerExecutor()
+
     def _docker_exec(self, cmd: list[str], interactive: bool = False) -> tuple[int, str, str]:
         """Execute command in docker container."""
-        docker_cmd = ["docker", "exec"]
-        if interactive:
-            docker_cmd.extend(["-it"])
-        docker_cmd.extend([self.container_name])
-        docker_cmd.extend(cmd)
-
-        try:
-            result = subprocess.run(docker_cmd, capture_output=not interactive, text=True)
-            return result.returncode, result.stdout or "", result.stderr or ""
-        except Exception as e:
-            return 1, "", str(e)
+        return self._docker.exec(self.container_name, cmd, interactive)
 
     def _mysql_exec(self, sql: str, needs_password: bool = True) -> tuple[int, str, str]:
         """Execute SQL via mysql client in container."""

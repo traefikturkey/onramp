@@ -14,12 +14,13 @@ Implements operation handlers for scaffold.yml manifests:
 
 import os
 import shutil
-import subprocess
-import urllib.request
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from ports.command import CommandExecutor
 
 
 @dataclass
@@ -31,6 +32,14 @@ class OperationContext:
     scaffold_dir: Path
     etc_dir: Path
     services_enabled: Path
+    command_executor: "CommandExecutor | None" = field(default=None)
+
+    def __post_init__(self):
+        """Initialize command executor if not provided."""
+        if self.command_executor is None:
+            from adapters.subprocess_cmd import SubprocessCommandExecutor
+
+            self.command_executor = SubprocessCommandExecutor()
 
     def resolve_path(self, path: str) -> Path:
         """Resolve a path relative to etc/<service>/."""
@@ -116,7 +125,8 @@ class GenerateRsaKeyOp(Operation):
 
     def execute(self) -> bool:
         private_path = self.resolve_path(self.config["output"])
-        public_path = self.resolve_path(self.config.get("public_key", ""))
+        public_key_name = self.config.get("public_key", "")
+        public_path = self.resolve_path(public_key_name) if public_key_name else None
         bits = self.config.get("bits", 2048)
         skip_if_exists = self.config.get("skip_if_exists", True)
 
@@ -130,31 +140,36 @@ class GenerateRsaKeyOp(Operation):
             private_path.parent.mkdir(parents=True, exist_ok=True)
 
             # Generate private key
-            result = subprocess.run(
+            executor = self.ctx.command_executor
+            result = executor.run(
                 ["openssl", "genpkey", "-algorithm", "RSA", "-pkeyopt", f"rsa_keygen_bits:{bits}"],
                 capture_output=True,
                 check=True,
             )
-            private_path.write_bytes(result.stdout)
+            if result.returncode != 0:
+                print(f"    OpenSSL error: {result.stderr}")
+                return False
+
+            private_path.write_text(result.stdout)
             private_path.chmod(0o644)
             print(f"    Generated private key: {private_path}")
 
             # Extract public key if requested
             if public_path:
-                result = subprocess.run(
+                result = executor.run(
                     ["openssl", "rsa", "-pubout"],
-                    input=private_path.read_bytes(),
+                    input=private_path.read_text(),
                     capture_output=True,
                     check=True,
                 )
-                public_path.write_bytes(result.stdout)
+                if result.returncode != 0:
+                    print(f"    OpenSSL error: {result.stderr}")
+                    return False
+                public_path.write_text(result.stdout)
                 public_path.chmod(0o644)
                 print(f"    Extracted public key: {public_path}")
 
             return True
-        except subprocess.CalledProcessError as e:
-            print(f"    OpenSSL error: {e.stderr.decode()}")
-            return False
         except Exception as e:
             print(f"    Error generating RSA key: {e}")
             return False
@@ -176,18 +191,20 @@ class GenerateRandomOp(Operation):
         try:
             output_path.parent.mkdir(parents=True, exist_ok=True)
 
-            result = subprocess.run(
+            executor = self.ctx.command_executor
+            result = executor.run(
                 ["openssl", "rand", f"-{encoding}", str(num_bytes)],
                 capture_output=True,
                 check=True,
             )
-            output_path.write_bytes(result.stdout)
+            if result.returncode != 0:
+                print(f"    OpenSSL error: {result.stderr}")
+                return False
+
+            output_path.write_text(result.stdout)
             output_path.chmod(0o644)
             print(f"    Generated random data: {output_path}")
             return True
-        except subprocess.CalledProcessError as e:
-            print(f"    OpenSSL error: {e.stderr.decode()}")
-            return False
         except Exception as e:
             print(f"    Error generating random data: {e}")
             return False
@@ -210,20 +227,22 @@ class DownloadOp(Operation):
             output_path.parent.mkdir(parents=True, exist_ok=True)
 
             # Use wget for downloads (more reliable with redirects)
-            result = subprocess.run(
+            executor = self.ctx.command_executor
+            result = executor.run(
                 ["wget", "-q", "-O", str(output_path), url],
                 capture_output=True,
                 check=True,
             )
+            if result.returncode != 0:
+                print(f"    Download error: {result.stderr or 'unknown error'}")
+                return False
+
             print(f"    Downloaded: {url} -> {output_path}")
 
             if mode:
                 output_path.chmod(int(mode, 8))
 
             return True
-        except subprocess.CalledProcessError as e:
-            print(f"    Download error: {e.stderr.decode() if e.stderr else 'unknown error'}")
-            return False
         except Exception as e:
             print(f"    Error downloading {url}: {e}")
             return False
@@ -272,12 +291,14 @@ class ChownOp(Operation):
                 cmd.append("-R")
             cmd.extend([ownership, str(path)])
 
-            subprocess.run(cmd, check=True, capture_output=True)
+            executor = self.ctx.command_executor
+            result = executor.run(cmd, capture_output=True, check=True)
+            if result.returncode != 0:
+                # chown may fail in containers - treat as warning
+                print(f"    Warning: chown failed (may be expected in container): {result.stderr}")
+                return True
+
             print(f"    Changed ownership: {path} -> {ownership}")
-            return True
-        except subprocess.CalledProcessError as e:
-            # chown may fail in containers - treat as warning
-            print(f"    Warning: chown failed (may be expected in container): {e}")
             return True
         except Exception as e:
             print(f"    Error changing ownership of {path}: {e}")
@@ -302,12 +323,14 @@ class ChmodOp(Operation):
                 cmd.append("-R")
             cmd.extend([mode, str(path)])
 
-            subprocess.run(cmd, check=True, capture_output=True)
+            executor = self.ctx.command_executor
+            result = executor.run(cmd, capture_output=True, check=True)
+            if result.returncode != 0:
+                print(f"    Error: chmod failed: {result.stderr}")
+                return False
+
             print(f"    Changed permissions: {path} -> {mode}")
             return True
-        except subprocess.CalledProcessError as e:
-            print(f"    Error: chmod failed: {e}")
-            return False
         except Exception as e:
             print(f"    Error changing permissions of {path}: {e}")
             return False
