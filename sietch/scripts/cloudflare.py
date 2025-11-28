@@ -20,8 +20,10 @@ import argparse
 import json
 import os
 import sys
-from urllib.request import Request, urlopen
-from urllib.error import HTTPError, URLError
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from ports.http import HttpClient
 
 
 class CloudflareAPI:
@@ -29,7 +31,12 @@ class CloudflareAPI:
 
     BASE_URL = "https://api.cloudflare.com/client/v4"
 
-    def __init__(self, api_token: str | None = None, domain: str | None = None):
+    def __init__(
+        self,
+        api_token: str | None = None,
+        domain: str | None = None,
+        http_client: "HttpClient | None" = None,
+    ):
         self.api_token = api_token or os.environ.get("CF_DNS_API_TOKEN", "")
         self.domain = domain or os.environ.get("HOST_DOMAIN", "")
 
@@ -37,6 +44,14 @@ class CloudflareAPI:
             raise ValueError("CF_DNS_API_TOKEN environment variable not set")
         if not self.domain:
             raise ValueError("HOST_DOMAIN environment variable not set")
+
+        # Use injected client or create default
+        if http_client is not None:
+            self._http = http_client
+        else:
+            from adapters.urllib_http import UrllibHttpClient
+
+            self._http = UrllibHttpClient()
 
     def _request(self, method: str, endpoint: str, data: dict | None = None) -> dict:
         """Make API request."""
@@ -47,23 +62,21 @@ class CloudflareAPI:
         }
 
         body = json.dumps(data).encode() if data else None
-        req = Request(url, data=body, headers=headers, method=method)
+
+        status, response_body = self._http.request(method, url, headers, body, timeout=30)
 
         try:
-            with urlopen(req, timeout=30) as response:
-                return json.loads(response.read().decode())
-        except HTTPError as e:
-            error_body = e.read().decode()
-            try:
-                error_json = json.loads(error_body)
-                errors = error_json.get("errors", [])
-                if errors:
-                    raise RuntimeError(f"API Error: {errors[0].get('message', 'Unknown error')}")
-            except json.JSONDecodeError:
-                pass
-            raise RuntimeError(f"HTTP {e.code}: {error_body}")
-        except URLError as e:
-            raise RuntimeError(f"Network error: {e.reason}")
+            result = json.loads(response_body.decode())
+        except json.JSONDecodeError:
+            raise RuntimeError(f"HTTP {status}: {response_body.decode()}")
+
+        if status >= 400:
+            errors = result.get("errors", [])
+            if errors:
+                raise RuntimeError(f"API Error: {errors[0].get('message', 'Unknown error')}")
+            raise RuntimeError(f"HTTP {status}: {response_body.decode()}")
+
+        return result
 
     def get_zone_id(self) -> str:
         """Get zone ID for the configured domain."""

@@ -28,9 +28,12 @@ import argparse
 import fnmatch
 import os
 import shutil
-import subprocess
 import sys
 from pathlib import Path
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from ports.command import CommandExecutor
 
 try:
     import yaml
@@ -59,12 +62,24 @@ IGNORE_PATTERNS = [
 class Scaffolder:
     """Handles scaffolding operations for services."""
 
-    def __init__(self, base_dir: str = "/app"):
+    def __init__(
+        self,
+        base_dir: str = "/app",
+        executor: "CommandExecutor | None" = None,
+    ):
         self.base_dir = Path(base_dir)
         self.scaffold_dir = self.base_dir / "services-scaffold"
         self.services_enabled = self.base_dir / "services-enabled"
         self.services_available = self.base_dir / "services-available"
         self.etc_dir = self.base_dir / "etc"
+
+        # Use injected executor or create default
+        if executor is not None:
+            self._executor = executor
+        else:
+            from adapters.subprocess_cmd import SubprocessCommandExecutor
+
+            self._executor = SubprocessCommandExecutor()
 
     def _should_ignore(self, path: Path) -> bool:
         """Check if a file should be ignored (not copied)."""
@@ -133,22 +148,22 @@ class Scaffolder:
             with open(source, "r") as f:
                 template_content = f.read()
 
-            result = subprocess.run(
+            result = self._executor.run(
                 ["envsubst"],
                 input=template_content,
                 capture_output=True,
-                text=True,
                 check=True,
             )
+
+            if result.returncode != 0:
+                print(f"  Error rendering {source}: {result.stderr}", file=sys.stderr)
+                return False
 
             with open(dest, "w") as f:
                 f.write(result.stdout)
 
             print(f"  Rendered: {source.name} -> {dest}")
             return True
-        except subprocess.CalledProcessError as e:
-            print(f"  Error rendering {source}: {e.stderr}", file=sys.stderr)
-            return False
         except Exception as e:
             print(f"  Error rendering {source}: {e}", file=sys.stderr)
             return False
@@ -288,13 +303,14 @@ class Scaffolder:
             print(f"  Unsupported manifest version: {version}", file=sys.stderr)
             return False
 
-        # Create context
+        # Create context (share executor with operations)
         ctx = OperationContext(
             service=service,
             base_dir=self.base_dir,
             scaffold_dir=self.scaffold_dir,
             etc_dir=self.etc_dir,
             services_enabled=self.services_enabled,
+            command_executor=self._executor,
         )
 
         # Execute operations in order

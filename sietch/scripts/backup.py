@@ -19,10 +19,13 @@ Features:
 import argparse
 import fnmatch
 import os
-import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from ports.command import CommandExecutor
 
 
 # Default exclusions
@@ -42,25 +45,34 @@ BACKUP_DIRS = [
 class BackupManager:
     """Manages backup and restore operations."""
 
-    def __init__(self, base_dir: str = "/app"):
+    def __init__(
+        self,
+        base_dir: str = "/app",
+        executor: "CommandExecutor | None" = None,
+    ):
         self.base_dir = Path(base_dir)
         self.backup_dir = self.base_dir / "backups"
-        self.hostname = os.environ.get("HOST_NAME", os.uname().nodename)
+        self.hostname = os.environ.get("HOST_NAME", "unknown")
 
         # NFS settings from environment
         self.nfs_server = os.environ.get("NFS_SERVER", "")
         self.nfs_backup_path = os.environ.get("NFS_BACKUP_PATH", "")
         self.nfs_tmp_dir = Path(os.environ.get("NFS_BACKUP_TMP_DIR", "/tmp/nfs_backup"))
 
+        # Use injected executor or create default
+        if executor is not None:
+            self._executor = executor
+        else:
+            from adapters.subprocess_cmd import SubprocessCommandExecutor
+
+            self._executor = SubprocessCommandExecutor()
+
     def _run_cmd(self, cmd: list[str], sudo: bool = False) -> tuple[int, str, str]:
         """Run a shell command."""
         if sudo:
             cmd = ["sudo"] + cmd
-        try:
-            result = subprocess.run(cmd, capture_output=True, text=True)
-            return result.returncode, result.stdout, result.stderr
-        except Exception as e:
-            return 1, "", str(e)
+        result = self._executor.run(cmd)
+        return result.returncode, result.stdout, result.stderr
 
     def ensure_backup_dir(self) -> bool:
         """Ensure backup directory exists."""
