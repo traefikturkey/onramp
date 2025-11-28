@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}Backups - OnRamp{% endblock %}
+
+{% block content %}
+<h1>Backup Management</h1>
+
+<div class="grid">
+    <article>
+        <header>Backups</header>
+        <p>
+            <strong>{{ backup_count }}</strong> backups<br>
+            <small>Total size: {{ total_size }}</small>
+        </p>
+    </article>
+
+    <article>
+        <header>Create Backup</header>
+        <p>Create a new backup of your configuration.</p>
+        <footer>
+            <button
+                hx-post="/api/backups/create"
+                hx-swap="none"
+                hx-indicator="#backup-spinner"
+                hx-on::after-request="if(event.detail.successful) { location.reload(); } else { showToast('Backup failed', 'error'); }">
+                Create Backup
+            </button>
+            <span id="backup-spinner" class="htmx-indicator">Creating...</span>
+        </footer>
+    </article>
+</div>
+
+<section>
+    <h2>Available Backups</h2>
+
+    {% if backups %}
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Size</th>
+                <th>Created</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for backup in backups %}
+            <tr id="backup-{{ loop.index }}">
+                <td><code>{{ backup.name }}</code></td>
+                <td>{{ backup.size_human }}</td>
+                <td>{{ backup.created.strftime('%Y-%m-%d %H:%M') }}</td>
+                <td>
+                    <button
+                        class="outline small"
+                        hx-post="/api/backups/restore/{{ backup.name }}"
+                        hx-swap="none"
+                        hx-confirm="Are you sure you want to restore from {{ backup.name }}? This will overwrite current configuration."
+                        hx-on::after-request="if(event.detail.successful) { showToast('Restore complete', 'success'); } else { showToast('Restore failed', 'error'); }">
+                        Restore
+                    </button>
+                    <button
+                        class="outline secondary small"
+                        hx-delete="/api/backups/{{ backup.name }}"
+                        hx-swap="none"
+                        hx-confirm="Delete backup {{ backup.name }}?"
+                        hx-on::after-request="if(event.detail.successful) { document.getElementById('backup-{{ loop.index }}').remove(); showToast('Deleted', 'success'); }">
+                        Delete
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <article>
+        <p>No backups found. Create your first backup above.</p>
+    </article>
+    {% endif %}
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function showToast(message, type) {
+    const toast = document.createElement('div');
+    toast.className = 'toast toast-' + type;
+    toast.textContent = message;
+    toast.style.cssText = 'position:fixed;bottom:20px;right:20px;padding:1rem;border-radius:4px;background:' +
+        (type === 'success' ? 'var(--pico-primary)' : 'var(--pico-del-color)') + ';color:white;z-index:1000;';
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+}
+</script>
+{% endblock %}
