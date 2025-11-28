@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Services - OnRamp{% endblock %}
+
+{% block content %}
+<h1>Available Services</h1>
+
+<!-- Search and Filter -->
+<div class="grid">
+    <form action="/services" method="get">
+        <input
+            type="search"
+            name="q"
+            placeholder="Search services..."
+            value="{{ search_query or '' }}"
+            aria-label="Search services">
+    </form>
+
+    <details class="dropdown">
+        <summary role="button" class="outline">
+            {{ current_category or 'All Categories' }}
+        </summary>
+        <ul>
+            <li><a href="/services">All Categories</a></li>
+            {% for cat in categories %}
+            <li><a href="/services?category={{ cat }}">{{ cat | title }}</a></li>
+            {% endfor %}
+        </ul>
+    </details>
+</div>
+
+<!-- Results info -->
+<p><small>Showing {{ services | length }} services</small></p>
+
+<!-- Service Grid -->
+{% if services %}
+<div class="service-grid">
+    {% for service in services %}
+    <article class="service-card">
+        <header>
+            <strong>{{ service.name }}</strong>
+            {% if service.enabled %}
+            <span class="status-badge enabled">Enabled</span>
+            {% endif %}
+            {% if service.category %}
+            <span class="category-badge">{{ service.category }}</span>
+            {% endif %}
+        </header>
+
+        <p class="service-description">
+            {{ service.description or 'No description available' }}
+        </p>
+
+        <footer>
+            {% if service.url %}
+            <a href="{{ service.url }}" target="_blank" rel="noopener" class="secondary">
+                <small>Documentation ↗</small>
+            </a>
+            {% endif %}
+            <a href="/services/{{ service.name }}" role="button" class="outline">
+                {% if service.enabled %}Manage{% else %}Enable{% endif %}
+            </a>
+        </footer>
+    </article>
+    {% endfor %}
+</div>
+{% else %}
+<article>
+    <p>No services found matching your criteria.</p>
+    <p><a href="/services">View all services</a></p>
+</article>
+{% endif %}
+{% endblock %}

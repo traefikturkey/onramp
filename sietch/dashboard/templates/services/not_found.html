@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Service Not Found - OnRamp{% endblock %}
+
+{% block content %}
+<article>
+    <header>
+        <h1>Service Not Found</h1>
+    </header>
+    <p>The service <strong>{{ name }}</strong> was not found.</p>
+    <p><a href="/services" role="button">Browse Available Services</a></p>
+</article>
+{% endblock %}

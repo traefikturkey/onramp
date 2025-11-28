@@ -15,12 +15,9 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Install Python dependencies
-# - pyyaml: for scaffold.yml manifest parsing
-# - click: for CLI argument parsing (optional, using argparse instead)
-# - rich: for progress bars and formatted output (optional for now)
-# - requests: for HTTP API calls (cloudflare.py uses urllib for zero deps)
-RUN pip install --no-cache-dir pyyaml
+# Install Python dependencies from requirements.txt
+COPY requirements.txt /requirements.txt
+RUN pip install --no-cache-dir -r /requirements.txt
 
 # Create app directory
 WORKDIR /app
@@ -28,8 +25,15 @@ WORKDIR /app
 # Copy scripts
 COPY scripts/ /scripts/
 
+# Copy dashboard application
+COPY dashboard/ /dashboard/
+
 # Make scripts executable
 RUN chmod +x /scripts/*.py
 
-# Default command shows help
-CMD ["python", "/scripts/scaffold.py", "--help"]
+# Expose dashboard port
+EXPOSE 8000
+
+# Default command: run dashboard
+# For scripts-only mode, override with: CMD ["python", "/scripts/scaffold.py", "--help"]
+CMD ["uvicorn", "dashboard.app:app", "--factory", "--host", "0.0.0.0", "--port", "8000"]
