@@ -1,0 +1,6 @@
+After enabling, update the secret key:
+
+1. Edit etc/searxng/settings.yml
+2. Change secret_key from "CHANGEME!" to a secure random string
+3. Restart the service:
+   make restart-service searxng

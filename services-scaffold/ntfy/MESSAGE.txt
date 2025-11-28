@@ -1,0 +1,15 @@
+After first start, configure authentication and web push:
+
+1. Create an admin user:
+   docker exec -it ntfy ntfy user add --role=admin <username>
+
+2. Generate web push keys (for browser notifications):
+   docker exec -it ntfy ntfy webpush keys
+
+3. Add the keys to your environment:
+   make edit-env ntfy
+   # Set NTFY_WEB_PUSH_PUBLIC_KEY, NTFY_WEB_PUSH_PRIVATE_KEY,
+   # and NTFY_WEB_PUSH_EMAIL_ADDRESS
+
+4. Restart to apply:
+   make restart-service ntfy

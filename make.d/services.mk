@@ -184,20 +184,6 @@ services-dev:
 
 #########################################################
 ##
-## DNS Setup (CoreDNS/PiHole)
-##
-#########################################################
-
-setup-coredns: prep-dns
-	mkdir -p ./etc/coredns
-	touch ./etc/coredns/Corefile.pihole
-
-prep-dns:
-	sudo sed -i 's/#DNSStubListener=yes/DNSStubListener=no/' /etc/systemd/resolved.conf
-	sudo systemctl restart systemd-resolved
-
-#########################################################
-##
 ## Service-Specific Commands
 ##
 #########################################################
@@ -214,10 +200,3 @@ pull-model: ## Pull ollama model
 
 update-ollama-models:
 	$(shell pwd)/make.d/scripts/update-ollama-models.sh --docker
-
-# Prestashop
-remove-presta-install-folder:
-	@sudo rm -rf etc/prestashop/install/
-
-rename-presta-admin:
-	@sudo mv etc/prestashop/admin/ etc/prestashop/$(first_arg)

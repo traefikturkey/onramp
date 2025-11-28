@@ -1,0 +1,6 @@
+If running on port 53 (DNS), disable systemd-resolved first:
+
+  sudo sed -i 's/#DNSStubListener=yes/DNSStubListener=no/' /etc/systemd/resolved.conf
+  sudo systemctl restart systemd-resolved
+
+Then update /etc/resolv.conf with your primary DNS server IP.

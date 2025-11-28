@@ -1,0 +1,7 @@
+After completing the Prestashop web setup wizard:
+
+1. Remove the install directory (security requirement):
+   sudo rm -rf etc/prestashop/install/
+
+2. Rename the admin folder for security:
+   sudo mv etc/prestashop/admin/ etc/prestashop/<your-custom-name>
