@@ -24,6 +24,14 @@ x-local*
 # Sietch container build marker
 sietch/.built
 
+# Python artifacts
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+htmlcov/
+.coverage
+
 
 # https://theapache64.github.io/git-do-not-ignore/
 !media/

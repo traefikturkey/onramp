@@ -1,0 +1,13 @@
+[project]
+name = "sietch"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = ["pyyaml>=6.0"]
+
+[dependency-groups]
+dev = ["pytest>=8.0", "pytest-cov>=4.0"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["scripts"]
+addopts = ["-v", "--tb=short"]
