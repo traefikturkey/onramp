@@ -12,7 +12,7 @@ from docker.errors import NotFound, APIError
 class DockerClient:
     """Wrapper around docker-py SDK for container operations."""
 
-    def __init__(self, host: str = "tcp://docker-proxy:2375"):
+    def __init__(self, host: str = "unix:///var/run/docker.sock"):
         self.host = host
         self._client = None
 
@@ -32,30 +32,66 @@ class DockerClient:
             return []
 
     def get_container(self, name: str) -> dict | None:
-        """Get a specific container by name."""
+        """Get a specific container by name or compose service name."""
+        # First try direct name lookup
         try:
             container = self.client.containers.get(name)
             return self._container_to_dict(container)
         except NotFound:
-            return None
+            pass
         except APIError:
-            return None
+            pass
+
+        # Fall back to searching by compose service label
+        try:
+            containers = self.client.containers.list(
+                all=True, filters={"label": f"com.docker.compose.service={name}"}
+            )
+            if containers:
+                return self._container_to_dict(containers[0])
+        except APIError:
+            pass
+
+        return None
+
+    def _find_container(self, name: str):
+        """Find container by name or compose service label."""
+        try:
+            return self.client.containers.get(name)
+        except NotFound:
+            pass
+        except APIError:
+            pass
+
+        # Fall back to compose service label
+        try:
+            containers = self.client.containers.list(
+                all=True, filters={"label": f"com.docker.compose.service={name}"}
+            )
+            if containers:
+                return containers[0]
+        except APIError:
+            pass
+
+        return None
 
     def start(self, name: str) -> tuple[bool, str]:
         """Start a container."""
+        container = self._find_container(name)
+        if not container:
+            return False, f"Container {name} not found"
         try:
-            container = self.client.containers.get(name)
             container.start()
             return True, f"Container {name} started"
-        except NotFound:
-            return False, f"Container {name} not found"
         except APIError as e:
             return False, str(e)
 
     def stop(self, name: str) -> tuple[bool, str]:
         """Stop a container."""
+        container = self._find_container(name)
+        if not container:
+            return False, f"Container {name} not found"
         try:
-            container = self.client.containers.get(name)
             container.stop()
             return True, f"Container {name} stopped"
         except NotFound:
@@ -65,30 +101,32 @@ class DockerClient:
 
     def restart(self, name: str) -> tuple[bool, str]:
         """Restart a container."""
+        container = self._find_container(name)
+        if not container:
+            return False, f"Container {name} not found"
         try:
-            container = self.client.containers.get(name)
             container.restart()
             return True, f"Container {name} restarted"
-        except NotFound:
-            return False, f"Container {name} not found"
         except APIError as e:
             return False, str(e)
 
     def get_logs(self, name: str, tail: int = 100, timestamps: bool = True) -> str:
         """Get container logs."""
+        container = self._find_container(name)
+        if not container:
+            return f"Container {name} not found"
         try:
-            container = self.client.containers.get(name)
             logs = container.logs(tail=tail, timestamps=timestamps)
             return logs.decode("utf-8", errors="replace")
-        except NotFound:
-            return f"Container {name} not found"
         except APIError as e:
             return str(e)
 
     def get_stats(self, name: str) -> dict | None:
         """Get container resource stats."""
+        container = self._find_container(name)
+        if not container:
+            return None
         try:
-            container = self.client.containers.get(name)
             stats = container.stats(stream=False)
             return self._parse_stats(stats)
         except (NotFound, APIError):
@@ -118,11 +156,15 @@ class DockerClient:
 
     def _parse_stats(self, stats: dict) -> dict:
         """Parse Docker stats into readable format."""
-        cpu_delta = stats.get("cpu_stats", {}).get("cpu_usage", {}).get("total_usage", 0) - \
-                   stats.get("precpu_stats", {}).get("cpu_usage", {}).get("total_usage", 0)
-        system_delta = stats.get("cpu_stats", {}).get("system_cpu_usage", 0) - \
-                      stats.get("precpu_stats", {}).get("system_cpu_usage", 0)
-        num_cpus = len(stats.get("cpu_stats", {}).get("cpu_usage", {}).get("percpu_usage", [1]))
+        cpu_delta = stats.get("cpu_stats", {}).get("cpu_usage", {}).get(
+            "total_usage", 0
+        ) - stats.get("precpu_stats", {}).get("cpu_usage", {}).get("total_usage", 0)
+        system_delta = stats.get("cpu_stats", {}).get(
+            "system_cpu_usage", 0
+        ) - stats.get("precpu_stats", {}).get("system_cpu_usage", 0)
+        num_cpus = len(
+            stats.get("cpu_stats", {}).get("cpu_usage", {}).get("percpu_usage", [1])
+        )
 
         cpu_percent = 0.0
         if system_delta > 0 and cpu_delta > 0:
@@ -130,7 +172,9 @@ class DockerClient:
 
         memory_usage = stats.get("memory_stats", {}).get("usage", 0)
         memory_limit = stats.get("memory_stats", {}).get("limit", 1)
-        memory_percent = (memory_usage / memory_limit) * 100.0 if memory_limit > 0 else 0.0
+        memory_percent = (
+            (memory_usage / memory_limit) * 100.0 if memory_limit > 0 else 0.0
+        )
 
         return {
             "cpu_percent": round(cpu_percent, 2),

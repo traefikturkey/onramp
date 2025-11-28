@@ -34,7 +34,7 @@ class ServiceManager:
         return filename.rsplit(".yml", 1)[0] if filename.endswith(".yml") else filename
 
     def _parse_metadata(self, yml_path: Path) -> dict:
-        """Parse metadata from comment headers in YAML files."""
+        """Parse metadata from comment lines in YAML files."""
         metadata = {
             "description": None,
             "url": None,
@@ -46,9 +46,9 @@ class ServiceManager:
             with open(yml_path, "r", encoding="utf-8") as f:
                 for line in f:
                     line = line.strip()
-                    # Stop parsing at first non-comment line (except empty)
-                    if line and not line.startswith("#"):
-                        break
+                    # Parse all comment lines in the file
+                    if not line.startswith("#"):
+                        continue
 
                     if line.startswith("# description:"):
                         metadata["description"] = line.split(":", 1)[1].strip()
@@ -172,7 +172,11 @@ class ServiceManager:
                 categories[category] = []
 
             categories[category].append(
-                {"name": service, "description": metadata.get("description"), "url": metadata.get("url")}
+                {
+                    "name": service,
+                    "description": metadata.get("description"),
+                    "url": metadata.get("url"),
+                }
             )
 
         # Output by category
@@ -225,24 +229,43 @@ def main():
         help="Action to perform",
     )
     parser.add_argument("service", nargs="?", help="Service name (for info/validate)")
-    parser.add_argument("--enabled", action="store_true", help="List/count enabled services")
-    parser.add_argument("--available", action="store_true", help="List/count available services")
+    parser.add_argument(
+        "--enabled", action="store_true", help="List/count enabled services"
+    )
+    parser.add_argument(
+        "--available", action="store_true", help="List/count available services"
+    )
     parser.add_argument("--games", action="store_true", help="List games")
     parser.add_argument("--overrides", action="store_true", help="List overrides")
-    parser.add_argument("--external", action="store_true", help="List external services")
+    parser.add_argument(
+        "--external", action="store_true", help="List external services"
+    )
     parser.add_argument("--all", action="store_true", help="List all categories")
-    parser.add_argument("--base-dir", default="/app", help="Base directory (default: /app)")
+    parser.add_argument(
+        "--base-dir", default="/app", help="Base directory (default: /app)"
+    )
 
     args = parser.parse_args()
     mgr = ServiceManager(args.base_dir)
 
     if args.action == "list":
         # Default to --available if no filter specified
-        if not any([args.enabled, args.available, args.games, args.overrides, args.external, args.all]):
+        if not any(
+            [
+                args.enabled,
+                args.available,
+                args.games,
+                args.overrides,
+                args.external,
+                args.all,
+            ]
+        ):
             args.available = True
 
         if args.all:
-            args.available = args.enabled = args.games = args.overrides = args.external = True
+            args.available = args.enabled = args.games = args.overrides = (
+                args.external
+            ) = True
 
         if args.available:
             for s in mgr.list_available():

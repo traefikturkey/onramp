@@ -1,0 +1,52 @@
+<article class="service-card" id="service-{{ service.name }}">
+    <header>
+        <strong>{{ service.name }}</strong>
+        {% if service.core %}
+        <span class="status-badge core">Core</span>
+        {% endif %}
+        {% if service.container %}
+            {% if service.container.status == 'running' %}
+            <span class="status-badge running">Running</span>
+            {% elif service.container.status == 'exited' %}
+            <span class="status-badge stopped">Stopped</span>
+            {% else %}
+            <span class="status-badge">{{ service.container.status }}</span>
+            {% endif %}
+        {% else %}
+        <span class="status-badge unknown">Unknown</span>
+        {% endif %}
+    </header>
+
+    <p class="service-description">
+        {{ service.description or 'No description available' }}
+    </p>
+
+    <footer>
+        <div class="button-row">
+            {% set host_name = service.container.labels.get('joyride.host.name') if service.container and service.container.labels else none %}
+            {% if not service.core %}
+            {% if service.container and service.container.status == 'running' %}
+            <button
+                class="outline secondary"
+                hx-post="/api/docker/containers/{{ service.name }}/restart"
+                hx-swap="none"
+                hx-on::after-request="location.reload()">
+                Restart
+            </button>
+            {% else %}
+            <button
+                class="outline"
+                hx-post="/api/docker/containers/{{ service.name }}/start"
+                hx-swap="none"
+                hx-on::after-request="location.reload()">
+                Start
+            </button>
+            {% endif %}
+            {% endif %}
+            <a href="/services/{{ service.name }}" role="button" class="outline">Details</a>
+            {% if host_name %}
+            <a href="https://{{ host_name }}" target="_blank" rel="noopener" role="button" class="outline">Visit</a>
+            {% endif %}
+        </div>
+    </footer>
+</article>

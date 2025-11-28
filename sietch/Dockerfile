@@ -24,8 +24,8 @@ WORKDIR /app
 # Copy project files for dependency installation
 COPY pyproject.toml ./
 
-# Install Python dependencies with uv
-RUN uv sync --frozen --no-dev --no-install-project
+# Install Python dependencies with uv (without installing the project itself)
+RUN uv sync --no-dev --no-install-project
 
 # Copy scripts
 COPY scripts/ /scripts/
@@ -36,9 +36,11 @@ COPY dashboard/ /dashboard/
 # Make scripts executable
 RUN chmod +x /scripts/*.py
 
+# Set Python path to find dashboard module
+ENV PYTHONPATH=/
+
 # Expose dashboard port
 EXPOSE 8000
 
-# Default command: run dashboard
-# For scripts-only mode, override with: CMD ["uv", "run", "python", "/scripts/scaffold.py", "--help"]
-CMD ["uv", "run", "uvicorn", "dashboard.app:app", "--factory", "--host", "0.0.0.0", "--port", "8000"]
+# Default command: run dashboard using the venv python directly
+CMD ["/app/.venv/bin/python", "-m", "uvicorn", "dashboard.app:app", "--factory", "--host", "0.0.0.0", "--port", "8000"]

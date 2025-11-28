@@ -47,16 +47,18 @@
             {% endif %}
         </header>
 
-        <p class="service-description">
-            {{ service.description or 'No description available' }}
-        </p>
-
-        <footer>
+        <div class="service-body">
+            <p class="service-description">
+                {{ service.description or 'No description available' }}
+            </p>
             {% if service.url %}
-            <a href="{{ service.url }}" target="_blank" rel="noopener" class="secondary">
+            <a href="{{ service.url }}" target="_blank" rel="noopener" class="secondary doc-link">
                 <small>Documentation ↗</small>
             </a>
             {% endif %}
+        </div>
+
+        <footer>
             <a href="/services/{{ service.name }}" role="button" class="outline">
                 {% if service.enabled %}Manage{% else %}Enable{% endif %}
             </a>

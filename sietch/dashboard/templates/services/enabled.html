@@ -14,6 +14,7 @@
             <th>Service</th>
             <th>Status</th>
             <th>Description</th>
+            <th>Docs</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -42,22 +43,35 @@
                 <small>{{ service.description or '-' }}</small>
             </td>
             <td>
-                {% if service.container %}
+                {% if service.url %}
+                <a href="{{ service.url }}" target="_blank" rel="noopener" class="secondary">
+                    <small>↗</small>
+                </a>
+                {% else %}
+                <small>-</small>
+                {% endif %}
+            </td>
+            <td class="actions-cell">
+                {% if service.core %}
+                <span class="status-badge core">Core</span>
+                {% elif service.container %}
                     {% if service.container.status == 'running' %}
-                    <button
-                        class="outline secondary small"
-                        hx-post="/api/docker/containers/{{ service.name }}/restart"
-                        hx-swap="none"
-                        hx-on::after-request="location.reload()">
-                        Restart
-                    </button>
-                    <button
-                        class="outline small"
-                        hx-post="/api/docker/containers/{{ service.name }}/stop"
-                        hx-swap="none"
-                        hx-on::after-request="location.reload()">
-                        Stop
-                    </button>
+                    <div class="button-row">
+                        <button
+                            class="outline secondary small"
+                            hx-post="/api/docker/containers/{{ service.name }}/restart"
+                            hx-swap="none"
+                            hx-on::after-request="location.reload()">
+                            Restart
+                        </button>
+                        <button
+                            class="outline small"
+                            hx-post="/api/docker/containers/{{ service.name }}/stop"
+                            hx-swap="none"
+                            hx-on::after-request="location.reload()">
+                            Stop
+                        </button>
+                    </div>
                     {% else %}
                     <button
                         class="outline small"

@@ -20,6 +20,8 @@
 
 /* Service Card */
 .service-card {
+    display: flex;
+    flex-direction: column;
     transition: transform 0.15s ease;
 }
 
@@ -35,18 +37,61 @@
     gap: 0.5rem;
 }
 
+.service-card .service-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
 .service-card .service-description {
     font-size: 0.875rem;
     color: var(--pico-muted-color);
-    min-height: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.service-card .doc-link {
+    margin-top: auto;
+    margin-bottom: 0.5rem;
 }
 
 .service-card footer {
+    padding-top: 0.5rem;
+    margin-top: auto;
+}
+
+/* Button row - explicit flexbox, not Pico grid */
+.button-row {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 0.5rem;
+    gap: 0.4rem;
+    flex-wrap: nowrap;
+}
+
+.button-row button,
+.button-row [role="button"] {
+    flex: 1 1 0;
+    margin: 0;
+    padding: 0.4rem 0.6rem;
+    white-space: nowrap;
+    text-align: center;
+    font-size: 0.85rem;
+    min-width: 0;
+}
+
+/* Table actions column */
+.actions-cell {
+    white-space: nowrap;
+}
+
+.actions-cell .button-row {
+    justify-content: flex-end;
+    gap: 0.3rem;
+}
+
+.actions-cell .button-row button,
+.actions-cell .button-row [role="button"] {
+    flex: 0 0 auto;
+    padding: 0.2rem 0.5rem;
+    font-size: 0.75rem;
 }
 
 /* ===================
@@ -62,6 +107,7 @@
     letter-spacing: 0.025em;
     background: var(--status-unknown);
     color: white;
+    white-space: nowrap;
 }
 
 .status-badge.running {
@@ -81,6 +127,10 @@
 
 .status-badge.enabled {
     background: var(--status-enabled);
+}
+
+.status-badge.core {
+    background: var(--pico-primary);
 }
 
 .status-badge.disabled,
@@ -434,4 +484,12 @@ footer.container {
 .wizard-step.completed .wizard-step-number {
     background: var(--status-running);
     color: white;
+}
+
+/* Infinite scroll loading sentinel */
+.loading-sentinel {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 2rem;
+    color: var(--pico-muted-color);
 }
