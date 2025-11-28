@@ -1,7 +1,10 @@
 FROM python:3.12-slim
 
 LABEL maintainer="OnRamp Project"
-LABEL description="Tool container for OnRamp scaffolding and migration"
+LABEL description="Tool container for OnRamp scaffolding and dashboard"
+
+# Install uv from official image
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
 # Install system dependencies:
 # - gettext-base: provides envsubst for template rendering
@@ -15,12 +18,14 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Install Python dependencies from requirements.txt
-COPY requirements.txt /requirements.txt
-RUN pip install --no-cache-dir -r /requirements.txt
-
 # Create app directory
 WORKDIR /app
+
+# Copy project files for dependency installation
+COPY pyproject.toml ./
+
+# Install Python dependencies with uv
+RUN uv sync --frozen --no-dev --no-install-project
 
 # Copy scripts
 COPY scripts/ /scripts/
@@ -35,5 +40,5 @@ RUN chmod +x /scripts/*.py
 EXPOSE 8000
 
 # Default command: run dashboard
-# For scripts-only mode, override with: CMD ["python", "/scripts/scaffold.py", "--help"]
-CMD ["uvicorn", "dashboard.app:app", "--factory", "--host", "0.0.0.0", "--port", "8000"]
+# For scripts-only mode, override with: CMD ["uv", "run", "python", "/scripts/scaffold.py", "--help"]
+CMD ["uv", "run", "uvicorn", "dashboard.app:app", "--factory", "--host", "0.0.0.0", "--port", "8000"]
