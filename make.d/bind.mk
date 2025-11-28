@@ -1,4 +1,5 @@
 setup-coredns: prep-dns
+	mkdir -p ./etc/coredns
 	touch ./etc/coredns/Corefile.pihole
 
 prep-dns: 

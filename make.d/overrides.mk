@@ -10,4 +10,4 @@ overrides-enabled/$(SERVICE_PASSED_DNCASED).yml:
 
 remove-override: disable-override ## disble the override before removing it
 disable-override:
-	rm ./overrides-enabled/$(SERVICE_PASSED_DNCASED).yml 
+	rm -f ./overrides-enabled/$(SERVICE_PASSED_DNCASED).yml

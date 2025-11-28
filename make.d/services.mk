@@ -51,9 +51,9 @@ disable-game: disable-service ## Disable a game
 remove-service: disable-service ## Disable a service and disable it before removing it
 
 disable-service: stop-service ## Disable a service
-	rm ./services-enabled/$(SERVICE_PASSED_DNCASED).yml
-	rm ./services-enabled/$(SERVICE_PASSED_DNCASED).env 2> /dev/null || true
-	rm ./overrides-enabled/$(SERVICE_PASSED_DNCASED)-*.yml 2> /dev/null || true
+	rm -f ./services-enabled/$(SERVICE_PASSED_DNCASED).yml
+	rm -f ./services-enabled/$(SERVICE_PASSED_DNCASED).env
+	rm -f ./overrides-enabled/$(SERVICE_PASSED_DNCASED)-*.yml
 
 nuke-service: disable-service ## Disable a service and remove its etc/ directory
 	@if [ -d ./etc/$(SERVICE_PASSED_DNCASED) ]; then \

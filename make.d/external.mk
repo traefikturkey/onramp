@@ -5,7 +5,7 @@
 #########################################################
 
 disable-external: ## disable an external service
-	rm ./etc/traefik/enabled/$(SERVICE_PASSED_DNCASED).yml
+	rm -f ./etc/traefik/enabled/$(SERVICE_PASSED_DNCASED).yml
 
 enable-external: ## enable an external service
 	@cp  --no-clobber ./etc/traefik/available/$(SERVICE_PASSED_DNCASED).yml ./etc/traefik/enabled/$(SERVICE_PASSED_DNCASED).yml || true

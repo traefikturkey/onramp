@@ -10,8 +10,8 @@ bash-run:
 bash-exec:
 	$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) exec $(SERVICE_PASSED_DNCASED) sh
 
-edit-env: ## edit the .env file using the editor specified in the EDITOR variable
-	$(EDITOR) .env
+# NOTE: edit-env moved to sietch.mk for service-specific env editing
+# Use: make edit-env <service> or make edit-env-onramp for global
 
 generate-matrix-config:
 	docker run -it --rm  -v ./etc/synapse:/data  -e SYNAPSE_SERVER_NAME=synapse.traefikturkey.icu -e SYNAPSE_REPORT_STATS=yes matrixdotorg/synapse:latest generate	
