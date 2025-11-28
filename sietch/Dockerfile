@@ -16,6 +16,10 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies
+# - pyyaml: for scaffold.yml manifest parsing
+# - click: for CLI argument parsing (optional, using argparse instead)
+# - rich: for progress bars and formatted output (optional for now)
+# - requests: for HTTP API calls (cloudflare.py uses urllib for zero deps)
 RUN pip install --no-cache-dir pyyaml
 
 # Create app directory

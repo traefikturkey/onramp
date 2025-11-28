@@ -62,6 +62,7 @@ class Scaffolder:
         self.base_dir = Path(base_dir)
         self.scaffold_dir = self.base_dir / "services-scaffold"
         self.services_enabled = self.base_dir / "services-enabled"
+        self.services_available = self.base_dir / "services-available"
         self.etc_dir = self.base_dir / "etc"
 
     def _should_ignore(self, path: Path) -> bool:
@@ -166,6 +167,69 @@ class Scaffolder:
             print(f"  Error copying {source}: {e}", file=sys.stderr)
             return False
 
+    def create_etc_volumes(self, service: str) -> bool:
+        """Create etc/ volume directories/files from service YAML.
+
+        Parses the docker-compose YAML to find volume mounts pointing to
+        ./etc/<service>/* and creates the necessary directories or files.
+        """
+        import re
+
+        # Find service YAML (check enabled first, then available)
+        service_yml = self.services_enabled / f"{service}.yml"
+        if not service_yml.exists():
+            service_yml = self.services_available / f"{service}.yml"
+            if not service_yml.exists():
+                # No service YAML, nothing to do
+                return True
+
+        try:
+            with open(service_yml, "r") as f:
+                content = f.read()
+        except Exception as e:
+            print(f"  Error reading {service_yml}: {e}", file=sys.stderr)
+            return False
+
+        # Pattern to match ./etc/<service>/* volume mounts
+        # Matches: ./etc/service/path or ./etc/service/file.ext
+        pattern = rf"\./etc/{re.escape(service)}\S*"
+        matches = re.findall(pattern, content)
+
+        if not matches:
+            return True
+
+        print(f"  Creating etc/ volumes for {service}...")
+
+        for match in matches:
+            # Remove everything after : (the container path)
+            volume_path = match.split(":")[0]
+
+            # Convert to absolute path
+            abs_path = self.base_dir / volume_path.lstrip("./")
+
+            # Determine if it's a file or directory
+            # If the path has an extension after the service name, it's likely a file
+            relative_to_service = str(abs_path).split(f"/etc/{service}/", 1)
+            if len(relative_to_service) > 1:
+                remainder = relative_to_service[1]
+                # Check if the remainder contains a dot (file extension)
+                if "." in Path(remainder).name:
+                    # It's a file - create parent dir and touch file
+                    abs_path.parent.mkdir(parents=True, exist_ok=True)
+                    if not abs_path.exists():
+                        abs_path.touch()
+                        print(f"    Created file: {abs_path}")
+                else:
+                    # It's a directory
+                    abs_path.mkdir(parents=True, exist_ok=True)
+                    print(f"    Created dir: {abs_path}")
+            else:
+                # Just the service directory
+                abs_path.mkdir(parents=True, exist_ok=True)
+                print(f"    Created dir: {abs_path}")
+
+        return True
+
     def execute_manifest(self, service: str) -> bool:
         """Execute operations from scaffold.yml manifest."""
         manifest_path = self.find_manifest(service)
@@ -216,13 +280,19 @@ class Scaffolder:
 
     def build(self, service: str) -> bool:
         """Build scaffold for a service."""
-        if not self.has_scaffold(service):
-            print(f"No scaffold files found for '{service}'")
-            return True
-
         print(f"Building scaffold for '{service}'...")
-        templates, statics = self.find_scaffold_files(service)
         success = True
+
+        # Phase 0: Create etc/ volume directories from service YAML
+        if not self.create_etc_volumes(service):
+            success = False
+
+        # Check if we have scaffold files (may have none, just volume creation)
+        if not self.has_scaffold(service):
+            print(f"  No scaffold templates for '{service}'")
+            return success
+
+        templates, statics = self.find_scaffold_files(service)
 
         # Phase 1: Render templates
         for template in templates:
