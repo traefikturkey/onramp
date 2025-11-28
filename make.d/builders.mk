@@ -4,14 +4,6 @@
 ##
 #########################################################
 
-ifneq (,$(wildcard ./services-enabled/authelia.yml))
-BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),etc/authelia/configuration.yml)
-endif
-
-etc/authelia/configuration.yml:
-	mkdir -p ./etc/authelia
-	envsubst '$${HOST_DOMAIN}' < .templates/authelia_configuration.template > ./etc/authelia/configuration.yml
-
 ifneq (,$(wildcard ./services-enabled/adguard.yml))
 BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),etc/adguard/conf/AdGuardHome.yaml)
 endif
