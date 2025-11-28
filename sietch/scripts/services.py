@@ -27,7 +27,7 @@ class ServiceManager:
         self.overrides_available = self.base_dir / "overrides-available"
         self.overrides_enabled = self.base_dir / "overrides-enabled"
         self.games_dir = self.services_available / "games"
-        self.external_dir = self.base_dir / "etc" / "traefik" / "available"
+        self.external_dir = self.base_dir / "external-available"
 
     def _strip_extension(self, filename: str) -> str:
         """Remove .yml extension from filename."""
