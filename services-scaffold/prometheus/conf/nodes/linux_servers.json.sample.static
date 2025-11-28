@@ -1,0 +1,21 @@
+[
+  {
+    "Targets": [
+      "pve-1.example.com:9100",
+      "pve-2.example.com:9100"
+    ],
+    "Labels": {
+      "type": "proxmox",
+      "alert": "true"
+    }
+  },
+  {
+    "Targets": [
+      "pihole-1.example.com:9100"
+    ],
+    "Labels": {
+      "type": "raspberry-pi",
+      "alert": "true"
+    }
+  }
+]

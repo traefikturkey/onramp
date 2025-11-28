@@ -1,0 +1,22 @@
+[
+	{
+		"Targets": [
+			"10.0.0.100"
+		],
+		"Labels": {
+			"Name": "Front Yard",
+			"Type": "amcrest",
+			"alert": "true"
+		}
+	},
+	{
+		"Targets": [
+			"10.0.0.99"
+		],
+		"Labels": {
+			"Name": "Driveway",
+			"Type": "reolink",
+			"alert": "true"
+		}
+	}
+]
