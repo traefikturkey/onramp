@@ -24,15 +24,6 @@ etc/joyride/hosts.d/hosts:
 	mkdir -p ./etc/joyride/hosts.d
 	touch ./etc/joyride/hosts.d/hosts
 
-ifneq (,$(wildcard ./services-enabled/pocketbase.yml))
-BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),etc/pocketbase)
-endif
-
-etc/pocketbase:
-	mkdir -p ./etc/pocketbase/data
-	mkdir -p ./etc/pocketbase/public
-	mkdir -p ./etc/pocketbase/hooks
-
 ifneq (,$(wildcard ./services-enabled/dashy.yml))
 BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),etc/dashy/dashy-config.yml)
 endif
@@ -70,39 +61,6 @@ setup-onboard:
 	@mkdir -p ./etc/onboard/icons
 	@sudo chown -R $(USER):$(USER) ./etc/onboard
 
-
-ifneq (,$(wildcard ./services-enabled/omada.yml))
-BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),setup-omada)
-endif
-
-setup-omada:
-	@mkdir -p ./etc/omada/data
-	@mkdir -p ./etc/omada/work
-	@mkdir -p ./etc/omada/logs
-
-
-ifneq (,$(wildcard ./services-enabled/audiobookshelf.yml))
-BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),setup-audiobookshelf)
-endif
-
-setup-audiobookshelf:
-	@mkdir -p ./etc/audiobookshelf/config
-	@mkdir -p ./etc/audiobookshelf/metadata
-
-ifneq (,$(wildcard ./services-enabled/uptime-kuma.yml))
-BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),setup-uptime-kuma)
-endif
-
-setup-uptime-kuma:
-	@mkdir -p ./etc/uptime-kuma
-
-ifneq (,$(wildcard ./services-enabled/rundeck.yml))
-BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),setup-rundeck)
-endif
-
-setup-rundeck:
-	@mkdir -p ./etc/rundeck/db
-	@mkdir -p ./etc/rundeck/config
 
 ifneq (,$(wildcard ./services-enabled/geopulse.yml))
 BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),generate-geopulse-keys)
