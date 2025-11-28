@@ -57,7 +57,7 @@ services-enabled/.env:
 # Legacy .env target for backwards compatibility
 .env:
 	@if [ ! -f services-enabled/.env ]; then \
-		cp --no-clobber .templates/env.template .env; \
+		cp --no-clobber services-scaffold/onramp/.env.template .env; \
 		$(EDITOR) .env; \
 	fi
 
