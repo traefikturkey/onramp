@@ -2,6 +2,9 @@
 #
 # cloudflare tunnel commands
 #
+# Note: Tunnel creation/deletion uses cloudflared CLI via docker.
+# DNS API operations use the Python cloudflare.py script.
+#
 #########################################################
 
 create-tunnel: etc/cloudflared etc/cloudflared/cert.pem etc/cloudflared/%.json ## create the cloudflare tunnel and dns entry
@@ -16,35 +19,30 @@ etc/cloudflared/cert.pem:
 	sudo chown -R 65532:$(USER) ./config/cloudflared
 	sudo chmod 660 ./config/cloudflared/*
 
-# using make the way it was intended, only create tunnel if directory does not exist
 etc/cloudflared/%.json:
 	@echo "Creating Cloudflared Tunnel $(CLOUDFLARE_TUNNEL_URL)"
-	$(COMPOSE_COMMAND) $(FLAGS) run --rm cloudflared tunnel create $(CLOUDFLARE_TUNNEL_NAME) 
+	$(COMPOSE_COMMAND) $(FLAGS) run --rm cloudflared tunnel create $(CLOUDFLARE_TUNNEL_NAME)
 	$(COMPOSE_COMMAND) $(FLAGS) run --rm cloudflared tunnel route dns $(CLOUDFLARE_TUNNEL_NAME) $(CLOUDFLARE_TUNNEL_URL)
 	sudo chown -R 65532:$(USER) ./config/cloudflared
 	sudo chmod 660 ./config/cloudflared/*
- 
-remove-tunnel: remove-cloudflare-dns-entry remove-cloudflare-tunnel ## remove the cloudflare tunnel and the dns entry
-	
+
+remove-tunnel: remove-cloudflare-dns-entry remove-cloudflare-tunnel ## remove the cloudflare tunnel and dns entry
+
 remove-cloudflare-tunnel: ## remove the cloudflare tunnel
 	@echo "Removing Cloudflared Tunnel $(CLOUDFLARE_TUNNEL_URL)"
 	-$(COMPOSE_COMMAND) $(FLAGS) run --rm cloudflared tunnel cleanup $(CLOUDFLARE_TUNNEL_NAME)
 	-$(COMPOSE_COMMAND) $(FLAGS) run --rm cloudflared tunnel delete $(CLOUDFLARE_TUNNEL_NAME)
 	-rm -rf ./config/cloudflare/*.json
 
-# https://stackoverflow.com/a/29085760
-# https://stackoverflow.com/a/62819637
-# https://gist.github.com/Tras2/cba88201b17d765ec065ccbedfb16d9a?permalink_comment_id=3754799
-# https://gist.github.com/slayer/442fa2fffed57f8409e0b23bd0673a92
+remove-cloudflare-dns-entry: sietch-build ## remove the cloudflare DNS entry via API
+	$(SIETCH_RUN) python /scripts/cloudflare.py dns delete --name $(CLOUDFLARE_TUNNEL_URL)
 
-.ONESHELL:
-remove-cloudflare-dns-entry:
-		ZONE_ID=$$(curl -sX  GET "https://api.cloudflare.com/client/v4/zones?name=$(HOST_DOMAIN)" -H "Authorization: Bearer $(CF_DNS_API_TOKEN)" -H 'Content-Type: application/json' | jq -r '{"result"}[] | .[0] | .id')
-		RECORD_ID=$$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones/$${ZONE_ID}/dns_records?type=CNAME&name=$(CLOUDFLARE_TUNNEL_URL)" -H "Authorization: Bearer $(CF_DNS_API_TOKEN)" -H "Content-Type: application/json" | jq -r '{"result"}[] | .[0] | .id')
-		echo RECORD_ID = $$RECORD_ID
-		curl -s -X DELETE "https://api.cloudflare.com/client/v4/zones/$${ZONE_ID}/dns_records/$${RECORD_ID}" -H "Authorization: Bearer $(CF_DNS_API_TOKEN)" -H "Content-Type: application/json"
+list-cloudflare-dns: sietch-build ## list cloudflare DNS records
+	$(SIETCH_RUN) python /scripts/cloudflare.py dns list
 
 show-tunnel: ## show the status of the cloudflare tunnel
 	@echo "Checking Cloudflared Tunnel $(CLOUDFLARE_TUNNEL_URL)"
 	-$(COMPOSE_COMMAND) $(FLAGS) run --rm cloudflared tunnel info $(CLOUDFLARE_TUNNEL_NAME) || echo $$?
-	@echo 'command exited with $(.SHELLSTATUS)'
+
+show-cloudflare-zone: sietch-build ## show cloudflare zone info
+	$(SIETCH_RUN) python /scripts/cloudflare.py zone info
