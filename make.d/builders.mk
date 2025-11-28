@@ -104,14 +104,6 @@ setup-rundeck:
 	@mkdir -p ./etc/rundeck/db
 	@mkdir -p ./etc/rundeck/config
 
-ifneq (,$(wildcard ./overrides-enabled/wordpress-upload.yml))
-BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),setup-wordpress-upload)
-endif
-
-setup-wordpress-upload:
-	@mkdir -p ./etc/wordpress
-	cp --no-clobber .templates/wordpress-upload.template ./etc/wordpress/upload.ini
-
 ifneq (,$(wildcard ./services-enabled/geopulse.yml))
 BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),generate-geopulse-keys)
 endif
