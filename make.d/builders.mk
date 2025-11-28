@@ -49,15 +49,6 @@ etc/prometheus/conf:
 	mkdir -p etc/prometheus/conf
 	cp --no-clobber --recursive	.templates/prometheus-conf/* etc/prometheus/conf
 
-ifneq (,$(wildcard ./services-enabled/recyclarr.yml))
-BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),etc/recyclarr/recyclarr.yml)
-endif
-
-etc/recyclarr/recyclarr.yml:
-	mkdir -p ./etc/recyclarr
-	cp --no-clobber .templates/recyclarr.template ./etc/recyclarr/recyclarr.yml
-
-
 ifneq (,$(wildcard ./services-enabled/gatus.yml))
 BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),etc/gatus/config.yaml)
 endif
