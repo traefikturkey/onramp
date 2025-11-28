@@ -12,14 +12,6 @@ etc/adguard/conf/AdGuardHome.yaml:
 	mkdir -p ./etc/adguard/conf
 	envsubst '$${ADGUARD_PASSWORD}, $${ADGUARD_USER}, $${HOST_DOMAIN}' < .templates/adguardhome.template > ./etc/adguard/conf/AdGuardHome.yaml
 
-ifneq (,$(wildcard ./services-enabled/searnxg.yml))
-BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),etc/searnxg/settings.yaml)
-endif
-
-etc/searnxg/settings.yaml:
-	mkdir -p ./etc/searnxg
-	envsubst < .templates/searxng.settings.template.yml > ./etc/searnxg/settings.yml
-
 ifneq (,$(wildcard ./services-enabled/pihole.yml))
 BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),etc/pihole/dnsmasq/03-custom-dns-names.conf)
 endif
