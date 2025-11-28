@@ -112,14 +112,6 @@ setup-wordpress-upload:
 	@mkdir -p ./etc/wordpress
 	cp --no-clobber .templates/wordpress-upload.template ./etc/wordpress/upload.ini
 
-ifneq (,$(wildcard ./services-enabled/tandoor.yml))
-BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),setup-tandoor)
-endif
-
-setup-tandoor:
-	@mkdir -p ./etc/tandoor/nginx
-	envsubst '$${TANDOOR_HOST_NAME}, $${HOST_DOMAIN} '< ./.templates/recipes.conf.nginx.template > ./etc/tandoor/nginx/recipes.conf
-	
 ifneq (,$(wildcard ./services-enabled/docker-mirror.yml))
 BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),setup-docker-mirror)
 endif
