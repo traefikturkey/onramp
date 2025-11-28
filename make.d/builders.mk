@@ -147,10 +147,8 @@ BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),build_sonarr_dirs)
 endif
 
 build_sonarr_dirs:
-	@echo "Creating sonarr directories..."
 	@mkdir -p ./etc/sonarr/custom-services.d
 	@mkdir -p ./etc/sonarr/custom-cont-init.d
-
 	@if [ -z "$$(ls -A ./etc/sonarr/custom-services.d 2>/dev/null)" ]; then \
 		echo "custom-services.d is empty → downloading scripts_init.bash"; \
 		wget -q -P ./etc/sonarr/custom-cont-init.d \
@@ -161,13 +159,6 @@ build_sonarr_dirs:
 			rm -f ./etc/sonarr/custom-cont-init.d/scripts_init.bash; \
 			echo "Removed ./etc/sonarr/custom-cont-init.d/scripts_init.bash"; \
 		fi; \
-	fi
-
-	@if [ ! -f ./etc/sonarr/extended.conf ]; then \
-		echo "extended.conf not found → creating from template"; \
-		cp ./.templates/sonarr_extended.template ./etc/sonarr/extended.conf; \
-	else \
-		echo "extended.conf already exists → skipping creation"; \
 	fi
 	@chown -R $$USER:$$USER ./etc/sonarr 2>/dev/null || true
 	@chmod g+s ./etc/sonarr
