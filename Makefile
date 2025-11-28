@@ -58,7 +58,14 @@ endif
 # Sietch container configuration
 SIETCH_IMAGE := sietch
 SIETCH_MARKER := sietch/.built
-SIETCH_FILES := $(shell find sietch/ -type f ! -name '.built' 2>/dev/null)
+SIETCH_FILES := $(shell find sietch/ -type f ! -name '.built' \
+	! -path 'sietch/.venv/*' \
+	! -path 'sietch/__pycache__/*' \
+	! -path 'sietch/*/__pycache__/*' \
+	! -path 'sietch/.pytest_cache/*' \
+	! -path 'sietch/.coverage' \
+	! -name '*.pyc' \
+	2>/dev/null)
 SIETCH_RUN := docker run --rm -v $(shell pwd):/app -u $(PUID):$(PGID) $(SIETCH_IMAGE)
 
 # prevents circular references, do not remove

@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+
+{% block title %}{{ service.name }} - OnRamp{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ul>
+        <li><a href="/">Dashboard</a></li>
+        <li><a href="/services">Services</a></li>
+        <li>{{ service.name }}</li>
+    </ul>
+</nav>
+
+<hgroup>
+    <h1>{{ service.name }}</h1>
+    <p>{{ service.description or 'No description available' }}</p>
+</hgroup>
+
+<!-- Status and Actions -->
+<div class="grid">
+    <article>
+        <header>Status</header>
+        {% if service.enabled %}
+            {% if container %}
+                {% if container.status == 'running' %}
+                <p><span class="status-badge running">Running</span></p>
+                {% if container.health and container.health != 'none' %}
+                <small>Health Check: {{ container.health | capitalize }}</small>
+                {% else %}
+                <small>Health Check: Unavailable</small>
+                {% endif %}
+                {% elif container.status == 'exited' %}
+                <p><span class="status-badge stopped">Stopped</span></p>
+                {% else %}
+                <p><span class="status-badge">{{ container.status }}</span></p>
+                {% endif %}
+            {% else %}
+            <p><span class="status-badge unknown">Container Not Found</span></p>
+            {% endif %}
+        {% else %}
+        <p><span class="status-badge disabled">Not Enabled</span></p>
+        {% endif %}
+    </article>
+
+    {% if not service.core %}
+    <article>
+        <header>Actions</header>
+        {% if service.enabled and container %}
+            {% if container.status == 'running' %}
+            <div class="grid">
+                <button
+                    class="outline"
+                    hx-post="/api/docker/containers/{{ service.name }}/restart"
+                    hx-swap="none"
+                    hx-on::after-request="location.reload()">
+                    Restart
+                </button>
+                <button
+                    class="outline secondary"
+                    hx-post="/api/docker/containers/{{ service.name }}/stop"
+                    hx-swap="none"
+                    hx-on::after-request="location.reload()">
+                    Stop
+                </button>
+            </div>
+            {% else %}
+            <button
+                hx-post="/api/docker/containers/{{ service.name }}/start"
+                hx-swap="none"
+                hx-on::after-request="location.reload()">
+                Start
+            </button>
+            {% endif %}
+        {% elif not service.enabled %}
+        <p><em>Enable this service to manage it</em></p>
+        <p><small>Run: <code>make enable-service {{ service.name }}</code></small></p>
+        {% endif %}
+    </article>
+    {% endif %}
+</div>
+
+<!-- Service Info -->
+<article>
+    <header>Service Information</header>
+    <table>
+        <tbody>
+            <tr>
+                <th>Category</th>
+                <td>{{ service.category or 'Uncategorized' }}</td>
+            </tr>
+            <tr>
+                <th>Enabled</th>
+                <td>{{ 'Yes' if service.enabled else 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Has .env File</th>
+                <td>{{ 'Yes' if service.has_env else 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Has etc/ Config</th>
+                <td>{{ 'Yes' if service.has_etc else 'No' }}</td>
+            </tr>
+            {% if service.url %}
+            <tr>
+                <th>Documentation</th>
+                <td><a href="{{ service.url }}" target="_blank" rel="noopener">{{ service.url }}</a></td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</article>
+
+<!-- Container Details (if enabled) -->
+{% if container %}
+<article>
+    <header>Container Details</header>
+    <table>
+        <tbody>
+            <tr>
+                <th>Container ID</th>
+                <td><code>{{ container.id }}</code></td>
+            </tr>
+            <tr>
+                <th>Image</th>
+                <td><code>{{ container.image }}</code></td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>{{ container.status }}</td>
+            </tr>
+            <tr>
+                <th>Started At</th>
+                <td>{{ container.started_at or '-' }}</td>
+            </tr>
+            {% if container.ports %}
+            <tr>
+                <th>Ports</th>
+                <td>
+                    {% for port, bindings in container.ports.items() %}
+                        {{ port }}{% if bindings %} → {{ bindings[0].HostPort }}{% endif %}<br>
+                    {% endfor %}
+                </td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</article>
+{% endif %}
+{% endblock %}

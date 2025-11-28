@@ -1,0 +1,12 @@
+{% for service in services %}
+{% include "partials/service_card.html" %}
+{% endfor %}
+
+{% if has_more %}
+<div hx-get="/api/home/services?offset={{ next_offset }}"
+     hx-trigger="revealed"
+     hx-swap="outerHTML"
+     class="loading-sentinel">
+    <span aria-busy="true">Loading more...</span>
+</div>
+{% endif %}

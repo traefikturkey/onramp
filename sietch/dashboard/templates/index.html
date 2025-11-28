@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - OnRamp{% endblock %}
+
+{% block content %}
+<h1>Dashboard</h1>
+
+<!-- System Stats -->
+<div class="grid">
+    <article>
+        <header>Services Running</header>
+        <p>
+            <strong class="stat-number">{{ stats.services_running }}</strong>
+            <small>/ {{ stats.services_enabled }} enabled</small>
+        </p>
+    </article>
+
+    <article>
+        <header>Services Available</header>
+        <p>
+            <strong class="stat-number">{{ stats.services_enabled }}</strong>
+            <small>/ {{ stats.services_available }} in catalog</small>
+        </p>
+    </article>
+
+    <article>
+        <header>Quick Actions</header>
+        <p>
+            <a href="/services" role="button" class="outline">Browse Services</a>
+        </p>
+    </article>
+</div>
+
+<!-- Enabled Services -->
+<section>
+    <h2>Enabled Services</h2>
+
+    {% if enabled_services %}
+    <div class="service-grid" id="service-list">
+        {% for service in enabled_services %}
+        {% include "partials/service_card.html" %}
+        {% endfor %}
+        
+        {% if has_more %}
+        <div hx-get="/api/home/services?offset={{ next_offset }}"
+             hx-trigger="revealed"
+             hx-swap="outerHTML"
+             class="loading-sentinel">
+            <span aria-busy="true">Loading more...</span>
+        </div>
+        {% endif %}
+    </div>
+    {% else %}
+    <article>
+        <p>No services enabled yet.</p>
+        <p><a href="/services" role="button">Browse Available Services</a></p>
+    </article>
+    {% endif %}
+</section>
+{% endblock %}

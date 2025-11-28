@@ -1,0 +1,53 @@
+networks:
+  traefik:
+    external: true
+
+# description: Web dashboard for OnRamp homelab management
+# category: management
+# https://github.com/your-repo/onramp
+
+services:
+  onramp-dashboard:
+    image: sietch
+    build:
+      context: ./sietch
+      dockerfile: Dockerfile
+    container_name: ${ONRAMP_DASHBOARD_CONTAINER_NAME:-onramp-dashboard}
+    restart: ${ONRAMP_DASHBOARD_RESTART:-unless-stopped}
+    mem_limit: ${ONRAMP_DASHBOARD_MEM_LIMIT:-256m}
+    networks:
+      - traefik
+    volumes:
+      # Read-only access to service definitions
+      - ./services-available:/app/services-available:ro
+      - ./services-scaffold:/app/services-scaffold:ro
+      - ./Makefile:/app/Makefile:ro
+      - ./make.d:/app/make.d:ro
+      # Read-write for enabled services and configs
+      - ./services-enabled:/app/services-enabled
+      - ./etc:/app/etc
+      # Docker socket for container management
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      # Timezone
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - DASHBOARD_DEBUG=${ONRAMP_DASHBOARD_DEBUG:-false}
+    env_file:
+      - services-enabled/.env
+    labels:
+      - joyride.host.name=${ONRAMP_DASHBOARD_HOST_NAME:-dashboard}.${HOST_DOMAIN}
+      - traefik.enable=${ONRAMP_DASHBOARD_TRAEFIK_ENABLE:-true}
+      - traefik.http.routers.onramp-dashboard.entrypoints=websecure
+      - traefik.http.routers.onramp-dashboard.rule=Host(`${ONRAMP_DASHBOARD_HOST_NAME:-dashboard}.${HOST_DOMAIN}`)
+      - traefik.http.services.onramp-dashboard.loadbalancer.server.port=8000
+      - com.centurylinklabs.watchtower.enable=${ONRAMP_DASHBOARD_WATCHTOWER:-true}
+      - autoheal=${ONRAMP_DASHBOARD_AUTOHEAL:-true}
+    healthcheck:
+      test: ["CMD", "wget", "-qO", "/dev/null", "http://localhost:8000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s

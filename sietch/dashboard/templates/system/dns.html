@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}DNS Management - OnRamp{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ul>
+        <li><a href="/">Dashboard</a></li>
+        <li><a href="/system">System</a></li>
+        <li>DNS Management</li>
+    </ul>
+</nav>
+
+<h1>DNS Management</h1>
+
+<p>Manage Cloudflare DNS records for your domain.</p>
+
+<article>
+    <header>Cloudflare Zones</header>
+    <div id="zones-list" hx-get="/api/dns/zones" hx-trigger="load" hx-swap="innerHTML">
+        <p>Loading zones...</p>
+    </div>
+</article>
+
+<article>
+    <header>DNS Records</header>
+    <div id="records-list">
+        <p>Select a zone above to view records.</p>
+    </div>
+</article>
+
+<article>
+    <header>Add DNS Record</header>
+    <form id="add-record-form">
+        <div class="grid">
+            <label>
+                Type
+                <select name="type" required>
+                    <option value="A">A</option>
+                    <option value="AAAA">AAAA</option>
+                    <option value="CNAME">CNAME</option>
+                    <option value="TXT">TXT</option>
+                    <option value="MX">MX</option>
+                </select>
+            </label>
+            <label>
+                Name
+                <input type="text" name="name" placeholder="subdomain" required>
+            </label>
+        </div>
+        <label>
+            Content
+            <input type="text" name="content" placeholder="IP address or target" required>
+        </label>
+        <div class="grid">
+            <label>
+                <input type="checkbox" name="proxied" role="switch">
+                Proxied through Cloudflare
+            </label>
+            <button type="submit" disabled>Add Record</button>
+        </div>
+    </form>
+    <p><small>Note: Select a zone first to enable adding records.</small></p>
+</article>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let selectedZoneId = null;
+
+// Handle zone selection
+document.body.addEventListener('htmx:afterSwap', (e) => {
+    if (e.detail.target.id === 'zones-list') {
+        const zones = e.detail.target.querySelectorAll('[data-zone-id]');
+        zones.forEach(zone => {
+            zone.addEventListener('click', () => {
+                selectedZoneId = zone.dataset.zoneId;
+                loadRecords(selectedZoneId);
+                document.querySelector('#add-record-form button').disabled = false;
+            });
+        });
+    }
+});
+
+function loadRecords(zoneId) {
+    htmx.ajax('GET', `/api/dns/zones/${zoneId}/records`, {target: '#records-list'});
+}
+</script>
+{% endblock %}

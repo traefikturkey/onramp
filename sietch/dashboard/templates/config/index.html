@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Configuration - OnRamp{% endblock %}
+
+{% block content %}
+<h1>Configuration</h1>
+
+<div class="grid">
+    <article>
+        <header>Global Environment</header>
+        <p>Edit the main <code>.env</code> file with global settings like HOST_DOMAIN, PUID, PGID, etc.</p>
+        <footer>
+            <a href="/config/global" role="button">Edit Global .env</a>
+        </footer>
+    </article>
+
+    <article>
+        <header>Service Environments</header>
+        <p>Edit per-service environment files for enabled services.</p>
+        <footer>
+            <details class="dropdown">
+                <summary role="button" class="outline">Select Service</summary>
+                <ul>
+                    {% for service in enabled_services %}
+                    <li><a href="/config/service/{{ service }}">{{ service }}</a></li>
+                    {% else %}
+                    <li><em>No services enabled</em></li>
+                    {% endfor %}
+                </ul>
+            </details>
+        </footer>
+    </article>
+</div>
+
+<section>
+    <h2>Enabled Services</h2>
+    {% if enabled_services %}
+    <table>
+        <thead>
+            <tr>
+                <th>Service</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for service in enabled_services %}
+            <tr>
+                <td>{{ service }}</td>
+                <td>
+                    <a href="/config/service/{{ service }}" class="secondary">Edit .env</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No services enabled. <a href="/services">Browse available services</a></p>
+    {% endif %}
+</section>
+{% endblock %}

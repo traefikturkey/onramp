@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} - OnRamp{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ul>
+        <li><a href="/">Dashboard</a></li>
+        <li><a href="/config">Configuration</a></li>
+        <li>{{ title }}</li>
+    </ul>
+</nav>
+
+<h1>{{ title }}</h1>
+
+<p><small>File: <code>{{ file_path }}</code></small></p>
+
+<form id="env-form">
+    <label for="content">
+        Environment Variables
+        <textarea
+            id="content"
+            name="content"
+            rows="20"
+            style="font-family: monospace;"
+            placeholder="# Enter environment variables here&#10;VAR_NAME=value">{{ content }}</textarea>
+    </label>
+
+    <div class="grid">
+        <button
+            type="button"
+            hx-put="{{ save_url }}"
+            hx-include="#content"
+            hx-headers='{"Content-Type": "application/json"}'
+            hx-vals='js:{content: document.getElementById("content").value}'
+            hx-swap="none"
+            hx-on::after-request="if(event.detail.successful) { showToast('Saved successfully!', 'success'); } else { showToast('Save failed', 'error'); }">
+            Save Changes
+        </button>
+        <a href="/config" role="button" class="outline secondary">Cancel</a>
+    </div>
+</form>
+
+{% if template_content %}
+<details>
+    <summary>View Template Reference</summary>
+    <pre><code>{{ template_content }}</code></pre>
+</details>
+{% endif %}
+
+{% if service %}
+<p>
+    <a href="/services/{{ service.name }}" class="secondary">← Back to {{ service.name }}</a>
+</p>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+function showToast(message, type) {
+    const toast = document.createElement('div');
+    toast.className = 'toast toast-' + type;
+    toast.textContent = message;
+    toast.style.cssText = 'position:fixed;bottom:20px;right:20px;padding:1rem;border-radius:4px;background:' +
+        (type === 'success' ? 'var(--pico-primary)' : 'var(--pico-del-color)') + ';color:white;z-index:1000;';
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+}
+</script>
+{% endblock %}
