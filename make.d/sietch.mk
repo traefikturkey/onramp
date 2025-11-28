@@ -137,4 +137,19 @@ edit-env-external: ## Edit the external services environment file
 edit-env-custom: ## Edit custom/unmapped variables file
 	$(EDITOR) services-enabled/custom.env
 
+#########################################################
+##
+## Testing Commands
+##
+#########################################################
+
+test: sietch-build ## Run unit tests locally with uv
+	cd sietch && uv run pytest
+
+test-coverage: sietch-build ## Run tests with coverage report
+	cd sietch && uv run pytest --cov=scripts --cov-report=html
+
+test-docker: sietch-build ## Run tests inside the Sietch container
+	docker run --rm -v $(shell pwd)/sietch:/app $(SIETCH_IMAGE) uv run pytest
+
 #$(info "sietch.mk loaded")
