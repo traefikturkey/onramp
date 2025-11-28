@@ -22,7 +22,7 @@ You will need to install docker on your linux host and obtain a cloudflare API t
 
 <p>You'll need a personal domain that's setup with Cloudflare and an API token created like so</p>
 
-![Cloudflare api token](/documentation/assets/cloudflare-api.png)
+![Cloudflare api token](/docs/assets/cloudflare-api.png)
 
 ## 2. Installation
 

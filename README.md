@@ -16,7 +16,7 @@ Testing and PR's are welcome and encouraged!
 You'll need a personal domain that's setup with Cloudflare
 and an scoped API token created like shown below, [https://dash.cloudflare.com/profile/api-tokens](https://dash.cloudflare.com/profile/api-tokens) 
 
-![Cloudflare api token](https://raw.githubusercontent.com/traefikturkey/onramp/master/documentation/assets/read%2Bedit-token.png "Cloudflare api token")
+![Cloudflare api token](https://raw.githubusercontent.com/traefikturkey/onramp/master/docs/assets/read%2Bedit-token.png "Cloudflare api token")
 
 ## Download OnRamp
 
