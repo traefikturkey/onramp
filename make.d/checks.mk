@@ -17,4 +17,4 @@ check-authentik:
 	@if [ "$(AUTHENTIK_BOOTSTRAP_PASSWORD)" != "" ]; then echo "AUTHENTIK_BOOTSTRAP_PASSWORD: PASSED"; else echo "FAILED : Please set your AUTHENTIK_BOOTSTRAP_PASSWORD in the .env file"; fi
 
 check-authelia:
-	@if [ "$(AUTHELIA_JWT_SECRET)" != "" ]; then echo "AUTHELIA_JWT_SECRET : PASSED"; else echo "FAILED : Please set your AUTHENTIK_SECRET_KEY in the .env file"; fi
+	@if [ "$(AUTHELIA_JWT_SECRET)" != "" ]; then echo "AUTHELIA_JWT_SECRET : PASSED"; else echo "FAILED : Please set your AUTHELIA_JWT_SECRET in the .env file"; fi

@@ -40,7 +40,7 @@ ifneq (,$(wildcard ./services-available/$(SERVICE_PASSED_DNCASED).yml))
 	@# Run scaffold if templates exist for this service
 	@if [ -d services-scaffold/$(SERVICE_PASSED_DNCASED) ]; then \
 		echo "Running scaffold for $(SERVICE_PASSED_DNCASED)..."; \
-		$(MAKE) scaffold-build $(SERVICE_PASSED_DNCASED) || true; \
+		$(MAKE) scaffold-build $(SERVICE_PASSED_DNCASED); \
 	fi
 else
 	@echo "No such service file ./services-available/$(SERVICE_PASSED_DNCASED).yml!"

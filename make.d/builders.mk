@@ -152,7 +152,7 @@ setup-rundeck:
 	@mkdir -p ./etc/rundeck/db
 	@mkdir -p ./etc/rundeck/config
 
-ifneq (,$(wildcard ./override-enabled/wordpress-upload.yml))
+ifneq (,$(wildcard ./overrides-enabled/wordpress-upload.yml))
 BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),setup-wordpress-upload)
 endif
 
