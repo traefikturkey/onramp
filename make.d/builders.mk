@@ -12,13 +12,6 @@ etc/adguard/conf/AdGuardHome.yaml:
 	mkdir -p ./etc/adguard/conf
 	envsubst '$${ADGUARD_PASSWORD}, $${ADGUARD_USER}, $${HOST_DOMAIN}' < .templates/adguardhome.template > ./etc/adguard/conf/AdGuardHome.yaml
 
-ifneq (,$(wildcard ./services-enabled/pihole.yml))
-BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),etc/pihole/dnsmasq/03-custom-dns-names.conf)
-endif
-
-etc/pihole/dnsmasq/03-custom-dns-names.conf:
-	envsubst '$${HOST_DOMAIN}, $${HOSTIP} ' < .templates/pihole_joyride.template > ./etc/pihole/dnsmasq/03-custom-dns-names.conf
-
 ifneq (,$(wildcard ./services-enabled/joyride.yml))
 BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),etc/joyride/hosts.d/hosts)
 endif
