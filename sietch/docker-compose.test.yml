@@ -1,0 +1,17 @@
+# Docker Compose for running sietch tests
+# Usage: docker compose -f sietch/docker-compose.test.yml run --rm test
+
+services:
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    volumes:
+      # Mount source for live editing during test development
+      - ./scripts:/scripts:ro
+      - ./dashboard:/dashboard:ro
+      - ./tests:/tests:ro
+    environment:
+      - PYTHONDONTWRITEBYTECODE=1
+    entrypoint: ["/app/.venv/bin/pytest"]
+    command: ["-v", "-p", "no:cacheprovider", "/tests"]

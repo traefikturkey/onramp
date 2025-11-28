@@ -1,9 +1,9 @@
-FROM python:3.12-slim
+FROM python:3.14-slim
 
 LABEL maintainer="OnRamp Project"
-LABEL description="Tool container for OnRamp scaffolding and migration"
+LABEL description="Tool container for OnRamp scaffolding and dashboard"
 
-# Install uv
+# Install uv from official image
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
 # Install system dependencies:
@@ -21,17 +21,28 @@ RUN apt-get update && \
 # Create app directory
 WORKDIR /app
 
-# Copy project files and install dependencies
+# Copy project files for dependency installation
 COPY pyproject.toml ./
-RUN uv sync
+
+# Install Python dependencies with uv (without installing the project itself)
+RUN uv sync --no-dev --no-install-project
 
 # Copy scripts and tests
 COPY scripts/ /scripts/
 COPY tests/ /app/tests/
 
+# Copy dashboard application
+COPY dashboard/ /dashboard/
+
 # Make scripts executable and create symlink for pytest
 RUN chmod +x /scripts/*.py && \
     ln -s /scripts /app/scripts
 
-# Default command shows help
-CMD ["uv", "run", "python", "/scripts/scaffold.py", "--help"]
+# Set Python path to find dashboard module
+ENV PYTHONPATH=/
+
+# Expose dashboard port
+EXPOSE 8000
+
+# Default command: run dashboard using the venv python directly
+CMD ["/app/.venv/bin/python", "-m", "uvicorn", "dashboard.app:app", "--factory", "--host", "0.0.0.0", "--port", "8000"]
