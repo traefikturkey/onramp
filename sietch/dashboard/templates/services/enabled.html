@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Enabled Services - OnRamp{% endblock %}
+
+{% block content %}
+<h1>Enabled Services</h1>
+
+<p><small>{{ services | length }} services enabled</small></p>
+
+{% if services %}
+<table>
+    <thead>
+        <tr>
+            <th>Service</th>
+            <th>Status</th>
+            <th>Description</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for service in services %}
+        <tr id="service-row-{{ service.name }}">
+            <td>
+                <a href="/services/{{ service.name }}">
+                    <strong>{{ service.name }}</strong>
+                </a>
+            </td>
+            <td>
+                {% if service.container %}
+                    {% if service.container.status == 'running' %}
+                    <span class="status-badge running">Running</span>
+                    {% elif service.container.status == 'exited' %}
+                    <span class="status-badge stopped">Stopped</span>
+                    {% else %}
+                    <span class="status-badge">{{ service.container.status }}</span>
+                    {% endif %}
+                {% else %}
+                <span class="status-badge unknown">Not Found</span>
+                {% endif %}
+            </td>
+            <td>
+                <small>{{ service.description or '-' }}</small>
+            </td>
+            <td>
+                {% if service.container %}
+                    {% if service.container.status == 'running' %}
+                    <button
+                        class="outline secondary small"
+                        hx-post="/api/docker/containers/{{ service.name }}/restart"
+                        hx-swap="none"
+                        hx-on::after-request="location.reload()">
+                        Restart
+                    </button>
+                    <button
+                        class="outline small"
+                        hx-post="/api/docker/containers/{{ service.name }}/stop"
+                        hx-swap="none"
+                        hx-on::after-request="location.reload()">
+                        Stop
+                    </button>
+                    {% else %}
+                    <button
+                        class="outline small"
+                        hx-post="/api/docker/containers/{{ service.name }}/start"
+                        hx-swap="none"
+                        hx-on::after-request="location.reload()">
+                        Start
+                    </button>
+                    {% endif %}
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<article>
+    <p>No services enabled yet.</p>
+    <p><a href="/services" role="button">Browse Available Services</a></p>
+</article>
+{% endif %}
+{% endblock %}
