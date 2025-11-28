@@ -142,7 +142,14 @@ class GenerateRsaKeyOp(Operation):
             # Generate private key
             executor = self.ctx.command_executor
             result = executor.run(
-                ["openssl", "genpkey", "-algorithm", "RSA", "-pkeyopt", f"rsa_keygen_bits:{bits}"],
+                [
+                    "openssl",
+                    "genpkey",
+                    "-algorithm",
+                    "RSA",
+                    "-pkeyopt",
+                    f"rsa_keygen_bits:{bits}",
+                ],
                 capture_output=True,
                 check=True,
             )
@@ -295,7 +302,9 @@ class ChownOp(Operation):
             result = executor.run(cmd, capture_output=True, check=True)
             if result.returncode != 0:
                 # chown may fail in containers - treat as warning
-                print(f"    Warning: chown failed (may be expected in container): {result.stderr}")
+                print(
+                    f"    Warning: chown failed (may be expected in container): {result.stderr}"
+                )
                 return True
 
             print(f"    Changed ownership: {path} -> {ownership}")
