@@ -1,0 +1,14 @@
+Before starting recyclarr:
+
+1. Get API keys from your *arr services:
+   make retrieve-apikey sonarr
+   make retrieve-apikey radarr
+
+2. Edit the recyclarr config:
+   $EDITOR etc/recyclarr/recyclarr.yml
+
+3. Add your Sonarr/Radarr URLs and API keys
+
+4. Start the service and test sync:
+   make start-service recyclarr
+   docker exec recyclarr recyclarr sync --debug

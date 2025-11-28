@@ -19,6 +19,7 @@ When you run `make enable-service <name>`, OnRamp:
 | `env.template` | Render with envsubst | `services-enabled/<service>.env` |
 | `*.template` | Render with envsubst | `etc/<service>/*` (suffix stripped) |
 | `scaffold.yml` | Execute operations | N/A (control file) |
+| `MESSAGE.txt` | Display after build | N/A (post-enable instructions) |
 | `*.md` | Ignored | N/A (documentation) |
 | `.gitkeep` | Ignored | N/A (git placeholder) |
 | Everything else | Copy as-is | `etc/<service>/*` |
@@ -249,3 +250,24 @@ make scaffold-teardown <service> # Remove generated files (keeps etc/)
 
 Use `disable-service` when you might re-enable later (preserves config customizations).
 Use `nuke-service` for a clean slate.
+
+## Post-Enable Messages (MESSAGE.txt)
+
+Some services require manual steps after enabling (API key setup, host configuration, etc.). Add a `MESSAGE.txt` file to display instructions after successful scaffolding:
+
+```
+services-scaffold/myservice/
+├── env.template
+└── MESSAGE.txt
+```
+
+**MESSAGE.txt:**
+```
+After first start, configure authentication:
+
+1. Access the web UI at https://myservice.${HOST_DOMAIN}
+2. Create an admin user
+3. Generate API keys for integrations
+```
+
+The message is displayed after `make enable-service myservice` completes successfully.

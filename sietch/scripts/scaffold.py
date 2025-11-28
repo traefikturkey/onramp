@@ -52,6 +52,7 @@ IGNORE_PATTERNS = [
     "*.md",
     ".gitkeep",
     "scaffold.yml",
+    "MESSAGE.txt",
 ]
 
 
@@ -230,6 +231,16 @@ class Scaffolder:
 
         return True
 
+    def _display_message(self, service: str) -> None:
+        """Display post-enable message if MESSAGE.txt exists."""
+        message_file = self.scaffold_dir / service / "MESSAGE.txt"
+        if message_file.exists():
+            print("\n" + "=" * 60)
+            print(f"POST-ENABLE INSTRUCTIONS FOR {service.upper()}")
+            print("=" * 60)
+            print(message_file.read_text().strip())
+            print("=" * 60 + "\n")
+
     def execute_manifest(self, service: str) -> bool:
         """Execute operations from scaffold.yml manifest."""
         manifest_path = self.find_manifest(service)
@@ -309,6 +320,10 @@ class Scaffolder:
         # Phase 3: Execute manifest operations (after templates/statics)
         if not self.execute_manifest(service):
             success = False
+
+        # Phase 4: Display post-enable message if exists
+        if success:
+            self._display_message(service)
 
         return success
 

@@ -10,12 +10,6 @@ bash-run:
 bash-exec:
 	$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) exec $(SERVICE_PASSED_DNCASED) sh
 
-# NOTE: edit-env moved to sietch.mk for service-specific env editing
-# Use: make edit-env <service> or make edit-env-onramp for global
-
-generate-matrix-config:
-	docker run -it --rm  -v ./etc/synapse:/data  -e SYNAPSE_SERVER_NAME=synapse.traefikturkey.icu -e SYNAPSE_REPORT_STATS=yes matrixdotorg/synapse:latest generate	
-
 #########################################################
 ##
 ## arrs api-key retrieval
@@ -32,12 +26,7 @@ retrieve-apikey: ## retrieve api key from arrs
 ##
 #########################################################
 
-excuse: ## get programming excuse
-	@curl -s programmingexcuses.com | egrep -o "<a[^<>]+>[^<>]+</a>" | egrep -o "[^<>]+" | sed -n 2p
 
 # https://stackoverflow.com/questions/7117978/gnu-make-list-the-values-of-all-variables-or-macros-in-a-particular-run
 echo:
 	@$(MAKE) -pn | grep -A1 "^# makefile"| grep -v "^#\|^--" | grep -e "^[A-Z]+*" | sort
-
-env: ## show environment variables sorted
-	@env | sort

@@ -1,0 +1,11 @@
+Before starting cially:
+
+1. Create a Discord application at:
+   https://discord.com/developers/applications
+
+2. Configure the bot token and application settings
+
+3. Access Pocketbase admin UI to complete setup
+   (requires Traefik exposure for the web UI)
+
+4. Configure Discord bot permissions and invite to server

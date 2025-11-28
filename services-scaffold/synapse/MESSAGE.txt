@@ -1,0 +1,10 @@
+Before first start, generate the initial configuration:
+
+docker run -it --rm \
+  -v ./etc/synapse:/data \
+  -e SYNAPSE_SERVER_NAME=${SYNAPSE_CONTAINER_NAME:-synapse}.${HOST_DOMAIN} \
+  -e SYNAPSE_REPORT_STATS=yes \
+  ghcr.io/matrix-org/synapse:latest generate
+
+Then start the service:
+  make start-service synapse

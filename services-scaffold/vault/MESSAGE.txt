@@ -1,0 +1,11 @@
+After first start, initialize the vault:
+
+1. Initialize vault (generates unseal keys and root token):
+   docker exec -it vault vault operator init
+
+2. SAVE THE KEYS SECURELY - you cannot recover them later!
+
+3. Unseal the vault (requires 3 of 5 keys by default):
+   docker exec -it vault vault operator unseal
+
+See: https://developer.hashicorp.com/vault/docs/commands/operator/init

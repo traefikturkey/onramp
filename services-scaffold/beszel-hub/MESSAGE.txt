@@ -1,0 +1,12 @@
+After first start, configure monitoring agents:
+
+1. Open beszel-hub web UI and click "Add System"
+
+2. Copy the public key from the dialog
+
+3. For each system you want to monitor:
+   - Add BESZEL_PUBLIC_KEY to the agent's environment
+   - For local monitoring, use: /beszel_socket/beszel.sock as Host/IP
+   - For remote systems, use the hostname or IP address
+
+4. Restart agents after configuration changes
