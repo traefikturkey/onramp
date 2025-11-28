@@ -168,13 +168,26 @@ class Scaffolder:
             print(f"  Error copying {source}: {e}", file=sys.stderr)
             return False
 
-    def create_etc_volumes(self, service: str) -> bool:
+    def create_etc_volumes(self, service: str, scaffold_statics: list[Path] = None) -> bool:
         """Create etc/ volume directories/files from service YAML.
 
         Parses the docker-compose YAML to find volume mounts pointing to
         ./etc/<service>/* and creates the necessary directories or files.
+
+        Args:
+            service: Service name
+            scaffold_statics: List of static files from scaffold that will be copied
         """
         import re
+
+        # Build set of paths that scaffold will provide (relative to etc/<service>/)
+        scaffold_provides = set()
+        if scaffold_statics:
+            service_scaffold = self.scaffold_dir / service
+            for static in scaffold_statics:
+                relative = static.relative_to(service_scaffold)
+                # Convert to what the output path would be
+                scaffold_provides.add(str(relative))
 
         # Find service YAML (check enabled first, then available)
         service_yml = self.services_enabled / f"{service}.yml"
@@ -208,11 +221,16 @@ class Scaffolder:
             # Convert to absolute path
             abs_path = self.base_dir / volume_path.lstrip("./")
 
-            # Determine if it's a file or directory
-            # If the path has an extension after the service name, it's likely a file
+            # Check if path relative to etc/<service>/ is provided by scaffold
             relative_to_service = str(abs_path).split(f"/etc/{service}/", 1)
             if len(relative_to_service) > 1:
                 remainder = relative_to_service[1]
+
+                # Skip if scaffold will provide this file
+                if remainder in scaffold_provides:
+                    print(f"    Skipping (scaffold provides): {remainder}")
+                    continue
+
                 # Check if the remainder contains a dot (file extension)
                 if "." in Path(remainder).name:
                     # It's a file - create parent dir and touch file
@@ -294,16 +312,18 @@ class Scaffolder:
         print(f"Building scaffold for '{service}'...")
         success = True
 
+        # Get scaffold files first (needed for volume creation check)
+        templates, statics = self.find_scaffold_files(service)
+
         # Phase 0: Create etc/ volume directories from service YAML
-        if not self.create_etc_volumes(service):
+        # Pass statics so it knows what scaffold will provide
+        if not self.create_etc_volumes(service, statics):
             success = False
 
         # Check if we have scaffold files (may have none, just volume creation)
-        if not self.has_scaffold(service):
+        if not templates and not statics and not self.find_manifest(service):
             print(f"  No scaffold templates for '{service}'")
             return success
-
-        templates, statics = self.find_scaffold_files(service)
 
         # Phase 1: Render templates
         for template in templates:

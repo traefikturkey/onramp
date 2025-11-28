@@ -54,12 +54,6 @@ services-enabled/.env:
 		touch services-enabled/.env; \
 	fi
 
-# Legacy .env target for backwards compatibility
-.env:
-	@if [ ! -f services-enabled/.env ]; then \
-		cp --no-clobber services-scaffold/onramp/.env.template .env; \
-		$(EDITOR) .env; \
-	fi
 
 REPOS = ansible/ansible
 MISSING_REPOS := $(foreach repo,$(REPOS),$(if $(shell apt-cache policy | grep $(repo)),,addrepo/$(repo))) 
@@ -72,7 +66,7 @@ endif
 EXECUTABLES = git nano jq python3-pip yamllint python3-pathspec ansible 
 MISSING_PACKAGES := $(foreach exec,$(EXECUTABLES),$(if $(shell dpkg -s "$(exec)" &> /dev/null),,addpackage-$(exec)))
 
-# duck you debian
+# Add PPA repository (Ubuntu only)
 addrepo/%:
 	@if [ "$(shell lsb_release -si | tail -n 1)" = "Ubuntu" ]; then \
 		sudo apt-add-repository ppa:$* -y; \
@@ -112,8 +106,8 @@ install-node-exporter: install-ansible
 install-nvidia-drivers: install-ansible
 	ansible-playbook ansible/install-nvidia-drivers.yml
 
-# kill all vscode instances running on the server
-make kill-code:
+# Kill all vscode-server instances on the host
+kill-code:
 	ps aux | grep .vscode-server | awk '{print $$2}' | xargs kill
 
 #########################################################
@@ -151,10 +145,6 @@ down-staging: ## stop the staging and delete the acme staging certs
 ## Validation Checks
 ##
 #########################################################
-
-ifndef NETBOX_EMAIL
-	NETBOX_SUPERUSER_EMAIL=$(CF_API_EMAIL)
-endif
 
 check-yaml: install-dependencies ## Check YAML files
 	yamllint -c .yamllint .
