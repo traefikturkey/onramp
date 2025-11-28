@@ -4,48 +4,6 @@
 ##
 #########################################################
 
-ifneq (,$(wildcard ./services-enabled/joyride.yml))
-BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),etc/joyride/hosts.d/hosts)
-endif
-
-etc/joyride/hosts.d/hosts:
-	@if [ -f ./etc/joyride/hosts.d ] && [ ! -d ./etc/joyride/hosts.d ]; then \
-		echo "Fixing: ./etc/joyride/hosts.d is a file, removing to create directory"; \
-		rm -f ./etc/joyride/hosts.d; \
-	fi
-	mkdir -p ./etc/joyride/hosts.d
-	touch ./etc/joyride/hosts.d/hosts
-
-ifneq (,$(wildcard ./services-enabled/dashy.yml))
-BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),etc/dashy/dashy-config.yml)
-endif
-
-etc/dashy/dashy-config.yml:
-	mkdir -p ./etc/dashy
-	touch ./etc/dashy/dashy-config.yml
-
-ifneq (,$(wildcard ./services-enabled/olivetin.yml))
-BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),etc/olivetin/config.yaml)
-endif
-
-etc/olivetin/config.yaml:
-	mkdir -p ./etc/olivetin
-	touch $@
-
-ifneq (,$(wildcard ./services-enabled/cloudflare-tunnel.yml))
-BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),cloudflare-tunnel)
-endif
-
-ifneq (,$(wildcard ./services-enabled/onboard.yml))
-BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),setup-onboard)
-endif
-
-setup-onboard:
-	@mkdir -p ./etc/onboard/cache
-	@mkdir -p ./etc/onboard/icons
-	@sudo chown -R $(USER):$(USER) ./etc/onboard
-
-
 ifneq (,$(wildcard ./services-enabled/geopulse.yml))
 BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),generate-geopulse-keys)
 endif
@@ -53,15 +11,6 @@ endif
 generate-geopulse-keys:
 	@mkdir -p ./etc/geopulse/keys
 	./make.d/scripts/generate-geopulse-keys.sh
-
-ifneq (,$(wildcard ./services-enabled/kaneo.yml))
-BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),build_kaneo_dirs)
-endif
-
-build_kaneo_dirs:
-	@mkdir -p ./etc/kaneo/db
-	@chown -R $$USER:$$USER ./etc/kaneo 2>/dev/null || true
-	@chmod g+s ./etc/kaneo
 
 ifneq (,$(wildcard ./services-enabled/radarr.yml))
 BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),build_radarr_dirs)
