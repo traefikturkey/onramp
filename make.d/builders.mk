@@ -33,14 +33,6 @@ etc/pocketbase:
 	mkdir -p ./etc/pocketbase/public
 	mkdir -p ./etc/pocketbase/hooks
 
-ifneq (,$(wildcard ./services-enabled/copyparty.yml))
-BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),etc/copyparty/config/copyparty.conf)
-endif
-
-etc/copyparty/config/copyparty.conf:
-	mkdir -p ./etc/copyparty/config
-	cp --no-clobber .templates/copyparty.conf etc/copyparty/config/copyparty.conf
-
 ifneq (,$(wildcard ./services-enabled/dashy.yml))
 BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),etc/dashy/dashy-config.yml)
 endif
