@@ -4,6 +4,7 @@
 Here is a complete list of [available services](SERVICES.md) and [available games](SERVICES.md#available-games)
 
 For detailed documentation, see the [docs/](docs/) folder:
+- [Dashboard Guide](docs/dashboard.md) - Web UI for managing your homelab
 - [Scaffolding Guide](docs/scaffolding.md) - Convention-based service configuration
 - [Migration Guide](docs/main-branch-announcement.md) - Switching from master to main
 
