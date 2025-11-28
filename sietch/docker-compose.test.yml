@@ -3,6 +3,8 @@
 
 services:
   test:
+    container_name: sietch-test
+    hostname: sietch-test
     build:
       context: .
       dockerfile: Dockerfile.test
