@@ -9,7 +9,7 @@ networks:
 # add models to etc/ollama/Ollamamodels and run 
 # make.d/scripts/ollama-update-models.sh
 # to pull or update models
-# see .templates/Ollamamodels.sample for examples
+# see services-scaffold/ollama/Ollamamodels.sample for examples
 # Available models: https://ollama.com/library/
 
 

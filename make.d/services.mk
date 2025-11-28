@@ -62,11 +62,11 @@ nuke-service: disable-service ## Disable a service and remove its etc/ directory
 	fi
 
 create-service: ## create a service file from the template and open it in the editor
-	envsubst '$${SERVICE_PASSED_DNCASED},$${SERVICE_PASSED_UPCASED}' < ./.templates/service.template > ./services-available/$(SERVICE_PASSED_DNCASED).yml
+	envsubst '$${SERVICE_PASSED_DNCASED},$${SERVICE_PASSED_UPCASED}' < ./make.d/templates/service.template > ./services-available/$(SERVICE_PASSED_DNCASED).yml
 	$(EDITOR) ./services-available/$(SERVICE_PASSED_DNCASED).yml
 
 create-game: ## create a game service using the service template and open it in the editor
-	envsubst '$${SERVICE_PASSED_DNCASED},$${SERVICE_PASSED_UPCASED}' < ./.templates/service.template > ./services-available/games/$(SERVICE_PASSED_DNCASED).yml
+	envsubst '$${SERVICE_PASSED_DNCASED},$${SERVICE_PASSED_UPCASED}' < ./make.d/templates/service.template > ./services-available/games/$(SERVICE_PASSED_DNCASED).yml
 	$(EDITOR) ./services-available/games/$(SERVICE_PASSED_DNCASED).yml
 
 edit-service:
