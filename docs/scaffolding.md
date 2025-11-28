@@ -8,19 +8,22 @@ When you run `make enable-service <name>`, OnRamp:
 
 1. Creates a symlink in `services-enabled/`
 2. Looks for templates in `services-scaffold/<name>/`
-3. Processes any `*.template` or `*.static` files it finds
-4. Outputs the results to `services-enabled/` or `etc/<name>/`
+3. Processes any `*.template` files and copies other files
+4. Executes `scaffold.yml` manifest operations (if present)
+5. Outputs the results to `services-enabled/` or `etc/<name>/`
 
 ## File Conventions
 
 | File Pattern | Action | Output Location |
 |--------------|--------|-----------------|
 | `env.template` | Render with envsubst | `services-enabled/<service>.env` |
-| `*.yaml.template` | Render with envsubst | `etc/<service>/*.yaml` |
-| `*.yml.template` | Render with envsubst | `etc/<service>/*.yml` |
-| `*.conf.template` | Render with envsubst | `etc/<service>/*.conf` |
-| `*.static` | Copy without modification | `etc/<service>/*` |
-| `subdir/*.template` | Render, preserve structure | `etc/<service>/subdir/*` |
+| `*.template` | Render with envsubst | `etc/<service>/*` (suffix stripped) |
+| `scaffold.yml` | Execute operations | N/A (control file) |
+| `*.md` | Ignored | N/A (documentation) |
+| `.gitkeep` | Ignored | N/A (git placeholder) |
+| Everything else | Copy as-is | `etc/<service>/*` |
+
+Files are copied with no-clobber behavior — existing files are not overwritten.
 
 ## Global Config (onramp)
 
@@ -57,27 +60,45 @@ PLEX_DOCKER_TAG=${PLEX_DOCKER_TAG:-latest}
 ```
 services-scaffold/adguard/
 ├── env.template
-└── AdGuardHome.yaml.template
+└── conf/
+    └── AdGuardHome.yaml.template
 ```
 
 **Result:**
 - `services-enabled/adguard.env`
-- `etc/adguard/AdGuardHome.yaml`
+- `etc/adguard/conf/AdGuardHome.yaml`
+
+### Service with Static Files
+
+```
+services-scaffold/gatus/
+├── env.template
+└── config.yaml
+```
+
+Files without `.template` suffix are copied as-is (no variable substitution).
+
+**Result:**
+- `services-enabled/gatus.env`
+- `etc/gatus/config.yaml`
 
 ### Service with Nested Structure
 
 ```
 services-scaffold/prometheus/
 ├── env.template
-├── prometheus.yml.template
-└── targets/
-    └── docker_host.json.static
+├── conf/
+│   ├── prometheus.yml
+│   └── targets/
+│       └── docker_host.json
 ```
+
+Directory structure is preserved in the output.
 
 **Result:**
 - `services-enabled/prometheus.env`
-- `etc/prometheus/prometheus.yml`
-- `etc/prometheus/targets/docker_host.json`
+- `etc/prometheus/conf/prometheus.yml`
+- `etc/prometheus/conf/targets/docker_host.json`
 
 ## Template Syntax
 
@@ -94,6 +115,86 @@ scrape_configs:
 Default values use shell syntax:
 ```bash
 DOCKER_TAG=${PLEX_DOCKER_TAG:-latest}
+```
+
+## Manifest Operations (scaffold.yml)
+
+For complex operations beyond file copies (key generation, downloads, permissions), use a `scaffold.yml` manifest:
+
+```yaml
+version: "1"
+
+operations:
+  - type: mkdir
+    path: keys/
+
+  - type: generate_rsa_key
+    output: keys/jwt-private-key.pem
+    public_key: keys/jwt-public-key.pem
+    bits: 2048
+    skip_if_exists: true
+```
+
+### Available Operations
+
+| Type | Description | Parameters |
+|------|-------------|------------|
+| `mkdir` | Create directory | `path`, `mode` |
+| `generate_rsa_key` | Generate RSA keypair | `output`, `public_key`, `bits`, `skip_if_exists` |
+| `generate_random` | Generate random bytes | `output`, `bytes`, `encoding`, `skip_if_exists` |
+| `download` | Download file from URL | `url`, `output`, `mode`, `skip_if_exists` |
+| `delete` | Delete file/directory | `path` |
+| `chown` | Change ownership | `path`, `user`, `group`, `recursive` |
+| `chmod` | Change permissions | `path`, `mode`, `recursive` |
+
+### Conditional Execution
+
+Operations can be conditional:
+
+```yaml
+- type: download
+  url: https://example.com/script.sh
+  output: scripts/init.sh
+  condition:
+    type: dir_empty
+    path: custom-scripts/
+```
+
+Condition types:
+- `file_exists` / `file_not_exists`
+- `dir_empty` / `dir_not_empty`
+
+### Example: Service with Complex Setup
+
+```
+services-scaffold/radarr/
+├── extended.conf
+└── scaffold.yml
+```
+
+**scaffold.yml:**
+```yaml
+version: "1"
+
+operations:
+  - type: mkdir
+    path: custom-services.d/
+
+  - type: mkdir
+    path: custom-cont-init.d/
+
+  - type: download
+    url: https://raw.githubusercontent.com/.../scripts_init.bash
+    output: custom-cont-init.d/scripts_init.bash
+    condition:
+      type: dir_empty
+      path: custom-services.d/
+
+  - type: chown
+    path: ./
+    user: "${PUID}"
+    group: "${PGID}"
+    recursive: true
 ```
 
 ## Commands
@@ -119,14 +220,22 @@ make scaffold-teardown <service> # Remove generated files (keeps etc/)
    MYSERVICE_SECRET=${MYSERVICE_SECRET}
    ```
 
-3. Add config templates if needed:
-   ```bash
+3. Add config files if needed (with or without `.template` suffix):
+   ```yaml
    # services-scaffold/myservice/config.yaml.template
    server:
      port: ${MYSERVICE_PORT}
    ```
 
-4. Test it:
+4. Add a `scaffold.yml` for complex operations (optional):
+   ```yaml
+   version: "1"
+   operations:
+     - type: mkdir
+       path: data/
+   ```
+
+5. Test it:
    ```bash
    make enable-service myservice
    ```
