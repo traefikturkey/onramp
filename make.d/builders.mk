@@ -4,14 +4,6 @@
 ##
 #########################################################
 
-ifneq (,$(wildcard ./services-enabled/adguard.yml))
-BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),etc/adguard/conf/AdGuardHome.yaml)
-endif
-
-etc/adguard/conf/AdGuardHome.yaml:
-	mkdir -p ./etc/adguard/conf
-	envsubst '$${ADGUARD_PASSWORD}, $${ADGUARD_USER}, $${HOST_DOMAIN}' < .templates/adguardhome.template > ./etc/adguard/conf/AdGuardHome.yaml
-
 ifneq (,$(wildcard ./services-enabled/joyride.yml))
 BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),etc/joyride/hosts.d/hosts)
 endif
