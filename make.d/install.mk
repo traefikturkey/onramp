@@ -146,19 +146,4 @@ down-staging: ## stop the staging and delete the acme staging certs
 	$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) down
 	$(MAKE) clean-acme
 
-#########################################################
-##
-## make it-mikes-way
-##
-#########################################################
-
-MIKES_SERVICES := autoheal watchtower joyride dozzle monocker
-
-.PHONY: it-mikes-way mikesway-%
-it-mikes-way: start $(addprefix mikesway-,$(MIKES_SERVICES))
-
-mikesway-%:
-		make enable-service $*
-		make start-service $*
-
 #$(info "install.mk loaded")
