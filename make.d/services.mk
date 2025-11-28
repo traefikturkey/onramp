@@ -136,14 +136,17 @@ disable-override:
 #########################################################
 
 disable-external: ## Disable external service routing
+	rm -f ./external-enabled/$(SERVICE_PASSED_DNCASED).yml
 	rm -f ./etc/traefik/enabled/$(SERVICE_PASSED_DNCASED).yml
 
 enable-external: ## Enable external service routing
-	@cp --no-clobber ./etc/traefik/available/$(SERVICE_PASSED_DNCASED).yml ./etc/traefik/enabled/$(SERVICE_PASSED_DNCASED).yml || true
+	@mkdir -p ./etc/traefik/enabled
+	@ln -sf ../../external-available/$(SERVICE_PASSED_DNCASED).yml ./external-enabled/$(SERVICE_PASSED_DNCASED).yml || true
+	@ln -sf ../../../external-enabled/$(SERVICE_PASSED_DNCASED).yml ./etc/traefik/enabled/$(SERVICE_PASSED_DNCASED).yml || true
 
 create-external: ## Create external service from template
-	envsubst '$${SERVICE_PASSED_DNCASED},$${SERVICE_PASSED_UPCASED}' < ./services-scaffold/_templates/external.template > ./etc/traefik/available/$(SERVICE_PASSED_DNCASED).yml
-	$(EDITOR) ./etc/traefik/available/$(SERVICE_PASSED_DNCASED).yml
+	envsubst '$${SERVICE_PASSED_DNCASED},$${SERVICE_PASSED_UPCASED}' < ./services-scaffold/_templates/external.template > ./external-available/$(SERVICE_PASSED_DNCASED).yml
+	$(EDITOR) ./external-available/$(SERVICE_PASSED_DNCASED).yml
 
 #########################################################
 ##

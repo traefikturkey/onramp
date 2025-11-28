@@ -271,3 +271,43 @@ After first start, configure authentication:
 ```
 
 The message is displayed after `make enable-service myservice` completes successfully.
+
+## External Services (Traefik Routing)
+
+External services are non-Docker services (like Proxmox, TrueNAS, Home Assistant) that you want to route through Traefik for SSL termination and unified access.
+
+### Directory Structure
+
+```
+external-available/      # Templates for external routing (tracked in git)
+├── proxmox.yml
+├── homeassistant.yml
+└── ...
+
+external-enabled/        # Active configs - symlinks (gitignored)
+└── .keep
+```
+
+### Commands
+
+```bash
+make enable-external proxmox    # Enable routing for external service
+make disable-external proxmox   # Disable routing
+make create-external myservice  # Create new external service from template
+make list-external              # List available external services
+```
+
+### How It Works
+
+When you run `make enable-external <name>`:
+1. Creates symlink: `external-enabled/<name>.yml` → `external-available/<name>.yml`
+2. Creates symlink: `etc/traefik/enabled/<name>.yml` → `external-enabled/<name>.yml`
+3. Traefik's file provider picks up the config automatically
+
+### Creating a New External Service
+
+```bash
+make create-external myrouter
+```
+
+This creates `external-available/myrouter.yml` from a template and opens it for editing. Configure the hostname and target URL for your external service.
