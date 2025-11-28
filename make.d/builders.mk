@@ -24,14 +24,6 @@ etc/dashy/dashy-config.yml:
 	mkdir -p ./etc/dashy
 	touch ./etc/dashy/dashy-config.yml
 
-ifneq (,$(wildcard ./services-enabled/prometheus.yml))
-BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),etc/prometheus/conf)
-endif
-
-etc/prometheus/conf:
-	mkdir -p etc/prometheus/conf
-	cp --no-clobber --recursive	.templates/prometheus-conf/* etc/prometheus/conf
-
 ifneq (,$(wildcard ./services-enabled/olivetin.yml))
 BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),etc/olivetin/config.yaml)
 endif
