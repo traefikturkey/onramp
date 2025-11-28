@@ -8,6 +8,8 @@ import sys
 sys.path.insert(0, str(Path(__file__).parent.parent / "scripts"))
 
 from scaffold import Scaffolder, IGNORE_PATTERNS
+from tests.mocks.command import MockCommandExecutor
+from ports.command import CommandResult
 
 
 class TestIgnorePatterns:
@@ -303,3 +305,292 @@ class TestListScaffolds:
         result = scaffolder.list_scaffolds()
 
         assert result == []
+
+
+class TestRenderTemplate:
+    """Tests for render_template() with mocked executor."""
+
+    def test_renders_template_successfully(self, tmp_path):
+        """Should call envsubst and write output."""
+        mock_exec = MockCommandExecutor()
+        mock_exec.set_response("envsubst", CommandResult(0, "RENDERED_OUTPUT", ""))
+
+        scaffolder = Scaffolder(str(tmp_path), executor=mock_exec)
+
+        # Create source template
+        source = tmp_path / "template.txt"
+        source.write_text("VAR=${VALUE}")
+
+        dest = tmp_path / "output.txt"
+
+        result = scaffolder.render_template(source, dest)
+
+        assert result is True
+        assert dest.exists()
+        assert dest.read_text() == "RENDERED_OUTPUT"
+
+    def test_passes_template_content_to_envsubst(self, tmp_path):
+        """Should pass template content as stdin to envsubst."""
+        mock_exec = MockCommandExecutor()
+        mock_exec.set_response("envsubst", CommandResult(0, "output", ""))
+
+        scaffolder = Scaffolder(str(tmp_path), executor=mock_exec)
+
+        source = tmp_path / "template.txt"
+        source.write_text("MY_TEMPLATE_CONTENT")
+
+        dest = tmp_path / "output.txt"
+
+        scaffolder.render_template(source, dest)
+
+        # Check envsubst was called with template content as input
+        calls = mock_exec.get_calls_for("envsubst")
+        assert len(calls) == 1
+        # calls structure: (cmd, input, capture_output, check, cwd)
+        assert mock_exec.calls[0][1] == "MY_TEMPLATE_CONTENT"
+
+    def test_creates_parent_directories(self, tmp_path):
+        """Should create parent directories for output."""
+        mock_exec = MockCommandExecutor()
+        mock_exec.set_response("envsubst", CommandResult(0, "output", ""))
+
+        scaffolder = Scaffolder(str(tmp_path), executor=mock_exec)
+
+        source = tmp_path / "template.txt"
+        source.write_text("content")
+
+        dest = tmp_path / "nested" / "dir" / "output.txt"
+
+        result = scaffolder.render_template(source, dest)
+
+        assert result is True
+        assert dest.parent.exists()
+
+    def test_returns_false_on_envsubst_error(self, tmp_path, capsys):
+        """Should return False when envsubst fails."""
+        mock_exec = MockCommandExecutor()
+        mock_exec.set_response("envsubst", CommandResult(1, "", "envsubst error"))
+
+        scaffolder = Scaffolder(str(tmp_path), executor=mock_exec)
+
+        source = tmp_path / "template.txt"
+        source.write_text("content")
+
+        dest = tmp_path / "output.txt"
+
+        result = scaffolder.render_template(source, dest)
+
+        assert result is False
+        captured = capsys.readouterr()
+        assert "Error rendering" in captured.err
+
+    def test_handles_missing_source_file(self, tmp_path, capsys):
+        """Should handle missing source file gracefully."""
+        mock_exec = MockCommandExecutor()
+        scaffolder = Scaffolder(str(tmp_path), executor=mock_exec)
+
+        source = tmp_path / "nonexistent.txt"
+        dest = tmp_path / "output.txt"
+
+        result = scaffolder.render_template(source, dest)
+
+        assert result is False
+
+
+class TestCopyStatic:
+    """Tests for copy_static() - static file copying."""
+
+    def test_copies_file(self, tmp_path):
+        """Should copy file to destination."""
+        mock_exec = MockCommandExecutor()
+        scaffolder = Scaffolder(str(tmp_path), executor=mock_exec)
+
+        source = tmp_path / "source.conf"
+        source.write_text("static content")
+
+        dest = tmp_path / "dest.conf"
+
+        result = scaffolder.copy_static(source, dest)
+
+        assert result is True
+        assert dest.exists()
+        assert dest.read_text() == "static content"
+
+    def test_creates_parent_directories(self, tmp_path):
+        """Should create parent directories for destination."""
+        mock_exec = MockCommandExecutor()
+        scaffolder = Scaffolder(str(tmp_path), executor=mock_exec)
+
+        source = tmp_path / "source.conf"
+        source.write_text("content")
+
+        dest = tmp_path / "nested" / "dir" / "dest.conf"
+
+        result = scaffolder.copy_static(source, dest)
+
+        assert result is True
+        assert dest.parent.exists()
+        assert dest.exists()
+
+    def test_skips_existing_file(self, tmp_path, capsys):
+        """Should not overwrite existing files (no-clobber)."""
+        mock_exec = MockCommandExecutor()
+        scaffolder = Scaffolder(str(tmp_path), executor=mock_exec)
+
+        source = tmp_path / "source.conf"
+        source.write_text("new content")
+
+        dest = tmp_path / "dest.conf"
+        dest.write_text("existing content")
+
+        result = scaffolder.copy_static(source, dest)
+
+        assert result is True
+        assert dest.read_text() == "existing content"
+        captured = capsys.readouterr()
+        assert "Skipped (exists)" in captured.out
+
+
+class TestBuild:
+    """Tests for build() - full scaffold build process."""
+
+    def test_renders_templates(self, tmp_path):
+        """Should render all templates for service."""
+        mock_exec = MockCommandExecutor()
+        mock_exec.set_response("envsubst", CommandResult(0, "rendered", ""))
+
+        scaffolder = Scaffolder(str(tmp_path), executor=mock_exec)
+
+        # Create scaffold with template
+        scaffold_dir = tmp_path / "services-scaffold" / "plex"
+        scaffold_dir.mkdir(parents=True)
+        (scaffold_dir / "env.template").write_text("VAR=${VALUE}")
+
+        # Create services-enabled dir
+        (tmp_path / "services-enabled").mkdir()
+
+        result = scaffolder.build("plex")
+
+        assert result is True
+        # Check env file was created
+        assert (tmp_path / "services-enabled" / "plex.env").exists()
+
+    def test_copies_static_files(self, tmp_path):
+        """Should copy static files for service."""
+        mock_exec = MockCommandExecutor()
+        scaffolder = Scaffolder(str(tmp_path), executor=mock_exec)
+
+        # Create scaffold with static file
+        scaffold_dir = tmp_path / "services-scaffold" / "plex"
+        scaffold_dir.mkdir(parents=True)
+        (scaffold_dir / "config.conf").write_text("static content")
+
+        result = scaffolder.build("plex")
+
+        assert result is True
+        # Check static file was copied to etc/
+        assert (tmp_path / "etc" / "plex" / "config.conf").exists()
+
+    def test_returns_true_for_no_scaffold(self, tmp_path, capsys):
+        """Should return True when no scaffold files exist."""
+        mock_exec = MockCommandExecutor()
+        scaffolder = Scaffolder(str(tmp_path), executor=mock_exec)
+
+        result = scaffolder.build("nonexistent")
+
+        # Should succeed but print message
+        captured = capsys.readouterr()
+        assert "No scaffold templates" in captured.out
+
+    def test_displays_message_on_success(self, tmp_path, capsys):
+        """Should display MESSAGE.txt content on successful build."""
+        mock_exec = MockCommandExecutor()
+        mock_exec.set_response("envsubst", CommandResult(0, "rendered", ""))
+
+        scaffolder = Scaffolder(str(tmp_path), executor=mock_exec)
+
+        # Create scaffold with template and message
+        scaffold_dir = tmp_path / "services-scaffold" / "plex"
+        scaffold_dir.mkdir(parents=True)
+        (scaffold_dir / "env.template").write_text("VAR=${VALUE}")
+        (scaffold_dir / "MESSAGE.txt").write_text("Please configure your Plex token!")
+
+        (tmp_path / "services-enabled").mkdir()
+
+        scaffolder.build("plex")
+
+        captured = capsys.readouterr()
+        assert "POST-ENABLE INSTRUCTIONS" in captured.out
+        assert "Please configure your Plex token!" in captured.out
+
+
+class TestTeardown:
+    """Tests for teardown() - scaffold removal."""
+
+    def test_removes_env_file(self, tmp_path):
+        """Should remove service.env file."""
+        mock_exec = MockCommandExecutor()
+        scaffolder = Scaffolder(str(tmp_path), executor=mock_exec)
+
+        # Create env file
+        services_enabled = tmp_path / "services-enabled"
+        services_enabled.mkdir()
+        env_file = services_enabled / "plex.env"
+        env_file.write_text("VAR=value")
+
+        result = scaffolder.teardown("plex")
+
+        assert result is True
+        assert not env_file.exists()
+
+    def test_preserves_etc_by_default(self, tmp_path):
+        """Should preserve etc directory by default."""
+        mock_exec = MockCommandExecutor()
+        scaffolder = Scaffolder(str(tmp_path), executor=mock_exec)
+
+        # Create etc directory
+        etc_dir = tmp_path / "etc" / "plex"
+        etc_dir.mkdir(parents=True)
+        (etc_dir / "config.conf").write_text("content")
+
+        (tmp_path / "services-enabled").mkdir()
+
+        result = scaffolder.teardown("plex", preserve_etc=True)
+
+        assert result is True
+        assert etc_dir.exists()
+
+    def test_removes_etc_when_requested(self, tmp_path):
+        """Should remove etc directory when preserve_etc=False."""
+        mock_exec = MockCommandExecutor()
+        scaffolder = Scaffolder(str(tmp_path), executor=mock_exec)
+
+        # Create etc directory
+        etc_dir = tmp_path / "etc" / "plex"
+        etc_dir.mkdir(parents=True)
+        (etc_dir / "config.conf").write_text("content")
+
+        (tmp_path / "services-enabled").mkdir()
+
+        result = scaffolder.teardown("plex", preserve_etc=False)
+
+        assert result is True
+        assert not etc_dir.exists()
+
+
+class TestScaffolderInit:
+    """Tests for Scaffolder initialization."""
+
+    def test_uses_injected_executor(self, tmp_path):
+        """Should use injected command executor."""
+        mock_exec = MockCommandExecutor()
+        scaffolder = Scaffolder(str(tmp_path), executor=mock_exec)
+
+        assert scaffolder._executor is mock_exec
+
+    def test_default_base_dir(self):
+        """Should use /app as default base directory."""
+        mock_exec = MockCommandExecutor()
+        scaffolder = Scaffolder(executor=mock_exec)
+
+        assert scaffolder.base_dir == Path("/app")
