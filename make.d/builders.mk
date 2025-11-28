@@ -112,10 +112,6 @@ setup-wordpress-upload:
 	@mkdir -p ./etc/wordpress
 	cp --no-clobber .templates/wordpress-upload.template ./etc/wordpress/upload.ini
 
-ifneq (,$(wildcard ./services-enabled/docker-mirror.yml))
-BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),setup-docker-mirror)
-endif
-
 ifneq (,$(wildcard ./services-enabled/geopulse.yml))
 BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),generate-geopulse-keys)
 endif
@@ -123,11 +119,6 @@ endif
 generate-geopulse-keys:
 	@mkdir -p ./etc/geopulse/keys
 	./make.d/scripts/generate-geopulse-keys.sh
-
-setup-docker-mirror:
-	@mkdir -p ./etc/docker-mirror/registry
-	@mkdir -p ./etc/docker-mirror/registry_data
-	cp --no-clobber .templates/docker-mirror-config.template ./etc/docker-mirror/config.json
 
 ifneq (,$(wildcard ./services-enabled/kaneo.yml))
 BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),build_kaneo_dirs)
