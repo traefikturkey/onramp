@@ -94,7 +94,7 @@ To create a new service:
 make create-service name-of-service
 ```
 
-This will create a file in /services-available that is built using the service.template
+This will create a file in /services-available that is built using the make.d/templates/service.template
 
 
 
