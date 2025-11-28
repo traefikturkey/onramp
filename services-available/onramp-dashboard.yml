@@ -8,6 +8,7 @@ networks:
 
 services:
   onramp-dashboard:
+    image: sietch
     build:
       context: ./sietch
       dockerfile: Dockerfile
@@ -25,6 +26,8 @@ services:
       # Read-write for enabled services and configs
       - ./services-enabled:/app/services-enabled
       - ./etc:/app/etc
+      # Docker socket for container management
+      - /var/run/docker.sock:/var/run/docker.sock:ro
       # Timezone
       - /etc/localtime:/etc/localtime:ro
     environment:
@@ -32,24 +35,18 @@ services:
       - PGID=${PGID:-1000}
       - TZ=${TZ}
       - DASHBOARD_DEBUG=${ONRAMP_DASHBOARD_DEBUG:-false}
-      - DASHBOARD_DOCKER_HOST=tcp://docker-proxy:2375
     env_file:
       - services-enabled/.env
-    depends_on:
-      - docker-proxy
     labels:
       - joyride.host.name=${ONRAMP_DASHBOARD_HOST_NAME:-dashboard}.${HOST_DOMAIN}
       - traefik.enable=${ONRAMP_DASHBOARD_TRAEFIK_ENABLE:-true}
       - traefik.http.routers.onramp-dashboard.entrypoints=websecure
       - traefik.http.routers.onramp-dashboard.rule=Host(`${ONRAMP_DASHBOARD_HOST_NAME:-dashboard}.${HOST_DOMAIN}`)
-      - traefik.http.routers.onramp-dashboard.tls=true
-      - traefik.http.routers.onramp-dashboard.tls.certresolver=letsencrypt
-      - traefik.http.routers.onramp-dashboard.middlewares=authelia@docker
       - traefik.http.services.onramp-dashboard.loadbalancer.server.port=8000
       - com.centurylinklabs.watchtower.enable=${ONRAMP_DASHBOARD_WATCHTOWER:-true}
       - autoheal=${ONRAMP_DASHBOARD_AUTOHEAL:-true}
     healthcheck:
-      test: ["CMD", "python", "-c", "import httpx; httpx.get('http://localhost:8000/api/system/health')"]
+      test: ["CMD", "wget", "-qO", "/dev/null", "http://localhost:8000/"]
       interval: 30s
       timeout: 10s
       retries: 3

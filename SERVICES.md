@@ -1,5 +1,5 @@
 # Available Services
-256 services and counting...
+257 services and counting...
 
 [1](#1)
 [A](#A)
@@ -224,6 +224,7 @@
 - [omada](https://hub.docker.com/r/mbentley/omada-controller) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/omada.yml)): Container for running tp-link omada controller
 - [onboard](https://github.com/traefikturkey/onboard) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/onboard.yml)): An RSS and Bookmarks Dashboard 
 - [ongoing](https://github.com/traefikturkey/ongoing) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/ongoing.yml)): A self hosted url expander (opposite of url shortener)
+- [onramp-dashboard](https://github.com/your-repo/onramp) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/onramp-dashboard.yml)): Web dashboard for OnRamp homelab management
 - [openspeedtest](https://github.com/openspeedtest/Docker-Image) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/openspeedtest.yml)): web-based speed test application
 - [overseerr](https://hub.docker.com/r/linuxserver/overseerr) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/overseerr.yml)): Request management and notification system for media content
 - [owncast](https://github.com/owncast/owncast) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/owncast.yml)): Self-hosted live video streaming server

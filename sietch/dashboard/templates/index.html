@@ -8,18 +8,18 @@
 <!-- System Stats -->
 <div class="grid">
     <article>
-        <header>Containers</header>
+        <header>Services Running</header>
         <p>
-            <strong class="stat-number">{{ stats.containers_running }}</strong>
-            <small>/ {{ stats.containers_total }} running</small>
+            <strong class="stat-number">{{ stats.services_running }}</strong>
+            <small>/ {{ stats.services_enabled }} enabled</small>
         </p>
     </article>
 
     <article>
-        <header>Services Enabled</header>
+        <header>Services Available</header>
         <p>
             <strong class="stat-number">{{ stats.services_enabled }}</strong>
-            <small>/ {{ stats.services_available }} available</small>
+            <small>/ {{ stats.services_available }} in catalog</small>
         </p>
     </article>
 
@@ -36,58 +36,20 @@
     <h2>Enabled Services</h2>
 
     {% if enabled_services %}
-    <div class="service-grid">
+    <div class="service-grid" id="service-list">
         {% for service in enabled_services %}
-        <article class="service-card" id="service-{{ service.name }}">
-            <header>
-                <strong>{{ service.name }}</strong>
-                {% if service.container %}
-                    {% if service.container.status == 'running' %}
-                    <span class="status-badge running">Running</span>
-                    {% elif service.container.status == 'exited' %}
-                    <span class="status-badge stopped">Stopped</span>
-                    {% else %}
-                    <span class="status-badge">{{ service.container.status }}</span>
-                    {% endif %}
-                {% else %}
-                <span class="status-badge unknown">Unknown</span>
-                {% endif %}
-            </header>
-
-            <p class="service-description">
-                {{ service.description or 'No description available' }}
-            </p>
-
-            <footer>
-                <div class="grid">
-                    {% if service.container and service.container.status == 'running' %}
-                    <button
-                        class="outline secondary"
-                        hx-post="/api/docker/containers/{{ service.name }}/restart"
-                        hx-swap="none"
-                        hx-on::after-request="location.reload()">
-                        Restart
-                    </button>
-                    {% else %}
-                    <button
-                        class="outline"
-                        hx-post="/api/docker/containers/{{ service.name }}/start"
-                        hx-swap="none"
-                        hx-on::after-request="location.reload()">
-                        Start
-                    </button>
-                    {% endif %}
-                    <a href="/services/{{ service.name }}" role="button" class="outline">Details</a>
-                </div>
-            </footer>
-        </article>
+        {% include "partials/service_card.html" %}
         {% endfor %}
+        
+        {% if has_more %}
+        <div hx-get="/api/home/services?offset={{ next_offset }}"
+             hx-trigger="revealed"
+             hx-swap="outerHTML"
+             class="loading-sentinel">
+            <span aria-busy="true">Loading more...</span>
+        </div>
+        {% endif %}
     </div>
-
-    {% if more_services > 0 %}
-    <p><a href="/services/enabled">View all ({{ more_services }} more)</a></p>
-    {% endif %}
-
     {% else %}
     <article>
         <p>No services enabled yet.</p>

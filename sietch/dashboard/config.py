@@ -32,7 +32,7 @@ class Settings(BaseSettings):
         return self.base_dir / "etc"
 
     # Docker
-    docker_host: str = "tcp://docker-proxy:2375"
+    docker_host: str = "unix:///var/run/docker.sock"
 
     # Prometheus/Traefik metrics (optional)
     prometheus_url: str = "http://traefik:8082"

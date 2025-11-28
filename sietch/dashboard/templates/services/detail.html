@@ -24,7 +24,11 @@
             {% if container %}
                 {% if container.status == 'running' %}
                 <p><span class="status-badge running">Running</span></p>
-                <small>Health: {{ container.health }}</small>
+                {% if container.health and container.health != 'none' %}
+                <small>Health Check: {{ container.health | capitalize }}</small>
+                {% else %}
+                <small>Health Check: Unavailable</small>
+                {% endif %}
                 {% elif container.status == 'exited' %}
                 <p><span class="status-badge stopped">Stopped</span></p>
                 {% else %}
@@ -38,6 +42,7 @@
         {% endif %}
     </article>
 
+    {% if not service.core %}
     <article>
         <header>Actions</header>
         {% if service.enabled and container %}
@@ -71,6 +76,7 @@
         <p><small>Run: <code>make enable-service {{ service.name }}</code></small></p>
         {% endif %}
     </article>
+    {% endif %}
 </div>
 
 <!-- Service Info -->
