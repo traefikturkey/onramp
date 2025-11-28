@@ -49,14 +49,6 @@ etc/prometheus/conf:
 	mkdir -p etc/prometheus/conf
 	cp --no-clobber --recursive	.templates/prometheus-conf/* etc/prometheus/conf
 
-ifneq (,$(wildcard ./services-enabled/gatus.yml))
-BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),etc/gatus/config.yaml)
-endif
-
-etc/gatus/config.yaml:
-	mkdir -p ./etc/gatus
-	cp --no-clobber .templates/gatus.template ./etc/gatus/config.yaml
-
 ifneq (,$(wildcard ./services-enabled/olivetin.yml))
 BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),etc/olivetin/config.yaml)
 endif
