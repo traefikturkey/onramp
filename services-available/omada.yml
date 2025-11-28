@@ -36,7 +36,7 @@ services:
       # Below ports required for portal access
       - '8088:8088'
       - '8043:8043'
-      # - '27001:27001/udp'
+      - '27001:27001/udp'
       # - '27002:27002'
       # - '27017:27017'
       # Below ports required for device discovery
