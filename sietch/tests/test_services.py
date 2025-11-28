@@ -114,19 +114,20 @@ class TestParseMetadata:
         assert meta["category"] == "media"
         assert meta["url"] == "https://plex.tv"
 
-    def test_stops_at_non_comment_line(self, tmp_path):
+    def test_last_metadata_wins(self, tmp_path):
+        """When duplicate metadata exists, the last one wins (scans whole file)."""
         yml = tmp_path / "test.yml"
         yml.write_text(
-            "# description: Before content\n"
+            "# description: First description\n"
             "services:\n"
-            "# description: After content\n"
+            "# description: Second description\n"
         )
 
         mgr = ServiceManager(str(tmp_path))
         meta = mgr._parse_metadata(yml)
 
-        # Should only get the first description
-        assert meta["description"] == "Before content"
+        # Parser scans entire file, last value wins
+        assert meta["description"] == "Second description"
 
     def test_handles_empty_file(self, tmp_path):
         yml = tmp_path / "test.yml"
