@@ -9,7 +9,9 @@
     --status-enabled: #3b82f6;
 }
 
-/* Service Grid */
+/* ===================
+   Service Grid
+   =================== */
 .service-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -47,7 +49,9 @@
     gap: 0.5rem;
 }
 
-/* Status Badges */
+/* ===================
+   Status Badges
+   =================== */
 .status-badge {
     display: inline-block;
     padding: 0.2rem 0.5rem;
@@ -94,20 +98,61 @@
     color: var(--pico-muted-color);
 }
 
-/* Stats */
+/* ===================
+   Stats
+   =================== */
 .stat-number {
     font-size: 2rem;
     font-weight: 700;
 }
 
-/* Small buttons */
+/* Container stats bars */
+.stat-bar {
+    height: 8px;
+    background: var(--pico-secondary-background);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 0.5rem 0;
+}
+
+.stat-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.stat-bar-fill.cpu {
+    background: var(--status-enabled);
+}
+
+.stat-bar-fill.memory {
+    background: var(--status-warning);
+}
+
+.stat-bar-fill.low {
+    background: var(--status-running);
+}
+
+.stat-bar-fill.medium {
+    background: var(--status-warning);
+}
+
+.stat-bar-fill.high {
+    background: var(--status-stopped);
+}
+
+/* ===================
+   Small buttons
+   =================== */
 button.small,
 [role="button"].small {
     padding: 0.25rem 0.5rem;
     font-size: 0.8rem;
 }
 
-/* Breadcrumb fix for Pico */
+/* ===================
+   Breadcrumb fix for Pico
+   =================== */
 nav[aria-label="breadcrumb"] ul {
     padding: 0;
 }
@@ -121,7 +166,9 @@ nav[aria-label="breadcrumb"] li + li::before {
     color: var(--pico-muted-color);
 }
 
-/* Table improvements */
+/* ===================
+   Table improvements
+   =================== */
 table {
     margin-bottom: 0;
 }
@@ -133,21 +180,258 @@ table td code {
     font-size: 0.85rem;
 }
 
-/* Footer */
-footer {
+/* ===================
+   Footer
+   =================== */
+footer.container {
     margin-top: 3rem;
     padding: 1rem 0;
     text-align: center;
     color: var(--pico-muted-color);
 }
 
-/* Responsive adjustments */
+/* ===================
+   Toast Notifications
+   =================== */
+#toast-container {
+    position: fixed;
+    bottom: 80px; /* Above mobile nav */
+    right: 20px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.toast {
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    color: white;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    animation: toast-in 0.3s ease;
+}
+
+.toast-success {
+    background: var(--status-running);
+}
+
+.toast-error {
+    background: var(--status-stopped);
+}
+
+.toast-warning {
+    background: var(--status-warning);
+}
+
+.toast-info {
+    background: var(--status-enabled);
+}
+
+.toast-fade {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+@keyframes toast-in {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* ===================
+   Mobile Navigation
+   =================== */
+.mobile-nav {
+    display: none;
+}
+
+.mobile-bottom-nav {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--pico-background-color);
+    border-top: 1px solid var(--pico-muted-border-color);
+    padding: 0.5rem;
+    justify-content: space-around;
+    z-index: 100;
+}
+
+.mobile-bottom-nav a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.5rem;
+    color: var(--pico-muted-color);
+    text-decoration: none;
+}
+
+.mobile-bottom-nav a:hover,
+.mobile-bottom-nav a:focus {
+    color: var(--pico-primary);
+}
+
+/* ===================
+   Responsive
+   =================== */
 @media (max-width: 768px) {
+    /* Hide desktop nav, show mobile */
+    .desktop-nav {
+        display: none;
+    }
+
+    .mobile-nav {
+        display: block;
+    }
+
+    .mobile-bottom-nav {
+        display: flex;
+    }
+
+    /* Add padding for bottom nav */
+    main.container {
+        padding-bottom: 80px;
+    }
+
+    footer.container {
+        padding-bottom: 80px;
+    }
+
+    /* Adjust toast position */
+    #toast-container {
+        bottom: 100px;
+        right: 10px;
+        left: 10px;
+    }
+
+    .toast {
+        width: 100%;
+    }
+
+    /* Single column grid */
     .service-grid {
         grid-template-columns: 1fr;
     }
 
+    /* Smaller stats */
     .stat-number {
         font-size: 1.5rem;
     }
+
+    /* Stack grids on mobile */
+    .grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Table scroll */
+    table {
+        display: block;
+        overflow-x: auto;
+    }
+}
+
+/* ===================
+   HTMX Indicators
+   =================== */
+.htmx-indicator {
+    display: none;
+}
+
+.htmx-request .htmx-indicator {
+    display: inline;
+}
+
+.htmx-request.htmx-indicator {
+    display: inline;
+}
+
+/* Loading spinner */
+.spinner {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid var(--pico-muted-color);
+    border-top-color: var(--pico-primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ===================
+   Onboarding / Empty States
+   =================== */
+.empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+}
+
+.empty-state svg {
+    width: 64px;
+    height: 64px;
+    color: var(--pico-muted-color);
+    margin-bottom: 1rem;
+}
+
+.empty-state h2 {
+    color: var(--pico-muted-color);
+    font-weight: 400;
+}
+
+/* ===================
+   Onboarding wizard
+   =================== */
+.wizard-steps {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.wizard-step {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--pico-muted-color);
+}
+
+.wizard-step.active {
+    color: var(--pico-primary);
+}
+
+.wizard-step.completed {
+    color: var(--status-running);
+}
+
+.wizard-step-number {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 600;
+    background: var(--pico-secondary-background);
+}
+
+.wizard-step.active .wizard-step-number {
+    background: var(--pico-primary);
+    color: white;
+}
+
+.wizard-step.completed .wizard-step-number {
+    background: var(--status-running);
+    color: white;
 }

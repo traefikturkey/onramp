@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}System - OnRamp{% endblock %}
+
+{% block content %}
+<h1>System</h1>
+
+<div class="grid">
+    <article>
+        <header>Docker</header>
+        {% if docker_info %}
+        <table>
+            <tbody>
+                <tr><th>Version</th><td>{{ docker_info.version }}</td></tr>
+                <tr><th>OS</th><td>{{ docker_info.os }}</td></tr>
+                <tr><th>Architecture</th><td>{{ docker_info.arch }}</td></tr>
+                <tr><th>CPUs</th><td>{{ docker_info.cpus }}</td></tr>
+                <tr><th>Memory</th><td>{{ docker_info.memory_human }}</td></tr>
+                <tr><th>Containers</th><td>{{ docker_info.containers }}</td></tr>
+                <tr><th>Images</th><td>{{ docker_info.images }}</td></tr>
+            </tbody>
+        </table>
+        {% else %}
+        <p>Docker information unavailable</p>
+        {% endif %}
+    </article>
+
+    <article>
+        <header>Quick Links</header>
+        <ul>
+            <li><a href="/system/dns">DNS Management</a></li>
+            <li><a href="/system/database">Database Management</a></li>
+            <li><a href="/backups">Backup Management</a></li>
+            <li><a href="/config">Configuration</a></li>
+        </ul>
+    </article>
+</div>
+
+<section>
+    <h2>Live Status</h2>
+    <div id="live-status" hx-ext="sse" sse-connect="/api/events/status" sse-swap="status">
+        <p>Connecting to live status...</p>
+    </div>
+</section>
+
+<section>
+    <h2>Docker Events</h2>
+    <div id="docker-events" style="max-height: 300px; overflow-y: auto; font-family: monospace; font-size: 0.85rem;">
+        <p>Listening for Docker events...</p>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Subscribe to Docker events
+const eventSource = new EventSource('/api/events/docker');
+const eventsDiv = document.getElementById('docker-events');
+
+eventSource.addEventListener('container', (e) => {
+    const data = JSON.parse(e.data);
+    const time = new Date(data.time * 1000).toLocaleTimeString();
+    const entry = document.createElement('div');
+    entry.innerHTML = `<span style="color:var(--pico-muted-color)">${time}</span> <strong>${data.container}</strong>: ${data.action}`;
+    eventsDiv.insertBefore(entry, eventsDiv.firstChild);
+    // Keep only last 50 events
+    while (eventsDiv.children.length > 50) {
+        eventsDiv.removeChild(eventsDiv.lastChild);
+    }
+});
+
+eventSource.addEventListener('error', () => {
+    eventsDiv.innerHTML = '<p style="color:var(--pico-del-color)">Connection lost. Refresh to reconnect.</p>';
+});
+
+// Status updates
+const statusSource = new EventSource('/api/events/status');
+const statusDiv = document.getElementById('live-status');
+
+statusSource.addEventListener('status', (e) => {
+    const data = JSON.parse(e.data);
+    statusDiv.innerHTML = `
+        <div class="grid">
+            <div><strong>${data.containers_running}</strong> / ${data.containers_total} containers running</div>
+            <div><strong>${data.services_enabled}</strong> services enabled</div>
+        </div>
+    `;
+});
+</script>
+{% endblock %}

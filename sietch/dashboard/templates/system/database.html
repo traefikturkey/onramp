@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}Database Management - OnRamp{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ul>
+        <li><a href="/">Dashboard</a></li>
+        <li><a href="/system">System</a></li>
+        <li>Database Management</li>
+    </ul>
+</nav>
+
+<h1>Database Management</h1>
+
+<p>Manage MariaDB databases and users.</p>
+
+<div class="grid">
+    <article>
+        <header>Databases</header>
+        <div id="databases-list" hx-get="/api/database/databases" hx-trigger="load" hx-swap="innerHTML">
+            <p>Loading databases...</p>
+        </div>
+    </article>
+
+    <article>
+        <header>Users</header>
+        <div id="users-list" hx-get="/api/database/users" hx-trigger="load" hx-swap="innerHTML">
+            <p>Loading users...</p>
+        </div>
+    </article>
+</div>
+
+<article>
+    <header>Create User with Database</header>
+    <p>Create a new database user with a dedicated database and full privileges.</p>
+    <form id="create-user-form">
+        <div class="grid">
+            <label>
+                Username
+                <input type="text" name="username" placeholder="app_user" required pattern="[a-zA-Z0-9_]+">
+            </label>
+            <label>
+                Database Name
+                <input type="text" name="database" placeholder="app_db" required pattern="[a-zA-Z0-9_]+">
+            </label>
+        </div>
+        <label>
+            Password (leave empty to generate)
+            <input type="password" name="password" placeholder="Auto-generated if empty">
+        </label>
+        <button
+            type="button"
+            hx-post="/api/database/users/with-database"
+            hx-include="closest form"
+            hx-swap="none"
+            hx-on::after-request="handleCreateResult(event)">
+            Create User & Database
+        </button>
+    </form>
+    <div id="create-result" style="display:none;">
+        <article>
+            <header>Created Successfully</header>
+            <table>
+                <tr><th>Username</th><td id="result-username"></td></tr>
+                <tr><th>Password</th><td><code id="result-password"></code></td></tr>
+                <tr><th>Database</th><td id="result-database"></td></tr>
+            </table>
+            <p><small>Save this password - it won't be shown again!</small></p>
+        </article>
+    </div>
+</article>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function handleCreateResult(event) {
+    if (event.detail.successful) {
+        const data = JSON.parse(event.detail.xhr.responseText);
+        document.getElementById('result-username').textContent = data.username;
+        document.getElementById('result-password').textContent = data.password;
+        document.getElementById('result-database').textContent = data.database;
+        document.getElementById('create-result').style.display = 'block';
+        // Refresh lists
+        htmx.trigger('#databases-list', 'load');
+        htmx.trigger('#users-list', 'load');
+    } else {
+        alert('Failed to create user: ' + event.detail.xhr.responseText);
+    }
+}
+</script>
+{% endblock %}
