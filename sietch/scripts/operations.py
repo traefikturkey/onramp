@@ -125,7 +125,8 @@ class GenerateRsaKeyOp(Operation):
 
     def execute(self) -> bool:
         private_path = self.resolve_path(self.config["output"])
-        public_path = self.resolve_path(self.config.get("public_key", ""))
+        public_key_name = self.config.get("public_key", "")
+        public_path = self.resolve_path(public_key_name) if public_key_name else None
         bits = self.config.get("bits", 2048)
         skip_if_exists = self.config.get("skip_if_exists", True)
 
