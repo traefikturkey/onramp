@@ -156,6 +156,6 @@ test-coverage: sietch-build ## Run tests with coverage report
 	cd sietch && uv run pytest --cov=scripts --cov-report=html
 
 test-docker: sietch-build ## Run tests inside the Sietch container
-	docker run --rm -v $(shell pwd)/sietch:/app $(SIETCH_IMAGE) uv run pytest
+	docker run --rm -v $(shell pwd)/sietch:/app -w /app $(SIETCH_IMAGE) sh -c "uv sync --all-extras && uv run pytest"
 
 #$(info "sietch.mk loaded")
