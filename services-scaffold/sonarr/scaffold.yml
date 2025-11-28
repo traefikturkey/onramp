@@ -1,0 +1,38 @@
+version: "1"
+
+# Setup extended scripts for Sonarr (RandomNinjaAtk arr-scripts)
+# Downloads init script only if custom-services.d is empty (user hasn't customized)
+
+operations:
+  - type: mkdir
+    path: custom-services.d/
+
+  - type: mkdir
+    path: custom-cont-init.d/
+
+  # Download init script if custom-services.d is empty
+  - type: download
+    url: https://raw.githubusercontent.com/RandomNinjaAtk/arr-scripts/main/sonarr/scripts_init.bash
+    output: custom-cont-init.d/scripts_init.bash
+    condition:
+      type: dir_empty
+      path: custom-services.d/
+
+  # Remove old init script if user has customized custom-services.d
+  - type: delete
+    path: custom-cont-init.d/scripts_init.bash
+    condition:
+      type: dir_not_empty
+      path: custom-services.d/
+
+  # Set ownership to current user
+  - type: chown
+    path: ./
+    user: "${PUID}"
+    group: "${PGID}"
+    recursive: true
+
+  # Set group sticky bit
+  - type: chmod
+    path: ./
+    mode: "g+s"
