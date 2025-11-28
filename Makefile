@@ -58,7 +58,7 @@ endif
 # Sietch container configuration
 SIETCH_IMAGE := sietch
 SIETCH_MARKER := sietch/.built
-SIETCH_FILES := $(shell find sietch/ -type f 2>/dev/null)
+SIETCH_FILES := $(shell find sietch/ -type f ! -name '.built' 2>/dev/null)
 SIETCH_RUN := docker run --rm -v $(shell pwd):/app -u $(PUID):$(PGID) $(SIETCH_IMAGE)
 
 # prevents circular references, do not remove

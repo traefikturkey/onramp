@@ -40,6 +40,10 @@ BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),etc/joyride/hosts.d/hos
 endif
 
 etc/joyride/hosts.d/hosts:
+	@if [ -f ./etc/joyride/hosts.d ] && [ ! -d ./etc/joyride/hosts.d ]; then \
+		echo "Fixing: ./etc/joyride/hosts.d is a file, removing to create directory"; \
+		rm -f ./etc/joyride/hosts.d; \
+	fi
 	mkdir -p ./etc/joyride/hosts.d
 	touch ./etc/joyride/hosts.d/hosts
 
@@ -81,6 +85,7 @@ BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),etc/recyclarr/recyclarr
 endif
 
 etc/recyclarr/recyclarr.yml:
+	mkdir -p ./etc/recyclarr
 	cp --no-clobber .templates/recyclarr.template ./etc/recyclarr/recyclarr.yml
 
 
@@ -89,6 +94,7 @@ BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),etc/gatus/config.yaml)
 endif
 
 etc/gatus/config.yaml:
+	mkdir -p ./etc/gatus
 	cp --no-clobber .templates/gatus.template ./etc/gatus/config.yaml
 
 ifneq (,$(wildcard ./services-enabled/olivetin.yml))
@@ -96,6 +102,7 @@ BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),etc/olivetin/config.yam
 endif
 
 etc/olivetin/config.yaml:
+	mkdir -p ./etc/olivetin
 	touch $@
 
 ifneq (,$(wildcard ./services-enabled/cloudflare-tunnel.yml))
