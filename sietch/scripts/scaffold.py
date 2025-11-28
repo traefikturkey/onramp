@@ -7,23 +7,52 @@ in the services-scaffold/ directory.
 
 Conventions:
 - *.template files are rendered with envsubst -> output location
-- *.static files are copied without modification
+- scaffold.yml manifests define complex operations (key gen, downloads, etc.)
+- All other files are copied as-is (except ignored patterns)
 - Subdirectories are mirrored in the output
+
+Ignored patterns (not copied):
+- *.md (documentation)
+- .gitkeep (git placeholders)
+- scaffold.yml (manifest file)
 
 Output mapping:
 - services-scaffold/onramp/.env.template -> services-enabled/.env
 - services-scaffold/onramp/.env.<stub>.template -> services-enabled/.env.<stub>
 - services-scaffold/<service>/env.template -> services-enabled/<service>.env
 - services-scaffold/<service>/<file>.template -> etc/<service>/<file>
-- services-scaffold/<service>/<file>.static -> etc/<service>/<file>
+- services-scaffold/<service>/<file> -> etc/<service>/<file>
 """
 
 import argparse
+import fnmatch
 import os
 import shutil
 import subprocess
 import sys
 from pathlib import Path
+
+try:
+    import yaml
+
+    YAML_AVAILABLE = True
+except ImportError:
+    YAML_AVAILABLE = False
+
+# Import operations module for manifest execution
+try:
+    from operations import OperationContext, execute_operation
+
+    OPERATIONS_AVAILABLE = True
+except ImportError:
+    OPERATIONS_AVAILABLE = False
+
+# Files/patterns to ignore when copying static files
+IGNORE_PATTERNS = [
+    "*.md",
+    ".gitkeep",
+    "scaffold.yml",
+]
 
 
 class Scaffolder:
@@ -35,6 +64,14 @@ class Scaffolder:
         self.services_enabled = self.base_dir / "services-enabled"
         self.etc_dir = self.base_dir / "etc"
 
+    def _should_ignore(self, path: Path) -> bool:
+        """Check if a file should be ignored (not copied)."""
+        name = path.name
+        for pattern in IGNORE_PATTERNS:
+            if fnmatch.fnmatch(name, pattern):
+                return True
+        return False
+
     def find_scaffold_files(self, service: str) -> tuple[list[Path], list[Path]]:
         """Find all template and static files for a service."""
         service_scaffold = self.scaffold_dir / service
@@ -42,19 +79,36 @@ class Scaffolder:
             return [], []
 
         templates = list(service_scaffold.rglob("*.template"))
-        statics = list(service_scaffold.rglob("*.static"))
+
+        # Static files: everything except templates and ignored patterns
+        statics = [
+            f
+            for f in service_scaffold.rglob("*")
+            if f.is_file() and f.suffix != ".template" and not self._should_ignore(f)
+        ]
+
         return templates, statics
 
+    def find_manifest(self, service: str) -> Path | None:
+        """Find scaffold.yml manifest for a service."""
+        manifest = self.scaffold_dir / service / "scaffold.yml"
+        return manifest if manifest.exists() else None
+
     def has_scaffold(self, service: str) -> bool:
-        """Check if a service has scaffold files."""
+        """Check if a service has scaffold files or manifest."""
         templates, statics = self.find_scaffold_files(service)
-        return bool(templates or statics)
+        manifest = self.find_manifest(service)
+        return bool(templates or statics or manifest)
 
     def get_output_path(self, service: str, source: Path) -> Path:
         """Determine output path for a scaffold file."""
         relative = source.relative_to(self.scaffold_dir / service)
-        # Remove .template or .static suffix
-        output_name = source.stem if source.suffix in (".template", ".static") else source.name
+
+        # Only strip .template suffix (not .static anymore)
+        if source.suffix == ".template":
+            output_name = source.stem
+        else:
+            output_name = source.name
 
         # Handle special cases for onramp (global config)
         if service == "onramp":
@@ -112,6 +166,54 @@ class Scaffolder:
             print(f"  Error copying {source}: {e}", file=sys.stderr)
             return False
 
+    def execute_manifest(self, service: str) -> bool:
+        """Execute operations from scaffold.yml manifest."""
+        manifest_path = self.find_manifest(service)
+        if not manifest_path:
+            return True  # No manifest is not an error
+
+        if not YAML_AVAILABLE:
+            print(f"  Warning: pyyaml not installed, skipping manifest for {service}")
+            return True
+
+        if not OPERATIONS_AVAILABLE:
+            print(f"  Warning: operations module not available, skipping manifest for {service}")
+            return True
+
+        print(f"  Executing manifest operations...")
+
+        try:
+            with open(manifest_path, "r") as f:
+                manifest = yaml.safe_load(f)
+        except Exception as e:
+            print(f"  Error reading manifest: {e}", file=sys.stderr)
+            return False
+
+        # Validate version
+        version = manifest.get("version", "1")
+        if version != "1":
+            print(f"  Unsupported manifest version: {version}", file=sys.stderr)
+            return False
+
+        # Create context
+        ctx = OperationContext(
+            service=service,
+            base_dir=self.base_dir,
+            scaffold_dir=self.scaffold_dir,
+            etc_dir=self.etc_dir,
+            services_enabled=self.services_enabled,
+        )
+
+        # Execute operations in order
+        operations = manifest.get("operations", [])
+        for i, op_config in enumerate(operations, 1):
+            op_type = op_config.get("type", "unknown")
+            if not execute_operation(op_config, ctx):
+                print(f"  Failed at operation {i}: {op_type}", file=sys.stderr)
+                return False
+
+        return True
+
     def build(self, service: str) -> bool:
         """Build scaffold for a service."""
         if not self.has_scaffold(service):
@@ -122,15 +224,21 @@ class Scaffolder:
         templates, statics = self.find_scaffold_files(service)
         success = True
 
+        # Phase 1: Render templates
         for template in templates:
             dest = self.get_output_path(service, template)
             if not self.render_template(template, dest):
                 success = False
 
+        # Phase 2: Copy static files
         for static in statics:
             dest = self.get_output_path(service, static)
             if not self.copy_static(static, dest):
                 success = False
+
+        # Phase 3: Execute manifest operations (after templates/statics)
+        if not self.execute_manifest(service):
+            success = False
 
         return success
 
