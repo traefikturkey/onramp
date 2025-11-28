@@ -33,18 +33,20 @@ services:
       - SHOW_SERVER_LOGS=true
       - SHOW_MONGODB_LOGS=false
     ports:
-      # Below ports required for portal access
+      # Management interface
       - '8088:8088'
       - '8043:8043'
+      # Captive portal (guest network auth)
+      - '8843:8843'
+      # Device discovery and communication
+      - '19810:19810/udp'
       - '27001:27001/udp'
+      # Device adoption and management
+      - '29810:29810/udp'
+      - '29811-29817:29811-29817'
+      # MongoDB ports - only needed for external MongoDB, not required for normal operation
       # - '27002:27002'
       # - '27017:27017'
-      # Below ports required for device discovery
-      - '29810:29810/udp'
-      - '29811:29811'
-      - '29812:29812'
-      - '29813:29813'
-      - '29814:29814'
 
     labels:
       - joyride.host.name=${OMADA_CONTAINER_NAME:-omada}.${HOST_DOMAIN}
