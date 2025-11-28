@@ -1,0 +1,40 @@
+# Test container for sietch
+# Includes dev dependencies (pytest, etc.)
+FROM python:3.14-slim
+
+LABEL maintainer="OnRamp Project"
+LABEL description="Test container for sietch"
+
+# Install uv from official image
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
+
+# Install system dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        gettext-base \
+        openssl \
+        wget && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Copy project files for dependency installation
+COPY pyproject.toml ./
+
+# Install ALL dependencies including dev (pytest, etc.)
+RUN uv sync --all-extras --no-install-project
+
+# Copy source code
+COPY scripts/ /scripts/
+COPY dashboard/ /dashboard/
+COPY tests/ /tests/
+
+# Make scripts executable
+RUN chmod +x /scripts/*.py
+
+# Set Python path
+ENV PYTHONPATH=/
+
+# Default: run pytest
+CMD ["/app/.venv/bin/pytest", "-v", "/tests"]
