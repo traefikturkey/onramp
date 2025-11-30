@@ -578,6 +578,99 @@ class TestTeardown:
         assert not etc_dir.exists()
 
 
+class TestIsVolumeDirectory:
+    """Tests for _is_volume_directory() - volume path type detection."""
+
+    def test_existing_directory_returns_true(self, tmp_path):
+        """Should return True if path already exists as directory."""
+        mock_exec = MockCommandExecutor()
+        scaffolder = Scaffolder(str(tmp_path), executor=mock_exec)
+
+        abs_path = tmp_path / "etc" / "service" / "config"
+        abs_path.mkdir(parents=True)
+
+        result = scaffolder._is_volume_directory("service", "config", abs_path)
+        assert result is True
+
+    def test_existing_file_returns_false(self, tmp_path):
+        """Should return False if path already exists as file."""
+        mock_exec = MockCommandExecutor()
+        scaffolder = Scaffolder(str(tmp_path), executor=mock_exec)
+
+        abs_path = tmp_path / "etc" / "service" / "config.yml"
+        abs_path.parent.mkdir(parents=True)
+        abs_path.write_text("content")
+
+        result = scaffolder._is_volume_directory("service", "config.yml", abs_path)
+        assert result is False
+
+    def test_scaffold_directory_returns_true(self, tmp_path):
+        """Should return True if scaffold source exists as directory."""
+        mock_exec = MockCommandExecutor()
+        scaffolder = Scaffolder(str(tmp_path), executor=mock_exec)
+
+        # Create scaffold directory
+        scaffold_path = tmp_path / "services-scaffold" / "service" / "config"
+        scaffold_path.mkdir(parents=True)
+
+        abs_path = tmp_path / "etc" / "service" / "config"
+
+        result = scaffolder._is_volume_directory("service", "config", abs_path)
+        assert result is True
+
+    def test_dot_d_suffix_returns_true(self, tmp_path):
+        """Should return True for .d directory naming convention."""
+        mock_exec = MockCommandExecutor()
+        scaffolder = Scaffolder(str(tmp_path), executor=mock_exec)
+
+        abs_path = tmp_path / "etc" / "service" / "hosts.d"
+        result = scaffolder._is_volume_directory("service", "hosts.d", abs_path)
+        assert result is True
+
+        abs_path = tmp_path / "etc" / "service" / "conf.d"
+        result = scaffolder._is_volume_directory("service", "conf.d", abs_path)
+        assert result is True
+
+    def test_dot_available_suffix_returns_true(self, tmp_path):
+        """Should return True for .available/.enabled directory naming convention."""
+        mock_exec = MockCommandExecutor()
+        scaffolder = Scaffolder(str(tmp_path), executor=mock_exec)
+
+        abs_path = tmp_path / "etc" / "service" / "sites.available"
+        result = scaffolder._is_volume_directory("service", "sites.available", abs_path)
+        assert result is True
+
+        abs_path = tmp_path / "etc" / "service" / "mods.enabled"
+        result = scaffolder._is_volume_directory("service", "mods.enabled", abs_path)
+        assert result is True
+
+    def test_file_extension_returns_false(self, tmp_path):
+        """Should return False for common file extensions."""
+        mock_exec = MockCommandExecutor()
+        scaffolder = Scaffolder(str(tmp_path), executor=mock_exec)
+
+        file_extensions = ["config.yml", "config.yaml", "settings.conf",
+                           "data.json", "data.xml", "settings.ini", "readme.txt"]
+
+        for filename in file_extensions:
+            abs_path = tmp_path / "etc" / "service" / filename
+            result = scaffolder._is_volume_directory("service", filename, abs_path)
+            assert result is False, f"Expected False for {filename}"
+
+    def test_no_extension_returns_true(self, tmp_path):
+        """Should return True for paths without extension (assumed directory)."""
+        mock_exec = MockCommandExecutor()
+        scaffolder = Scaffolder(str(tmp_path), executor=mock_exec)
+
+        abs_path = tmp_path / "etc" / "service" / "data"
+        result = scaffolder._is_volume_directory("service", "data", abs_path)
+        assert result is True
+
+        abs_path = tmp_path / "etc" / "service" / "cache"
+        result = scaffolder._is_volume_directory("service", "cache", abs_path)
+        assert result is True
+
+
 class TestScaffolderInit:
     """Tests for Scaffolder initialization."""
 
