@@ -246,22 +246,58 @@ class Scaffolder:
                     print(f"    Skipping (scaffold provides): {remainder}")
                     continue
 
-                # Check if the remainder contains a dot (file extension)
-                if "." in Path(remainder).name:
+                # Determine if this is a file or directory
+                is_directory = self._is_volume_directory(service, remainder, abs_path)
+
+                if is_directory:
+                    abs_path.mkdir(parents=True, exist_ok=True)
+                    print(f"    Created dir: {abs_path}")
+                else:
                     # It's a file - create parent dir and touch file
                     abs_path.parent.mkdir(parents=True, exist_ok=True)
                     if not abs_path.exists():
                         abs_path.touch()
                         print(f"    Created file: {abs_path}")
-                else:
-                    # It's a directory
-                    abs_path.mkdir(parents=True, exist_ok=True)
-                    print(f"    Created dir: {abs_path}")
             else:
                 # Just the service directory
                 abs_path.mkdir(parents=True, exist_ok=True)
                 print(f"    Created dir: {abs_path}")
 
+        return True
+
+    def _is_volume_directory(self, service: str, remainder: str, abs_path: Path) -> bool:
+        """Determine if a volume mount path should be a directory or file.
+
+        Uses multiple heuristics since we can't always know from the path alone:
+        1. If path already exists, use its actual type
+        2. If scaffold has this path as a directory, it's a directory
+        3. Check for file extension pattern (e.g., .conf, .yml, .json)
+        4. Default to directory for ambiguous cases like 'hosts.d'
+        """
+        # If it already exists, use actual type
+        if abs_path.exists():
+            return abs_path.is_dir()
+
+        # Check if scaffold source exists and is a directory
+        scaffold_path = self.scaffold_dir / service / remainder
+        if scaffold_path.exists():
+            return scaffold_path.is_dir()
+
+        # Check for common file extension patterns
+        # A file extension is a dot followed by 1-4 alphanumeric characters at the end
+        name = Path(remainder).name
+        if "." in name:
+            # Get the part after the last dot
+            ext = name.rsplit(".", 1)[-1]
+            # Common file extensions are 1-4 alphanumeric chars
+            # Directories like "hosts.d", "conf.d" have .d which is just 1 char
+            # but we should treat those as directories
+            if ext.lower() in ("d", "daily", "weekly", "monthly", "available", "enabled"):
+                return True  # These are directory naming conventions
+            if len(ext) <= 4 and ext.isalnum():
+                return False  # Likely a file extension
+
+        # Default to directory for ambiguous cases
         return True
 
     def _display_message(self, service: str) -> None:
