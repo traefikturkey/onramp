@@ -20,7 +20,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - /etc/localtime:/etc/localtime:ro
     environment:
-      - CONFIG_FILE=/data/config.yaml
+      - CONFIG_FILE=/config.yaml
       - GITEA_INSTANCE_URL=${GITEA_RUNNER_INSTANCE_URL:-https://gitea.${HOST_DOMAIN}}
       - GITEA_RUNNER_REGISTRATION_TOKEN=${GITEA_RUNNER_REGISTRATION_TOKEN}
       - GITEA_RUNNER_NAME=${GITEA_RUNNER_NAME:-${GITEA_RUNNER_CONTAINER_NAME:-gitea-runner}}
