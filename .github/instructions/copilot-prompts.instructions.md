@@ -1,4 +1,3 @@
-```markdown
 ---
 description: "Guidance for crafting Copilot prompt files in this repo."
 applyTo: ".github/prompts/**/*.prompt.md"
@@ -25,4 +24,3 @@ When creating or updating any `*.prompt.md` file in this repository, ground your
 - Update or retire prompts when project conventions, tooling, or workflows change.
 - Ensure new prompt files are reviewed alongside related instruction files to maintain consistency across guidance.
 
-```

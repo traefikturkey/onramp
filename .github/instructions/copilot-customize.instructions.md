@@ -1,4 +1,3 @@
-```markdown
 ---
 description: "Guidance for crafting Copilot instruction files in this repo."
 applyTo: ".github/instructions/**/*.instructions.md"
@@ -30,4 +29,3 @@ When creating or updating any `*.instructions.md` file in this repository, groun
 - Update this guidance if Microsoft revises the linked documentation or if our workflow changes.
 - Remove obsolete or conflicting advice immediately to prevent drift across instruction files.
 
-```
