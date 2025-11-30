@@ -178,3 +178,45 @@ make build
 
 [Describe your issue here - what command you ran, what error you saw, what you expected to happen]
 
+## After Resolving Your Issue
+
+Once you've fixed your migration problem, help future users by improving the migration script:
+
+### 1. Identify the Pattern
+- What type of variable or configuration caused the issue?
+- Is this a one-off edge case or a pattern that could affect others?
+- What detection logic was missing?
+
+### 2. Generalize the Fix
+Ask your AI assistant to:
+- Review `sietch/scripts/migrate-env.py` for where the fix should go
+- Determine if the fix belongs in:
+  - `GLOBAL_VARS` - Core configuration variables
+  - `NFS_PREFIXES` - NFS/SAMBA mount settings
+  - `EXTERNAL_PREFIXES` - External service proxy settings
+  - `SERVICE_PREFIXES` - Service-specific variable mapping
+  - Detection logic (`should_migrate_*` methods)
+  - Migration logic (`migrate_*` methods)
+
+### 3. Implement the Improvement
+Prompt template for your AI assistant:
+
+> Based on the migration issue I just resolved, please:
+> 1. Analyze what caused the problem
+> 2. Determine if this could affect other users
+> 3. If yes, propose a change to `sietch/scripts/migrate-env.py` that would handle this case automatically
+> 4. Include appropriate tests in `sietch/tests/test_migrate_env.py`
+> 5. Update `docs/migration-from-legacy-env.md` or `docs/migration-from-feature-branch.md` if the documentation needs clarification
+
+### 4. Submit Your Improvement
+- Create a branch: `git checkout -b fix/migration-<description>`
+- Make the changes to migrate-env.py
+- Run tests: `make test`
+- Commit and push
+- Open a PR with context about the original issue
+
+### Example Improvements
+- Adding a new service prefix to `SERVICE_PREFIXES`
+- Adding external service detection to `EXTERNAL_PREFIXES`
+- Improving variable categorization logic
+- Adding edge case handling for unusual .env formats

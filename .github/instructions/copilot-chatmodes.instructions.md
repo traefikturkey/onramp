@@ -1,4 +1,3 @@
-```markdown
 ---
 description: "Guidance for crafting Copilot chat modes in this repo."
 applyTo: ".github/chatmodes/**/*.chatmode.md"
@@ -25,4 +24,3 @@ When creating or updating any `*.chatmode.md` file in this repository, ground yo
 - Update tool access and metadata whenever our available MCP servers or workflows change.
 - Retire or refactor modes that overlap in scope or fall out of use to keep the catalog focused and effective.
 
-```
