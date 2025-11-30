@@ -1,0 +1,30 @@
+networks:
+  traefik:
+    external: true
+
+# description: Gitea Actions runner for CI/CD workflows (similar to GitHub Actions)
+# https://hub.docker.com/r/gitea/act_runner
+# https://docs.gitea.com/usage/actions/act-runner
+# https://gitea.com/gitea/act_runner
+
+services:
+  gitea-runner:
+    image: gitea/act_runner:${GITEA_RUNNER_DOCKER_TAG:-latest}
+    container_name: ${GITEA_RUNNER_CONTAINER_NAME:-gitea-runner}
+    restart: ${GITEA_RUNNER_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/gitea-runner/config.yaml:/config.yaml
+      - ./etc/gitea-runner/data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - CONFIG_FILE=/data/config.yaml
+      - GITEA_INSTANCE_URL=${GITEA_RUNNER_INSTANCE_URL:-https://gitea.${HOST_DOMAIN}}
+      - GITEA_RUNNER_REGISTRATION_TOKEN=${GITEA_RUNNER_REGISTRATION_TOKEN}
+      - GITEA_RUNNER_NAME=${GITEA_RUNNER_NAME:-${GITEA_RUNNER_CONTAINER_NAME:-gitea-runner}}
+      - GITEA_RUNNER_LABELS=${GITEA_RUNNER_LABELS:-ubuntu-latest:docker://node:20-bookworm,ubuntu-22.04:docker://node:20-bookworm,ubuntu-20.04:docker://node:20-bookworm}
+    labels:
+      - com.centurylinklabs.watchtower.enable=${GITEA_RUNNER_WATCHTOWER_ENABLED:-true}
+      - autoheal=${GITEA_RUNNER_AUTOHEAL_ENABLED:-true}
