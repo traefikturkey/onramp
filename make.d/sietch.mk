@@ -97,6 +97,24 @@ else
 	@echo "Usage: make scaffold-nuke <service>"
 endif
 
+create-scaffold-env: sietch-build ## Create env.template from compose file variables
+ifdef SERVICE_PASSED_DNCASED
+	$(SIETCH_RUN) python /scripts/extract_env.py $(SERVICE_PASSED_DNCASED)
+	@echo ""
+	@echo "Edit the generated template:"
+	@echo "  $(EDITOR) services-scaffold/$(SERVICE_PASSED_DNCASED)/env.template"
+else
+	@echo "Usage: make create-scaffold-env <service>"
+	@echo "Example: make create-scaffold-env gitea-runner"
+endif
+
+create-scaffold-env-dry-run: sietch-build ## Preview env.template without creating
+ifdef SERVICE_PASSED_DNCASED
+	$(SIETCH_RUN) python /scripts/extract_env.py $(SERVICE_PASSED_DNCASED) --dry-run
+else
+	@echo "Usage: make create-scaffold-env-dry-run <service>"
+endif
+
 #########################################################
 ##
 ## Environment File Commands
