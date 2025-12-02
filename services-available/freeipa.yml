@@ -1,0 +1,42 @@
+networks:
+  traefik:
+    external: true
+
+# description: FreeIPA server container (systemd-based)
+# https://github.com/freeipa/freeipa-container
+# https://quay.io/repository/freeipa/freeipa-server
+
+services:
+  freeipa:
+    image: quay.io/freeipa/freeipa-server:${FREEIPA_DOCKER_TAG:-latest}
+    container_name: ${FREEIPA_CONTAINER_NAME:-freeipa}
+    restart: ${FREEIPA_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/freeipa:/data
+      - /etc/localtime:/etc/localtime:ro
+      # If your runtime requires additional cgroup mounts for systemd, add them manually.
+      # - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    environment:
+      - IPA_SERVER_HOSTNAME=${IPA_SERVER_HOSTNAME}
+      - IPA_SERVER_IP=${IPA_SERVER_IP}
+      - IPA_SERVER_INSTALL_OPTS=${IPA_SERVER_INSTALL_OPTS}
+      - PASSWORD=${PASSWORD}
+    labels:
+      - joyride.host.name=${FREEIPA_CONTAINER_NAME:-freeipa}.${HOST_DOMAIN}
+      - traefik.enable=false
+      - com.centurylinklabs.watchtower.enable=${FREEIPA_WATCHTOWER_ENABLED:-false}
+      - autoheal=${FREEIPA_AUTOHEAL_ENABLED:-false}
+    # Example ports (uncomment to expose):
+    # ports:
+    #   - "53:53/udp"
+    #   - "53:53"
+    #   - "80:80"
+    #   - "443:443"
+    #   - "389:389"
+    #   - "636:636"
+    #   - "88:88"
+    #   - "464:464"
+    #   - "88:88/udp"
+    #   - "464:464/udp"
