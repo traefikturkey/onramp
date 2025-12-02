@@ -19,10 +19,10 @@ services:
       # If your runtime requires additional cgroup mounts for systemd, add them manually.
       # - /sys/fs/cgroup:/sys/fs/cgroup:ro
     environment:
-      - IPA_SERVER_HOSTNAME=${IPA_SERVER_HOSTNAME}
-      - IPA_SERVER_IP=${IPA_SERVER_IP}
-      - IPA_SERVER_INSTALL_OPTS=${IPA_SERVER_INSTALL_OPTS}
-      - PASSWORD=${PASSWORD}
+      - IPA_SERVER_HOSTNAME=${FREEIPA_SERVER_HOSTNAME}
+      - IPA_SERVER_IP=${FREEIPA_SERVER_IP}
+      - IPA_SERVER_INSTALL_OPTS=${FREEIPA_SERVER_INSTALL_OPTS}
+      - PASSWORD=${FREEIPA_SERVER_PASSWORD}
     labels:
       - joyride.host.name=${FREEIPA_CONTAINER_NAME:-freeipa}.${HOST_DOMAIN}
       - traefik.enable=false
