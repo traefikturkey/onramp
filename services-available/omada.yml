@@ -8,6 +8,9 @@ networks:
 # Article on issues with device adoption
 # https://www.tp-link.com/us/support/faq/3192/
 
+# Directions for upgrading from v5 to v6
+# https://github.com/mbentley/docker-omada-controller?tab=readme-ov-file#v5-to-v6-upgrade-guide
+
 services:
   omada:
     image: mbentley/omada-controller:${OMADA_DOCKER_TAG:-latest}
