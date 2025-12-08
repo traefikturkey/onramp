@@ -1,0 +1,28 @@
+networks:
+  traefik:
+    external: true
+
+# desciption: Free, open source and self-hosted solution for automated PostgreSQL backups.
+# https://github.com/RostislavDugin/postgresus
+
+services:
+  postgresus:
+    image: rostislavdugin/postgresus:${POSTGRESUS_DOCKER_TAG:-latest}
+    container_name: ${POSTGRESUS_CONTAINER_NAME:-postgresus}
+    restart: ${POSTGRESUS_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    volumes:
+      - ./etc/postgresus/postgresus-data:/postgresus-data
+    labels:
+      - joyride.host.name=${POSTGRESUS_CONTAINER_NAME:-postgresus}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.postgresus.entrypoints=websecure
+      - traefik.http.routers.postgresus.rule=Host(`${POSTGRESUS_CONTAINER_NAME:-postgresus}.${HOST_DOMAIN}`)
+      - traefik.http.services.postgresus.loadbalancer.server.port=4005
+      - com.centurylinklabs.watchtower.enable=${POSTGRESUS_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

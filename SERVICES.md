@@ -246,6 +246,7 @@
 - [portainer](https://github.com/portainer/portainer) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/portainer.yml)): Lightweight container management ui
 - [postfix](https://github.com/juanluisbaptiste/docker-postfix) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/postfix.yml)): Mail transfer agent (mta) for sending and receiving emails
 - [postgres](https://hub.docker.com/_/postgres) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/postgres.yml)): Powerful open-source relational database system
+- [postgresus](https://github.com/RostislavDugin/postgresus) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/postgresus.yml)): Free, open-source and self-hosted solution for automated PostgreSQL backups
 - [postman](https://hub.docker.com/r/kasmweb/postman) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/postman.yml)): Collaboration platform for api development
 - [prestashop](https://hub.docker.com/r/prestashop/prestashop/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/prestashop.yml)): E-commerce platform
 - [prometheus-alertmanager](https://github.com/prometheus/alertmanager) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/prometheus-alertmanager.yml)): Manages alerts from prometheus monitoring
@@ -391,5 +392,3 @@
 
 ## V
 - [valheim](https://github.com/lloesche/valheim-server-docker) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/games/valheim.yml)): Valheim is a game about exploring a huge fantasy world inspired by norse mythology and viking culture
-
-
