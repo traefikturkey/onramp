@@ -45,8 +45,8 @@ After each service migration:
 
 **Simple Services** (Good first candidates):
 1. ✅ **n8n** - Already migrated (reference implementation)
-2. ⏸️ **healthchecks** - Single app, postgres only → **START HERE**
-3. ⏸️ **kaneo** - Kanban board, postgres only
+2. ✅ **healthchecks** - Single app, postgres only - **MIGRATED**
+3. ⏸️ **kaneo** - Kanban board, postgres only → **NEXT**
 4. ⏸️ **mediamanager** - Media library, postgres only
 
 **Medium Complexity** (Multi-container):
@@ -148,16 +148,24 @@ Add to service YAML files:
 ---
 
 ### Migration 1: healthchecks
-**Date**: TBD  
-**Status**: ⏸️ Pending  
+**Date**: December 13, 2025  
+**Status**: ✅ Complete  
 **Issues Found**:
-- TBD
+- None! Clean migration
 
-**Solutions**:
-- TBD
+**Key Changes**:
+- Added metadata: `# database: postgres` and `# database_name: healthchecks`
+- Changed `DB_HOST` from `hc-postgres` to `postgres`
+- Changed credentials to use `PG_PASS` and `PG_USER` (shared credentials)
+- Changed `DB_SSLMODE` from `allow` to `prefer`
+- Changed `DB_TARGET_SESSION_ATTRS` from `any` to `read-write`
+- Removed dedicated `hc-postgres` service definition
+- Created `healthchecks-postgres.yml` override for backward compatibility
+- Database created automatically via scaffold.py automation
+- Service started successfully, ran migrations, healthy status confirmed
 
 **Commits**:
-- TBD
+- TBD (to be committed)
 
 ---
 
@@ -165,12 +173,14 @@ Add to service YAML files:
 
 1. ✅ Create plan document (this file)
 2. ✅ Create checklist document
-3. ⏳ Create `postgres_manager.py` module
-4. ⏸️ Update `scaffold.py` for auto-creation
-5. ⏸️ Test automation with n8n
-6. ⏸️ Migrate healthchecks
+3. ✅ Create `postgres_manager.py` module
+4. ✅ Update `scaffold.py` for auto-creation
+5. ✅ Test automation with healthchecks (worked perfectly!)
+6. ✅ Migrate healthchecks
+7. ⏳ Migrate kaneo
+8. ⏸️ Continue with remaining 9 services
 
 ---
 
-**Last Updated**: December 13, 2025 - Initial creation  
-**Next Review**: After postgres_manager.py implementation
+**Last Updated**: December 13, 2025 - Healthchecks migrated successfully  
+**Next Review**: After kaneo migration

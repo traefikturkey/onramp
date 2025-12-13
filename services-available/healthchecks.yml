@@ -4,6 +4,8 @@ networks:
 
 # description: Monitors cron jobs and sends alerts
 # https://healthchecks.io/docs/self_hosted_docker/
+# database: postgres
+# database_name: healthchecks
 
 services:
   healthchecks:
@@ -13,18 +15,18 @@ services:
     networks:
       - traefik
     depends_on:
-      - hc-postgres
+      - postgres
     environment:
       - APPRISE_ENABLED=False
       - DB=postgres
       - DB_CONN_MAX_AGE=0
-      - DB_HOST=hc-postgres
+      - DB_HOST=postgres
       - DB_NAME=${HEALTHCHECKS_DB_NAME:-healthchecks}
-      - DB_PASSWORD=${HEALTHCHECKS_DB_PASS:-changeme}
+      - DB_PASSWORD=${HEALTHCHECKS_DB_PASS:-${PG_PASS}}
       - DB_PORT=5432
-      - DB_SSLMODE=allow
-      - DB_TARGET_SESSION_ATTRS=any
-      - DB_USER=${HEALTHCHECKS_DB_USER:-dbadmin}
+      - DB_SSLMODE=prefer
+      - DB_TARGET_SESSION_ATTRS=read-write
+      - DB_USER=${HEALTHCHECKS_DB_USER:-${PG_USER:-admin}}
       - DEBUG=False
       - DEFAULT_FROM_EMAIL=${HEALTHCHECKS_EMAIL:-healthchecks@example.org}
       - INTEGRATIONS_ALLOW_PRIVATE_IPS=False
@@ -50,16 +52,3 @@ services:
       - traefik.http.routers.healthchecks.middlewares=default-headers@file
       - com.centurylinklabs.watchtower.enable=${HEALTHCHECKS_WATCHTOWER_ENABLED:-true}
       - autoheal=true
-
-  hc-postgres:
-    image: postgres:${HEALTHCHECKS_DOCKER_TAG:-16.0}
-    container_name: hc-postgres
-    networks:
-      - traefik
-    restart: unless-stopped
-    environment:
-      POSTGRES_USER: ${HEALTHCHECKS_DB_USER:-dbadmin}
-      POSTGRES_PASSWORD: ${HEALTHCHECKS_DB_PASS:-changeme}
-      POSTGRES_DB: healthchecks
-    volumes:
-      - ./etc/healthchecks:/var/lib/postgresql/data

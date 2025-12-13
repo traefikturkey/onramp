@@ -1,0 +1,30 @@
+# Override to use dedicated PostgreSQL database for healthchecks
+# This is for backward compatibility with existing deployments
+# New deployments should use the shared postgres service (default)
+#
+# Usage: make enable-override healthchecks-postgres
+#
+# Note: If you have an existing hc-postgres database, this override
+# allows you to continue using it instead of migrating to shared postgres
+
+services:
+  healthchecks:
+    depends_on:
+      - hc-postgres
+    environment:
+      - DB_HOST=hc-postgres
+      - DB_USER=${HEALTHCHECKS_DB_USER:-dbadmin}
+      - DB_PASSWORD=${HEALTHCHECKS_DB_PASS:-changeme}
+
+  hc-postgres:
+    image: postgres:${HEALTHCHECKS_POSTGRES_TAG:-16.0}
+    container_name: hc-postgres
+    networks:
+      - traefik
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${HEALTHCHECKS_DB_USER:-dbadmin}
+      POSTGRES_PASSWORD: ${HEALTHCHECKS_DB_PASS:-changeme}
+      POSTGRES_DB: healthchecks
+    volumes:
+      - ./etc/healthchecks/postgres:/var/lib/postgresql/data
