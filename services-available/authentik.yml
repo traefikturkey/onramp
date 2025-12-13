@@ -11,30 +11,6 @@ networks:
 # database_name: authentik
 
 services:
-  postgresql:
-    image: postgres
-    container_name: authentik_postgresql
-    restart: unless-stopped
-    user: ${PUID}:${PGID}
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
-      start_period: 20s
-      interval: 30s
-      retries: 5
-      timeout: 5s
-    volumes:
-      - ./etc/authentik/postgresql:/var/lib/postgresql/data
-    environment:
-      - PUID=${PUID:-1000}
-      - PGID=${PGID:-1000}
-      - POSTGRES_PASSWORD=${PG_PASS_AUTHENTIK:?database password required}
-      - POSTGRES_USER=${PG_USER:-authentik}
-      - POSTGRES_DB=${PG_DB:-authentik}
-    labels:
-      - com.centurylinklabs.watchtower.enable=${AUTHENTIK_WATCHTOWER_ENABLED:-true}
-      - traefik.enable=false
-      - autoheal=true
-
   redis:
     image: redis:alpine
     container_name: authentik_redis
