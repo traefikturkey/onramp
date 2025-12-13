@@ -66,6 +66,14 @@ try:
 except ImportError:
     VALKEY_MANAGER_AVAILABLE = False
 
+# Import mariadb manager for database automation
+try:
+    from mariadb_manager import MariaDBManager
+
+    MARIADB_MANAGER_AVAILABLE = True
+except ImportError:
+    MARIADB_MANAGER_AVAILABLE = False
+
 # Files/patterns to ignore when copying static files
 IGNORE_PATTERNS = [
     "*.md",
@@ -372,6 +380,11 @@ class Scaffolder:
         valkey_yml = self.services_enabled / "valkey.yml"
         return valkey_yml.exists()
 
+    def _is_mariadb_enabled(self) -> bool:
+        """Check if mariadb service is enabled."""
+        mariadb_yml = self.services_enabled / "mariadb.yml"
+        return mariadb_yml.exists()
+
     def _create_postgres_database(self, service: str, metadata: dict) -> bool:
         """Create PostgreSQL database if metadata indicates it's needed.
         
@@ -467,6 +480,53 @@ class Scaffolder:
             print(f"  Error assigning valkey database: {e}", file=sys.stderr)
             return False
 
+    def _create_mariadb_database(self, service: str, metadata: dict) -> bool:
+        """Create MariaDB database if metadata indicates it's needed.
+        
+        Args:
+            service: Service name
+            metadata: Parsed metadata from service YAML
+            
+        Returns:
+            True if database created successfully or not needed, False on error
+        """
+        # Check if service needs mariadb
+        if metadata.get("database") != "mariadb":
+            return True  # Not a mariadb service, nothing to do
+        
+        # Check if database_name is specified
+        database_name = metadata.get("database_name")
+        if not database_name:
+            print(f"  Warning: Service '{service}' uses mariadb but no database_name specified", file=sys.stderr)
+            return True  # Not a fatal error
+        
+        # Check if mariadb manager is available
+        if not MARIADB_MANAGER_AVAILABLE:
+            print(f"  Warning: mariadb_manager not available, skipping database creation", file=sys.stderr)
+            return True
+        
+        # Check if mariadb service is enabled
+        if not self._is_mariadb_enabled():
+            print(f"  Warning: Service '{service}' needs mariadb but mariadb service is not enabled", file=sys.stderr)
+            print(f"           Enable mariadb with: make enable-service mariadb", file=sys.stderr)
+            return True  # Not a fatal error, just a warning
+        
+        # Create database
+        try:
+            print(f"  Creating MariaDB database '{database_name}'...")
+            maria_manager = MariaDBManager()
+            
+            if maria_manager.database_exists(database_name):
+                print(f"    Database '{database_name}' already exists")
+                return True
+            
+            maria_manager.create_database(database_name)
+            print(f"    Database '{database_name}' created successfully")
+            return True
+        except Exception as e:
+            print(f"  Error creating mariadb database: {e}", file=sys.stderr)
+            return False
+
     def _display_message(self, service: str) -> None:
         """Display post-enable message if MESSAGE.txt exists."""
         message_file = self.scaffold_dir / service / "MESSAGE.txt"
@@ -539,6 +599,10 @@ class Scaffolder:
 
         # Phase -1: Create PostgreSQL database if needed (before volumes)
         if not self._create_postgres_database(service, metadata):
+            success = False
+
+        # Phase -1a: Create MariaDB database if needed (before volumes)
+        if not self._create_mariadb_database(service, metadata):
             success = False
 
         # Phase -1b: Assign Valkey database if needed (before volumes)
