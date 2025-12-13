@@ -33,7 +33,10 @@ class SubprocessDockerExecutor:
                 docker_cmd,
                 capture_output=not interactive,
                 text=True,
+                timeout=30,  # 30 second timeout to prevent hanging
             )
             return result.returncode, result.stdout or "", result.stderr or ""
+        except subprocess.TimeoutExpired:
+            return 1, "", "Command timed out after 30 seconds"
         except Exception as e:
             return 1, "", str(e)

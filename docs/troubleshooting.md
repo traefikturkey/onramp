@@ -126,8 +126,14 @@ make mariadb-console
 
 ### Create database for service
 
+Databases are auto-created by scaffolding when you enable a service:
 ```bash
-make create-user-with-db servicename
+make enable-service servicename
+```
+
+For manual database creation:
+```bash
+make mariadb-create-db servicename
 ```
 
 ## Getting More Help

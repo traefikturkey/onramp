@@ -19,7 +19,7 @@ Features:
 - Executes via docker exec into mariadb container
 - Safe database creation (IF NOT EXISTS)
 - User isolation with per-database permissions
-- Backup/restore using mysqldump/mysql
+- Backup/restore using mariadb-dump/mariadb
 - Proper SQL escaping
 - UTF-8mb4 support
 """
@@ -49,6 +49,9 @@ class MariaDBManager:
     ):
         self.container_name = container_name
         self.base_dir = Path(base_dir)
+        
+        # Get password from container environment
+        self._root_password = None
 
         if docker is not None:
             self._docker = docker
@@ -56,21 +59,39 @@ class MariaDBManager:
             from adapters.docker_subprocess import SubprocessDockerExecutor
 
             self._docker = SubprocessDockerExecutor()
+            
+    def _get_root_password(self) -> str:
+        """Get MariaDB root password from container environment."""
+        if self._root_password is None:
+            # Get password from container environment variable
+            code, stdout, stderr = self._docker.exec(
+                self.container_name,
+                ["bash", "-c", "echo $MYSQL_ROOT_PASSWORD"],
+                False
+            )
+            if code == 0 and stdout.strip():
+                self._root_password = stdout.strip()
+            else:
+                # Fallback to empty password (should not happen)
+                self._root_password = ""
+        return self._root_password
 
     def _docker_exec(self, cmd: list[str], interactive: bool = False) -> tuple[int, str, str]:
         """Execute command in docker container."""
         return self._docker.exec(self.container_name, cmd, interactive)
 
     def _mysql_exec(self, sql: str, dbname: str = "mysql") -> tuple[int, str, str]:
-        """Execute SQL via mysql client in container."""
-        # Get password from environment
-        cmd = ["mysql", "-u", "root", "-p${MARIADB_PASS}", dbname, "-e", sql]
+        """Execute SQL via mariadb client in container."""
+        password = self._get_root_password()
+        # Use mariadb command with password
+        cmd = ["mariadb", "-u", "root", f"-p{password}", dbname, "-e", sql]
         return self._docker_exec(cmd)
 
     def console(self) -> int:
-        """Open interactive mysql console."""
+        """Open interactive mariadb console."""
         print(f"Connecting to {self.container_name}...")
-        return self._docker_exec(["mysql", "-u", "root", "-p${MARIADB_PASS}"], interactive=True)[0]
+        password = self._get_root_password()
+        return self._docker_exec(["mariadb", "-u", "root", f"-p{password}"], interactive=True)[0]
 
     def list_databases(self) -> tuple[int, list[str]]:
         """List all databases."""
@@ -162,7 +183,7 @@ class MariaDBManager:
         backup_file = f"{output_path.stem}_{timestamp}.sql"
         
         cmd = [
-            "mysqldump",
+            "mariadb-dump",
             "-u", "root",
             "-p${MARIADB_PASS}",
             "--single-transaction",
@@ -194,10 +215,10 @@ class MariaDBManager:
         # Read backup content
         sql_content = backup_path.read_text()
 
-        # Restore via mysql
-        cmd = ["mysql", "-u", "root", "-p${MARIADB_PASS}", dbname]
+        # Restore via mariadb
+        cmd = ["mariadb", "-u", "root", "-p${MARIADB_PASS}", dbname]
         # Note: This would need to pipe stdin, which requires a different approach
-        print(f"To restore manually: docker exec -i {self.container_name} mysql -u root -p$MARIADB_PASS {dbname} < {backup_file}")
+        print(f"To restore manually: docker exec -i {self.container_name} mariadb -u root -p$MARIADB_PASS {dbname} < {backup_file}")
         return 0
 
     def get_stats(self, dbname: str) -> int:
@@ -262,7 +283,7 @@ class MariaDBManager:
         print("1. Creating backup...")
         dump_cmd = [
             "docker", "exec", source_container,
-            "mysqldump", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}",
+            "mariadb-dump", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}",
             "--single-transaction", "--routines", "--triggers",
             source_db
         ]
@@ -288,7 +309,7 @@ class MariaDBManager:
         print("3. Restoring to shared MariaDB...")
         restore_cmd = [
             "docker", "exec", "-i", self.container_name,
-            "mysql", "-u", "root", "-p${MARIADB_PASS}", dest_db
+            "mariadb", "-u", "root", "-p${MARIADB_PASS}", dest_db
         ]
         
         try:

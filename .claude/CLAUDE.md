@@ -71,10 +71,13 @@ make list-backups            # List available backups
 
 ### Database (MariaDB)
 ```bash
-make create-database NAME    # Create database
-make create-user-with-db NAME # Create user + database
-make show-databases          # List all databases
+make mariadb-console         # Interactive console
+make mariadb-list-databases  # List all databases
+make mariadb-create-db NAME  # Create database
+make mariadb-drop-db NAME    # Drop database
+make mariadb-backup-db NAME out.sql  # Backup database
 ```
+Note: Databases are auto-created by scaffolding via `make enable-service`
 
 ## Sietch Scripts
 
