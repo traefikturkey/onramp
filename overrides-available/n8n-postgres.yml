@@ -1,33 +1,25 @@
-# Override to add PostgreSQL database backend for n8n
+# Override to add PostgreSQL database backend for n8n using shared postgres service
+# Prerequisites: Enable postgres service first: make enable-service postgres
 # Usage: make enable-override n8n-postgres && make restart
 # 
 # Benefits of PostgreSQL over SQLite:
 # - Better performance for high-volume workflows
 # - Suitable for multi-user/team environments
 # - Required for horizontal scaling
+#
+# Note: This connects to the shared postgres service. Make sure to:
+# 1. Set PG_PASS in your environment (postgres password)
+# 2. The n8n database will be created automatically on first connection
 
 services:
   n8n:
     environment:
-      # PostgreSQL database config
+      # PostgreSQL database config (uses shared postgres service)
       - DB_TYPE=postgresdb
-      - DB_POSTGRESDB_HOST=n8n_postgres
+      - DB_POSTGRESDB_HOST=postgres
       - DB_POSTGRESDB_PORT=5432
       - DB_POSTGRESDB_DATABASE=${N8N_POSTGRES_DB:-n8n}
-      - DB_POSTGRESDB_USER=${N8N_POSTGRES_USER:-n8n}
-      - DB_POSTGRESDB_PASSWORD=${POSTGRES_PASSWORD_N8N:-n8n}
+      - DB_POSTGRESDB_USER=${N8N_POSTGRES_USER:-${PG_USER:-admin}}
+      - DB_POSTGRESDB_PASSWORD=${N8N_POSTGRES_PASSWORD:-${PG_PASS}}
     depends_on:
-      - n8n_postgres
-
-  n8n_postgres:
-    image: postgres:16
-    container_name: n8n_postgres
-    networks:
-      - traefik
-    environment:
-      - POSTGRES_USER=${N8N_POSTGRES_USER:-n8n}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD_N8N:-n8n}
-      - POSTGRES_DB=${N8N_POSTGRES_DB:-n8n}
-    volumes:
-      - ./etc/n8n/postgresql:/var/lib/postgresql/data
-    restart: unless-stopped
+      - postgres
