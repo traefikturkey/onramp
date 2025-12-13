@@ -7,9 +7,11 @@ networks:
 
 services:
   postgres:
-    image: postgres
+    image: postgres:16
     container_name: postgres
     restart: unless-stopped
+    networks:
+      - traefik
     volumes:
       - ${POSTGRES_DIR:-./media/databases/postgres/data}:/var/lib/postgresql/data
     environment:
