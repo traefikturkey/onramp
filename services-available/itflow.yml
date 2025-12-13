@@ -32,7 +32,7 @@ services:
       - ITFLOW_REPO_BRANCH=master
       - ITFLOW_LOG_LEVEL=info
       - ITFLOW_DB_HOST=mariadb
-      - ITFLOW_DB_PASS=${ITFLOW_DB_PASS:-itflowpass}
+      - ITFLOW_DB_PASS=${ITFLOW_DB_PASS:-${MARIADB_PASS}}
     labels:
       - joyride.host.name=${ITFLOW_CONTAINER_NAME:-itflow}.${HOST_DOMAIN}
       - traefik.enable=true

@@ -73,6 +73,15 @@ Successfully migrated 20 services to shared infrastructure (12 to Valkey, 8 to M
 
 ## Services NOT Tested (18/20)
 
+### Important: Immich Cannot Be Migrated
+**immich** is listed in the Valkey migrations but **still uses its own dedicated postgres database**. This is intentional because:
+- Immich requires `postgres:14-vectorchord0.4.3-pgvectors0.2.0` (custom image with vector extensions)
+- Our shared postgres:latest doesn't have these extensions
+- Immich's postgres container cannot be removed without breaking vector search functionality
+- Only the Redis/Valkey migration was performed for immich
+
+**Recommendation:** Remove immich from documentation as a "migrated" service or document it as "partial migration (cache only)"
+
 ### Valkey Migrations (10 untested)
 1. dawarich - DB 1
 2. yamtrack - DB 3

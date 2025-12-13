@@ -39,9 +39,8 @@ services:
       - DB_HOST=mariadb
       - DB_PORT=${FIREFLY_DB_PORT:-3306}
       - DB_DATABASE=${FIREFLY_DB_DATABASE:-firefly}
-      - DB_USERNAME=${FIREFLY_DB_USERNAME:-firefly}
-      # echo "FIREFLY_DB_PASSWORD=$(openssl rand -base64 16 | tr -d /=+ | cut -c -16)"  >> .env
-      - DB_PASSWORD=${FIREFLY_DB_PASSWORD:-super_secure_password_change_me}
+      - DB_USERNAME=${FIREFLY_DB_USERNAME:-${MARIADB_USER:-admin}}
+      - DB_PASSWORD=${FIREFLY_DB_PASSWORD:-${MARIADB_PASS}}
     labels:
       - joyride.host.name=${FIREFLY3_CONTAINER_NAME:-firefly}.${HOST_DOMAIN}
       - traefik.enable=true

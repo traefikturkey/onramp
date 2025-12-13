@@ -26,8 +26,8 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
-      - DATABASE_USERNAME=${BL_MYSQL_USER:-boooklore}
-      - DATABASE_PASSWORD=${BL_MYSQL_PASSWORD:-onrampstdpass1234}      
+      - DATABASE_USERNAME=${BL_MYSQL_USER:-${MARIADB_USER:-admin}}
+      - DATABASE_PASSWORD=${BL_MYSQL_PASSWORD:-${MARIADB_PASS}}      
     depends_on:
       - mariadb
     labels:
