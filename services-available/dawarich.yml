@@ -9,7 +9,7 @@ networks:
 # Also, there is no way to make a user an administrator through the GUI.
 # You have to do it through the console. See https://dawarich.app/docs/FAQ/#how-to-make-a-user-an-admin
 # cache: valkey
-# cache_db: 1
+# cache_db: 2
 
 services:
   dawarich:
