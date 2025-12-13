@@ -1,0 +1,27 @@
+# Rollback override for unimus
+# This restores the dedicated MariaDB container
+# Usage: make enable-override unimus-dedicated-mariadb
+
+networks:
+  unimus-dbnet:
+
+services:
+  unimus-app:
+    depends_on:
+      - unimus-database
+
+  unimus-database:
+    container_name: unimus_database
+    image: mariadb:10
+    networks:
+      - unimus-dbnet
+    environment:
+      - POSTGRES_USER=${UNIMUS_POSTGRES_USER:-postgres}
+      - MYSQL_ROOT_PASSWORD=s${UNIMUS_MYSQL_ROOT_PASSWORD:-somesupersecrest}
+      - MYSQL_DATABASE=${UNIMUS_MYSQL_DB:-unimus}
+      - MYSQL_USER=${UNIMUS_MYSQL_USER:-unimus}
+      - MYSQL_PASSWORD=secret
+    volumes:
+      - ./etc/unimus/db:/var/lib/mysql
+      - /etc/localtime:/etc/localtime:ro      
+    restart: ${UNIMUSDB_RESTART_POLICY:-unless-stopped}

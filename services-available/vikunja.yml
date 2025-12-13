@@ -4,6 +4,8 @@ networks:
 
 # description: Task and time management app
 # https://vikunja.io/docs/full-docker-example/
+# database: mariadb
+# database_name: vikunja
 
 services:
   vikunja:
@@ -16,7 +18,7 @@ services:
       - PGID=${PGID:-1000}
       - TZ=${TZ}
       - VIKUNJA_SERVICE_PUBLICURL=https://${VIKUNJA_CONTAINER_NAME:-vikunja}.${HOST_DOMAIN}
-      - VIKUNJA_DATABASE_HOST=${VIKUNJA_DATABASE_HOST:-vikunja-db}
+      - VIKUNJA_DATABASE_HOST=mariadb
       - VIKUNJA_DATABASE_PASSWORD=${VIKUNJA_DATABASE_PASSWORD:-secret}
       - VIKUNJA_DATABASE_TYPE=${VIKUNJA_DATABASE_TYPE:-mysql}
       - VIKUNJA_DATABASE_USER=${VIKUNJA_DATABASE_USER:-vikunja}
@@ -24,8 +26,7 @@ services:
       - VIKUNJA_SERVICE_JWTSECRET=${VIKUNJA_SERVICE_JWTSECRET:-<a super secure random secret>}
     restart: ${VIKUNJA_RESTART:-unless-stopped}
     depends_on:
-      vikunja-db:
-        condition: service_healthy
+      - mariadb
     labels:
       - joyride.host.name=${VIKUNJA_CONTAINER_NAME:-vikunja}.${HOST_DOMAIN}
       - traefik.enable=true
@@ -42,25 +43,6 @@ services:
       - flame.name=${VIKUNJA_FLAME_NAME:-vikunja}
       - flame.url=https://${VIKUNJA_CONTAINER_NAME:-vikunja}.${HOST_DOMAIN}
       - flame.icon=${VIKUNJA_FLAME_ICON:-docker}
-
-  vikunja-db:
-    image: mariadb:10
-    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --max-connections=1000
-    container_name: ${VIKUNJA_DATABASE_CONTAINER_NAME:-vikunja-db}
-    environment:
-      - MYSQL_ROOT_PASSWORD=${VIKUNJA_MYSQL_ROOT_PASSWORD:-supersecret}
-      - MYSQL_USER=${VIKUNJA_DATABASE_USER:-vikunja}
-      - MYSQL_PASSWORD=${VIKUNJA_DATABASE_PASSWORD:-secret}
-      - MYSQL_DATABASE=${VIKUNJA_DATABASE:-vikunja}
-    networks:
-      - traefik
-    volumes:
-      - ./etc/vikunja/db:/var/lib/mysql
-    restart: ${VIKUNJA_RESTART:-unless-stopped}
-    healthcheck:
-      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u $$MYSQL_USER --password=$$MYSQL_PASSWORD"]
-      interval: 2s
-      start_period: 30s
 
 
 

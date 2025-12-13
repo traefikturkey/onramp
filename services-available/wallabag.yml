@@ -7,6 +7,8 @@ networks:
 # https://github.com/wallabag/wallabag
 # cache: valkey
 # cache_db: 11
+# database: mariadb
+# database_name: wallabag
 
 services:
   wallabag:
@@ -15,7 +17,7 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=${WALLABAG_DB_ROOT_PASSWORD:-wallaroot}
       - SYMFONY__ENV__DATABASE_DRIVER=pdo_mysql
-      - SYMFONY__ENV__DATABASE_HOST=db
+      - SYMFONY__ENV__DATABASE_HOST=mariadb
       - SYMFONY__ENV__DATABASE_PORT=3306
       - SYMFONY__ENV__DATABASE_NAME=${WALLABAG_DB_NAME:-wallabag}
       - SYMFONY__ENV__DATABASE_USER=${WALLABAG_DB_USER:-wallabag}
@@ -47,20 +49,4 @@ services:
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost"]
       interval: 1m
       timeout: 3s
-    depends_on:
-      - db
-      - valkey
 
-  db:
-    image: mariadb
-    environment:
-      - MYSQL_ROOT_PASSWORD=${WALLABAG_DB_PASSWORD:-wallaroot}
-    restart: unless-stopped
-    volumes:
-      - ./etc/wallabag/data:/var/lib/mysql
-    networks:
-      - database
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 20s
-      timeout: 3s

@@ -1,0 +1,36 @@
+# Rollback override for booklore
+# This restores the dedicated MariaDB container
+# Usage: make enable-override booklore-dedicated-mariadb
+
+networks:
+  bl_int:
+
+services:
+  booklore:
+    depends_on:
+      booklore-db:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL=jdbc:mariadb://booklore-db:3306/${BL_MYSQL_DATABASE:-booklore}
+
+  booklore-db:
+    image: lscr.io/linuxserver/mariadb:${BOOKLORE_MARIADB_TAG:-11.4.5}
+    container_name: booklore-db
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - MYSQL_ROOT_PASSWORD=${BL_MYSQL_ROOT_PASSWORD:-onramprulez}
+      - MYSQL_DATABASE=${BL_MYSQL_DATABASE:-booklore}
+      - MYSQL_USER=${BL_MYSQL_USER:-booklore}
+      - MYSQL_PASSWORD=${BL_MYSQL_PASSWORD:-onrampstdpass1234}
+    volumes:
+      - ./etc/booklore/db:/config
+    restart: unless-stopped
+    networks:
+      - bl_int    
+    healthcheck:
+      test: ["CMD", "mariadb-admin", "ping", "-h", "localhost"]
+      interval: 5s 
+      timeout: 5s
+      retries: 10

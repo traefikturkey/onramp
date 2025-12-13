@@ -8,24 +8,10 @@ networks:
 # https://docs.paperless-ngx.com/
 # cache: valkey
 # cache_db: 9
+# database: mariadb
+# database_name: paperless
 
 services:
-  db:
-    image: docker.io/library/mariadb:10
-    restart: unless-stopped
-    volumes:
-      - ./etc/paperless-ngx/dbdata:/var/lib/mysql
-    networks:
-      - traefik
-    environment:
-      - MARIADB_HOST=${PAPERLESS_DB_HOST:-paperless}
-      - MARIADB_DATABASE=${PAPERLESS_DB_NAME:-paperless}
-      - MARIADB_USER=${PAPERLESS_DB_USER:-paperless}
-      - MARIADB_PASSWORD=${PAPERLESS_DB_PASS:-paperless}
-      - MARIADB_ROOT_PASSWORD=${PAPERLESS_DB_ROOTPASS:-paperless}
-    ports:
-      - "3306:3306"
-
   gotenberg:
     image: docker.io/gotenberg/gotenberg:7.6
     restart: unless-stopped
@@ -49,7 +35,7 @@ services:
       - traefik
     depends_on:
       - valkey
-      - db
+      - mariadb
       - gotenberg
       - tika
     volumes:
@@ -70,7 +56,7 @@ services:
       - PAPERLESS_TIKA_ENDPOINT=http://tika:9998
       - PAPERLESS_DBENGINE=${PAPERLESS_DB_ENGINE:-mariadb}
       - PAPERLESS_DBPORT=${PAPERLESS_DB_PORT:-3306}
-      - PAPERLESS_DBHOST=${PAPERLESS_DB_HOST:-db}
+      - PAPERLESS_DBHOST=mariadb
       - PAPERLESS_DBNAME=${PAPERLESS_DB_NAME:-paperless}
       - PAPERLESS_DBUSER=${PAPERLESS_DB_USER:-paperless}
       - PAPERLESS_DBPASS=${PAPERLESS_DB_PASS:-paperless}

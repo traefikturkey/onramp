@@ -9,6 +9,8 @@ volumes:
 
 # description: Manages personal finances and budgets
 # https://github.com/firefly-iii/firefly-iii/tree/main
+# database: mariadb
+# database_name: firefly
 
 services:
   firefly3:
@@ -16,7 +18,7 @@ services:
     container_name: ${FIREFLY3_CONTAINER_NAME:-firefly}
     restart: ${FIREFLY3_RESTART:-unless-stopped}
     depends_on:
-      - db
+      - mariadb
     networks:
       - traefik
       - firefly_iii
@@ -34,7 +36,7 @@ services:
       # echo "FIREFLY_CRON_TOKEN='$(openssl rand -base64 32 | tr -d /=+ | cut -c -32)'"  >> .env
       - APP_KEY=${FIREFLY_CRON_TOKEN}
       - DB_CONNECTION=${FIREFLY_DB_CONNECTION:-mysql}
-      - DB_HOST=${FIREFLY_DB_HOST:-db}
+      - DB_HOST=mariadb
       - DB_PORT=${FIREFLY_DB_PORT:-3306}
       - DB_DATABASE=${FIREFLY_DB_DATABASE:-firefly}
       - DB_USERNAME=${FIREFLY_DB_USERNAME:-firefly}
@@ -49,22 +51,7 @@ services:
       - traefik.http.services.firefly3.loadbalancer.server.port=8080
       - com.centurylinklabs.watchtower.enable=${FIREFLY3_WATCHTOWER_ENABLED:-true}
       - autoheal=true
-  db:
-    image: mariadb
-    hostname: db
-    container_name: ${FIREFLY_DB_CONTAINER_NAME:-firefly_db}
-    restart: ${FIREFLY3_RESTART:-unless-stopped}
-    environment:
-      - MYSQL_DATABASE=${FIREFLY_DB_DATABASE:-firefly}
-      - MYSQL_USER=${FIREFLY_DB_USERNAME:-firefly}
-      - MYSQL_PASSWORD=${FIREFLY_DB_PASSWORD:-super_secure_password_change_me}
-      - MYSQL_RANDOM_ROOT_PASSWORD=yes
-    networks:
-      - firefly_iii
-    volumes:
-      - firefly_db:/var/lib/mysql
-    labels:
-      - traefik.enable=false
+
   cron:
     #
     # To make this work, set STATIC_CRON_TOKEN in your .env file or as an environment variable and replace REPLACEME below
