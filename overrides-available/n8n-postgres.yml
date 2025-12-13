@@ -10,6 +10,9 @@
 # Note: This connects to the shared postgres service. Make sure to:
 # 1. Set PG_PASS in your environment (postgres password)
 # 2. The n8n database will be created automatically on first connection
+#
+# database: postgres
+# database_name: n8n
 
 services:
   n8n:

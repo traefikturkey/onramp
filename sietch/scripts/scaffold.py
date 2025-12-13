@@ -50,6 +50,14 @@ try:
 except ImportError:
     OPERATIONS_AVAILABLE = False
 
+# Import postgres manager for database automation
+try:
+    from postgres_manager import PostgresManager
+
+    POSTGRES_MANAGER_AVAILABLE = True
+except ImportError:
+    POSTGRES_MANAGER_AVAILABLE = False
+
 # Files/patterns to ignore when copying static files
 IGNORE_PATTERNS = [
     "*.md",
@@ -300,6 +308,102 @@ class Scaffolder:
         # Default to directory for ambiguous cases
         return True
 
+    def _parse_metadata(self, service: str) -> dict:
+        """Parse metadata comments from service YAML file.
+        
+        Looks for metadata comments in the format:
+        # key: value
+        
+        Supported metadata:
+        - database: postgres (indicates service needs postgres)
+        - database_name: dbname (name of database to create)
+        
+        Returns:
+            Dictionary with metadata keys and values
+        """
+        metadata = {}
+        
+        # Check services-enabled first, then services-available
+        service_yml = self.services_enabled / f"{service}.yml"
+        if not service_yml.exists():
+            service_yml = self.services_available / f"{service}.yml"
+            if not service_yml.exists():
+                return metadata
+        
+        try:
+            with open(service_yml, "r") as f:
+                for line in f:
+                    line = line.strip()
+                    # Look for metadata comments: # key: value
+                    if line.startswith("# ") and ": " in line:
+                        # Remove leading '# ' and split on first ':'
+                        comment = line[2:].strip()
+                        if comment.startswith("http"):
+                            continue  # Skip URLs
+                        if ": " in comment:
+                            key, value = comment.split(": ", 1)
+                            key = key.strip()
+                            value = value.strip()
+                            # Only store simple key-value metadata
+                            if key in ("database", "database_name"):
+                                metadata[key] = value
+        except Exception as e:
+            print(f"  Warning: Error parsing metadata from {service_yml}: {e}", file=sys.stderr)
+        
+        return metadata
+
+    def _is_postgres_enabled(self) -> bool:
+        """Check if postgres service is enabled."""
+        postgres_yml = self.services_enabled / "postgres.yml"
+        return postgres_yml.exists()
+
+    def _create_postgres_database(self, service: str, metadata: dict) -> bool:
+        """Create PostgreSQL database if metadata indicates it's needed.
+        
+        Args:
+            service: Service name
+            metadata: Parsed metadata from service YAML
+            
+        Returns:
+            True if database created successfully or not needed, False on error
+        """
+        # Check if service needs postgres
+        if metadata.get("database") != "postgres":
+            return True  # Not a postgres service, nothing to do
+        
+        # Check if database_name is specified
+        database_name = metadata.get("database_name")
+        if not database_name:
+            print(f"  Warning: Service '{service}' uses postgres but no database_name specified", file=sys.stderr)
+            return True  # Not a fatal error
+        
+        # Check if postgres manager is available
+        if not POSTGRES_MANAGER_AVAILABLE:
+            print(f"  Warning: postgres_manager not available, skipping database creation", file=sys.stderr)
+            return True
+        
+        # Check if postgres service is enabled
+        if not self._is_postgres_enabled():
+            print(f"  Warning: Service '{service}' needs postgres but postgres service is not enabled", file=sys.stderr)
+            print(f"           Enable postgres with: make enable-service postgres", file=sys.stderr)
+            return True  # Not a fatal error, just a warning
+        
+        # Create database
+        try:
+            print(f"  Creating PostgreSQL database '{database_name}'...")
+            pg_manager = PostgresManager()
+            
+            if pg_manager.database_exists(database_name):
+                print(f"    Database '{database_name}' already exists")
+                return True
+            
+            pg_manager.create_database(database_name)
+            print(f"    Database '{database_name}' created successfully")
+            return True
+        except Exception as e:
+            print(f"  Error creating database '{database_name}': {e}", file=sys.stderr)
+            return False
+
     def _display_message(self, service: str) -> None:
         """Display post-enable message if MESSAGE.txt exists."""
         message_file = self.scaffold_dir / service / "MESSAGE.txt"
@@ -366,6 +470,13 @@ class Scaffolder:
 
         # Get scaffold files first (needed for volume creation check)
         templates, statics = self.find_scaffold_files(service)
+
+        # Parse metadata from service YAML
+        metadata = self._parse_metadata(service)
+
+        # Phase -1: Create PostgreSQL database if needed (before volumes)
+        if not self._create_postgres_database(service, metadata):
+            success = False
 
         # Phase 0: Create etc/ volume directories from service YAML
         # Pass statics so it knows what scaffold will provide
