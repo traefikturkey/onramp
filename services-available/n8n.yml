@@ -17,8 +17,6 @@ services:
       - traefik
     #ports:
     #  - 5678:5678
-    #expose:
-    #  - 5678
     volumes:
       - ./etc/n8n/:/home/node/.n8n/
 
