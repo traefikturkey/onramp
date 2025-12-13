@@ -10,7 +10,7 @@ networks:
 # database: postgres
 # database_name: authentik
 # cache: valkey
-# cache_db: 0
+# cache_db: 1
 
 services:
   authentik-server:
@@ -27,7 +27,7 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - AUTHENTIK_REDIS__HOST=valkey
-      - AUTHENTIK_REDIS__DB=0
+      - AUTHENTIK_REDIS__DB=1
       - AUTHENTIK_POSTGRESQL__HOST=postgres
       - AUTHENTIK_POSTGRESQL__USER=${PG_USER:-${PG_USER:-admin}}
       - AUTHENTIK_POSTGRESQL__NAME=${PG_DB:-authentik}
@@ -68,7 +68,7 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - AUTHENTIK_REDIS__HOST=valkey
-      - AUTHENTIK_REDIS__DB=0
+      - AUTHENTIK_REDIS__DB=1
       - AUTHENTIK_POSTGRESQL__HOST=postgres
       - AUTHENTIK_POSTGRESQL__USER=${PG_USER:-${PG_USER:-admin}}
       - AUTHENTIK_POSTGRESQL__NAME=${PG_DB:-authentik}

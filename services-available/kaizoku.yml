@@ -7,7 +7,8 @@ networks:
 # database: postgres
 # database_name: kaizoku
 # cache: valkey
-# cache_db: 2
+# cache_db: 0
+# Note: kaizoku ignores REDIS_DB environment variable and always uses DB 0
 
 services:
   kaizoku:
@@ -28,7 +29,7 @@ services:
       - KAIZOKU_PORT=3000
       - REDIS_HOST=valkey
       - REDIS_PORT=6379
-      - REDIS_DB=2
+      - REDIS_DB=0  # Note: kaizoku ignores this and always uses DB 0
     depends_on:
       - postgres
       - valkey
