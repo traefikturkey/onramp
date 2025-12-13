@@ -58,6 +58,14 @@ try:
 except ImportError:
     POSTGRES_MANAGER_AVAILABLE = False
 
+# Import valkey manager for cache database automation
+try:
+    from valkey_manager import ValkeyManager
+
+    VALKEY_MANAGER_AVAILABLE = True
+except ImportError:
+    VALKEY_MANAGER_AVAILABLE = False
+
 # Files/patterns to ignore when copying static files
 IGNORE_PATTERNS = [
     "*.md",
@@ -317,6 +325,8 @@ class Scaffolder:
         Supported metadata:
         - database: postgres (indicates service needs postgres)
         - database_name: dbname (name of database to create)
+        - cache: valkey (indicates service needs valkey)
+        - cache_db: N (optional: preferred valkey database number 0-15)
         
         Returns:
             Dictionary with metadata keys and values
@@ -345,7 +355,7 @@ class Scaffolder:
                             key = key.strip()
                             value = value.strip()
                             # Only store simple key-value metadata
-                            if key in ("database", "database_name"):
+                            if key in ("database", "database_name", "cache", "cache_db"):
                                 metadata[key] = value
         except Exception as e:
             print(f"  Warning: Error parsing metadata from {service_yml}: {e}", file=sys.stderr)
@@ -356,6 +366,11 @@ class Scaffolder:
         """Check if postgres service is enabled."""
         postgres_yml = self.services_enabled / "postgres.yml"
         return postgres_yml.exists()
+
+    def _is_valkey_enabled(self) -> bool:
+        """Check if valkey service is enabled."""
+        valkey_yml = self.services_enabled / "valkey.yml"
+        return valkey_yml.exists()
 
     def _create_postgres_database(self, service: str, metadata: dict) -> bool:
         """Create PostgreSQL database if metadata indicates it's needed.
@@ -402,6 +417,54 @@ class Scaffolder:
             return True
         except Exception as e:
             print(f"  Error creating database '{database_name}': {e}", file=sys.stderr)
+            return False
+
+    def _assign_valkey_database(self, service: str, metadata: dict) -> bool:
+        """Assign Valkey database number if metadata indicates it's needed.
+        
+        Args:
+            service: Service name
+            metadata: Parsed metadata from service YAML
+            
+        Returns:
+            True if database assigned successfully or not needed, False on error
+        """
+        # Check if service needs valkey
+        if metadata.get("cache") != "valkey":
+            return True  # Not a valkey service, nothing to do
+        
+        # Check if valkey manager is available
+        if not VALKEY_MANAGER_AVAILABLE:
+            print(f"  Warning: valkey_manager not available, skipping database assignment", file=sys.stderr)
+            return True
+        
+        # Check if valkey service is enabled
+        if not self._is_valkey_enabled():
+            print(f"  Warning: Service '{service}' needs valkey but valkey service is not enabled", file=sys.stderr)
+            print(f"           Enable valkey with: make enable-service valkey", file=sys.stderr)
+            return True  # Not a fatal error, just a warning
+        
+        # Assign database number
+        try:
+            print(f"  Assigning Valkey database for '{service}'...")
+            valkey_manager = ValkeyManager()
+            
+            # Check for preferred database number in metadata
+            preferred_db = None
+            if "cache_db" in metadata:
+                try:
+                    preferred_db = int(metadata["cache_db"])
+                except ValueError:
+                    print(f"  Warning: Invalid cache_db value '{metadata['cache_db']}', auto-assigning", file=sys.stderr)
+            
+            code, db_num = valkey_manager.assign_database(service, preferred_db)
+            if code != 0:
+                return False
+            
+            print(f"    Assigned DB {db_num} to '{service}'")
+            return True
+        except Exception as e:
+            print(f"  Error assigning valkey database: {e}", file=sys.stderr)
             return False
 
     def _display_message(self, service: str) -> None:
@@ -476,6 +539,10 @@ class Scaffolder:
 
         # Phase -1: Create PostgreSQL database if needed (before volumes)
         if not self._create_postgres_database(service, metadata):
+            success = False
+
+        # Phase -1b: Assign Valkey database if needed (before volumes)
+        if not self._assign_valkey_database(service, metadata):
             success = False
 
         # Phase 0: Create etc/ volume directories from service YAML

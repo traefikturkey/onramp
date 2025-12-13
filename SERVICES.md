@@ -1,5 +1,5 @@
 # Available Services
-260 services and counting...
+261 services and counting...
 
 [1](#1)
 [A](#A)
@@ -328,6 +328,7 @@
 
 
 ## V
+- [valkey](https://valkey.io) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/valkey.yml)): Shared Valkey cache server for multiple services
 - [vaultwarden](https://github.com/dani-garcia/vaultwarden) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/vaultwarden.yml)): Self-hosted bitwarden password manager
 - [vault](https://github.com/hashicorp/vault) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/vault.yml)): A tool for secrets management, encryption as a service, and privileged access management
 - [vert](https://github.com/VERT-sh/VERT) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/vert.yml)): 
