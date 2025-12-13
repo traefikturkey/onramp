@@ -66,7 +66,7 @@ SIETCH_FILES := $(shell find sietch/ -type f ! -name '.built' \
 	! -path 'sietch/.coverage' \
 	! -name '*.pyc' \
 	2>/dev/null)
-SIETCH_RUN := docker run --rm -v $(shell pwd):/app -u $(PUID):$(PGID) $(SIETCH_IMAGE)
+SIETCH_RUN := docker run --rm -v $(shell pwd):/app -v /var/run/docker.sock:/var/run/docker.sock --network traefik -u $(PUID):$(PGID) $(SIETCH_IMAGE)
 
 # prevents circular references, do not remove
 BUILD_DEPENDENCIES :=

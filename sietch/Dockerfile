@@ -10,11 +10,25 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 # - gettext-base: provides envsubst for template rendering
 # - openssl: for RSA key generation (geopulse)
 # - wget: for downloading files (radarr/sonarr arr-scripts)
+# - ca-certificates, curl: for docker installation
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         gettext-base \
         openssl \
-        wget && \
+        wget \
+        ca-certificates \
+        curl && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Install Docker CLI
+RUN install -m 0755 -d /etc/apt/keyrings && \
+    curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc && \
+    chmod a+r /etc/apt/keyrings/docker.asc && \
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
+      $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null && \
+    apt-get update && \
+    apt-get install -y docker-ce-cli && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
