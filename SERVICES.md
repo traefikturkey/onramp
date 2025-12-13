@@ -1,5 +1,5 @@
 # Available Services
-257 services and counting...
+260 services and counting...
 
 [1](#1)
 [A](#A)
@@ -110,6 +110,7 @@
 - [fooocus](https://github.com/lllyasviel/Fooocus) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/fooocus.yml)): Focus on prompting and generating | a generative image generator
 - [fossflow](https://hub.docker.com/r/fitzzz/fossflow) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/fossflow.yml)): Open-source Progressive Web App (PWA) for creating isometric diagrams.
 - [foundryvtt](https://hub.docker.com/r/felddy/foundryvtt) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/foundryvtt.yml)): Virtual tabletop platform for role-playing games
+- [freeipa](https://github.com/freeipa/freeipa-container) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/freeipa.yml)): FreeIPA server container (systemd-based)
 - [freshrss](https://github.com/FreshRSS/FreshRSS) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/freshrss.yml)): Self-hosted rss feed reader
 - [frigate-coral](https://docs.frigate.video/frigate/installation/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/frigate-coral.yml)): Container for running frigate with coral edge tpu support
 - [frigate-cpu](https://docs.frigate.video/frigate/installation/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/frigate-cpu.yml)): frigate nvr with cpu only
@@ -121,6 +122,7 @@
 - [gatus](https://github.com/TwiN/gatus) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/gatus.yml)): Monitors services and sends alerts
 - [geopulse](https://github.com/tess1o/geopulse) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/geopulse.yml)): A self-hosted location tracking and analysis platform
 - [ghost](https://hub.docker.com/_/ghost) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/ghost.yml)): Headless cms for creating blogs and websites
+- [gitea-runner](https://hub.docker.com/r/gitea/act_runner) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/gitea-runner.yml)): Gitea Actions runner for CI/CD workflows (similar to GitHub Actions)
 - [gitea](https://github.com/go-gitea/gitea) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/gitea.yml)): Lightweight git service similar to github
 - [github-backup](https://github-backup.sierrasoftworks.com/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/github-backup.yml)): Runs GitHub Backup to periodically archive GitHub repositories and releases
 - [gitlab](https://docs.gitlab.com/ee/install/docker.html) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/gitlab.yml)): Self-hosted git repository management system
@@ -157,6 +159,7 @@
 - [jellyfin](https://github.com/linuxserver/docker-jellyfin) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/jellyfin.yml)): Media server for streaming content
 - [jellyseerr](https://github.com/Fallenbagel/jellyseerr/tree/develop) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/jellyseerr.yml)): Container for running jellyseerr, a torrent indexer
 - [joplin](https://joplinapp.org/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/joplin.yml)): Note-taking and to-do app
+- [joyride-reloaded](https://github.com/ilude/joyride-python) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/joyride-reloaded.yml)): dynamic dns server that uses docker labels
 - [joyride](https://github.com/traefikturkey/joyride) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/joyride.yml)): dynamic dns server that uses docker labels
 
 
@@ -361,10 +364,11 @@
 
 
 # Available Games
-10 games and counting...
+11 games and counting...
 
 [F](#F-1)
 [M](#M-1)
+[P](#P-1)
 [R](#R-1)
 [S](#S-1)
 [V](#V-1)
@@ -380,6 +384,10 @@
 - [minecraft-direwolf20-120](https://hub.docker.com/r/itzg/minecraft-server) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/games/minecraft-direwolf20-120.yml)): Direwolf20 is a Feed The Beast modpack for Minecraft 1.20.1
 - [minecraft-skyfactory4](https://hub.docker.com/r/itzg/minecraft-server) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/games/minecraft-skyfactory4.yml)): SkyFactory 4 is a Feed The Beast modpack for Minecraft 1.12.2
 - [minecraft](https://hub.docker.com/r/itzg/minecraft-server) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/games/minecraft.yml)): Minecraft is a game about placing blocks and going on adventures
+
+
+## P
+- [project-zomboid](https://github.com/Renegade-Master/zomboid-dedicated-server) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/games/project-zomboid.yml)): Project Zomboid is an open-world isometric zombie survival game
 
 
 ## R

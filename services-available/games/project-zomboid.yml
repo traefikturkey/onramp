@@ -1,0 +1,46 @@
+# description: Project Zomboid is an open-world isometric zombie survival game
+# https://github.com/Renegade-Master/zomboid-dedicated-server
+# https://hub.docker.com/r/renegademaster/zomboid-dedicated-server
+# https://pzwiki.net/wiki/Dedicated_server
+
+services:
+  project-zomboid:
+    image: renegademaster/zomboid-dedicated-server:${PROJECT_ZOMBOID_DOCKER_TAG:-latest}
+    container_name: ${PROJECT_ZOMBOID_CONTAINER_NAME:-project-zomboid}
+    hostname: ${PROJECT_ZOMBOID_HOSTNAME:-project-zomboid}
+    restart: ${PROJECT_ZOMBOID_RESTART_POLICY:-unless-stopped}
+    ports:
+      - ${PROJECT_ZOMBOID_DEFAULT_PORT:-16261}:16261/udp    # Game traffic (primary)
+      - ${PROJECT_ZOMBOID_UDP_PORT:-16262}:16262/udp        # Game traffic (secondary)
+      # - ${PROJECT_ZOMBOID_RCON_PORT:-27015}:27015/tcp     # RCON (optional, uncomment if needed)
+    volumes:
+      - ./etc/games/${PROJECT_ZOMBOID_HOSTNAME:-project-zomboid}/ZomboidDedicatedServer:/home/steam/ZomboidDedicatedServer
+      - ./etc/games/${PROJECT_ZOMBOID_HOSTNAME:-project-zomboid}/Zomboid:/home/steam/Zomboid
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - TZ=${TZ}
+      # Server identity
+      - SERVER_NAME=${PROJECT_ZOMBOID_SERVER_NAME:-ZomboidServer}
+      - SERVER_PASSWORD=${PROJECT_ZOMBOID_SERVER_PASSWORD:-}
+      # Admin credentials
+      - ADMIN_USERNAME=${PROJECT_ZOMBOID_ADMIN_USERNAME:-superuser}
+      - ADMIN_PASSWORD=${PROJECT_ZOMBOID_ADMIN_PASSWORD:-changeme}
+      # Server settings
+      - MAX_PLAYERS=${PROJECT_ZOMBOID_MAX_PLAYERS:-16}
+      - MAX_RAM=${PROJECT_ZOMBOID_MAX_RAM:-4096m}
+      - AUTOSAVE_INTERVAL=${PROJECT_ZOMBOID_AUTOSAVE_INTERVAL:-15}
+      - PAUSE_ON_EMPTY=${PROJECT_ZOMBOID_PAUSE_ON_EMPTY:-true}
+      - PUBLIC_SERVER=${PROJECT_ZOMBOID_PUBLIC_SERVER:-true}
+      - USE_STEAM=${PROJECT_ZOMBOID_USE_STEAM:-true}
+      - STEAM_VAC=${PROJECT_ZOMBOID_STEAM_VAC:-true}
+      # Mods (semicolon-separated)
+      - MOD_NAMES=${PROJECT_ZOMBOID_MOD_NAMES:-}
+      - MOD_WORKSHOP_IDS=${PROJECT_ZOMBOID_MOD_WORKSHOP_IDS:-}
+      # RCON (optional)
+      - RCON_PASSWORD=${PROJECT_ZOMBOID_RCON_PASSWORD:-changeme_rcon}
+      - RCON_PORT=${PROJECT_ZOMBOID_RCON_PORT:-27015}
+    labels:
+      - joyride.host.name=${PROJECT_ZOMBOID_HOSTNAME:-project-zomboid}.${HOST_DOMAIN}
+      - traefik.enable=false
+      - com.centurylinklabs.watchtower.enable=${PROJECT_ZOMBOID_WATCHTOWER_ENABLED:-true}
+      - autoheal=true
