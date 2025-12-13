@@ -1,0 +1,23 @@
+# Rollback override for immich
+# This restores the dedicated Valkey container
+# Usage: make enable-override immich-dedicated-valkey
+
+networks:
+  immich-db:
+
+services:
+  immich:
+    depends_on:
+      - redis
+      - database
+    environment:
+      - REDIS_HOSTNAME=${IMMICH_REDIS_CONTAINER_NAME:-immich_redis}
+
+  redis:
+    container_name: immich_redis
+    networks:
+      - immich-db
+    image: docker.io/valkey/valkey:8-bookworm@sha256:fea8b3e67b15729d4bb70589eb03367bab9ad1ee89c876f54327fc7c6e618571
+    healthcheck:
+      test: redis-cli ping || exit 1
+    restart: ${IMMICH_RESTART_POLICY:-unless-stopped}

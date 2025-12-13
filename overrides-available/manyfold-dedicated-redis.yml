@@ -1,0 +1,21 @@
+# Rollback override for manyfold
+# This restores the dedicated Redis container
+# Usage: make enable-override manyfold-dedicated-redis
+
+networks:
+  traefik:
+    external: true
+
+services:
+  manyfold:
+    depends_on:
+      - postgres
+      - manyfold-redis
+    environment:
+      - REDIS_URL=redis://manyfold-redis:6379/1
+
+  manyfold-redis:
+    image: redis:7
+    restart: unless-stopped 
+    networks:
+      - traefik

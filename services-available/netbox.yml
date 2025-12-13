@@ -2,12 +2,11 @@
 # https://docs.linuxserver.io/images/docker-netbox
 # database: postgres
 # database_name: netbox
+# cache: valkey
+# cache_db: 8
 networks:
   traefik:
     external: true
-
-volumes:
-  netbox-redis:
 
 services:
   netbox:
@@ -16,7 +15,7 @@ services:
     restart: unless-stopped
     depends_on:
       - postgres
-      - netbox-redis
+      - valkey
     healthcheck:
       start_period: 90s
     networks:
@@ -37,12 +36,9 @@ services:
       - DB_USER=${PG_USER_NETBOX:-${PG_USER:-admin}}
       - DB_PASSWORD=${PG_PASS_NETBOX:-${PG_PASS}}
       - DB_HOST=postgres
-      #- DB_PORT=5432
-      - REDIS_HOST=netbox_redis
-      #- REDIS_PORT=<REDIS_PORT>
-      #- REDIS_PASSWORD=<REDIS_PASSWORD>
-      #- REDIS_DB_TASK=<REDIS_DB_TASK>
-      #- REDIS_DB_CACHE=<REDIS_DB_CACHE>
+      - REDIS_HOST=valkey
+      - REDIS_DB_TASK=8
+      - REDIS_DB_CACHE=8
     labels:
       - joyride.host.name=${NETBOX_CONTAINER_NAME:-netbox}.${HOST_DOMAIN}
       - traefik.enable=true
@@ -52,17 +48,4 @@ services:
       - traefik.http.routers.netbox.service=netbox
       - traefik.http.services.netbox.loadbalancer.server.port=8000
       - com.centurylinklabs.watchtower.enable=${NETBOX_WATCHTOWER_ENABLED:-true}
-      - autoheal=true
-
-  netbox-redis:
-    image: redis:alpine
-    container_name: netbox_redis
-    restart: unless-stopped
-    networks:
-      - traefik
-    volumes:
-      - netbox-redis:/data
-    labels:
-      - com.centurylinklabs.watchtower.enable=${NETBOX_WATCHTOWER_ENABLED:-true}
-      - traefik.enable=false
       - autoheal=true
