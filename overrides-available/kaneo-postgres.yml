@@ -1,0 +1,36 @@
+# Override to use dedicated PostgreSQL database for kaneo
+# This is for backward compatibility with existing deployments
+# New deployments should use the shared postgres service (default)
+#
+# Usage: make enable-override kaneo-postgres
+#
+# Note: If you have an existing kaneo-postgres database, this override
+# allows you to continue using it instead of migrating to shared postgres
+
+networks:
+  kaneo_int:
+
+services:
+  kaneo-backend:
+    networks:
+      - traefik
+      - kaneo_int
+    depends_on:
+      - kaneo-postgres
+    environment:
+      - DATABASE_URL=postgresql://${KANEO_POSTGRES_USER:-kaneo_user}:${KANEO_POSTGRES_PASSWORD:-kaneo_password}@${KANEO_POSTGRES_CONTAINER_NAME:-kaneo-postgres}:5432/kaneo
+
+  kaneo-postgres:
+    image: postgres:${KANEO_POSTGRES_TAG:-16-alpine}
+    container_name: ${KANEO_POSTGRES_CONTAINER_NAME:-kaneo-postgres}
+    restart: ${KANEO_RESTART:-unless-stopped}
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=${KANEO_POSTGRES_USER:-kaneo_user}
+      - POSTGRES_DB=${KANEO_POSTGRES_DB:-kaneo}
+      - POSTGRES_PASSWORD=${KANEO_POSTGRES_PASSWORD:-kaneo_password}
+    networks:
+      - kaneo_int
+    volumes:
+      - ${KANEO_POSTGRES_DIR:-./etc/kaneo/postgres}:/var/lib/postgresql/data
