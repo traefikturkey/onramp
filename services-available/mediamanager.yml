@@ -1,34 +1,23 @@
 networks:
-  mm-internal:
   traefik:
     external: true
 
 # description: MediaManager is modern software to manage your TV and movie library
 # https://github.com/maxdorninger/MediaManager
 # https://maxdorninger.github.io/MediaManager/introduction.html
+# database: postgres
+# database_name: mediamanager
 
 services:
-  mediamanager-db:
-    image: postgres:latest
-    container_name: ${MEDIAMANAGER_DB_NAME:-mediamanager-db}
-    restart: ${MEDIAMANAGER_RESTART:-unless-stopped}
-    volumes:
-      - ./etc/mediamanager/db:/var/lib/postgresql/data
-      - /etc/localtime:/etc/localtime:ro      
-    environment:
-      - POSTGRES_USER=${MM_POSTGRES_USER:-onramp}
-      - POSTGRES_DB=${MM_POSTGRES_DB:-MediaManager}
-      - POSTGRES_PASSWORD=${MM_POSTGRES_PASSWORD:-MediaManager}
-    networks:
-      - mm-internal
-
   mediamanager-backend:
     image: ghcr.io/maxdorninger/mediamanager/backend:${MEDIAMANAGERBACKEND_DOCKER_TAG:-latest}
     container_name: ${MEDIAMANAGER_CONTAINER_NAME:-mediamanager-backend}
     restart: ${MEDIAMANAGER_RESTART:-unless-stopped}
     # mem_limit: ${MEDIAMANAGER_MEM_LIMIT:-200g}
     networks:
-      - mm-internal
+      - traefik
+    depends_on:
+      - postgres
     volumes:
       - ./etc/mediamanager/backend:/data # <==== this probably needs changed
       - /etc/localtime:/etc/localtime:ro
@@ -42,14 +31,14 @@ services:
       - QBITTORRENT_USERNAME=
       - QBITTORRENT_PORT=
       - CORS_URLS=["http://localhost:3000","${MEDIAMANAGER_HOST_NAME:-mediamanager}.${HOST_DOMAIN}"]
-      - DB_HOST=mediamanager-db
+      - DB_HOST=postgres
       - FRONTEND_URL=${MEDIAMANAGER_HOST_NAME:-mediamanager}.${HOST_DOMAIN}
 
       # if using external DB service      
-      - DB_USER=${MM_POSTGRES_USER:-MediaManager}
+      - DB_USER=${MM_POSTGRES_USER:-${PG_USER:-admin}}
       - DB_PORT=5432
-      - DB_PASSWORD=${MM_POSTGRES_PASSWORD:-MediaManager}
-      - DB_DBNAME=${MM_POSTGRES_DB:-MediaManager}
+      - DB_PASSWORD=${MM_POSTGRES_PASSWORD:-${PG_PASS}}
+      - DB_DBNAME=${MM_POSTGRES_DB:-mediamanager}
 
       # For Prowlarr integration
       - PROWLARR_ENABLED=${MM_PROWLARR_ENABLED:-false}
@@ -94,7 +83,6 @@ services:
       - mediamanager-backend
     networks:
       - traefik
-      - mm-internal
     labels:
       - joyride.host.name=${MEDIAMANAGER_HOST_NAME:-mediamanager}.${HOST_DOMAIN}
       - traefik.enable=${MEDIAMANAGER_TRAEFIK_ENABLED:-true}

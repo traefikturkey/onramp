@@ -1,0 +1,43 @@
+# Override to use dedicated PostgreSQL database for mediamanager
+# This is for backward compatibility with existing deployments
+# New deployments should use the shared postgres service (default)
+#
+# Usage: make enable-override mediamanager-postgres
+#
+# Note: If you have an existing mediamanager-db database, this override
+# allows you to continue using it instead of migrating to shared postgres
+
+networks:
+  mm-internal:
+
+services:
+  mediamanager-backend:
+    networks:
+      - traefik
+      - mm-internal
+    depends_on:
+      - mediamanager-db
+    environment:
+      - DB_HOST=mediamanager-db
+      - DB_USER=${MM_POSTGRES_USER:-MediaManager}
+      - DB_PASSWORD=${MM_POSTGRES_PASSWORD:-MediaManager}
+      - DB_DBNAME=${MM_POSTGRES_DB:-MediaManager}
+
+  mediamanager-frontend:
+    networks:
+      - traefik
+      - mm-internal
+
+  mediamanager-db:
+    image: postgres:${MEDIAMANAGER_POSTGRES_TAG:-latest}
+    container_name: ${MEDIAMANAGER_DB_NAME:-mediamanager-db}
+    restart: ${MEDIAMANAGER_RESTART:-unless-stopped}
+    volumes:
+      - ./etc/mediamanager/postgres:/var/lib/postgresql/data
+      - /etc/localtime:/etc/localtime:ro      
+    environment:
+      - POSTGRES_USER=${MM_POSTGRES_USER:-MediaManager}
+      - POSTGRES_DB=${MM_POSTGRES_DB:-MediaManager}
+      - POSTGRES_PASSWORD=${MM_POSTGRES_PASSWORD:-MediaManager}
+    networks:
+      - mm-internal
