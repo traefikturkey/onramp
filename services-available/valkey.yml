@@ -26,7 +26,7 @@ networks:
 
 services:
   valkey:
-    image: valkey:${VALKEY_DOCKER_TAG:-latest}
+    image: valkey/valkey:${VALKEY_DOCKER_TAG:-latest}
     container_name: ${VALKEY_CONTAINER_NAME:-valkey}
     restart: ${VALKEY_RESTART:-unless-stopped}
     networks:
