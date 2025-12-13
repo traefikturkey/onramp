@@ -1,0 +1,28 @@
+# Rollback override for docmost
+# This restores the dedicated postgres container
+# Usage: make enable-override docmost-dedicated-postgres
+
+networks:
+  traefik:
+    external: true
+
+services:
+  docmost:
+    depends_on:
+      - docmost-db
+      - docmost-redis
+    environment:
+      - DATABASE_URL=postgresql://${DOCMOST_POSTGRES_USER:-docmost}:${DOCMOST_POSTGRES_PASSWORD:-changemeplease}@${DOCMOST_DB_CONTAINER_NAME:-docmost-db}:5432/docmost?schema=public
+
+  docmost-db:
+    image: postgres:16-alpine
+    container_name: ${DOCMOST_DB_CONTAINER_NAME:-docmost-db}
+    networks:
+      - traefik
+    environment:
+      - POSTGRES_DB=${DOCMOST_POSTGRES_DB:-docmost}
+      - POSTGRES_USER=${DOCMOST_POSTGRES_USER:-docmost}
+      - POSTGRES_PASSWORD=${DOCMOST_POSTGRES_PASSWORD:-changemeplease}
+    restart: unless-stopped
+    volumes:
+      - ./etc/docmost/db:/var/lib/postgresql/data

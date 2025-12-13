@@ -1,0 +1,29 @@
+# Rollback override for itflow
+# This restores the dedicated MariaDB container
+# Usage: make enable-override itflow-dedicated-mariadb
+
+networks:
+  traefik:
+    external: true
+
+services:
+  itflow:
+    depends_on:
+      - itflow-db
+    environment:
+      - ITFLOW_DB_HOST=itflow-db
+
+  itflow-db:
+    hostname: itflow-db
+    container_name: itflow-db
+    image: mariadb:10.6.11
+    restart: unless-stopped
+    networks:
+      - traefik
+    environment:
+      - MARIADB_RANDOM_ROOT_PASSWORD=true
+      - MARIADB_DATABASE=${ITFLOW_DB_NAME:-itflow}
+      - MARIADB_USER=${ITFLOW_DB_USER:-itflow}
+      - MARIADB_PASSWORD=${ITFLOW_DB_PASS:-itflowpass}
+    volumes:
+      - ./etc/itflow/data:/var/lib/mysql/

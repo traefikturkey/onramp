@@ -1,0 +1,33 @@
+# Rollback override for firefly3
+# This restores the dedicated MariaDB container
+# Usage: make enable-override firefly3-dedicated-mariadb
+
+networks:
+  firefly_iii:
+
+volumes:
+  firefly_db:
+
+services:
+  firefly3:
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=${FIREFLY_DB_HOST:-db}
+
+  db:
+    image: mariadb
+    hostname: db
+    container_name: ${FIREFLY_DB_CONTAINER_NAME:-firefly_db}
+    restart: ${FIREFLY3_RESTART:-unless-stopped}
+    environment:
+      - MYSQL_DATABASE=${FIREFLY_DB_DATABASE:-firefly}
+      - MYSQL_USER=${FIREFLY_DB_USERNAME:-firefly}
+      - MYSQL_PASSWORD=${FIREFLY_DB_PASSWORD:-super_secure_password_change_me}
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
+    networks:
+      - firefly_iii
+    volumes:
+      - firefly_db:/var/lib/mysql
+    labels:
+      - traefik.enable=false

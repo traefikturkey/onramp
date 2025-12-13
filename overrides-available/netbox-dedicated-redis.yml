@@ -1,0 +1,31 @@
+# Rollback override for netbox
+# This restores the dedicated Redis container
+# Usage: make enable-override netbox-dedicated-redis
+
+networks:
+  traefik:
+    external: true
+
+volumes:
+  netbox-redis:
+
+services:
+  netbox:
+    depends_on:
+      - postgres
+      - netbox-redis
+    environment:
+      - REDIS_HOST=netbox_redis
+
+  netbox-redis:
+    image: redis:alpine
+    container_name: netbox_redis
+    restart: unless-stopped
+    networks:
+      - traefik
+    volumes:
+      - netbox-redis:/data
+    labels:
+      - com.centurylinklabs.watchtower.enable=${NETBOX_WATCHTOWER_ENABLED:-true}
+      - traefik.enable=false
+      - autoheal=true

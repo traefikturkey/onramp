@@ -1,0 +1,22 @@
+# Rollback override for wallabag
+# This restores the dedicated Redis container
+# Usage: make enable-override wallabag-dedicated-redis
+
+networks:
+  database:
+
+services:
+  wallabag:
+    depends_on:
+      - db
+      - redis
+
+  redis:
+    image: redis:alpine
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 20s
+      timeout: 3s
+    networks:
+      - database

@@ -1,0 +1,34 @@
+# Rollback override for vikunja
+# This restores the dedicated MariaDB container
+# Usage: make enable-override vikunja-dedicated-mariadb
+
+networks:
+  traefik:
+    external: true
+
+services:
+  vikunja:
+    depends_on:
+      vikunja-db:
+        condition: service_healthy
+    environment:
+      - VIKUNJA_DATABASE_HOST=${VIKUNJA_DATABASE_HOST:-vikunja-db}
+
+  vikunja-db:
+    image: mariadb:10
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --max-connections=1000
+    container_name: ${VIKUNJA_DATABASE_CONTAINER_NAME:-vikunja-db}
+    environment:
+      - MYSQL_ROOT_PASSWORD=${VIKUNJA_MYSQL_ROOT_PASSWORD:-supersecret}
+      - MYSQL_USER=${VIKUNJA_DATABASE_USER:-vikunja}
+      - MYSQL_PASSWORD=${VIKUNJA_DATABASE_PASSWORD:-secret}
+      - MYSQL_DATABASE=${VIKUNJA_DATABASE:-vikunja}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/vikunja/db:/var/lib/mysql
+    restart: ${VIKUNJA_RESTART:-unless-stopped}
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u $$MYSQL_USER --password=$$MYSQL_PASSWORD"]
+      interval: 2s
+      start_period: 30s

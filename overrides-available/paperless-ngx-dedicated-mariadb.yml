@@ -1,0 +1,31 @@
+# Rollback override for paperless-ngx
+# This restores the dedicated MariaDB container
+# Usage: make enable-override paperless-ngx-dedicated-mariadb
+
+networks:
+  traefik:
+    external: true
+
+services:
+  paperless-ngx:
+    depends_on:
+      - valkey
+      - db
+    environment:
+      - PAPERLESS_DBHOST=${PAPERLESS_DB_HOST:-db}
+
+  db:
+    image: docker.io/library/mariadb:10
+    restart: unless-stopped
+    volumes:
+      - ./etc/paperless-ngx/dbdata:/var/lib/mysql
+    networks:
+      - traefik
+    environment:
+      - MARIADB_HOST=${PAPERLESS_DB_HOST:-paperless}
+      - MARIADB_DATABASE=${PAPERLESS_DB_NAME:-paperless}
+      - MARIADB_USER=${PAPERLESS_DB_USER:-paperless}
+      - MARIADB_PASSWORD=${PAPERLESS_DB_PASS:-paperless}
+      - MARIADB_ROOT_PASSWORD=${PAPERLESS_DB_ROOTPASS:-paperless}
+    ports:
+      - "3306:3306"

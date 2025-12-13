@@ -1,0 +1,41 @@
+# Rollback override for authentik
+# This restores the dedicated Redis container
+# Usage: make enable-override authentik-dedicated-redis
+
+networks:
+  traefik:
+    external: true
+
+services:
+  authentik-server:
+    depends_on:
+      - redis
+    environment:
+      - AUTHENTIK_REDIS__HOST=authentik_redis
+      - AUTHENTIK_REDIS__DB=0
+
+  worker:
+    depends_on:
+      - redis
+    environment:
+      - AUTHENTIK_REDIS__HOST=authentik_redis
+      - AUTHENTIK_REDIS__DB=0
+
+  redis:
+    image: redis:alpine
+    container_name: authentik_redis
+    restart: unless-stopped
+    networks:
+      - traefik
+    volumes:
+      - ./etc/authentik/redis:/data
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      start_period: 20s
+      interval: 30s
+      retries: 5
+      timeout: 3s
+    labels:
+      - com.centurylinklabs.watchtower.enable=${AUTHENTIK_WATCHTOWER_ENABLED:-true}
+      - traefik.enable=false
+      - autoheal=true

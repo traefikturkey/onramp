@@ -8,16 +8,10 @@ networks:
 # https://github.com/paperless-ngx/paperless-ngx
 # https://hub.docker.com/r/linuxserver/paperless-ngx
 # https://docs.paperless-ngx.com/
+# cache: valkey
+# cache_db: 10
 
 services:
-  broker:
-    image: docker.io/library/redis:6.0 #pinned for kitty
-    restart: unless-stopped
-    networks:
-      - traefik
-    volumes:
-      - ./etc/paperless-ngx-postgres/redisdata:/data
-
   db:
     image: postgres:13
     restart: unless-stopped
@@ -53,7 +47,7 @@ services:
     networks:
       - traefik
     depends_on:
-      - broker
+      - valkey
       - db
       - gotenberg
       - tika
@@ -70,7 +64,7 @@ services:
       - TZ=${TZ}
        #PAPERLESS_URL Required for proper authentication behind traefik
       - PAPERLESS_URL=https://${PAPERLESS_NGX_CONTAINER_NAME:-paperless}.${HOST_DOMAIN}
-      - PAPERLESS_REDIS=redis://broker:6379
+      - PAPERLESS_REDIS=redis://valkey:6379/10
       - PAPERLESS_TIKA_ENABLED=1
       - PAPERLESS_TIKA_GOTENBERG_ENDPOINT=http://gotenberg:3000
       - PAPERLESS_TIKA_ENDPOINT=http://tika:9998

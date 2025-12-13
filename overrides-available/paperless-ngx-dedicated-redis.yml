@@ -1,0 +1,25 @@
+# Rollback override for paperless-ngx
+# This restores the dedicated Redis container
+# Usage: make enable-override paperless-ngx-dedicated-redis
+
+networks:
+  traefik:
+    external: true
+
+services:
+  broker:
+    image: docker.io/library/redis:7
+    restart: unless-stopped
+    networks:
+      - traefik
+    volumes:
+      - ./etc/paperless-ngx/redisdata:/data
+
+  paperless-ngx:
+    depends_on:
+      - broker
+      - db
+      - gotenberg
+      - tika
+    environment:
+      - PAPERLESS_REDIS=redis://broker:6379

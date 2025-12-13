@@ -1,0 +1,49 @@
+# Rollback override for dawarich
+# This restores the dedicated Redis container
+# Usage: make enable-override dawarich-dedicated-redis
+
+networks:
+  traefik:
+    external: true
+
+services:
+  dawarich:
+    depends_on:
+      dawarich_db:
+        condition: service_healthy
+        restart: true
+      dawarich_redis:
+        condition: service_healthy
+        restart: true
+    environment:
+      - REDIS_URL=redis://dawarich_redis:6379
+
+  dawarich_sidekiq:
+    depends_on:
+      dawarich_db:
+        condition: service_healthy
+        restart: true
+      dawarich_redis:
+        condition: service_healthy
+        restart: true
+      dawarich:
+        condition: service_healthy
+        restart: true
+    environment:
+      - REDIS_URL=redis://dawarich_redis:6379
+
+  dawarich_redis:
+    image: redis:7.4-alpine
+    container_name: dawarich_redis
+    command: redis-server
+    networks:
+      - traefik
+    volumes:
+      - ./etc/dawarich/redis:/var/shared/redis
+    restart: always
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s

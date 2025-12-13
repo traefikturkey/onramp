@@ -1,0 +1,29 @@
+# Rollback override for semaphore
+# This restores the dedicated MySQL container
+# Usage: make enable-override semaphore-dedicated-mysql
+
+networks:
+  traefik:
+    external: true
+
+services:
+  semaphore:
+    depends_on:
+      - semaphore-db
+    environment:
+      - SEMAPHORE_DB_HOST=${SEMAPHORE_DB_HOST:-semaphore-db}
+
+  semaphore-db:
+    restart: unless-stopped
+    image: mysql:8.0
+    container_name: semaphore-db
+    networks:
+      - traefik
+    volumes:
+      - ./etc/semaphore/db:/var/lib/mysql
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+      MYSQL_DATABASE: ${SEMAPHORE_DB:-semaphore}
+      MYSQL_USER: ${SEMAPHORE_DB_USER:-semaphore}
+      MYSQL_PASSWORD: ${SEMAPHORE_DB_PASS:-semaphore}
+      MYSQL_PORT: ${SEMAPHORE_DB_PORT:-3306}

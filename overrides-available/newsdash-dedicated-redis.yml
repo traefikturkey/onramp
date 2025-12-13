@@ -1,0 +1,27 @@
+# Rollback override for newsdash
+# This restores the dedicated Redis container
+# Usage: make enable-override newsdash-dedicated-redis
+
+networks:
+  traefik:
+    external: true
+
+volumes:
+  redis:
+
+services:
+  newsdash:
+    depends_on:
+      - redis
+    environment:
+      - REDIS_URL=redis://redis:6380
+
+  redis:
+    image: bitnami/redis
+    restart: unless-stopped
+    mem_limit: 1g
+    command: /opt/bitnami/scripts/redis/run.sh --loglevel notice
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    volumes:
+      - redis:/bitnami

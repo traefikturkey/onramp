@@ -1,0 +1,24 @@
+# Rollback override for docmost
+# This restores the dedicated Redis container
+# Usage: make enable-override docmost-dedicated-redis
+
+networks:
+  traefik:
+    external: true
+
+services:
+  docmost:
+    depends_on:
+      - postgres
+      - docmost-redis
+    environment:
+      - REDIS_URL=redis://${DOCMOST_REDIS_CONTAINER_NAME:-docmost-redis}:6379
+
+  docmost-redis:
+    image: redis:7.2-alpine
+    container_name: ${DOCMOST_REDIS_CONTAINER_NAME:-docmost-redis}
+    networks:
+      - traefik
+    restart: unless-stopped
+    volumes:
+      - ./etc/docmost/redis:/data

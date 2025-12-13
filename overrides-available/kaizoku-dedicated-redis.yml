@@ -1,0 +1,28 @@
+# Rollback override for kaizoku
+# This restores the dedicated Redis container
+# Usage: make enable-override kaizoku-dedicated-redis
+
+networks:
+  traefik:
+    external: true
+
+volumes:
+  kaizoku-redis:
+
+services:
+  kaizoku:
+    depends_on:
+      - postgres
+      - kaizoku-redis
+    environment:
+      - REDIS_HOST=kaizoku-redis
+      - REDIS_PORT=6379
+
+  kaizoku-redis:
+    image: redis:7-alpine
+    networks:
+      - traefik
+    restart: unless-stopped
+    container_name: kaizoku-redis
+    volumes:
+      - kaizoku-redis:/manga

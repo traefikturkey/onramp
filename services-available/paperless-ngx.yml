@@ -6,32 +6,12 @@ networks:
 # https://github.com/paperless-ngx/paperless-ngx
 # https://hub.docker.com/r/linuxserver/paperless-ngx
 # https://docs.paperless-ngx.com/
+# cache: valkey
+# cache_db: 9
+# database: mariadb
+# database_name: paperless
 
 services:
-  broker:
-    image: docker.io/library/redis:7
-    restart: unless-stopped
-    networks:
-      - traefik
-    volumes:
-      - ./etc/paperless-ngx/redisdata:/data
-
-  db:
-    image: docker.io/library/mariadb:10
-    restart: unless-stopped
-    volumes:
-      - ./etc/paperless-ngx/dbdata:/var/lib/mysql
-    networks:
-      - traefik
-    environment:
-      - MARIADB_HOST=${PAPERLESS_DB_HOST:-paperless}
-      - MARIADB_DATABASE=${PAPERLESS_DB_NAME:-paperless}
-      - MARIADB_USER=${PAPERLESS_DB_USER:-paperless}
-      - MARIADB_PASSWORD=${PAPERLESS_DB_PASS:-paperless}
-      - MARIADB_ROOT_PASSWORD=${PAPERLESS_DB_ROOTPASS:-paperless}
-    ports:
-      - "3306:3306"
-
   gotenberg:
     image: docker.io/gotenberg/gotenberg:7.6
     restart: unless-stopped
@@ -54,8 +34,8 @@ services:
     networks:
       - traefik
     depends_on:
-      - broker
-      - db
+      - valkey
+      - mariadb
       - gotenberg
       - tika
     volumes:
@@ -70,16 +50,16 @@ services:
       - TZ=${TZ}
        #PAPERLESS_URL Required for proper authentication behind traefik
       - PAPERLESS_URL=https://${PAPERLESS_NGX_CONTAINER_NAME:-paperless-ngx}.${HOST_DOMAIN}
-      - PAPERLESS_REDIS=redis://broker:6379
+      - PAPERLESS_REDIS=redis://valkey:6379/9
       - PAPERLESS_TIKA_ENABLED=1
       - PAPERLESS_TIKA_GOTENBERG_ENDPOINT=http://gotenberg:3000
       - PAPERLESS_TIKA_ENDPOINT=http://tika:9998
       - PAPERLESS_DBENGINE=${PAPERLESS_DB_ENGINE:-mariadb}
       - PAPERLESS_DBPORT=${PAPERLESS_DB_PORT:-3306}
-      - PAPERLESS_DBHOST=${PAPERLESS_DB_HOST:-db}
+      - PAPERLESS_DBHOST=mariadb
       - PAPERLESS_DBNAME=${PAPERLESS_DB_NAME:-paperless}
-      - PAPERLESS_DBUSER=${PAPERLESS_DB_USER:-paperless}
-      - PAPERLESS_DBPASS=${PAPERLESS_DB_PASS:-paperless}
+      - PAPERLESS_DBUSER=${PAPERLESS_DB_USER:-${MARIADB_USER:-admin}}
+      - PAPERLESS_DBPASS=${PAPERLESS_DB_PASS:-${MARIADB_PASS}}
       - PAPERLESS_ADMIN_USER=${PAPERLESS_ADMINUSER:-admin}
       - PAPERLESS_ADMIN_MAIL=${PAPERLESS_ADMINMAIL:-admin@yourmail.com}
       - PAPERLESS_ADMIN_PASSWORD=${PAPERLESS_ADMINPASSWORD:-admin}

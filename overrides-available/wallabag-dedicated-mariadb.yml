@@ -1,0 +1,28 @@
+# Rollback override for wallabag
+# This restores the dedicated MariaDB container
+# Usage: make enable-override wallabag-dedicated-mariadb
+
+networks:
+  database:
+
+services:
+  wallabag:
+    depends_on:
+      - db
+      - valkey
+    environment:
+      - SYMFONY__ENV__DATABASE_HOST=db
+
+  db:
+    image: mariadb
+    environment:
+      - MYSQL_ROOT_PASSWORD=${WALLABAG_DB_PASSWORD:-wallaroot}
+    restart: unless-stopped
+    volumes:
+      - ./etc/wallabag/data:/var/lib/mysql
+    networks:
+      - database
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 20s
+      timeout: 3s

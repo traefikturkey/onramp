@@ -4,24 +4,10 @@ networks:
 
 # description: UI and API for Ansible,Terraform/OpenTofu/Terragrunt
 # https://docs.ansible-semaphore.com/
+# database: mariadb
+# database_name: semaphore
 
 services:
-  semaphore-db:
-    restart: unless-stopped
-    ### to use postgres instead, enable the semaphore-pg override.
-    image: mysql:8.0
-    container_name: semaphore-db
-    networks:
-      - traefik
-    volumes:
-      - ./etc/semaphore/db:/var/lib/mysql
-    environment:
-      MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
-      MYSQL_DATABASE: ${SEMAPHORE_DB:-semaphore}
-      MYSQL_USER: ${SEMAPHORE_DB_USER:-semaphore}
-      MYSQL_PASSWORD: ${SEMAPHORE_DB_PASS:-semaphore}
-      MYSQL_PORT: ${SEMAPHORE_DB_PORT:-3306}
-
   semaphore:
     image: semaphoreui/semaphore:${SEMAPHORE_DOCKER_TAG:-latest}
     container_name: ${SEMAPHORE_CONTAINER_NAME:-semaphore}
@@ -29,7 +15,7 @@ services:
     networks:
       - traefik
     depends_on:
-      - semaphore-db
+      - mariadb
     volumes:
       - ./etc/semaphore/inventory.txt:/inventory:ro
       - ./etc/semaphore/authorized_keys.txt:/authorized_keys:ro
@@ -38,10 +24,10 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
-      - SEMAPHORE_DB_USER=${SEMAPHORE_DB_USER:-semaphore}
-      - SEMAPHORE_DB_PASS=${SEMAPHORE_DB_PASS:-semaphore}
-      - SEMAPHORE_DB_HOST=${SEMAPHORE_DB_HOST:-semaphore-db}
-      - SEMAPHORE_DB_PORT=${SEMAPHORE_DB_PORT:-3306} # change to 5432 for postgres
+      - SEMAPHORE_DB_USER=${SEMAPHORE_DB_USER:-${MARIADB_USER:-admin}}
+      - SEMAPHORE_DB_PASS=${SEMAPHORE_DB_PASS:-${MARIADB_PASS}}
+      - SEMAPHORE_DB_HOST=mariadb
+      - SEMAPHORE_DB_PORT=${SEMAPHORE_DB_PORT:-3306}
       - SEMAPHORE_DB_DIALECT=${SEMAPHORE_DB_DIALECT:-mysql}
       - SEMAPHORE_DB=${SEMAPHORE_DB:-semaphore}
       - SEMAPHORE_PLAYBOOK_PATH=${SEMAPHORE_PLAYBOOK_PATH:-/tmp/semaphore/}

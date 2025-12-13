@@ -4,6 +4,10 @@ networks:
 
 # description: A self-hosted digital asset manager for 3d print files
 # https://github.com/manyfold3d/manyfold
+# database: postgres
+# database_name: manyfold
+# cache: valkey
+# cache_db: 6
 
 services:
   manyfold:
@@ -21,15 +25,15 @@ services:
       - PGID=${PGID:-1000}
       - TZ=${TZ}
       - SECRET_KEY_BASE=${MANYFOLD_SECRET_KEY_BASE:-a_nice_long_random_string}
-      - REDIS_URL=redis://manyfold-redis:6379/1
+      - REDIS_URL=redis://valkey:6379/6
       - DATABASE_ADAPTER=postgresql
-      - DATABASE_HOST=manyfold-postgres
-      - DATABASE_USER=${MANYFOLD_DB_USER:-manyfold}
-      - DATABASE_PASSWORD=${MANYFOLD_DB_PASSWORD:-password}
-      - DATABASE_NAME=${MANYFOLD_DB_NAME:-manyfold}
+      - DATABASE_HOST=postgres
+      - DATABASE_USER=${MANYFOLD_DB_USER:-${PG_USER:-admin}}
+      - DATABASE_PASSWORD=${MANYFOLD_DB_PASSWORD:-${PG_PASS}}
+      - DATABASE_NAME=manyfold
     depends_on:
-      - manyfold-postgres
-      - manyfold-redis
+      - postgres
+      - valkey
     labels:
       - joyride.host.name=${MANYFOLD_HOST_NAME:-manyfold}.${HOST_DOMAIN}
       - traefik.enable=${MANYFOLD_TRAEFIK_ENABLED:-true}
@@ -39,20 +43,3 @@ services:
       - traefik.http.services.manyfold.loadbalancer.server.port=3214
       - com.centurylinklabs.watchtower.enable=${MANYFOLD_WATCHTOWER_ENABLED:-true}
       - autoheal=${MANYFOLD_AUTOHEAL_ENABLED:-true}
-
-  manyfold-postgres:
-    image: postgres:15
-    volumes:
-      - ./etc/manyfold/db:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_USER=${MANYFOLD_DB_USER:-manyfold}
-      - POSTGRES_PASSWORD=${MANYFOLD_DB_PASSWORD:-password}
-    restart: unless-stopped
-    networks:
-      - traefik 
-
-  manyfold-redis:
-    image: redis:7
-    restart: unless-stopped 
-    networks:
-      - traefik

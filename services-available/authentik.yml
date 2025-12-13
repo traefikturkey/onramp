@@ -9,38 +9,25 @@ networks:
 # https://www.postgresql.org/
 # database: postgres
 # database_name: authentik
+# cache: valkey
+# cache_db: 1
 
 services:
-  redis:
-    image: redis:alpine
-    container_name: authentik_redis
-    restart: unless-stopped
-    networks:
-      - traefik
-    volumes:
-      - ./etc/authentik/redis:/data
-    healthcheck:
-      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
-      start_period: 20s
-      interval: 30s
-      retries: 5
-      timeout: 3s
-    labels:
-      - com.centurylinklabs.watchtower.enable=${AUTHENTIK_WATCHTOWER_ENABLED:-true}
-      - traefik.enable=false
-      - autoheal=true
-
   authentik-server:
     image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_DOCKER_TAG:-2023.5.2}
     container_name: authentik_server
     restart: unless-stopped
     networks:
       - traefik
+    depends_on:
+      - postgres
+      - valkey
     command: server
     environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
-      - AUTHENTIK_REDIS__HOST=authentik_redis
+      - AUTHENTIK_REDIS__HOST=valkey
+      - AUTHENTIK_REDIS__DB=1
       - AUTHENTIK_POSTGRESQL__HOST=postgres
       - AUTHENTIK_POSTGRESQL__USER=${PG_USER:-${PG_USER:-admin}}
       - AUTHENTIK_POSTGRESQL__NAME=${PG_DB:-authentik}
@@ -73,11 +60,15 @@ services:
     image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_DOCKER_TAG:-2022.8.2}
     container_name: authentik_worker
     restart: unless-stopped
+    depends_on:
+      - postgres
+      - valkey
     command: worker
     environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
-      - AUTHENTIK_REDIS__HOST=authentik_redis
+      - AUTHENTIK_REDIS__HOST=valkey
+      - AUTHENTIK_REDIS__DB=1
       - AUTHENTIK_POSTGRESQL__HOST=postgres
       - AUTHENTIK_POSTGRESQL__USER=${PG_USER:-${PG_USER:-admin}}
       - AUTHENTIK_POSTGRESQL__NAME=${PG_DB:-authentik}

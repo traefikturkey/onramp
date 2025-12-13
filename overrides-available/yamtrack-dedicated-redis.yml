@@ -1,0 +1,23 @@
+# Rollback override for yamtrack
+# This restores the dedicated Redis container
+# Usage: make enable-override yamtrack-dedicated-redis
+
+networks:
+  traefik:
+    external: true
+
+services:
+  yamtrack:
+    depends_on:
+      - yamtrack-redis
+    environment:
+      - REDIS_URL=redis://yamtrack-redis:6379
+
+  yamtrack-redis:
+    container_name: yamtrack-redis
+    image: redis:7-alpine
+    restart: unless-stopped
+    networks:
+      - traefik
+    volumes:
+      - ./etc/yamtrack/redis:/data
