@@ -2,11 +2,10 @@ networks:
   traefik:
     external: true
 
-volumes:
-  redis:
-
 # description: Self-hosted rss feed reader and dashboard
 # https://github.com/buzz/newsdash
+# cache: valkey
+# cache_db: 4
 
 services:
   newsdash:
@@ -19,8 +18,10 @@ services:
     volumes:
       - ./etc/newsdash:/config # <==== this probably needs changed ====>
       - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      - valkey
     environment:
-      - REDIS_URL=redis://redis:6380
+      - REDIS_URL=redis://valkey:6379/4
     labels:
       - joyride.host.name=newsdash.${HOST_DOMAIN}
       - traefik.enable=true
@@ -29,13 +30,3 @@ services:
       - traefik.http.services.newsdash.loadbalancer.server.port=3001
       - com.centurylinklabs.watchtower.enable=${NEWSDASH_WATCHTOWER_ENABLED:-true}
       - autoheal=true
-
-  redis:
-    image: bitnami/redis
-    restart: ${REDIS_DOCKER_RESTART_POLICY:-unless-stopped}
-    mem_limit: 1g
-    command: /opt/bitnami/scripts/redis/run.sh --loglevel ${REDIS_LOG_LEVEL:-notice}
-    environment:
-      - ALLOW_EMPTY_PASSWORD=yes
-    volumes:
-      - redis:/bitnami

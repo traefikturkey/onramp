@@ -2,13 +2,12 @@ networks:
   traefik:
     external: true
 
-volumes:
-  kaizoku-redis:
-  
 # description: Web-based anime downloader
 # https://github.com/oae/kaizoku
 # database: postgres
 # database_name: kaizoku
+# cache: valkey
+# cache_db: 2
 
 services:
   kaizoku:
@@ -27,10 +26,12 @@ services:
       - TZ=${TZ}
       - DATABASE_URL=postgresql://${KAIZOKU_POSTGRES_USER:-${PG_USER:-admin}}:${KAIZOKU_POSTGRES_PASSWORD:-${PG_PASS}}@postgres:5432/kaizoku
       - KAIZOKU_PORT=3000
-      - REDIS_HOST=kaizoku-redis
+      - REDIS_HOST=valkey
       - REDIS_PORT=6379
+      - REDIS_DB=2
     depends_on:
       - postgres
+      - valkey
     labels:
       - joyride.host.name=${KAIZOKU_CONTAINER_NAME:-kaizoku}.${HOST_DOMAIN}
       - traefik.enable=true
@@ -40,12 +41,3 @@ services:
       - traefik.http.services.kaizoku.loadbalancer.server.port=3000
       - com.centurylinklabs.watchtower.enable=${KAIZOKU_WATCHTOWER_ENABLED:-true}
       - autoheal=true
-
-  kaizoku-redis:
-    image: redis:7-alpine
-    networks:
-      - traefik
-    restart: unless-stopped
-    container_name: kaizoku-redis
-    volumes:
-      - kaizoku-redis:/manga
