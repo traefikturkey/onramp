@@ -1,17 +1,17 @@
 networks:
   traefik:
     external: true
-  dockerizalo-db:
 
 # description: Docker build and deployment platform 
 # https://github.com/undernightcore/dockerizalo
+# database: postgres
+# database_name: dockerizalo
 
 services:
   dockerizalo:
     image: ghcr.io/undernightcore/dockerizalo-proxy:latest
     container_name: ${DOCKERIZALO_PROXY_CONTAINER_NAME:-dockerizalo}
     networks:
-      - dockerizalo-db
       - traefik
     depends_on:
       - api
@@ -30,7 +30,7 @@ services:
     image: ghcr.io/undernightcore/dockerizalo-ui:latest
     container_name: ${DOCKERIZALO_UI_CONTAINER_NAME:-ui}
     networks:
-      - dockerizalo-db
+      - traefik
     labels:
       - traefik.enable=false
 
@@ -41,33 +41,12 @@ services:
       - ./etc/dockerizalo/api:/data/dockerizalo
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
-      - dockerizalo-db
+      - traefik
     environment:
-      DATABASE_URL: postgresql://dockerizalo:dockerizalo@dockerizalo-db:5432/dockerizalo?schema=public
+      DATABASE_URL: postgresql://${DOCKERIZALO_POSTGRES_USER:-${PG_USER:-admin}}:${DOCKERIZALO_POSTGRES_PASSWORD:-${PG_PASS}}@postgres:5432/dockerizalo?schema=public
       APP_SECRET: hitthekeyboardwithyourheadhere
     depends_on:
-      dockerizalo-db:
-        condition: service_healthy
+      - postgres
     labels:
-      - traefik.enable=false        
-
-  dockerizalo-db:
-    image: postgres
-    container_name: ${DOCKERIZALO_DB_CONTAINER_NAME:-dockerizalo-db}
-    restart: unless-stopped
-    volumes:
-      - ./etc/dockerizalo/db:/var/lib/postgresql/data
-    environment:
-      POSTGRES_PASSWORD: dockerizalo
-      POSTGRES_USER: dockerizalo
-      POSTGRES_DB: dockerizalo
-    networks:
-      - dockerizalo-db
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    labels:
-      - traefik.enable=false      
+      - traefik.enable=false
 
