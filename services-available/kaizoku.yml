@@ -17,8 +17,6 @@ services:
     restart: ${KAIZOKU_RESTART:-unless-stopped}
     networks:
       - traefik
-    ports:
-      - 3000:3000
     volumes:
       - ${KAIZOKU_MANGA_VOLUME:-./media/manga}:/manga
       - ./etc/kaizoku/config:/config

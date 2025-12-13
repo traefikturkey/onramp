@@ -1,0 +1,41 @@
+networks:
+  traefik:
+    external: true
+
+# description: dynamic dns server that uses docker labels
+# https://github.com/ilude/joyride-python
+
+# if you want to run joyride on port 53
+# run the following commands on ubuntu
+# sudo systemctl disable systemd-resolved.service
+# sudo systemctl stop systemd-resolved
+#
+# then add your primary dns servers ip address
+# to /etc/resolv.conf
+
+services:
+  joyride-reloaded:
+    image: ghcr.io/ilude/joyride-python:${JOYRIDE_RELOADED_DOCKER_TAG:-latest}
+    container_name: ${JOYRIDE_RELOADED_CONTAINER_NAME:-joyride-reloaded}
+    restart: ${JOYRIDE_RELOADED_RESTART:-unless-stopped}
+    mem_limit: ${JOYRIDE_RELOADED_MEM_LIMIT:-200g}
+    network_mode: host
+    volumes:
+      # Mount hosts directory for static DNS records
+      # Hidden files (starting with .) are ignored
+      - ./etc/joyride-reloaded/hosts:/app/hosts:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - HOSTIP=${HOSTIP}
+    labels:
+      - joyride.host.name=${JOYRIDE_RELOADED_HOST_NAME:-joyride}.${HOST_DOMAIN}
+      - traefik.enable=${JOYRIDE_RELOADED_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.joyride-reloaded.entrypoints=websecure
+      - traefik.http.routers.joyride-reloaded.rule=Host(`${JOYRIDE_RELOADED_HOST_NAME:-joyride}.${HOST_DOMAIN}`)
+      - traefik.http.services.joyride-reloaded.loadbalancer.server.port=5000
+      - com.centurylinklabs.watchtower.enable=${JOYRIDE_RELOADED_WATCHTOWER_ENABLED:-true}
+      - autoheal=${JOYRIDE_RELOADED_AUTOHEAL_ENABLED:-true}
