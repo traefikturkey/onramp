@@ -2,26 +2,48 @@ networks:
   traefik:
     external: true
 
-# description: Popular open-source relational database management system
+# description: Shared MariaDB database server for multiple services
 # https://hub.docker.com/_/mariadb
+#
+# This is a shared mariadb:latest instance used by multiple OnRamp services.
+# Services automatically create their databases via scaffold integration.
+#
+# Setup:
+# 1. Set MARIADB_PASS in services-enabled/.env
+# 2. make enable-service mariadb
+# 3. make restart
+#
+# Database Management:
+# - Databases are auto-created when services with "# database: mariadb" metadata are enabled
+# - Manual operations: cd sietch/scripts && ./mariadb_manager.py [list-databases|create-db|drop-db|console]
+#
+# Services using this database:
+# - (will be populated as services are migrated)
+#
+# Credentials: All services use shared MARIADB_USER/MARIADB_PASS from .env
+#
+# Configuration:
+# - max_connections=1000 (for services like vikunja)
+# - utf8mb4 character set (default)
 
 services:
   mariadb:
     image: mariadb:${MARIADB_DOCKER_TAG:-latest}
     container_name: ${MARIADB_CONTAINER_NAME:-mariadb}
-    restart: unless-stopped
+    restart: ${MARIADB_RESTART:-unless-stopped}
     networks:
       - traefik
     volumes:
-      - ${MARIADB_DB_VOLUME:-./media/databases/mariadb}:/var/lib/mysql
+      - ${MARIADB_DIR:-./media/databases/mariadb/data}:/var/lib/mysql
       - /etc/localtime:/etc/localtime:ro
     environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
       - MYSQL_USER=${MARIADB_USER:-admin}
-      - MYSQL_PASSWORD=${MARIADB_USER_PASSWORD:-admin}
-      - MYSQL_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD:-admin}
+      - MYSQL_PASSWORD=${MARIADB_PASS:?database password required}
+      - MYSQL_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD:-${MARIADB_PASS:?database password required}}
+    command: --max_connections=1000 --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     ports:
       - 3306:3306
     labels:
