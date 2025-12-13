@@ -2,14 +2,31 @@ networks:
   traefik:
     external: true
 
-# description: Powerful open-source relational database system
+# description: Shared PostgreSQL database server for multiple services
 # https://hub.docker.com/_/postgres
+#
+# This is a shared postgres:16 instance used by multiple OnRamp services.
+# Services automatically create their databases via scaffold integration.
+#
+# Setup:
+# 1. Set PG_PASS in services-enabled/.env
+# 2. make enable-service postgres
+# 3. make restart
+#
+# Database Management:
+# - Databases are auto-created when services with "# database: postgres" metadata are enabled
+# - Manual operations: cd sietch/scripts && ./postgres_manager.py [list-databases|create-db|drop-db|console]
+#
+# Services using this database:
+# - authentik, dockerizalo, healthchecks, kaizoku, kaneo, mediamanager, n8n, nocodb, tandoor
+#
+# Credentials: All services use shared PG_USER/PG_PASS from .env
 
 services:
   postgres:
-    image: postgres:16
-    container_name: postgres
-    restart: unless-stopped
+    image: postgres:${POSTGRES_DOCKER_TAG:-16}
+    container_name: ${POSTGRES_CONTAINER_NAME:-postgres}
+    restart: ${POSTGRES_RESTART:-unless-stopped}
     networks:
       - traefik
     volumes:
