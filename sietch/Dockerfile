@@ -32,6 +32,9 @@ RUN install -m 0755 -d /etc/apt/keyrings && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+# Install pyyaml system-wide for scripts that run outside the venv
+RUN pip install --no-cache-dir pyyaml
+
 # Create app directory
 WORKDIR /app
 

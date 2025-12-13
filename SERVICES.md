@@ -1,5 +1,5 @@
 # Available Services
-261 services and counting...
+263 services and counting...
 
 [1](#1)
 [A](#A)
@@ -87,6 +87,7 @@
 - [docker-registry](https://hub.docker.com/_/registry) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/docker-registry.yml)): Registry for storing and distributing container images
 - [dockpeek-socket-proxy](https://github.com/dockpeek/dockpeek) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/dockpeek-socket-proxy.yml)): Proxy service for Dockpeek
 - [dockpeek](https://github.com/dockpeek/dockpeek) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/dockpeek.yml)): Docker Port Dashboard for Easy Container Access
+- [docling](https://github.com/docling-project/docling-serve) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/docling.yml)): AI-powered document parsing and processing service with GPU acceleration
 - [docmost](https://github.com/docmost/docmost) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/docmost.yml)): Docmost is an open-source collaborative wiki and documentation software.
 - [doku](https://github.com/amerkurev/doku) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/doku.yml)): Disk usage dashboard
 - [dozzle-agent](https://github.com/traefikturkey/onramp/tree/master/services-available/dozzle-agent.yml): 
@@ -149,6 +150,7 @@
 
 ## I
 - [immich](https://immich.app/docs/install/environment-variables) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/immich.yml)): Container for running immich, a self-hosted Google Photos alternative.
+- [infinity](https://github.com/michaelfeil/infinity) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/infinity.yml)): High-performance embedding inference server supporting multiple models
 - [influxdb](https://hub.docker.com/_/influxdb) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/influxdb.yml)): Time-series database for metrics and events
 - [itflow](https://itflow.org/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/itflow.yml)): IT documentation, ticketing and accounting system.
 - [ittools](https://github.com/CorentinTh/it-tools) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/ittools.yml)): Useful tools for developer and people working in IT.

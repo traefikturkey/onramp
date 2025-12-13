@@ -1,0 +1,45 @@
+networks:
+  traefik:
+    external: true
+
+# config_version: 2
+# description: AI-powered document parsing and processing service with GPU acceleration
+# https://github.com/docling-project/docling-serve
+# category: ai
+
+services:
+  docling:
+    image: ghcr.io/docling-project/docling-serve:${DOCLING_DOCKER_TAG:-latest}
+    container_name: ${DOCLING_CONTAINER_NAME:-docling}
+    restart: ${DOCLING_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - DOCLING_SERVE_ENABLE_UI=${DOCLING_ENABLE_UI:-1}
+      - DOCLING_NUM_THREADS=${DOCLING_NUM_THREADS:-8}
+    ports:
+      - ${DOCLING_PORT:-5001}:5001
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: ${DOCLING_GPU_COUNT:-1}
+              capabilities: [gpu]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    labels:
+      - joyride.host.name=${DOCLING_CONTAINER_NAME:-docling}.${HOST_DOMAIN}
+      - traefik.enable=${DOCLING_TRAEFIK_ENABLE:-true}
+      - traefik.http.routers.docling.entrypoints=websecure
+      - traefik.http.routers.docling.rule=Host(`${DOCLING_CONTAINER_NAME:-docling}.${HOST_DOMAIN}`)
+      - traefik.http.services.docling.loadbalancer.server.port=5001
+      - com.centurylinklabs.watchtower.enable=${DOCLING_WATCHTOWER_ENABLE:-true}
+      - autoheal=${DOCLING_AUTOHEAL:-true}

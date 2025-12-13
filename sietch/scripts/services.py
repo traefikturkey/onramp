@@ -45,6 +45,9 @@ class ServiceManager:
             "url": None,
             "category": None,
             "skip_services_file": False,
+            "config_version": 1,  # Default to v1 if not specified
+            "database": None,
+            "database_name": None,
         }
 
         try:
@@ -62,6 +65,15 @@ class ServiceManager:
                     elif line.startswith("# skip_services_file:"):
                         val = line.split(":", 1)[1].strip().lower()
                         metadata["skip_services_file"] = val in ("true", "yes", "1")
+                    elif line.startswith("# config_version:"):
+                        try:
+                            metadata["config_version"] = int(line.split(":", 1)[1].strip())
+                        except ValueError:
+                            metadata["config_version"] = 1
+                    elif line.startswith("# database:"):
+                        metadata["database"] = line.split(":", 1)[1].strip()
+                    elif line.startswith("# database_name:"):
+                        metadata["database_name"] = line.split(":", 1)[1].strip()
                     elif line.startswith("# http"):
                         metadata["url"] = line[2:].strip()
         except Exception:
@@ -297,7 +309,7 @@ def main():
 
     parser.add_argument(
         "action",
-        choices=["list", "info", "count", "markdown", "validate", "archive-env", "restore-env", "check-archive"],
+        choices=["list", "info", "count", "markdown", "validate", "archive-env", "restore-env", "check-archive", "lint", "get-version", "check-version"],
         help="Action to perform",
     )
     parser.add_argument("service", nargs="?", help="Service name (for info/validate/archive/restore)")
@@ -315,6 +327,10 @@ def main():
     parser.add_argument("--all", action="store_true", help="List all categories")
     parser.add_argument("--archived", action="store_true", help="List archived .env files")
     parser.add_argument("--no-interactive", action="store_true", help="Disable interactive prompts")
+    parser.add_argument("--strict", action="store_true", help="Strict mode - treat warnings as errors")
+    parser.add_argument("--fix", action="store_true", help="Auto-fix issues where possible")
+    parser.add_argument("--min-version", type=int, help="Minimum required config version")
+    parser.add_argument("--outdated", action="store_true", help="List services with outdated config versions")
     parser.add_argument(
         "--base-dir", default="/app", help="Base directory (default: /app)"
     )
@@ -432,6 +448,111 @@ def main():
         else:
             print(f"no")
             return 1
+
+    if args.action == "get-version":
+        if not args.service:
+            parser.error("Service name required for 'get-version' action")
+        yml_path = mgr.services_available / f"{args.service}.yml"
+        if not yml_path.exists():
+            print(f"Service '{args.service}' not found", file=sys.stderr)
+            return 1
+        metadata = mgr._parse_metadata(yml_path)
+        print(metadata.get("config_version", 1))
+        return 0
+
+    if args.action == "check-version":
+        if not args.service:
+            parser.error("Service name required for 'check-version' action")
+        yml_path = mgr.services_available / f"{args.service}.yml"
+        if not yml_path.exists():
+            print(f"Service '{args.service}' not found", file=sys.stderr)
+            return 1
+        metadata = mgr._parse_metadata(yml_path)
+        version = metadata.get("config_version", 1)
+        min_version = args.min_version or 2
+        
+        if version >= min_version:
+            return 0
+        else:
+            return 1
+
+    if args.action == "lint":
+        # Import yaml for linting
+        try:
+            import yaml
+        except ImportError:
+            print("Error: pyyaml not installed", file=sys.stderr)
+            return 1
+        
+        from services_linter import ServiceLinter
+        linter = ServiceLinter(args.base_dir)
+        
+        if args.service:
+            # Lint single service
+            is_valid, errors, warnings = linter.lint(args.service, strict=args.strict, auto_fix=args.fix)
+            
+            print(f"Linting {args.service}...")
+            if errors:
+                print(f"  ❌ Errors ({len(errors)}):")
+                for err in errors:
+                    print(f"    - {err}")
+            if warnings:
+                print(f"  ⚠️  Warnings ({len(warnings)}):")
+                for warn in warnings:
+                    print(f"    - {warn}")
+            if is_valid:
+                print(f"  ✓ Service configuration is valid")
+            
+            return 0 if is_valid else 1
+        
+        elif args.all or args.outdated:
+            # Lint all services or only outdated ones
+            services = mgr.list_available()
+            failed = []
+            outdated = []
+            
+            for service in services:
+                yml_path = mgr.services_available / f"{service}.yml"
+                metadata = mgr._parse_metadata(yml_path)
+                version = metadata.get("config_version", 1)
+                
+                if args.outdated and version >= 2:
+                    continue  # Skip up-to-date services
+                
+                if args.outdated:
+                    outdated.append(service)
+                    continue
+                
+                is_valid, errors, warnings = linter.lint(service, strict=args.strict, auto_fix=args.fix)
+                if not is_valid:
+                    failed.append((service, errors, warnings))
+            
+            if args.outdated:
+                if outdated:
+                    print(f"Services with outdated config (v1):")
+                    for service in outdated:
+                        print(f"  - {service}")
+                else:
+                    print("All services are up-to-date!")
+                return 0
+            
+            if failed:
+                print(f"\n❌ {len(failed)} services failed validation:\n")
+                for service, errors, warnings in failed:
+                    print(f"{service}:")
+                    if errors:
+                        for err in errors:
+                            print(f"  ❌ {err}")
+                    if warnings:
+                        for warn in warnings:
+                            print(f"  ⚠️  {warn}")
+                    print()
+                return 1
+            else:
+                print(f"✓ All {len(services)} services passed validation")
+                return 0
+        else:
+            parser.error("Service name or --all required for 'lint' action")
 
     return 0
 

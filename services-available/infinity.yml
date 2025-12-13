@@ -1,0 +1,49 @@
+networks:
+  traefik:
+    external: true
+
+# config_version: 2
+# description: High-performance embedding inference server supporting multiple models
+# https://github.com/michaelfeil/infinity
+# category: ai
+
+services:
+  infinity:
+    image: michaelf34/infinity:${INFINITY_DOCKER_TAG:-latest}
+    container_name: ${INFINITY_CONTAINER_NAME:-infinity}
+    restart: ${INFINITY_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - ${INFINITY_DATA_PATH:-./media/infinity}:/app/.cache
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    # Multi-model setup: gte-large for global embeddings, bge-m3 for chunk embeddings
+    # Models are downloaded on first use and cached in volumes
+    command: >
+      v2
+      --model-id ${INFINITY_MODEL_1:-Alibaba-NLP/gte-large-en-v1.5}
+      --model-id ${INFINITY_MODEL_2:-BAAI/bge-m3}
+      --port 7997
+      --batch-size ${INFINITY_BATCH_SIZE:-16}
+      --engine ${INFINITY_ENGINE:-torch}
+    ports:
+      - ${INFINITY_PORT:-7997}:7997
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: ${INFINITY_GPU_COUNT:-1}
+              capabilities: [gpu]
+    labels:
+      - joyride.host.name=${INFINITY_CONTAINER_NAME:-infinity}.${HOST_DOMAIN}
+      - traefik.enable=${INFINITY_TRAEFIK_ENABLE:-true}
+      - traefik.http.routers.infinity.entrypoints=websecure
+      - traefik.http.routers.infinity.rule=Host(`${INFINITY_CONTAINER_NAME:-infinity}.${HOST_DOMAIN}`)
+      - traefik.http.services.infinity.loadbalancer.server.port=7997
+      - com.centurylinklabs.watchtower.enable=${INFINITY_WATCHTOWER_ENABLE:-true}
+      - autoheal=${INFINITY_AUTOHEAL:-true}
