@@ -4,6 +4,8 @@ networks:
 
 # description: Databases As Spreadsheets
 # https://github.com/nocodb/nocodb
+# database: postgres
+# database_name: nocodb
 
 services:
   nocodb:
@@ -13,12 +15,12 @@ services:
     networks:
       - traefik
     depends_on:
-      - nocodb_postgres
+      - postgres
     volumes:
       - ./etc/nocodb/data:/usr/app/data
       - /etc/localtime:/etc/localtime:ro
     environment:
-      - NC_DB=pg://nocodb_postgres:5432?u=${NOCODB_POSTGRES_USER}&p=${NOCODB_POSTGRES_DB_PW}&d=${NOCODB_POSTGRES_DB}
+      - NC_DB=pg://postgres:5432?u=${NOCODB_POSTGRES_USER:-${PG_USER:-admin}}&p=${NOCODB_POSTGRES_DB_PW:-${PG_PASS}}&d=${NOCODB_POSTGRES_DB:-nocodb}
       - NC_PUBLIC_URL=https://${NOCODB_HOST_NAME:-nocodb}.${HOST_DOMAIN}
       - NC_DISABLE_TELE=true
       - NC_ATTACHMENT_FIELD_SIZE=${NOCODB_ATTACHMENT_FIELD_SIZE}
@@ -37,19 +39,6 @@ services:
       - traefik.http.services.nocodb.loadbalancer.server.port=8080
       - com.centurylinklabs.watchtower.enable=${NOCODB_WATCHTOWER_ENABLED:-true}
       - autoheal=${NOCODB_AUTOHEAL_ENABLED:-true}
-
-  nocodb_postgres:
-    image: postgres:12.17-alpine
-    container_name: nocodb_postgres
-    restart: ${NOCODB_RESTART:-unless-stopped}
-    networks:
-      - traefik
-    volumes:
-      - ./etc/nocodb/postgresql:/var/lib/postgresql/data
-    environment:
-      POSTGRES_DB: ${NOCODB_POSTGRES_DB}
-      POSTGRES_PASSWORD: ${NOCODB_POSTGRES_DB_PW}
-      POSTGRES_USER: ${NOCODB_POSTGRES_USER}
     healthcheck:
       interval: 10s
       retries: 10

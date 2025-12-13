@@ -1,13 +1,14 @@
 networks:
   traefik:
     external: true
-  kaizoku-db:
 
 volumes:
   kaizoku-redis:
   
 # description: Web-based anime downloader
 # https://github.com/oae/kaizoku
+# database: postgres
+# database_name: kaizoku
 
 services:
   kaizoku:
@@ -26,13 +27,12 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
-      - DATABASE_URL=postgresql://kaizoku:kaizoku@kaizoku-db:5432/kaizoku
+      - DATABASE_URL=postgresql://${KAIZOKU_POSTGRES_USER:-${PG_USER:-admin}}:${KAIZOKU_POSTGRES_PASSWORD:-${PG_PASS}}@postgres:5432/kaizoku
       - KAIZOKU_PORT=3000
       - REDIS_HOST=kaizoku-redis
       - REDIS_PORT=6379
     depends_on:
-      kaizoku-db:
-        condition: service_healthy
+      - postgres
     labels:
       - joyride.host.name=${KAIZOKU_CONTAINER_NAME:-kaizoku}.${HOST_DOMAIN}
       - traefik.enable=true
@@ -51,21 +51,3 @@ services:
     container_name: kaizoku-redis
     volumes:
       - kaizoku-redis:/manga
-
-  kaizoku-db:
-    image: postgres:alpine
-    restart: unless-stopped
-    container_name: kaizoku-db
-    networks:
-      - traefik
-    healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U kaizoku']
-      interval: 5s
-      timeout: 5s
-      retries: 5
-    environment:
-      - POSTGRES_USER=${KAIZOKU_POSTGRES_USER:-kaizoku}
-      - POSTGRES_DB=${KAIZOKU_POSTGRES_DB:-kaizoku}
-      - POSTGRES_PASSWORD=${KAIZOKU_POSTGRES_PASSWORD:-kaizoku}
-    volumes:
-      - ${KAIZOKU_DB_VOLUME:-./etc/kaizoku/db}:/var/lib/postgresql/data
