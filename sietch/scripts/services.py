@@ -8,11 +8,15 @@ Commands:
   count [--enabled|--available]
   markdown
   validate <service>
+  archive-env <service> - Archive a service's .env file to services-enabled/archive/
+  restore-env <service> - Restore a service's .env file from archive (interactive)
+  check-archive <service> - Check if archived .env exists for a service
 """
 
 import argparse
 import os
 import re
+import shutil
 import sys
 from pathlib import Path
 
@@ -28,6 +32,7 @@ class ServiceManager:
         self.overrides_enabled = self.base_dir / "overrides-enabled"
         self.games_dir = self.services_available / "games"
         self.external_dir = self.base_dir / "external-available"
+        self.archive_dir = self.services_enabled / "archive"
 
     def _strip_extension(self, filename: str) -> str:
         """Remove .yml extension from filename."""
@@ -216,6 +221,73 @@ class ServiceManager:
 
         return "\n".join(lines)
 
+    def archive_env(self, service: str) -> tuple[bool, str]:
+        """Archive a service's .env file to the archive directory.
+        
+        Returns (success, message).
+        """
+        env_file = self.services_enabled / f"{service}.env"
+        
+        if not env_file.exists():
+            return False, f"No .env file found for service '{service}'"
+        
+        # Ensure archive directory exists
+        self.archive_dir.mkdir(exist_ok=True)
+        
+        archive_file = self.archive_dir / f"{service}.env"
+        
+        try:
+            shutil.move(str(env_file), str(archive_file))
+            return True, f"Archived {service}.env to {archive_file}"
+        except Exception as e:
+            return False, f"Failed to archive {service}.env: {e}"
+
+    def check_archive(self, service: str) -> bool:
+        """Check if an archived .env file exists for a service."""
+        archive_file = self.archive_dir / f"{service}.env"
+        return archive_file.exists()
+
+    def restore_env(self, service: str, interactive: bool = True) -> tuple[bool, str]:
+        """Restore a service's .env file from the archive.
+        
+        If interactive=True, prompts user before restoring.
+        Returns (success, message).
+        """
+        archive_file = self.archive_dir / f"{service}.env"
+        
+        if not archive_file.exists():
+            return False, f"No archived .env file found for service '{service}'"
+        
+        env_file = self.services_enabled / f"{service}.env"
+        
+        # Check if destination already exists
+        if env_file.exists():
+            if interactive:
+                response = input(
+                    f"⚠️  {service}.env already exists. Overwrite with archived version? [y/N]: "
+                )
+                if response.lower() not in ("y", "yes"):
+                    return False, "Restore cancelled by user"
+            else:
+                return False, f"{service}.env already exists (use --force to overwrite)"
+        
+        try:
+            shutil.copy2(str(archive_file), str(env_file))
+            return True, f"Restored {service}.env from archive"
+        except Exception as e:
+            return False, f"Failed to restore {service}.env: {e}"
+
+    def list_archived(self) -> list[str]:
+        """List all archived .env files."""
+        if not self.archive_dir.exists():
+            return []
+        
+        archived = []
+        for f in self.archive_dir.iterdir():
+            if f.is_file() and f.suffix == ".env":
+                archived.append(self._strip_extension(f.name))
+        return sorted(archived)
+
 
 def main():
     parser = argparse.ArgumentParser(
@@ -225,10 +297,10 @@ def main():
 
     parser.add_argument(
         "action",
-        choices=["list", "info", "count", "markdown", "validate"],
+        choices=["list", "info", "count", "markdown", "validate", "archive-env", "restore-env", "check-archive"],
         help="Action to perform",
     )
-    parser.add_argument("service", nargs="?", help="Service name (for info/validate)")
+    parser.add_argument("service", nargs="?", help="Service name (for info/validate/archive/restore)")
     parser.add_argument(
         "--enabled", action="store_true", help="List/count enabled services"
     )
@@ -241,6 +313,8 @@ def main():
         "--external", action="store_true", help="List external services"
     )
     parser.add_argument("--all", action="store_true", help="List all categories")
+    parser.add_argument("--archived", action="store_true", help="List archived .env files")
+    parser.add_argument("--no-interactive", action="store_true", help="Disable interactive prompts")
     parser.add_argument(
         "--base-dir", default="/app", help="Base directory (default: /app)"
     )
@@ -257,6 +331,7 @@ def main():
                 args.games,
                 args.overrides,
                 args.external,
+                args.archived,
                 args.all,
             ]
         ):
@@ -265,7 +340,7 @@ def main():
         if args.all:
             args.available = args.enabled = args.games = args.overrides = (
                 args.external
-            ) = True
+            ) = args.archived = True
 
         if args.available:
             for s in mgr.list_available():
@@ -289,6 +364,11 @@ def main():
             if args.available or args.enabled or args.games or args.overrides:
                 print("\n--- External ---")
             for s in mgr.list_external():
+                print(s)
+        if args.archived:
+            if args.available or args.enabled or args.games or args.overrides or args.external:
+                print("\n--- Archived .env Files ---")
+            for s in mgr.list_archived():
                 print(s)
         return 0
 
@@ -326,6 +406,32 @@ def main():
     if args.action == "markdown":
         print(mgr.generate_markdown())
         return 0
+
+    if args.action == "archive-env":
+        if not args.service:
+            parser.error("Service name required for 'archive-env' action")
+        success, message = mgr.archive_env(args.service)
+        print(message)
+        return 0 if success else 1
+
+    if args.action == "restore-env":
+        if not args.service:
+            parser.error("Service name required for 'restore-env' action")
+        interactive = not args.no_interactive
+        success, message = mgr.restore_env(args.service, interactive=interactive)
+        print(message)
+        return 0 if success else 1
+
+    if args.action == "check-archive":
+        if not args.service:
+            parser.error("Service name required for 'check-archive' action")
+        exists = mgr.check_archive(args.service)
+        if exists:
+            print(f"yes")
+            return 0
+        else:
+            print(f"no")
+            return 1
 
     return 0
 
