@@ -1,0 +1,40 @@
+# Rollback override for netbox
+# This restores the dedicated postgres container
+# Usage: make enable-override netbox-dedicated-postgres
+
+networks:
+  traefik:
+    external: true
+
+services:
+  netbox:
+    depends_on:
+      - netbox-postgresql
+      - netbox-redis
+    environment:
+      - DB_HOST=netbox-postgresql
+      - DB_USER=${PG_USER_NETBOX:-netbox}
+      - DB_PASSWORD=${PG_PASS_NETBOX}
+      - DB_NAME=${PG_DB_NETBOX:-netbox}
+
+  netbox-postgresql:
+    image: postgres:16.4
+    container_name: netbox_postgresql
+    restart: unless-stopped
+    networks:
+      - traefik
+    user: "1000:1000"
+    volumes:
+      - ./etc/netbox/postgresql:/var/lib/postgresql/data
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - POSTGRES_PASSWORD=${PG_PASS_NETBOX:?database password required}
+      - POSTGRES_USER=${PG_USER:-netbox}
+      - POSTGRES_DB=${PG_DB:-netbox}
+    env_file:
+      - services-enabled/.env
+    labels:
+      - com.centurylinklabs.watchtower.enable=${NETBOX_WATCHTOWER_ENABLED:-true}
+      - traefik.enable=false
+      - autoheal=true

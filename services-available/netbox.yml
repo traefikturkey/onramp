@@ -1,5 +1,7 @@
 # description: Web-based ip address management (ipam) and data center infrastructure management (dcim) tool
 # https://docs.linuxserver.io/images/docker-netbox
+# database: postgres
+# database_name: netbox
 networks:
   traefik:
     external: true
@@ -13,7 +15,7 @@ services:
     container_name: ${NETBOX_CONTAINER_NAME:-netbox}
     restart: unless-stopped
     depends_on:
-      - netbox-postgresql
+      - postgres
       - netbox-redis
     healthcheck:
       start_period: 90s
@@ -31,10 +33,10 @@ services:
       - SUPERUSER_EMAIL=${NETBOX_SUPERUSER_EMAIL:-$CF_API_EMAIL}
       - SUPERUSER_PASSWORD=${NETBOX_SUPERUSER_PASS:-netbox}
       - ALLOWED_HOST=${NETBOX_CONTAINER_NAME:-netbox}.${HOST_DOMAIN}
-      - DB_NAME=${PG_DB_NETBOX:-netbox}
-      - DB_USER=${PG_USER_NETBOX:-netbox}
-      - DB_PASSWORD=${PG_PASS_NETBOX}
-      - DB_HOST=netbox-postgresql
+      - DB_NAME=netbox
+      - DB_USER=${PG_USER_NETBOX:-${PG_USER:-admin}}
+      - DB_PASSWORD=${PG_PASS_NETBOX:-${PG_PASS}}
+      - DB_HOST=postgres
       #- DB_PORT=5432
       - REDIS_HOST=netbox_redis
       #- REDIS_PORT=<REDIS_PORT>
@@ -50,28 +52,6 @@ services:
       - traefik.http.routers.netbox.service=netbox
       - traefik.http.services.netbox.loadbalancer.server.port=8000
       - com.centurylinklabs.watchtower.enable=${NETBOX_WATCHTOWER_ENABLED:-true}
-      - autoheal=true
-
-  netbox-postgresql:
-    image: postgres:16.4
-    container_name: netbox_postgresql
-    restart: unless-stopped
-    networks:
-      - traefik
-    user: "1000:1000"
-    volumes:
-      - ./etc/netbox/postgresql:/var/lib/postgresql/data
-    environment:
-      - PUID=${PUID:-1000}
-      - PGID=${PGID:-1000}
-      - POSTGRES_PASSWORD=${PG_PASS_NETBOX:?database password required}
-      - POSTGRES_USER=${PG_USER:-netbox}
-      - POSTGRES_DB=${PG_DB:-netbox}
-    env_file:
-      - services-enabled/.env
-    labels:
-      - com.centurylinklabs.watchtower.enable=${NETBOX_WATCHTOWER_ENABLED:-true}
-      - traefik.enable=false
       - autoheal=true
 
   netbox-redis:

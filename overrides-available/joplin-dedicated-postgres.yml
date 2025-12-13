@@ -1,0 +1,30 @@
+# Rollback override for joplin
+# This restores the dedicated postgres container
+# Usage: make enable-override joplin-dedicated-postgres
+
+networks:
+  traefik:
+    external: true
+
+services:
+  joplin:
+    depends_on:
+      - joplin-db
+    environment:
+      - POSTGRES_HOST=joplin-db
+      - POSTGRES_PASSWORD=${JOPLIN_POSTGRES_PASSWORD:-postgres}
+      - POSTGRES_USER=${JOPLIN_POSTGRES_USER:-postgres}
+      - POSTGRES_DATABASE=${JOPLIN_POSTGRES_DATABASE:-joplin}
+
+  joplin-db:
+    image: postgres:15
+    container_name: ${JOPLIN_DB_CONTAINER_NAME:-joplin-db}
+    restart: ${JOPLIN_RESTART:-unless-stopped}
+    volumes:
+      - ./etc/joplin:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=${JOPLIN_POSTGRES_PASSWORD:-postgres}
+      - POSTGRES_USER=${JOPLIN_POSTGRES_USER:-postgres}
+      - POSTGRES_DB=${JOPLIN_POSTGRES_DATABASE:-joplin}

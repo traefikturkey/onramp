@@ -6,21 +6,10 @@ networks:
 # https://joplinapp.org/
 # https://hub.docker.com/r/joplin/server
 # https://github.com/laurent22/joplin
+# database: postgres
+# database_name: joplin
 
 services:
-  db:
-    image: postgres:15
-    container_name: ${JOPLIN_DB_CONTAINER_NAME:-joplin-db}
-    restart: ${JOPLIN_RESTART:-unless-stopped}
-    volumes:
-      - ./etc/joplin:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
-    environment:
-      - POSTGRES_PASSWORD=${JOPLIN_POSTGRES_PASSWORD:-postgres}
-      - POSTGRES_USER=${JOPLIN_POSTGRES_USER:-postgres}
-      - POSTGRES_DB=${JOPLIN_POSTGRES_DATABASE:-joplin}
-
   joplin:
     image: joplin/server:${JOPLIN_DOCKER_TAG:-latest}
     container_name: ${JOPLIN_CONTAINER_NAME:-joplin}
@@ -28,7 +17,7 @@ services:
     networks:
       - traefik
     depends_on:
-      - db
+      - postgres
     volumes:
       - /etc/localtime:/etc/localtime:ro
     environment:
@@ -38,11 +27,11 @@ services:
       - APP_PORT=22300
       - APP_BASE_URL=https://${JOPLIN_CONTAINER_NAME:-joplin}.${HOST_DOMAIN}
       - DB_CLIENT=pg
-      - POSTGRES_PASSWORD=${JOPLIN_POSTGRES_PASSWORD:-postgres}
+      - POSTGRES_PASSWORD=${JOPLIN_POSTGRES_PASSWORD:-${PG_PASS}}
       - POSTGRES_DATABASE=${JOPLIN_POSTGRES_DATABASE:-joplin}
-      - POSTGRES_USER=${JOPLIN_POSTGRES_USER:-postgres}
-      - POSTGRES_PORT=${JOPLIN_POSTGRES_PORT:-5432}
-      - POSTGRES_HOST=db
+      - POSTGRES_USER=${JOPLIN_POSTGRES_USER:-${PG_USER:-admin}}
+      - POSTGRES_PORT=5432
+      - POSTGRES_HOST=postgres
       # - MAILER_ENABLED=1
       # - MAILER_HOST=smtp.gmail.com
       # - MAILER_PORT=465

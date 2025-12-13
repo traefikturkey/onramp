@@ -4,6 +4,8 @@ networks:
 
 # description: Docmost is an open-source collaborative wiki and documentation software.
 # https://github.com/docmost/docmost
+# database: postgres
+# database_name: docmost
 
 services:
   docmost:
@@ -17,7 +19,7 @@ services:
       - ./etc/docmost/app:/app/data/storage
       - /etc/localtime:/etc/localtime:ro
     depends_on:
-      - docmost-db
+      - postgres
       - docmost-redis
     environment:
       - PUID=${PUID:-1000}
@@ -25,7 +27,7 @@ services:
       - TZ=${TZ}
       - APP_URL=http://localhost:3000
       - APP_SECRET=${DOCMOST_SECRET:-unique-super-secret-string}
-      - DATABASE_URL=postgresql://${DOCMOST_POSTGRES_USER:-docmost}:${DOCMOST_POSTGRES_PASSWORD:-changemeplease}@${DOCMOST_DB_CONTAINER_NAME:-docmost-db}:5432/docmost?schema=public}
+      - DATABASE_URL=postgresql://${DOCMOST_POSTGRES_USER:-${PG_USER:-admin}}:${DOCMOST_POSTGRES_PASSWORD:-${PG_PASS}}@postgres:5432/docmost?schema=public
       - REDIS_URL=redis://${DOCMOST_REDIS_CONTAINER_NAME:-docmost-redis}:6379
     labels:
       - joyride.host.name=${DOCMOST_CONTAINER_NAME:-docmost}.${HOST_DOMAIN}
@@ -36,19 +38,6 @@ services:
       - traefik.http.services.docmost.loadbalancer.server.port=3000
       - com.centurylinklabs.watchtower.enable=${DOCMOST_WATCHTOWER_ENABLED:-true}
       - autoheal=${DOCMOST_AUTOHEAL_ENABLED:-true}
-
-  docmost-db:
-    image: postgres:16-alpine
-    container_name: ${DOCMOST_DB_CONTAINER_NAME:-docmost-db}
-    networks:
-      - traefik
-    environment:
-      - POSTGRES_DB=${DOCMOST_POSTGRES_DB:-docmost}
-      - POSTGRES_USER=${DOCMOST_POSTGRES_USER:-docmost}
-      - POSTGRES_PASSWORD=${DOCMOST_POSTGRES_PASSWORD:-changemeplease}
-    restart: unless-stopped
-    volumes:
-      - ./etc/docmost/db:/var/lib/postgresql/data
 
   docmost-redis:
     image: redis:7.2-alpine

@@ -1,0 +1,30 @@
+# Rollback override for odoo
+# This restores the dedicated postgres container
+# Usage: make enable-override odoo-dedicated-postgres
+
+networks:
+  traefik:
+    external: true
+
+services:
+  odoo:
+    depends_on:
+      - odoo-db
+
+  odoo-db:
+    image: postgres:15
+    container_name: odoo_postgres
+    restart: ${ODOO_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - ./media/odoo/postgresql:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${ODOO_POSTGRES_DB}
+      POSTGRES_PASSWORD: ${ODOO_POSTGRES_DB_PW}
+      POSTGRES_USER: ${ODOO_POSTGRES_USER}
+    healthcheck:
+      interval: 10s
+      retries: 10
+      test: pg_isready -U ${ODOO_POSTGRES_USER} -d ${ODOO_POSTGRES_DB}
+      timeout: 2s
