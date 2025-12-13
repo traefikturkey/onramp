@@ -15,6 +15,7 @@ docker-compose.*.yml
 .specstory/
 .chat/
 .restore_latest
+.plan/
 
 # Legacy environment file (migrated to services-enabled/)
 .env
