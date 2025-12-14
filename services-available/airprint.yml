@@ -1,10 +1,10 @@
 # description: Enables apple airprint functionality for non-airprint printers using CUPS and Avahi
 # Note: Uses network_mode: host for multicast support, so no traefik network
-# https://github.com/chuckcharlie/cups-avahi-airprint
+# https://github.com/RagingTiger/cups-airprint
 
 services:
   airprint:
-    image: chuckcharlie/cups-avahi-airprint:${AIRPRINT_DOCKER_TAG:-latest}
+    image: ghcr.io/ragingtiger/cups-airprint:${AIRPRINT_DOCKER_TAG:-latest}
     container_name: ${AIRPRINT_CONTAINER_NAME:-airprint}
     restart: unless-stopped
     # Host mode is needed for AirPrint to work

@@ -1,9 +1,9 @@
 # description: Extracts ssl certificate information from traefik acme.json file
-# https://github.com/ldez/traefik-certs-dumper
+# https://github.com/kereis/traefik-certs-dumper
 
 services:
   traefik-certs-dumper:
-    image: ldez/traefik-certs-dumper:${TRAEFIK_CERT_DUMPER_DOCKER_TAG:-v2.8.1}
+    image: ghcr.io/kereis/traefik-certs-dumper:${TRAEFIK_CERT_DUMPER_DOCKER_TAG:-latest}
     container_name: ${TRAEFIK_CERT_DUMPER_CONTAINER_NAME:-traefik-certs-dumper}
     restart: unless-stopped
     volumes:

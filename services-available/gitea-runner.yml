@@ -3,13 +3,12 @@ networks:
     external: true
 
 # description: Gitea Actions runner for CI/CD workflows (similar to GitHub Actions)
-# https://hub.docker.com/r/gitea/act_runner
+# https://github.com/vegardit/docker-gitea-act-runner
 # https://docs.gitea.com/usage/actions/act-runner
-# https://gitea.com/gitea/act_runner
 
 services:
   gitea-runner:
-    image: gitea/act_runner:${GITEA_RUNNER_DOCKER_TAG:-latest}
+    image: ghcr.io/vegardit/gitea-act-runner:${GITEA_RUNNER_DOCKER_TAG:-latest}
     container_name: ${GITEA_RUNNER_CONTAINER_NAME:-gitea-runner}
     restart: ${GITEA_RUNNER_RESTART:-unless-stopped}
     networks:

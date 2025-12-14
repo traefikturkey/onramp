@@ -3,23 +3,21 @@ networks:
     external: true
 
 # description: Disk space analyzer and cleanup tool
-# https://github.com/jlesage/docker-qdirstat
+# https://github.com/linuxserver/docker-qdirstat
+# NOTE: Migrated from jlesage/qdirstat - env vars and port changed!
+# Old: USER_ID, GROUP_ID, port 5800 -> New: PUID, PGID, port 3000
 
 services:
   qdirstat:
-    image: jlesage/qdirstat:${QDIRSTAT_DOCKER_TAG:-latest}
+    image: lscr.io/linuxserver/qdirstat:${QDIRSTAT_DOCKER_TAG:-latest}
     container_name: ${QDIRSTAT_CONTAINER_NAME:-qdirstat}
     restart: unless-stopped
     networks:
       - traefik
-    cap_add:
-      - SYS_NICE
     environment:
-      - USER_ID=${PUID:-1000}
-      - GROUP_ID=${PGID:-1000}
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
       - TZ=${TZ}
-      - KEEP_APP_RUNNING=1
-      - APP_NICENESS=10
     volumes:
       - ./etc/qdirstat:/config
       - ${QDIRSTAT_MEDIA_VOLUME:-./media}:/storage
@@ -28,6 +26,6 @@ services:
       - traefik.enable=true
       - traefik.http.routers.qdirstat.entrypoints=websecure
       - traefik.http.routers.qdirstat.rule=Host(`${QDIRSTAT_CONTAINER_NAME:-qdirstat}.${HOST_DOMAIN}`)
-      - traefik.http.services.qdirstat.loadbalancer.server.port=5800
+      - traefik.http.services.qdirstat.loadbalancer.server.port=3000
       - com.centurylinklabs.watchtower.enable=${QDIRSTAT_WATCHTOWER_ENABLED:-true}
       - autoheal=true

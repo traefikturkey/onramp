@@ -72,6 +72,113 @@ SERVICE_MIGRATIONS: dict[str, list[dict]] = {
             ],
         }
     ],
+    "cert-dumper": [
+        {
+            "version": 1,
+            "description": "ldez/traefik-certs-dumper -> ghcr.io/kereis/traefik-certs-dumper",
+            "image_change": "ldez/traefik-certs-dumper -> ghcr.io/kereis/traefik-certs-dumper",
+            "transforms": {},
+            "notes": [
+                "Image migrated to ghcr.io/kereis/traefik-certs-dumper",
+                "This is an actively maintained fork of the original.",
+                "Environment variables are compatible - no changes needed.",
+            ],
+        }
+    ],
+    "joplin": [
+        {
+            "version": 1,
+            "description": "joplin/server -> ghcr.io/etechonomy/joplin-server",
+            "image_change": "joplin/server -> ghcr.io/etechonomy/joplin-server",
+            "transforms": {},
+            "notes": [
+                "Image migrated to ghcr.io/etechonomy/joplin-server",
+                "Community build that tracks upstream Joplin Server releases.",
+                "Environment variables are compatible - no changes needed.",
+            ],
+        }
+    ],
+    "gitea-runner": [
+        {
+            "version": 1,
+            "description": "gitea/act_runner -> ghcr.io/vegardit/gitea-act-runner",
+            "image_change": "gitea/act_runner -> ghcr.io/vegardit/gitea-act-runner",
+            "transforms": {},
+            "notes": [
+                "Image migrated to ghcr.io/vegardit/gitea-act-runner",
+                "Enhanced wrapper around official Gitea Act Runner.",
+                "Environment variables are compatible - no changes needed.",
+                "Additional features: auto-registration, ephemeral mode, parallel jobs config.",
+            ],
+        }
+    ],
+    "firefox": [
+        {
+            "version": 1,
+            "description": "jlesage/firefox -> lscr.io/linuxserver/firefox",
+            "image_change": "jlesage/firefox -> lscr.io/linuxserver/firefox",
+            "transforms": {},
+            "notes": [
+                "Image migrated to lscr.io/linuxserver/firefox",
+                "BREAKING: Port changed from 5800 to 3000 (Selkies GUI vs jlesage GUI)",
+                "Environment variables (PUID/PGID) are compatible.",
+            ],
+        }
+    ],
+    "makemkv": [
+        {
+            "version": 1,
+            "description": "jlesage/makemkv -> lscr.io/linuxserver/makemkv",
+            "image_change": "jlesage/makemkv -> lscr.io/linuxserver/makemkv",
+            "transforms": {},
+            "notes": [
+                "Image migrated to lscr.io/linuxserver/makemkv",
+                "BREAKING: Port changed from 5800 to 3000 (Selkies GUI vs jlesage GUI)",
+                "Environment variables (PUID/PGID) are compatible.",
+                "NOTE: DARK_MODE and AUTO_DISC_RIPPER env vars may not be supported.",
+            ],
+        }
+    ],
+    "qdirstat": [
+        {
+            "version": 1,
+            "description": "jlesage/qdirstat -> lscr.io/linuxserver/qdirstat",
+            "image_change": "jlesage/qdirstat -> lscr.io/linuxserver/qdirstat",
+            "transforms": {
+                "USER_ID": "PUID",
+                "GROUP_ID": "PGID",
+            },
+            "notes": [
+                "Image migrated to lscr.io/linuxserver/qdirstat",
+                "BREAKING: Port changed from 5800 to 3000 (Selkies GUI vs jlesage GUI)",
+                "BREAKING: USER_ID -> PUID, GROUP_ID -> PGID",
+            ],
+        }
+    ],
+    "healthchecks": [
+        {
+            "version": 1,
+            "description": "healthchecks/healthchecks -> lscr.io/linuxserver/healthchecks",
+            "image_change": "healthchecks/healthchecks -> lscr.io/linuxserver/healthchecks",
+            "transforms": {},
+            "notes": [
+                "Image migrated to lscr.io/linuxserver/healthchecks",
+                "Environment variables are compatible - no changes needed.",
+            ],
+        }
+    ],
+    "airprint": [
+        {
+            "version": 1,
+            "description": "chuckcharlie/cups-avahi-airprint -> ghcr.io/ragingtiger/cups-airprint",
+            "image_change": "chuckcharlie/cups-avahi-airprint -> ghcr.io/ragingtiger/cups-airprint",
+            "transforms": {},
+            "notes": [
+                "Image migrated to ghcr.io/ragingtiger/cups-airprint",
+                "Environment variables are compatible - no changes needed.",
+            ],
+        }
+    ],
 }
 
 

@@ -4,14 +4,14 @@ networks:
 
 # description: Note-taking and to-do app
 # https://joplinapp.org/
-# https://hub.docker.com/r/joplin/server
+# https://github.com/etechonomy/joplin-server (community ghcr.io build)
 # https://github.com/laurent22/joplin
 # database: postgres
 # database_name: joplin
 
 services:
   joplin:
-    image: joplin/server:${JOPLIN_DOCKER_TAG:-latest}
+    image: ghcr.io/etechonomy/joplin-server:${JOPLIN_DOCKER_TAG:-latest}
     container_name: ${JOPLIN_CONTAINER_NAME:-joplin}
     restart: ${JOPLIN_RESTART:-unless-stopped}
     networks:

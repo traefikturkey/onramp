@@ -3,11 +3,12 @@ networks:
     external: true
 
 # description: Runs mozilla firefox browser in a container
-# https://github.com/jlesage/docker-firefox
+# https://github.com/linuxserver/docker-firefox
+# NOTE: Migrated from jlesage/firefox - port changed from 5800 to 3000!
 
 services:
   firefox:
-    image: jlesage/firefox:${FIREFOX_DOCKER_TAG:-latest}
+    image: lscr.io/linuxserver/firefox:${FIREFOX_DOCKER_TAG:-latest}
     container_name: ${FIREFOX_CONTAINER_NAME:-firefox}
     restart: ${FIREFOX_RESTART:-unless-stopped}
     networks:
@@ -30,6 +31,6 @@ services:
       - traefik.http.routers.firefox.entrypoints=websecure
       - traefik.http.routers.firefox.rule=Host(`${FIREFOX_CONTAINER_NAME:-firefox}.${HOST_DOMAIN}`)
       #- traefik.http.services.firefox.loadbalancer.server.scheme=https # enable if the service wants to connect over https
-      - traefik.http.services.firefox.loadbalancer.server.port=5800
+      - traefik.http.services.firefox.loadbalancer.server.port=3000
       - com.centurylinklabs.watchtower.enable=${FIREFOX_WATCHTOWER_ENABLE:-true}
       - autoheal=${FIREFOX_AUTOHEAL:-true}
