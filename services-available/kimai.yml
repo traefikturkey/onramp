@@ -3,6 +3,7 @@ networks:
     external: true
 
 # description: Time-tracking software for freelancers and small businesses
+# database: mariadb
 # https://github.com/kevinpapst/kimai2
 # https://github.com/tobybatch/kimai2
 
