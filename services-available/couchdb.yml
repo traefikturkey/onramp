@@ -16,7 +16,9 @@ services:
     volumes:
       - ./etc/couchdb/data:/opt/couchdb/data
       - ./etc/couchdb/etc/local.d:/opt/couchdb/etc/local.d
+      - ./etc/couchdb/docker-entrypoint.sh:/onramp-entrypoint.sh:ro
       - /etc/localtime:/etc/localtime:ro
+    entrypoint: ["/bin/bash", "/onramp-entrypoint.sh"]
     environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}

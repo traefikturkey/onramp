@@ -13,10 +13,7 @@ services:
     networks:
       - traefik
     volumes:
-      - ./etc/cloudbeaver/conf/cloudbeaver.conf:/opt/cloudbeaver/conf/cloudbeaver.conf
-      - ./etc/cloudbeaver/conf/initial-data-sources.conf:/opt/cloudbeaver/conf/initial-data-sources.conf
-      - ./etc/cloudbeaver/conf/logback.xml:/opt/cloudbeaver/conf/logback.xml
-      - ./etc/cloudbeaver/conf/product.conf:/opt/cloudbeaver/conf/product.conf
+      - ./etc/cloudbeaver/workspace:/opt/cloudbeaver/workspace
       - /etc/localtime:/etc/localtime:ro
     environment:
       - CB_LOCAL_HOST_ADDR=0.0.0.0

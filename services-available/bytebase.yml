@@ -20,8 +20,8 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
-    command: ["--data", "/var/opt/bytebase", "--port", "8080", "--disable-sample"]
-    #command: --data /var/opt/bytebase --pg ${BB_PG} --external-url ${BB_EXTERNAL_URL} --port 8087 --disable-sample --disable-metric --debug
+    command: ["--data", "/var/opt/bytebase", "--port", "8080"]
+    #command: --data /var/opt/bytebase --pg ${BB_PG} --external-url ${BB_EXTERNAL_URL} --port 8080 --debug
     labels:
       - joyride.host.name=${BYTEBASE_HOST_NAME:-bytebase}.${HOST_DOMAIN}
       - traefik.enable=${BYTEBASE_TRAEFIK_ENABLED:-true}

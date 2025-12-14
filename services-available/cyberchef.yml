@@ -7,7 +7,7 @@ networks:
 
 services:
   cyberchef:
-    image: mpepping/cyberchef:${CYBERCHEF_DOCKER_TAG:-latest}
+    image: ghcr.io/gchq/cyberchef:${CYBERCHEF_DOCKER_TAG:-latest}
     container_name: ${CYBERCHEF_CONTAINER_NAME:-cyberchef}
     restart: unless-stopped
     networks:
