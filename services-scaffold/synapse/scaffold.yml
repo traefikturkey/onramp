@@ -1,0 +1,15 @@
+phases:
+  pre_scaffold:
+    - name: Generate homeserver.yaml if not exists
+      command: |
+        if [ ! -f ./etc/synapse/homeserver.yaml ]; then
+          echo "Generating Synapse homeserver.yaml..."
+          docker run --rm \
+            -v "$(pwd)/etc/synapse:/data" \
+            -e SYNAPSE_SERVER_NAME="${SYNAPSE_CONTAINER_NAME:-synapse}.${HOST_DOMAIN}" \
+            -e SYNAPSE_REPORT_STATS=yes \
+            ghcr.io/matrix-org/synapse:latest generate
+          echo "Configuration generated at ./etc/synapse/homeserver.yaml"
+        else
+          echo "homeserver.yaml already exists, skipping generation"
+        fi
