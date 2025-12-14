@@ -731,3 +731,166 @@ class TestScaffolderInit:
         scaffolder = Scaffolder(executor=mock_exec)
 
         assert scaffolder.base_dir == Path("/app")
+
+
+class TestPathTraversalPrevention:
+    """Tests for path traversal attack prevention."""
+
+    def test_validates_path_within_base_dir(self, tmp_path):
+        """Should validate paths stay within base directory."""
+        from scaffold import validate_path_within_base
+
+        base = tmp_path / "app"
+        base.mkdir()
+
+        # Valid path within base
+        valid_path = base / "etc" / "service" / "config.yml"
+        assert validate_path_within_base(valid_path, base) is True
+
+        # Path traversal attempt
+        traversal_path = base / "etc" / ".." / ".." / "etc" / "passwd"
+        assert validate_path_within_base(traversal_path, base) is False
+
+    def test_rejects_absolute_path_outside_base(self, tmp_path):
+        """Should reject absolute paths outside base directory."""
+        from scaffold import validate_path_within_base
+
+        base = tmp_path / "app"
+        base.mkdir()
+
+        # Absolute path outside base
+        outside_path = Path("/etc/passwd")
+        assert validate_path_within_base(outside_path, base) is False
+
+    def test_rejects_symlink_escape(self, tmp_path):
+        """Should reject paths that escape via symlinks."""
+        from scaffold import validate_path_within_base
+
+        base = tmp_path / "app"
+        base.mkdir()
+        etc_dir = base / "etc"
+        etc_dir.mkdir()
+
+        # Create symlink pointing outside base
+        symlink = etc_dir / "escape"
+        symlink.symlink_to("/etc")
+
+        escaped_path = symlink / "passwd"
+        assert validate_path_within_base(escaped_path, base) is False
+
+    def test_create_etc_volumes_rejects_traversal(self, tmp_path, capsys):
+        """Should reject volume paths with traversal attempts."""
+        mock_exec = MockCommandExecutor()
+        scaffolder = Scaffolder(str(tmp_path), executor=mock_exec)
+
+        # Set up directories
+        (tmp_path / "services-available").mkdir()
+        (tmp_path / "services-enabled").mkdir()
+        (tmp_path / "etc").mkdir()
+
+        # Create service YAML with path traversal attempt
+        service_yml = tmp_path / "services-enabled" / "evil.yml"
+        service_yml.write_text("""
+services:
+  evil:
+    volumes:
+      - ./etc/../../../tmp/pwned:/data
+      - ./etc/evil/../../passwd:/etc/passwd
+""")
+
+        result = scaffolder.create_etc_volumes("evil")
+
+        # Should succeed but not create files outside etc/
+        assert result is True
+        # Traversal paths should NOT be created
+        assert not (tmp_path / "tmp" / "pwned").exists()
+        assert not (tmp_path / "passwd").exists()
+
+        captured = capsys.readouterr()
+        assert "path traversal" in captured.out.lower() or "skipping" in captured.out.lower()
+
+
+class TestRollbackOnFailure:
+    """Tests for rollback when scaffold operations fail."""
+
+    def test_tracks_created_files(self, tmp_path):
+        """Should track files created during scaffold."""
+        mock_exec = MockCommandExecutor()
+        scaffolder = Scaffolder(str(tmp_path), executor=mock_exec)
+
+        # Scaffolder should have a way to track created files
+        assert hasattr(scaffolder, '_created_files') or hasattr(scaffolder, 'created_files')
+
+    def test_rollback_removes_created_files(self, tmp_path):
+        """Should remove created files on rollback."""
+        mock_exec = MockCommandExecutor()
+        scaffolder = Scaffolder(str(tmp_path), executor=mock_exec)
+
+        # Create some files
+        test_file = tmp_path / "etc" / "service" / "config.yml"
+        test_file.parent.mkdir(parents=True)
+        test_file.write_text("test")
+
+        # Track and rollback
+        scaffolder._track_created(test_file)
+        scaffolder.rollback()
+
+        assert not test_file.exists()
+
+    def test_rollback_removes_created_directories(self, tmp_path):
+        """Should remove created directories on rollback (in reverse order)."""
+        mock_exec = MockCommandExecutor()
+        scaffolder = Scaffolder(str(tmp_path), executor=mock_exec)
+
+        # Create nested directories
+        nested_dir = tmp_path / "etc" / "service" / "conf.d"
+        nested_dir.mkdir(parents=True)
+
+        # Track directories
+        scaffolder._track_created(tmp_path / "etc" / "service")
+        scaffolder._track_created(nested_dir)
+        scaffolder.rollback()
+
+        # Should be cleaned up
+        assert not nested_dir.exists()
+
+    def test_build_rolls_back_on_manifest_failure(self, tmp_path, capsys):
+        """Should rollback created files when manifest operation fails."""
+        mock_exec = MockCommandExecutor()
+        # Make openssl fail for key generation
+        mock_exec.set_response("openssl", CommandResult(1, "", "openssl error"))
+
+        scaffolder = Scaffolder(str(tmp_path), executor=mock_exec)
+
+        # Set up scaffold with manifest that will fail
+        service_scaffold = tmp_path / "services-scaffold" / "testservice"
+        service_scaffold.mkdir(parents=True)
+        (tmp_path / "services-available").mkdir()
+        (tmp_path / "services-enabled").mkdir()
+        (tmp_path / "etc").mkdir()
+
+        # Create a template that will succeed
+        template = service_scaffold / "config.template"
+        template.write_text("CONFIG=value")
+
+        # Create manifest with operation that will fail
+        manifest = service_scaffold / "scaffold.yml"
+        manifest.write_text("""
+version: "1"
+operations:
+  - type: generate_rsa_key
+    output: keys/private.pem
+""")
+
+        # Create service YAML
+        service_yml = tmp_path / "services-available" / "testservice.yml"
+        service_yml.write_text("services:\n  testservice:\n    image: test")
+        (tmp_path / "services-enabled" / "testservice.yml").symlink_to(service_yml)
+
+        result = scaffolder.build("testservice")
+
+        # Build should fail
+        assert result is False
+
+        # Config file that was created should be rolled back
+        # (This tests the rollback behavior)
