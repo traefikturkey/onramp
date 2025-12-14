@@ -32,12 +32,12 @@ services:
       - TZ=${TZ}
       - LC_ALL=${LUBELOG_LC_ALL:-en_US.UTF-8}
       - LANG=${LUBELOG_LANG:-en_US.UTF-8}
-      - MailConfig__EmailServer=${LUBELOG_MAIL_SERVER}
-      - MailConfig__EmailFrom=${LUBELOG_MAIL_FROM}
+      - MailConfig__EmailServer=${LUBELOG_MAIL_SERVER:-}
+      - MailConfig__EmailFrom=${LUBELOG_MAIL_FROM:-}
       - MailConfig__UseSSL=${LUBELOG_MAIL_USE_SSL:-true}
       - MailConfig__Port=${LUBELOG_MAIL_PORT:-587}
-      - MailConfig__Username=${LUBELOG_MAIL_USERNAME}
-      - MailConfig__Password=${LUBELOG_MAIL_PASSWORD}
+      - MailConfig__Username=${LUBELOG_MAIL_USERNAME:-}
+      - MailConfig__Password=${LUBELOG_MAIL_PASSWORD:-}
       - LOGGING__LOGLEVEL__DEFAULT=${LUBELOG_LOG_LEVEL:-Error}
 
     labels:
