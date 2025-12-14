@@ -18,8 +18,10 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
+      - NGINX_LISTEN_IPV6=false
     volumes:
       - ./etc/qdirstat:/config
+      - ./etc/qdirstat/nginx-default.conf:/etc/nginx/sites-enabled/default:ro
       - ${QDIRSTAT_MEDIA_VOLUME:-./media}:/storage
     labels:
       - joyride.host.name=${QDIRSTAT_CONTAINER_NAME:-qdirstat}.${HOST_DOMAIN}
