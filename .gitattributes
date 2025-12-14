@@ -1,0 +1,3 @@
+# Environment files should never be tracked
+services-enabled/.env export-ignore
+services-enabled/.env.* export-ignore
