@@ -1,7 +1,8 @@
-# Include environment files from services-enabled (new modular system)
-# Note: Only include .env and .env.* files, NOT *.env (service-specific files)
-# Service-specific *.env files use shell variable syntax that Make can't parse
-ENVIRONMENT_FILES := $(wildcard ./services-enabled/.env) $(wildcard ./services-enabled/.env.*)
+# Include only the main .env file from services-enabled
+# Note: .env.nfs, .env.external, and *.env files use shell variable syntax
+# (e.g., ${VAR:-default}) that Make interprets as recursive references.
+# Those files are passed to Docker Compose via --env-file flags instead.
+ENVIRONMENT_FILES := $(wildcard ./services-enabled/.env)
 ifneq (,$(ENVIRONMENT_FILES))
     include $(ENVIRONMENT_FILES)
     export
