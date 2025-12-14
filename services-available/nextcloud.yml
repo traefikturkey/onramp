@@ -19,6 +19,7 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
+      - DISABLE_IPV6=true
     labels:
       - joyride.host.name=${NEXTCLOUD_CONTAINER_NAME:-nextcloud}.${HOST_DOMAIN}
       - traefik.enable=true
