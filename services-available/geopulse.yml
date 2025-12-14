@@ -106,6 +106,7 @@ services:
     networks:
       - traefik
     volumes:
+      - ./etc/geopulse/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
       - PUID=${PUID:-1000}

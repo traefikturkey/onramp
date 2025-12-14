@@ -1,0 +1,6 @@
+volumes:
+  - firefly3
+
+files:
+  - source: http.conf.static
+    dest: http.conf

@@ -1,20 +1,6 @@
-version: "1"
+volumes:
+  - geopulse
 
-# Generate cryptographic keys for GeoPulse JWT authentication
-# These are generated once and preserved across rebuilds
-
-operations:
-  - type: mkdir
-    path: keys/
-
-  - type: generate_rsa_key
-    output: keys/jwt-private-key.pem
-    public_key: keys/jwt-public-key.pem
-    bits: 2048
-    skip_if_exists: true
-
-  - type: generate_random
-    output: keys/ai-encryption-key.txt
-    bytes: 32
-    encoding: base64
-    skip_if_exists: true
+files:
+  - source: default.conf.static
+    dest: nginx/default.conf

@@ -1,0 +1,80 @@
+server {
+    listen 80;
+    server_name localhost;
+    root /usr/share/nginx/html;
+    index index.html;
+    client_max_body_size CLIENT_MAX_BODY_SIZE_PLACEHOLDER;
+
+    # Gzip settings for better performance
+    gzip on;
+    gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
+    gzip_comp_level 6;
+    gzip_min_length 1000;
+
+    # Cache static assets (but exclude OSM tiles path)
+    location ~* ^/(?!osm/).*\.(jpg|jpeg|png|gif|ico|css|js)$ {
+        expires 1y;
+        add_header Cache-Control "public, max-age=31536000";
+    }
+
+# OpenStreetMap tile caching
+location ^~ /osm/tiles/ {
+    resolver OSM_RESOLVER_PLACEHOLDER valid=300s ipv6=off;
+    resolver_timeout 10s;
+
+    # Rewrite: /osm/tiles/a/19/299420/178830.png -> /19/299420/178830.png
+    rewrite ^/osm/tiles/[abc]/(.*)$ /$1 break;
+
+    # $osm_subdomain is set by the map in 00-cache.conf
+    proxy_pass https://$osm_subdomain.tile.openstreetmap.org;
+
+    # Caching
+    proxy_cache osm_cache;
+    proxy_cache_valid 200 30d;
+    proxy_cache_valid 404 1m;
+    proxy_cache_valid 502 503 504 1m;
+    proxy_ignore_headers Cache-Control Expires Set-Cookie;
+    proxy_cache_use_stale error timeout updating http_500 http_502 http_503 http_504;
+    proxy_cache_background_update on;
+    proxy_cache_lock on;
+
+    # Remove sensitive headers
+    proxy_set_header Cookie "";
+    proxy_set_header Authorization "";
+
+    # Set required headers
+    proxy_set_header User-Agent "GeoPulse/1.9.1";
+    proxy_set_header Host $osm_subdomain.tile.openstreetmap.org;
+
+    # Connection settings
+    proxy_http_version 1.1;
+    proxy_set_header Connection "";
+
+    # Timeouts
+    proxy_connect_timeout 10s;
+    proxy_read_timeout 10s;
+
+    # Browser cache
+    expires 30d;
+    add_header Cache-Control "public, immutable";
+}
+    # Handle API requests
+    location /api/ {
+        proxy_pass BACKEND_URL_PLACEHOLDER/api/;
+
+        # Set timeouts for long-running backend processes to 60 minutes
+        proxy_connect_timeout 3600s;
+        proxy_send_timeout 3600s;
+        proxy_read_timeout 3600s;
+
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # Handle all routes for SPA
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+}
