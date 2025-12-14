@@ -27,9 +27,15 @@ services:
       - N8N_BASIC_AUTH_PASSWORD=${N8N_BASIC_AUTH_PASSWORD:-password}
 
       # Network configuration
-      - N8N_HOST=0.0.0.0
       - N8N_LISTEN_ADDRESS=0.0.0.0
       - N8N_PORT=5678
+
+      # Reverse proxy configuration (Traefik)
+      - N8N_PROTOCOL=https
+      - N8N_HOST=${N8N_HOST_NAME:-n8n}.${HOST_DOMAIN}
+      - WEBHOOK_URL=https://${N8N_HOST_NAME:-n8n}.${HOST_DOMAIN}/
+      - N8N_EDITOR_BASE_URL=https://${N8N_HOST_NAME:-n8n}.${HOST_DOMAIN}/
+      - N8N_PROXY_HOPS=1
 
       - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true # Enforce settings file permissions
 
