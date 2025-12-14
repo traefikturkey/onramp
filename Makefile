@@ -1,5 +1,7 @@
 # Include environment files from services-enabled (new modular system)
-ENVIRONMENT_FILES := $(wildcard ./services-enabled/.env) $(wildcard ./services-enabled/*.env) $(wildcard ./services-enabled/.env.*)
+# Note: Only include .env and .env.* files, NOT *.env (service-specific files)
+# Service-specific *.env files use shell variable syntax that Make can't parse
+ENVIRONMENT_FILES := $(wildcard ./services-enabled/.env) $(wildcard ./services-enabled/.env.*)
 ifneq (,$(ENVIRONMENT_FILES))
     include $(ENVIRONMENT_FILES)
     export
