@@ -161,7 +161,9 @@ class BackupManager:
             all_exclusions.extend(env_exclusions.split())
 
         # Build tar command
-        cmd = ["tar"]
+        # --ignore-failed-read: continue past permission errors (some service dirs are owned by other users)
+        # --warning=no-file-changed: suppress warnings about files modified during backup
+        cmd = ["tar", "--ignore-failed-read", "--warning=no-file-changed"]
 
         # Add exclusions
         for excl in all_exclusions:
