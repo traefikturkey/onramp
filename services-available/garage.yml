@@ -1,0 +1,134 @@
+networks:
+  traefik:
+    external: true
+
+# description: S3-compatible distributed object storage (AGPL licensed MinIO alternative)
+# https://garagehq.deuxfleurs.fr/
+# https://hub.docker.com/r/dxflrs/garage
+#
+# Garage is a lightweight, self-hosted S3-compatible storage system designed
+# for self-hosting and geo-distributed deployments. It's simpler than MinIO
+# and has a permissive AGPL license.
+#
+# ============================================================================
+# INITIAL SETUP
+# ============================================================================
+#
+# Step 1: Enable the service
+#   make enable-service garage
+#
+# Step 2: Generate and set RPC secret (REQUIRED before first start)
+#   openssl rand -hex 32
+#   Edit etc/garage/garage.toml and set rpc_secret = "<generated-secret>"
+#
+# Step 3: Start the service
+#   make restart
+#
+# ============================================================================
+# CLUSTER INITIALIZATION (one-time setup after first start)
+# ============================================================================
+#
+# Step 4: Check node status and get the node ID
+#   docker exec garage /garage status
+#   # Note the node ID (first column, e.g., 47a478c0413d4486)
+#
+# Step 5: Assign storage capacity to the node
+#   docker exec garage /garage layout assign -z dc1 -c 100G <node-id>
+#   # Replace 100G with your desired capacity
+#
+# Step 6: Apply the layout (version number increments with each change)
+#   docker exec garage /garage layout apply --version 1
+#
+# ============================================================================
+# CREATING BUCKETS AND KEYS
+# ============================================================================
+#
+# Create an API key:
+#   docker exec garage /garage key create my-key
+#   # Save the Key ID and Secret key!
+#
+# Create a bucket:
+#   docker exec garage /garage bucket create my-bucket
+#
+# Grant read/write access:
+#   docker exec garage /garage bucket allow --read --write my-bucket --key my-key
+#
+# ============================================================================
+# S3 CLIENT CONFIGURATION
+# ============================================================================
+#
+# Endpoint URL: https://s3.${HOST_DOMAIN}
+# Region: garage (or as configured in GARAGE_S3_REGION)
+# Access Key: <Key ID from key create>
+# Secret Key: <Secret key from key create>
+#
+# AWS CLI example:
+#   aws --endpoint-url https://s3.example.com s3 ls
+#
+# ============================================================================
+# USEFUL COMMANDS
+# ============================================================================
+#
+# List buckets:     docker exec garage /garage bucket list
+# List keys:        docker exec garage /garage key list
+# Show key info:    docker exec garage /garage key info <key-name>
+# Show bucket info: docker exec garage /garage bucket info <bucket-name>
+# Cluster health:   docker exec garage /garage status
+# Show layout:      docker exec garage /garage layout show
+#
+# ============================================================================
+# DEFAULT PORTS
+# ============================================================================
+#
+# - 3900: S3 API
+# - 3901: RPC (inter-node communication)
+# - 3902: S3 Web (static website hosting)
+# - 3903: Admin API (metrics, health, key management)
+
+services:
+  garage:
+    image: dxflrs/garage:${GARAGE_DOCKER_TAG:-v2.1.0}
+    container_name: ${GARAGE_CONTAINER_NAME:-garage}
+    restart: ${GARAGE_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/garage/garage.toml:/etc/garage.toml:ro
+      - ./etc/garage/meta:/var/lib/garage/meta
+      - ./etc/garage/data:/var/lib/garage/data
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    healthcheck:
+      test: ["CMD", "/garage", "status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    labels:
+      - joyride.host.name=${GARAGE_CONTAINER_NAME:-garage}.${HOST_DOMAIN}
+      - traefik.enable=true
+
+      # S3 API service settings
+      - traefik.http.routers.garage-s3.entrypoints=websecure
+      - traefik.http.routers.garage-s3.tls=true
+      - traefik.http.routers.garage-s3.rule=Host(`${GARAGE_S3_HOST:-s3}.${HOST_DOMAIN}`)
+      - traefik.http.routers.garage-s3.service=garage-s3-backend
+      - traefik.http.services.garage-s3-backend.loadbalancer.server.port=${GARAGE_S3_PORT:-3900}
+
+      # Also route bucket subdomains to S3 API (for virtual-hosted style access)
+      - traefik.http.routers.garage-s3-buckets.entrypoints=websecure
+      - traefik.http.routers.garage-s3-buckets.tls=true
+      - traefik.http.routers.garage-s3-buckets.rule=HostRegexp(`{subdomain:[a-z0-9-]+}.${GARAGE_S3_HOST:-s3}.${HOST_DOMAIN}`)
+      - traefik.http.routers.garage-s3-buckets.service=garage-s3-backend
+
+      # Admin API service settings (metrics, cluster status, key management)
+      - traefik.http.routers.garage-admin.entrypoints=websecure
+      - traefik.http.routers.garage-admin.tls=true
+      - traefik.http.routers.garage-admin.rule=Host(`${GARAGE_ADMIN_HOST:-garage}.${HOST_DOMAIN}`)
+      - traefik.http.routers.garage-admin.service=garage-admin-backend
+      - traefik.http.services.garage-admin-backend.loadbalancer.server.port=${GARAGE_ADMIN_PORT:-3903}
+
+      - com.centurylinklabs.watchtower.enable=${GARAGE_WATCHTOWER_ENABLED:-true}
+      - autoheal=true

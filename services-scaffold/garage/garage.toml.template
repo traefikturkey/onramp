@@ -1,0 +1,51 @@
+# Garage configuration file
+# https://garagehq.deuxfleurs.fr/documentation/reference-manual/configuration/
+#
+# Generated from services-scaffold/garage/garage.toml.template
+# To regenerate: make scaffold-build garage
+
+# Metadata and data storage (inside container)
+metadata_dir = "/var/lib/garage/meta"
+data_dir = "/var/lib/garage/data"
+
+# Database engine: lmdb (default/fastest), sqlite, sled
+db_engine = "${GARAGE_DB_ENGINE}"
+
+# Block size for data chunks (default: 1MiB)
+block_size = ${GARAGE_BLOCK_SIZE}
+
+# Replication factor: 1 (single-node), 2, 3 (production)
+# For single-node homelab, use 1
+replication_factor = ${GARAGE_REPLICATION_FACTOR}
+
+# Compression level: none, or 1-19 (zstd)
+compression_level = ${GARAGE_COMPRESSION_LEVEL}
+
+# RPC secret - cluster authentication (32 hex bytes)
+# Generate with: openssl rand -hex 32
+rpc_secret = "${GARAGE_RPC_SECRET}"
+
+# RPC bind address for inter-node communication
+rpc_bind_addr = "0.0.0.0:3901"
+
+# S3 API configuration
+[s3_api]
+s3_region = "${GARAGE_S3_REGION}"
+api_bind_addr = "0.0.0.0:${GARAGE_S3_PORT}"
+# Root domain for virtual-hosted style bucket access
+# e.g., bucket.s3.example.com
+root_domain = ".${GARAGE_S3_HOST}.${HOST_DOMAIN}"
+
+# S3 Web (static website hosting)
+[s3_web]
+bind_addr = "0.0.0.0:${GARAGE_WEB_PORT}"
+root_domain = ".web.${HOST_DOMAIN}"
+index = "index.html"
+
+# Admin API configuration
+[admin]
+api_bind_addr = "0.0.0.0:${GARAGE_ADMIN_PORT}"
+# Admin token for API access (optional)
+admin_token = "${GARAGE_ADMIN_TOKEN}"
+# Metrics token (optional)
+metrics_token = "${GARAGE_METRICS_TOKEN}"
