@@ -31,7 +31,7 @@ build: install-dependencies ensure-env migrate-legacy-env $(BUILD_DEPENDENCIES)
 install: build install-docker
 
 # Ensure environment is configured (new modular system or legacy)
-ensure-env: services-enabled/.env
+ensure-env: services-enabled/.env ensure-env-files
 	@true
 
 # Create services-enabled/.env from template if needed

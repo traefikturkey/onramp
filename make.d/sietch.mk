@@ -164,6 +164,19 @@ ENV_VARS := $(shell cat services-enabled/.env services-enabled/*.env 2>/dev/null
 	grep -v '^\#' | grep -v '^$$' | grep '=' | \
 	sed 's/^export //' | cut -d'=' -f1 | sort -u)
 
+# Environment file templates and their destinations
+ENV_TEMPLATES := .env .env.nfs .env.external .env.custom
+
+ensure-env-files: ## Recreate missing env files from templates (non-destructive)
+	@mkdir -p services-enabled
+	@for env in $(ENV_TEMPLATES); do \
+		if [ ! -f "services-enabled/$$env" ] && [ -f "services-scaffold/onramp/$$env.template" ]; then \
+			echo "Creating services-enabled/$$env from template..."; \
+			cp "services-scaffold/onramp/$$env.template" "services-enabled/$$env"; \
+		fi; \
+	done
+	@echo "Environment files checked."
+
 env: ## Show all loaded environment variables (sorted, resolved)
 	@echo "=== Environment Variables (from services-enabled/*.env) ==="
 	@echo ""
