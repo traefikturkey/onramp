@@ -261,6 +261,13 @@ class BackupManager:
 
     def create_nfs_backup(self, direct: bool = False) -> int:
         """Create backup and copy to NFS, or create directly on NFS."""
+        # Ensure mount point exists before attempting mount
+        if not self.nfs_tmp_dir.exists():
+            code, _, stderr = self._run_cmd(["mkdir", "-p", str(self.nfs_tmp_dir)], sudo=True)
+            if code != 0:
+                print(f"Error creating NFS mount point: {stderr}", file=sys.stderr)
+                return 1
+
         if not self._mount_nfs():
             return 1
 
