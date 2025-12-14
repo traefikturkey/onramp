@@ -25,7 +25,6 @@ services:
     environment:
       - VAULT_ADDR=https://${VAULT_HOST_NAME:-vault}.${HOST_DOMAIN}
       - VAULT_API_ADDR=https://${VAULT_HOST_NAME:-vault}.${HOST_DOMAIN}
-      - VAULT_ADDR=https://${VAULT_HOST_NAME:-vault}.${HOST_DOMAIN}
       - VAULT_UI=true
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
