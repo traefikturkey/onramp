@@ -168,18 +168,19 @@ class MariaDBManager:
         return code == 0 and dbname in stdout
 
     def create_database(self, dbname: str) -> int:
-        """Create a database if it doesn't exist."""
-        validate_db_name(dbname)
-        if self.database_exists(dbname):
-            print(f"Database '{dbname}' already exists")
-            return 0
+        """Create a database if it doesn't exist.
 
+        Uses CREATE DATABASE IF NOT EXISTS to avoid TOCTOU race condition
+        between database_exists() check and creation.
+        """
+        validate_db_name(dbname)
+        # Use IF NOT EXISTS - no need to check first (avoids TOCTOU race)
         sql = f"CREATE DATABASE IF NOT EXISTS `{dbname}` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci"
         code, stdout, stderr = self._mysql_exec(sql)
         if code != 0:
             print(f"Error creating database: {stderr}", file=sys.stderr)
         else:
-            print(f"Database '{dbname}' created successfully")
+            print(f"Database '{dbname}' created or already exists")
         return code
 
     def drop_database(self, dbname: str) -> int:

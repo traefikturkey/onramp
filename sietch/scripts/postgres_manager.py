@@ -142,15 +142,19 @@ class PostgresManager:
         return code == 0 and "1" in stdout
 
     def create_database(self, dbname: str) -> int:
-        """Create a database if it doesn't exist."""
-        validate_db_name(dbname)
-        if self.database_exists(dbname):
-            print(f"Database '{dbname}' already exists")
-            return 0
+        """Create a database if it doesn't exist.
 
+        Uses direct CREATE DATABASE and handles "already exists" error to avoid
+        TOCTOU race condition between database_exists() check and creation.
+        """
+        validate_db_name(dbname)
         sql = f'CREATE DATABASE "{dbname}"'
         code, stdout, stderr = self._psql_exec(sql)
         if code != 0:
+            # Check if it's just "already exists" - not a real error
+            if "already exists" in stderr.lower():
+                print(f"Database '{dbname}' already exists")
+                return 0
             print(f"Error creating database: {stderr}", file=sys.stderr)
         else:
             print(f"Database '{dbname}' created successfully")

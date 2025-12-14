@@ -63,8 +63,10 @@ class Condition:
         elif cond_type == "file_not_exists":
             return not path.exists()
         elif cond_type == "dir_empty":
+            # Non-existent directory is NOT empty - it doesn't exist
+            # Operations using this condition likely assume the directory exists
             if not path.exists() or not path.is_dir():
-                return True
+                return False
             return len(list(path.iterdir())) == 0
         elif cond_type == "dir_not_empty":
             if not path.exists() or not path.is_dir():
