@@ -160,6 +160,15 @@ endif
 ##
 #########################################################
 
+ENV_VARS := $(shell cat services-enabled/.env services-enabled/*.env 2>/dev/null | \
+	grep -v '^\#' | grep -v '^$$' | grep '=' | \
+	sed 's/^export //' | cut -d'=' -f1 | sort -u)
+
+env: ## Show all loaded environment variables (sorted, resolved)
+	@echo "=== Environment Variables (from services-enabled/*.env) ==="
+	@echo ""
+	@$(foreach v,$(ENV_VARS),echo "$(v)=$($(v))";)
+
 edit-env: ## Edit a service's environment file
 ifdef SERVICE_PASSED_DNCASED
 	@if [ -f services-enabled/$(SERVICE_PASSED_DNCASED).env ]; then \
