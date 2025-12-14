@@ -846,17 +846,30 @@ class Scaffolder:
             print(f"  Error: Failed to enable/start mariadb dependency", file=sys.stderr)
             return False
 
-        # Create database
+        # Create database and grant privileges to admin user
         try:
             print(f"  Creating MariaDB database '{database_name}'...")
             maria_manager = MariaDBManager()
 
             if maria_manager.database_exists(database_name):
                 print(f"    Database '{database_name}' already exists")
-                return True
+            else:
+                maria_manager.create_database(database_name)
+                print(f"    Database '{database_name}' created successfully")
 
-            maria_manager.create_database(database_name)
-            print(f"    Database '{database_name}' created successfully")
+            # Grant privileges to admin user (from MARIADB_USER env var)
+            admin_user = os.environ.get("MARIADB_USER", "admin")
+            print(f"    Granting privileges to '{admin_user}'...")
+
+            # Use the database.py grant_privileges method via DatabaseManager
+            from database import DatabaseManager
+            db_manager = DatabaseManager()
+            grant_code = db_manager.grant_privileges(database_name, admin_user)
+            if grant_code != 0:
+                print(f"  Warning: Failed to grant privileges to '{admin_user}'", file=sys.stderr)
+            else:
+                print(f"    Privileges granted to '{admin_user}'")
+
             return True
         except Exception as e:
             print(f"  Error creating mariadb database: {e}", file=sys.stderr)
