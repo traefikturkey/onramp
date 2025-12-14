@@ -11,7 +11,7 @@ networks:
 
 services:
   tandoor-web:
-    image: vabene1111/recipes:${TANDOOR_DOCKER_TAG:-latest}
+    image: ghcr.io/tandoorrecipes/recipes:${TANDOOR_DOCKER_TAG:-latest}
     container_name: ${TANDOOR_CONTAINER_NAME:-tandoor-web}
     restart: ${TANDOOR_RESTART:-unless-stopped}
     networks:

@@ -8,7 +8,7 @@ networks:
 
 services:
   navidrome:
-    image: deluan/navidrome:${NAVIDROME_DOCKER_TAG:-latest}
+    image: ghcr.io/navidrome/navidrome:${NAVIDROME_DOCKER_TAG:-latest}
     container_name: ${NAVIDROME_CONTAINER_NAME:-navidrome}
     restart: ${NAVIDROME_RESTART:-unless-stopped}
     networks:

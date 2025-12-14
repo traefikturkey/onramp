@@ -7,7 +7,7 @@ networks:
 
 services:
   vaultwarden:
-    image: vaultwarden/server:${VAULTWARDEN_DOCKER_TAG:-latest}
+    image: ghcr.io/dani-garcia/vaultwarden:${VAULTWARDEN_DOCKER_TAG:-latest}
     container_name: ${VAULTWARDEN_CONTAINER_NAME:-vaultwarden}
     restart: unless-stopped
     mem_limit: ${VAULTWARDEN_MEM_LIMIT:-200m}

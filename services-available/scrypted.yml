@@ -8,7 +8,7 @@ networks:
 
 services:
   scrypted:
-    image: koush/scrypted:${SCRYPTED_DOCKER_TAG:-latest}
+    image: ghcr.io/koush/scrypted:${SCRYPTED_DOCKER_TAG:-latest}
     container_name: ${SCRYPTED_CONTAINER_NAME:-scrypted}
     restart: ${SCRYPTED_RESTART:-unless-stopped}
     networks:

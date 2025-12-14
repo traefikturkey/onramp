@@ -7,7 +7,7 @@ networks:
 
 services:
   ittools:
-    image: corentinth/it-tools:${ITTOOLS_DOCKER_TAG:-latest}
+    image: ghcr.io/corentinth/it-tools:${ITTOOLS_DOCKER_TAG:-latest}
     container_name: ${ITTOOLS_CONTAINER_NAME:-ittools}
     restart: ${ITTOOLS_RESTART:-unless-stopped}
     mem_limit: ${ITTOOLS_MEM_LIMIT:-200g}

@@ -9,7 +9,7 @@ networks:
 
 services:
   jellyseerr:
-    image: fallenbagel/jellyseerr:${JELLYSEERR_DOCKER_TAG:-latest}
+    image: ghcr.io/fallenbagel/jellyseerr:${JELLYSEERR_DOCKER_TAG:-latest}
     container_name: ${JELLYSEERR_CONTAINER_NAME:-jellyseerr}
     restart: ${JELLYSEERR_RESTART:-unless-stopped}
     networks:

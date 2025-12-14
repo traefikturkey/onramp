@@ -1,19 +1,26 @@
-networks:
-  traefik:
-    external: true
-
 # description: Updates dns records on cloudflare dynamically
-# https://github.com/oznu/docker-cloudflare-ddns
+# https://github.com/favonia/cloudflare-ddns
+# NOTE: Migrated from oznu/cloudflare-ddns (ARCHIVED) - env vars changed!
+# Old: EMAIL, API_KEY, ZONE, SUBDOMAIN -> New: CLOUDFLARE_API_TOKEN, DOMAINS
 
 services:
   cloudflare-ddns:
-    image: oznu/cloudflare-ddns:${CLOUDFLARE_DDNS_DOCKER_TAG:-latest}
+    image: ghcr.io/favonia/cloudflare-ddns:${CLOUDFLARE_DDNS_DOCKER_TAG:-latest}
+    container_name: ${CLOUDFLARE_DDNS_CONTAINER_NAME:-cloudflare-ddns}
     restart: unless-stopped
+    network_mode: host
+    read_only: true
+    cap_drop:
+      - all
+    security_opt:
+      - no-new-privileges:true
     environment:
-      - EMAIL=${CF_API_EMAIL}
-      - API_KEY=${CF_DNS_API_TOKEN}
-      - ZONE=${HOST_DOMAIN}
-      - SUBDOMAIN=${CLOUDFLARE_DDNS_HOSTNAME}
+      - CLOUDFLARE_API_TOKEN=${CF_DNS_API_TOKEN}
+      # Comma-separated list of domains to update (e.g., subdomain.example.com,www.example.com)
+      - DOMAINS=${CLOUDFLARE_DDNS_HOSTNAME}.${HOST_DOMAIN}
       - PROXIED=${CLOUDFLARE_DDNS_PROXIED:-false}
+      # Optional: IP detection method
+      #- IP4_PROVIDER=cloudflare.trace
+      #- IP6_PROVIDER=cloudflare.trace
     labels:
       - traefik.enable=false

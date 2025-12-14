@@ -7,7 +7,7 @@ networks:
 
 services:
   yacht:
-    image: selfhostedpro/yacht:${YACHT_DOCKER_TAG:-latest}
+    image: ghcr.io/selfhostedpro/yacht:${YACHT_DOCKER_TAG:-latest}
     container_name: yacht
     restart: unless-stopped
     networks:

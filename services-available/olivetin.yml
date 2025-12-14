@@ -7,7 +7,7 @@ networks:
 
 services:
   olivetin:
-    image: jamesread/olivetin:${OLIVETIN_DOCKER_TAG:-latest}
+    image: ghcr.io/olivetin/olivetin:${OLIVETIN_DOCKER_TAG:-latest}
     container_name: ${OLIVETIN_CONTAINER_NAME:-olivetin}
     restart: ${OLIVETIN_RESTART:-unless-stopped}
     networks:

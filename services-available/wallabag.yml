@@ -12,7 +12,7 @@ networks:
 
 services:
   wallabag:
-    image: wallabag/wallabag
+    image: ghcr.io/wallabag/docker:${WALLABAG_DOCKER_TAG:-latest}
     container_name: wallabag
     environment:
       - MYSQL_ROOT_PASSWORD=${WALLABAG_DB_ROOT_PASSWORD:-${MARIADB_PASS}}

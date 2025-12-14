@@ -9,7 +9,7 @@ networks:
 
 services:
   n8n:
-    image: n8nio/n8n:${N8N_DOCKER_TAG:-latest}
+    image: ghcr.io/n8n-io/n8n:${N8N_DOCKER_TAG:-latest}
     container_name: ${N8N_CONTAINER_NAME:-n8n}
     restart: ${N8N_RESTART:-unless-stopped}
     mem_limit: ${N8N_MEM_LIMIT:-200g}

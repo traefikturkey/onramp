@@ -8,7 +8,7 @@ networks:
 
 services:
   actual:
-    image: actualbudget/actual-server:latest
+    image: ghcr.io/actualbudget/actual-server:latest
     container_name: ${ACTUAL_CONTAINER_NAME:-actual}
     restart: ${ACTUAL_RESTART:-unless-stopped}
     networks:

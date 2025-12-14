@@ -8,7 +8,7 @@ networks:
 
 services:
   gluetun:
-    image: qmcgaw/gluetun:${GLUETUN_DOCKER_TAG:-latest}
+    image: ghcr.io/qdm12/gluetun:${GLUETUN_DOCKER_TAG:-latest}
     container_name: ${GLUETUN_CONTAINER_NAME:-gluetun}
     restart: ${GLUETUN_RESTART:-unless-stopped}
     mem_limit: ${GLUETUN_MEM_LIMIT:-200g}

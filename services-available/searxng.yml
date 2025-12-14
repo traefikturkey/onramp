@@ -9,7 +9,7 @@ networks:
 
 services:
   searxng:
-    image: searxng/searxng:${SEARXNG_DOCKER_TAG:-latest}
+    image: ghcr.io/searxng/searxng:${SEARXNG_DOCKER_TAG:-latest}
     container_name: ${SEARXNG_CONTAINER_NAME:-searxng}
     restart: unless-stopped
     networks:

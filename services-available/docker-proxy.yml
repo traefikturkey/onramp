@@ -7,7 +7,7 @@ networks:
 
 services:
   docker-proxy:
-    image: tecnativa/docker-socket-proxy:${DOCKER_PROXY_DOCKER_TAG:-latest}
+    image: ghcr.io/tecnativa/docker-socket-proxy:${DOCKER_PROXY_DOCKER_TAG:-latest}
     container_name: ${DOCKER_PROXY_CONTAINER_NAME:-docker-proxy}
     restart: ${DOCKER_PROXY_RESTART:-unless-stopped}
     volumes:

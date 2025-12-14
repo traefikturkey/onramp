@@ -1,9 +1,9 @@
 # description: Dns resolver
-# https://hub.docker.com/r/mvance/unbound
+# https://github.com/pascaliske/docker-unbound
 
 services:
   unbound:
-    image: mvance/unbound:${UNBOUND_DOCKER_TAG:-latest}
+    image: ghcr.io/pascaliske/unbound:${UNBOUND_DOCKER_TAG:-latest}
     container_name: ${UNBOUND_CONTAINER_NAME:-unbound}
     restart: unless-stopped
     volumes:

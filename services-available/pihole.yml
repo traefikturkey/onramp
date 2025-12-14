@@ -7,7 +7,7 @@ networks:
 
 services:
   pihole:
-    image: pihole/pihole:${PIHOLE_DOCKER_TAG:-latest}
+    image: ghcr.io/pi-hole/pihole:${PIHOLE_DOCKER_TAG:-latest}
     container_name: ${PIHOLE_CONTAINER_NAME:-pihole}
     restart: unless-stopped
     networks:

@@ -7,7 +7,7 @@ networks:
 
 services:
   authelia:
-    image: authelia/authelia:${AUTHELIA_DOCKER_TAG:-latest}
+    image: ghcr.io/authelia/authelia:${AUTHELIA_DOCKER_TAG:-latest}
     container_name: authelia
     restart: unless-stopped
     networks:

@@ -9,7 +9,7 @@ networks:
 
 services:
   woodpecker:
-    image: woodpeckerci/woodpecker-server:${WOODPECKER_DOCKER_TAG:-latest}
+    image: ghcr.io/woodpecker-ci/woodpecker-server:${WOODPECKER_DOCKER_TAG:-latest}
     container_name: ${WOODPECKER_CONTAINER_NAME:-woodpecker}
     restart: unless-stopped
     networks:
@@ -41,7 +41,7 @@ services:
 
 
   woodpecker-agent:
-    image: woodpeckerci/woodpecker-agent:latest
+    image: ghcr.io/woodpecker-ci/woodpecker-agent:latest
     command: agent
     restart: unless-stopped
     depends_on:

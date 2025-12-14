@@ -2,12 +2,12 @@ networks:
   traefik:
     external: true
 
-# description: Personal knowledge management system
-# https://github.com/zadam/trilium
+# description: Personal knowledge management system (TriliumNext fork)
+# https://github.com/TriliumNext/Trilium
 
 services:
   trilium:
-    image: zadam/trilium:${TRILIUM_DOCKER_TAG:-latest}
+    image: ghcr.io/triliumnext/trilium:${TRILIUM_DOCKER_TAG:-latest}
     container_name: ${TRILIUM_CONTAINER_NAME:-trilium}
     restart: ${TRILIUM_RESTART:-unless-stopped}
     networks:

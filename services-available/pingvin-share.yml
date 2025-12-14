@@ -7,7 +7,7 @@ networks:
 
 services:
   pingvin-share:
-    image: stonith404/pingvin-share:${PINGVIN_SHARE_DOCKER_TAG:-latest}
+    image: ghcr.io/stonith404/pingvin-share:${PINGVIN_SHARE_DOCKER_TAG:-latest}
     container_name: ${PINGVIN_SHARE_CONTAINER_NAME:-pingvin-share}
     restart: ${PINGVIN_SHARE_RESTART:-unless-stopped}
     networks:

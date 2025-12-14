@@ -7,7 +7,7 @@ networks:
 
 services:
   truecommand:
-    image: ixsystems/truecommand:${TRUECOMMAND_DOCKER_TAG:-latest}
+    image: ghcr.io/ixsystems/truecommand:${TRUECOMMAND_DOCKER_TAG:-latest}
     container_name: ${TRUECOMMAND_CONTAINER_NAME:-truecommand}
     restart: unless-stopped
     networks:

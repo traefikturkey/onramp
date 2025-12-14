@@ -7,7 +7,7 @@ networks:
 
 services:
   whoami:
-    image: traefik/whoami:${WHOAMI_DOCKER_TAG:-latest}
+    image: ghcr.io/traefik/whoami:${WHOAMI_DOCKER_TAG:-latest}
     container_name: ${WHOAMI_CONTAINER_NAME:-whoami}
     restart: unless-stopped
     networks:

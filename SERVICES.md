@@ -60,7 +60,7 @@
 - [chromadb](https://github.com/chroma-core/chroma/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/chromadb.yml)): open-source embedding database for LLM/AI applications
 - [cially](https://github.com/skellgreco/cially) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/cially.yml)): Cially is a powerful, open-source dashboard designed to provide in-depth insights, real-time analytics, and detailed statistics for your Discord server.
 - [cloudbeaver](https://dbeaver.com/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/cloudbeaver.yml)): CloudBeaver is a lightweight web application designed for efficient and secure data management. It supports a wide range of databases, including SQL, NoSQL, and cloud databases, all accessible through a web browser.
-- [cloudflare-ddns](https://github.com/oznu/docker-cloudflare-ddns) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/cloudflare-ddns.yml)): Updates dns records on cloudflare dynamically
+- [cloudflare-ddns](https://github.com/favonia/cloudflare-ddns) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/cloudflare-ddns.yml)): Updates dns records on cloudflare dynamically
 - [cloudflare-tunnel-gui](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/cloudflare-tunnel-gui.yml)): Provides a graphical interface for cloudflare tunnel
 - [cloudflare-tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/cloudflare-tunnel.yml)): Creates secure tunnels to expose local services
 - [code-server](https://github.com/coder/code-server) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/code-server.yml)): Runs visual studio code in a web browser
@@ -289,7 +289,7 @@
 ## S
 - [sablier](https://github.com/acouvreur/sablier) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/sablier.yml)): Container for running sablier, a web-based timer
 - [sabnzbd](https://hub.docker.com/r/linuxserver/sabnzbd) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/sabnzbd.yml)): Binary newsgrabber for usenet
-- [samba](https://github.com/dperson/samba) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/samba.yml)): Provides file and print services for windows clients
+- [samba](https://github.com/ServerContainers/samba) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/samba.yml)): Provides file and print services for windows clients
 - [scrypted](https://github.com/koush/scrypted) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/scrypted.yml)): Home automation platform
 - [sd-web](https://github.com/AUTOMATIC1111/stable-diffusion-webui) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/sd-web.yml)): stable diffusion web interface for ai images
 - [searxng](https://github.com/searxng/searxng-docker) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/searxng.yml)): Self-hosted metasearch engine
@@ -316,13 +316,13 @@
 - [tdarr](https://docs.tdarr.io/docs/installation/docker/run-compose) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/tdarr.yml)): Media optimization and conversion tool
 - [transmission-vpn](https://hub.docker.com/r/haugene/transmission-openvpn) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/transmission-vpn.yml)): Bittorrent client with vpn support
 - [transmission](https://hub.docker.com/r/linuxserver/transmission) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/transmission.yml)): Transmission bittorrent client with no VPN. Intended to be used with Gluetun.
-- [trilium](https://github.com/zadam/trilium) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/trilium.yml)): Personal knowledge management system
+- [trilium](https://github.com/TriliumNext/Trilium) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/trilium.yml)): Personal knowledge management system (TriliumNext fork)
 - [truecommand](https://hub.docker.com/r/ixsystems/truecommand) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/truecommand.yml)): Management tool for truenas
 
 
 ## U
 - [ubuntu](https://hub.docker.com/_/ubuntu) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/ubuntu.yml)): ubuntu base image
-- [unbound](https://hub.docker.com/r/mvance/unbound) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/unbound.yml)): Dns resolver
+- [unbound](https://github.com/pascaliske/docker-unbound) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/unbound.yml)): Dns resolver
 - [unifi](https://github.com/goofball222/unifi) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/unifi.yml)): Network management controller for ubiquiti devices
 - [unimus](https://github.com/crocandr/docker-unimus) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/unimus.yml)): contianer for multi-vendor network device configuration backup and management solution
 - [unmanic](https://github.com/Unmanic/unmanic) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/unmanic.yml)): Unmanic is a simple tool for optimising your file library

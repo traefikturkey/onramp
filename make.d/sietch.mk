@@ -62,6 +62,45 @@ migrate-env-force: sietch-build ## Force migration even if services-enabled/.env
 
 #########################################################
 ##
+## Service Environment Migrations
+##
+## Handle breaking env var changes when container images are
+## migrated to new versions with different configuration formats.
+##
+#########################################################
+
+migrate-service-list: sietch-build ## List service env migrations and their status
+	$(SIETCH_RUN) python /scripts/migrate_service_env.py list
+
+migrate-service: sietch-build ## Migrate env vars for a service (e.g., make migrate-service samba)
+ifdef SERVICE_PASSED_DNCASED
+	$(SIETCH_RUN) python /scripts/migrate_service_env.py migrate $(SERVICE_PASSED_DNCASED)
+else
+	@echo "Usage: make migrate-service <service>"
+	@echo "Example: make migrate-service samba"
+	@echo ""
+	@echo "Run 'make migrate-service-list' to see available migrations"
+endif
+
+migrate-service-all: sietch-build ## Run all pending service env migrations
+	$(SIETCH_RUN) python /scripts/migrate_service_env.py migrate --all
+
+migrate-service-dry-run: sietch-build ## Preview service env migration without changes
+ifdef SERVICE_PASSED_DNCASED
+	$(SIETCH_RUN) python /scripts/migrate_service_env.py migrate $(SERVICE_PASSED_DNCASED) --dry-run
+else
+	$(SIETCH_RUN) python /scripts/migrate_service_env.py migrate --all --dry-run
+endif
+
+migrate-service-check: sietch-build ## Check migration status for a service
+ifdef SERVICE_PASSED_DNCASED
+	$(SIETCH_RUN) python /scripts/migrate_service_env.py check $(SERVICE_PASSED_DNCASED)
+else
+	@echo "Usage: make migrate-service-check <service>"
+endif
+
+#########################################################
+##
 ## Scaffold Commands
 ##
 #########################################################

@@ -8,7 +8,7 @@ networks:
 
 services:
   gatus:
-    image: twinproduction/gatus:${GATUS_DOCKER_TAG:-latest}
+    image: ghcr.io/twin/gatus:${GATUS_DOCKER_TAG:-latest}
     container_name: ${GATUS_CONTAINER_NAME:-gatus}
     restart: ${GATUS_RESTART:-unless-stopped}
     networks:

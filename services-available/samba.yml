@@ -1,34 +1,29 @@
 # description: Provides file and print services for windows clients
-# https://github.com/dperson/samba
+# https://github.com/ServerContainers/samba
+# NOTE: Migrated from dperson/samba (outdated) - env vars changed!
+# See: https://github.com/ServerContainers/samba#environment-variables-and-டdocker-secrets
 
 services:
   samba:
-    image: dperson/samba:${SAMBA_DOCKER_TAG:-latest}
+    image: ghcr.io/servercontainers/samba:${SAMBA_DOCKER_TAG:-latest}
     container_name: ${SAMBA_CONTAINER_NAME:-samba}
     restart: unless-stopped
-    ports:
-      - 137:137/udp
-      - 138:138/udp
-      - 139:139/tcp
-      - 445:445/tcp
+    network_mode: host
     environment:
       - TZ=${TZ}
-      - USERID=${PUID:-1000}
-      - GROUPID=${PGID:-1000}
-      - WORKGROUP=${SAMBA_WORKGROUP:-workgroup}
-      - USER=${USER};${SAMBA_PASSWORD}
-      #- USER2=${SAMBA_USER2};${SAMBA_PASSWORD2}
-      #- USER3=${SAMBA_USER3};${SAMBA_PASSWORD3}
-      - NMBD=True
-      - RECYCLE=false  # disable recycle bin
-      # SHARE=share_name;share_path_in_container;browsable;readonly;allow_guest;allowed_users;admin_users;write_users;comment
-      - SHARE=${SAMBA_SHARE1_NAME:-media};/${SAMBA_SHARE1_NAME:-media};yes;no;no;${USER};${USER};;${SAMBA_SHARE1_NAME:-media}
-      #- SHARE2=foo;/foo;yes;no;no;${USER};${USER};;Foo
-      #- SHARE3=bar;/bar;yes;no;no;${USER};${USER};;Bar
+      # User accounts: ACCOUNT_<username>=<password>
+      - ACCOUNT_${SAMBA_USER:-${USER}}=${SAMBA_PASSWORD}
+      - UID_${SAMBA_USER:-${USER}}=${PUID:-1000}
+      - GROUP_${SAMBA_USER:-${USER}}=${PGID:-1000}
+      # Global config
+      - SAMBA_CONF_WORKGROUP=${SAMBA_WORKGROUP:-workgroup}
+      # Share config: [ShareName]; path=/path; options...
+      - SAMBA_VOLUME_CONFIG_${SAMBA_SHARE1_NAME:-media}=[${SAMBA_SHARE1_NAME:-media}]; path=/${SAMBA_SHARE1_NAME:-media}; writable=yes; guest ok=no; valid users=${SAMBA_USER:-${USER}}; browseable=yes
+      # Optional: disable avahi/wsdd2 if not needed
+      #- AVAHI_DISABLE=1
+      #- WSDD2_DISABLE=1
     volumes:
       - ${SAMBA_SHARE1_VOLUME:-./media}:/${SAMBA_SHARE1_NAME:-media}
-      #- /host/foo:/container/foo
-      #- /host/bar:/container/bar
       - /etc/localtime:/etc/localtime:ro
     labels:
       - traefik.enable=false
