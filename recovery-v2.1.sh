@@ -1,9 +1,10 @@
 #!/bin/bash
-# OnRamp Recovery Script v2.0
+# OnRamp Recovery Script v2.1
 # Fixes git state after main branch force-push while preserving .env files
+# Also backs up modified tracked files and untracked files in key directories
 # Safe to run multiple times (idempotent)
 #
-# Usage: bash <(curl -fsSL https://raw.githubusercontent.com/traefikturkey/onramp/main/recovery-v2.sh)
+# Usage: bash <(curl -fsSL https://raw.githubusercontent.com/traefikturkey/onramp/main/recovery-v2.1.sh)
 
 set -euo pipefail
 
