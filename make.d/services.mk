@@ -36,10 +36,10 @@ ifneq (,$(wildcard ./services-available/$(SERVICE_PASSED_DNCASED).yml))
 	@echo "Enabling $(SERVICE_PASSED_DNCASED)..."
 	@ln -s ../services-available/$(SERVICE_PASSED_DNCASED).yml ./services-enabled/$(SERVICE_PASSED_DNCASED).yml || true
 	@# Check if archived .env exists and prompt to restore
-	@if $(SIETCH_RUN) python /scripts/services.py check-archive $(SERVICE_PASSED_DNCASED) 2>/dev/null | grep -q "yes"; then \
+	@if $(SIETCH_RUN) python /scripts/services.py check-archive '$(SERVICE_PASSED_DNCASED)' 2>/dev/null | grep -q "yes"; then \
 		echo ""; \
 		echo "📦 Found archived .env file for $(SERVICE_PASSED_DNCASED)"; \
-		$(SIETCH_RUN) python /scripts/services.py restore-env $(SERVICE_PASSED_DNCASED); \
+		$(SIETCH_RUN) python /scripts/services.py restore-env '$(SERVICE_PASSED_DNCASED)'; \
 	fi
 	$(MAKE) scaffold-build $(SERVICE_PASSED_DNCASED)
 else
@@ -60,9 +60,9 @@ remove-service: disable-service
 
 disable-service: stop-service ## Disable a service
 	@# Archive .env file if it exists
-	@if [ -f ./services-enabled/$(SERVICE_PASSED_DNCASED).env ]; then \
+	@if [ -f './services-enabled/$(SERVICE_PASSED_DNCASED).env' ]; then \
 		echo "📦 Archiving $(SERVICE_PASSED_DNCASED).env..."; \
-		$(SIETCH_RUN) python /scripts/services.py archive-env $(SERVICE_PASSED_DNCASED); \
+		$(SIETCH_RUN) python /scripts/services.py archive-env '$(SERVICE_PASSED_DNCASED)'; \
 	fi
 	rm -f ./services-enabled/$(SERVICE_PASSED_DNCASED).yml
 	rm -f ./overrides-enabled/$(SERVICE_PASSED_DNCASED)-*.yml

@@ -19,7 +19,7 @@ endif
 
 # look for the second target word passed to make
 export SERVICE_PASSED_DNCASED := $(strip $(word 2,$(MAKECMDGOALS)))
-export SERVICE_PASSED_UPCASED := $(strip $(subst -,_,$(shell echo $(SERVICE_PASSED_DNCASED) | tr a-z A-Z )))
+export SERVICE_PASSED_UPCASED := $(strip $(subst -,_,$(shell echo '$(SERVICE_PASSED_DNCASED)' | tr a-z A-Z )))
 
 export DOCKER_COMPOSE_FILES :=  $(wildcard services-enabled/*.yml) $(wildcard overrides-enabled/*.yml) $(wildcard docker-compose.*.yml) 
 export DOCKER_COMPOSE_FLAGS := -f docker-compose.yml $(foreach file, $(DOCKER_COMPOSE_FILES), -f $(file))
