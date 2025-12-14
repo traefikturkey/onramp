@@ -19,6 +19,7 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
+      - LD_SERVER_HOST=0.0.0.0
       - LD_SUPERUSER_NAME=${LD_SUPERUSER_NAME:-admin}
       - LD_SUPERUSER_PASSWORD=${LD_SUPERUSER_PASSWORD:-admin}
       - LD_ENABLE_AUTH_PROXY=${LD_ENABLE_AUTH_PROXY:-false}
