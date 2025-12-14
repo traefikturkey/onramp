@@ -27,7 +27,10 @@ Output mapping:
 import argparse
 import fnmatch
 import os
+import re
+import secrets
 import shutil
+import string
 import sys
 from pathlib import Path
 from typing import TYPE_CHECKING
@@ -165,26 +168,74 @@ class Scaffolder:
         # All other files go to etc/<service>/
         return self.etc_dir / service / relative.parent / output_name
 
+    def _generate_secure_password(self, length: int = 32) -> str:
+        """Generate a secure random password."""
+        alphabet = string.ascii_letters + string.digits
+        return ''.join(secrets.choice(alphabet) for _ in range(length))
+
+    def _is_password_var(self, var_name: str) -> bool:
+        """Check if a variable name looks like a password/secret."""
+        password_patterns = (
+            '_PASS', '_PASSWORD', '_SECRET', '_KEY', '_TOKEN',
+            'PASS_', 'PASSWORD_', 'SECRET_', 'KEY_', 'TOKEN_',
+        )
+        upper_name = var_name.upper()
+        return any(pattern in upper_name for pattern in password_patterns)
+
+    def _render_template_string(self, content: str) -> str:
+        """
+        Render template content by substituting ${VAR} and ${VAR:-default} patterns.
+
+        For password-like variables that are unset, generates secure random values.
+        """
+        # Pattern matches ${VAR} or ${VAR:-default} or ${VAR:?error}
+        pattern = re.compile(r'\$\{([A-Z][A-Z0-9_]*)(?::-([^}]*)|:\?([^}]*))?\}')
+
+        generated_passwords = {}
+
+        def replace_var(match: re.Match) -> str:
+            var_name = match.group(1)
+            default_value = match.group(2)  # From ${VAR:-default}
+            error_msg = match.group(3)  # From ${VAR:?error}
+
+            # Check environment first
+            env_value = os.environ.get(var_name)
+
+            if env_value is not None and env_value != '':
+                return env_value
+
+            # If there's a default, use it
+            if default_value is not None:
+                return default_value
+
+            # For password-like variables, generate a secure value
+            if self._is_password_var(var_name):
+                if var_name not in generated_passwords:
+                    generated_passwords[var_name] = self._generate_secure_password()
+                    print(f"    Generated secure value for {var_name}")
+                return generated_passwords[var_name]
+
+            # For error syntax ${VAR:?msg}, return empty (user must set it)
+            if error_msg is not None:
+                print(f"    Warning: {var_name} not set ({error_msg})")
+                return ''
+
+            # Variable not set and no default - return empty
+            return ''
+
+        return pattern.sub(replace_var, content)
+
     def render_template(self, source: Path, dest: Path) -> bool:
-        """Render a template file using envsubst."""
+        """Render a template file using Python string substitution."""
         try:
             dest.parent.mkdir(parents=True, exist_ok=True)
             with open(source, "r") as f:
                 template_content = f.read()
 
-            result = self._executor.run(
-                ["envsubst"],
-                input=template_content,
-                capture_output=True,
-                check=True,
-            )
-
-            if result.returncode != 0:
-                print(f"  Error rendering {source}: {result.stderr}", file=sys.stderr)
-                return False
+            rendered_content = self._render_template_string(template_content)
 
             with open(dest, "w") as f:
-                f.write(result.stdout)
+                f.write(rendered_content)
 
             print(f"  Rendered: {source.name} -> {dest}")
             return True

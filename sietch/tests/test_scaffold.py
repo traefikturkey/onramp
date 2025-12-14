@@ -308,18 +308,17 @@ class TestListScaffolds:
 
 
 class TestRenderTemplate:
-    """Tests for render_template() with mocked executor."""
+    """Tests for render_template() with Python-based templating."""
 
-    def test_renders_template_successfully(self, tmp_path):
-        """Should call envsubst and write output."""
+    def test_renders_template_successfully(self, tmp_path, monkeypatch):
+        """Should render template with env var substitution."""
+        monkeypatch.setenv("MY_VALUE", "hello_world")
+
         mock_exec = MockCommandExecutor()
-        mock_exec.set_response("envsubst", CommandResult(0, "RENDERED_OUTPUT", ""))
-
         scaffolder = Scaffolder(str(tmp_path), executor=mock_exec)
 
-        # Create source template
         source = tmp_path / "template.txt"
-        source.write_text("VAR=${VALUE}")
+        source.write_text("VAR=${MY_VALUE}")
 
         dest = tmp_path / "output.txt"
 
@@ -327,33 +326,43 @@ class TestRenderTemplate:
 
         assert result is True
         assert dest.exists()
-        assert dest.read_text() == "RENDERED_OUTPUT"
+        assert dest.read_text() == "VAR=hello_world"
 
-    def test_passes_template_content_to_envsubst(self, tmp_path):
-        """Should pass template content as stdin to envsubst."""
+    def test_substitutes_default_values(self, tmp_path):
+        """Should use default value when env var is not set."""
         mock_exec = MockCommandExecutor()
-        mock_exec.set_response("envsubst", CommandResult(0, "output", ""))
-
         scaffolder = Scaffolder(str(tmp_path), executor=mock_exec)
 
         source = tmp_path / "template.txt"
-        source.write_text("MY_TEMPLATE_CONTENT")
+        source.write_text("VAR=${UNSET_VAR:-default_value}")
 
         dest = tmp_path / "output.txt"
 
         scaffolder.render_template(source, dest)
 
-        # Check envsubst was called with template content as input
-        calls = mock_exec.get_calls_for("envsubst")
-        assert len(calls) == 1
-        # calls structure: (cmd, input, capture_output, check, cwd)
-        assert mock_exec.calls[0][1] == "MY_TEMPLATE_CONTENT"
+        assert dest.read_text() == "VAR=default_value"
+
+    def test_generates_password_for_unset_password_vars(self, tmp_path):
+        """Should generate secure password for password-like variables."""
+        mock_exec = MockCommandExecutor()
+        scaffolder = Scaffolder(str(tmp_path), executor=mock_exec)
+
+        source = tmp_path / "template.txt"
+        source.write_text("PG_PASS=${PG_PASS}")
+
+        dest = tmp_path / "output.txt"
+
+        scaffolder.render_template(source, dest)
+
+        content = dest.read_text()
+        assert content.startswith("PG_PASS=")
+        password = content.split("=", 1)[1]
+        assert len(password) == 32  # Default password length
+        assert "${" not in password
 
     def test_creates_parent_directories(self, tmp_path):
         """Should create parent directories for output."""
         mock_exec = MockCommandExecutor()
-        mock_exec.set_response("envsubst", CommandResult(0, "output", ""))
-
         scaffolder = Scaffolder(str(tmp_path), executor=mock_exec)
 
         source = tmp_path / "template.txt"
@@ -366,23 +375,22 @@ class TestRenderTemplate:
         assert result is True
         assert dest.parent.exists()
 
-    def test_returns_false_on_envsubst_error(self, tmp_path, capsys):
-        """Should return False when envsubst fails."""
+    def test_handles_error_syntax(self, tmp_path, capsys):
+        """Should warn and return empty for ${VAR:?error} syntax."""
         mock_exec = MockCommandExecutor()
-        mock_exec.set_response("envsubst", CommandResult(1, "", "envsubst error"))
-
         scaffolder = Scaffolder(str(tmp_path), executor=mock_exec)
 
         source = tmp_path / "template.txt"
-        source.write_text("content")
+        source.write_text("VAR=${REQUIRED_VAR:?must be set}")
 
         dest = tmp_path / "output.txt"
 
         result = scaffolder.render_template(source, dest)
 
-        assert result is False
+        assert result is True
+        assert dest.read_text() == "VAR="
         captured = capsys.readouterr()
-        assert "Error rendering" in captured.err
+        assert "REQUIRED_VAR not set" in captured.out
 
     def test_handles_missing_source_file(self, tmp_path, capsys):
         """Should handle missing source file gracefully."""
