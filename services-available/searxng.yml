@@ -20,6 +20,7 @@ services:
       - TZ=${TZ}
       - UMASK=022
       - SEARXNG_BASE_URL=https://${SEARXNG_HOSTNAME:-searxng}/
+      - GRANIAN_HOST=0.0.0.0
     volumes:
       - ${SEARXNG_VOLUME-./etc/searxng}:/etc/searxng:rw
     cap_drop:
