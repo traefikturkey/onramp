@@ -19,9 +19,10 @@ services:
       - 443:443
     env_file:
       - services-enabled/.env
+      - services-enabled/.env.external
     volumes:
       - ./etc/traefik/letsencrypt:/letsencrypt
-      - ./etc/traefik/enabled:/enabled
+      - ./external-enabled:/enabled
       - /etc/localtime:/etc/localtime:ro
       - /usr/share/zoneinfo:/usr/share/zoneinfo:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro

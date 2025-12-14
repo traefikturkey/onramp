@@ -284,7 +284,7 @@ external-available/      # Templates for external routing (tracked in git)
 ├── homeassistant.yml
 └── ...
 
-external-enabled/        # Active configs - symlinks (gitignored)
+external-enabled/        # Active configs - creates a copy in external-enabled (gitignored)
 └── .keep
 ```
 
@@ -300,9 +300,8 @@ make list-external              # List available external services
 ### How It Works
 
 When you run `make enable-external <name>`:
-1. Creates symlink: `external-enabled/<name>.yml` → `external-available/<name>.yml`
-2. Creates symlink: `etc/traefik/enabled/<name>.yml` → `external-enabled/<name>.yml`
-3. Traefik's file provider picks up the config automatically
+1. Creates a copy: `external-available/<name>.yml` → `external-enabled/<name>.yml`
+2. Traefik's file provider picks up the config automatically
 
 ### Creating a New External Service
 
