@@ -6,6 +6,7 @@ networks:
 # https://github.com/n8n-io/n8n
 # Note: By default uses SQLite (lightweight, suitable for single-user/development).
 #       For production/multi-user setups with PostgreSQL: make enable-override n8n-postgres
+# Note: for gmail oauth help, see this video: https://www.youtube.com/watch?v=YR1TH_ZCAWo
 
 services:
   n8n:
