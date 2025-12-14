@@ -118,9 +118,10 @@ class TestConditionFileNotExists:
 class TestConditionDirEmpty:
     """Tests for Condition type=dir_empty."""
 
-    def test_true_when_dir_missing(self, ctx):
+    def test_false_when_dir_missing(self, ctx):
+        """Non-existent directory should not be treated as empty."""
         condition = Condition({"type": "dir_empty", "path": "data"}, ctx)
-        assert condition.evaluate() is True
+        assert condition.evaluate() is False
 
     def test_true_when_dir_empty(self, ctx):
         service_dir = ctx.etc_dir / ctx.service
