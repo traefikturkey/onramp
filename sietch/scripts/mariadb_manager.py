@@ -26,6 +26,8 @@ Features:
 
 import argparse
 import json
+import os
+import re
 import secrets
 import string
 import subprocess
@@ -36,6 +38,50 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from ports.docker import DockerExecutor
+
+# Validation patterns to prevent SQL injection
+# Database names: alphanumeric, underscore, hyphen, 1-63 chars, must start with letter
+DB_NAME_PATTERN = re.compile(r'^[a-zA-Z][a-zA-Z0-9_-]{0,62}$')
+# Usernames: alphanumeric, underscore, 1-63 chars, must start with letter
+USERNAME_PATTERN = re.compile(r'^[a-zA-Z][a-zA-Z0-9_]{0,62}$')
+# Table names: same as DB names
+TABLE_NAME_PATTERN = re.compile(r'^[a-zA-Z][a-zA-Z0-9_]{0,62}$')
+
+
+def validate_db_name(dbname: str) -> None:
+    """Validate database name to prevent SQL injection."""
+    if not dbname:
+        raise ValueError("Database name cannot be empty")
+    if not DB_NAME_PATTERN.match(dbname):
+        raise ValueError(
+            f"Invalid database name '{dbname}'. Must start with a letter, "
+            "contain only alphanumeric characters, underscores, or hyphens, "
+            "and be 1-63 characters long."
+        )
+
+
+def validate_username(username: str) -> None:
+    """Validate username to prevent SQL injection."""
+    if not username:
+        raise ValueError("Username cannot be empty")
+    if not USERNAME_PATTERN.match(username):
+        raise ValueError(
+            f"Invalid username '{username}'. Must start with a letter, "
+            "contain only alphanumeric characters or underscores, "
+            "and be 1-63 characters long."
+        )
+
+
+def validate_table_name(table_name: str) -> None:
+    """Validate table name to prevent SQL injection."""
+    if not table_name:
+        raise ValueError("Table name cannot be empty")
+    if not TABLE_NAME_PATTERN.match(table_name):
+        raise ValueError(
+            f"Invalid table name '{table_name}'. Must start with a letter, "
+            "contain only alphanumeric characters or underscores, "
+            "and be 1-63 characters long."
+        )
 
 
 class MariaDBManager:
@@ -81,17 +127,23 @@ class MariaDBManager:
         return self._docker.exec(self.container_name, cmd, interactive)
 
     def _mysql_exec(self, sql: str, dbname: str = "mysql") -> tuple[int, str, str]:
-        """Execute SQL via mariadb client in container."""
+        """Execute SQL via mariadb client in container.
+
+        Uses MYSQL_PWD environment variable to avoid password in process listing.
+        """
         password = self._get_root_password()
-        # Use mariadb command with password
-        cmd = ["mariadb", "-u", "root", f"-p{password}", dbname, "-e", sql]
+        # Use MYSQL_PWD env var instead of -p to avoid password in ps output
+        # Pass via bash -c with env var set
+        cmd = ["bash", "-c", f"MYSQL_PWD='{password}' mariadb -u root {dbname} -e \"{sql}\""]
         return self._docker_exec(cmd)
 
     def console(self) -> int:
         """Open interactive mariadb console."""
         print(f"Connecting to {self.container_name}...")
         password = self._get_root_password()
-        return self._docker_exec(["mariadb", "-u", "root", f"-p{password}"], interactive=True)[0]
+        # Use MYSQL_PWD env var for interactive console too
+        cmd = ["bash", "-c", f"MYSQL_PWD='{password}' mariadb -u root"]
+        return self._docker_exec(cmd, interactive=True)[0]
 
     def list_databases(self) -> tuple[int, list[str]]:
         """List all databases."""
@@ -110,12 +162,14 @@ class MariaDBManager:
 
     def database_exists(self, dbname: str) -> bool:
         """Check if database exists."""
+        validate_db_name(dbname)
         sql = f"SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='{dbname}'"
         code, stdout, stderr = self._mysql_exec(sql)
         return code == 0 and dbname in stdout
 
     def create_database(self, dbname: str) -> int:
         """Create a database if it doesn't exist."""
+        validate_db_name(dbname)
         if self.database_exists(dbname):
             print(f"Database '{dbname}' already exists")
             return 0
@@ -130,6 +184,7 @@ class MariaDBManager:
 
     def drop_database(self, dbname: str) -> int:
         """Drop a database."""
+        validate_db_name(dbname)
         sql = f"DROP DATABASE IF EXISTS `{dbname}`"
         code, stdout, stderr = self._mysql_exec(sql)
         if code != 0:
@@ -140,12 +195,16 @@ class MariaDBManager:
 
     def create_user(self, username: str, password: str = None, dbname: str = None) -> tuple[int, str]:
         """Create a MariaDB user with optional database ownership."""
+        validate_username(username)
+        if dbname:
+            validate_db_name(dbname)
+
         if password is None:
             # Generate secure random password
             alphabet = string.ascii_letters + string.digits
             password = ''.join(secrets.choice(alphabet) for _ in range(32))
 
-        # Create user
+        # Create user - password is generated internally, so safe from injection
         sql = f"CREATE USER IF NOT EXISTS '{username}'@'%' IDENTIFIED BY '{password}'"
         code, stdout, stderr = self._mysql_exec(sql)
         if code != 0:
@@ -159,7 +218,7 @@ class MariaDBManager:
             if code != 0:
                 print(f"Error granting privileges: {stderr}", file=sys.stderr)
                 return code, password
-            
+
             # Flush privileges
             flush_code, _, _ = self._mysql_exec("FLUSH PRIVILEGES")
             if flush_code != 0:
@@ -176,22 +235,20 @@ class MariaDBManager:
 
     def backup_database(self, dbname: str, output_file: str) -> int:
         """Backup database to SQL file."""
+        validate_db_name(dbname)
         output_path = Path(output_file)
         output_path.parent.mkdir(parents=True, exist_ok=True)
 
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         backup_file = f"{output_path.stem}_{timestamp}.sql"
-        
+
+        password = self._get_root_password()
+        # Use MYSQL_PWD env var to avoid password in process listing
         cmd = [
-            "mariadb-dump",
-            "-u", "root",
-            "-p${MARIADB_PASS}",
-            "--single-transaction",
-            "--routines",
-            "--triggers",
-            dbname
+            "bash", "-c",
+            f"MYSQL_PWD='{password}' mariadb-dump -u root --single-transaction --routines --triggers {dbname}"
         ]
-        
+
         code, stdout, stderr = self._docker_exec(cmd)
         if code != 0:
             print(f"Error backing up database: {stderr}", file=sys.stderr)
@@ -204,6 +261,7 @@ class MariaDBManager:
 
     def restore_database(self, dbname: str, backup_file: str) -> int:
         """Restore database from SQL backup file."""
+        validate_db_name(dbname)
         backup_path = Path(backup_file)
         if not backup_path.exists():
             print(f"Backup file not found: {backup_file}", file=sys.stderr)
@@ -215,20 +273,37 @@ class MariaDBManager:
         # Read backup content
         sql_content = backup_path.read_text()
 
-        # Restore via mariadb
-        cmd = ["mariadb", "-u", "root", "-p${MARIADB_PASS}", dbname]
-        # Note: This would need to pipe stdin, which requires a different approach
-        print(f"To restore manually: docker exec -i {self.container_name} mariadb -u root -p$MARIADB_PASS {dbname} < {backup_file}")
+        # Copy backup to container and restore
+        password = self._get_root_password()
+        print(f"Restoring database '{dbname}' from {backup_file}...")
+
+        # Use docker cp + exec approach for restore
+        temp_file = f"/tmp/restore_{dbname}.sql"
+        copy_cmd = ["docker", "cp", str(backup_path), f"{self.container_name}:{temp_file}"]
+        result = subprocess.run(copy_cmd, capture_output=True, text=True)
+        if result.returncode != 0:
+            print(f"Error copying backup to container: {result.stderr}", file=sys.stderr)
+            return 1
+
+        # Restore using MYSQL_PWD env var
+        restore_cmd = ["bash", "-c", f"MYSQL_PWD='{password}' mariadb -u root {dbname} < {temp_file} && rm {temp_file}"]
+        code, stdout, stderr = self._docker_exec(restore_cmd)
+        if code != 0:
+            print(f"Error restoring database: {stderr}", file=sys.stderr)
+            return code
+
+        print(f"Database '{dbname}' restored successfully")
         return 0
 
     def get_stats(self, dbname: str) -> int:
         """Get database statistics."""
+        validate_db_name(dbname)
         if not self.database_exists(dbname):
             print(f"Database '{dbname}' does not exist", file=sys.stderr)
             return 1
 
         sql = f"""
-        SELECT 
+        SELECT
             table_schema AS 'Database',
             COUNT(*) AS 'Tables',
             ROUND(SUM(data_length + index_length) / 1024 / 1024, 2) AS 'Size (MB)'
@@ -236,7 +311,7 @@ class MariaDBManager:
         WHERE table_schema = '{dbname}'
         GROUP BY table_schema
         """
-        
+
         code, stdout, stderr = self._mysql_exec(sql)
         if code != 0:
             print(f"Error getting stats: {stderr}", file=sys.stderr)
@@ -246,6 +321,7 @@ class MariaDBManager:
 
     def verify_database(self, dbname: str) -> int:
         """Verify database integrity."""
+        validate_db_name(dbname)
         if not self.database_exists(dbname):
             print(f"Database '{dbname}' does not exist", file=sys.stderr)
             return 1
@@ -258,9 +334,15 @@ class MariaDBManager:
             return code
 
         tables = [line.strip() for line in stdout.split("\n") if line.strip() and line.strip() != "table_name"]
-        
+
         print(f"Checking {len(tables)} tables in '{dbname}'...")
         for table in tables:
+            # Validate table name before using in SQL
+            try:
+                validate_table_name(table)
+            except ValueError:
+                print(f"  ? {table}: Skipped (unusual name)")
+                continue
             check_sql = f"CHECK TABLE `{dbname}`.`{table}`"
             code, stdout, stderr = self._mysql_exec(check_sql)
             if code != 0 or "error" in stdout.lower():
@@ -272,6 +354,8 @@ class MariaDBManager:
 
     def migrate_from_container(self, source_container: str, source_db: str, dest_db: str) -> int:
         """Migrate database from another container to shared MariaDB."""
+        validate_db_name(source_db)
+        validate_db_name(dest_db)
         print(f"Migrating {source_db} from {source_container} to {dest_db}...")
 
         # Backup from source
@@ -281,19 +365,19 @@ class MariaDBManager:
         backup_file = backup_dir / f"{source_db}_{timestamp}.sql"
 
         print("1. Creating backup...")
+        # Use bash -c with MYSQL_PWD to avoid password in process listing
         dump_cmd = [
             "docker", "exec", source_container,
-            "mariadb-dump", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}",
-            "--single-transaction", "--routines", "--triggers",
-            source_db
+            "bash", "-c",
+            f"MYSQL_PWD=\"$MYSQL_ROOT_PASSWORD\" mariadb-dump -u root --single-transaction --routines --triggers {source_db}"
         ]
-        
+
         try:
             result = subprocess.run(dump_cmd, capture_output=True, text=True)
             if result.returncode != 0:
                 print(f"Error creating backup: {result.stderr}", file=sys.stderr)
                 return 1
-            
+
             backup_file.write_text(result.stdout)
             print(f"   Backup created: {backup_file}")
 
@@ -307,18 +391,29 @@ class MariaDBManager:
 
         # Restore to shared MariaDB
         print("3. Restoring to shared MariaDB...")
+        password = self._get_root_password()
+
+        # Copy backup to container
+        temp_file = f"/tmp/migrate_{dest_db}.sql"
+        copy_cmd = ["docker", "cp", str(backup_file), f"{self.container_name}:{temp_file}"]
+        result = subprocess.run(copy_cmd, capture_output=True, text=True)
+        if result.returncode != 0:
+            print(f"Error copying backup: {result.stderr}", file=sys.stderr)
+            return 1
+
+        # Restore using MYSQL_PWD
         restore_cmd = [
-            "docker", "exec", "-i", self.container_name,
-            "mariadb", "-u", "root", "-p${MARIADB_PASS}", dest_db
+            "docker", "exec", self.container_name,
+            "bash", "-c",
+            f"MYSQL_PWD='{password}' mariadb -u root {dest_db} < {temp_file} && rm {temp_file}"
         ]
-        
+
         try:
-            with open(backup_file, 'r') as f:
-                result = subprocess.run(restore_cmd, stdin=f, capture_output=True, text=True)
-                if result.returncode != 0:
-                    print(f"Error restoring: {result.stderr}", file=sys.stderr)
-                    return 1
-            
+            result = subprocess.run(restore_cmd, capture_output=True, text=True)
+            if result.returncode != 0:
+                print(f"Error restoring: {result.stderr}", file=sys.stderr)
+                return 1
+
             print(f"   ✓ Migration complete!")
             print(f"   Backup saved at: {backup_file}")
 

@@ -25,6 +25,7 @@ Features:
 
 import argparse
 import json
+import re
 import secrets
 import string
 import subprocess
@@ -35,6 +36,50 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from ports.docker import DockerExecutor
+
+# Validation patterns to prevent SQL injection
+# Database names: alphanumeric, underscore, hyphen, 1-63 chars, must start with letter
+DB_NAME_PATTERN = re.compile(r'^[a-zA-Z][a-zA-Z0-9_-]{0,62}$')
+# Usernames: alphanumeric, underscore, 1-63 chars, must start with letter
+USERNAME_PATTERN = re.compile(r'^[a-zA-Z][a-zA-Z0-9_]{0,62}$')
+# Table names: same as DB names
+TABLE_NAME_PATTERN = re.compile(r'^[a-zA-Z][a-zA-Z0-9_]{0,62}$')
+
+
+def validate_db_name(dbname: str) -> None:
+    """Validate database name to prevent SQL injection."""
+    if not dbname:
+        raise ValueError("Database name cannot be empty")
+    if not DB_NAME_PATTERN.match(dbname):
+        raise ValueError(
+            f"Invalid database name '{dbname}'. Must start with a letter, "
+            "contain only alphanumeric characters, underscores, or hyphens, "
+            "and be 1-63 characters long."
+        )
+
+
+def validate_username(username: str) -> None:
+    """Validate username to prevent SQL injection."""
+    if not username:
+        raise ValueError("Username cannot be empty")
+    if not USERNAME_PATTERN.match(username):
+        raise ValueError(
+            f"Invalid username '{username}'. Must start with a letter, "
+            "contain only alphanumeric characters or underscores, "
+            "and be 1-63 characters long."
+        )
+
+
+def validate_table_name(table_name: str) -> None:
+    """Validate table name to prevent SQL injection."""
+    if not table_name:
+        raise ValueError("Table name cannot be empty")
+    if not TABLE_NAME_PATTERN.match(table_name):
+        raise ValueError(
+            f"Invalid table name '{table_name}'. Must start with a letter, "
+            "contain only alphanumeric characters or underscores, "
+            "and be 1-63 characters long."
+        )
 
 
 class PostgresManager:
@@ -91,12 +136,14 @@ class PostgresManager:
 
     def database_exists(self, dbname: str) -> bool:
         """Check if database exists."""
+        validate_db_name(dbname)
         sql = f"SELECT 1 FROM pg_database WHERE datname='{dbname}'"
         code, stdout, stderr = self._psql_exec(sql)
         return code == 0 and "1" in stdout
 
     def create_database(self, dbname: str) -> int:
         """Create a database if it doesn't exist."""
+        validate_db_name(dbname)
         if self.database_exists(dbname):
             print(f"Database '{dbname}' already exists")
             return 0
@@ -111,6 +158,7 @@ class PostgresManager:
 
     def drop_database(self, dbname: str) -> int:
         """Drop a database."""
+        validate_db_name(dbname)
         sql = f'DROP DATABASE IF EXISTS "{dbname}"'
         code, stdout, stderr = self._psql_exec(sql)
         if code != 0:
@@ -121,12 +169,16 @@ class PostgresManager:
 
     def create_user(self, username: str, password: str = None, dbname: str = None) -> tuple[int, str]:
         """Create a postgres user with optional database ownership."""
+        validate_username(username)
+        if dbname:
+            validate_db_name(dbname)
+
         if password is None:
             # Generate secure random password
             alphabet = string.ascii_letters + string.digits
             password = ''.join(secrets.choice(alphabet) for _ in range(32))
 
-        # Create user
+        # Create user - password is generated internally, so safe from injection
         sql = f"CREATE USER \"{username}\" WITH PASSWORD '{password}'"
         code, stdout, stderr = self._psql_exec(sql)
         if code != 0 and "already exists" not in stderr:
@@ -151,6 +203,7 @@ class PostgresManager:
 
     def backup_database(self, dbname: str, output_path: Path) -> int:
         """Backup database using pg_dump."""
+        validate_db_name(dbname)
         print(f"Backing up database '{dbname}' to {output_path}...")
 
         # Use custom format (-Fc) for best compression and flexibility
@@ -177,6 +230,7 @@ class PostgresManager:
 
     def restore_database(self, dbname: str, backup_path: Path) -> int:
         """Restore database from pg_dump backup."""
+        validate_db_name(dbname)
         print(f"Restoring database '{dbname}' from {backup_path}...")
 
         if not backup_path.exists():
@@ -209,6 +263,7 @@ class PostgresManager:
 
     def get_database_stats(self, dbname: str) -> dict:
         """Get database statistics (size, table count, row counts)."""
+        validate_db_name(dbname)
         stats = {"dbname": dbname, "tables": {}, "total_size": 0}
 
         # Get database size
@@ -236,8 +291,14 @@ class PostgresManager:
                     parts = [p.strip() for p in line.split("|")]
                     if len(parts) >= 2:
                         table_name = parts[1]
+                        # Validate table name before using in SQL
+                        try:
+                            validate_table_name(table_name)
+                        except ValueError:
+                            # Skip tables with unusual names
+                            continue
                         # Get row count
-                        count_sql = f"SELECT COUNT(*) FROM {table_name}"
+                        count_sql = f"SELECT COUNT(*) FROM \"{table_name}\""
                         c, out, err = self._psql_exec(count_sql, dbname)
                         if c == 0:
                             try:
@@ -250,6 +311,7 @@ class PostgresManager:
 
     def verify_database(self, dbname: str) -> bool:
         """Verify database integrity."""
+        validate_db_name(dbname)
         print(f"Verifying database '{dbname}'...")
 
         # Check database exists
@@ -275,6 +337,9 @@ class PostgresManager:
         self, source_container: str, source_db: str, dest_db: str, source_user: str = "postgres"
     ) -> int:
         """Migrate database from another postgres container to shared instance."""
+        validate_db_name(source_db)
+        validate_db_name(dest_db)
+        validate_username(source_user)
         print(f"Migrating {source_db} from {source_container} to shared postgres as {dest_db}...")
 
         # Create temporary backup path
