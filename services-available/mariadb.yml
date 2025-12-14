@@ -36,13 +36,15 @@ services:
     volumes:
       - ${MARIADB_DIR:-./media/databases/mariadb/data}:/var/lib/mysql
       - /etc/localtime:/etc/localtime:ro
+    env_file:
+      - services-enabled/.env
     environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
       - MYSQL_USER=${MARIADB_USER:-admin}
-      - MYSQL_PASSWORD=${MARIADB_PASS:?database password required}
-      - MYSQL_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD:-${MARIADB_PASS:?database password required}}
+      - MYSQL_PASSWORD=${MARIADB_PASS}
+      - MYSQL_ROOT_PASSWORD=${MARIADB_PASS}
     command: --max_connections=1000 --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     ports:
       - 3306:3306
