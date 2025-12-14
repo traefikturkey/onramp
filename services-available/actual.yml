@@ -17,7 +17,7 @@ services:
       - UID=${PUID:-1000}
       - GID=${PGID:-1000}
       - TZ=${TZ}
-      - hostname=${ACTUAL_CONTAINER_NAME:-actual}.${HOST_DOMAIN}
+      - ACTUAL_HOSTNAME=0.0.0.0
       # Uncomment any of the lines below to set configuration options.
       # - ACTUAL_HTTPS_KEY=/data/selfhost.key
       # - ACTUAL_HTTPS_CERT=/data/selfhost.crt
