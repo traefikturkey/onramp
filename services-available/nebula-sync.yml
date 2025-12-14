@@ -23,3 +23,4 @@ services:
     labels:
       - com.centurylinklabs.watchtower.enable=${NEBULA_SYNC_WATCHTOWER_ENABLED:-true}
       - autoheal=${NEBULA_SYNC_AUTOHEAL_ENABLED:-true}
+      - traefik.enable=false
