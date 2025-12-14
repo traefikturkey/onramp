@@ -5,6 +5,7 @@
 backups/*
 services-enabled/*.yml
 services-enabled/*.env
+services-enabled/*.env.*
 services-enabled/archive/*.env
 services-dev/*.yml
 services-test/
