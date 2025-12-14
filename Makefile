@@ -1,10 +1,13 @@
-# Include only the main .env file from services-enabled
+# Files Make can safely include (only main .env - no shell variable syntax)
 # Note: .env.nfs, .env.external, and *.env files use shell variable syntax
 # (e.g., ${VAR:-default}) that Make interprets as recursive references.
-# Those files are passed to Docker Compose via --env-file flags instead.
-ENVIRONMENT_FILES := $(wildcard ./services-enabled/.env)
-ifneq (,$(ENVIRONMENT_FILES))
-    include $(ENVIRONMENT_FILES)
+MAKE_INCLUDE_FILES := $(wildcard ./services-enabled/.env)
+
+# All env files for passing to sietch/docker via --env-file flags
+# These use shell syntax that docker handles correctly
+SIETCH_ENV_FILES := $(wildcard ./services-enabled/.env) $(wildcard ./services-enabled/.env.*)
+ifneq (,$(MAKE_INCLUDE_FILES))
+    include $(MAKE_INCLUDE_FILES)
     export
 endif
 
@@ -69,7 +72,7 @@ SIETCH_FILES := $(shell find sietch/ -type f ! -name '.built' \
 	! -path 'sietch/.coverage' \
 	! -name '*.pyc' \
 	2>/dev/null)
-SIETCH_ENV_FLAGS := $(foreach file, $(ENVIRONMENT_FILES), --env-file $(file))
+SIETCH_ENV_FLAGS := $(foreach file, $(SIETCH_ENV_FILES), --env-file $(file))
 SIETCH_COMPUTED_VARS := -e HOSTIP=$(HOSTIP) -e PUID=$(PUID) -e PGID=$(PGID) -e HOST_NAME=$(HOST_NAME) -e TZ=$(TZ) -e HOST_DOMAIN=$(HOST_DOMAIN)
 SIETCH_RUN := docker run --rm $(SIETCH_ENV_FLAGS) $(SIETCH_COMPUTED_VARS) -v $(shell pwd):/app -v /var/run/docker.sock:/var/run/docker.sock --network traefik -u $(PUID):$(PGID) $(SIETCH_IMAGE)
 
