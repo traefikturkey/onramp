@@ -14,8 +14,6 @@ services:
     restart: ${HEALTHCHECKS_RESTART:-unless-stopped}
     networks:
       - traefik
-    depends_on:
-      - postgres
     environment:
       - APPRISE_ENABLED=False
       - DB=postgres

@@ -326,28 +326,29 @@ class Scaffolder:
 
     def _parse_metadata(self, service: str) -> dict:
         """Parse metadata comments from service YAML file.
-        
+
         Looks for metadata comments in the format:
         # key: value
-        
+
         Supported metadata:
+        - requires: svc1, svc2 (services that must be enabled/running first)
         - database: postgres (indicates service needs postgres)
         - database_name: dbname (name of database to create)
         - cache: valkey (indicates service needs valkey)
         - cache_db: N (optional: preferred valkey database number 0-15)
-        
+
         Returns:
             Dictionary with metadata keys and values
         """
         metadata = {}
-        
+
         # Check services-enabled first, then services-available
         service_yml = self.services_enabled / f"{service}.yml"
         if not service_yml.exists():
             service_yml = self.services_available / f"{service}.yml"
             if not service_yml.exists():
                 return metadata
-        
+
         try:
             with open(service_yml, "r") as f:
                 for line in f:
@@ -363,11 +364,11 @@ class Scaffolder:
                             key = key.strip()
                             value = value.strip()
                             # Only store simple key-value metadata
-                            if key in ("database", "database_name", "cache", "cache_db"):
+                            if key in ("database", "database_name", "cache", "cache_db", "requires"):
                                 metadata[key] = value
         except Exception as e:
             print(f"  Warning: Error parsing metadata from {service_yml}: {e}", file=sys.stderr)
-        
+
         return metadata
 
     def _is_postgres_enabled(self) -> bool:
@@ -385,46 +386,226 @@ class Scaffolder:
         mariadb_yml = self.services_enabled / "mariadb.yml"
         return mariadb_yml.exists()
 
+    def _enable_dependency(self, service: str) -> bool:
+        """Enable a dependency service (create symlink and run scaffold).
+
+        Args:
+            service: Service name to enable
+
+        Returns:
+            True if enabled successfully, False on error
+        """
+        service_yml = self.services_enabled / f"{service}.yml"
+        available_yml = self.services_available / f"{service}.yml"
+
+        # Check if already enabled
+        if service_yml.exists():
+            return True
+
+        # Check if service exists in available
+        if not available_yml.exists():
+            print(f"  Error: Dependency '{service}' not found in services-available/", file=sys.stderr)
+            return False
+
+        print(f"  Auto-enabling dependency '{service}'...")
+
+        # Create symlink
+        try:
+            service_yml.symlink_to(f"../services-available/{service}.yml")
+            print(f"    Created symlink: {service}.yml -> ../services-available/{service}.yml")
+        except Exception as e:
+            print(f"  Error creating symlink for '{service}': {e}", file=sys.stderr)
+            return False
+
+        # Run scaffold for the dependency (but don't recurse infinitely)
+        # Create a new scaffolder to avoid state issues
+        dep_scaffolder = Scaffolder(str(self.base_dir), self._executor)
+        if dep_scaffolder.has_scaffold(service):
+            print(f"    Running scaffold for '{service}'...")
+            if not dep_scaffolder.build(service):
+                print(f"  Warning: Scaffold failed for '{service}', continuing anyway", file=sys.stderr)
+
+        return True
+
+    def _start_dependency(self, service: str, wait_seconds: int = 30) -> bool:
+        """Start a dependency service and wait for it to be ready.
+
+        Args:
+            service: Service name to start
+            wait_seconds: Seconds to wait for service to be ready
+
+        Returns:
+            True if started successfully, False on error
+        """
+        import time
+
+        print(f"  Starting dependency '{service}'...")
+
+        # Run docker compose up
+        try:
+            result = self._executor.run(
+                [
+                    "docker", "compose",
+                    "--project-directory", str(self.base_dir),
+                    "-f", f"services-enabled/{service}.yml",
+                    "up", "-d", service
+                ],
+                capture_output=True,
+                check=False,
+            )
+
+            if result.returncode != 0:
+                print(f"  Error starting '{service}': {result.stderr}", file=sys.stderr)
+                return False
+
+            print(f"    Started '{service}', waiting for ready state...")
+        except Exception as e:
+            print(f"  Error starting '{service}': {e}", file=sys.stderr)
+            return False
+
+        # Wait for container to be running/healthy
+        for i in range(wait_seconds):
+            try:
+                result = self._executor.run(
+                    ["docker", "inspect", "-f", "{{.State.Status}}", service],
+                    capture_output=True,
+                    check=False,
+                )
+                status = result.stdout.strip() if result.stdout else ""
+
+                if status == "running":
+                    # Check for health status if available
+                    health_result = self._executor.run(
+                        ["docker", "inspect", "-f", "{{.State.Health.Status}}", service],
+                        capture_output=True,
+                        check=False,
+                    )
+                    health = health_result.stdout.strip() if health_result.stdout else ""
+
+                    if health == "healthy" or health == "":
+                        print(f"    '{service}' is ready")
+                        return True
+                    elif health == "starting":
+                        pass  # Keep waiting
+                    # For unhealthy, keep waiting a bit more
+
+                time.sleep(1)
+            except Exception:
+                time.sleep(1)
+
+        print(f"  Warning: '{service}' may not be fully ready after {wait_seconds}s", file=sys.stderr)
+        return True  # Return True anyway to attempt database creation
+
+    def _ensure_dependency(self, service: str, wait_seconds: int = 30) -> bool:
+        """Ensure a dependency service is enabled and running.
+
+        Args:
+            service: Service name
+            wait_seconds: Seconds to wait for service to be ready
+
+        Returns:
+            True if dependency is ready, False on error
+        """
+        # Enable if not already
+        if not self._enable_dependency(service):
+            return False
+
+        # Check if running
+        try:
+            result = self._executor.run(
+                ["docker", "inspect", "-f", "{{.State.Status}}", service],
+                capture_output=True,
+                check=False,
+            )
+            status = result.stdout.strip() if result.stdout else ""
+
+            if status == "running":
+                return True  # Already running
+        except Exception:
+            pass  # Not running, need to start
+
+        # Start the service
+        return self._start_dependency(service, wait_seconds)
+
+    def _ensure_required_services(self, service: str, metadata: dict) -> bool:
+        """Ensure all required services are enabled and running.
+
+        Parses the 'requires' metadata which can be a comma-separated list
+        of service names that must be enabled and running before this service.
+
+        Args:
+            service: Service name (for logging)
+            metadata: Parsed metadata from service YAML
+
+        Returns:
+            True if all required services are ready, False on error
+        """
+        requires = metadata.get("requires", "")
+        if not requires:
+            return True
+
+        # Parse comma-separated list of required services
+        required_services = [s.strip() for s in requires.split(",") if s.strip()]
+        if not required_services:
+            return True
+
+        for req_service in required_services:
+            # Skip if it's the same service (avoid infinite loop)
+            if req_service == service:
+                continue
+
+            # Check if required service exists
+            req_yml = self.services_available / f"{req_service}.yml"
+            if not req_yml.exists():
+                print(f"  Warning: Required service '{req_service}' not found in services-available/", file=sys.stderr)
+                continue
+
+            # Ensure the required service is enabled and running
+            if not self._ensure_dependency(req_service):
+                print(f"  Error: Failed to enable/start required service '{req_service}'", file=sys.stderr)
+                return False
+
+        return True
+
     def _create_postgres_database(self, service: str, metadata: dict) -> bool:
         """Create PostgreSQL database if metadata indicates it's needed.
-        
+
         Args:
             service: Service name
             metadata: Parsed metadata from service YAML
-            
+
         Returns:
             True if database created successfully or not needed, False on error
         """
         # Check if service needs postgres
         if metadata.get("database") != "postgres":
             return True  # Not a postgres service, nothing to do
-        
+
         # Check if database_name is specified
         database_name = metadata.get("database_name")
         if not database_name:
             print(f"  Warning: Service '{service}' uses postgres but no database_name specified", file=sys.stderr)
             return True  # Not a fatal error
-        
+
         # Check if postgres manager is available
         if not POSTGRES_MANAGER_AVAILABLE:
             print(f"  Warning: postgres_manager not available, skipping database creation", file=sys.stderr)
             return True
-        
-        # Check if postgres service is enabled
-        if not self._is_postgres_enabled():
-            print(f"  Warning: Service '{service}' needs postgres but postgres service is not enabled", file=sys.stderr)
-            print(f"           Enable postgres with: make enable-service postgres", file=sys.stderr)
-            return True  # Not a fatal error, just a warning
-        
+
+        # Auto-enable and start postgres if needed
+        if not self._ensure_dependency("postgres"):
+            print(f"  Error: Failed to enable/start postgres dependency", file=sys.stderr)
+            return False
+
         # Create database
         try:
             print(f"  Creating PostgreSQL database '{database_name}'...")
             pg_manager = PostgresManager()
-            
+
             if pg_manager.database_exists(database_name):
                 print(f"    Database '{database_name}' already exists")
                 return True
-            
+
             pg_manager.create_database(database_name)
             print(f"    Database '{database_name}' created successfully")
             return True
@@ -434,34 +615,33 @@ class Scaffolder:
 
     def _assign_valkey_database(self, service: str, metadata: dict) -> bool:
         """Assign Valkey database number if metadata indicates it's needed.
-        
+
         Args:
             service: Service name
             metadata: Parsed metadata from service YAML
-            
+
         Returns:
             True if database assigned successfully or not needed, False on error
         """
         # Check if service needs valkey
         if metadata.get("cache") != "valkey":
             return True  # Not a valkey service, nothing to do
-        
+
         # Check if valkey manager is available
         if not VALKEY_MANAGER_AVAILABLE:
             print(f"  Warning: valkey_manager not available, skipping database assignment", file=sys.stderr)
             return True
-        
-        # Check if valkey service is enabled
-        if not self._is_valkey_enabled():
-            print(f"  Warning: Service '{service}' needs valkey but valkey service is not enabled", file=sys.stderr)
-            print(f"           Enable valkey with: make enable-service valkey", file=sys.stderr)
-            return True  # Not a fatal error, just a warning
-        
+
+        # Auto-enable and start valkey if needed
+        if not self._ensure_dependency("valkey"):
+            print(f"  Error: Failed to enable/start valkey dependency", file=sys.stderr)
+            return False
+
         # Assign database number
         try:
             print(f"  Assigning Valkey database for '{service}'...")
             valkey_manager = ValkeyManager()
-            
+
             # Check for preferred database number in metadata
             preferred_db = None
             if "cache_db" in metadata:
@@ -469,11 +649,11 @@ class Scaffolder:
                     preferred_db = int(metadata["cache_db"])
                 except ValueError:
                     print(f"  Warning: Invalid cache_db value '{metadata['cache_db']}', auto-assigning", file=sys.stderr)
-            
+
             code, db_num = valkey_manager.assign_database(service, preferred_db)
             if code != 0:
                 return False
-            
+
             print(f"    Assigned DB {db_num} to '{service}'")
             return True
         except Exception as e:
@@ -482,44 +662,43 @@ class Scaffolder:
 
     def _create_mariadb_database(self, service: str, metadata: dict) -> bool:
         """Create MariaDB database if metadata indicates it's needed.
-        
+
         Args:
             service: Service name
             metadata: Parsed metadata from service YAML
-            
+
         Returns:
             True if database created successfully or not needed, False on error
         """
         # Check if service needs mariadb
         if metadata.get("database") != "mariadb":
             return True  # Not a mariadb service, nothing to do
-        
+
         # Check if database_name is specified
         database_name = metadata.get("database_name")
         if not database_name:
             print(f"  Warning: Service '{service}' uses mariadb but no database_name specified", file=sys.stderr)
             return True  # Not a fatal error
-        
+
         # Check if mariadb manager is available
         if not MARIADB_MANAGER_AVAILABLE:
             print(f"  Warning: mariadb_manager not available, skipping database creation", file=sys.stderr)
             return True
-        
-        # Check if mariadb service is enabled
-        if not self._is_mariadb_enabled():
-            print(f"  Warning: Service '{service}' needs mariadb but mariadb service is not enabled", file=sys.stderr)
-            print(f"           Enable mariadb with: make enable-service mariadb", file=sys.stderr)
-            return True  # Not a fatal error, just a warning
-        
+
+        # Auto-enable and start mariadb if needed
+        if not self._ensure_dependency("mariadb"):
+            print(f"  Error: Failed to enable/start mariadb dependency", file=sys.stderr)
+            return False
+
         # Create database
         try:
             print(f"  Creating MariaDB database '{database_name}'...")
             maria_manager = MariaDBManager()
-            
+
             if maria_manager.database_exists(database_name):
                 print(f"    Database '{database_name}' already exists")
                 return True
-            
+
             maria_manager.create_database(database_name)
             print(f"    Database '{database_name}' created successfully")
             return True
@@ -596,6 +775,11 @@ class Scaffolder:
 
         # Parse metadata from service YAML
         metadata = self._parse_metadata(service)
+
+        # Phase -2: Ensure required services are enabled and running
+        if not self._ensure_required_services(service, metadata):
+            print(f"  Error: Failed to satisfy required services", file=sys.stderr)
+            success = False
 
         # Phase -1: Create PostgreSQL database if needed (before volumes)
         if not self._create_postgres_database(service, metadata):

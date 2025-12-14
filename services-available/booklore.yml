@@ -28,8 +28,6 @@ services:
       - TZ=${TZ}
       - DATABASE_USERNAME=${BL_MYSQL_USER:-${MARIADB_USER:-admin}}
       - DATABASE_PASSWORD=${BL_MYSQL_PASSWORD:-${MARIADB_PASS}}      
-    depends_on:
-      - mariadb
     labels:
       - joyride.host.name=${BOOKLORE_HOST_NAME:-booklore}.${HOST_DOMAIN}
       - traefik.enable=${BOOKLORE_TRAEFIK_ENABLED:-true}

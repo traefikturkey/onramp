@@ -30,9 +30,6 @@ services:
       - REDIS_HOST=valkey
       - REDIS_PORT=6379
       - REDIS_DB=0  # Note: kaizoku ignores this and always uses DB 0
-    depends_on:
-      - postgres
-      - valkey
     labels:
       - joyride.host.name=${KAIZOKU_CONTAINER_NAME:-kaizoku}.${HOST_DOMAIN}
       - traefik.enable=true

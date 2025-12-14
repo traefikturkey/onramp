@@ -45,8 +45,6 @@ services:
     environment:
       DATABASE_URL: postgresql://${DOCKERIZALO_POSTGRES_USER:-${PG_USER:-admin}}:${DOCKERIZALO_POSTGRES_PASSWORD:-${PG_PASS}}@postgres:5432/dockerizalo?schema=public
       APP_SECRET: hitthekeyboardwithyourheadhere
-    depends_on:
-      - postgres
     labels:
       - traefik.enable=false
 

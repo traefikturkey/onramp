@@ -19,8 +19,6 @@ services:
       - CORS_ORIGINS=https://${KANEO_HOST_NAME:-kaneo}.${HOST_DOMAIN}
     networks:
       - traefik
-    depends_on:
-      - postgres
     labels:
       - joyride.host.name=${KANEO_API_HOST_NAME:-kaneo-api}.${HOST_DOMAIN}
       - traefik.enable=${KANEO_TRAEFIK_ENABLED:-true}

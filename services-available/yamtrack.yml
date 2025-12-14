@@ -13,8 +13,6 @@ services:
     image: ghcr.io/fuzzygrim/yamtrack:${YAMTRACK_DOCKER_TAG:-latest}
     container_name: ${YAMTRACK_CONTAINER_NAME:-yamtrack}
     restart: ${YAMTRACK_RESTART:-unless-stopped}
-    depends_on:
-      - valkey
     mem_limit: ${YAMTRACK_MEM_LIMIT:-200g}
     networks:
       - traefik

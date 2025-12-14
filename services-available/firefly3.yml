@@ -17,8 +17,6 @@ services:
     image: fireflyiii/core:${FIREFLY3_DOCKER_TAG:-latest}
     container_name: ${FIREFLY3_CONTAINER_NAME:-firefly}
     restart: ${FIREFLY3_RESTART:-unless-stopped}
-    depends_on:
-      - mariadb
     networks:
       - traefik
       - firefly_iii

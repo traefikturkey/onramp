@@ -31,9 +31,6 @@ services:
       - DATABASE_USER=${MANYFOLD_DB_USER:-${PG_USER:-admin}}
       - DATABASE_PASSWORD=${MANYFOLD_DB_PASSWORD:-${PG_PASS}}
       - DATABASE_NAME=manyfold
-    depends_on:
-      - postgres
-      - valkey
     labels:
       - joyride.host.name=${MANYFOLD_HOST_NAME:-manyfold}.${HOST_DOMAIN}
       - traefik.enable=${MANYFOLD_TRAEFIK_ENABLED:-true}

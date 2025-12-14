@@ -12,8 +12,6 @@ services:
     image: odoo:${ODOO_DOCKER_TAG:-latest}
     container_name: ${ODOO_CONTAINER_NAME:-odoo}
     restart: ${ODOO_RESTART:-unless-stopped}
-    depends_on:
-      - postgres
     networks:
       - traefik
     volumes:

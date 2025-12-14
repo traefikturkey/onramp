@@ -14,8 +14,6 @@ services:
     restart: ${NOCODB_RESTART:-unless-stopped}
     networks:
       - traefik
-    depends_on:
-      - postgres
     volumes:
       - ./etc/nocodb/data:/usr/app/data
       - /etc/localtime:/etc/localtime:ro

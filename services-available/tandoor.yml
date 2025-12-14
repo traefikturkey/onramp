@@ -16,8 +16,6 @@ services:
     restart: ${TANDOOR_RESTART:-unless-stopped}
     networks:
       - traefik
-    depends_on:
-      - postgres
     volumes:
       - ./etc/tandoor/static:/opt/recipes/staticfiles
       - ./etc/tandoor/media:/opt/recipes/mediafiles      

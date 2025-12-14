@@ -22,8 +22,6 @@ services:
       - unimus-dbnet
     environment:
       - JAVA_OPTS=-Xms256M -Xmx1024M -Dunimus.core.connect-timeout=20000 -Dunimus.core.inter-connection-delay=1000 -Dunimus.core.cli-expect-timeout=30000
-    depends_on:
-      - mariadb
     restart: ${UNIMUS_RESTART_POLICY:-unless-stopped}
     labels:
       - joyride.host.name=${UNIMUS_CONTAINER_NAME:-unimus}.${HOST_DOMAIN}

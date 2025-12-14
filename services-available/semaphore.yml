@@ -14,8 +14,6 @@ services:
     restart: ${SEMAPHORE_RESTART:-unless-stopped}
     networks:
       - traefik
-    depends_on:
-      - mariadb
     volumes:
       - ./etc/semaphore/inventory.txt:/inventory:ro
       - ./etc/semaphore/authorized_keys.txt:/authorized_keys:ro

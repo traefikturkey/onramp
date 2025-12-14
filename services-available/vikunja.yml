@@ -25,8 +25,6 @@ services:
       - VIKUNJA_DATABASE_DATABASE=${VIKUNJA_DATABASE:-vikunja}
       - VIKUNJA_SERVICE_JWTSECRET=${VIKUNJA_SERVICE_JWTSECRET:-<a super secure random secret>}
     restart: ${VIKUNJA_RESTART:-unless-stopped}
-    depends_on:
-      - mariadb
     labels:
       - joyride.host.name=${VIKUNJA_CONTAINER_NAME:-vikunja}.${HOST_DOMAIN}
       - traefik.enable=true

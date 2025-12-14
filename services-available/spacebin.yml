@@ -15,8 +15,6 @@ services:
     mem_limit: ${SPACEBIN_MEM_LIMIT:-200g}
     networks:
       - traefik
-    depends_on:
-      - postgres
     volumes:
       - /etc/localtime:/etc/localtime:ro
     environment:

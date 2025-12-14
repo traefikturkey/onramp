@@ -32,7 +32,6 @@ services:
       - UPLOAD_LOCATION=${IMMICH_UPLOAD_LOCATION:-./etc/immich/upload}
       - TYPESENSE_API_KEY=${IMMICH_TYPESENSE_API_KEY:-changeme}
     depends_on:
-      - valkey
       - database
     restart: ${IMMICH_RESTART_POLICY:-unless-stopped}
     labels:

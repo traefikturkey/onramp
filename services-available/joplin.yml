@@ -16,8 +16,6 @@ services:
     restart: ${JOPLIN_RESTART:-unless-stopped}
     networks:
       - traefik
-    depends_on:
-      - postgres
     volumes:
       - /etc/localtime:/etc/localtime:ro
     environment:

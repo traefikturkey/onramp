@@ -15,8 +15,6 @@ services:
     restart: ${ITFLOW_RESTART:-unless-stopped}
     networks:
       - traefik
-    depends_on:
-      - mariadb
     volumes:
       - ./etc/itflow/www:/var/www/html
       - /etc/localtime:/etc/localtime:ro

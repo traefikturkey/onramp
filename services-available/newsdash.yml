@@ -18,8 +18,6 @@ services:
     volumes:
       - ./etc/newsdash:/config # <==== this probably needs changed ====>
       - /etc/localtime:/etc/localtime:ro
-    depends_on:
-      - valkey
     environment:
       - REDIS_URL=redis://valkey:6379/4
     labels:

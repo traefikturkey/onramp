@@ -20,15 +20,12 @@ services:
     volumes:
       - ./etc/docmost/app:/app/data/storage
       - /etc/localtime:/etc/localtime:ro
-    depends_on:
-      - postgres
-      - valkey
     environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
       - APP_URL=http://localhost:3000
-      - APP_SECRET=${DOCMOST_SECRET:-unique-super-secret-string}
+      - APP_SECRET=${DOCMOST_SECRET:-unique-super-secret-string-change-me}
       - DATABASE_URL=postgresql://${DOCMOST_POSTGRES_USER:-${PG_USER:-admin}}:${DOCMOST_POSTGRES_PASSWORD:-${PG_PASS}}@postgres:5432/docmost?schema=public
       - REDIS_URL=redis://valkey:6379/5
     labels:

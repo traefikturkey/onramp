@@ -16,8 +16,6 @@ services:
     # mem_limit: ${MEDIAMANAGER_MEM_LIMIT:-200g}
     networks:
       - traefik
-    depends_on:
-      - postgres
     volumes:
       - ./etc/mediamanager/backend:/data # <==== this probably needs changed
       - /etc/localtime:/etc/localtime:ro

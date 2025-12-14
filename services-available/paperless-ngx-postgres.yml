@@ -47,7 +47,6 @@ services:
     networks:
       - traefik
     depends_on:
-      - valkey
       - db
       - gotenberg
       - tika

@@ -9,6 +9,7 @@ volumes:
 
 # description: Imports data into firefly iii, a personal finance manager
 # https://github.com/firefly-iii/firefly-iii/tree/main
+# requires: firefly3
 
 services:
   firefly-data-importer:
@@ -20,8 +21,6 @@ services:
       - traefik
     ports:
       - '81:8080'
-    depends_on:
-      - firefly3
     environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}

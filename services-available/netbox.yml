@@ -13,9 +13,6 @@ services:
     image: lscr.io/linuxserver/netbox:${NETBOX_DOCKER_TAG:-latest}
     container_name: ${NETBOX_CONTAINER_NAME:-netbox}
     restart: unless-stopped
-    depends_on:
-      - postgres
-      - valkey
     healthcheck:
       start_period: 90s
     networks:
