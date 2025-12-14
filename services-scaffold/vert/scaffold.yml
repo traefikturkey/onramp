@@ -1,0 +1,3 @@
+files:
+  - source: default.conf.static
+    dest: default.conf

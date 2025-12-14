@@ -6,5 +6,6 @@ services:
     image: ubuntu
     container_name: ubuntu
     restart: on-failure
+    command: sleep infinity
     volumes:
       - ${UBUNTU_TEST_VOLUME:-.}:/mnt

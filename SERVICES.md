@@ -253,7 +253,7 @@
 - [portainer](https://github.com/portainer/portainer) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/portainer.yml)): Lightweight container management ui
 - [postfix](https://github.com/juanluisbaptiste/docker-postfix) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/postfix.yml)): Mail transfer agent (mta) for sending and receiving emails
 - [postgres](https://hub.docker.com/_/postgres) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/postgres.yml)): Shared PostgreSQL database server for multiple services
-- [postman](https://hub.docker.com/r/kasmweb/postman) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/postman.yml)): Collaboration platform for api development
+- [postman](https://github.com/hoppscotch/hoppscotch) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/postman.yml)): Hoppscotch - Open-source API development ecosystem (Postman alternative)
 - [prestashop](https://hub.docker.com/r/prestashop/prestashop/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/prestashop.yml)): E-commerce platform
 - [prometheus-alertmanager](https://github.com/prometheus/alertmanager) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/prometheus-alertmanager.yml)): Manages alerts from prometheus monitoring
 - [prometheus-all](https://github.com/prometheus/prometheus) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/prometheus-all.yml)): Collection of prometheus exporters and dashboards
@@ -297,7 +297,7 @@
 - [semaphore](https://docs.ansible-semaphore.com/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/semaphore.yml)): UI and API for Ansible,Terraform/OpenTofu/Terragrunt
 - [sftp-server](https://github.com/drakkan/sftpgo) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/sftp-server.yml)): Secure ftp server
 - [shlink](https://shlink.io/documentation/install-docker-image/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/shlink.yml)): Self-Hosted URL shortener.
-- [snapdrop](https://hub.docker.com/r/linuxserver/snapdrop) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/snapdrop.yml)): Web-based file sharing tool for local networks
+- [snapdrop](https://docs.linuxserver.io/images/docker-pairdrop/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/snapdrop.yml)): PairDrop - Web-based file sharing tool for local networks (Snapdrop fork with improvements)
 - [sonarr](https://hub.docker.com/r/linuxserver/sonarr) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/sonarr.yml)): Manages tv show collections and downloads
 - [spacebin](https://github.com/lukewhrit/spacebin) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/spacebin.yml)): spacebin: text sharing for the final frontier (Pastebin alternative)
 - [sqliteweb](https://hub.docker.com/r/tomdesinto/sqliteweb/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/sqliteweb.yml)): Web-based SQLite Database Browser

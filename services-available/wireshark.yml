@@ -17,7 +17,7 @@ services:
       - NET_ADMIN
     # security_opt:
     #   - seccomp:unconfined #optional
-    network_mode: host
+    # network_mode: host # Commented out - conflicts with Traefik network
     ports:
       - 13000:3000
     volumes:
@@ -27,6 +27,7 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
+      - DISABLE_IPV6=true
     labels:
       - joyride.host.name=${WIRESHARK_CONTAINER_NAME:-wireshark}.${HOST_DOMAIN}
       - traefik.enable=true

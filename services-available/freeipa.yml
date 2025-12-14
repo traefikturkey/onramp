@@ -8,7 +8,7 @@ networks:
 
 services:
   freeipa:
-    image: quay.io/freeipa/freeipa-server:${FREEIPA_DOCKER_TAG:-latest}
+    image: freeipa/freeipa-server:${FREEIPA_DOCKER_TAG:-rocky-9}
     container_name: ${FREEIPA_CONTAINER_NAME:-freeipa}
     restart: ${FREEIPA_RESTART:-unless-stopped}
     networks:

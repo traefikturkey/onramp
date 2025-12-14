@@ -8,6 +8,13 @@ networks:
 # https://github.com/paperless-ngx/paperless-ngx
 # https://hub.docker.com/r/linuxserver/paperless-ngx
 # https://docs.paperless-ngx.com/
+#
+# IMPORTANT: Upgraded from postgres:13 to postgres:16
+# If you get "PostgreSQL 14 or later is required" error after upgrade:
+# 1. make stop-service paperless-ngx-postgres
+# 2. sudo rm -rf /apps/onramp/etc/paperless-ngx-postgres/pgdata/*
+# 3. make start-service paperless-ngx-postgres
+# (This recreates the database - only do this if data is not important)
 
 services:
   broker:
@@ -19,7 +26,7 @@ services:
       - ./etc/paperless-ngx-postgres/redisdata:/data
 
   db:
-    image: postgres:13
+    image: postgres:16
     restart: unless-stopped
     volumes:
       - ./etc/paperless-ngx-postgres/pgdata:/var/lib/postgresql/data

@@ -1,0 +1,3 @@
+files:
+  - source: mosquitto.conf.static
+    dest: config/mosquitto.conf

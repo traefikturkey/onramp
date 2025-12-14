@@ -32,7 +32,7 @@ services:
       - CACHE_DRIVER="redis"
       - SESSION_DRIVER="redis"
       - QUEUE_DRIVER="redis"
-      - REDIS_HOST="redis"
+      - REDIS_HOST="valkey"
       - DB_HOST=mariadb
       - TRUSTED_PROXIES="*"
       - APP_URL="https://${PTERODACTYL_PANEL_CONTAINER_NAME:-panel}.${HOST_DOMAIN}"

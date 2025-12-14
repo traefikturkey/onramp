@@ -37,7 +37,7 @@ services:
         reservations:
           devices:
             - driver: nvidia
-              count: ${INFINITY_GPU_COUNT:-1}
+              count: ${INFINITY_GPU_COUNT:-all}
               capabilities: [gpu]
     labels:
       - joyride.host.name=${INFINITY_CONTAINER_NAME:-infinity}.${HOST_DOMAIN}

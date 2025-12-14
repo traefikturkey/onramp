@@ -2,13 +2,13 @@ networks:
   traefik:
     external: true
 
-# description: Web-based file sharing tool for local networks
-# https://hub.docker.com/r/linuxserver/snapdrop
+# description: PairDrop - Web-based file sharing tool for local networks (Snapdrop fork with improvements)
+# https://docs.linuxserver.io/images/docker-pairdrop/
 
 services:
   snapdrop:
-    image: lscr.io/linuxserver/snapdrop:${SNAPDROP_DOCKER_TAG:-latest}
-    container_name: snapdrop
+    image: lscr.io/linuxserver/pairdrop:${SNAPDROP_DOCKER_TAG:-latest}
+    container_name: pairdrop
     restart: unless-stopped
     networks:
       - traefik

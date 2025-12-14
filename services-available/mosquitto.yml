@@ -13,7 +13,7 @@ services:
       - ./etc/mosquitto/log:/mosquitto/log
     ports:
       - 1883:1883
-      - 9001:9001
+      - 9002:9001
     labels:
       - autoheal=true
       - traefik.enable=false

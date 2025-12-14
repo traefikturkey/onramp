@@ -15,11 +15,12 @@ services:
       - traefik
     volumes:
       - ${SURREALDB_DIR:-./media/databases/surrealdb}:/data
-    entrypoint: 
+    command:
       # https://surrealdb.com/docs/surrealdb/cli/start
-      - /surreal 
-      - start 
-      - --auth
+      - start
+      - --user=${SURREALDB_USER:-surreal}
+      - --pass=${SURREALDB_PASS:-supersecretpassword497}
+      - --log=${SURREALDB_LOG_LEVEL:-info}
       - file:/data/${SURREALDB_NAME:-database} 
     environment:
       # none, full, error, warn, info, debug, trace

@@ -8,7 +8,7 @@ networks:
 
 services:
   postgres:
-    image: postgres14
+    image: postgres:14
     container_name: radarr-postgres
     restart: unless-stopped
     volumes:
@@ -21,7 +21,7 @@ services:
       - POSTGRES_USER=${RADARR_PG_USER:-radarr}
       - POSTGRES_MULTIPLE_DATABASES=radarr-main,radarr-log
     ports:
-      - 5432:5432
+      - 5433:5432
     labels:
       - traefik.enable=false
       - com.centurylinklabs.watchtower.enable=false

@@ -1,0 +1,11 @@
+listener 1883
+listener 9001
+protocol websockets
+
+persistence true
+persistence_location /mosquitto/data/
+
+log_dest file /mosquitto/log/mosquitto.log
+log_dest stdout
+
+allow_anonymous true

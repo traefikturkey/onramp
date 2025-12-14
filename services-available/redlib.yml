@@ -15,12 +15,14 @@ services:
     mem_limit: ${REDLIB_MEM_LIMIT:-200g}
     networks:
       - traefik
+    command: ["redlib", "--ipv4-only"]
     volumes:
       - /etc/localtime:/etc/localtime:ro
     environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
+      - REDLIB_ADDRESS=0.0.0.0
       - ROBOTS_DISABLE_INDEXING=${REBLIB_DISABLE_INDEXING:-on}
       - SFW_ONLY=${REDLIB_SFW_ONLY:-off}
       - THEME=${REDLIB_THEME:-system}

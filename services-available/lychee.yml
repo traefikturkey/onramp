@@ -7,7 +7,7 @@ networks:
 
 services:
   lychee:
-    image: kdelfour/lychee-docker:${LYCHEE_DOCKER_TAG:-latest}
+    image: lscr.io/linuxserver/lychee:${LYCHEE_DOCKER_TAG:-latest}
     container_name: lychee
     restart: unless-stopped
     networks:

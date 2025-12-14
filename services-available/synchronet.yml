@@ -15,12 +15,12 @@ services:
     networks:
       - traefik
     ports:
-      - 80:80 #http
-      - 443:443 #https
+      # - 80:80 #http (commented - use Traefik instead)
+      # - 443:443 #https (commented - use Traefik instead)
       - 1123:1123 #ws-term
       - 11235:11235 #wss-term
       - "21:21" #ftp
-      - "22:22" #ssh
+      - "2222:22" #ssh (changed from 22:22 to avoid conflict with system SSH)
       - "23:23" #telnet
       - "513:513" #rlogin
       - "64:64" #petscii 40-column
