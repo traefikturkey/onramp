@@ -34,6 +34,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./etc/wallabag/images:/var/www/wallabag/web/assets/images
+      - ./etc/wallabag/nginx.conf:/etc/nginx/nginx.conf:ro
     labels:
       - joyride.host.name=${WALLABAG_CONTAINER_NAME:-wallabag}.${HOST_DOMAIN}
       - traefik.enable=true
