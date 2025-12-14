@@ -70,8 +70,13 @@ class BackupManager:
     def _run_cmd(self, cmd: list[str], sudo: bool = False) -> tuple[int, str, str]:
         """Run a shell command."""
         if sudo:
-            cmd = ["sudo"] + cmd
-        result = self._executor.run(cmd)
+            # Try with sudo first, fall back to direct execution if sudo not available
+            result = self._executor.run(["sudo"] + cmd)
+            # Check if sudo not found (error message or exit code)
+            if result.returncode != 0 and "sudo" in result.stderr.lower():
+                result = self._executor.run(cmd)
+        else:
+            result = self._executor.run(cmd)
         return result.returncode, result.stdout, result.stderr
 
     def ensure_backup_dir(self) -> bool:
