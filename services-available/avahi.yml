@@ -1,15 +1,17 @@
 # description: Implements mdns/dns-sd for local network service discovery
-# https://github.com/MattKobayashi/docker-avahi
+# https://github.com/flungo-docker/avahi
 
 services:
   avahi:
-    image: ghcr.io/mattkobayashi/docker-avahi:${AVAHI_DOCKER_TAG:-latest}
+    image: flungo/avahi:${AVAHI_DOCKER_TAG:-latest}
     container_name: ${AVAHI_CONTAINER_NAME:-avahi}
     restart: unless-stopped
     network_mode: host
     environment:
       - SERVER_HOST_NAME=${HOST_NAME}
       - SERVER_DOMAIN_NAME=${HOST_DOMAIN}
+      # Enable reflector if needed for multi-network mDNS
+      - REFLECTOR_ENABLE_REFLECTOR=${AVAHI_ENABLE_REFLECTOR:-no}
     volumes:
       - /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket
     labels:

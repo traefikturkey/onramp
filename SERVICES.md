@@ -41,7 +41,7 @@
 - [authentik](https://goauthentik.io/docs/installation/docker-compose) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/authentik.yml)): identity and access management solution
 - [autoheal](https://github.com/willfarrell/docker-autoheal) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/autoheal.yml)): Restarts unhealthy docker containers automatically
 - [autokuma](https://github.com/BigBoot/AutoKuma) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/autokuma.yml)): Automate the setup of Uptime Kuma using docker labels
-- [avahi](https://github.com/MattKobayashi/docker-avahi) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/avahi.yml)): Implements mdns/dns-sd for local network service discovery
+- [avahi](https://github.com/flungo-docker/avahi) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/avahi.yml)): Implements mdns/dns-sd for local network service discovery
 
 
 ## B

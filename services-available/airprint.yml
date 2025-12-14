@@ -1,8 +1,5 @@
-networks:
-  traefik:
-    external: true
-
 # description: Enables apple airprint functionality for non-airprint printers using CUPS and Avahi
+# Note: Uses network_mode: host for multicast support, so no traefik network
 # https://github.com/chuckcharlie/cups-avahi-airprint
 
 services:
@@ -10,11 +7,9 @@ services:
     image: chuckcharlie/cups-avahi-airprint:${AIRPRINT_DOCKER_TAG:-latest}
     container_name: ${AIRPRINT_CONTAINER_NAME:-airprint}
     restart: unless-stopped
-    networks:
-      - traefik
-    # Host mode is needed for AirPrint © Apple TM to work
-    # This is required to support multicasting which is needed for AirPrint © Apple TM.
-    # Can be disabled an replaced with the port for manual operation
+    # Host mode is needed for AirPrint to work
+    # This is required to support multicasting which is needed for AirPrint.
+    # Note: network_mode host is incompatible with networks: block
     network_mode: "host"
     volumes:
       - ./etc/airprint:/config

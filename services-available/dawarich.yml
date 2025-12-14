@@ -65,10 +65,8 @@ services:
     depends_on:
       dawarich_db:
         condition: service_healthy
-        restart: true
       dawarich_redis:
         condition: service_healthy
-        restart: true
     deploy:
       resources:
         limits:
@@ -129,12 +127,10 @@ services:
     depends_on:
       dawarich_db:
         condition: service_healthy
-        restart: true
-      valkey:
-        restart: true
+      dawarich_redis:
+        condition: service_healthy
       dawarich:
         condition: service_healthy
-        restart: true
     deploy:
       resources:
         limits:
@@ -150,8 +146,8 @@ services:
     networks:
       - traefik
     environment:
-      - POSTGRES_USER=${DAWARICH_POSTGRES_USER:-postgres} 
-      - POSTGRES_PASSWORD=${DAWARICH_POSTGRES_PW:-password} 
+      - POSTGRES_USER=${DAWARICH_POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${DAWARICH_POSTGRES_PW:-password}
       - POSTGRES_DB=dawarich_production
     restart: always
     healthcheck:
@@ -160,3 +156,18 @@ services:
       retries: 5
       start_period: 30s
       timeout: 10s
+
+  dawarich_redis:
+    image: valkey/valkey:8-alpine
+    container_name: dawarich_redis
+    networks:
+      - traefik
+    volumes:
+      - ./etc/dawarich/redis:/data
+    restart: always
+    healthcheck:
+      test: ["CMD", "valkey-cli", "ping"]
+      interval: 10s
+      retries: 5
+      start_period: 10s
+      timeout: 5s
