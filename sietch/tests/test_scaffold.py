@@ -404,6 +404,42 @@ class TestRenderTemplate:
 
         assert result is False
 
+    def test_skips_existing_files_by_default(self, tmp_path, capsys):
+        """Should not overwrite existing destination files."""
+        mock_exec = MockCommandExecutor()
+        scaffolder = Scaffolder(str(tmp_path), executor=mock_exec)
+
+        source = tmp_path / "template.txt"
+        source.write_text("NEW_CONTENT=${VAR}")
+
+        dest = tmp_path / "output.txt"
+        dest.write_text("EXISTING_CONTENT")
+
+        result = scaffolder.render_template(source, dest)
+
+        assert result is True
+        assert dest.read_text() == "EXISTING_CONTENT"  # Not overwritten
+        captured = capsys.readouterr()
+        assert "Skipped (exists)" in captured.out
+
+    def test_overwrites_when_skip_if_exists_false(self, tmp_path, monkeypatch):
+        """Should overwrite existing files when skip_if_exists=False."""
+        monkeypatch.setenv("VAR", "new_value")
+
+        mock_exec = MockCommandExecutor()
+        scaffolder = Scaffolder(str(tmp_path), executor=mock_exec)
+
+        source = tmp_path / "template.txt"
+        source.write_text("CONTENT=${VAR}")
+
+        dest = tmp_path / "output.txt"
+        dest.write_text("EXISTING_CONTENT")
+
+        result = scaffolder.render_template(source, dest, skip_if_exists=False)
+
+        assert result is True
+        assert dest.read_text() == "CONTENT=new_value"  # Overwritten
+
 
 class TestCopyStatic:
     """Tests for copy_static() - static file copying."""

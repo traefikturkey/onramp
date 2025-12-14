@@ -225,9 +225,20 @@ class Scaffolder:
 
         return pattern.sub(replace_var, content)
 
-    def render_template(self, source: Path, dest: Path) -> bool:
-        """Render a template file using Python string substitution."""
+    def render_template(self, source: Path, dest: Path, skip_if_exists: bool = True) -> bool:
+        """Render a template file using Python string substitution.
+
+        Args:
+            source: Template file path
+            dest: Output file path
+            skip_if_exists: If True, don't overwrite existing files (default: True)
+        """
         try:
+            # Skip if destination exists (don't overwrite user configs)
+            if skip_if_exists and dest.exists():
+                print(f"  Skipped (exists): {dest}")
+                return True
+
             dest.parent.mkdir(parents=True, exist_ok=True)
             with open(source, "r") as f:
                 template_content = f.read()
