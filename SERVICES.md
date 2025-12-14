@@ -192,7 +192,7 @@
 - [mailhog](https://github.com/mailhog/MailHog) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/mailhog.yml)): Mail testing tool for developers
 - [mailrise](https://github.com/YoRyan/mailrise) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/mailrise.yml)): email smtp relay service for apprise notifications
 - [maintainerr](https://github.com/jorenn92/Maintainerr) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/maintainerr.yml)): managing media library
-- [makemkv](https://github.com/linuxserver/docker-makemkv) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/makemkv.yml)): Fully automated container for MakeMKV with Web GUI
+- [makemkv](https://github.com/jlesage/docker-makemkv) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/makemkv.yml)): Fully automated container for MakeMKV with Web GUI
 - [manyfold](https://github.com/manyfold3d/manyfold) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/manyfold.yml)): A self-hosted digital asset manager for 3d print files
 - [mariadb](https://hub.docker.com/_/mariadb) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/mariadb.yml)): Shared MariaDB database server for multiple services
 - [mazanoke](https://github.com/civilblur/mazanoke) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/mazanoke.yml)): A self-hosted local image optimizer that runs in your browser.

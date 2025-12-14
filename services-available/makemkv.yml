@@ -3,13 +3,12 @@ networks:
     external: true
 
 # description: Fully automated container for MakeMKV with Web GUI
-# https://github.com/linuxserver/docker-makemkv
-# NOTE: Migrated from jlesage/makemkv - port changed from 5800 to 3000!
-# DARK_MODE and AUTO_DISC_RIPPER env vars may not apply to LinuxServer version
+# https://github.com/jlesage/docker-makemkv
+# NOTE: LinuxServer.io doesn't have a MakeMKV image - using jlesage/makemkv
 
 services:
   makemkv:
-    image: lscr.io/linuxserver/makemkv:${MAKEMKV_DOCKER_TAG:-latest}
+    image: jlesage/makemkv:${MAKEMKV_DOCKER_TAG:-latest}
     container_name: ${MAKEMKV_CONTAINER_NAME:-makemkv}
     restart: ${MAKEMKV_RESTART:-unless-stopped}
     networks:
@@ -32,6 +31,6 @@ services:
       - traefik.enable=true
       - traefik.http.routers.makemkv.entrypoints=websecure
       - traefik.http.routers.makemkv.rule=Host(`${MAKEMKV_CONTAINER_NAME:-makemkv}.${HOST_DOMAIN}`)
-      - traefik.http.services.makemkv.loadbalancer.server.port=3000
+      - traefik.http.services.makemkv.loadbalancer.server.port=5800
       - com.centurylinklabs.watchtower.enable=${MAKEMKV_WATCHTOWER_ENABLED:-true}
       - autoheal=true
