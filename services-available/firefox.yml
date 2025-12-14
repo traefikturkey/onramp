@@ -23,6 +23,7 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
+      - DISABLE_IPV6=true
     #ports:
     #- ${FIREFOX_PORT:-5900}:5900
     labels:
