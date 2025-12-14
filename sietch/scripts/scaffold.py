@@ -38,6 +38,37 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from ports.command import CommandExecutor
 
+
+def validate_path_within_base(path: Path, base: Path) -> bool:
+    """Validate that a path stays within the base directory.
+
+    Prevents path traversal attacks by checking that the resolved
+    path is still under the base directory.
+
+    Args:
+        path: The path to validate
+        base: The base directory that path must stay within
+
+    Returns:
+        True if path is safely within base, False otherwise
+    """
+    try:
+        # Resolve both paths to absolute, following symlinks
+        resolved_base = base.resolve()
+        resolved_path = path.resolve()
+
+        # Check if resolved path starts with resolved base
+        # Using os.path.commonpath is more reliable than string comparison
+        try:
+            common = Path(os.path.commonpath([resolved_base, resolved_path]))
+            return common == resolved_base
+        except ValueError:
+            # Different drives on Windows, or one path is relative
+            return False
+    except (OSError, RuntimeError):
+        # Path doesn't exist or can't be resolved - be safe and reject
+        return False
+
 try:
     import yaml
 
@@ -100,6 +131,9 @@ class Scaffolder:
         self.services_available = self.base_dir / "services-available"
         self.etc_dir = self.base_dir / "etc"
 
+        # Track created files/directories for rollback on failure
+        self._created_files: list[Path] = []
+
         # Use injected executor or create default
         if executor is not None:
             self._executor = executor
@@ -107,6 +141,40 @@ class Scaffolder:
             from adapters.subprocess_cmd import SubprocessCommandExecutor
 
             self._executor = SubprocessCommandExecutor()
+
+    def _track_created(self, path: Path) -> None:
+        """Track a created file or directory for potential rollback."""
+        self._created_files.append(path)
+
+    def _clear_tracking(self) -> None:
+        """Clear the tracking list (after successful build)."""
+        self._created_files.clear()
+
+    def rollback(self) -> None:
+        """Rollback created files and directories.
+
+        Removes files and directories in reverse order of creation.
+        Directories are only removed if empty.
+        """
+        # Process in reverse order (newest first)
+        for path in reversed(self._created_files):
+            try:
+                if path.exists():
+                    if path.is_file():
+                        path.unlink()
+                        print(f"  Rollback: removed file {path}")
+                    elif path.is_dir():
+                        # Only remove if empty
+                        try:
+                            path.rmdir()
+                            print(f"  Rollback: removed directory {path}")
+                        except OSError:
+                            # Directory not empty, skip
+                            pass
+            except Exception as e:
+                print(f"  Rollback warning: could not remove {path}: {e}", file=sys.stderr)
+
+        self._created_files.clear()
 
     def _should_ignore(self, path: Path) -> bool:
         """Check if a file should be ignored (not copied)."""
@@ -315,12 +383,35 @@ class Scaffolder:
 
         print(f"  Creating etc/ volumes for {service}...")
 
+        # The allowed base for this service's etc files
+        allowed_base = self.etc_dir / service
+
         for match in matches:
             # Remove everything after : (the container path)
             volume_path = match.split(":")[0]
 
             # Convert to absolute path
             abs_path = self.base_dir / volume_path.lstrip("./")
+
+            # SECURITY: Validate path stays within etc/<service>/
+            # Resolve the path to handle any .. traversal attempts
+            try:
+                # For paths that don't exist yet, we need to check the normalized path
+                # Use os.path.normpath to resolve .. without requiring the path to exist
+                normalized = Path(os.path.normpath(abs_path))
+
+                # Check it's under the etc directory
+                if not str(normalized).startswith(str(self.etc_dir)):
+                    print(f"    Skipping (path traversal attempt): {volume_path}")
+                    continue
+
+                # For existing paths, also check resolved path (handles symlinks)
+                if abs_path.exists() and not validate_path_within_base(abs_path, self.etc_dir):
+                    print(f"    Skipping (path escapes via symlink): {volume_path}")
+                    continue
+            except Exception as e:
+                print(f"    Skipping (path validation error): {volume_path} - {e}")
+                continue
 
             # Check if path relative to etc/<service>/ is provided by scaffold
             relative_to_service = str(abs_path).split(f"/etc/{service}/", 1)
@@ -337,16 +428,19 @@ class Scaffolder:
 
                 if is_directory:
                     abs_path.mkdir(parents=True, exist_ok=True)
+                    self._track_created(abs_path)
                     print(f"    Created dir: {abs_path}")
                 else:
                     # It's a file - create parent dir and touch file
                     abs_path.parent.mkdir(parents=True, exist_ok=True)
                     if not abs_path.exists():
                         abs_path.touch()
+                        self._track_created(abs_path)
                         print(f"    Created file: {abs_path}")
             else:
                 # Just the service directory
                 abs_path.mkdir(parents=True, exist_ok=True)
+                self._track_created(abs_path)
                 print(f"    Created dir: {abs_path}")
 
         return True
@@ -828,8 +922,15 @@ class Scaffolder:
         return True
 
     def build(self, service: str) -> bool:
-        """Build scaffold for a service."""
+        """Build scaffold for a service.
+
+        On failure, performs rollback of created files/directories.
+        """
         print(f"Building scaffold for '{service}'...")
+
+        # Clear any previous tracking
+        self._clear_tracking()
+
         success = True
 
         # Get scaffold files first (needed for volume creation check)
@@ -844,45 +945,60 @@ class Scaffolder:
             success = False
 
         # Phase -1: Create PostgreSQL database if needed (before volumes)
-        if not self._create_postgres_database(service, metadata):
+        if success and not self._create_postgres_database(service, metadata):
             success = False
 
         # Phase -1a: Create MariaDB database if needed (before volumes)
-        if not self._create_mariadb_database(service, metadata):
+        if success and not self._create_mariadb_database(service, metadata):
             success = False
 
         # Phase -1b: Assign Valkey database if needed (before volumes)
-        if not self._assign_valkey_database(service, metadata):
+        if success and not self._assign_valkey_database(service, metadata):
             success = False
 
         # Phase 0: Create etc/ volume directories from service YAML
         # Pass statics so it knows what scaffold will provide
-        if not self.create_etc_volumes(service, statics):
+        if success and not self.create_etc_volumes(service, statics):
             success = False
 
         # Check if we have scaffold files (may have none, just volume creation)
         if not templates and not statics and not self.find_manifest(service):
             print(f"  No scaffold templates for '{service}'")
+            if success:
+                self._clear_tracking()
+            else:
+                self.rollback()
             return success
 
         # Phase 1: Render templates
-        for template in templates:
-            dest = self.get_output_path(service, template)
-            if not self.render_template(template, dest):
-                success = False
+        if success:
+            for template in templates:
+                dest = self.get_output_path(service, template)
+                if not self.render_template(template, dest):
+                    success = False
+                    break
+                self._track_created(dest)
 
         # Phase 2: Copy static files
-        for static in statics:
-            dest = self.get_output_path(service, static)
-            if not self.copy_static(static, dest):
-                success = False
+        if success:
+            for static in statics:
+                dest = self.get_output_path(service, static)
+                if not self.copy_static(static, dest):
+                    success = False
+                    break
+                self._track_created(dest)
 
         # Phase 3: Execute manifest operations (after templates/statics)
-        if not self.execute_manifest(service):
+        if success and not self.execute_manifest(service):
             success = False
 
-        # Phase 4: Display post-enable message if exists
-        if success:
+        # On failure, rollback created files
+        if not success:
+            print(f"  Build failed, rolling back changes...")
+            self.rollback()
+        else:
+            # Success - clear tracking and display message
+            self._clear_tracking()
             self._display_message(service)
 
         return success
