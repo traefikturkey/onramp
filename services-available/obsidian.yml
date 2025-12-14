@@ -7,7 +7,7 @@ networks:
 
 services:
   obsidian:
-    image: linuxserver/obsidian:${OBSIDIAN_DOCKER_TAG:-latest}
+    image: lscr.io/linuxserver/obsidian:${OBSIDIAN_DOCKER_TAG:-latest}
     container_name: ${OBSIDIAN_CONTAINER_NAME:-obsidian}
     restart: ${OBSIDIAN_RESTART:-unless-stopped}
     networks:

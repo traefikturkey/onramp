@@ -8,7 +8,7 @@ networks:
 
 services:
   overseerr:
-    image: linuxserver/overseerr:${OVERSEERR_DOCKER_TAG:-latest}
+    image: lscr.io/linuxserver/overseerr:${OVERSEERR_DOCKER_TAG:-latest}
     container_name: ${OVERSEERR_CONTAINER_NAME:-overseerr}
     restart: unless-stopped
     networks:

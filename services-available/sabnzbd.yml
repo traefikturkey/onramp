@@ -7,7 +7,7 @@ networks:
 
 services:
   sabnzbd:
-    image: linuxserver/sabnzbd:${SABNZBD_DOCKER_TAG:-latest}
+    image: lscr.io/linuxserver/sabnzbd:${SABNZBD_DOCKER_TAG:-latest}
     container_name: ${SABNZBD_CONTAINER_NAME:-sabnzbd}
     restart: ${SABNZBD_RESTART:-unless-stopped}
     networks:

@@ -8,7 +8,7 @@ networks:
 
 services:
   nzbget:
-    image: linuxserver/nzbget:${NZBGET_DOCKER_TAG:-latest}
+    image: lscr.io/linuxserver/nzbget:${NZBGET_DOCKER_TAG:-latest}
     container_name: ${NZBGET_CONTAINER_NAME:-nzbget}
     restart: unless-stopped
     networks:

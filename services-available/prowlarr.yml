@@ -8,7 +8,7 @@ networks:
 
 services:
   prowlarr:
-    image: linuxserver/prowlarr:${PROWLARR_DOCKER_TAG:-develop}
+    image: lscr.io/linuxserver/prowlarr:${PROWLARR_DOCKER_TAG:-develop}
     container_name: ${PROWLARR_CONTAINER_NAME:-prowlarr}
     restart: ${PROWLARR_RESTART:-unless-stopped}
     networks:

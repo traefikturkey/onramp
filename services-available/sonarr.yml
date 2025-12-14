@@ -7,7 +7,7 @@ networks:
 
 services:
   sonarr:
-    image: linuxserver/sonarr:${SONARR_DOCKER_TAG:-latest}
+    image: lscr.io/linuxserver/sonarr:${SONARR_DOCKER_TAG:-latest}
     container_name: ${SONARR_CONTAINER_NAME:-sonarr}
     restart: ${SONARR_RESTART:-unless-stopped}
     networks:

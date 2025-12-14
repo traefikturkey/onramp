@@ -8,7 +8,7 @@ networks:
 
 services:
   bazarr:
-    image: linuxserver/bazarr:${BAZARR_DOCKER_TAG:-latest}
+    image: lscr.io/linuxserver/bazarr:${BAZARR_DOCKER_TAG:-latest}
     container_name: ${BAZARR_CONTAINER_NAME:-bazarr}
     restart: unless-stopped
     networks:
