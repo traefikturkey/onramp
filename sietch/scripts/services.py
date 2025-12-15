@@ -259,30 +259,35 @@ class ServiceManager:
         archive_file = self.archive_dir / f"{service}.env"
         return archive_file.exists()
 
-    def restore_env(self, service: str, interactive: bool = True) -> tuple[bool, str]:
+    def restore_env(self, service: str, interactive: bool = True, force: bool = False) -> tuple[bool, str]:
         """Restore a service's .env file from the archive.
-        
-        If interactive=True, prompts user before restoring.
+
+        If interactive=True, prompts user before overwriting existing file.
+        If force=True, overwrites without prompting.
         Returns (success, message).
         """
         archive_file = self.archive_dir / f"{service}.env"
-        
+
         if not archive_file.exists():
             return False, f"No archived .env file found for service '{service}'"
-        
+
         env_file = self.services_enabled / f"{service}.env"
-        
+
         # Check if destination already exists
-        if env_file.exists():
+        if env_file.exists() and not force:
             if interactive:
-                response = input(
-                    f"⚠️  {service}.env already exists. Overwrite with archived version? [y/N]: "
-                )
-                if response.lower() not in ("y", "yes"):
-                    return False, "Restore cancelled by user"
+                try:
+                    response = input(
+                        f"⚠️  {service}.env already exists. Overwrite with archived version? [y/N]: "
+                    )
+                    if response.lower() not in ("y", "yes"):
+                        return False, "Restore cancelled by user"
+                except EOFError:
+                    # Non-TTY context (e.g., makefile), auto-restore
+                    pass
             else:
                 return False, f"{service}.env already exists (use --force to overwrite)"
-        
+
         try:
             shutil.copy2(str(archive_file), str(env_file))
             return True, f"Restored {service}.env from archive"
@@ -327,6 +332,7 @@ def main():
     parser.add_argument("--all", action="store_true", help="List all categories")
     parser.add_argument("--archived", action="store_true", help="List archived .env files")
     parser.add_argument("--no-interactive", action="store_true", help="Disable interactive prompts")
+    parser.add_argument("--force", action="store_true", help="Force overwrite without prompting")
     parser.add_argument("--strict", action="store_true", help="Strict mode - treat warnings as errors")
     parser.add_argument("--fix", action="store_true", help="Auto-fix issues where possible")
     parser.add_argument("--min-version", type=int, help="Minimum required config version")
@@ -434,7 +440,7 @@ def main():
         if not args.service:
             parser.error("Service name required for 'restore-env' action")
         interactive = not args.no_interactive
-        success, message = mgr.restore_env(args.service, interactive=interactive)
+        success, message = mgr.restore_env(args.service, interactive=interactive, force=args.force)
         print(message)
         return 0 if success else 1
 

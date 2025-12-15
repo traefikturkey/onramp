@@ -8,6 +8,9 @@ services:
     container_name: ${MONOCKER_CONTAINER_NAME:-monocker}
     restart: ${MONOCKER_RESTART:-unless-stopped}
     mem_limit: ${MONOCKER_MEM_LIMIT:-130m}
+    env_file:
+      - services-enabled/.env
+      - services-enabled/monocker.env
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /etc/localtime:/etc/localtime:ro
@@ -15,12 +18,7 @@ services:
       TZ: ${TZ}
       # Optional label to preface messages. Handy if you are running multiple versions of Monocker
       SERVER_LABEL: ${MONOCKER_SERVER_LABEL:-${HOST_NAME}}
-      # Specify the messaging platform and details, or leave blank if only wanting container logs (pick one only)
-      MESSAGE_PLATFORM: ${MONOCKER_MESSAGE_PLATFORM}
-      # MESSAGE_PLATFORM: 'telegram@your_bot_id@your_chat_id'
-      # MESSAGE_PLATFORM: 'pushbullet@your_api_key@your_device_id'
-      # MESSAGE_PLATFORM: 'pushover@your_user_key@your_app_api_token'
-      # MESSAGE_PLATFORM: 'discord@webhook_url'
+      # MESSAGE_PLATFORM is set via monocker.env file (loaded by env_file directive)
       # Optional - includes or excludes specified containers - default behaviour is false
       LABEL_ENABLE: ${MONOCKER_LABEL_ENABLE:-false}
       # Optional - only show when container state changes to being offline (paused, exited, running (unhealthy), or dead) - default is false
