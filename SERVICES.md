@@ -1,5 +1,5 @@
 # Available Services
-264 services and counting...
+263 services and counting...
 
 [1](#1)
 [A](#A)
@@ -276,7 +276,6 @@
 ## R
 - [radarr-postgres](https://hub.docker.com/_/postgres) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/radarr-postgres.yml)): Container for running radarr with postgresql
 - [radarr](https://hub.docker.com/r/linuxserver/radarr) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/radarr.yml)): Manages movie collections and downloads
-- [readarr](https://docs.linuxserver.io/images/docker-readarr/#docker-compose-recommended-click-here-for-more-info) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/readarr.yml)): Manages ebook collections and downloads
 - [recyclarr](https://github.com/recyclarr/recyclarr# ) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/recyclarr.yml)): Container for running recyclarr, a media indexer
 - [redis](https://github.com/redis/redis) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/redis.yml)): In-memory data structure store
 - [redlib](https://github.com/redlib-org/redlib?tab=readme-ov-file#Configuration) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/redlib.yml)): An open source frontend for reddit.

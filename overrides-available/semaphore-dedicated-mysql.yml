@@ -12,6 +12,8 @@ services:
       - semaphore-db
     environment:
       - SEMAPHORE_DB_HOST=${SEMAPHORE_DB_HOST:-semaphore-db}
+      - SEMAPHORE_DB_USER=${SEMAPHORE_DB_USER:-semaphore}
+      - SEMAPHORE_DB_PASS=${SEMAPHORE_DB_PASS:-semaphore}
 
   semaphore-db:
     restart: unless-stopped

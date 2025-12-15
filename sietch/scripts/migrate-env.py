@@ -150,7 +150,6 @@ SERVICE_PREFIXES = {
     "PROMETHEUS": "prometheus",
     "PROWLARR": "prowlarr",
     "RADARR": "radarr",
-    "READARR": "readarr",
     "RECIPES": "recipes",
     "RECYCLARR": "recyclarr",
     "REDIS": "redis",

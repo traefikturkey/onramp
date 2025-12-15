@@ -375,7 +375,8 @@ class Scaffolder:
 
         # Pattern to match ./etc/<service>/* volume mounts
         # Matches: ./etc/service/path or ./etc/service/file.ext
-        pattern = rf"\./etc/{re.escape(service)}\S*"
+        # Use [^\s:}]* to match path chars but stop at whitespace, colon, or closing brace
+        pattern = rf"\./etc/{re.escape(service)}[^\s:}}]*"
         matches = re.findall(pattern, content)
 
         if not matches:
@@ -861,10 +862,8 @@ class Scaffolder:
             admin_user = os.environ.get("MARIADB_USER", "admin")
             print(f"    Granting privileges to '{admin_user}'...")
 
-            # Use the database.py grant_privileges method via DatabaseManager
-            from database import DatabaseManager
-            db_manager = DatabaseManager()
-            grant_code = db_manager.grant_privileges(database_name, admin_user)
+            # Grant privileges using MariaDBManager
+            grant_code = maria_manager.grant_privileges(database_name, admin_user)
             if grant_code != 0:
                 print(f"  Warning: Failed to grant privileges to '{admin_user}'", file=sys.stderr)
             else:

@@ -1,0 +1,17 @@
+Semaphore has been enabled with a dedicated MySQL 8.0 database.
+
+Due to known upstream migration issues with MariaDB, the semaphore-dedicated-mysql
+override has been automatically enabled.
+
+Access semaphore at: https://semaphore.${HOST_DOMAIN}
+
+Default credentials:
+  Username: admin@localhost
+  Password: changeme
+
+IMPORTANT: Change the admin password after first login!
+
+The service is pinned to v2.10.43 for stability. You can change this in:
+  services-enabled/semaphore.env
+
+For more information, see: services-scaffold/semaphore/README.md

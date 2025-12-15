@@ -134,7 +134,9 @@ class MariaDBManager:
         password = self._get_root_password()
         # Use MYSQL_PWD env var instead of -p to avoid password in ps output
         # Pass via bash -c with env var set
-        cmd = ["bash", "-c", f"MYSQL_PWD='{password}' mariadb -u root {dbname} -e \"{sql}\""]
+        # Escape the SQL to prevent backtick interpretation by bash
+        escaped_sql = sql.replace('`', '\\`').replace('$', '\\$')
+        cmd = ["bash", "-c", f"MYSQL_PWD='{password}' mariadb -u root {dbname} -e \"{escaped_sql}\""]
         return self._docker_exec(cmd)
 
     def console(self) -> int:
@@ -233,6 +235,24 @@ class MariaDBManager:
 
         print(f"User '{username}' created. Password saved to {password_file}")
         return 0, password
+
+    def grant_privileges(self, dbname: str, username: str) -> int:
+        """Grant all privileges on a database to a user."""
+        validate_db_name(dbname)
+        validate_username(username)
+
+        grant_sql = f"GRANT ALL PRIVILEGES ON `{dbname}`.* TO '{username}'@'%'"
+        code, stdout, stderr = self._mysql_exec(grant_sql)
+        if code != 0:
+            print(f"Error granting privileges: {stderr}", file=sys.stderr)
+            return code
+
+        # Flush privileges
+        flush_code, _, _ = self._mysql_exec("FLUSH PRIVILEGES")
+        if flush_code != 0:
+            print("Warning: Failed to flush privileges", file=sys.stderr)
+
+        return code
 
     def backup_database(self, dbname: str, output_file: str) -> int:
         """Backup database to SQL file."""
