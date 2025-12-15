@@ -12,6 +12,8 @@ services:
     image: woodpeckerci/woodpecker-server:${WOODPECKER_DOCKER_TAG:-latest}
     container_name: ${WOODPECKER_CONTAINER_NAME:-woodpecker}
     restart: unless-stopped
+    env_file:
+      - ./services-enabled/woodpecker.env
     networks:
       - traefik
       - default

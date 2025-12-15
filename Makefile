@@ -5,7 +5,9 @@ MAKE_INCLUDE_FILES := $(wildcard ./services-enabled/.env)
 
 # All env files for passing to sietch/docker via --env-file flags
 # These use shell syntax that docker handles correctly
-SIETCH_ENV_FILES := $(wildcard ./services-enabled/.env) $(wildcard ./services-enabled/*.env) $(wildcard ./services-enabled/.env.*)
+# Load service-specific env files first, then .env.* files, then main .env last
+# This ensures main .env values take precedence over defaults in service env files
+SIETCH_ENV_FILES := $(wildcard ./services-enabled/*.env) $(wildcard ./services-enabled/.env.*) $(wildcard ./services-enabled/.env)
 ifneq (,$(MAKE_INCLUDE_FILES))
     include $(MAKE_INCLUDE_FILES)
     export

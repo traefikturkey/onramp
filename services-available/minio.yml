@@ -10,6 +10,8 @@ services:
     image: minio/minio:${MINIO_DOCKER_TAG:-latest}
     container_name: ${MINIO_CONTAINER_NAME:-minio}
     restart: ${MINIO_RESTART:-unless-stopped}
+    env_file:
+      - ./services-enabled/minio.env
     networks:
       - traefik
     volumes:

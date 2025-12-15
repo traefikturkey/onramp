@@ -10,6 +10,8 @@ services:
     image: ghcr.io/wg-easy/wg-easy:${WG_EASY_DOCKER_TAG:-latest}
     container_name: ${WG_EASY_CONTAINER_NAME:-wg-easy}
     restart: ${WG_EASY_RESTART:-unless-stopped}
+    env_file:
+      - ./services-enabled/wg-easy.env
     networks:
       - traefik
     volumes:
@@ -19,7 +21,7 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
-      - WG_HOST=${WG_EASY_HOST}
+      - WG_HOST=${WG_EASY_HOST:-wg-easy.example.com}
       - WG_ALLOWED_IPS=${WG_EASY_ALLOWED_IPS:-10.8.0.0/24}
     cap_add:
       - NET_ADMIN

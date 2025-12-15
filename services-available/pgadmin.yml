@@ -11,6 +11,8 @@ services:
     image: dpage/pgadmin4:8.13
     container_name: pgadmin
     restart: unless-stopped
+    env_file:
+      - ./services-enabled/pgadmin.env
     networks:
       - traefik
     volumes:
