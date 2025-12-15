@@ -8,8 +8,6 @@ networks:
 # The default login for the first start of this application are 'demo@dawarich.app' and 'password'
 # Also, there is no way to make a user an administrator through the GUI.
 # You have to do it through the console. See https://dawarich.app/docs/FAQ/#how-to-make-a-user-an-admin
-# cache: valkey
-# cache_db: 2
 
 services:
   dawarich:
@@ -65,8 +63,10 @@ services:
     depends_on:
       dawarich_db:
         condition: service_healthy
+        restart: true
       dawarich_redis:
         condition: service_healthy
+        restart: true
     deploy:
       resources:
         limits:
@@ -127,10 +127,13 @@ services:
     depends_on:
       dawarich_db:
         condition: service_healthy
+        restart: true
       dawarich_redis:
         condition: service_healthy
+        restart: true
       dawarich:
         condition: service_healthy
+        restart: true
     deploy:
       resources:
         limits:
@@ -158,16 +161,17 @@ services:
       timeout: 10s
 
   dawarich_redis:
-    image: valkey/valkey:8-alpine
+    image: redis:7.4-alpine
     container_name: dawarich_redis
+    command: redis-server
     networks:
       - traefik
     volumes:
-      - ./etc/dawarich/redis:/data
+      - ./etc/dawarich/redis:/var/shared/redis
     restart: always
     healthcheck:
-      test: ["CMD", "valkey-cli", "ping"]
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
       interval: 10s
       retries: 5
-      start_period: 10s
-      timeout: 5s
+      start_period: 30s
+      timeout: 10s

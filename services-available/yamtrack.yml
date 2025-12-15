@@ -5,14 +5,14 @@ networks:
 # description:  A self hosted media tracker.
 # https://github.com/FuzzyGrim/Yamtrack
 # Demo instance: https://yamtrack.fuzzygrim.com/
-# cache: valkey
-# cache_db: 3
 
 services:
   yamtrack:
     image: ghcr.io/fuzzygrim/yamtrack:${YAMTRACK_DOCKER_TAG:-latest}
     container_name: ${YAMTRACK_CONTAINER_NAME:-yamtrack}
     restart: ${YAMTRACK_RESTART:-unless-stopped}
+    depends_on:
+      - yamtrack-redis
     mem_limit: ${YAMTRACK_MEM_LIMIT:-200g}
     networks:
       - traefik
@@ -24,7 +24,7 @@ services:
       - PGID=${PGID:-1000}
       - TZ=${TZ}
       - SECRET=${YAMTRACK_SECRET:-superdupersecretstring} # generate with openssl rand -hex 32
-      - REDIS_URL=redis://valkey:6379/3
+      - REDIS_URL=redis://yamtrack-redis:6379
       - URLS=https://${YAMTRACK_CONTAINER_NAME:-yamtrack}.${HOST_DOMAIN}
     labels:
       - joyride.host.name=${YAMTRACK_HOST_NAME:-yamtrack}.${HOST_DOMAIN}
@@ -34,3 +34,12 @@ services:
       - traefik.http.services.yamtrack.loadbalancer.server.port=8000
       - com.centurylinklabs.watchtower.enable=${YAMTRACK_WATCHTOWER_ENABLED:-true}
       - autoheal=${YAMTRACK_AUTOHEAL_ENABLED:-true}
+
+  yamtrack-redis:
+    container_name: yamtrack-redis
+    image: redis:7-alpine
+    restart: unless-stopped
+    networks:
+      - traefik
+    volumes:
+      - ./etc/yamtrack/redis:/data

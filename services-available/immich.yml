@@ -1,8 +1,6 @@
 ---
 # description: Container for running immich, a self-hosted Google Photos alternative.
 # https://immich.app/docs/install/environment-variables
-# cache: valkey
-# cache_db: 7
 
 networks:
   traefik:
@@ -27,11 +25,11 @@ services:
       - DB_HOSTNAME=${IMMICH_DB_HOSTNAME:-immich_database}
       - DB_USERNAME=${IMMICH_POSTGRES_USER:-postgres}
       - DB_DATABASE_NAME=${IMMICH_POSTGRES_DB:-immich}
-      - REDIS_HOSTNAME=valkey
-      - REDIS_DBINDEX=7
+      - REDIS_HOSTNAME=${IMMICH_REDIS_CONTAINER_NAME:-immich_redis}
       - UPLOAD_LOCATION=${IMMICH_UPLOAD_LOCATION:-./etc/immich/upload}
       - TYPESENSE_API_KEY=${IMMICH_TYPESENSE_API_KEY:-changeme}
     depends_on:
+      - redis
       - database
     restart: ${IMMICH_RESTART_POLICY:-unless-stopped}
     labels:
@@ -52,6 +50,15 @@ services:
       - immich-db
     volumes:
       - ${IMMICH_MODEL_CACHE_DIR:-./etc/immich/model-cache}:/cache
+    restart: ${IMMICH_RESTART_POLICY:-unless-stopped}
+
+  redis:
+    container_name: immich_redis
+    networks:
+      - immich-db
+    image: docker.io/valkey/valkey:8-bookworm@sha256:fea8b3e67b15729d4bb70589eb03367bab9ad1ee89c876f54327fc7c6e618571
+    healthcheck:
+      test: redis-cli ping || exit 1
     restart: ${IMMICH_RESTART_POLICY:-unless-stopped}
 
   database:
