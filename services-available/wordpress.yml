@@ -5,9 +5,6 @@ networks:
 # description: Popular content management system (cms)
 # https://wordpress.com/
 # https://hub.docker.com/_/wordpress
-# database: mariadb
-# database_name: wordpress
-
 
 services:
   wordpress:

@@ -3,10 +3,8 @@ networks:
     external: true
   bl_int:
 
-# description: BookLore is a self-hosted web app for organizing and managing your personal book collection. 
+# description: BookLore is a self-hosted web app for organizing and managing your personal book collection.
 # https://github.com/adityachandelgit/BookLore
-# database: mariadb
-# database_name: booklore
 
 services:
   booklore:
@@ -18,16 +16,19 @@ services:
       - traefik
       - bl_int
     volumes:
-      - ./etc/booklore/data:/app/data 
+      - ./etc/booklore/data:/app/data
       - ./media/books:/app/books
       - /etc/localtime:/etc/localtime:ro
     environment:
-      - DATABASE_URL=jdbc:mariadb://mariadb:3306/${BL_MYSQL_DATABASE:-booklore}    
+      - DATABASE_URL=jdbc:mariadb://booklore-db:3306/${BL_MYSQL_DATABASE}
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
-      - DATABASE_USERNAME=${BL_MYSQL_USER:-${MARIADB_USER:-admin}}
-      - DATABASE_PASSWORD=${BL_MYSQL_PASSWORD:-${MARIADB_PASS}}      
+      - DATABASE_USERNAME=${BL_MYSQL_USER:-boooklore}
+      - DATABASE_PASSWORD=${BL_MYSQL_PASSWORD:-onrampstdpass1234}
+    depends_on:
+      booklore-db:
+        condition: service_healthy
     labels:
       - joyride.host.name=${BOOKLORE_HOST_NAME:-booklore}.${HOST_DOMAIN}
       - traefik.enable=${BOOKLORE_TRAEFIK_ENABLED:-true}
@@ -38,3 +39,25 @@ services:
       - com.centurylinklabs.watchtower.enable=${BOOKLORE_WATCHTOWER_ENABLED:-true}
       - autoheal=${BOOKLORE_AUTOHEAL_ENABLED:-true}
       - traefik.docker.network=traefik
+
+  booklore-db:
+    image: lscr.io/linuxserver/mariadb:${BOOKLORE_MARIADB_TAG:-11.4.5}
+    container_name: booklore-db
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - MYSQL_ROOT_PASSWORD=${BL_MYSQL_ROOT_PASSWORD:-onramprulez}
+      - MYSQL_DATABASE=${BL_MYSQL_DATABASE:-booklore}
+      - MYSQL_USER=${BL_MYSQL_USER:-booklore}
+      - MYSQL_PASSWORD=${BL_MYSQL_PASSWORD:-onrampstdpass1234}
+    volumes:
+      - ./etc/booklore/db:/config
+    restart: unless-stopped
+    networks:
+      - bl_int
+    healthcheck:
+      test: ["CMD", "mariadb-admin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 10

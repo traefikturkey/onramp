@@ -2,8 +2,6 @@
 # description: contianer for multi-vendor network device configuration backup and management solution
 # https://github.com/crocandr/docker-unimus
 # requires license key (free or paid) from https://portal.unimus.net/
-# database: mariadb
-# database_name: unimus
 
 networks:
   traefik:
@@ -22,6 +20,8 @@ services:
       - unimus-dbnet
     environment:
       - JAVA_OPTS=-Xms256M -Xmx1024M -Dunimus.core.connect-timeout=20000 -Dunimus.core.inter-connection-delay=1000 -Dunimus.core.cli-expect-timeout=30000
+    depends_on:
+      - unimus-database
     restart: ${UNIMUS_RESTART_POLICY:-unless-stopped}
     labels:
       - joyride.host.name=${UNIMUS_CONTAINER_NAME:-unimus}.${HOST_DOMAIN}
@@ -32,4 +32,22 @@ services:
       - traefik.http.services.unimus.loadbalancer.server.port=8085
       - com.centurylinklabs.watchtower.enable=${UNIMUS_WATCHTOWER_ENABLED:-false}
       - autoheal=true
+
+  unimus-database:
+    container_name: unimus_database
+    image: mariadb:10
+    networks:
+      - unimus-dbnet
+    environment:
+      - POSTGRES_USER=${UNIMUS_POSTGRES_USER:-postgres}
+      - MYSQL_ROOT_PASSWORD=s${UNIMUS_MYSQL_ROOT_PASSWORD:-somesupersecrest}
+      - MYSQL_DATABASE=${UNIMUS_MYSQL_DB:-unimus}
+      - MYSQL_USER=${UNIMUS_MYSQL_USER:-unimus}
+      - MYSQL_PASSWORD=secret
+    volumes:
+      - ./etc/unimus/db:/var/lib/mysql
+      - /etc/localtime:/etc/localtime:ro
+    restart: ${UNIMUSDB_RESTART_POLICY:-unless-stopped}
+    labels:
+      - traefik.enable=false
 

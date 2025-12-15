@@ -3,8 +3,6 @@ networks:
     external: true
 
 # description: Time-tracking software for freelancers and small businesses
-# database: mariadb
-# database_name: kimai
 # https://github.com/kevinpapst/kimai2
 # https://github.com/tobybatch/kimai2
 
@@ -22,7 +20,7 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
-      - DATABASE_URL=mysql://${KIMAI_DB_USER:-${MARIADB_USER:-admin}}:${KIMAI_DB_PASS:-${MARIADB_PASS}}@mariadb/${KIMAI_DB_NAME:-kimai}
+      - DATABASE_URL=mysql://kimai:kimaipassword@mariadb/kimai
       - TRUSTED_HOSTS=localhost,127.0.0.1,${KIMAI_CONTAINER_NAME:-kimai}.${HOST_DOMAIN}
     labels:
       - joyride.host.name=${KIMAI_CONTAINER_NAME:-kimai}.${HOST_DOMAIN}
