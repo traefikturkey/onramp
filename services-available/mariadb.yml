@@ -46,6 +46,12 @@ services:
       - MYSQL_PASSWORD=${MARIADB_PASS}
       - MYSQL_ROOT_PASSWORD=${MARIADB_PASS}
     command: --max_connections=1000 --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
     ports:
       - 3306:3306
     labels:

@@ -20,6 +20,12 @@ services:
       - PGID=${PGID:-1000}
       - TZ=${TZ}
       - DISABLE_IPV6=true
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/status.php"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 120s
     labels:
       - joyride.host.name=${NEXTCLOUD_CONTAINER_NAME:-nextcloud}.${HOST_DOMAIN}
       - traefik.enable=true

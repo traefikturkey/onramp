@@ -59,6 +59,12 @@ services:
       - SEMAPHORE_LDAP_DN_SEARCH=${SEMAPHORE_LDAP_SEARCH:-'dc=local,dc=example,dc=com'}
       - SEMAPHORE_LDAP_SEARCH_FILTER=${SEMAPHORE_LDAP_SEARCH_FILTER:-"(\u0026(uid=%s)(memberOf=cn=ipausers,cn=groups,cn=accounts,dc=local,dc=example,dc=com))"}
       - ANSIBLE_HOST_KEY_CHECKING=${SEMAPHORE_ANSIBLE_HOST_KEY_CHECKING:-false}
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000/api/ping"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
     labels:
       - joyride.host.name=${SEMAPHORE_CONTAINER_NAME:-semaphore}.${HOST_DOMAIN}
       - traefik.enable=true

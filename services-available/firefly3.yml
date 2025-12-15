@@ -40,6 +40,12 @@ services:
       - DB_USERNAME=${FIREFLY_DB_USERNAME:-firefly}
       # echo "FIREFLY_DB_PASSWORD=$(openssl rand -base64 16 | tr -d /=+ | cut -c -16)"  >> .env
       - DB_PASSWORD=${FIREFLY_DB_PASSWORD:-super_secure_password_change_me}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
     labels:
       - joyride.host.name=${FIREFLY3_CONTAINER_NAME:-firefly}.${HOST_DOMAIN}
       - traefik.enable=true

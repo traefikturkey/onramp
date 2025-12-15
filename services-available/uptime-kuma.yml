@@ -13,6 +13,12 @@ services:
     mem_limit: ${UPTIMEKUMA_MEM_LIMIT:-500m}
     networks:
       - traefik
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3001/status', (r) => process.exit(r.statusCode === 200 ? 0 : 1)).on('error', () => process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
     volumes:
       - ./etc/uptime-kuma:/app/data
       - ${UPTIMEKUMA_DOCKER_SOCKET:-/var/run/docker.sock}:/var/run/docker.sock

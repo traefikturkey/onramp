@@ -30,6 +30,12 @@ services:
       - traefik
     depends_on:
       - itflow-db
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
     volumes:
       - ./etc/itflow/www:/var/www/html
       - /etc/localtime:/etc/localtime:ro
