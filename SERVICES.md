@@ -1,5 +1,5 @@
 # Available Services
-263 services and counting...
+262 services and counting...
 
 [1](#1)
 [A](#A)
@@ -362,7 +362,6 @@
 - [yacht](https://github.com/SelfhostedPro/Yacht) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/yacht.yml)): Web interface for managing docker containers
 - [yamtrack](https://github.com/FuzzyGrim/Yamtrack) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/yamtrack.yml)):  A self hosted media tracker.
 - [youtube-dl](https://github.com/nbr23/youtube-dl-server) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/youtube-dl.yml)): Web UI for youtube-dl to download videos from youtube and other sites
-- [youtube-transcript-mcp](https://hub.docker.com/mcp/server/youtube_transcript/overview) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/youtube-transcript-mcp.yml)): Model Context Protocol server that retrieves YouTube video transcripts (stdio transport, not HTTP)
 
 
 

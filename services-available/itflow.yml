@@ -18,7 +18,6 @@ services:
     volumes:
       - ./etc/itflow/www:/var/www/html
       - /etc/localtime:/etc/localtime:ro
-    user: "33"
     environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}

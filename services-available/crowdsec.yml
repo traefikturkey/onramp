@@ -19,7 +19,7 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
-      - COLLECTIONS="crowdsecurity/linux crowdsecurity/traefik"
+      - COLLECTIONS=crowdsecurity/linux crowdsecurity/traefik
     labels:
       #- joyride.host.name=${CROWDSEC_CONTAINER_NAME:-crowdsec}.${HOST_DOMAIN}
       - traefik.enable=false
