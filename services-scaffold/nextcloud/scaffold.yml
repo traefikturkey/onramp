@@ -1,6 +1,0 @@
-phases:
-  - name: config
-    templates:
-      - src: default.conf.static
-        dest: /etc/nextcloud/nginx/site-confs/default.conf
-        mode: "0644"
