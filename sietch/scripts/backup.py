@@ -28,10 +28,43 @@ if TYPE_CHECKING:
     from ports.command import CommandExecutor
 
 
-# Default exclusions
+# Default exclusions - patterns to skip during backup
+# These reduce backup size by excluding regeneratable/non-essential data
 DEFAULT_EXCLUSIONS = [
+    # Placeholder files
     ".keep",
-    "etc/plex/Library",  # Plex library is huge
+    ".gitkeep",
+    # Plex library (huge, regeneratable)
+    "etc/plex/Library",
+    # Log files
+    "*.log",
+    "logs/",
+    "Logs/",
+    # Cache directories
+    "cache/",
+    "Cache/",
+    ".cache/",
+    "__pycache__/",
+    # Git pack files (large, regeneratable from repo)
+    ".git/objects/pack/",
+    # Large binary artifacts
+    "*.iso",
+    "*.img",
+    "*.qcow2",
+    # AI model files (huge, downloadable)
+    "*.safetensors",
+    "*.gguf",
+    "pytorch_model.bin",
+    "*.partial",
+    # Game server binaries (downloadable)
+    "etc/games/",
+    # Database files (should be backed up separately via dump)
+    "etc/*/db/journal/",
+    # Temporary files
+    "tmp/",
+    "temp/",
+    "*.tmp",
+    "*.swp",
 ]
 
 # Directories to include in backup
@@ -309,6 +342,154 @@ class BackupManager:
         finally:
             self._unmount_nfs()
 
+    def discover_database_containers(self) -> list[dict]:
+        """Discover running database containers.
+
+        Returns list of dicts with container info:
+        - name: container name
+        - type: 'postgres' or 'mariadb'
+        - service: inferred service name
+        """
+        containers = []
+
+        # Get list of running containers
+        code, stdout, stderr = self._run_cmd(
+            ["docker", "ps", "--format", "{{.Names}}"]
+        )
+        if code != 0:
+            print(f"Error listing containers: {stderr}", file=sys.stderr)
+            return containers
+
+        for name in stdout.strip().split("\n"):
+            if not name:
+                continue
+
+            # Check for PostgreSQL containers
+            if "-db" in name or name in ("postgres",):
+                # Check if it's PostgreSQL
+                code, _, _ = self._run_cmd(
+                    ["docker", "exec", name, "pg_isready", "-q"]
+                )
+                if code == 0:
+                    service = name.replace("-db", "").replace("-postgres", "")
+                    containers.append({
+                        "name": name,
+                        "type": "postgres",
+                        "service": service,
+                    })
+                    continue
+
+                # Check if it's MariaDB/MySQL
+                code, _, _ = self._run_cmd(
+                    ["docker", "exec", name, "mysqladmin", "ping", "-s"]
+                )
+                if code == 0:
+                    service = name.replace("-db", "").replace("-mariadb", "").replace("-mysql", "")
+                    containers.append({
+                        "name": name,
+                        "type": "mariadb",
+                        "service": service,
+                    })
+
+            # Check standalone mariadb/mysql containers
+            elif name in ("mariadb", "mysql"):
+                containers.append({
+                    "name": name,
+                    "type": "mariadb",
+                    "service": "shared",
+                })
+
+        return containers
+
+    def dump_postgres(self, container: str, output_dir: Path) -> tuple[int, str | None]:
+        """Dump all databases from a PostgreSQL container."""
+        timestamp = datetime.now().strftime("%Y%m%d-%H%M")
+        dump_file = output_dir / f"{container}-{timestamp}.sql"
+
+        print(f"  Dumping PostgreSQL: {container} -> {dump_file.name}")
+
+        # Use pg_dumpall to get all databases
+        code, stdout, stderr = self._run_cmd([
+            "docker", "exec", container,
+            "pg_dumpall", "-U", "postgres"
+        ])
+
+        if code != 0:
+            # Try with 'admin' user (OnRamp default)
+            code, stdout, stderr = self._run_cmd([
+                "docker", "exec", container,
+                "pg_dumpall", "-U", "admin"
+            ])
+
+        if code != 0:
+            print(f"    Error: {stderr}", file=sys.stderr)
+            return code, None
+
+        # Write dump to file
+        with open(dump_file, "w") as f:
+            f.write(stdout)
+
+        size_mb = dump_file.stat().st_size / (1024 * 1024)
+        print(f"    Created: {dump_file.name} ({size_mb:.1f} MB)")
+        return 0, str(dump_file)
+
+    def dump_mariadb(self, container: str, output_dir: Path) -> tuple[int, str | None]:
+        """Dump all databases from a MariaDB container."""
+        timestamp = datetime.now().strftime("%Y%m%d-%H%M")
+        dump_file = output_dir / f"{container}-{timestamp}.sql"
+
+        print(f"  Dumping MariaDB: {container} -> {dump_file.name}")
+
+        # Use mysqldump with --all-databases
+        code, stdout, stderr = self._run_cmd([
+            "docker", "exec", container,
+            "mysqldump", "--all-databases", "-u", "root"
+        ])
+
+        if code != 0:
+            print(f"    Error: {stderr}", file=sys.stderr)
+            return code, None
+
+        # Write dump to file
+        with open(dump_file, "w") as f:
+            f.write(stdout)
+
+        size_mb = dump_file.stat().st_size / (1024 * 1024)
+        print(f"    Created: {dump_file.name} ({size_mb:.1f} MB)")
+        return 0, str(dump_file)
+
+    def dump_databases(self) -> int:
+        """Dump all discovered database containers."""
+        db_backup_dir = self.backup_dir / "databases"
+        db_backup_dir.mkdir(parents=True, exist_ok=True)
+
+        print("Discovering database containers...")
+        containers = self.discover_database_containers()
+
+        if not containers:
+            print("No database containers found")
+            return 0
+
+        print(f"Found {len(containers)} database container(s)")
+        success_count = 0
+        error_count = 0
+
+        for db in containers:
+            if db["type"] == "postgres":
+                code, _ = self.dump_postgres(db["name"], db_backup_dir)
+            elif db["type"] == "mariadb":
+                code, _ = self.dump_mariadb(db["name"], db_backup_dir)
+            else:
+                continue
+
+            if code == 0:
+                success_count += 1
+            else:
+                error_count += 1
+
+        print(f"\nDatabase dump complete: {success_count} succeeded, {error_count} failed")
+        return 1 if error_count > 0 else 0
+
 
 def main():
     parser = argparse.ArgumentParser(
@@ -325,12 +506,13 @@ Examples:
   backup.py create-nfs                # Create and copy to NFS
   backup.py create-nfs --direct       # Create directly on NFS
   backup.py restore-nfs               # Restore latest from NFS
+  backup.py dump-databases            # Dump all database containers
         """,
     )
 
     parser.add_argument(
         "action",
-        choices=["create", "restore", "list", "create-nfs", "restore-nfs"],
+        choices=["create", "restore", "list", "create-nfs", "restore-nfs", "dump-databases"],
         help="Action to perform",
     )
     parser.add_argument("--service", "-s", help="Service name (for service-specific backup)")
@@ -376,6 +558,9 @@ Examples:
 
     if args.action == "restore-nfs":
         return mgr.restore_nfs_backup()
+
+    if args.action == "dump-databases":
+        return mgr.dump_databases()
 
     return 0
 

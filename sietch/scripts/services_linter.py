@@ -239,6 +239,12 @@ class ServiceLinter:
         # Check autoheal (required for all services)
         if not any('autoheal' in k for k in label_dict.keys()):
             warnings.append(f"{svc_name}: Missing autoheal label")
+        else:
+            # Check if autoheal=true but no healthcheck
+            autoheal_val = label_dict.get('autoheal', '')
+            if 'true' in str(autoheal_val).lower():
+                if 'healthcheck' not in svc_config:
+                    errors.append(f"{svc_name}: autoheal=true without healthcheck (autoheal won't work)")
         
         # Check watchtower
         if not any('watchtower.enable' in k for k in label_dict.keys()):
@@ -283,3 +289,132 @@ class ServiceLinter:
                 hardcoded.append(f"Hardcoded hostname: {match}.${{HOST_DOMAIN}} (should use variable)")
         
         return list(set(hardcoded))  # Remove duplicates
+
+    def lint_all(self, enabled_only: bool = False) -> dict:
+        """Lint all services.
+
+        Args:
+            enabled_only: Only lint enabled services
+
+        Returns:
+            Dict with 'passed', 'failed', 'all_errors', 'all_warnings'
+        """
+        services_enabled = self.base_dir / "services-enabled"
+        enabled = set()
+        if services_enabled.exists():
+            for yml in services_enabled.glob("*.yml"):
+                enabled.add(yml.stem)
+
+        results = {
+            "passed": [],
+            "failed": [],
+            "all_errors": [],
+            "all_warnings": [],
+        }
+
+        for yml_file in sorted(self.services_available.glob("*.yml")):
+            service = yml_file.stem
+
+            if enabled_only and service not in enabled:
+                continue
+
+            is_valid, errors, warnings = self.lint(service)
+
+            if is_valid:
+                results["passed"].append(service)
+            else:
+                results["failed"].append(service)
+
+            results["all_errors"].extend(errors)
+            results["all_warnings"].extend(warnings)
+
+        return results
+
+
+def main():
+    """Command-line entry point."""
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description="Lint service YAML files against OnRamp standards",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  services_linter.py plex           # Lint a specific service
+  services_linter.py --all          # Lint all services
+  services_linter.py --enabled      # Lint only enabled services
+  services_linter.py --strict plex  # Fail on warnings too
+        """,
+    )
+
+    parser.add_argument(
+        "service",
+        nargs="?",
+        help="Service to lint",
+    )
+    parser.add_argument(
+        "--all",
+        action="store_true",
+        help="Lint all services",
+    )
+    parser.add_argument(
+        "--enabled",
+        action="store_true",
+        help="Lint only enabled services",
+    )
+    parser.add_argument(
+        "--strict",
+        action="store_true",
+        help="Treat warnings as errors",
+    )
+    parser.add_argument(
+        "--base-dir",
+        default="/app",
+        help="Base directory (default: /app)",
+    )
+
+    args = parser.parse_args()
+
+    linter = ServiceLinter(args.base_dir)
+
+    if args.all or args.enabled:
+        results = linter.lint_all(enabled_only=args.enabled)
+
+        print(f"Passed: {len(results['passed'])}")
+        print(f"Failed: {len(results['failed'])}")
+
+        if results["all_errors"]:
+            print("\nErrors:")
+            for err in results["all_errors"]:
+                print(f"  - {err}")
+
+        if results["all_warnings"]:
+            print("\nWarnings:")
+            for warn in results["all_warnings"]:
+                print(f"  - {warn}")
+
+        return 1 if results["failed"] else 0
+
+    if not args.service:
+        parser.error("Either --all, --enabled, or a service name is required")
+
+    is_valid, errors, warnings = linter.lint(args.service, strict=args.strict)
+
+    print(f"Linting: {args.service}")
+    print(f"Valid: {is_valid}")
+
+    if errors:
+        print("\nErrors:")
+        for err in errors:
+            print(f"  - {err}")
+
+    if warnings:
+        print("\nWarnings:")
+        for warn in warnings:
+            print(f"  - {warn}")
+
+    return 0 if is_valid else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())
