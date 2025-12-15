@@ -1,0 +1,217 @@
+# Backup Strategy
+
+OnRamp's backup system focuses on configuration data. This document explains what's backed up, what's not, and how to create comprehensive backups.
+
+## What's Backed Up
+
+The default backup includes:
+
+| Directory | Contents |
+|-----------|----------|
+| `etc/` | Service configuration files |
+| `services-enabled/` | Enabled service symlinks and env files |
+| `overrides-enabled/` | Active override symlinks |
+
+## What's NOT Backed Up
+
+The following are excluded to reduce backup size:
+
+| Pattern | Reason |
+|---------|--------|
+| `*.log`, `logs/`, `Logs/` | Regeneratable, can be large |
+| `cache/`, `Cache/`, `.cache/` | Regeneratable |
+| `.git/objects/pack/` | Large git data, regeneratable |
+| `*.iso`, `*.img`, `*.qcow2` | Large binary artifacts |
+| `*.safetensors`, `*.gguf` | AI model files (downloadable) |
+| `etc/games/` | Game server binaries (downloadable) |
+| `etc/plex/Library` | Plex library metadata (regeneratable) |
+| `etc/*/db/journal/` | Database journals (part of DB backup) |
+| `tmp/`, `temp/`, `*.tmp` | Temporary files |
+
+### Database Data
+
+Docker volumes containing database data are NOT backed up by the config backup. Use separate database dumps for complete backups.
+
+## Backup Commands
+
+### Basic Backups
+
+```bash
+# Full configuration backup
+make create-backup
+
+# Service-specific backup
+make create-backup SERVICE=plex
+
+# List available backups
+make list-backups
+```
+
+### NFS Backups
+
+```bash
+# Create backup and copy to NFS
+make create-nfs-backup
+
+# Create directly on NFS (faster for slow local storage)
+make create-nfs-backup-direct
+
+# Restore from NFS
+make restore-nfs-backup
+```
+
+### Restore
+
+```bash
+# Restore latest backup
+make restore-backup
+
+# Restore specific backup
+make restore-backup FILE=backups/onramp-config-backup-hostname-24-12-14-1200.tar.gz
+```
+
+## Full Backup Procedure
+
+For complete disaster recovery:
+
+### 1. Config Backup (Automatic)
+
+```bash
+make create-backup
+```
+
+### 2. Database Dumps (Manual)
+
+For each service with a database:
+
+```bash
+# PostgreSQL dedicated containers
+docker exec myservice-db pg_dump -U myservice myservice > myservice-$(date +%Y%m%d).sql
+
+# MariaDB dedicated containers
+docker exec myservice-db mysqldump -u myservice -p myservice > myservice-$(date +%Y%m%d).sql
+
+# Shared PostgreSQL (legacy)
+docker exec postgres pg_dump -U username dbname > dbname-$(date +%Y%m%d).sql
+```
+
+### 3. Volume Data (Manual)
+
+For services with important volume data:
+
+```bash
+# Export named volume
+docker run --rm -v myservice-data:/data -v $(pwd):/backup alpine \
+  tar czf /backup/myservice-data-$(date +%Y%m%d).tar.gz -C /data .
+```
+
+## Restore Procedure
+
+### 1. Deploy Fresh OnRamp
+
+```bash
+git clone https://github.com/your/onramp.git
+cd onramp
+make install
+```
+
+### 2. Restore Configuration
+
+```bash
+# Copy backup to server
+scp backup.tar.gz server:/apps/onramp/backups/
+
+# Restore
+make restore-backup FILE=backups/backup.tar.gz
+```
+
+### 3. Restore Databases
+
+```bash
+# Start database containers
+make start-service postgres
+
+# Restore dumps
+docker exec -i postgres psql -U admin < dbname.sql
+```
+
+### 4. Restart Services
+
+```bash
+make restart
+```
+
+## Scheduling Backups
+
+### Cron Job Example
+
+```bash
+# Daily config backup at 2 AM
+0 2 * * * cd /apps/onramp && make create-nfs-backup
+
+# Weekly database dumps at 3 AM on Sundays
+0 3 * * 0 cd /apps/onramp && ./scripts/backup-databases.sh
+```
+
+### Database Backup Script
+
+Create `/apps/onramp/scripts/backup-databases.sh`:
+
+```bash
+#!/bin/bash
+BACKUP_DIR="/apps/onramp/backups/databases"
+DATE=$(date +%Y%m%d)
+mkdir -p "$BACKUP_DIR"
+
+# Backup all PostgreSQL containers
+for container in $(docker ps --filter "name=-db" --format "{{.Names}}" | grep -E "postgres|pg"); do
+  docker exec "$container" pg_dumpall -U postgres > "$BACKUP_DIR/${container}-${DATE}.sql"
+done
+
+# Backup all MariaDB containers
+for container in $(docker ps --filter "name=-db" --format "{{.Names}}" | grep -E "mariadb|mysql"); do
+  docker exec "$container" mysqldump --all-databases -u root -p"$MYSQL_ROOT_PASSWORD" > "$BACKUP_DIR/${container}-${DATE}.sql"
+done
+
+# Cleanup old backups (keep 7 days)
+find "$BACKUP_DIR" -name "*.sql" -mtime +7 -delete
+```
+
+## Custom Exclusions
+
+Add exclusions via environment variable:
+
+```bash
+# In services-enabled/.env
+ONRAMP_BACKUP_EXCLUSIONS="etc/large-service etc/another-service/data"
+```
+
+Or pass directly:
+
+```bash
+docker run --rm -v $(pwd):/app sietch python /scripts/backup.py create \
+  --exclude "etc/myservice/cache" \
+  --exclude "etc/myservice/logs"
+```
+
+## Backup Size Optimization
+
+If backups are too large:
+
+1. **Audit directories**: `du -sh etc/*/ | sort -h`
+2. **Find large files**: `find etc -type f -size +50M`
+3. **Add exclusions**: Update `DEFAULT_EXCLUSIONS` in `backup.py` or use environment variable
+
+Current exclusions target common space-wasters but your setup may have unique needs.
+
+## Recovery Testing
+
+Periodically test your backup/restore process:
+
+1. Create backup on production
+2. Copy to test environment
+3. Restore and verify services start
+4. Check application functionality
+5. Verify data integrity
+
+Document any issues and adjust procedures accordingly.

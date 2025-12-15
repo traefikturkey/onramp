@@ -8,6 +8,12 @@ For detailed documentation, see the [docs/](docs/) folder:
 - [Scaffolding Guide](docs/scaffolding.md) - Convention-based service configuration
 - [Migration Guide](docs/main-branch-announcement.md) - Switching from master to main
 
+Architecture documentation in [.github/shared/](.github/shared/):
+- [Database Architecture](.github/shared/database-architecture.md) - Dedicated vs shared databases
+- [Network Architecture](.github/shared/network-architecture.md) - Traefik and network patterns
+- [Backup Strategy](.github/shared/backup-strategy.md) - Backup and restore procedures
+- [Health Check Patterns](.github/shared/healthcheck-patterns.md) - Standard health checks
+
 This repo assumes that you are running a debian linux disto like Ubuntu!
 
 A podman version is available as a branch here: [https://github.com/traefikturkey/onramp/tree/podman](https://github.com/traefikturkey/onramp/tree/podman)
