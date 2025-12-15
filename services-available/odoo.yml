@@ -4,14 +4,14 @@ networks:
 
 # description: a suite of applications used in managing a business, including CRM, ERP, and more.
 # https://github.com/odoo/odoo
-# database: postgres
-# database_name: odoo
 
 services:
   odoo:
     image: odoo:${ODOO_DOCKER_TAG:-latest}
     container_name: ${ODOO_CONTAINER_NAME:-odoo}
     restart: ${ODOO_RESTART:-unless-stopped}
+    depends_on:
+      - db
     networks:
       - traefik
     volumes:
@@ -23,9 +23,6 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
-      - HOST=postgres
-      - USER=${ODOO_POSTGRES_USER:-${PG_USER:-admin}}
-      - PASSWORD=${ODOO_POSTGRES_DB_PW:-${PG_PASS}}
     labels:
       - joyride.host.name=${ODOO_HOST_NAME:-odoo}.${HOST_DOMAIN}
       - traefik.enable=${ODOO_TRAEFIK_ENABLED:-true}
@@ -37,3 +34,21 @@ services:
 
       - com.centurylinklabs.watchtower.enable=${ODOO_WATCHTOWER_ENABLED:-true}
       - autoheal=${ODOO_AUTOHEAL_ENABLED:-true}
+
+  db:
+    image: postgres:15
+    container_name: odoo_postgres
+    restart: ${ODOO_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - ./media/odoo/postgresql:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${ODOO_POSTGRES_DB}
+      POSTGRES_PASSWORD: ${ODOO_POSTGRES_DB_PW}
+      POSTGRES_USER: ${ODOO_POSTGRES_USER}
+    healthcheck:
+      interval: 10s
+      retries: 10
+      test: pg_isready -U ${ODOO_POSTGRES_USER} -d ${ODOO_POSTGRES_DB}
+      timeout: 2s

@@ -50,7 +50,7 @@
 - [beszel-agent](https://beszel.dev/guide/agent-installation) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/beszel-agent.yml)): agent to connect to the Beszel hub for monitoring of docker containers and servers.
 - [beszel-hub](https://github.com/henrygd/beszel) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/beszel-hub.yml)): lightweight server monitoring platform that includes Docker statistics, historical data, and alert functions.
 - [bind](https://hub.docker.com/r/ubuntu/bind9) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/bind.yml)): A very flexible, full-featured DNS system
-- [booklore](https://github.com/adityachandelgit/BookLore) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/booklore.yml)): BookLore is a self-hosted web app for organizing and managing your personal book collection. 
+- [booklore](https://github.com/adityachandelgit/BookLore) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/booklore.yml)): BookLore is a self-hosted web app for organizing and managing your personal book collection.
 - [bytebase](https://www.bytebase.com) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/bytebase.yml)): Database CI/CD and Security at Scale
 
 
@@ -81,7 +81,7 @@
 - [dashdot](https://github.com/MauriceNino/dashdot) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/dashdot.yml)): Dashboard for monitoring docker containers
 - [dashy](https://github.com/Lissy93/dashy) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/dashy.yml)): Customizable dashboard for displaying information
 - [dawarich](https://github.com/Freika/dawarich) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/dawarich.yml)): Self-hostable alternative to Google Location History (Google Maps Timeline)
-- [dockerizalo](https://github.com/undernightcore/dockerizalo) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/dockerizalo.yml)): Docker build and deployment platform 
+- [dockerizalo](https://github.com/undernightcore/dockerizalo) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/dockerizalo.yml)): Docker build and deployment platform
 - [docker-mirror](https://hub.docker.com/_/registry) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/docker-mirror.yml)): docker mirror / registry for caching docker images
 - [docker-proxy](https://github.com/Tecnativa/docker-socket-proxy) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/docker-proxy.yml)): Proxy for docker containers
 - [docker-registry](https://hub.docker.com/_/registry) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/docker-registry.yml)): Registry for storing and distributing container images

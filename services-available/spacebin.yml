@@ -4,8 +4,6 @@ networks:
 
 # description: spacebin: text sharing for the final frontier (Pastebin alternative)
 # https://github.com/lukewhrit/spacebin
-# database: postgres
-# database_name: spacebin
 
 services:
   spacebin:
@@ -21,7 +19,7 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
-      - SPIRIT_CONNECTION_URI=postgres://${SPACEBIN_POSTGRES_USER:-${PG_USER:-admin}}:${SPACEBIN_POSTGRES_PASSWORD:-${PG_PASS}}@postgres:5432/spacebin?sslmode=disable
+      - SPIRIT_CONNECTION_URI=${SPACEBIN_CONNECTION_URI:-postgres://spacebin:password@spacebin-db:5432/spacebin?sslmode=disable}
       - SPIRIT_RATELIMITER=${SPACEBIN_RATELIMITER}
       - SPIRIT_EXPIRATION_AGE=${SPACEBIN_EXPIRATION_IN_DAYS:-90}
       - SPIRIT_ID_LENGTH=${SPACEBIN_ID_LENGTH:-8}
@@ -36,3 +34,15 @@ services:
       - traefik.http.routers.spacebin.middlewares=default-headers@file
       - com.centurylinklabs.watchtower.enable=${SPACEBIN_WATCHTOWER_ENABLED:-true}
       - autoheal=${SPACEBIN_AUTOHEAL_ENABLED:-true}
+  spacebin-db:
+    image: postgres:16.3-alpine
+    container_name: spacebin-db
+    restart: ${SPACEBIN_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    environment:
+      - POSTGRES_USER=${SPACEBIN_POSTGRES_USER:-spacebin}
+      - POSTGRES_PASSWORD=${SPACEBIN_POSTGRES_PASSWORD:-password}
+      - POSTGRES_DB=${SPACEBIN_POSTGRES_DB:-spacebin}
+    volumes:
+      - ./etc/spacebin/db:/var/lib/postgresql/data

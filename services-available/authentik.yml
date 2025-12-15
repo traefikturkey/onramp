@@ -7,12 +7,49 @@ networks:
 # https://github.com/goauthentik/authentik
 # https://goauthentik.io/docs/
 # https://www.postgresql.org/
-# database: postgres
-# database_name: authentik
-# cache: valkey
-# cache_db: 1
 
 services:
+  postgresql:
+    image: postgres
+    container_name: authentik_postgresql
+    restart: unless-stopped
+    user: ${PUID}:${PGID}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+      start_period: 20s
+      interval: 30s
+      retries: 5
+      timeout: 5s
+    volumes:
+      - ./etc/authentik/postgresql:/var/lib/postgresql/data
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - POSTGRES_PASSWORD=${PG_PASS_AUTHENTIK:?database password required}
+      - POSTGRES_USER=${PG_USER:-authentik}
+      - POSTGRES_DB=${PG_DB:-authentik}
+    labels:
+      - com.centurylinklabs.watchtower.enable=${AUTHENTIK_WATCHTOWER_ENABLED:-true}
+      - traefik.enable=false
+      - autoheal=true
+
+  redis:
+    image: redis:alpine
+    container_name: authentik_redis
+    restart: unless-stopped
+    volumes:
+      - ./etc/authentik/redis:/data
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      start_period: 20s
+      interval: 30s
+      retries: 5
+      timeout: 3s
+    labels:
+      - com.centurylinklabs.watchtower.enable=${AUTHENTIK_WATCHTOWER_ENABLED:-true}
+      - traefik.enable=false
+      - autoheal=true
+
   authentik-server:
     image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_DOCKER_TAG:-2023.5.2}
     container_name: authentik_server
@@ -23,12 +60,11 @@ services:
     environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
-      - AUTHENTIK_REDIS__HOST=valkey
-      - AUTHENTIK_REDIS__DB=1
-      - AUTHENTIK_POSTGRESQL__HOST=postgres
-      - AUTHENTIK_POSTGRESQL__USER=${PG_USER:-${PG_USER:-admin}}
+      - AUTHENTIK_REDIS__HOST=redis
+      - AUTHENTIK_POSTGRESQL__HOST=postgresql
+      - AUTHENTIK_POSTGRESQL__USER=${PG_USER:-authentik}
       - AUTHENTIK_POSTGRESQL__NAME=${PG_DB:-authentik}
-      - AUTHENTIK_POSTGRESQL__PASSWORD=${PG_PASS_AUTHENTIK:-${PG_PASS}}
+      - AUTHENTIK_POSTGRESQL__PASSWORD=${PG_PASS_AUTHENTIK}
       - AUTHENTIK_LOG_LEVEL=debug
       - AUTHENTIK_SECRET_KEY=${AUTHENTIK_SECRET_KEY}
       - AUTHENTIK_BOOTSTRAP_PASSWORD=${AUTHENTIK_BOOTSTRAP_PASSWORD}
@@ -61,12 +97,11 @@ services:
     environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
-      - AUTHENTIK_REDIS__HOST=valkey
-      - AUTHENTIK_REDIS__DB=1
-      - AUTHENTIK_POSTGRESQL__HOST=postgres
-      - AUTHENTIK_POSTGRESQL__USER=${PG_USER:-${PG_USER:-admin}}
+      - AUTHENTIK_REDIS__HOST=redis
+      - AUTHENTIK_POSTGRESQL__HOST=postgresql
+      - AUTHENTIK_POSTGRESQL__USER=${PG_USER:-authentik}
       - AUTHENTIK_POSTGRESQL__NAME=${PG_DB:-authentik}
-      - AUTHENTIK_POSTGRESQL__PASSWORD=${PG_PASS_AUTHENTIK:-${PG_PASS}}
+      - AUTHENTIK_POSTGRESQL__PASSWORD=${PG_PASS_AUTHENTIK}
       - AUTHENTIK_SECRET_KEY=${AUTHENTIK_SECRET_KEY}
       #- AUTHENTIK_GEOIP: /tmp/geoipdisabled
       # If you uncomment above it will disable GeoIP.

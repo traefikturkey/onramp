@@ -1,4 +1,5 @@
 networks:
+  tandoor-int:
   traefik:
     external: true
 
@@ -6,31 +7,45 @@ networks:
 # https://github.com/TandoorRecipes/recipes
 # https://docs.tandoor.dev/
 # https://tandoor.dev/
-# database: postgres
-# database_name: tandoor
 
 services:
+  tandoor-db:
+    restart: ${TANDOOR_RESTART:-unless-stopped}
+    container_name: ${TANDOORDB_CONTAINER_NAME:-tandoor-db}
+    image: postgres:16-alpine
+    volumes:
+      - ./etc/tandoor/db:/var/lib/postgresql/data
+    networks:
+      - tandoor-int
+    environment:
+      - POSTGRES_DB=${TANDOOR_POSTGRES_DB:-djangodb}
+      - POSTGRES_USER=${TANDOOR_POSTGRES_USER:-djangouser}
+      - POSTGRES_PASSWORD=${TANDOOR_POSTGRES_PASSWORD:-djangopassword}
+      - TZ=${TZ}
+
   tandoor-web:
-    image: ghcr.io/tandoorrecipes/recipes:${TANDOOR_DOCKER_TAG:-latest}
+    image: vabene1111/recipes:${TANDOOR_DOCKER_TAG:-latest}
     container_name: ${TANDOOR_CONTAINER_NAME:-tandoor-web}
     restart: ${TANDOOR_RESTART:-unless-stopped}
     networks:
-      - traefik
+      - tandoor-int
     volumes:
       - ./etc/tandoor/static:/opt/recipes/staticfiles
-      - ./etc/tandoor/media:/opt/recipes/mediafiles      
+      - ./etc/tandoor/media:/opt/recipes/mediafiles
       - /etc/localtime:/etc/localtime:ro
     environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
       - DB_ENGINE=${TANDOOR_DB_ENGINE:-django.db.backends.postgresql}
-      - POSTGRES_HOST=${TANDOOR_POSTGRES_HOST:-postgres}
-      - POSTGRES_DB=${TANDOOR_POSTGRES_DB:-tandoor}
+      - POSTGRES_HOST=${TANDOOR_POSTGRES_HOST:-tandoor-db}
+      - POSTGRES_DB=${TANDOOR_POSTGRES_DB:-djangodb}
       - POSTGRES_PORT=${TANDOOR_POSTGRES_PORT:-5432}
-      - POSTGRES_USER=${TANDOOR_POSTGRES_USER:-${PG_USER:-admin}}
-      - POSTGRES_PASSWORD=${TANDOOR_POSTGRES_PASSWORD:-${PG_PASS}}
+      - POSTGRES_USER=${TANDOOR_POSTGRES_USER:-djangouser}
+      - POSTGRES_PASSWORD=${TANDOOR_POSTGRES_PASSWORD:-djangopassword}
       - SECRET_KEY=${TANDOOR_SECRET_KEY}
+    depends_on:
+      - tandoor-db
 
   tandoor-nginx:
     image: nginx:mainline-alpine
@@ -43,6 +58,7 @@ services:
       - tandoor-web
     networks:
       - traefik
+      - tandoor-int
     labels:
       - joyride.host.name=${TANDOOR_HOST_NAME:-recipe}.${HOST_DOMAIN}
       - traefik.enable=${TANDOOR_TRAEFIK_ENABLED:-true}

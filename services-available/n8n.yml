@@ -4,13 +4,10 @@ networks:
 
 # description: workflow automation platform with native AI capabilities
 # https://github.com/n8n-io/n8n
-# Note: By default uses SQLite (lightweight, suitable for single-user/development).
-#       For production/multi-user setups with PostgreSQL: make enable-override n8n-postgres
-# Note: for gmail oauth help, see this video: https://www.youtube.com/watch?v=YR1TH_ZCAWo
 
 services:
   n8n:
-    image: ghcr.io/n8n-io/n8n:${N8N_DOCKER_TAG:-latest}
+    image: n8nio/n8n:${N8N_DOCKER_TAG:-latest}
     container_name: ${N8N_CONTAINER_NAME:-n8n}
     restart: ${N8N_RESTART:-unless-stopped}
     mem_limit: ${N8N_MEM_LIMIT:-200g}
@@ -18,6 +15,8 @@ services:
       - traefik
     #ports:
     #  - 5678:5678
+    #expose:
+    #  - 5678
     volumes:
       - ./etc/n8n/:/home/node/.n8n/
 
@@ -27,16 +26,13 @@ services:
       - N8N_BASIC_AUTH_USER=${N8N_BASIC_AUTH_USER:-user}
       - N8N_BASIC_AUTH_PASSWORD=${N8N_BASIC_AUTH_PASSWORD:-password}
 
-      # Network configuration
-      - N8N_LISTEN_ADDRESS=0.0.0.0
-      - N8N_PORT=5678
-
-      # Reverse proxy configuration (Traefik)
-      - N8N_PROTOCOL=https
-      - N8N_HOST=${N8N_HOST_NAME:-n8n}.${HOST_DOMAIN}
-      - WEBHOOK_URL=https://${N8N_HOST_NAME:-n8n}.${HOST_DOMAIN}/
-      - N8N_EDITOR_BASE_URL=https://${N8N_HOST_NAME:-n8n}.${HOST_DOMAIN}/
-      - N8N_PROXY_HOPS=1
+      # Database config
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_HOST=n8n_postgres
+      - DB_POSTGRESDB_PORT=5432
+      - DB_POSTGRESDB_DATABASE=${N8N_POSTGRES_DB:-n8n}
+      - DB_POSTGRESDB_USER=${N8N_POSTGRES_USER:-n8n}
+      - DB_POSTGRESDB_PASSWORD=${POSTGRES_PASSWORD_N8N:-n8n}
 
       - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true # Enforce settings file permissions
 
@@ -46,7 +42,7 @@ services:
       # Cookie security (false if behind SSL-terminating proxy or for local usage)
       - N8N_SECURE_COOKIE=false
 
-      # (Optional) Encryption key for credentials (makes them portable) 
+      # (Optional) Encryption key for credentials (makes them portable)
       # - N8N_ENCRYPTION_KEY=some-32-char-random-string
 
       - PUID=${PUID:-1000}
@@ -62,3 +58,18 @@ services:
       - traefik.http.services.n8n.loadbalancer.server.port=5678
       - com.centurylinklabs.watchtower.enable=${N8N_WATCHTOWER_ENABLED:-true}
       - autoheal=${N8N_AUTOHEAL_ENABLED:-true}
+    depends_on:
+      - n8n_postgres
+
+  n8n_postgres:
+    image: postgres:12
+    container_name: n8n_postgres
+    networks:
+      - traefik
+    environment:
+      - POSTGRES_USER=${N8N_POSTGRES_USER:-n8n}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD_N8N:-n8n}
+      - POSTGRES_DB=${N8N_POSTGRES_DB:-n8n}
+    volumes:
+      - ./etc/n8n/postgresql:/var/lib/postgresql/data
+    restart: unless-stopped

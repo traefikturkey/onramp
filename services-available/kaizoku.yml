@@ -1,14 +1,13 @@
 networks:
   traefik:
     external: true
+  kaizoku-db:
+
+volumes:
+  kaizoku-redis:
 
 # description: Web-based anime downloader
 # https://github.com/oae/kaizoku
-# database: postgres
-# database_name: kaizoku
-# cache: valkey
-# cache_db: 0
-# Note: kaizoku ignores REDIS_DB environment variable and always uses DB 0
 
 services:
   kaizoku:
@@ -17,6 +16,8 @@ services:
     restart: ${KAIZOKU_RESTART:-unless-stopped}
     networks:
       - traefik
+    ports:
+      - 3000:3000
     volumes:
       - ${KAIZOKU_MANGA_VOLUME:-./media/manga}:/manga
       - ./etc/kaizoku/config:/config
@@ -25,11 +26,13 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
-      - DATABASE_URL=postgresql://${KAIZOKU_POSTGRES_USER:-${PG_USER:-admin}}:${KAIZOKU_POSTGRES_PASSWORD:-${PG_PASS}}@postgres:5432/kaizoku
+      - DATABASE_URL=postgresql://kaizoku:kaizoku@kaizoku-db:5432/kaizoku
       - KAIZOKU_PORT=3000
-      - REDIS_HOST=valkey
+      - REDIS_HOST=kaizoku-redis
       - REDIS_PORT=6379
-      - REDIS_DB=0  # Note: kaizoku ignores this and always uses DB 0
+    depends_on:
+      kaizoku-db:
+        condition: service_healthy
     labels:
       - joyride.host.name=${KAIZOKU_CONTAINER_NAME:-kaizoku}.${HOST_DOMAIN}
       - traefik.enable=true
@@ -39,3 +42,30 @@ services:
       - traefik.http.services.kaizoku.loadbalancer.server.port=3000
       - com.centurylinklabs.watchtower.enable=${KAIZOKU_WATCHTOWER_ENABLED:-true}
       - autoheal=true
+
+  kaizoku-redis:
+    image: redis:7-alpine
+    networks:
+      - traefik
+    restart: unless-stopped
+    container_name: kaizoku-redis
+    volumes:
+      - kaizoku-redis:/manga
+
+  kaizoku-db:
+    image: postgres:alpine
+    restart: unless-stopped
+    container_name: kaizoku-db
+    networks:
+      - traefik
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U kaizoku']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    environment:
+      - POSTGRES_USER=${KAIZOKU_POSTGRES_USER:-kaizoku}
+      - POSTGRES_DB=${KAIZOKU_POSTGRES_DB:-kaizoku}
+      - POSTGRES_PASSWORD=${KAIZOKU_POSTGRES_PASSWORD:-kaizoku}
+    volumes:
+      - ${KAIZOKU_DB_VOLUME:-./etc/kaizoku/db}:/var/lib/postgresql/data
