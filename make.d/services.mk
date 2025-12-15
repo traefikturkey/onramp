@@ -4,6 +4,11 @@
 ##
 #########################################################
 
+# Fix env file permissions (security: passwords should not be world-readable)
+fix-env-permissions:
+	@chmod 600 services-enabled/*.env 2>/dev/null || true
+	@chmod 600 services-enabled/.env* 2>/dev/null || true
+
 # Core service lifecycle
 start-service: COMPOSE_IGNORE_ORPHANS = true
 start-service: enable-service build
@@ -42,6 +47,7 @@ ifneq (,$(wildcard ./services-available/$(SERVICE_PASSED_DNCASED).yml))
 		$(SIETCH_RUN) python /scripts/services.py restore-env '$(SERVICE_PASSED_DNCASED)'; \
 	fi
 	$(MAKE) scaffold-build $(SERVICE_PASSED_DNCASED)
+	@$(MAKE) fix-env-permissions
 else
 	@echo "No such service file ./services-available/$(SERVICE_PASSED_DNCASED).yml!"
 endif
