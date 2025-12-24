@@ -28,6 +28,7 @@ services:
       - RECIPE_LANDSCAPE_VIEW=true
       - RECIPE_DISABLE_COMMENTS=false
       - RECIPE_DISABLE_AMOUNT=false
+      - TOKEN_TIME=3600
       # =====================================
       # Email Configuration
       # SMTP_HOST=
