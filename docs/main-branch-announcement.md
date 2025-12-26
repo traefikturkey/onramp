@@ -13,7 +13,7 @@ The big change is how environment files are handled. Instead of one giant `.env`
 # Stop current services
 make down
 
-# Create a full backup first (excludes media/)
+# Create a full backup first (excludes media/) -- Probably gonna need to add sudo here (or sudo !! after).
 tar --exclude='media' -czvf ~/onramp-backup-$(date +%Y%m%d).tar.gz .
 
 # Fetch and switch to main
