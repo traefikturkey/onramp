@@ -23,6 +23,9 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
+      - HOST=db
+      - USER=${ODOO_POSTGRES_USER:-odoo}
+      - PASSWORD=${ODOO_POSTGRES_DB_PW}
     labels:
       - joyride.host.name=${ODOO_HOST_NAME:-odoo}.${HOST_DOMAIN}
       - traefik.enable=${ODOO_TRAEFIK_ENABLED:-true}

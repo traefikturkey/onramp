@@ -1,0 +1,7 @@
+[options]
+; Odoo configuration file
+; Database connection is configured via environment variables (HOST, USER, PASSWORD)
+; which override any settings here
+
+; addons_path = /mnt/extra-addons
+admin_passwd = False
