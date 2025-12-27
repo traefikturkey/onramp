@@ -220,28 +220,6 @@ Files are copied with **no-clobber** — existing files in `etc/<service>/` are 
 
 Operations in `scaffold.yml` respect `skip_if_exists` flags for the same reason.
 
-## Service Metadata (Auto-Dependencies)
-
-Services can declare metadata comments to automatically enable dependencies:
-
-```yaml
-# database: postgres
-# database_name: myservice
-# cache: valkey
-# cache_db: 5
-# requires: gitea, crowdsec
-```
-
-| Key | Effect |
-|-----|--------|
-| `database` | Auto-enables postgres/mariadb, creates database |
-| `database_name` | Name of database to create |
-| `cache` | Auto-enables Valkey, assigns database number |
-| `cache_db` | Preferred Valkey database (0-15) |
-| `requires` | Auto-enables and starts listed services first |
-
-This eliminates cross-file `depends_on` errors and ensures dependencies are ready before the main service starts.
-
 ## Full Documentation
 
 For detailed scaffolding documentation, see `docs/scaffolding.md` in the repository.
