@@ -65,7 +65,7 @@ services:
       - n8n_postgres
 
   n8n_postgres:
-    image: postgres:12
+    image: postgres:16
     env_file:
       - ./services-enabled/n8n.env
     container_name: n8n_postgres
