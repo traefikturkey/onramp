@@ -8,11 +8,17 @@ Docker Compose-based self-hosted homelab. Traefik reverse proxy + Cloudflare DNS
 
 ```
 services-available/              # Service definitions (*.yml)
-services-enabled/                # Active symlinks + *.env files
+services-enabled/                # Active symlinks + environment files
+  ├── .env                       # Global (HOST_NAME, HOST_DOMAIN, TZ, PUID/PGID)
+  ├── .env.nfs                   # NFS mount paths
+  ├── .env.external              # External service URLs
+  └── <service>.env              # Per-service variables
 services-scaffold/<service>/     # Templates → generates env + configs
 etc/                             # Generated configs per service
 media/                           # Service data volumes
 backups/                         # Backup archives + migration backups
+overrides-available/             # Optional service extensions
+overrides-enabled/               # Active overrides
 sietch/scripts/                  # Python tools
 ```
 
@@ -24,9 +30,12 @@ sietch/scripts/                  # Python tools
 | Start service | `make start-service NAME` |
 | View logs | `make logs NAME` |
 | Edit global env | `make edit-env-onramp` |
+| Edit NFS config | `make edit-env-nfs` |
+| Edit external URLs | `make edit-env-external` |
 | Edit service env | `make edit-env NAME` |
 | Rebuild scaffold | `make scaffold-build NAME` |
 | List services | `make list-services` |
+| List overrides | `make list-overrides` |
 
 ## How Scaffolding Works
 
