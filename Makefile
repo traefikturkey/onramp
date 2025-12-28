@@ -3,8 +3,10 @@
 # (e.g., ${VAR:-default}) that Make interprets as recursive references.
 MAKE_INCLUDE_FILES := $(wildcard ./services-enabled/.env)
 
-# All env files for docker-compose: main .env first, then .env.*, then *.env
+# All env files for docker-compose: .env, .env.*, and *.env
 # Order matters: later files override earlier ones
+# These are loaded via --env-file for YAML variable substitution
+# Note: env_file: in YAML only provides runtime container environment
 ENV_FILES := $(wildcard ./services-enabled/.env) $(wildcard ./services-enabled/.env.*) $(wildcard ./services-enabled/*.env)
 ENV_FLAGS := $(foreach file, $(ENV_FILES), --env-file $(file))
 
