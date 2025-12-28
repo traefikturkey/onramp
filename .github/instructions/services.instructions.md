@@ -48,3 +48,7 @@ make logs <service>
 - **No .env created**: Missing `services-scaffold/<service>/env.template`
 - **Can't connect to DB**: Missing HOST/USER/PASSWORD in service environment
 - **Traefik not routing**: Wrong port or missing `traefik.enable=true`
+
+## Reference
+
+See [troubleshooting](../shared/troubleshooting.md) for detailed solutions and [scaffold templates](../shared/scaffold-templates.md) for scaffold.yml operations.
