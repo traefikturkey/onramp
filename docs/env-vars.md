@@ -110,6 +110,47 @@ PLEX_CLAIM=claim-xxxx
 PLEX_TRAEFIK_ENABLED=true
 ```
 
+## How Environment Variables Are Loaded
+
+OnRamp uses two mechanisms for environment variables, each serving different purposes:
+
+### 1. Makefile `--env-file` Flags (YAML Parsing)
+
+The Makefile loads ALL env files via `--env-file` flags to docker compose:
+
+```makefile
+ENV_FILES := .env .env.nfs .env.external *.env
+ENV_FLAGS := $(foreach file, $(ENV_FILES), --env-file $(file))
+```
+
+This enables **YAML variable substitution** - variables like `${SERVICE_DOCKER_TAG:-latest}` in your docker-compose files are resolved at parse time. Without this, values like `container_name` and labels wouldn't work.
+
+### 2. YAML `env_file:` Directive (Container Runtime)
+
+Each service YAML explicitly declares its env file:
+
+```yaml
+services:
+  myservice:
+    image: myservice:${MYSERVICE_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/myservice.env
+    container_name: ${MYSERVICE_CONTAINER_NAME:-myservice}
+```
+
+This serves two purposes:
+- **Runtime Environment**: Provides variables inside the running container
+- **Self-Documentation**: Reading the YAML shows exactly which env file the service uses
+
+### Why Both Are Needed
+
+| Mechanism | When It Runs | What It Does |
+|-----------|--------------|--------------|
+| `--env-file` (Makefile) | YAML parsing | Resolves `${VAR}` in container_name, labels, volumes |
+| `env_file:` (YAML) | Container start | Provides vars inside the container |
+
+Example: `SYNCTHING_CONTAINER_NAME=sync` must be available during YAML parsing for `container_name: ${SYNCTHING_CONTAINER_NAME:-syncthing}` to resolve correctly.
+
 ## Variable Precedence
 
 Variables are loaded in this order (later overrides earlier):

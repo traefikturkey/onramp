@@ -88,7 +88,8 @@ make enable-service uptime-kuma
 make restart
 ```
 > Note: This creates a symlink file in `./services-enabled` to the service.yml file in `./services-available`.
-> If the service has templates in `services-scaffold/`, a configuration file will also be generated at `services-enabled/<service>.env`.
+> A `.env` file is always generated at `services-enabled/<service>.env` (from template if available, or auto-generated).
+> Each service YAML has an `env_file:` directive pointing to this file.
 
 and disabled with the following:
 ```
