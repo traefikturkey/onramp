@@ -19,6 +19,7 @@ services:
     #  - 5678
     volumes:
       - ./etc/n8n/:/home/node/.n8n/
+      - ./media/n8n/workflows:/home/node/workflows
 
     environment:
       # Basic auth
