@@ -2,6 +2,79 @@
 
 OnRamp uses modular Makefiles in `make.d/` to organize Docker Compose, service lifecycle, backup, and utility commands. The root `Makefile` aggregates all modules dynamically.
 
+## Command Quick Reference
+
+### Core Operations
+| Command | Description |
+|---------|-------------|
+| `make` | Start all enabled services |
+| `make down` | Stop all services |
+| `make restart` | Stop + start all services |
+| `make update` | Pull images + restart |
+| `make logs` | Follow all service logs |
+
+### Service Lifecycle
+| Command | Description |
+|---------|-------------|
+| `make enable-service NAME` | Enable + scaffold service |
+| `make disable-service NAME` | Disable service (keeps data) |
+| `make nuke-service NAME` | Remove service AND all data |
+| `make start-service NAME` | Start single service |
+| `make stop-service NAME` | Stop single service |
+| `make restart-service NAME` | Restart single service |
+| `make logs NAME` | View service logs |
+| `make attach-service NAME` | Exec bash into container |
+| `make update-service NAME` | Pull + restart service |
+
+### Environment
+| Command | Description |
+|---------|-------------|
+| `make edit-env-onramp` | Edit global .env |
+| `make edit-env NAME` | Edit service .env |
+| `make edit-env-nfs` | Edit NFS config |
+| `make edit-env-external` | Edit external services |
+
+### Scaffolding
+| Command | Description |
+|---------|-------------|
+| `make scaffold-build NAME` | Re-run scaffold templates |
+| `make scaffold-list` | List services with scaffolds |
+| `make scaffold-check NAME` | Validate scaffold exists |
+
+### Listing
+| Command | Description |
+|---------|-------------|
+| `make list-services` | All available services |
+| `make list-enabled` | Currently enabled services |
+| `make list-overrides` | Available overrides |
+| `make list-external` | External service proxies |
+| `make list-games` | Game servers |
+
+### Backup/Restore
+| Command | Description |
+|---------|-------------|
+| `make create-backup` | Backup configuration |
+| `make restore-backup` | Restore from backup |
+| `make list-backups` | List available backups |
+
+### Database (MariaDB)
+| Command | Description |
+|---------|-------------|
+| `make mariadb-console` | Interactive console |
+| `make mariadb-list-databases` | List all databases |
+| `make mariadb-create-db NAME` | Create database |
+| `make mariadb-drop-db NAME` | Drop database |
+
+### Utilities
+| Command | Description |
+|---------|-------------|
+| `make check-yaml` | Validate all YAML files |
+| `make start-staging` | Use ACME staging certs |
+| `make test` | Run pytest suite |
+| `make help` | Show all available targets |
+
+---
+
 ## Structure
 
 ### Root Makefile Pattern

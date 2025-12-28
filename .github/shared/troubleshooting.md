@@ -241,6 +241,77 @@ docker logs <service>_postgres
 
 ---
 
+## Health Check Issues
+
+### Container keeps restarting (unhealthy)
+
+**Diagnosis:**
+```bash
+docker inspect <container> | grep -A 20 '"Health"'
+docker logs <container> --tail 50
+```
+
+**Common causes:**
+- Health check command references wrong port
+- Service takes longer to start than health check timeout
+- Missing dependencies (database not ready)
+
+**Fix in service YAML:**
+```yaml
+healthcheck:
+  test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+  interval: 30s
+  timeout: 10s
+  retries: 5
+  start_period: 60s  # Increase for slow-starting services
+```
+
+---
+
+## Certificate Issues
+
+### Stuck on staging certificates
+
+**Solution:**
+```bash
+make down-staging
+make clean-acme
+make start
+```
+
+### Testing with staging certs first
+
+Always test with staging to avoid rate limits:
+```bash
+make start-staging
+# Check logs, verify routing works
+make down-staging
+make start  # Production certs
+```
+
+---
+
+## Environment Precedence
+
+When the same variable is defined in multiple files:
+
+**Order (later wins):**
+1. `services-enabled/.env` (global)
+2. `services-enabled/.env.nfs` (NFS mounts)
+3. `services-enabled/.env.external` (external services)
+4. `services-enabled/<service>.env` (service-specific) ← **Highest priority**
+
+**Debugging:**
+```bash
+# Check which file defines a variable
+grep -r "MY_VAR" services-enabled/
+
+# Check final resolved value
+docker compose config | grep MY_VAR
+```
+
+---
+
 ## Quick Diagnostic Commands
 
 ```bash
@@ -258,4 +329,10 @@ docker ps -a | grep <service>
 
 # Inspect environment being passed
 docker inspect <container> | grep -A 50 '"Env"'
+
+# Validate all YAML files
+make check-yaml
+
+# View Traefik routing
+docker logs traefik 2>&1 | grep <service>
 ```
