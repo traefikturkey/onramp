@@ -31,6 +31,7 @@ services:
       - traefik.enable=${ODOO_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.odoo.entrypoints=websecure
       - traefik.http.routers.odoo.rule=Host(`${ODOO_HOST_NAME:-odoo}.${HOST_DOMAIN}`)
+      - traefik.http.routers.odoo.tls.certresolver=letsencrypt
       - traefik.http.routers.odoo.service=odoo
       #- traefik.http.services.odoo.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.odoo.loadbalancer.server.port=8069
