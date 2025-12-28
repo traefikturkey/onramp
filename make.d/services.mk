@@ -9,9 +9,17 @@ fix-env-permissions:
 	@chmod 600 services-enabled/*.env 2>/dev/null || true
 	@chmod 600 services-enabled/.env* 2>/dev/null || true
 
+# Ensure service .env file exists (auto-fix for missing env files)
+ensure-service-env:
+	@if [ -f './services-enabled/$(SERVICE_PASSED_DNCASED).yml' ] && [ ! -f './services-enabled/$(SERVICE_PASSED_DNCASED).env' ]; then \
+		echo "⚠️  Missing .env file for $(SERVICE_PASSED_DNCASED), running scaffold..."; \
+		$(MAKE) scaffold-build $(SERVICE_PASSED_DNCASED); \
+		$(MAKE) fix-env-permissions; \
+	fi
+
 # Core service lifecycle
 start-service: COMPOSE_IGNORE_ORPHANS = true
-start-service: enable-service build
+start-service: enable-service ensure-service-env build
 	$(DOCKER_COMPOSE) $(SERVICE_FLAGS) up -d --force-recreate $(SERVICE_PASSED_DNCASED)
 
 down-service: stop-service
