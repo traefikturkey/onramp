@@ -8,6 +8,8 @@ MAKE_INCLUDE_FILES := $(wildcard ./services-enabled/.env)
 # Load service-specific env files first, then .env.* files, then main .env last
 # This ensures main .env values take precedence over defaults in service env files
 SIETCH_ENV_FILES := $(wildcard ./services-enabled/*.env) $(wildcard ./services-enabled/.env.*) $(wildcard ./services-enabled/.env)
+SIETCH_ENV_FLAGS := $(foreach file, $(SIETCH_ENV_FILES), --env-file $(file))
+
 ifneq (,$(MAKE_INCLUDE_FILES))
     include $(MAKE_INCLUDE_FILES)
     export
@@ -24,14 +26,14 @@ export SERVICE_PASSED_DNCASED := $(strip $(word 2,$(MAKECMDGOALS)))
 export SERVICE_PASSED_UPCASED := $(strip $(subst -,_,$(shell echo '$(SERVICE_PASSED_DNCASED)' | tr a-z A-Z )))
 
 export DOCKER_COMPOSE_FILES :=  $(wildcard services-enabled/*.yml) $(wildcard overrides-enabled/*.yml) $(wildcard docker-compose.*.yml) 
-export DOCKER_COMPOSE_FLAGS := -f docker-compose.yml $(foreach file, $(DOCKER_COMPOSE_FILES), -f $(file))
+export DOCKER_COMPOSE_FLAGS := $(SIETCH_ENV_FLAGS) -f docker-compose.yml $(foreach file, $(DOCKER_COMPOSE_FILES), -f $(file))
 
 DOCKER_COMPOSE_DEVELOPMENT_FILES := $(wildcard services-dev/*.yml)
 DOCKER_COMPOSE_DEVELOPMENT_FLAGS := --project-directory ./ $(foreach file, $(DOCKER_COMPOSE_DEVELOPMENT_FILES), -f $(file))
 
 # used to look for the file in the services-enabled folder when [start|stop|pull]-service is used 
 SERVICE_FILES := $(wildcard services-enabled/$(SERVICE_PASSED_DNCASED).yml) $(wildcard overrides-enabled/$(SERVICE_PASSED_DNCASED)-*.yml)
-SERVICE_FLAGS := --project-directory ./ $(foreach file, $(SERVICE_FILES), -f $(file))
+SERVICE_FLAGS := $(SIETCH_ENV_FLAGS) --project-directory ./ $(foreach file, $(SERVICE_FILES), -f $(file))
 
 # get the boxes ip address and the current users id and group id
 export HOSTIP := $(shell ip route get 1.1.1.1 | grep -oP 'src \K\S+')
@@ -74,7 +76,6 @@ SIETCH_FILES := $(shell find sietch/ -type f ! -name '.built' \
 	! -path 'sietch/.coverage' \
 	! -name '*.pyc' \
 	2>/dev/null)
-SIETCH_ENV_FLAGS := $(foreach file, $(SIETCH_ENV_FILES), --env-file $(file))
 SIETCH_COMPUTED_VARS := -e HOSTIP=$(HOSTIP) -e PUID=$(PUID) -e PGID=$(PGID) -e HOST_NAME=$(HOST_NAME) -e TZ=$(TZ) -e HOST_DOMAIN=$(HOST_DOMAIN)
 SIETCH_RUN := docker run --rm $(SIETCH_ENV_FLAGS) $(SIETCH_COMPUTED_VARS) -v $(shell pwd):/app -v /var/run/docker.sock:/var/run/docker.sock --network traefik -u $(PUID):$(PGID) $(SIETCH_IMAGE)
 
