@@ -8,6 +8,8 @@ networks:
 services:
   rustdesk:
     image: ghcr.io/rustdesk/rustdesk-server:${RUSTDESK_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/rustdesk.env
     container_name: ${RUSTDESK_ID_CONTAINER_NAME:-rustdesk-id-server}
     restart: ${RUSTDESK_RESTART:-unless-stopped}
     command: hbbs -r ${RUSTDESK_RELAY_CONTAINER_NAME:-rustdesk-relay}.${HOST_DOMAIN}:21117
@@ -33,6 +35,8 @@ services:
 
   rustdesk-relay:
     image: ghcr.io/rustdesk/rustdesk-server:${RUSTDESK_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/rustdesk.env
     container_name: ${RUSTDESK_RELAY_CONTAINER_NAME:-rustdesk-relay}
     restart: ${RUSTDESK_RESTART:-unless-stopped}
     networks:

@@ -10,6 +10,8 @@ networks:
 services:
   cially:
     image: ghcr.io/skellgreco/cially-bot:${CIALLY_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/cially.env
     container_name: ${CIALLY_CONTAINER_NAME:-cially}
     restart: ${CIALLY_RESTART:-unless-stopped}
     mem_limit: ${CIALLY_MEM_LIMIT:-200g}
@@ -42,6 +44,8 @@ services:
 
   cially-web:
     image: ghcr.io/skellgreco/cially-web:latest
+    env_file:
+      - ./services-enabled/cially.env
     container_name: cially-web
     restart: unless-stopped
     environment:
@@ -69,6 +73,8 @@ services:
   # Need to expose this via Traefik as well since the user needs to log into Pocketbase and configure it.
   pocketbase:
     image: ghcr.io/keksiqc/pocketbase:0.26.6
+    env_file:
+      - ./services-enabled/cially.env
     container_name: cially-pocketbase
     restart: unless-stopped
     volumes:

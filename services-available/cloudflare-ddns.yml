@@ -6,6 +6,8 @@
 services:
   cloudflare-ddns:
     image: ghcr.io/favonia/cloudflare-ddns:${CLOUDFLARE_DDNS_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/cloudflare-ddns.env
     container_name: ${CLOUDFLARE_DDNS_CONTAINER_NAME:-cloudflare-ddns}
     restart: unless-stopped
     network_mode: host

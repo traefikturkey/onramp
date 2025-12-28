@@ -4,6 +4,8 @@
 services:
   ubuntu:
     image: ubuntu
+    env_file:
+      - ./services-enabled/ubuntu.env
     container_name: ubuntu
     restart: on-failure
     command: sleep infinity

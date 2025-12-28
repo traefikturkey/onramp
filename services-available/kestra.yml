@@ -10,6 +10,8 @@ networks:
 services:
   kestra:
     image: ghcr.io/kestra-io/kestra:${KESTRA_DOCKER_TAG:-latest-full}
+    env_file:
+      - ./services-enabled/kestra.env
     container_name: ${KESTRA_CONTAINER_NAME:-kestra}
     restart: ${KESTRA_RESTART:-unless-stopped}
     user: "${KESTRA_USER:-root}"

@@ -8,6 +8,8 @@ networks:
 services:
   bytebase:
     image: bytebase/bytebase:${BYTEBASE_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/bytebase.env
     init: true
     container_name: ${BYTEBASE_CONTAINER_NAME:-bytebase}
     restart: ${BYTEBASE_RESTART:-unless-stopped}

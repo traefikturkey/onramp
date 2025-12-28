@@ -10,6 +10,8 @@ networks:
 services:
   pwndrop:
     image: lscr.io/linuxserver/pwndrop:${PWNDROP_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/pwndrop.env
     container_name: ${PWNDROP_CONTAINER_NAME:-pwndrop}
     restart: unless-stopped
     networks:

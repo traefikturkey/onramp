@@ -9,6 +9,8 @@ networks:
 services:
   kasm:
     image: lscr.io/linuxserver/kasm:${KASM_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/kasm.env
     container_name: ${KASM_CONTAINER_NAME:-kasm}
     restart: ${KASM_RESTART:-unless-stopped}
     networks:

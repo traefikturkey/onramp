@@ -11,6 +11,8 @@ services:
   cloudflared_chown:
     # https://github.com/cloudflare/cloudflared/issues/163
     image: privatebin/chown:1.34.1-musl-1.2.2-r3
+    env_file:
+      - ./services-enabled/cloudflare-tunnel.env
     read_only: true
     command:
       - 65532:65532
@@ -19,6 +21,8 @@ services:
       - ./etc/cloudflare-tunnel:/mnt
   cloudflare-tunnel:
     image: cloudflare/cloudflared:${CLOUDFLARE_TUNNEL_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/cloudflare-tunnel.env
     container_name: ${CLOUDFLARE_TUNNEL_CONTAINER_NAME:-cloudflare-tunnel}
     restart: ${CLOUDFLARE_TUNNEL_RESTART:-unless-stopped}
     command: tunnel --url traefik:443 --hostname ${HOST_NAME}.${HOST_DOMAIN} run ${CLOUDFLARE_TUNNEL_NAME}

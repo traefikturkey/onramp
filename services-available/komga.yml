@@ -8,6 +8,8 @@ networks:
 services:
   komga:
     image: ghcr.io/gotson/komga:${KOMGA_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/komga.env
     container_name: ${KOMGA_CONTAINER_NAME:-komga}
     restart: ${KOMGA_RESTART:-unless-stopped}
     networks:

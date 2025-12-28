@@ -9,6 +9,8 @@ networks:
 services:
   nodered:
     image: ghcr.io/node-red/node-red:${NODERED_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/nodered.env
     container_name: nodered
     restart: unless-stopped
     networks:

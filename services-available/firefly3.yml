@@ -13,6 +13,8 @@ volumes:
 services:
   firefly3:
     image: fireflyiii/core:${FIREFLY3_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/firefly3.env
     container_name: ${FIREFLY3_CONTAINER_NAME:-firefly}
     restart: ${FIREFLY3_RESTART:-unless-stopped}
     depends_on:
@@ -57,6 +59,8 @@ services:
       - autoheal=true
   db:
     image: mariadb
+    env_file:
+      - ./services-enabled/firefly3.env
     hostname: db
     container_name: ${FIREFLY_DB_CONTAINER_NAME:-firefly_db}
     restart: ${FIREFLY3_RESTART:-unless-stopped}
@@ -77,6 +81,8 @@ services:
     # The STATIC_CRON_TOKEN must be *exactly* 32 characters long
     #
     image: alpine
+    env_file:
+      - ./services-enabled/firefly3.env
     restart: ${FIREFLY3_RESTART:-unless-stopped}
     environment:
       # echo "FIREFLY_CRON_TOKEN='$(openssl rand -base64 32 | tr -d /=+ | cut -c -32)'" >> .env

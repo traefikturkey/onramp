@@ -10,6 +10,8 @@ networks:
 services:
   mediamanager-db:
     image: postgres:latest
+    env_file:
+      - ./services-enabled/mediamanager.env
     container_name: ${MEDIAMANAGER_DB_NAME:-mediamanager-db}
     restart: ${MEDIAMANAGER_RESTART:-unless-stopped}
     volumes:
@@ -24,6 +26,8 @@ services:
 
   mediamanager-backend:
     image: ghcr.io/maxdorninger/mediamanager/backend:${MEDIAMANAGERBACKEND_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/mediamanager.env
     container_name: ${MEDIAMANAGER_CONTAINER_NAME:-mediamanager-backend}
     restart: ${MEDIAMANAGER_RESTART:-unless-stopped}
     # mem_limit: ${MEDIAMANAGER_MEM_LIMIT:-200g}
@@ -86,6 +90,8 @@ services:
 
   mediamanager-frontend:
     image: ghcr.io/maxdorninger/mediamanager/frontend:${MEDIAMANAGERFRONTEND_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/mediamanager.env
     container_name: ${MEDIAMANAGERFRONT_CONTAINER_NAME:-mediamanager-frontend}
     restart: ${MEDIAMANAGER_RESTART:-unless-stopped}
     environment:

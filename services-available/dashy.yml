@@ -8,6 +8,8 @@ networks:
 services:
   dashy:
     image: ghcr.io/lissy93/dashy:${DASHY_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/dashy.env
     container_name: ${DASHY_CONTAINER_NAME:-dashy}
     restart: ${DASHY_RESTART:-unless-stopped}
     networks:

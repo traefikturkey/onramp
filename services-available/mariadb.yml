@@ -37,7 +37,7 @@ services:
       - ${MARIADB_DIR:-./media/databases/mariadb/data}:/var/lib/mysql
       - /etc/localtime:/etc/localtime:ro
     env_file:
-      - services-enabled/.env
+      - ./services-enabled/mariadb.env
     environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}

@@ -8,6 +8,8 @@ networks:
 services:
   pingvin-share:
     image: ghcr.io/stonith404/pingvin-share:${PINGVIN_SHARE_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/pingvin-share.env
     container_name: ${PINGVIN_SHARE_CONTAINER_NAME:-pingvin-share}
     restart: ${PINGVIN_SHARE_RESTART:-unless-stopped}
     networks:

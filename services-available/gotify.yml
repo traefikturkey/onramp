@@ -8,6 +8,8 @@ networks:
 services:
   gotify:
     image: ghcr.io/gotify/server:${GOTIFY_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/gotify.env
     container_name: ${GOTIFY_CONTAINER_NAME:-gotify}
     restart: unless-stopped
     networks:

@@ -8,6 +8,8 @@ networks:
 services:
   windows:
     image: ghcr.io/dockur/windows:${WINDOWS_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/windows.env
     container_name: ${WINDOWS_CONTAINER_NAME:-windows}
     restart: ${WINDOWS_RESTART:-unless-stopped}
     mem_limit: ${WINDOWS_MEM_LIMIT:-200g}

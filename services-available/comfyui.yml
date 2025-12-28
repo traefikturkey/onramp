@@ -9,6 +9,8 @@ networks:
 services:
   comfyui:
     image: frefrik/comfyui-flux:${COMFYUI_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/comfyui.env
     container_name: ${COMFYUI_CONTAINER_NAME:-comfyui}
     restart: ${COMFYUI_RESTART:-unless-stopped}
     mem_limit: ${COMFYUI_MEM_LIMIT:-200g}

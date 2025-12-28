@@ -9,6 +9,8 @@ networks:
 services:
   remotely:
     image: immybot/remotely:${REMOTELY_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/remotely.env
     container_name: ${REMOTELY_CONTAINER_NAME:-remotely}
     restart: ${REMOTELY_RESTART:-unless-stopped}
     networks:

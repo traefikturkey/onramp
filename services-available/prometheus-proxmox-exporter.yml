@@ -8,7 +8,7 @@ services:
     container_name: prometheus-proxmox-exporter
     restart: unless-stopped
     env_file:
-      - services-enabled/.env
+      - ./services-enabled/prometheus-proxmox-exporter.env
     # ports:
     #   - 9221:9221
     labels:

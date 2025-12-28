@@ -9,6 +9,8 @@ networks:
 services:
   jellyfin:
     image: lscr.io/linuxserver/jellyfin:${JELLYFIN_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/jellyfin.env
     container_name: ${JELLYFIN_CONTAINER_NAME:-jellyfin}
     restart: unless-stopped
     networks:

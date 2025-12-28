@@ -9,6 +9,8 @@ networks:
 services:
   makemkv:
     image: jlesage/makemkv:${MAKEMKV_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/makemkv.env
     container_name: ${MAKEMKV_CONTAINER_NAME:-makemkv}
     restart: ${MAKEMKV_RESTART:-unless-stopped}
     networks:

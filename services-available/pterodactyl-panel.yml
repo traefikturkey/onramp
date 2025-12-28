@@ -9,6 +9,8 @@ networks:
 services:
   pterodactyl-panel:
     image: ghcr.io/pterodactyl/panel:${PTERODACTYL_PANEL_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/pterodactyl-panel.env
     container_name: ${PTERODACTYL_PANEL_CONTAINER_NAME:-pterodactyl-panel}
     restart: ${PTERODACTYL_PANEL_RESTART:-unless-stopped}
     networks:

@@ -8,6 +8,8 @@ networks:
 services:
   glances:
     image: nicolargo/glances:${GLANCES_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/glances.env
     container_name: ${GLANCES_CONTAINER_NAME:-glances}
     restart: ${GLANCES_RESTART:-unless-stopped}
     networks:

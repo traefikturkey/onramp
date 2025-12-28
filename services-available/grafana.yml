@@ -14,7 +14,7 @@ services:
       - default
     user: ${PUID:-1000}
     env_file:
-      - services-enabled/.env
+      - ./services-enabled/grafana.env
     environment:
       - GF_INSTALL_PLUGINS=camptocamp-prometheus-alertmanager-datasource
     # ports:

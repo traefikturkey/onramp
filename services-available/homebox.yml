@@ -9,6 +9,8 @@ networks:
 services:
   homebox:
     image: ghcr.io/sysadminsmedia/homebox:${HOMEBOX_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/homebox.env
     container_name: ${HOMEBOX_CONTAINER_NAME:-homebox}
     restart: ${HOMEBOX_RESTART:-unless-stopped}
     networks:

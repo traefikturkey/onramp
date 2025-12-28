@@ -16,6 +16,8 @@ networks:
 services:
   excalidraw:
     image: excalidraw/excalidraw:${EXCALIDRAW_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/excalidraw.env
     container_name: ${EXCALIDRAW_CONTAINER_NAME:-excalidraw}
     restart: ${EXCALIDRAW_RESTART:-unless-stopped}
     networks:

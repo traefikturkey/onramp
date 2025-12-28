@@ -8,6 +8,8 @@ networks:
 services:
   13ft:
     image: ghcr.io/wasi-master/13ft:${_13FT_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/13ft.env
     container_name: ${_13FT_CONTAINER_NAME:-13ft}
     #hostname: 13ft
     restart: ${_13FT_RESTART:-unless-stopped}

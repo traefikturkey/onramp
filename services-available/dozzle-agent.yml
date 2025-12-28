@@ -1,6 +1,8 @@
 services:
   dozzle-agent:
     image: amir20/dozzle:latest
+    env_file:
+      - ./services-enabled/dozzle-agent.env
     command: agent
     restart: ${DOZZLE_RESTART:-unless-stopped}
     container_name: dozzle-agent

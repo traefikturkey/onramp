@@ -8,6 +8,8 @@ networks:
 services:
   prometheus:
     image: prom/prometheus:${PROMETHEUS_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/prometheus-all.env
     container_name: prometheus
     restart: unless-stopped
     networks:
@@ -46,7 +48,7 @@ services:
     container_name: proxmox-exporter
     restart: unless-stopped
     env_file:
-      - services-enabled/.env
+      - ./services-enabled/prometheus-all.env
     # ports:
     #   - 9221:9221
     labels:
@@ -54,6 +56,8 @@ services:
 
   prometheus-blackbox:
     image: prom/blackbox-exporter:latest
+    env_file:
+      - ./services-enabled/prometheus-all.env
     container_name: prometheus-blackbox
     restart: unless-stopped
     networks:
@@ -80,6 +84,8 @@ services:
 
   prometheus-alertmanager:
     image: prom/alertmanager:latest
+    env_file:
+      - ./services-enabled/prometheus-all.env
     container_name: prometheus-alertmanager
     restart: unless-stopped
     networks:

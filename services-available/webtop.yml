@@ -8,6 +8,8 @@ networks:
 services:
   webtop:
     image: lscr.io/linuxserver/webtop:${WEBTOP_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/webtop.env
     container_name: ${WEBTOP_CONTAINER_NAME:-webtop}
     restart: unless-stopped
     networks:

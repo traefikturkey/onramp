@@ -8,6 +8,8 @@ networks:
 services:
   foundryvtt:
     image: ghcr.io/felddy/foundryvtt:${FOUNDRYVTT_DOCKER_TAG:-release}
+    env_file:
+      - ./services-enabled/foundryvtt.env
     container_name: ${FOUNDRYVTT_CONTAINER_NAME:-foundryvtt}
     restart: ${FOUNDRYVTT_RESTART:-unless-stopped}
     networks:

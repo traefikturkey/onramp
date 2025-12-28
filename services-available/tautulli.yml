@@ -8,6 +8,8 @@ networks:
 services:
   tautulli:
     image: lscr.io/linuxserver/tautulli:${TAUTULLI_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/tautulli.env
     container_name: tautulli
     restart: unless-stopped
     networks:

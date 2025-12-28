@@ -9,6 +9,8 @@ networks:
 services:
   gatus:
     image: ghcr.io/twin/gatus:${GATUS_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/gatus.env
     container_name: ${GATUS_CONTAINER_NAME:-gatus}
     restart: ${GATUS_RESTART:-unless-stopped}
     networks:

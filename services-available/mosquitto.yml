@@ -4,6 +4,8 @@
 services:
   mosquitto-mqtt:
     image: eclipse-mosquitto:${MOSQITTO_MQTT_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/mosquitto.env
     container_name: mosquitto-mqtt
     restart: unless-stopped
     user: ${PUID:-1000}:${PGID:-1000}

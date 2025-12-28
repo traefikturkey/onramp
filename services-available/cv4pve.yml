@@ -8,6 +8,8 @@ networks:
 services:
   cv4pve:
     image: corsinvest/cv4pve-admin:${CV4PVE_DOCKER_TAG:-1.0.2}
+    env_file:
+      - ./services-enabled/cv4pve.env
     container_name: ${CV4PVE_CONTAINER_NAME:-cv4pve}
     restart: ${CV4PVE_RESTART:-unless-stopped}
     networks:

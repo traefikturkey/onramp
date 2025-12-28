@@ -6,6 +6,8 @@
 services:
   samba:
     image: ghcr.io/servercontainers/samba:${SAMBA_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/samba.env
     container_name: ${SAMBA_CONTAINER_NAME:-samba}
     restart: unless-stopped
     network_mode: host

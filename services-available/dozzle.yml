@@ -8,6 +8,8 @@ networks:
 services:
   dozzle:
     image: ghcr.io/amir20/dozzle:${DOZZLE_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/dozzle.env
     container_name: ${DOZZLE_CONTAINER_NAME:-dozzle}
     restart: ${DOZZLE_RESTART:-unless-stopped}
     mem_limit: ${DOZZLE_MEM_LIMIT:-50m}

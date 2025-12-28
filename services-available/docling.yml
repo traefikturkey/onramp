@@ -10,6 +10,8 @@ networks:
 services:
   docling:
     image: ghcr.io/docling-project/docling-serve:${DOCLING_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/docling.env
     container_name: ${DOCLING_CONTAINER_NAME:-docling}
     restart: ${DOCLING_RESTART:-unless-stopped}
     networks:

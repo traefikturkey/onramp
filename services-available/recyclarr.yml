@@ -10,6 +10,8 @@ networks:
 services:
   recyclarr:
     image: ghcr.io/recyclarr/recyclarr:${RECYCLARR_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/recyclarr.env
     container_name: ${RECYCLARR_CONTAINER_NAME:-recyclarr}
     restart: ${RECYCLARR_RESTART:-unless-stopped}
     networks:

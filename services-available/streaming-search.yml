@@ -8,6 +8,8 @@ networks:
 services:
   streaming-search:
     image: colaski/global-streaming-search:${STREAMING_SEARCH_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/streaming-search.env
     container_name: ${STREAMING_SEARCH_CONTAINER_NAME:-streaming-search}
     restart: ${STREAMING_SEARCH_RESTART:-unless-stopped}
     networks:

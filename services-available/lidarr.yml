@@ -10,6 +10,8 @@ services:
   lidarr:
     # image: linuxserver/lidarr #uses musicbrainz with caching server for metadata
     image: ghcr.io/hotio/lidarr:${LIDARR_DOCKER_TAG:-latest} #uses slskd as metadata
+    env_file:
+      - ./services-enabled/lidarr.env
     container_name: ${LIDARR_CONTAINER_NAME:-lidarr}
     restart: ${LIDARR_RESTART:-unless-stopped}
     networks:

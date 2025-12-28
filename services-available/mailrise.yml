@@ -10,6 +10,8 @@ networks:
 services:
   mailrise:
     image: yoryan/mailrise:${MAILRISE_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/mailrise.env
     container_name: ${MAILRISE_CONTAINER_NAME:-mailrise}
     restart: ${MAILRISE_RESTART:-unless-stopped}
     networks:

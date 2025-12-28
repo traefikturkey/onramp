@@ -8,6 +8,8 @@ networks:
 services:
   gitlab:
     image: gitlab/gitlab-ce:${GITLAB_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/gitlab.env
     container_name: ${GITLAB_CONTAINER_NAME:-gitlab}
     restart: ${GITLAB_RESTART:-unless-stopped}
     networks:

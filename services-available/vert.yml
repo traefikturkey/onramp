@@ -9,6 +9,8 @@ networks:
 services:
   vert:
     image: ghcr.io/vert-sh/vert:${VERT_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/vert.env
     container_name: ${VERT_CONTAINER_NAME:-vert}
     restart: ${VERT_RESTART:-unless-stopped}
     mem_limit: ${VERT_MEM_LIMIT:-200g}

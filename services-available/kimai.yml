@@ -9,6 +9,8 @@ networks:
 services:
   kimai:
     image: kimai/kimai2:${KIMAI_DOCKER_TAG:-apache}
+    env_file:
+      - ./services-enabled/kimai.env
     container_name: ${KIMAI_CONTAINER_NAME:-kimai}
     restart: unless-stopped
     networks:

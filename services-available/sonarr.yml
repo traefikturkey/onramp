@@ -8,6 +8,8 @@ networks:
 services:
   sonarr:
     image: lscr.io/linuxserver/sonarr:${SONARR_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/sonarr.env
     container_name: ${SONARR_CONTAINER_NAME:-sonarr}
     restart: ${SONARR_RESTART:-unless-stopped}
     networks:

@@ -9,8 +9,7 @@ services:
     restart: ${MONOCKER_RESTART:-unless-stopped}
     mem_limit: ${MONOCKER_MEM_LIMIT:-130m}
     env_file:
-      - services-enabled/.env
-      - services-enabled/monocker.env
+      - ./services-enabled/monocker.env
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /etc/localtime:/etc/localtime:ro

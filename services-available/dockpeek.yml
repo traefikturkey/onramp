@@ -8,6 +8,8 @@ networks:
 services:
   dockpeek:
     image: ghcr.io/dockpeek/dockpeek:${DOCKPEEK_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/dockpeek.env
     container_name: ${DOCKPEEK_CONTAINER_NAME:-dockpeek}
     restart: ${DOCKPEEK_RESTART:-unless-stopped}
     mem_limit: ${DOCKPEEK_MEM_LIMIT:-200g}

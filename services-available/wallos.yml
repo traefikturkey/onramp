@@ -8,6 +8,8 @@ networks:
 services:
   wallos:
     image: bellamy/wallos:${WALLOS_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/wallos.env
     container_name: ${WALLOS_CONTAINER_NAME:-wallos}
     restart: ${WALLOS_RESTART:-unless-stopped}
     mem_limit: ${WALLOS_MEM_LIMIT:-200g}

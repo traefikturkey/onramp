@@ -8,6 +8,8 @@ networks:
 services:
   synapse:
     image: ghcr.io/matrix-org/synapse:${SYNAPSE_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/synapse.env
     container_name: ${SYNAPSE_CONTAINER_NAME:-synapse}
     restart: ${SYNAPSE_RESTART:-unless-stopped}
     networks:

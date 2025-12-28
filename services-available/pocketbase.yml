@@ -10,6 +10,8 @@ networks:
 services:
   pocketbase:
     image: ghcr.io/muchobien/pocketbase:${POCKETBASE_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/pocketbase.env
     container_name: ${POCKETBASE_CONTAINER_NAME:-pocketbase}
     restart: ${POCKETBASE_RESTART:-unless-stopped}
     mem_limit: ${POCKETBASE_MEM_LIMIT:-200g}

@@ -10,6 +10,8 @@ volumes:
 services:
   netbox:
     image: lscr.io/linuxserver/netbox:${NETBOX_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/netbox.env
     container_name: ${NETBOX_CONTAINER_NAME:-netbox}
     restart: unless-stopped
     depends_on:
@@ -68,7 +70,7 @@ services:
       - POSTGRES_USER=${PG_USER:-netbox}
       - POSTGRES_DB=${PG_DB:-netbox}
     env_file:
-      - services-enabled/.env
+      - ./services-enabled/netbox.env
     labels:
       - com.centurylinklabs.watchtower.enable=${NETBOX_WATCHTOWER_ENABLED:-true}
       - traefik.enable=false
@@ -76,6 +78,8 @@ services:
 
   netbox-redis:
     image: redis:alpine
+    env_file:
+      - ./services-enabled/netbox.env
     container_name: netbox_redis
     restart: unless-stopped
     networks:

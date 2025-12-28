@@ -8,6 +8,8 @@ networks:
 services:
   mailhog:
     image: mailhog/mailhog:${MAILHOG_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/mailhog.env
     container_name: ${MAILHOG_CONTAINER_NAME:-mailhog}
     restart: unless-stopped
     networks:

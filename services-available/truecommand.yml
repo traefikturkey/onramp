@@ -8,6 +8,8 @@ networks:
 services:
   truecommand:
     image: ghcr.io/ixsystems/truecommand:${TRUECOMMAND_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/truecommand.env
     container_name: ${TRUECOMMAND_CONTAINER_NAME:-truecommand}
     restart: unless-stopped
     networks:

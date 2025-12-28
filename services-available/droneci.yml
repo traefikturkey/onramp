@@ -12,6 +12,8 @@ networks:
 services:
   drone:
     image: drone/drone:${DRONE_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/droneci.env
     container_name: ${DRONE_CONTAINER_NAME:-drone}
     restart: unless-stopped
     networks:
@@ -49,6 +51,8 @@ services:
   drone-runner:
     container_name: drone-runner
     image: drone/drone-runner-docker
+    env_file:
+      - ./services-enabled/droneci.env
     restart: unless-stopped
     networks:
       - traefik

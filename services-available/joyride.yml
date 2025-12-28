@@ -13,6 +13,8 @@
 services:
   joyride:
     image: ghcr.io/traefikturkey/joyride:${JOYRIDE_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/joyride.env
     container_name: ${JOYRIDE_CONTAINER_NAME:-joyride}
     restart: ${JOYRIDE_RESTART:-unless-stopped}
     mem_limit: ${JOYRIDE_MEM_LIMIT:-100m}

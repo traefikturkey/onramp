@@ -9,6 +9,8 @@ networks:
 services:
   kaneo-postgres:
     image: postgres:16-alpine
+    env_file:
+      - ./services-enabled/kaneo.env
     container_name: ${KANEO_POSTGRES_CONTAINER_NAME:-kaneo-postgres}
     restart: ${KANEO_RESTART:-unless-stopped}
     ports:
@@ -24,6 +26,8 @@ services:
 
   kaneo-backend:
     image: ghcr.io/usekaneo/api:${KANEO_BACKEND_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/kaneo.env
     container_name: ${KANEO_BACKEND_CONTAINER_NAME:-kaneo-backend}
     restart: ${KANEO_RESTART:-unless-stopped}
     environment:
@@ -50,6 +54,8 @@ services:
 
   kaneo-frontend:
     image: ghcr.io/usekaneo/web:${KANEO_FRONTEND_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/kaneo.env
     container_name: ${KANEO_FRONTEND_CONTAINER_NAME:-kaneo-frontend}
     restart: ${KANEO_RESTART:-unless-stopped}
     environment:

@@ -8,6 +8,8 @@ networks:
 services:
   pulse:
     image: rcourtman/pulse:${PULSE_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/pulse.env
     container_name: ${PULSE_CONTAINER_NAME:-pulse}
     restart: ${PULSE_RESTART:-unless-stopped}
     mem_limit: ${PULSE_MEM_LIMIT:-200g}

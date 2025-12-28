@@ -8,6 +8,8 @@ networks:
 services:
   stirling-pdf:
     image: ghcr.io/stirling-tools/stirling-pdf:${STIRLING_PDF_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/stirling-pdf.env
     container_name: ${STIRLING_PDF_CONTAINER_NAME:-stirling-pdf}
     restart: ${STIRLING_PDF_RESTART:-unless-stopped}
     networks:

@@ -8,6 +8,8 @@ networks:
 services:
   pinchflat:
     image: ghcr.io/kieraneglin/pinchflat:${PINCHFLAT_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/pinchflat.env
     container_name: ${PINCHFLAT_CONTAINER_NAME:-pinchflat}
     restart: ${PINCHFLAT_RESTART:-unless-stopped}
     mem_limit: ${PINCHFLAT_MEM_LIMIT:-200g}

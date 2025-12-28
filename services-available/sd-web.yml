@@ -10,6 +10,8 @@ networks:
 services:
   sd-web:
     image: ghcr.io/traefikturkey/sd-webui-docker:${SD_WEB_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/sd-web.env
     container_name: ${SD_WEB_CONTAINER_NAME:-sd-web}
     restart: ${SD_WEB_RESTART:-unless-stopped}
     networks:

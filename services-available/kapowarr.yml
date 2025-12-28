@@ -8,6 +8,8 @@ networks:
 services:
   kapowarr:
     image: mrcas/kapowarr:${KAPOWARR_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/kapowarr.env
     container_name: ${KAPOWARR_CONTAINER_NAME:-kapowarr}
     restart: ${KAPOWARR_RESTART:-unless-stopped}
     networks:

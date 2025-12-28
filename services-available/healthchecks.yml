@@ -9,6 +9,8 @@ networks:
 services:
   healthchecks:
     image: lscr.io/linuxserver/healthchecks:${HEALTHCHECKS_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/healthchecks.env
     container_name: ${HEALTHCHECKS_CONTAINER_NAME:-healthchecks}
     restart: ${HEALTHCHECKS_RESTART:-unless-stopped}
     networks:
@@ -54,6 +56,8 @@ services:
 
   hc-postgres:
     image: postgres:${HEALTHCHECKS_DOCKER_TAG:-16.0}
+    env_file:
+      - ./services-enabled/healthchecks.env
     container_name: hc-postgres
     networks:
       - traefik

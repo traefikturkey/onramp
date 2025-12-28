@@ -10,6 +10,8 @@ networks:
 services:
   prestashop:
     image: prestashop/prestashop:${PRESTASHOP_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/prestashop.env
     container_name: ${PRESTASHOP_CONTAINER_NAME:-prestashop}
     restart: unless-stopped
     networks:

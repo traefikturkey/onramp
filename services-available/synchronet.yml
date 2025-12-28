@@ -9,6 +9,8 @@ networks:
 services:
   synchronet:
     image: bbsio/synchronet:${SYNCHRONET_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/synchronet.env
     container_name: ${SYNCHRONET_CONTAINER_NAME:-synchronet}
     restart: ${SYNCHRONET_RESTART:-unless-stopped}
     mem_limit: ${SYNCHRONET_MEM_LIMIT:-200g}

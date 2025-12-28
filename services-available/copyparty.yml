@@ -8,6 +8,8 @@ networks:
 services:
   copyparty:
     image: copyparty/ac:${COPYPARTY_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/copyparty.env
     container_name: ${COPYPARTY_CONTAINER_NAME:-copyparty}
     restart: ${COPYPARTY_RESTART:-unless-stopped}
     mem_limit: ${COPYPARTY_MEM_LIMIT:-200g}

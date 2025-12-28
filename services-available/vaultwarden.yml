@@ -8,6 +8,8 @@ networks:
 services:
   vaultwarden:
     image: ghcr.io/dani-garcia/vaultwarden:${VAULTWARDEN_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/vaultwarden.env
     container_name: ${VAULTWARDEN_CONTAINER_NAME:-vaultwarden}
     restart: unless-stopped
     mem_limit: ${VAULTWARDEN_MEM_LIMIT:-200m}

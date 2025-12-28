@@ -10,6 +10,8 @@ networks:
 services:
   coredns:
     image: coredns/coredns:${COREDNS_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/coredns.env
     container_name: ${COREDNS_CONTAINER_NAME:-coredns}
     restart: ${COREDNS_RESTART:-unless-stopped}
     mem_limit: ${COREDNS_MEM_LIMIT:-200g}

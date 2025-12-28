@@ -8,6 +8,8 @@ networks:
 services:
   maintainerr:
     image: ghcr.io/jorenn92/maintainerr:${MAINTAINERR_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/maintainerr.env
     container_name: ${MAINTAINERR_CONTAINER_NAME:-maintainerr}
     restart: ${MAINTAINERR_RESTART:-unless-stopped}
     networks:

@@ -9,6 +9,8 @@ networks:
 services:
   bazarr:
     image: lscr.io/linuxserver/bazarr:${BAZARR_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/bazarr.env
     container_name: ${BAZARR_CONTAINER_NAME:-bazarr}
     restart: unless-stopped
     networks:

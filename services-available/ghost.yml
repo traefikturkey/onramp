@@ -8,6 +8,8 @@ networks:
 services:
   ghost:
     image: ghost:${GHOST_DOCKER_TAG:-alpine}
+    env_file:
+      - ./services-enabled/ghost.env
     container_name: ${GHOST_CONTAINER_NAME:-ghost}
     restart: ${GHOST_RESTART:-unless-stopped}
     networks:

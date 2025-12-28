@@ -8,6 +8,8 @@ networks:
 services:
   prometheus:
     image: prom/prometheus:${PROMETHEUS_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/prometheus.env
     container_name: ${PROMETHEUS_CONTAINER_NAME:-prometheus}
     restart: unless-stopped
     networks:

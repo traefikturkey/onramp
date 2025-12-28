@@ -25,6 +25,8 @@ networks:
 services:
   postgres:
     image: postgres:${POSTGRES_DOCKER_TAG:-16}
+    env_file:
+      - ./services-enabled/postgres.env
     container_name: ${POSTGRES_CONTAINER_NAME:-postgres}
     restart: ${POSTGRES_RESTART:-unless-stopped}
     networks:

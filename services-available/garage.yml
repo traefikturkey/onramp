@@ -88,6 +88,8 @@ networks:
 services:
   garage:
     image: dxflrs/garage:${GARAGE_DOCKER_TAG:-v2.1.0}
+    env_file:
+      - ./services-enabled/garage.env
     container_name: ${GARAGE_CONTAINER_NAME:-garage}
     restart: ${GARAGE_RESTART:-unless-stopped}
     networks:

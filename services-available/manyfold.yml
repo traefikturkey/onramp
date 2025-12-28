@@ -8,6 +8,8 @@ networks:
 services:
   manyfold:
     image: ghcr.io/manyfold3d/manyfold:${MANYFOLD_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/manyfold.env
     container_name: ${MANYFOLD_CONTAINER_NAME:-manyfold}
     restart: ${MANYFOLD_RESTART:-unless-stopped}
     mem_limit: ${MANYFOLD_MEM_LIMIT:-200g}
@@ -42,6 +44,8 @@ services:
 
   manyfold-postgres:
     image: postgres:15
+    env_file:
+      - ./services-enabled/manyfold.env
     volumes:
       - ./etc/manyfold/db:/var/lib/postgresql/data
     environment:
@@ -53,6 +57,8 @@ services:
 
   manyfold-redis:
     image: redis:7
+    env_file:
+      - ./services-enabled/manyfold.env
     restart: unless-stopped
     networks:
       - traefik

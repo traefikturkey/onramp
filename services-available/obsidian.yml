@@ -8,6 +8,8 @@ networks:
 services:
   obsidian:
     image: lscr.io/linuxserver/obsidian:${OBSIDIAN_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/obsidian.env
     container_name: ${OBSIDIAN_CONTAINER_NAME:-obsidian}
     restart: ${OBSIDIAN_RESTART:-unless-stopped}
     networks:

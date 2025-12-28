@@ -10,6 +10,8 @@ networks:
 services:
   rundeck:
     image: rundeck/rundeck:${RUNDECK_DOCKER_TAG:-5.0.1}
+    env_file:
+      - ./services-enabled/rundeck.env
     container_name: ${RUNDECK_CONTAINER_NAME:-rundeck}
     restart: ${RUNDECK_RESTART:-unless-stopped}
     networks:

@@ -8,6 +8,8 @@ networks:
 services:
   odoo:
     image: odoo:${ODOO_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/odoo.env
     container_name: ${ODOO_CONTAINER_NAME:-odoo}
     restart: ${ODOO_RESTART:-unless-stopped}
     depends_on:
@@ -42,6 +44,8 @@ services:
 
   db:
     image: postgres:15
+    env_file:
+      - ./services-enabled/odoo.env
     container_name: odoo_postgres
     restart: ${ODOO_RESTART:-unless-stopped}
     networks:

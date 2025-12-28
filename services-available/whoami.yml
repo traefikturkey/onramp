@@ -8,6 +8,8 @@ networks:
 services:
   whoami:
     image: ghcr.io/traefik/whoami:${WHOAMI_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/whoami.env
     container_name: ${WHOAMI_CONTAINER_NAME:-whoami}
     restart: unless-stopped
     networks:

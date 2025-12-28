@@ -8,6 +8,8 @@ networks:
 services:
   transmission:
     image: lscr.io/linuxserver/transmission:${TRANSMISSION_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/transmission.env
     container_name: ${TRANSMISSION_CONTAINER_NAME:-transmission}
     restart: ${TRANSMISSION_RESTART:-unless-stopped}
     mem_limit: ${TRANSMISSION_MEM_LIMIT:-200g}

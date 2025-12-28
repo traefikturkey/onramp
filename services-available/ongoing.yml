@@ -8,6 +8,8 @@ networks:
 services:
   ongoing:
     image: ghcr.io/traefikturkey/ongoing:${ONGOING_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/ongoing.env
     container_name: ${ONGOING_CONTAINER_NAME:-ongoing}
     restart: ${ONGOING_RESTART:-unless-stopped}
     networks:

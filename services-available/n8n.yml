@@ -8,6 +8,8 @@ networks:
 services:
   n8n:
     image: n8nio/n8n:${N8N_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/n8n.env
     container_name: ${N8N_CONTAINER_NAME:-n8n}
     restart: ${N8N_RESTART:-unless-stopped}
     mem_limit: ${N8N_MEM_LIMIT:-200g}
@@ -64,6 +66,8 @@ services:
 
   n8n_postgres:
     image: postgres:12
+    env_file:
+      - ./services-enabled/n8n.env
     container_name: n8n_postgres
     networks:
       - traefik

@@ -9,6 +9,8 @@ networks:
 services:
   fooocus:
     image: ghcr.io/lllyasviel/fooocus:${FOOOCUS_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/fooocus.env
     container_name: ${FOOOCUS_CONTAINER_NAME:-fooocus}
     restart: ${FOOOCUS_RESTART:-unless-stopped}
     mem_limit: ${FOOOCUS_MEM_LIMIT:-200g} ## Container needs at least 8 gb of system memory

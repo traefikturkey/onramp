@@ -9,6 +9,8 @@ networks:
 services:
   onboard:
     image: ghcr.io/traefikturkey/onboard:${ONBOARD_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/onboard.env
     container_name: ${ONBOARD_CONTAINER_NAME:-onboard}
     restart: ${ONBOARD_RESTART:-unless-stopped}
     mem_limit: ${ONBOARD_MEM_LIMIT:-1g}

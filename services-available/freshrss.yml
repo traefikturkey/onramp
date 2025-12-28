@@ -10,6 +10,8 @@ networks:
 services:
   freshrss:
     image: lscr.io/linuxserver/freshrss:${FRESHRSS_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/freshrss.env
     container_name: ${FRESHRSS_CONTAINER_NAME:-freshrss}
     restart: ${FRESHRSS_RESTART:-unless-stopped}
     networks:

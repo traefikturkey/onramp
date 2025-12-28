@@ -12,6 +12,8 @@ volumes:
 services:
   kaizoku:
     image: ghcr.io/oae/kaizoku:${KAIZOKU_DOCKER_TAG:-v1.6.1} # may need to be updated at some point. latest had issues when I tried.
+    env_file:
+      - ./services-enabled/kaizoku.env
     container_name: ${KAIZOKU_CONTAINER_NAME:-kaizoku}
     restart: ${KAIZOKU_RESTART:-unless-stopped}
     networks:
@@ -45,6 +47,8 @@ services:
 
   kaizoku-redis:
     image: redis:7-alpine
+    env_file:
+      - ./services-enabled/kaizoku.env
     networks:
       - traefik
     restart: unless-stopped
@@ -54,6 +58,8 @@ services:
 
   kaizoku-db:
     image: postgres:alpine
+    env_file:
+      - ./services-enabled/kaizoku.env
     restart: unless-stopped
     container_name: kaizoku-db
     networks:

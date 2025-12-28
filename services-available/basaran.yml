@@ -11,6 +11,8 @@ networks:
 services:
   basaran:
     image: ghcr.io/hyperonym/basaran:${BASARAN_DOCKER_TAG:-0.13.3}
+    env_file:
+      - ./services-enabled/basaran.env
     container_name: ${BASARAN_CONTAINER_NAME:-basaran}
     restart: ${BASARAN_RESTART:-unless-stopped}
     networks:

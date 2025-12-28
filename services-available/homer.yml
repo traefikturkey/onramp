@@ -9,6 +9,8 @@ networks:
 services:
   homer:
     image: b4bz/homer:${HOMER_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/homer.env
     container_name: ${HOMER_CONTAINER_NAME:-homer}
     restart: unless-stopped
     networks:

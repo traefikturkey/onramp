@@ -37,7 +37,7 @@ services:
       - PLEX_GID=${PGID:-1000}
       - VERSION=docker
     env_file:
-      - services-enabled/.env
+      - ./services-enabled/plex.env
     labels:
       - joyride.host.name=${PLEX_CONTAINER_NAME:-plex}.${HOST_DOMAIN}
       - traefik.enable=${PLEX_TRAEFIK_ENABLE:-true}

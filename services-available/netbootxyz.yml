@@ -8,6 +8,8 @@ networks:
 services:
   netbootxyz:
     image: ghcr.io/netbootxyz/netbootxyz:${NETBOOTXYZ_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/netbootxyz.env
     container_name: ${NETBOOTXYZ_CONTAINER_NAME:-netbootxyz}
     restart: unless-stopped
     networks:

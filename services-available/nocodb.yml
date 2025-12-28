@@ -8,6 +8,8 @@ networks:
 services:
   nocodb:
     image: nocodb/nocodb:${NOCODB_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/nocodb.env
     container_name: ${NOCODB_CONTAINER_NAME:-nocodb}
     restart: ${NOCODB_RESTART:-unless-stopped}
     networks:
@@ -40,6 +42,8 @@ services:
 
   nocodb_postgres:
     image: postgres:12.17-alpine
+    env_file:
+      - ./services-enabled/nocodb.env
     container_name: nocodb_postgres
     restart: ${NOCODB_RESTART:-unless-stopped}
     networks:

@@ -16,7 +16,7 @@ services:
       - ./etc/yacht:/config
       - /var/run/docker.sock:/var/run/docker.sock
     env_file:
-      - services-enabled/.env
+      - ./services-enabled/yacht.env
     labels:
       - joyride.host.name=${YACHT_CONTAINER_NAME:-yacht}.${HOST_DOMAIN}
       - traefik.enable=true

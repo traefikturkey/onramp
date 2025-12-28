@@ -9,6 +9,8 @@ networks:
 services:
   sqliteweb:
     image: tomdesinto/sqliteweb:${SQLITEWEB_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/sqliteweb.env
     container_name: ${SQLITEWEB_CONTAINER_NAME:-sqliteweb}
     restart: ${SQLITEWEB_RESTART:-unless-stopped}
     networks:

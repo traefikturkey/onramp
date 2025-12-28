@@ -16,6 +16,8 @@ networks:
 services:
   ollama:
     image: ollama/ollama:${OLLAMA_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/ollama.env
     container_name: ${OLLAMA_CONTAINER_NAME:-ollama}
     restart: ${OLLAMA_RESTART:-unless-stopped}
     networks:

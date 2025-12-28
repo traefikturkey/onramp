@@ -8,6 +8,8 @@ networks:
 services:
   convertx:
     image: ghcr.io/c4illin/convertx:${CONVERTX_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/convertx.env
     container_name: ${CONVERTX_CONTAINER_NAME:-convertx}
     restart: ${CONVERTX_RESTART:-unless-stopped}
     mem_limit: ${CONVERTX_MEM_LIMIT:-200g}

@@ -8,6 +8,8 @@ networks:
 services:
   redis:
     image: redis:${REDIS_DOCKER_TAG:-alpine}
+    env_file:
+      - ./services-enabled/redis.env
     container_name: ${REDIS_CONTAINER_NAME:-redis}
     restart: ${REDIS_RESTART:-unless-stopped}
     networks:

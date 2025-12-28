@@ -19,6 +19,8 @@ networks:
 services:
   broker:
     image: docker.io/library/redis:6.0 #pinned for kitty
+    env_file:
+      - ./services-enabled/paperless-ngx-postgres.env
     restart: unless-stopped
     networks:
       - traefik
@@ -27,6 +29,8 @@ services:
 
   db:
     image: postgres:16
+    env_file:
+      - ./services-enabled/paperless-ngx-postgres.env
     restart: unless-stopped
     volumes:
       - ./etc/paperless-ngx-postgres/pgdata:/var/lib/postgresql/data
@@ -39,6 +43,8 @@ services:
 
   gotenberg:
     image: docker.io/gotenberg/gotenberg:7.4 #pinned for kitty
+    env_file:
+      - ./services-enabled/paperless-ngx-postgres.env
     restart: unless-stopped
     networks:
       - traefik
@@ -48,12 +54,16 @@ services:
 
   tika:
     image: docker.io/apache/tika:latest
+    env_file:
+      - ./services-enabled/paperless-ngx-postgres.env
     restart: unless-stopped
     networks:
       - traefik
 
   paperless-ngx-postgres:
     image: ghcr.io/paperless-ngx/paperless-ngx:${PAPERLESS_NGX_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/paperless-ngx-postgres.env
     container_name: ${PAPERLESS_NGX_CONTAINER_NAME:-paperless-ngx-postgres}
     restart: ${PAPERLESS_NGX_RESTART:-unless-stopped}
 #    mem_limit: ${PAPERLESS_MEM_LIMIT:-2.5g}

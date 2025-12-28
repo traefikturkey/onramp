@@ -8,6 +8,8 @@ networks:
 services:
   requestrr:
     image: darkalfx/requestrr:${REQUESTRR_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/requestrr.env
     container_name: requestrr
     restart: unless-stopped
     networks:

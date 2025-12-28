@@ -10,6 +10,8 @@ networks:
 services:
   db:
     image: postgres:15
+    env_file:
+      - ./services-enabled/joplin.env
     container_name: ${JOPLIN_DB_CONTAINER_NAME:-joplin-db}
     restart: ${JOPLIN_RESTART:-unless-stopped}
     volumes:
@@ -23,6 +25,8 @@ services:
 
   joplin:
     image: joplin/server:${JOPLIN_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/joplin.env
     container_name: ${JOPLIN_CONTAINER_NAME:-joplin}
     restart: ${JOPLIN_RESTART:-unless-stopped}
     networks:

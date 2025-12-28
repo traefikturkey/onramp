@@ -9,6 +9,8 @@ networks:
 services:
   wordpress:
     image: wordpress:${WORDPRESS_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/wordpress.env
     container_name: ${WORDPRESS_CONTAINER_NAME:-wordpress}
     restart: unless-stopped
     networks:

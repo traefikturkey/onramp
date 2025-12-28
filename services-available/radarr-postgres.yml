@@ -9,6 +9,8 @@ networks:
 services:
   postgres:
     image: postgres:14
+    env_file:
+      - ./services-enabled/radarr-postgres.env
     container_name: radarr-postgres
     restart: unless-stopped
     volumes:

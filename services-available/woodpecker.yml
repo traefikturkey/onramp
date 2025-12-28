@@ -44,6 +44,8 @@ services:
 
   woodpecker-agent:
     image: woodpeckerci/woodpecker-agent:latest
+    env_file:
+      - ./services-enabled/woodpecker.env
     command: agent
     restart: unless-stopped
     depends_on:

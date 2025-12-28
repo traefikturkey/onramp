@@ -8,6 +8,8 @@ networks:
 services:
   cloudbeaver:
     image: dbeaver/cloudbeaver:${CLOUDBEAVER_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/cloudbeaver.env
     container_name: ${CLOUDBEAVER_CONTAINER_NAME:-cloudbeaver}
     restart: ${CLOUDBEAVER_RESTART:-unless-stopped}
     networks:

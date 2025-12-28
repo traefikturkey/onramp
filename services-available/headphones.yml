@@ -9,6 +9,8 @@ networks:
 services:
   headphones:
     image: alonlivne/headphones:${HEADPHONES_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/headphones.env
     container_name: ${HEADPHONES_CONTAINER_NAME:-headphones}
     restart: ${HEADPHONES_RESTART:-unless-stopped}
     networks:

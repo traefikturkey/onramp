@@ -10,6 +10,8 @@ networks:
 services:
   broker:
     image: docker.io/library/redis:7
+    env_file:
+      - ./services-enabled/paperless-ngx.env
     restart: unless-stopped
     networks:
       - traefik
@@ -18,6 +20,8 @@ services:
 
   db:
     image: docker.io/library/mariadb:10
+    env_file:
+      - ./services-enabled/paperless-ngx.env
     restart: unless-stopped
     volumes:
       - ./etc/paperless-ngx/dbdata:/var/lib/mysql
@@ -34,6 +38,8 @@ services:
 
   gotenberg:
     image: docker.io/gotenberg/gotenberg:7.6
+    env_file:
+      - ./services-enabled/paperless-ngx.env
     restart: unless-stopped
     networks:
       - traefik
@@ -43,12 +49,16 @@ services:
 
   tika:
     image: docker.io/apache/tika:latest
+    env_file:
+      - ./services-enabled/paperless-ngx.env
     restart: unless-stopped
     networks:
       - traefik
 
   paperless-ngx:
     image: ghcr.io/paperless-ngx/paperless-ngx:${PAPERLESS_NGX_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/paperless-ngx.env
     container_name: ${PAPERLESS_NGX_CONTAINER_NAME:-paperless-ngx}
     restart: ${PAPERLESS_NGX_RESTART:-unless-stopped}
     networks:

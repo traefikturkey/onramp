@@ -8,6 +8,8 @@ networks:
 services:
   dockpeek-socket-proxy:
     image: lscr.io/linuxserver/socket-proxy:${DOCKPEEK_SOCKET_PROXY_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/dockpeek-socket-proxy.env
     container_name: ${DOCKPEEK_SOCKET_PROXY_CONTAINER_NAME:-dockpeek-socket-proxy}
     restart: ${DOCKPEEK_SOCKET_PROXY_RESTART:-unless-stopped}
     mem_limit: ${DOCKPEEK_SOCKET_PROXY_MEM_LIMIT:-200g}

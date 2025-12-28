@@ -9,6 +9,8 @@ networks:
 services:
   apprise:
     image: lscr.io/linuxserver/apprise-api:${APPRISE_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/apprise.env
     container_name: ${APPRISE_CONTAINER_NAME:-apprise}
     restart: ${APPRISE_RESTART:-unless-stopped}
     networks:

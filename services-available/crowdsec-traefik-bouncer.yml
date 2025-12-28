@@ -9,6 +9,8 @@ networks:
 services:
   crowdsec-traefik-bouncer:
     image: docker.io/fbonalair/traefik-crowdsec-bouncer:${TRAEFIK_BOUNCER_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/crowdsec-traefik-bouncer.env
     container_name: bouncer-traefik
     environment:
       - CROWDSEC_AGENT_HOST=crowdsec:8080

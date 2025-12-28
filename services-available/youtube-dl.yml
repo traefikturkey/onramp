@@ -8,6 +8,8 @@ networks:
 services:
   youtube-dl:
     image: nbr23/youtube-dl-server:${YOUTUBE_DL_DOCKER_TAG:-yt-dlp}
+    env_file:
+      - ./services-enabled/youtube-dl.env
     container_name: ${YOUTUBE_DL_CONTAINER_NAME:-youtube-dl}
     restart: ${YOUTUBE_DL_RESTART:-unless-stopped}
     networks:

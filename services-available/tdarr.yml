@@ -8,6 +8,8 @@ networks:
 services:
   tdarr:
     image: ghcr.io/haveagitgat/tdarr:${TDARR_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/tdarr.env
     container_name: ${TDARR_CONTAINER_NAME:-tdarr}
     restart: ${TDARR_RESTART:-unless-stopped}
     networks:

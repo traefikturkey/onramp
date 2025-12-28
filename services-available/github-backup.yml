@@ -6,6 +6,8 @@
 services:
   github-backup:
     image: ${GITHUB_BACKUP_IMAGE:-ghcr.io/sierrasoftworks/github-backup}:${GITHUB_BACKUP_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/github-backup.env
     container_name: ${GITHUB_BACKUP_CONTAINER_NAME:-github-backup}
     restart: ${GITHUB_BACKUP_RESTART_POLICY:-unless-stopped}
     mem_limit: ${GITHUB_BACKUP_MEM_LIMIT:-512m}

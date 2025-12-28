@@ -9,6 +9,8 @@ networks:
 services:
   syncthing:
     image: lscr.io/linuxserver/syncthing:${SYNCTHING_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/syncthing.env
     container_name: ${SYNCTHING_CONTAINER_NAME:-syncthing}
     restart: ${SYNCTHING_RESTART:-unless-stopped}
     mem_limit: ${SYNCTHING_MEM_LIMIT:-200m}

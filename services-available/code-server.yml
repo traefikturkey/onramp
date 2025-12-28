@@ -10,6 +10,8 @@ networks:
 services:
   code-server:
     image: lscr.io/linuxserver/code-server:${CODE_SERVER_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/code-server.env
     container_name: ${CODE_SERVER_CONTAINER_NAME:-code-server}
     restart: ${CODE_SERVER_RESTART:-unless-stopped}
     networks:

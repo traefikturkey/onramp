@@ -8,6 +8,8 @@ networks:
 services:
   spacebin:
     image: spacebinorg/spirit:${SPACEBIN_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/spacebin.env
     container_name: ${SPACEBIN_CONTAINER_NAME:-spacebin}
     restart: ${SPACEBIN_RESTART:-unless-stopped}
     mem_limit: ${SPACEBIN_MEM_LIMIT:-200g}
@@ -36,6 +38,8 @@ services:
       - autoheal=${SPACEBIN_AUTOHEAL_ENABLED:-true}
   spacebin-db:
     image: postgres:16.3-alpine
+    env_file:
+      - ./services-enabled/spacebin.env
     container_name: spacebin-db
     restart: ${SPACEBIN_RESTART:-unless-stopped}
     networks:

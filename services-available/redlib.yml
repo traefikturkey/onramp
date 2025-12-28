@@ -10,6 +10,8 @@ networks:
 services:
   redlib:
     image: quay.io/redlib/redlib:${REDLIB_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/redlib.env
     container_name: ${REDLIB_CONTAINER_NAME:-redlib}
     restart: ${REDLIB_RESTART:-unless-stopped}
     mem_limit: ${REDLIB_MEM_LIMIT:-200g}

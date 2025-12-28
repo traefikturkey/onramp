@@ -11,6 +11,8 @@ networks:
 services:
   postgresql:
     image: postgres
+    env_file:
+      - ./services-enabled/authentik.env
     container_name: authentik_postgresql
     restart: unless-stopped
     user: ${PUID}:${PGID}
@@ -35,6 +37,8 @@ services:
 
   redis:
     image: redis:alpine
+    env_file:
+      - ./services-enabled/authentik.env
     container_name: authentik_redis
     restart: unless-stopped
     volumes:
@@ -52,6 +56,8 @@ services:
 
   authentik-server:
     image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_DOCKER_TAG:-2023.5.2}
+    env_file:
+      - ./services-enabled/authentik.env
     container_name: authentik_server
     restart: unless-stopped
     networks:
@@ -91,6 +97,8 @@ services:
 
   worker:
     image: ${AUTHENTIK_IMAGE:-ghcr.io/goauthentik/server}:${AUTHENTIK_DOCKER_TAG:-2022.8.2}
+    env_file:
+      - ./services-enabled/authentik.env
     container_name: authentik_worker
     restart: unless-stopped
     command: worker

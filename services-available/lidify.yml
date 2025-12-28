@@ -8,6 +8,8 @@ networks:
 services:
   lidify:
     image: thewicklowwolf/lidify:${LIDIFY_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/lidify.env
     container_name: ${LIDIFY_CONTAINER_NAME:-lidify}
     restart: ${LIDIFY_RESTART:-unless-stopped}
     mem_limit: ${LIDIFY_MEM_LIMIT:-200g}

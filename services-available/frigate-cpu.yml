@@ -8,6 +8,8 @@ networks:
 services:
   frigate-cpu:
     image: ghcr.io/blakeblackshear/frigate:${FRIGATE_DOCKER_TAG:-stable}
+    env_file:
+      - ./services-enabled/frigate-cpu.env
     container_name: ${FRIGATE_CONTAINER_NAME:-frigate-cpu}
     restart: ${FRIGATE_RESTART:-unless-stopped}
     networks:
