@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 
 # Set the base URL for GitHub repository
-GITHUB_BASE_URL="https://github.com/traefikturkey/onramp/tree/master/services-available"
+GITHUB_BASE_URL="https://github.com/traefikturkey/onramp/tree/main/services-available"
 
 # Initialize variables for services
 declare -A services_map

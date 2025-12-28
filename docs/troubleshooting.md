@@ -27,7 +27,7 @@ make start
 ### Check service logs
 
 ```bash
-make logs-service servicename
+make logs servicename
 # or
 docker logs servicename
 ```
