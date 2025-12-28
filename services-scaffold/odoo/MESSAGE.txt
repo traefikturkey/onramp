@@ -1,0 +1,4 @@
+Odoo will automatically initialize the database on first start.
+This may take a minute while the base module is installed.
+
+Access the web UI at https://odoo.${HOST_DOMAIN}

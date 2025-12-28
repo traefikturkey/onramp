@@ -1,0 +1,18 @@
+http:
+  middlewares:
+    default-headers:
+      headers:
+        frameDeny: true
+        #sslRedirect: true # depercated
+        browserXssFilter: true
+        contentTypeNosniff: true
+        forceSTSHeader: true
+        stsIncludeSubdomains: true
+        stsPreload: true
+        stsSeconds: 15552000
+        customFrameOptionsValue: SAMEORIGIN
+        customResponseHeaders:
+          X-Robots-Tag: "none,noarchive,nosnippet,notranslate,noimageindex,"
+          server: ""
+        customRequestHeaders:
+          X-Forwarded-Proto: https

@@ -11,7 +11,9 @@ services:
     container_name: ${ODOO_CONTAINER_NAME:-odoo}
     restart: ${ODOO_RESTART:-unless-stopped}
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+    command: odoo -i base -d ${ODOO_POSTGRES_DB}
     networks:
       - traefik
     volumes:

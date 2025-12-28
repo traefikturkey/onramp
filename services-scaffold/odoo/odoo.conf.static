@@ -5,3 +5,7 @@
 
 ; addons_path = /mnt/extra-addons
 admin_passwd = False
+
+; Session directory - must be writable by Odoo
+; Maps to ./media/odoo/web-data/.local/share/Odoo/sessions via volume mount
+session_dir = /var/lib/odoo/.local/share/Odoo/sessions
