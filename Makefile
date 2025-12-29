@@ -10,6 +10,10 @@ MAKE_INCLUDE_FILES := $(wildcard ./services-enabled/.env)
 ENV_FILES := $(wildcard ./services-enabled/.env) $(wildcard ./services-enabled/.env.*) $(wildcard ./services-enabled/*.env)
 ENV_FLAGS := $(foreach file, $(ENV_FILES), --env-file $(file))
 
+# Global env files only (for sietch container - avoids malformed service .env files breaking all operations)
+GLOBAL_ENV_FILES := $(wildcard ./services-enabled/.env) $(wildcard ./services-enabled/.env.*)
+GLOBAL_ENV_FLAGS := $(foreach file, $(GLOBAL_ENV_FILES), --env-file $(file))
+
 ifneq (,$(MAKE_INCLUDE_FILES))
     include $(MAKE_INCLUDE_FILES)
     export
@@ -78,7 +82,7 @@ SIETCH_FILES := $(shell find sietch/ -type f ! -name '.built' \
 	! -name '*.pyc' \
 	2>/dev/null)
 SIETCH_COMPUTED_VARS := -e HOSTIP=$(HOSTIP) -e PUID=$(PUID) -e PGID=$(PGID) -e HOST_NAME=$(HOST_NAME) -e TZ=$(TZ) -e HOST_DOMAIN=$(HOST_DOMAIN)
-SIETCH_RUN := docker run --rm $(ENV_FLAGS) $(SIETCH_COMPUTED_VARS) -v $(shell pwd):/app -v /var/run/docker.sock:/var/run/docker.sock --network traefik -u $(PUID):$(PGID) $(SIETCH_IMAGE)
+SIETCH_RUN := docker run --rm $(GLOBAL_ENV_FLAGS) $(SIETCH_COMPUTED_VARS) -v $(shell pwd):/app -v /var/run/docker.sock:/var/run/docker.sock --network traefik -u $(PUID):$(PGID) $(SIETCH_IMAGE)
 
 # prevents circular references, do not remove
 BUILD_DEPENDENCIES :=
