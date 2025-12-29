@@ -238,13 +238,13 @@ edit-env-custom: ## Edit custom/unmapped variables file
 ##
 #########################################################
 
-test: sietch-build ## Run unit tests locally with uv
-	cd sietch && uv run pytest
+test: sietch-build ## Run unit tests inside the Sietch container
+	docker run --rm -v $(shell pwd)/sietch:/app -w /app $(SIETCH_IMAGE) sh -c "uv sync --all-extras && uv run pytest"
 
 test-coverage: sietch-build ## Run tests with coverage report
-	cd sietch && uv run pytest --cov=scripts --cov-report=html
+	docker run --rm -v $(shell pwd)/sietch:/app -w /app $(SIETCH_IMAGE) sh -c "uv sync --all-extras && uv run pytest --cov=scripts --cov-report=html"
 
-test-docker: sietch-build ## Run tests inside the Sietch container
-	docker run --rm -v $(shell pwd)/sietch:/app -w /app $(SIETCH_IMAGE) sh -c "uv sync --all-extras && uv run pytest"
+test-local: sietch-build ## Run unit tests locally with uv (requires uv installed)
+	cd sietch && uv run pytest
 
 #$(info "sietch.mk loaded")
