@@ -19,8 +19,12 @@ create-nfs-backup: sietch-build ## create backup and copy to NFS server
 create-nfs-backup-direct: sietch-build ## create backup directly on NFS server
 	$(SIETCH_RUN) python /scripts/backup.py create-nfs --direct
 
-restore-backup: sietch-build ## restore the latest backup
+restore-backup: sietch-build ## restore the latest backup (or specific: BACKUP=filename)
+ifdef BACKUP
+	$(SIETCH_RUN) python /scripts/backup.py restore --file /backups/$(BACKUP)
+else
 	$(SIETCH_RUN) python /scripts/backup.py restore --latest
+endif
 
 restore-backup-service: sietch-build ## restore the latest backup of a specific service
 	$(SIETCH_RUN) python /scripts/backup.py restore --latest --service $(SERVICE_PASSED_DNCASED)
