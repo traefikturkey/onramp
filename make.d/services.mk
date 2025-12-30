@@ -12,7 +12,7 @@ fix-env-permissions:
 # Core service lifecycle
 start-service: COMPOSE_IGNORE_ORPHANS = true
 start-service: enable-service build
-	$(DOCKER_COMPOSE) $(SERVICE_FLAGS) up -d --force-recreate $(SERVICE_PASSED_DNCASED)
+	$(DOCKER_COMPOSE) $(SERVICE_FLAGS) up -d --force-recreate --pull=missing $(SERVICE_PASSED_DNCASED)
 
 down-service: stop-service
 stop-service:
@@ -170,7 +170,7 @@ create-external: ## Create external service from template
 
 start-compose: COMPOSE_IGNORE_ORPHANS = true
 start-compose: build
-	$(DOCKER_COMPOSE) $(SERVICE_FLAGS) up -d --force-recreate
+	$(DOCKER_COMPOSE) $(SERVICE_FLAGS) up -d --force-recreate --pull=missing
 
 down-compose: stop-compose
 stop-compose:
@@ -191,7 +191,7 @@ compose-run:
 
 start-dev: COMPOSE_IGNORE_ORPHANS = true
 start-dev: build services-dev
-	$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_DEVELOPMENT_FLAGS) up -d --force-recreate $(SERVICE_PASSED_DNCASED)
+	$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_DEVELOPMENT_FLAGS) up -d --force-recreate --pull=missing $(SERVICE_PASSED_DNCASED)
 
 stop-dev:
 	-$(DOCKER_COMPOSE) $(DOCKER_COMPOSE_DEVELOPMENT_FLAGS) stop $(SERVICE_PASSED_DNCASED)
