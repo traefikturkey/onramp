@@ -1,0 +1,28 @@
+networks:
+  traefik:
+    external: true
+
+# Databasus is a free, open source and self-hosted tool to backup databases. Make backups with different storages (S3, Google Drive, FTP, etc.) and notifications about progress (Slack, Discord, Telegram, etc.). Previously known as DATABASUS (see migration guide).
+# https://github.com/databasus/databasus
+
+services:
+  databasus:
+    image: databasus/databasus:${DATABASUS_DOCKER_TAG:-latest}
+    container_name: ${DATABASUS_CONTAINER_NAME:-databasus}
+    restart: ${DATABASUS_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    volumes:
+      - ./etc/databasus-data:/databasus-data
+    labels:
+      - joyride.host.name=${DATABASUS_CONTAINER_NAME:-DATABASUS}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.DATABASUS.entrypoints=websecure
+      - traefik.http.routers.DATABASUS.rule=Host(`${DATABASUS_CONTAINER_NAME:-DATABASUS}.${HOST_DOMAIN}`)
+      - traefik.http.services.DATABASUS.loadbalancer.server.port=4005
+      - com.centurylinklabs.watchtower.enable=${DATABASUS_WATCHTOWER_ENABLED:-true}
+      - autoheal=true
