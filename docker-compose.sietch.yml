@@ -1,0 +1,33 @@
+# Sietch container for compose-based operations (NFS backups)
+#
+# This file provides a Docker Compose service definition for sietch,
+# used specifically for operations that require volume mounts (like NFS).
+#
+# For most operations, sietch runs via SIETCH_RUN (docker run).
+# NFS backup operations use this compose file with the sietch-nfs-backup override.
+#
+# Usage:
+#   docker compose -f docker-compose.sietch.yml run --rm sietch <command>
+#
+# With NFS override:
+#   docker compose -f docker-compose.sietch.yml \
+#     -f overrides-enabled/sietch-nfs-backup.yml run --rm sietch <command>
+
+services:
+  sietch:
+    image: sietch
+    volumes:
+      - .:/app
+      - /var/run/docker.sock:/var/run/docker.sock
+    user: "${PUID}:${PGID}"
+    network_mode: "none"
+    working_dir: /app
+    environment:
+      - HOSTIP=${HOSTIP}
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - HOST_NAME=${HOST_NAME}
+      - TZ=${TZ}
+      - HOST_DOMAIN=${HOST_DOMAIN}
+      - NFS_SERVER=${NFS_SERVER:-}
+      - NFS_BACKUP_PATH=${NFS_BACKUP_PATH:-}

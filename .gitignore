@@ -12,6 +12,7 @@ services-test/
 overrides-enabled/*.yml
 docker-compose.*.yml
 !sietch/docker-compose.*.yml
+!docker-compose.sietch.yml
 .vscode/
 .specstory/
 .chat/
