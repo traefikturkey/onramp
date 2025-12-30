@@ -163,7 +163,7 @@
 - [jellyseerr](https://github.com/Fallenbagel/jellyseerr/tree/develop) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/jellyseerr.yml)): Container for running jellyseerr, a torrent indexer
 - [joplin](https://joplinapp.org/) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/joplin.yml)): Note-taking and to-do app
 - [joyride-reloaded](https://github.com/ilude/joyride-python) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/joyride-reloaded.yml)): dynamic dns server that uses docker labels
-- [joyride](https://github.com/traefikturkey/joyride) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/joyride.yml)): dynamic dns server that uses docker labels
+- [joyride](https://github.com/traefikturkey/joyride/tree/coredns) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/joyride.yml)): CoreDNS-based dynamic dns server using docker labels
 
 
 ## K

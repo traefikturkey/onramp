@@ -1,6 +1,16 @@
-If running on port 53 (DNS), disable systemd-resolved first:
+CoreDNS-based Joyride enabled!
 
-  sudo sed -i 's/#DNSStubListener=yes/DNSStubListener=no/' /etc/systemd/resolved.conf
-  sudo systemctl restart systemd-resolved
+Containers with these labels will get DNS entries:
+  - joyride.host.name=myapp.example.com
+  - coredns.host.name=myapp.example.com
 
-Then update /etc/resolv.conf with your primary DNS server IP.
+HOST_IP is auto-detected from the default route (host networking).
+
+Legacy environment variables are supported:
+  - JOYRIDE_ENABLE_SERF=true  (enables clustering)
+  - JOYRIDE_NXDOMAIN_ENABLED=true  (return NXDOMAIN instead of drop)
+
+Health check: http://localhost:5454/health
+Prometheus metrics: http://localhost:9153/metrics
+
+Source: https://github.com/traefikturkey/joyride/tree/coredns
