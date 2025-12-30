@@ -49,12 +49,26 @@ make list-backups
 
 ### NFS Backups
 
+NFS backups work automatically when configured in `services-enabled/.env.nfs`:
+
+```bash
+# Configure NFS (required)
+make edit-env-nfs
+# Set: NFS_SERVER=your-nas-hostname
+# Set: NFS_BACKUP_PATH=/path/to/backup/share
+```
+
+Once configured:
+
 ```bash
 # Create backup and copy to NFS
 make create-nfs-backup
 
 # Create directly on NFS (faster for slow local storage)
 make create-nfs-backup-direct
+
+# List NFS backups
+make list-nfs-backups
 
 # Restore from NFS
 make restore-nfs-backup

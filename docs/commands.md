@@ -84,6 +84,12 @@ Complete list of OnRamp make commands.
 | `make create-backup` | Create configuration backup |
 | `make restore-backup` | Restore from backup |
 | `make list-backups` | List available backups |
+| `make create-nfs-backup` | Create backup and copy to NFS server |
+| `make create-nfs-backup-direct` | Create backup directly on NFS server |
+| `make restore-nfs-backup` | Restore latest backup from NFS server |
+| `make list-nfs-backups` | List backups on NFS server |
+
+NFS backups require `NFS_SERVER` and `NFS_BACKUP_PATH` in `services-enabled/.env.nfs`.
 
 ## Database (MariaDB)
 
