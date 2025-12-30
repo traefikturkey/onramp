@@ -60,10 +60,6 @@ create-nfs-backup: sietch-build backups ## create backup and copy to NFS server
 	$(check_nfs_config)
 	$(SIETCH_NFS_COMPOSE) run --rm sietch python /scripts/backup.py create-nfs
 
-create-nfs-backup-direct: sietch-build backups ## create backup directly on NFS server
-	$(check_nfs_config)
-	$(SIETCH_NFS_COMPOSE) run --rm sietch python /scripts/backup.py create-nfs --direct
-
 restore-nfs-backup: sietch-build ## restore the latest backup from NFS server
 	$(check_nfs_config)
 	$(SIETCH_NFS_COMPOSE) run --rm sietch python /scripts/backup.py restore-nfs

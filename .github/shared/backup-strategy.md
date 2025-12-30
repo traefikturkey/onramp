@@ -64,9 +64,6 @@ Once configured:
 # Create backup and copy to NFS
 make create-nfs-backup
 
-# Create directly on NFS (faster for slow local storage)
-make create-nfs-backup-direct
-
 # List NFS backups
 make list-nfs-backups
 

@@ -85,7 +85,6 @@ Complete list of OnRamp make commands.
 | `make restore-backup` | Restore from backup |
 | `make list-backups` | List available backups |
 | `make create-nfs-backup` | Create backup and copy to NFS server |
-| `make create-nfs-backup-direct` | Create backup directly on NFS server |
 | `make restore-nfs-backup` | Restore latest backup from NFS server |
 | `make list-nfs-backups` | List backups on NFS server |
 
