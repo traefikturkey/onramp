@@ -17,7 +17,7 @@ services:
   sietch:
     image: sietch
     volumes:
-      - .:/app
+      - ..:/app
       - /var/run/docker.sock:/var/run/docker.sock
     user: "${PUID}:${PGID}"
     network_mode: "none"
