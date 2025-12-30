@@ -38,7 +38,7 @@ list-backups: sietch-build ## list available backups
 
 # Compose command for NFS backup operations
 SIETCH_NFS_COMPOSE := $(DOCKER_COMPOSE) $(GLOBAL_ENV_FLAGS) \
-	-f docker-compose.sietch.yml \
+	-f sietch/docker-compose.yml \
 	-f overrides-available/sietch-nfs-backup.yml
 
 # Helper to check NFS config (reads from env file directly)
