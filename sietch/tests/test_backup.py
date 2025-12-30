@@ -423,6 +423,75 @@ class TestUnmountNfs:
         assert result is False
 
 
+class TestNfsPreMount:
+    """Tests for NFS pre-mount detection (Docker NFS volume scenario)."""
+
+    @pytest.fixture
+    def mock_exec(self):
+        return MockCommandExecutor()
+
+    def test_detects_premount_from_env(self, tmp_path, monkeypatch, mock_exec):
+        """Should detect NFS_PREMOUNTED=true from environment."""
+        monkeypatch.setenv("NFS_PREMOUNTED", "true")
+
+        mgr = BackupManager(base_dir=str(tmp_path), executor=mock_exec)
+
+        assert mgr.nfs_premounted is True
+
+    def test_premount_false_by_default(self, tmp_path, mock_exec):
+        """Should default to False for backward compatibility."""
+        mgr = BackupManager(base_dir=str(tmp_path), executor=mock_exec)
+
+        assert mgr.nfs_premounted is False
+
+    def test_mount_nfs_skips_when_premounted(self, tmp_path, monkeypatch, mock_exec):
+        """Should skip mount command when pre-mounted via Docker volume."""
+        monkeypatch.setenv("NFS_PREMOUNTED", "true")
+
+        # Create the mount point to simulate Docker volume
+        nfs_dir = tmp_path / "nfs_backup"
+        nfs_dir.mkdir()
+        monkeypatch.setenv("NFS_BACKUP_TMP_DIR", str(nfs_dir))
+
+        mgr = BackupManager(base_dir=str(tmp_path), executor=mock_exec)
+        result = mgr._mount_nfs()
+
+        assert result is True
+        # Should NOT have called any commands (no mount needed)
+        assert len(mock_exec.calls) == 0
+
+    def test_mount_nfs_fails_if_premount_path_missing(self, tmp_path, monkeypatch, mock_exec, capsys):
+        """Should fail if NFS_PREMOUNTED=true but path doesn't exist."""
+        monkeypatch.setenv("NFS_PREMOUNTED", "true")
+        monkeypatch.setenv("NFS_BACKUP_TMP_DIR", str(tmp_path / "nonexistent"))
+
+        mgr = BackupManager(base_dir=str(tmp_path), executor=mock_exec)
+        result = mgr._mount_nfs()
+
+        assert result is False
+        captured = capsys.readouterr()
+        assert "not accessible" in captured.err
+
+    def test_unmount_nfs_skips_when_premounted(self, tmp_path, monkeypatch, mock_exec):
+        """Should skip unmount command when pre-mounted via Docker volume."""
+        monkeypatch.setenv("NFS_PREMOUNTED", "true")
+
+        mgr = BackupManager(base_dir=str(tmp_path), executor=mock_exec)
+        result = mgr._unmount_nfs()
+
+        assert result is True
+        # Should NOT have called any commands (Docker handles cleanup)
+        assert len(mock_exec.calls) == 0
+
+    def test_premount_case_insensitive(self, tmp_path, monkeypatch, mock_exec):
+        """Should detect NFS_PREMOUNTED regardless of case."""
+        monkeypatch.setenv("NFS_PREMOUNTED", "TRUE")
+
+        mgr = BackupManager(base_dir=str(tmp_path), executor=mock_exec)
+
+        assert mgr.nfs_premounted is True
+
+
 class TestRunCmd:
     """Tests for _run_cmd() method."""
 
