@@ -184,3 +184,17 @@ For detailed documentation:
 - Always use `make` commands, never raw `docker compose`
 - Do not create files without explicit user request
 - Commit all changes when asked (clean `git status`)
+
+### File Move/Rename Checklist
+When moving or renaming files, review for:
+- Relative paths (volume mounts, imports, includes) that depend on file location
+- References in other files (Makefiles, scripts, documentation)
+- Glob patterns that may include/exclude differently after the move
+
+### Testing Requirements
+After making changes:
+- Identify all commands/features affected by the change
+- Test each affected command before committing
+- For new features: test the new functionality
+- For modifications: test both the modified feature AND existing features that share code paths
+- Run `make test` to verify unit tests pass
