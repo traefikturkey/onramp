@@ -184,6 +184,7 @@ For detailed documentation:
 - Always use `make` commands, never raw `docker compose`
 - Do not create files without explicit user request
 - Commit all changes when asked (clean `git status`)
+- Never mention AI, Claude, or "generated with" in commit messages
 
 ### File Move/Rename Checklist
 When moving or renaming files, review for:
