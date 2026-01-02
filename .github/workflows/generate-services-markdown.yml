@@ -1,0 +1,49 @@
+name: Generate Services Markdown
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'services-available/**/*.yml'
+      - '.githooks/generate-services-markdown.sh'
+      - '.github/workflows/generate-services-markdown.yml'
+  workflow_dispatch:  # Allow manual triggering
+
+jobs:
+  generate-services-markdown:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write  # Required to push changes
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for proper git operations
+      
+      - name: Generate SERVICES.md
+        run: |
+          echo "Running generate-services-markdown.sh..."
+          bash .githooks/generate-services-markdown.sh
+      
+      - name: Check for changes
+        id: check_changes
+        run: |
+          if git diff --quiet SERVICES.md; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "No changes to SERVICES.md"
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "SERVICES.md has been updated"
+          fi
+      
+      - name: Commit and push changes
+        if: steps.check_changes.outputs.changed == 'true'
+        run: |
+          git config --local user.name 'github-actions[bot]'
+          git config --local user.email 'github-actions[bot]@users.noreply.github.com'
+          git add SERVICES.md
+          git commit -m "docs: auto-update SERVICES.md from service definitions"
+          git push
