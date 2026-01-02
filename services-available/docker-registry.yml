@@ -9,6 +9,8 @@ networks:
 services:
   docker-registry:
     image: registry:${DOCKER_REGISTRY_DOCKER_TAG:-2}
+    env_file:
+      - ./services-enabled/docker-registry.env
     container_name: ${DOCKER_REGISTRY_CONTAINER_NAME:-docker-registry}
     restart: ${DOCKER_REGISTRY_RESTART:-unless-stopped}
     networks:

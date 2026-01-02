@@ -6,6 +6,8 @@
 services:
   mssql:
     image: mcr.microsoft.com/mssql/server:${MSSQL_DOCKER_TAG:-2022-latest}
+    env_file:
+      - ./services-enabled/mssql.env
     user: root # Required for container to correctly interact with the volume.
     container_name: mssql
     restart: unless-stopped

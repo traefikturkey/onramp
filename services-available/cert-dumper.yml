@@ -4,6 +4,8 @@
 services:
   traefik-certs-dumper:
     image: ghcr.io/kereis/traefik-certs-dumper:${TRAEFIK_CERT_DUMPER_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/cert-dumper.env
     container_name: ${TRAEFIK_CERT_DUMPER_CONTAINER_NAME:-traefik-certs-dumper}
     restart: unless-stopped
     volumes:

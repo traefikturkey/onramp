@@ -8,6 +8,8 @@ networks:
 services:
   paperless-ai:
     image: clusterzx/paperless-ai:${PAPERLESS_AI_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/paperless-ai.env
     container_name: ${PAPERLESS_AI_CONTAINER_NAME:-paperless-ai}
     restart: ${PAPERLESS_AI_RESTART:-unless-stopped}
     mem_limit: ${PAPERLESS_AI_MEM_LIMIT:-200g}

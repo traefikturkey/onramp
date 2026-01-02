@@ -4,6 +4,8 @@
 services:
   unbound:
     image: ghcr.io/pascaliske/unbound:${UNBOUND_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/unbound.env
     container_name: ${UNBOUND_CONTAINER_NAME:-unbound}
     restart: unless-stopped
     volumes:

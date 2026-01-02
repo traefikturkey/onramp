@@ -13,6 +13,8 @@ volumes:
 services:
   prometheus-alertmanager:
     image: prom/alertmanager:${ALERTMANAGER_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/prometheus-alertmanager.env
     container_name: ${ALERTMANAGER_CONTAINER_NAME:-prometheus-alertmanager}
     restart: unless-stopped
     networks:

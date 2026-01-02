@@ -9,6 +9,8 @@ networks:
 services:
   fulltext-rss:
     image: heussd/fivefilters-full-text-rss:${FULLTEXT_RSS_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/fulltext-rss.env
     container_name: ${FULLTEXT_RSS_CONTAINER_NAME:-fulltext-rss}
     restart: ${FULLTEXT_RSS_RESTART:-unless-stopped}
     networks:

@@ -8,6 +8,8 @@ networks:
 services:
   owncast:
     image: owncast/owncast:${OWNCAST_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/owncast.env
     container_name: ${OWNCAST_CONTAINER_NAME:-owncast}
     restart: ${OWNCAST_RESTART:-unless-stopped}
     networks:

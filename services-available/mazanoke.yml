@@ -9,6 +9,8 @@ networks:
 services:
   mazanoke:
     image: ghcr.io/civilblur/mazanoke:${MAZANOKE_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/mazanoke.env
     container_name: ${MAZANOKE_CONTAINER_NAME:-mazanoke}
     restart: ${MAZANOKE_RESTART:-unless-stopped}
     mem_limit: ${MAZANOKE_MEM_LIMIT:-200g}

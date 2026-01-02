@@ -9,6 +9,8 @@ networks:
 services:
   nzbget:
     image: lscr.io/linuxserver/nzbget:${NZBGET_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/nzbget.env
     container_name: ${NZBGET_CONTAINER_NAME:-nzbget}
     restart: unless-stopped
     networks:

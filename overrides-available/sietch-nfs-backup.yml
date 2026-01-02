@@ -1,0 +1,33 @@
+# NFS backup volume for sietch container
+#
+# Enables NFS-based backup storage for OnRamp configuration.
+# Docker daemon handles the privileged NFS mount operation.
+#
+# Enable with:
+#   make enable-override sietch-nfs-backup
+#
+# Configure in services-enabled/.env.nfs:
+#   NFS_SERVER=your-nas-hostname
+#   NFS_BACKUP_PATH=/path/to/backup/share
+#
+# Usage:
+#   make create-nfs-backup      - Create backup and copy to NFS
+#   make list-nfs-backups       - List backups on NFS server
+#   make restore-nfs-backup     - Restore latest backup from NFS
+
+volumes:
+  sietch-nfs-backup:
+    labels:
+      - remove_volume_on=down
+    driver_opts:
+      type: nfs
+      o: "addr=${NFS_SERVER},nolock,noatime,soft,rw"
+      device: ":${NFS_BACKUP_PATH}"
+
+services:
+  sietch:
+    volumes:
+      - sietch-nfs-backup:/nfs/backup
+    environment:
+      - NFS_BACKUP_TMP_DIR=/nfs/backup
+      - NFS_PREMOUNTED=true

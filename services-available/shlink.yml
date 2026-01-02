@@ -8,6 +8,8 @@ networks:
 services:
   shlink:
     image: ghcr.io/shlinkio/shlink:${SHLINK_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/shlink.env
     container_name: ${SHLINK_CONTAINER_NAME:-shlink}
     restart: ${SHLINK_RESTART:-unless-stopped}
     mem_limit: ${SHLINK_MEM_LIMIT:-200g}

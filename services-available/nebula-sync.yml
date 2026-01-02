@@ -5,6 +5,8 @@
 services:
   nebula-sync:
     image: ghcr.io/lovelaze/nebula-sync:${NEBULA_SYNC_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/nebula-sync.env
     container_name: ${NEBULA_SYNC_CONTAINER_NAME:-nebula-sync}
     restart: ${NEBULA_SYNC_RESTART:-unless-stopped}
     mem_limit: ${NEBULA_SYNC_MEM_LIMIT:-200g}

@@ -9,6 +9,8 @@ networks:
 services:
   scrypted:
     image: ghcr.io/koush/scrypted:${SCRYPTED_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/scrypted.env
     container_name: ${SCRYPTED_CONTAINER_NAME:-scrypted}
     restart: ${SCRYPTED_RESTART:-unless-stopped}
     networks:

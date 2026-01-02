@@ -4,6 +4,8 @@
 services:
   avahi:
     image: flungo/avahi:${AVAHI_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/avahi.env
     container_name: ${AVAHI_CONTAINER_NAME:-avahi}
     restart: unless-stopped
     network_mode: host

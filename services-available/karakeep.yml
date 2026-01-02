@@ -9,6 +9,8 @@ networks:
 services:
   karakeep:
     image: ghcr.io/karakeep-app/karakeep:${KARAKEEP_VERSION:-release}
+    env_file:
+      - ./services-enabled/karakeep.env
     container_name: ${KARAKEEP_CONTAINER_NAME:-karakeep}
     restart: ${KARAKEEP_RESTART:-unless-stopped}
     mem_limit: ${KARAKEEP_MEM_LIMIT:-200g}
@@ -62,6 +64,8 @@ services:
       - autoheal=${KARAKEEP_AUTOHEAL_ENABLED:-true}
   chrome:
     image: gcr.io/zenika-hub/alpine-chrome:123
+    env_file:
+      - ./services-enabled/karakeep.env
     restart: unless-stopped
     container_name: karakeep-chrome
     networks:
@@ -78,6 +82,8 @@ services:
     networks:
       - traefik
     image: getmeili/meilisearch:v1.13.3
+    env_file:
+      - ./services-enabled/karakeep.env
     restart: unless-stopped
     volumes:
       - ./etc/karakeep/meilisearch:/meili_data

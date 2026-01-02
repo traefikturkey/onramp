@@ -1,0 +1,13 @@
+Workflow files can be managed on the local filesystem at:
+  ./media/n8n/workflows/
+
+Commands:
+  make n8n-export-workflows    Export all workflows to filesystem
+  make n8n-import-workflows    Import workflows from filesystem (requires restart)
+  make n8n-export-credentials  Export credentials (encrypted)
+  make n8n-import-credentials  Import credentials (requires restart)
+
+Note: Credentials are encrypted with N8N_ENCRYPTION_KEY. To make them
+portable between instances, set the same key in both environments.
+
+Access the web UI at https://n8n.${HOST_DOMAIN}

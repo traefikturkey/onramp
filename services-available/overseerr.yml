@@ -9,6 +9,8 @@ networks:
 services:
   overseerr:
     image: lscr.io/linuxserver/overseerr:${OVERSEERR_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/overseerr.env
     container_name: ${OVERSEERR_CONTAINER_NAME:-overseerr}
     restart: unless-stopped
     networks:

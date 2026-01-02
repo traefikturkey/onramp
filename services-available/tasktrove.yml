@@ -9,6 +9,8 @@ networks:
 services:
   tasktrove:
     image: ghcr.io/dohsimpson/tasktrove:${TASKTROVE_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/tasktrove.env
     container_name: ${TASKTROVE_CONTAINER_NAME:-tasktrove}
     restart: ${TASKTROVE_RESTART:-unless-stopped}
     mem_limit: ${TASKTROVE_MEM_LIMIT:-200g}

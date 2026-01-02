@@ -9,6 +9,8 @@ networks:
 services:
   dockerizalo:
     image: ghcr.io/undernightcore/dockerizalo-proxy:latest
+    env_file:
+      - ./services-enabled/dockerizalo.env
     container_name: ${DOCKERIZALO_PROXY_CONTAINER_NAME:-dockerizalo}
     networks:
       - dockerizalo-db
@@ -28,6 +30,8 @@ services:
 
   ui:
     image: ghcr.io/undernightcore/dockerizalo-ui:latest
+    env_file:
+      - ./services-enabled/dockerizalo.env
     container_name: ${DOCKERIZALO_UI_CONTAINER_NAME:-ui}
     networks:
       - dockerizalo-db
@@ -36,6 +40,8 @@ services:
 
   api:
     image: ghcr.io/undernightcore/dockerizalo:latest
+    env_file:
+      - ./services-enabled/dockerizalo.env
     container_name: ${DOCKERIZALO_API_CONTAINER_NAME:-api}
     volumes:
       - ./etc/dockerizalo/api:/data/dockerizalo
@@ -53,6 +59,8 @@ services:
 
   dockerizalo-db:
     image: postgres
+    env_file:
+      - ./services-enabled/dockerizalo.env
     container_name: ${DOCKERIZALO_DB_CONTAINER_NAME:-dockerizalo-db}
     restart: unless-stopped
     volumes:

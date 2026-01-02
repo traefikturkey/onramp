@@ -9,6 +9,8 @@ networks:
 services:
   beszel-hub:
     image: ghcr.io/henrygd/beszel/beszel:${BESZEL_HUB_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/beszel-hub.env
     container_name: ${BESZEL_HUB_CONTAINER_NAME:-beszel-hub}
     restart: ${BESZEL_HUB_RESTART:-unless-stopped}
     networks:
@@ -34,6 +36,8 @@ services:
 
   beszel-local-agent:
     image: ghcr.io/henrygd/beszel/beszel-agent:${BESZEL_AGENT_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/beszel-hub.env
     container_name: ${BESZEL_AGENT_CONTAINER_NAME:-beszel-local-agent}
     restart: ${BESZEL_AGENT_RESTART:-unless-stopped}
     network_mode: host

@@ -9,6 +9,8 @@ networks:
 services:
   gluetun:
     image: ghcr.io/qdm12/gluetun:${GLUETUN_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/gluetun.env
     container_name: ${GLUETUN_CONTAINER_NAME:-gluetun}
     restart: ${GLUETUN_RESTART:-unless-stopped}
     mem_limit: ${GLUETUN_MEM_LIMIT:-200g}

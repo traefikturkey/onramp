@@ -10,6 +10,8 @@ networks:
 services:
   qdirstat:
     image: lscr.io/linuxserver/qdirstat:${QDIRSTAT_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/qdirstat.env
     container_name: ${QDIRSTAT_CONTAINER_NAME:-qdirstat}
     restart: unless-stopped
     networks:

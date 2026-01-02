@@ -8,16 +8,22 @@ When you run `make enable-service <name>`, OnRamp:
 
 1. Creates a symlink in `services-enabled/`
 2. Looks for templates in `services-scaffold/<name>/`
-3. Processes any `*.template` files and copies other files
-4. Executes `scaffold.yml` manifest operations (if present)
-5. Outputs the results to `services-enabled/` or `etc/<name>/`
+3. Generates `services-enabled/<name>.env`:
+   - From `env.template` if present (with variable substitution)
+   - Auto-generated with defaults if no template exists
+4. Processes any `*.template` files and copies other files
+5. Executes `scaffold.yml` manifest operations (if present)
+6. Outputs the results to `services-enabled/` or `etc/<name>/`
+
+**Note:** Every service gets a `.env` file, even without an `env.template`. This ensures the service YAML's `env_file:` directive always finds its expected file.
 
 ## File Conventions
 
 | File Pattern | Action | Output Location |
 |--------------|--------|-----------------|
-| `env.template` | Render with envsubst | `services-enabled/<service>.env` |
-| `*.template` | Render with envsubst | `etc/<service>/*` (suffix stripped) |
+| `env.template` | Render with variable substitution | `services-enabled/<service>.env` |
+| (no template) | Auto-generate minimal .env | `services-enabled/<service>.env` |
+| `*.template` | Render with variable substitution | `etc/<service>/*` (suffix stripped) |
 | `scaffold.yml` | Execute operations | N/A (control file) |
 | `MESSAGE.txt` | Display after build | N/A (post-enable instructions) |
 | `*.md` | Ignored | N/A (documentation) |
@@ -209,7 +215,18 @@ make scaffold-teardown <service> # Remove generated files (keeps etc/)
 
 ## Adding Scaffolding to a Service
 
-1. Create the directory:
+### Minimal Setup (No Custom Config)
+
+Services without special configuration needs don't require a scaffold directory. The scaffolder will auto-generate a basic `.env` file:
+
+```bash
+make enable-service myservice
+# Creates: services-enabled/myservice.env (auto-generated)
+```
+
+### Custom Environment Variables
+
+1. Create the directory and template:
    ```bash
    mkdir -p services-scaffold/myservice
    ```
@@ -221,25 +238,29 @@ make scaffold-teardown <service> # Remove generated files (keeps etc/)
    MYSERVICE_SECRET=${MYSERVICE_SECRET}
    ```
 
-3. Add config files if needed (with or without `.template` suffix):
-   ```yaml
-   # services-scaffold/myservice/config.yaml.template
-   server:
-     port: ${MYSERVICE_PORT}
-   ```
-
-4. Add a `scaffold.yml` for complex operations (optional):
-   ```yaml
-   version: "1"
-   operations:
-     - type: mkdir
-       path: data/
-   ```
-
-5. Test it:
+3. Test it:
    ```bash
    make enable-service myservice
    ```
+
+### With Config Files
+
+Add config files if needed (with or without `.template` suffix):
+```yaml
+# services-scaffold/myservice/config.yaml.template
+server:
+  port: ${MYSERVICE_PORT}
+```
+
+### With Complex Operations
+
+Add a `scaffold.yml` for complex operations (optional):
+```yaml
+version: "1"
+operations:
+  - type: mkdir
+    path: data/
+```
 
 ## Teardown vs Nuke
 

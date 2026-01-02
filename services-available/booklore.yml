@@ -9,6 +9,8 @@ networks:
 services:
   booklore:
     image: booklore/booklore:${BOOKLORE_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/booklore.env
     container_name: ${BOOKLORE_CONTAINER_NAME:-booklore}
     restart: ${BOOKLORE_RESTART:-unless-stopped}
     mem_limit: ${BOOKLORE_MEM_LIMIT:-200g}
@@ -42,6 +44,8 @@ services:
 
   booklore-db:
     image: lscr.io/linuxserver/mariadb:${BOOKLORE_MARIADB_TAG:-11.4.5}
+    env_file:
+      - ./services-enabled/booklore.env
     container_name: booklore-db
     environment:
       - PUID=${PUID:-1000}

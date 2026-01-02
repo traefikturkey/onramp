@@ -8,6 +8,8 @@ networks:
 services:
   pterodactyl-wings:
     image: <==== container_image ====>:${PTERODACTYL_WINGS_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/pterodactyl-wings.env
     container_name: ${PTERODACTYL_WINGS_CONTAINER_NAME:-pterodactyl-wings}
     restart: ${PTERODACTYL_WINGS_RESTART:-unless-stopped}
     networks:

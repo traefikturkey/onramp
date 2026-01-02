@@ -10,6 +10,8 @@ networks:
 services:
   infinity:
     image: michaelf34/infinity:${INFINITY_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/infinity.env
     container_name: ${INFINITY_CONTAINER_NAME:-infinity}
     restart: ${INFINITY_RESTART:-unless-stopped}
     networks:

@@ -10,6 +10,8 @@ services:
     restart: unless-stopped
     ### to use postgres instead, enable the semaphore-pg override.
     image: mysql:8.0
+    env_file:
+      - ./services-enabled/semaphore.env
     container_name: semaphore-db
     networks:
       - traefik
@@ -24,6 +26,8 @@ services:
 
   semaphore:
     image: semaphoreui/semaphore:${SEMAPHORE_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/semaphore.env
     container_name: ${SEMAPHORE_CONTAINER_NAME:-semaphore}
     restart: ${SEMAPHORE_RESTART:-unless-stopped}
     networks:

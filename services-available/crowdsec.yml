@@ -8,6 +8,8 @@ networks:
 services:
   crowdsec:
     image: ghcr.io/crowdsecurity/crowdsec:${CROWDSEC_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/crowdsec.env
     container_name: ${CROWDSEC_CONTAINER_NAME:-crowdsec}
     restart: unless-stopped
     volumes:

@@ -12,6 +12,8 @@ services:
   unimus-app:
     container_name: ${UNIMUS_CONTAINER_NAME:-unimus}
     image: croc/unimus:${UNIMUS_VERSION:-latest}
+    env_file:
+      - ./services-enabled/unimus.env
     volumes:
       - ./etc/unimus/web:/etc/unimus
       - /etc/localtime:/etc/localtime:ro
@@ -36,6 +38,8 @@ services:
   unimus-database:
     container_name: unimus_database
     image: mariadb:10
+    env_file:
+      - ./services-enabled/unimus.env
     networks:
       - unimus-dbnet
     environment:

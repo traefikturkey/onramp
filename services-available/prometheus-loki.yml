@@ -11,6 +11,8 @@ version: "3"
 services:
   prometheus-loki:
     image: grafana/loki:${LOKI_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/prometheus-loki.env
     container_name: ${LOKI_CONTAINER_NAME:-prometheus-loki}
     restart: unless-stopped
     volumes:
@@ -25,6 +27,8 @@ services:
 
   logspout:
     image: gliderlabs/logspout:${LOGSPOUT_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/prometheus-loki.env
     container_name: logspout
     restart: unless-stopped
     command: syslog+tcp://promtail:1514
@@ -41,6 +45,8 @@ services:
 
   promtail:
     image: grafana/promtail:${PROMTAIL_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/prometheus-loki.env
     container_name: promtail
     restart: unless-stopped
     volumes:

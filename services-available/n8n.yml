@@ -8,6 +8,8 @@ networks:
 services:
   n8n:
     image: n8nio/n8n:${N8N_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/n8n.env
     container_name: ${N8N_CONTAINER_NAME:-n8n}
     restart: ${N8N_RESTART:-unless-stopped}
     mem_limit: ${N8N_MEM_LIMIT:-200g}
@@ -19,6 +21,7 @@ services:
     #  - 5678
     volumes:
       - ./etc/n8n/:/home/node/.n8n/
+      - ./media/n8n/workflows:/home/node/workflows
 
     environment:
       # Basic auth
@@ -27,7 +30,7 @@ services:
       - N8N_BASIC_AUTH_PASSWORD=${N8N_BASIC_AUTH_PASSWORD:-password}
 
       # Database config
-      - DB_TYPE=postgresdb
+      - DB_TYPE=${DB_TYPE:-postgresdb}
       - DB_POSTGRESDB_HOST=n8n_postgres
       - DB_POSTGRESDB_PORT=5432
       - DB_POSTGRESDB_DATABASE=${N8N_POSTGRES_DB:-n8n}
@@ -62,7 +65,9 @@ services:
       - n8n_postgres
 
   n8n_postgres:
-    image: postgres:12
+    image: postgres:16
+    env_file:
+      - ./services-enabled/n8n.env
     container_name: n8n_postgres
     networks:
       - traefik

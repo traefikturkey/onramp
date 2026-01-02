@@ -27,6 +27,8 @@ networks:
 services:
   valkey:
     image: valkey/valkey:${VALKEY_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/valkey.env
     container_name: ${VALKEY_CONTAINER_NAME:-valkey}
     restart: ${VALKEY_RESTART:-unless-stopped}
     networks:

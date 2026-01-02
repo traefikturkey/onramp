@@ -10,6 +10,8 @@ networks:
 services:
   iventoy:
     image: thedrobe/iventoy-docker:${IVENTOY_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/iventoy.env
     container_name: ${IVENTOY_CONTAINER_NAME:-iventoy}
     restart: ${IVENTOY_RESTART:-unless-stopped}
     privileged: true #must be true

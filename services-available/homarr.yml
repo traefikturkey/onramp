@@ -8,6 +8,8 @@ networks:
 services:
   homarr:
     image: ghcr.io/ajnart/homarr:${HOMARR_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/homarr.env
     container_name: ${HOMARR_CONTAINER_NAME:-homarr}
     restart: unless-stopped
     networks:

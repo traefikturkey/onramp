@@ -6,14 +6,22 @@ OnRamp uses a convention-based templating system in `services-scaffold/` to auto
 
 | File Pattern | Processing | Output Location | Notes |
 |--------------|-----------|------------------|-------|
-| `env.template` | Render with envsubst | `services-enabled/<service>.env` | Environment variables per service |
-| `*.template` | Render with envsubst | `etc/<service>/*` (suffix stripped) | Config files with variable substitution |
+| `env.template` | Render with variable substitution | `services-enabled/<service>.env` | Environment variables per service |
+| (no template) | Auto-generate minimal .env | `services-enabled/<service>.env` | Ensures YAML `env_file:` works |
+| `*.template` | Render with variable substitution | `etc/<service>/*` (suffix stripped) | Config files with variable substitution |
 | `scaffold.yml` | Execute operations | N/A | Control file (not copied) |
 | `*.static` | Copy as-is | `etc/<service>/*` (suffix stripped) | No variable substitution |
 | `*.md` | Ignored | N/A | Documentation (not copied) |
 | `.gitkeep` | Ignored | N/A | Git placeholder (not copied) |
 | `MESSAGE.txt` | Display after build | N/A | Post-enable instructions (not copied) |
 | Other files | Copy as-is | `etc/<service>/*` | Preserve directory structure |
+
+### Auto-Generation of .env Files
+
+Services without an `env.template` still get a `.env` file auto-generated. This ensures:
+1. The service YAML's `env_file: ./services-enabled/<service>.env` directive always finds its file
+2. Users can add variables later without modifying scaffolding
+3. Consistent structure across all services
 
 ### Global Config (onramp service)
 

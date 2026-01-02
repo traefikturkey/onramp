@@ -10,6 +10,8 @@ networks:
 services:
   fossflow:
     image: fitzzz/fossflow:${FOSSFLOW_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/fossflow.env
     container_name: ${FOSSFLOW_CONTAINER_NAME:-fossflow}
     restart: ${FOSSFLOW_RESTART:-unless-stopped}
     mem_limit: ${FOSSFLOW_MEM_LIMIT:-200g}

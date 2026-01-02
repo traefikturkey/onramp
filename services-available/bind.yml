@@ -8,6 +8,8 @@ networks:
 services:
   bind:
     image: ubuntu/bind9:${BIND_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/bind.env
     container_name: ${BIND_CONTAINER_NAME:-bind}
     restart: ${BIND_RESTART:-unless-stopped}
     mem_limit: ${BIND_MEM_LIMIT:-200g}

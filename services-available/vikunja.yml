@@ -8,6 +8,8 @@ networks:
 services:
   vikunja:
     image: vikunja/vikunja:${VIKUNJA_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/vikunja.env
     container_name: ${VIKUNJA_CONTAINER_NAME:-vikunja}
     networks:
       - traefik
@@ -45,6 +47,8 @@ services:
 
   vikunja-db:
     image: mariadb:10
+    env_file:
+      - ./services-enabled/vikunja.env
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --max-connections=1000
     container_name: ${VIKUNJA_DATABASE_CONTAINER_NAME:-vikunja-db}
     environment:

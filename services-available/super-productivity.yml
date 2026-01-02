@@ -8,6 +8,8 @@ networks:
 services:
   super-productivity:
     image: johannesjo/super-productivity:${SUPER_PRODUCTIVITY_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/super-productivity.env
     container_name: ${SUPER_PRODUCTIVITY_CONTAINER_NAME:-super-productivity}
     restart: ${SUPER_PRODUCTIVITY_RESTART:-unless-stopped}
     networks:

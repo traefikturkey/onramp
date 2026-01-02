@@ -9,6 +9,8 @@ networks:
 services:
   kitchenowl_app:
     image: tombursch/kitchenowl-backend:latest
+    env_file:
+      - ./services-enabled/kitchenowl.env
     container_name: ${KITCHENOWL_CONTAINER_NAME:-kitchenowl_app}
     restart: unless-stopped
     environment:
@@ -22,6 +24,8 @@ services:
   
   kitchenowl_web:
     image: tombursch/kitchenowl-web:latest
+    env_file:
+      - ./services-enabled/kitchenowl.env
     container_name: ${KITCHENOWL_CONTAINER_NAME:-kitchenowl}
     restart: unless-stopped
     environment:

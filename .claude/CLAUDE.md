@@ -86,12 +86,14 @@ When you run `make enable-service <name>`:
 
 1. Creates symlink: `services-available/<name>.yml` → `services-enabled/`
 2. Looks for `services-scaffold/<name>/` directory
-3. If `env.template` exists → generates `services-enabled/<name>.env`
+3. Generates `services-enabled/<name>.env`:
+   - From `env.template` if present (with variable substitution)
+   - Auto-generated minimal file if no template exists
 4. Copies `*.template` files to `etc/<name>/` with variable substitution
 5. Copies `*.static` files to `etc/<name>/` as-is
 6. Executes `scaffold.yml` operations if present
 
-**If no scaffold exists**, only the symlink is created. The service may fail if it requires environment variables.
+**Every service gets a `.env` file** - this ensures the YAML `env_file:` directive works.
 
 ## Troubleshooting
 
@@ -104,10 +106,10 @@ make edit-env-onramp
 ```
 
 ### No .env Created for Service
-Service missing scaffold templates:
-1. Check if `services-scaffold/<service>/` exists
-2. If not, create `services-scaffold/<service>/env.template`
-3. Run `make scaffold-build <service>`
+The scaffolder should auto-generate a `.env` file even without a template. If missing:
+1. Re-run scaffolding: `make scaffold-build <service>`
+2. Check services-enabled directory exists
+3. For custom variables, create `services-scaffold/<service>/env.template`
 
 ### Service Can't Connect to Database
 Check service YAML has database connection environment variables:
@@ -126,15 +128,35 @@ cat backups/environments-enabled.legacy/.env
 
 ## Adding Services
 
-1. Create `services-available/<name>.yml`
-2. Create `services-scaffold/<name>/env.template` (required if service needs config)
+1. Create `services-available/<name>.yml` with `env_file:` directive:
+   ```yaml
+   services:
+     myservice:
+       image: myservice:${MYSERVICE_TAG:-latest}
+       env_file:
+         - ./services-enabled/myservice.env
+   ```
+2. (Optional) Create `services-scaffold/<name>/env.template` for custom variables
 3. `make enable-service <name>`
 
 ## Conventions
 
 - Templates: `*.template` (variable substitution) or `*.static` (copy as-is)
 - Env vars: `${VAR:-default}` pattern
+- Service YAMLs: Include `env_file:` directive pointing to `./services-enabled/<service>.env`
 - Services with databases: Use dedicated containers (e.g., `db` or `<service>-db`)
+
+## How Environment Variables Work
+
+OnRamp uses two mechanisms for environment variables:
+
+1. **Makefile `--env-file` flags**: Loads ALL env files for YAML variable substitution
+   - Enables `${VAR}` in container_name, labels, volumes, etc.
+   - Runs at docker-compose parse time
+
+2. **YAML `env_file:` directive**: Each service declares its env file
+   - Provides variables inside the running container
+   - Self-documenting (shows which file the service uses)
 
 ## Generated Files (Do Not Edit Directly)
 
@@ -162,3 +184,17 @@ For detailed documentation:
 - Always use `make` commands, never raw `docker compose`
 - Do not create files without explicit user request
 - Commit all changes when asked (clean `git status`)
+
+### File Move/Rename Checklist
+When moving or renaming files, review for:
+- Relative paths (volume mounts, imports, includes) that depend on file location
+- References in other files (Makefiles, scripts, documentation)
+- Glob patterns that may include/exclude differently after the move
+
+### Testing Requirements
+After making changes:
+- Identify all commands/features affected by the change
+- Test each affected command before committing
+- For new features: test the new functionality
+- For modifications: test both the modified feature AND existing features that share code paths
+- Run `make test` to verify unit tests pass

@@ -8,6 +8,8 @@ networks:
 services:
   unifi:
     image: ghcr.io/goofball222/unifi:${UNIFI_DOCKER_TAG:-latest-ubuntu}
+    env_file:
+      - ./services-enabled/unifi.env
     container_name: ${UNIFI_CONTAINER_NAME:-unifi}
     restart: ${UNIFI_RESTART:-unless-stopped}
     mem_limit: ${UNIFI_MEM_LIMIT:-2g}

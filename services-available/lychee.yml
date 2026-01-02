@@ -8,6 +8,8 @@ networks:
 services:
   lychee:
     image: lscr.io/linuxserver/lychee:${LYCHEE_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/lychee.env
     container_name: lychee
     restart: unless-stopped
     networks:

@@ -8,6 +8,8 @@ networks:
 services:
   ollama-webui:
     image: ghcr.io/open-webui/open-webui:${OLLAMA_WEBUI_DOCKER_TAG:-main}
+    env_file:
+      - ./services-enabled/ollama-webui.env
     container_name: ${OLLAMA_WEBUI_CONTAINER_NAME:-ollama-webui}
     restart: ${OLLAMA_WEBUI_RESTART:-unless-stopped}
     networks:

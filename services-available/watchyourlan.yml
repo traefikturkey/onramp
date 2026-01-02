@@ -4,6 +4,8 @@
 services:
   watchyourlan:
     image: ghcr.io/aceberg/watchyourlan:${WATCHYOURLAN_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/watchyourlan.env
     container_name: ${WATCHYOURLAN_CONTAINER_NAME:-watchyourlan}
     restart: ${WATCHYOURLAN_RESTART:-unless-stopped}
     network_mode: host # required to arpscan interfaces defined below

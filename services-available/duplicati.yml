@@ -8,6 +8,8 @@ networks:
 services:
   duplicati:
     image: lscr.io/linuxserver/duplicati:${DUPLICATI_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/duplicati.env
     container_name: ${DUPLICATI_CONTAINER_NAME:-duplicati}
     restart: ${DUPLICATI_RESTART:-unless-stopped}
     networks:

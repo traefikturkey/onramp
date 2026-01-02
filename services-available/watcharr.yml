@@ -8,6 +8,8 @@ networks:
 services:
   watcharr:
     image: ghcr.io/sbondco/watcharr:${WATCHARR_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/watcharr.env
     container_name: watcharr
     networks:
       - traefik

@@ -9,6 +9,8 @@ networks:
 services:
   doku:
     image: amerkurev/doku:${DOKU_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/doku.env
     container_name: ${DOKU_CONTAINER_NAME:-doku}
     restart: ${DOKU_RESTART:-unless-stopped}
     mem_limit: ${DOKU_MEM_LIMIT:-200g}

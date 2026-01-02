@@ -92,6 +92,9 @@ class BackupManager:
         self.nfs_backup_path = os.environ.get("NFS_BACKUP_PATH", "")
         self.nfs_tmp_dir = Path(os.environ.get("NFS_BACKUP_TMP_DIR", "/tmp/nfs_backup"))
 
+        # Pre-mount detection: when using Docker NFS volume, mount is already done
+        self.nfs_premounted = os.environ.get("NFS_PREMOUNTED", "").lower() == "true"
+
         # Use injected executor or create default
         if executor is not None:
             self._executor = executor
@@ -267,7 +270,19 @@ class BackupManager:
         return 0
 
     def _mount_nfs(self) -> bool:
-        """Mount NFS backup location."""
+        """Mount NFS backup location.
+
+        If NFS_PREMOUNTED=true (Docker NFS volume), skips mount and verifies path exists.
+        Otherwise attempts runtime mount (requires root/sudo).
+        """
+        # Pre-mounted via Docker NFS volume - just verify path is accessible
+        if self.nfs_premounted:
+            if self.nfs_tmp_dir.exists() and self.nfs_tmp_dir.is_dir():
+                return True
+            print(f"Error: NFS_PREMOUNTED=true but {self.nfs_tmp_dir} not accessible", file=sys.stderr)
+            return False
+
+        # Runtime mount path - requires NFS_SERVER and NFS_BACKUP_PATH
         if not self.nfs_server or not self.nfs_backup_path:
             print("Error: NFS_SERVER and NFS_BACKUP_PATH must be set", file=sys.stderr)
             return False
@@ -286,7 +301,13 @@ class BackupManager:
         return True
 
     def _unmount_nfs(self) -> bool:
-        """Unmount NFS and cleanup."""
+        """Unmount NFS and cleanup.
+
+        If NFS_PREMOUNTED=true (Docker NFS volume), skips unmount - Docker handles it.
+        """
+        if self.nfs_premounted:
+            return True  # Docker handles volume lifecycle
+
         code, _, _ = self._run_cmd(["umount", str(self.nfs_tmp_dir)], sudo=True)
         if code == 0:
             self._run_cmd(["rm", "-r", str(self.nfs_tmp_dir)], sudo=True)

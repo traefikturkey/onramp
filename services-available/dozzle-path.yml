@@ -8,6 +8,8 @@ networks:
 services:
   dozzle-path:
     image: amir20/dozzle:${DOZZLE_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/dozzle-path.env
     container_name: ${DOZZLE_CONTAINER_NAME:-dozzle}
     restart: ${DOZZLE_RESTART:-unless-stopped}
     networks:

@@ -10,6 +10,8 @@ networks:
 services:
   ns-mongo:
     image: mongo:${NSMONGO_VERSION:-4.4}
+    env_file:
+      - ./services-enabled/nightscout.env
     container_name: ${NSMONGO_CONTAINER_NAME:-ns-mongo}
     restart: ${NIGHTSCOUT_RESTART_POLICY:-unless-stopped}
     volumes:
@@ -19,6 +21,8 @@ services:
 
   nightscout:
     image: nightscout/cgm-remote-monitor:${NSWEB_VERSION:-latest}
+    env_file:
+      - ./services-enabled/nightscout.env
     container_name: ${NSWEB_CONTAINER_NAME:-nightscount}
     restart: ${NIGHTSCOUT_RESTART_POLICY:-unless-stopped}
     depends_on:

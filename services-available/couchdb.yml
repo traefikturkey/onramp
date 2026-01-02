@@ -8,6 +8,8 @@ networks:
 services:
   couchdb:
     image: couchdb:${COUCHDB_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/couchdb.env
     container_name: ${COUCHDB_CONTAINER_NAME:-couchdb}
     restart: ${COUCHDB_RESTART:-unless-stopped}
     mem_limit: ${COUCHDB_MEM_LIMIT:-200g}

@@ -9,6 +9,8 @@ networks:
 services:
   rwmarkable:
     image: ghcr.io/fccview/rwmarkable:${RWMARKABLE_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/rwmarkable.env
     container_name: ${RWMARKABLE_CONTAINER_NAME:-rwmarkable}
     restart: ${RWMARKABLE_RESTART:-unless-stopped}
     mem_limit: ${RWMARKABLE_MEM_LIMIT:-200g}

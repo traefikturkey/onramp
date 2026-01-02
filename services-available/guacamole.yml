@@ -11,6 +11,8 @@ networks:
 services:
   guacamole:
     image: abesnier/guacamole:${GUACAMOLE_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/guacamole.env
     container_name: ${GUACAMOLE_CONTAINER_NAME:-guacamole}
     restart: ${GUACAMOLE_RESTART:-unless-stopped}
     mem_limit: ${GUACAMOLE_MEM_LIMIT:-200g}

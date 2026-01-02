@@ -9,6 +9,8 @@ networks:
 services:
   grocy:
     image: lscr.io/linuxserver/grocy:${GROCY_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/grocy.env
     container_name: ${GROCY_CONTAINER_NAME:-grocy}
     networks:
       - traefik

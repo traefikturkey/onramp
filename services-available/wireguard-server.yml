@@ -5,6 +5,8 @@
 services:
   wireguard-server:
     image: lscr.io/linuxserver/wireguard:${WIREGUARD_SERVER_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/wireguard-server.env
     container_name: ${WIREGUARD_SERVER_CONTAINER_NAME:-wireguard-server}
     restart: ${WIREGUARD_SERVER_RESTART:-unless-stopped}
     cap_add:

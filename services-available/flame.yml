@@ -9,6 +9,8 @@ networks:
 services:
   flame:
     image: pawelmalak/flame:${FLAME_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/flame.env
     container_name: ${FLAME_CONTAINER_NAME:-flame}
     restart: unless-stopped
     networks:

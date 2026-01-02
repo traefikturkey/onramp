@@ -8,6 +8,8 @@ networks:
 services:
   dozzle:
     image: ghcr.io/amir20/dozzle:${DOZZLE_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/dozzle.env
     container_name: ${DOZZLE_CONTAINER_NAME:-dozzle}
     restart: ${DOZZLE_RESTART:-unless-stopped}
     mem_limit: ${DOZZLE_MEM_LIMIT:-50m}
@@ -16,6 +18,7 @@ services:
     environment:
       - TZ=${TZ}
       - DOZZLE_LEVEL=${DOZZLE_LEVEL:-debug}
+      - DOZZLE_REMOTE_AGENT=${DOZZLE_REMOTE_AGENT}
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro

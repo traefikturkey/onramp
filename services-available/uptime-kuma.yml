@@ -8,6 +8,8 @@ networks:
 services:
   uptime-kuma:
     image: louislam/uptime-kuma:${UPTIMEKUMA_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/uptime-kuma.env
     container_name: ${UPTIMEKUMA_CONTAINER_NAME:-uptimekuma}
     restart: unless-stopped
     mem_limit: ${UPTIMEKUMA_MEM_LIMIT:-500m}

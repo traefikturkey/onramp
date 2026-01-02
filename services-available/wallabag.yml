@@ -9,6 +9,8 @@ networks:
 services:
   wallabag:
     image: wallabag/wallabag
+    env_file:
+      - ./services-enabled/wallabag.env
     container_name: wallabag
     environment:
       - MYSQL_ROOT_PASSWORD=${WALLABAG_DB_ROOT_PASSWORD:-wallaroot}
@@ -48,6 +50,8 @@ services:
 
   db:
     image: mariadb
+    env_file:
+      - ./services-enabled/wallabag.env
     environment:
       - MYSQL_ROOT_PASSWORD=${WALLABAG_DB_PASSWORD:-wallaroot}
     restart: unless-stopped
@@ -63,6 +67,8 @@ services:
 
   redis:
     image: redis:alpine
+    env_file:
+      - ./services-enabled/wallabag.env
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]

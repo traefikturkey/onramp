@@ -8,6 +8,8 @@ networks:
 services:
   feishin:
     image: ghcr.io/jeffvli/feishin:${FEISHIN_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/feishin.env
     container_name: ${FEISHIN_CONTAINER_NAME:-feishin}
     restart: ${FEISHIN_RESTART:-unless-stopped}
     mem_limit: ${FEISHIN_MEM_LIMIT:-200g}

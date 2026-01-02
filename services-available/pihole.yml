@@ -8,6 +8,8 @@ networks:
 services:
   pihole:
     image: ghcr.io/pi-hole/pihole:${PIHOLE_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/pihole.env
     container_name: ${PIHOLE_CONTAINER_NAME:-pihole}
     restart: unless-stopped
     networks:

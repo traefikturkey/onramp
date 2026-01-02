@@ -9,6 +9,8 @@ networks:
 services:
   yamtrack:
     image: ghcr.io/fuzzygrim/yamtrack:${YAMTRACK_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/yamtrack.env
     container_name: ${YAMTRACK_CONTAINER_NAME:-yamtrack}
     restart: ${YAMTRACK_RESTART:-unless-stopped}
     depends_on:
@@ -38,6 +40,8 @@ services:
   yamtrack-redis:
     container_name: yamtrack-redis
     image: redis:7-alpine
+    env_file:
+      - ./services-enabled/yamtrack.env
     restart: unless-stopped
     networks:
       - traefik

@@ -9,6 +9,8 @@ networks:
 services:
   postman:
     image: hoppscotch/hoppscotch:${POSTMAN_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/postman.env
     container_name: ${POSTMAN_CONTAINER_NAME:-hoppscotch}
     restart: ${POSTMAN_RESTART:-unless-stopped}
     networks:

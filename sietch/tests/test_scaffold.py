@@ -567,6 +567,63 @@ class TestBuild:
         assert "POST-ENABLE INSTRUCTIONS" in captured.out
         assert "Please configure your Plex token!" in captured.out
 
+    def test_auto_generates_env_when_no_scaffold_files(self, tmp_path, capsys):
+        """Should auto-generate .env file when service has no scaffold templates."""
+        mock_exec = MockCommandExecutor()
+        scaffolder = Scaffolder(str(tmp_path), executor=mock_exec)
+
+        # Create services-enabled directory but no scaffold for the service
+        (tmp_path / "services-enabled").mkdir()
+
+        result = scaffolder.build("myservice")
+
+        assert result is True
+        env_file = tmp_path / "services-enabled" / "myservice.env"
+        assert env_file.exists()
+        content = env_file.read_text()
+        assert "MYSERVICE" in content
+        assert "Auto-generated" in content
+
+    def test_auto_generates_env_when_scaffold_has_only_statics(self, tmp_path, capsys):
+        """Should auto-generate .env when scaffold has statics but no env.template."""
+        mock_exec = MockCommandExecutor()
+        scaffolder = Scaffolder(str(tmp_path), executor=mock_exec)
+
+        # Create scaffold with only static files (like joyride)
+        scaffold_dir = tmp_path / "services-scaffold" / "joyride"
+        hosts_dir = scaffold_dir / "hosts.d"
+        hosts_dir.mkdir(parents=True)
+        (hosts_dir / "hosts").write_text("")
+        (scaffold_dir / "MESSAGE.txt").write_text("Configure DNS")
+
+        (tmp_path / "services-enabled").mkdir()
+        (tmp_path / "etc").mkdir()
+
+        result = scaffolder.build("joyride")
+
+        assert result is True
+        env_file = tmp_path / "services-enabled" / "joyride.env"
+        assert env_file.exists()
+        content = env_file.read_text()
+        assert "JOYRIDE" in content
+        assert "Auto-generated" in content
+
+    def test_does_not_overwrite_existing_env(self, tmp_path):
+        """Should not overwrite existing .env file during auto-generation."""
+        mock_exec = MockCommandExecutor()
+        scaffolder = Scaffolder(str(tmp_path), executor=mock_exec)
+
+        # Create existing env file with custom content
+        (tmp_path / "services-enabled").mkdir()
+        env_file = tmp_path / "services-enabled" / "myservice.env"
+        env_file.write_text("CUSTOM_VAR=custom_value")
+
+        result = scaffolder.build("myservice")
+
+        assert result is True
+        # Should preserve existing content
+        assert env_file.read_text() == "CUSTOM_VAR=custom_value"
+
 
 class TestTeardown:
     """Tests for teardown() - scaffold removal."""

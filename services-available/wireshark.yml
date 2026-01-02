@@ -8,6 +8,8 @@ networks:
 services:
   wireshark:
     image: lscr.io/linuxserver/wireshark:${WIRESHARK_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/wireshark.env
     container_name: ${WIRESHARK_CONTAINER_NAME:-wireshark}
     restart: ${WIRESHARK_RESTART:-unless-stopped}
     networks:

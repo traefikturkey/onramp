@@ -8,6 +8,8 @@ networks:
 services:
   sablier:
     image: ghcr.io/acouvreur/sablier:${SABLIER_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/sablier.env
     container_name: ${SABLIER_CONTAINER_NAME:-sablier}
     restart: ${SABLIER_RESTART:-unless-stopped}
     networks:

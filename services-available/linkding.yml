@@ -8,6 +8,8 @@ networks:
 services:
   linkding:
     image: sissbruecker/linkding:${LINKDING_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/linkding.env
     container_name: ${LINKDING_CONTAINER_NAME:-linkding}
     restart: ${LINKDING_RESTART:-unless-stopped}
     networks:

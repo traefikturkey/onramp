@@ -6,6 +6,8 @@
 services:
   beszel-agent:
     image: ghcr.io/henrygd/beszel/beszel-agent:${BESZEL_AGENT_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/beszel-agent.env
     container_name: ${BESZEL_AGENT_CONTAINER_NAME:-beszel-agent}
     restart: ${BESZEL_AGENT_RESTART:-unless-stopped}
     network_mode: host

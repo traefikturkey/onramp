@@ -9,6 +9,8 @@ networks:
 services:
   radarr:
     image: lscr.io/linuxserver/radarr:${RADARR_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/radarr.env
     container_name: ${RADARR_CONTAINER_NAME:-radarr}
     restart: ${RADARR_RESTART:-unless-stopped}
     networks:

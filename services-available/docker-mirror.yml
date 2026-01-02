@@ -9,6 +9,8 @@ networks:
 services:
   docker-mirror:
     image: registry:${DOCKER_MIRROR_DOCKER_TAG:-2}
+    env_file:
+      - ./services-enabled/docker-mirror.env
     container_name: ${DOCKER_MIRROR_CONTAINER_NAME:-docker-mirror}
     restart: ${DOCKER_MIRROR_RESTART:-unless-stopped}
     mem_limit: ${DOCKER_MIRROR_MEM_LIMIT:-200g}

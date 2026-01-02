@@ -8,6 +8,8 @@ networks:
 services:
   chromadb:
     image: ghcr.io/chroma-core/chroma:${CHROMADB_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/chromadb.env
     container_name: ${CHROMADB_CONTAINER_NAME:-chromadb}
     restart: ${CHROMADB_RESTART:-unless-stopped}
     networks:

@@ -10,6 +10,8 @@ networks:
 services:
   dashdot:
     image: mauricenino/dashdot:${DASHDOT_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/dashdot.env
     container_name: ${DASHDOT_CONTAINER_NAME:-dashdot}
     restart: unless-stopped
     networks:

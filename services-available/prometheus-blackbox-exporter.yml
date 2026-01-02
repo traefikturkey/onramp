@@ -8,6 +8,8 @@ networks:
 services:
   prometheus-blackbox-exporter:
     image: prom/blackbox-exporter:${BLACKBOX_EXPORTER_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/prometheus-blackbox-exporter.env
     container_name: prometheus-blackbox-exporter
     restart: unless-stopped
     networks:

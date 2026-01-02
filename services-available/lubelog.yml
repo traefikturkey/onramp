@@ -8,6 +8,8 @@ networks:
 services:
   lubelog:
     image: ghcr.io/hargata/lubelogger:${LUBELOG_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/lubelog.env
     container_name: ${LUBELOG_CONTAINER_NAME:-lubelog}
     restart: ${LUBELOG_RESTART:-unless-stopped}
     mem_limit: ${LUBELOG_MEM_LIMIT:-200g}

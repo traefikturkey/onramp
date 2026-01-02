@@ -5,6 +5,8 @@
 services:
   airprint:
     image: ghcr.io/ragingtiger/cups-airprint:${AIRPRINT_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/airprint.env
     container_name: ${AIRPRINT_CONTAINER_NAME:-airprint}
     restart: unless-stopped
     # Host mode is needed for AirPrint to work

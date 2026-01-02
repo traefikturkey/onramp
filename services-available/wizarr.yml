@@ -9,6 +9,8 @@ networks:
 services:
   wizarr:
     image: ghcr.io/wizarrrr/wizarr:${WIZARR_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/wizarr.env
     container_name: ${WIZARR_CONTAINER_NAME:-wizarr}
     restart: ${WIZARR_RESTART:-unless-stopped}
     mem_limit: ${WIZARR_MEM_LIMIT:-200g}

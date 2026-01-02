@@ -10,6 +10,8 @@ networks:
 services:
   searxng:
     image: ghcr.io/searxng/searxng:${SEARXNG_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/searxng.env
     container_name: ${SEARXNG_CONTAINER_NAME:-searxng}
     restart: unless-stopped
     networks:
@@ -48,6 +50,8 @@ services:
   redis:
     container_name: searxng-redis
     image: "redis:alpine"
+    env_file:
+      - ./services-enabled/searxng.env
     command: redis-server --save "" --appendonly "no"
     tmpfs:
       - /var/lib/redis

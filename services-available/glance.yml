@@ -10,6 +10,8 @@ networks:
 services:
   glance:
     image: glanceapp/glance:${GLANCE_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/glance.env
     container_name: ${GLANCE_CONTAINER_NAME:-glance}
     restart: ${GLANCE_RESTART:-unless-stopped}
     mem_limit: ${GLANCE_MEM_LIMIT:-200g}

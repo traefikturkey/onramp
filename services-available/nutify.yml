@@ -3,11 +3,13 @@ networks:
     external: true
 
 # description: UPS Monitoring System
-# https://github.com/DartSteven/Nutify>
+# https://github.com/DartSteven/Nutify
 
 services:
   nutify:
     image: dartsteven/nutify:${NUTIFY_DOCKER_TAG:-amd64-latest}
+    env_file:
+      - ./services-enabled/nutify.env
     container_name: ${NUTIFY_CONTAINER_NAME:-nutify}
     restart: ${NUTIFY_RESTART:-unless-stopped}
     mem_limit: ${NUTIFY_MEM_LIMIT:-200g}

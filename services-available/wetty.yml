@@ -9,6 +9,8 @@ networks:
 services:
   wetty:
     image: wettyoss/wetty:${WETTY_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/wetty.env
     container_name: ${WETTY_CONTAINER_NAME:-wetty}
     restart: ${WETTY_RESTART:-unless-stopped}
     mem_limit: ${WETTY_MEM_LIMIT:-200g}

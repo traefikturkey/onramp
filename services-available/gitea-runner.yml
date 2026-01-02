@@ -9,6 +9,8 @@ networks:
 services:
   gitea-runner:
     image: ghcr.io/vegardit/gitea-act-runner:${GITEA_RUNNER_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/gitea-runner.env
     container_name: ${GITEA_RUNNER_CONTAINER_NAME:-gitea-runner}
     restart: ${GITEA_RUNNER_RESTART:-unless-stopped}
     networks:

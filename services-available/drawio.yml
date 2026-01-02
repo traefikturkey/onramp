@@ -13,6 +13,8 @@ networks:
 services:
   drawio:
     image: jgraph/drawio:${DRAW_IO_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/drawio.env
     container_name: ${DRAW_IO_CONTAINER_NAME:-drawio}
     restart: ${DRAW_IO_RESTART:-unless-stopped}
     networks:

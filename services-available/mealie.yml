@@ -9,6 +9,8 @@ networks:
 services:
   mealie:
     image: ghcr.io/mealie-recipes/mealie:${MEALIE_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/mealie.env
     container_name: ${MEALIE_CONTAINER_NAME:-mealie}
     restart: ${MEALIE_RESTART:-unless-stopped}
     networks:

@@ -8,6 +8,8 @@ networks:
 services:
   snapdrop:
     image: lscr.io/linuxserver/pairdrop:${SNAPDROP_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/snapdrop.env
     container_name: pairdrop
     restart: unless-stopped
     networks:

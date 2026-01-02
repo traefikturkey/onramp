@@ -9,6 +9,8 @@ networks:
 services:
   ntfy:
     image: binwiederhier/ntfy:${NTFY_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/ntfy.env
     container_name: ${NTFY_CONTAINER_NAME:-ntfy}
     restart: ${NTFY_RESTART:-unless-stopped}
     mem_limit: ${NTFY_MEM_LIMIT:-200g}

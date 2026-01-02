@@ -8,6 +8,8 @@ networks:
 services:
   autokuma:
     image: ghcr.io/bigboot/autokuma:${AUTOKUMA_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/autokuma.env
     container_name: ${AUTOKUMA_CONTAINER_NAME:-autokuma}
     restart: ${AUTOKUMA_RESTART:-unless-stopped}
     networks:

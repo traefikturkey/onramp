@@ -9,6 +9,8 @@ networks:
 services:
   lazylibrarian:
     image: lscr.io/linuxserver/lazylibrarian:${LAZYLIBRARIAN_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/lazylibrarian.env
     container_name: ${LAZYLIBRARIAN_CONTAINER_NAME:-lazylibrarian}
     restart: ${LAZYLIBRARIAN_RESTART:-unless-stopped}
     mem_limit: ${LAZYLIBRARIAN_MEM_LIMIT:-200g}

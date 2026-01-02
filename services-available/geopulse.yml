@@ -9,6 +9,8 @@ networks:
 services:
   geopulse-postgres:
     image: postgis/postgis:17-3.5
+    env_file:
+      - ./services-enabled/geopulse.env
     container_name: ${GEOPULSE_CONTAINER_NAME:-geopulse-postgres}
     restart: ${GEOPULSE_RESTART:-unless-stopped}
     mem_limit: ${GEOPULSE_MEM_LIMIT:-200g}
@@ -52,6 +54,8 @@ services:
 
   geopulse-backend:
     image: ghcr.io/tess1o/geopulse-backend:${GEOPULSE_DOCKER_TAG:-native-latest}
+    env_file:
+      - ./services-enabled/geopulse.env
     container_name: ${GEOPULSE_CONTAINER_NAME:-geopulse-backend}
     restart: ${GEOPULSE_RESTART:-unless-stopped}
     mem_limit: ${GEOPULSE_MEM_LIMIT:-200g}
@@ -100,6 +104,8 @@ services:
 
   geopulse-ui:
     image: ghcr.io/tess1o/geopulse-ui:${GEOPULSE_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/geopulse.env
     container_name: ${GEOPULSE_CONTAINER_NAME:-geopulse-ui}
     restart: ${GEOPULSE_RESTART:-unless-stopped}
     mem_limit: ${GEOPULSE_MEM_LIMIT:-200g}

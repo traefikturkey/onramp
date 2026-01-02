@@ -13,6 +13,8 @@ networks:
 services:
   watchtower:
     image: ${WATCHTOWER_IMAGE:-ghcr.io/containrrr/watchtower}:${WATCHTOWER_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/watchtower.env
     container_name: ${WATCHTOWER_CONTAINER_NAME:-watchtower}
     restart: ${WATCHTOWER_RESTART:-unless-stopped}
     mem_limit: ${WATCHTOWER_MEM_LIMIT:-100m}

@@ -12,6 +12,8 @@ networks:
 services:
   dawarich:
     image: freikin/dawarich:${DAWARICH_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/dawarich.env
     container_name: ${DAWARICH_CONTAINER_NAME:-dawarich}
     restart: ${DAWARICH_RESTART:-unless-stopped}
     volumes:
@@ -84,6 +86,8 @@ services:
 
   dawarich_sidekiq:
     image: freikin/dawarich:${DAWARICH_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/dawarich.env
     container_name: dawarich_sidekiq
     volumes:
       - ./etc/dawarich/public:/var/app/public
@@ -142,6 +146,8 @@ services:
 
   dawarich_db:
     image: postgis/postgis:17-3.5-alpine
+    env_file:
+      - ./services-enabled/dawarich.env
     shm_size: 1G
     container_name: dawarich_db
     volumes:
@@ -162,6 +168,8 @@ services:
 
   dawarich_redis:
     image: redis:7.4-alpine
+    env_file:
+      - ./services-enabled/dawarich.env
     container_name: dawarich_redis
     command: redis-server
     networks:

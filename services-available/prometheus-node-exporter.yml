@@ -6,6 +6,8 @@
 services:
   nodeexporter:
     image: prom/node-exporter:${NODE_EXPORTER_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/prometheus-node-exporter.env
     container_name: prometheus-node-exporter
     volumes:
       - /proc:/host/proc:ro

@@ -14,7 +14,7 @@ services:
     networks:
       - traefik
     env_file:
-      - services-enabled/influxdb.env
+      - ./services-enabled/influxdb.env
     volumes:
       - ./etc/influxdb:/etc/influxdb2
       - ${INFLUXDB_DIR:-./media/databases/influxdb}:/var/lib/influxdb2

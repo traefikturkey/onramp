@@ -10,6 +10,8 @@ services:
     hostname: itflow-db
     container_name: itflow-db
     image: mariadb:10.6.11
+    env_file:
+      - ./services-enabled/itflow.env
     restart: unless-stopped
     networks:
       - traefik
@@ -23,6 +25,8 @@ services:
 
   itflow:
     image: lued/itflow:${ITFLOW_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/itflow.env
     container_name: ${ITFLOW_CONTAINER_NAME:-itflow}
     hostname: ${ITFLOW_HOSTNAME:-itflow}
     restart: ${ITFLOW_RESTART:-unless-stopped}

@@ -9,6 +9,8 @@ networks:
 services:
   surrealdb:
     image: surrealdb/surrealdb:${SURREALDB_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/surrealdb.env
     container_name: ${SURREALDB_CONTAINER_NAME:-surrealdb}
     restart: ${SURREALDB_RESTART:-unless-stopped}
     networks:

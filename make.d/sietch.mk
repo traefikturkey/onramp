@@ -167,7 +167,7 @@ ENV_VARS := $(shell cat services-enabled/.env services-enabled/*.env 2>/dev/null
 # Environment file templates and their destinations
 ENV_TEMPLATES := .env .env.nfs .env.external .env.custom
 
-ensure-env-files: ## Recreate missing env files from templates (non-destructive)
+ensure-env-files: sietch-build ## Recreate missing env files from templates (non-destructive)
 	@mkdir -p services-enabled
 	@for env in $(ENV_TEMPLATES); do \
 		if [ ! -f "services-enabled/$$env" ] && [ -f "services-scaffold/onramp/$$env.template" ]; then \
@@ -175,6 +175,16 @@ ensure-env-files: ## Recreate missing env files from templates (non-destructive)
 			cp "services-scaffold/onramp/$$env.template" "services-enabled/$$env"; \
 		fi; \
 	done
+	@# Check enabled services for missing .env files
+	@for yml in services-enabled/*.yml; do \
+		[ -f "$$yml" ] || continue; \
+		svc=$$(basename "$$yml" .yml); \
+		if [ ! -f "services-enabled/$$svc.env" ]; then \
+			echo "⚠️  Missing .env for $$svc, running scaffold..."; \
+			$(SIETCH_RUN) python /scripts/scaffold.py build "$$svc"; \
+		fi; \
+	done
+	@chmod 600 services-enabled/*.env 2>/dev/null || true
 	@echo "Environment files checked."
 
 env: ## Show all loaded environment variables (sorted, resolved)
@@ -228,13 +238,13 @@ edit-env-custom: ## Edit custom/unmapped variables file
 ##
 #########################################################
 
-test: sietch-build ## Run unit tests locally with uv
-	cd sietch && uv run pytest
+test: sietch-build ## Run unit tests inside the Sietch container
+	docker run --rm -v $(shell pwd)/sietch:/app -w /app $(SIETCH_IMAGE) sh -c "uv sync --all-extras && uv run pytest"
 
 test-coverage: sietch-build ## Run tests with coverage report
-	cd sietch && uv run pytest --cov=scripts --cov-report=html
+	docker run --rm -v $(shell pwd)/sietch:/app -w /app $(SIETCH_IMAGE) sh -c "uv sync --all-extras && uv run pytest --cov=scripts --cov-report=html"
 
-test-docker: sietch-build ## Run tests inside the Sietch container
-	docker run --rm -v $(shell pwd)/sietch:/app -w /app $(SIETCH_IMAGE) sh -c "uv sync --all-extras && uv run pytest"
+test-local: sietch-build ## Run unit tests locally with uv (requires uv installed)
+	cd sietch && uv run pytest
 
 #$(info "sietch.mk loaded")

@@ -9,6 +9,8 @@ networks:
 services:
   gitea:
     image: gitea/gitea:${GITEA_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/gitea.env
     container_name: ${GITEA_CONTAINER_NAME:-gitea}
     restart: unless-stopped
     networks:

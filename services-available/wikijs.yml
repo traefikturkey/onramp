@@ -9,6 +9,8 @@ networks:
 services:
   wikijs:
     image: lscr.io/linuxserver/wikijs:${WIKIJS_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/wikijs.env
     container_name: ${WIKIJS_CONTAINER_NAME:-wikijs}
     restart: unless-stopped
     networks:

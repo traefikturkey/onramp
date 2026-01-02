@@ -8,6 +8,8 @@ networks:
 services:
   sabnzbd:
     image: lscr.io/linuxserver/sabnzbd:${SABNZBD_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/sabnzbd.env
     container_name: ${SABNZBD_CONTAINER_NAME:-sabnzbd}
     restart: ${SABNZBD_RESTART:-unless-stopped}
     networks:

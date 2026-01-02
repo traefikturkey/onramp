@@ -8,6 +8,8 @@ networks:
 services:
   adguard:
     image: adguard/adguardhome:${ADGUARD_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/adguard.env
     container_name: ${ADGUARD_CONTAINER_NAME:-adguard}
     restart: unless-stopped
     networks:

@@ -8,6 +8,8 @@ networks:
 services:
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:${CADVISOR_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/cadvisor.env
     container_name: ${CADVISOR_CONTAINER_NAME:-cadvisor}
     restart: ${CADVISOR_RESTART:-unless-stopped}
     networks:

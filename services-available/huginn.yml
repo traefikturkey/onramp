@@ -10,6 +10,8 @@ networks:
 services:
   huginn:
     image: ghcr.io/huginn/huginn:${HUGINN_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/huginn.env
     container_name: ${HUGINN_CONTAINER_NAME:-huginn}
     restart: ${HUGINN_RESTART:-unless-stopped}
     networks:

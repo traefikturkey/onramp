@@ -11,6 +11,8 @@ volumes:
 services:
   newsdash:
     image: newsdash/newsdash:${NEWSDASH_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/newsdash.env
     container_name: newsdash
     restart: ${NEWSDASH_DOCKER_RESTART_POLICY:-unless-stopped}
     networks:
@@ -32,6 +34,8 @@ services:
 
   redis:
     image: bitnami/redis
+    env_file:
+      - ./services-enabled/newsdash.env
     restart: ${REDIS_DOCKER_RESTART_POLICY:-unless-stopped}
     mem_limit: 1g
     command: /opt/bitnami/scripts/redis/run.sh --loglevel ${REDIS_LOG_LEVEL:-notice}

@@ -8,6 +8,8 @@ networks:
 services:
   nextcloud:
     image: lscr.io/linuxserver/nextcloud:${NEXTCLOUD_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/nextcloud.env
     container_name: ${NEXTCLOUD_CONTAINER_NAME:-nextcloud}
     restart: ${NEXTCLOUD_RESTART:-unless-stopped}
     networks:

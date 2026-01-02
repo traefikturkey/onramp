@@ -10,6 +10,8 @@ networks:
 services:
   wbo:
     image: lovasoa/wbo:${WBO_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/wbo.env
     container_name: ${WBO_CONTAINER_NAME:-wbo}    
     networks:
       - traefik

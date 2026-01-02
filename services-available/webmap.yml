@@ -8,6 +8,8 @@ networks:
 services:
   webmap:
     image: secureforest/webmap:${WEBMAP_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/webmap.env
     container_name: ${WEBMAP_CONTAINER_NAME:-webmap}
     restart: unless-stopped
     networks:

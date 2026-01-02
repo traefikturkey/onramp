@@ -8,6 +8,8 @@ networks:
 services:
   go2rtc:
     image: ghcr.io/alexxit/go2rtc:${GO2RTC_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/go2rtc.env
     container_name: ${GO2RTC_CONTAINER_NAME:-go2rtc}
     restart: ${GO2RTC_RESTART:-unless-stopped}
     networks:

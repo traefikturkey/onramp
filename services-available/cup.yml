@@ -9,6 +9,8 @@ networks:
 services:
   cup:
     image: ghcr.io/sergi0g/cup:${CUP_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/cup.env
     container_name: ${CUP_CONTAINER_NAME:-cup}
     restart: ${CUP_RESTART:-unless-stopped}
     mem_limit: ${CUP_MEM_LIMIT:-200g}

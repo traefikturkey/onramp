@@ -8,6 +8,8 @@ networks:
 services:
   docmost:
     image: docmost/docmost:${DOCMOST_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/docmost.env
     container_name: ${DOCMOST_CONTAINER_NAME:-docmost}
     restart: ${DOCMOST_RESTART:-unless-stopped}
     mem_limit: ${DOCMOST_MEM_LIMIT:-200g}
@@ -39,6 +41,8 @@ services:
 
   docmost-db:
     image: postgres:16-alpine
+    env_file:
+      - ./services-enabled/docmost.env
     container_name: ${DOCMOST_DB_CONTAINER_NAME:-docmost-db}
     networks:
       - traefik
@@ -52,6 +56,8 @@ services:
 
   docmost-redis:
     image: redis:7.2-alpine
+    env_file:
+      - ./services-enabled/docmost.env
     container_name: ${DOCMOST_REDIS_CONTAINER_NAME:-docmost-redis}
     networks:
       - traefik

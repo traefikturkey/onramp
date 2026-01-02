@@ -13,6 +13,8 @@ services:
     restart: ${TANDOOR_RESTART:-unless-stopped}
     container_name: ${TANDOORDB_CONTAINER_NAME:-tandoor-db}
     image: postgres:16-alpine
+    env_file:
+      - ./services-enabled/tandoor.env
     volumes:
       - ./etc/tandoor/db:/var/lib/postgresql/data
     networks:
@@ -25,6 +27,8 @@ services:
 
   tandoor-web:
     image: vabene1111/recipes:${TANDOOR_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/tandoor.env
     container_name: ${TANDOOR_CONTAINER_NAME:-tandoor-web}
     restart: ${TANDOOR_RESTART:-unless-stopped}
     networks:
@@ -49,6 +53,8 @@ services:
 
   tandoor-nginx:
     image: nginx:mainline-alpine
+    env_file:
+      - ./services-enabled/tandoor.env
     container_name: ${TANDOOR_CONTAINER_NAME:-tandoor-nginx}
     volumes:
       - ./etc/tandoor/nginx:/etc/nginx/conf.d:ro

@@ -11,6 +11,8 @@ networks:
 services:
   coqui-ai:
     image: ghcr.io/coqui-ai/tts-cpu:${COQUI_AI_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/coqui-ai.env
     container_name: ${COQUI_AI_CONTAINER_NAME:-coqui-ai}
     restart: ${COQUI_AI_RESTART:-unless-stopped}
     networks:

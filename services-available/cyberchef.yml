@@ -8,6 +8,8 @@ networks:
 services:
   cyberchef:
     image: ghcr.io/gchq/cyberchef:${CYBERCHEF_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/cyberchef.env
     container_name: ${CYBERCHEF_CONTAINER_NAME:-cyberchef}
     restart: unless-stopped
     networks:

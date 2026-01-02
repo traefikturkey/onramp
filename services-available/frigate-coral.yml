@@ -8,6 +8,8 @@ networks:
 services:
   frigate-coral:
     image: ghcr.io/blakeblackshear/frigate:${FRIGATE_DOCKER_TAG:-stable}
+    env_file:
+      - ./services-enabled/frigate-coral.env
     container_name: ${FRIGATE_CONTAINER_NAME:-frigate-coral}
     restart: ${FRIGATE_RESTART:-unless-stopped}
     networks:

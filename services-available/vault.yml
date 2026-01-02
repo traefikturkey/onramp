@@ -12,6 +12,8 @@ networks:
 services:
   vault:
     image: hashicorp/vault:${VAULT_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/vault.env
     container_name: ${VAULT_CONTAINER_NAME:-vault}
     restart: ${VAULT_RESTART:-unless-stopped}
     mem_limit: ${VAULT_MEM_LIMIT:-200g}

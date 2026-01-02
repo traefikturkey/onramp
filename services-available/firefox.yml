@@ -9,6 +9,8 @@ networks:
 services:
   firefox:
     image: lscr.io/linuxserver/firefox:${FIREFOX_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/firefox.env
     container_name: ${FIREFOX_CONTAINER_NAME:-firefox}
     restart: ${FIREFOX_RESTART:-unless-stopped}
     networks:

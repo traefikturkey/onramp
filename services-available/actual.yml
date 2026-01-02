@@ -9,6 +9,8 @@ networks:
 services:
   actual:
     image: ghcr.io/actualbudget/actual-server:latest
+    env_file:
+      - ./services-enabled/actual.env
     container_name: ${ACTUAL_CONTAINER_NAME:-actual}
     restart: ${ACTUAL_RESTART:-unless-stopped}
     networks:

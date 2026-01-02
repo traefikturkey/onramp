@@ -8,6 +8,8 @@ networks:
 services:
   heimdall:
     image: lscr.io/linuxserver/heimdall:${HEIMDALL_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/heimdall.env
     container_name: ${HEIMDALL_CONTAINER_NAME:-heimdall}
     restart: unless-stopped
     networks:

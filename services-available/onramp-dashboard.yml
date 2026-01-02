@@ -36,7 +36,7 @@ services:
       - TZ=${TZ}
       - DASHBOARD_DEBUG=${ONRAMP_DASHBOARD_DEBUG:-false}
     env_file:
-      - services-enabled/.env
+      - ./services-enabled/onramp-dashboard.env
     labels:
       - joyride.host.name=${ONRAMP_DASHBOARD_HOST_NAME:-dashboard}.${HOST_DOMAIN}
       - traefik.enable=${ONRAMP_DASHBOARD_TRAEFIK_ENABLE:-true}

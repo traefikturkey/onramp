@@ -24,7 +24,7 @@ git checkout main
 make
 
 # Verify your services are running
-make ps
+docker compose ps
 ```
 
 If you want to preview the migration first:
