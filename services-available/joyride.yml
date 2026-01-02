@@ -1,10 +1,10 @@
 
-# description: CoreDNS-based dynamic dns server using docker labels
-# https://github.com/traefikturkey/joyride/tree/coredns
+# description: dns server using docker labels
+# https://github.com/traefikturkey/joyride/
 
 services:
   joyride:
-    image: ghcr.io/traefikturkey/joyride:${JOYRIDE_DOCKER_TAG:-coredns}
+    image: ghcr.io/traefikturkey/joyride:${JOYRIDE_DOCKER_TAG:-latest}
     env_file:
       - ./services-enabled/joyride.env
     container_name: ${JOYRIDE_CONTAINER_NAME:-joyride}
