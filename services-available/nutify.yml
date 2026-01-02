@@ -3,7 +3,7 @@ networks:
     external: true
 
 # description: UPS Monitoring System
-# https://github.com/DartSteven/Nutify>
+# https://github.com/DartSteven/Nutify
 
 services:
   nutify:
