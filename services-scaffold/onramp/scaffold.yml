@@ -1,0 +1,15 @@
+version: "1"
+
+# Initialize core OnRamp directories with proper ownership
+# This ensures etc/ is created before Docker Compose starts
+# (prevents Docker from creating it as root)
+
+operations:
+  - type: mkdir
+    path: etc/
+
+  - type: chown
+    path: etc/
+    user: "${PUID}"
+    group: "${PGID}"
+    recursive: true
