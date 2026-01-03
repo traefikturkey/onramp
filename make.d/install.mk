@@ -25,7 +25,7 @@ fix-acme-json-permissions:
 		fi \
 	fi
 
-build: install-dependencies ensure-env migrate-legacy-env $(BUILD_DEPENDENCIES)
+build: install-dependencies ensure-env ensure-external-middleware migrate-legacy-env $(BUILD_DEPENDENCIES)
 #@echo "build steps completed"
 
 install: build install-docker
@@ -33,6 +33,16 @@ install: build install-docker
 # Ensure environment is configured (new modular system or legacy)
 ensure-env: services-enabled/.env ensure-env-files
 	@true
+
+# Ensure external-enabled has the default traefik middleware
+# Services reference default-headers@file which requires this file
+ensure-external-middleware: external-enabled/middleware.yml
+	@true
+
+external-enabled/middleware.yml:
+	@mkdir -p external-enabled
+	@cp external-available/middleware.yml external-enabled/middleware.yml
+	@echo "Initialized external-enabled/middleware.yml"
 
 # Create services-enabled/.env from template if needed
 # Handles three migration paths:
