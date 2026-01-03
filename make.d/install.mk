@@ -127,7 +127,7 @@ kill-code:
 #########################################################
 
 start-staging: build ## start the staging and wait for the acme staging certs to be issued
-	ACME_CASERVER=https://acme-staging-v02.api.letsencrypt.org/directory $(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) up -d --force-recreate --pull=missing
+	export ACME_CASERVER=https://acme-staging-v02.api.letsencrypt.org/directory && $(DOCKER_COMPOSE) $(DOCKER_COMPOSE_FLAGS) up -d --force-recreate --pull=missing
 	@echo "waiting $(CF_RESOLVER_WAITTIME) seconds for cert DNS propogation..."
 	@echo ""
 	@echo "While you wait you should setup a DNS record pointing $(HOST_NAME).$(HOST_DOMAIN) to $(HOSTIP) for this server!"
