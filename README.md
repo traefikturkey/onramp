@@ -14,6 +14,8 @@ Architecture documentation in [.github/shared/](.github/shared/):
 - [Backup Strategy](.github/shared/backup-strategy.md) - Backup and restore procedures
 - [Health Check Patterns](.github/shared/healthcheck-patterns.md) - Standard health checks
 
+Onramp uses Docker and it installs docker if you don't alerady have it installed (a check is run as part of the 'make install' command below).
+
 This repo assumes that you are running a debian linux disto like Ubuntu!
 
 A podman version is available as a branch here: [https://github.com/traefikturkey/onramp/tree/podman](https://github.com/traefikturkey/onramp/tree/podman)
@@ -23,7 +25,8 @@ Testing and PR's are welcome and encouraged!
 You'll need a personal domain that's setup with Cloudflare
 and an scoped API token created like shown below, [https://dash.cloudflare.com/profile/api-tokens](https://dash.cloudflare.com/profile/api-tokens) 
 
-![Cloudflare api token](https://raw.githubusercontent.com/traefikturkey/onramp/master/docs/assets/read%2Bedit-token.png "Cloudflare api token")
+![Cloudflare api token](https://raw.githubusercontent.com/traefikturkey/onramp/master/documentation/assets/read%2Bedit-token.png "Cloudflare api token")
+
 
 ## Download OnRamp
 
