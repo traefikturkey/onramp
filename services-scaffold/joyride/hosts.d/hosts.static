@@ -1,0 +1,7 @@
+# Static DNS entries (standard hosts file format)
+# These entries take priority over Docker container labels
+#
+# Format: IP_ADDRESS HOSTNAME [ALIAS...]
+# Example:
+# 192.168.1.10 nas.example.com nas
+# 192.168.1.20 printer.example.com
