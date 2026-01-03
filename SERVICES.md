@@ -1,5 +1,5 @@
 # Available Services
-256 services and counting...
+258 services and counting...
 
 [1](#1)
 [A](#A)
@@ -80,7 +80,7 @@
 ## D
 - [dashdot](https://github.com/MauriceNino/dashdot) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/dashdot.yml)): Dashboard for monitoring docker containers
 - [dashy](https://github.com/Lissy93/dashy) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/dashy.yml)): Customizable dashboard for displaying information
-- [databasus](https://github.com/databasus/databasus)([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/databasus.yml)): Databasus is a free, open source and self-hosted tool to backup databases. Make backups with different storages (S3, Google Drive, FTP, etc.) and notifications about progress (Slack, Discord, Telegram, etc.). Previously known as Postgresus
+- [databasus](https://github.com/databasus/databasus) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/databasus.yml)): 
 - [dawarich](https://github.com/Freika/dawarich) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/dawarich.yml)): Self-hostable alternative to Google Location History (Google Maps Timeline)
 - [dockerizalo](https://github.com/undernightcore/dockerizalo) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/dockerizalo.yml)): Docker build and deployment platform 
 - [docker-mirror](https://hub.docker.com/_/registry) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/docker-mirror.yml)): docker mirror / registry for caching docker images
@@ -246,8 +246,8 @@
 - [portainer-ee](https://github.com/portainer/portainer) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/portainer-ee.yml)): Commercial version of portainer, a container management tool
 - [portainer](https://github.com/portainer/portainer) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/portainer.yml)): Lightweight container management ui
 - [postfix](https://github.com/juanluisbaptiste/docker-postfix) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/postfix.yml)): Mail transfer agent (mta) for sending and receiving emails
+- [postgresus](https://github.com/RostislavDugin/postgresus) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/postgresus.yml)): 
 - [postgres](https://hub.docker.com/_/postgres) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/postgres.yml)): Powerful open-source relational database system
-- [postgresus](https://github.com/RostislavDugin/postgresus) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/postgresus.yml)): Free, open-source and self-hosted solution for automated PostgreSQL backups(deprecation 12/2026)
 - [postman](https://hub.docker.com/r/kasmweb/postman) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/postman.yml)): Collaboration platform for api development
 - [prestashop](https://hub.docker.com/r/prestashop/prestashop/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/prestashop.yml)): E-commerce platform
 - [prometheus-alertmanager](https://github.com/prometheus/alertmanager) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/prometheus-alertmanager.yml)): Manages alerts from prometheus monitoring
@@ -393,3 +393,5 @@
 
 ## V
 - [valheim](https://github.com/lloesche/valheim-server-docker) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/games/valheim.yml)): Valheim is a game about exploring a huge fantasy world inspired by norse mythology and viking culture
+
+
