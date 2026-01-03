@@ -22,7 +22,7 @@ docker-compose.*.yml
 .env
 .hosts
 envs/*
-hosts*
+etc/**/hosts*
 x-local*
 
 # Sietch container build marker
