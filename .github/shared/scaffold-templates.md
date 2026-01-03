@@ -93,6 +93,7 @@ operations:
 | Operation | Parameters | Behavior |
 |-----------|-----------|----------|
 | `mkdir` | `path`, `mode` | Create directory (default mode 0755) |
+| `touch` | `path`, `skip_if_exists` | Create empty file (default skip_if_exists: true) |
 | `generate_rsa_key` | `output`, `public_key`, `bits`, `skip_if_exists` | Generate RSA keypair via OpenSSL |
 | `generate_random` | `output`, `bytes`, `encoding`, `skip_if_exists` | Generate random bytes (base64/hex encoding) |
 | `download` | `url`, `output`, `mode`, `skip_if_exists` | Download file from URL via wget |
