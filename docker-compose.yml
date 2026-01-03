@@ -30,8 +30,8 @@ services:
       - --api
       - --api.insecure=${TRAEFIK_API_INSECURE:-true}
       - --api.dashboard=${TRAEFIK_DASHBOARD_ENABLE:-true}
-      - --log.level=${TRAEFIK_LOG_LEVEL:-ERROR}
-      - --accesslog=${TRAEFIK_ACCESSLOG:-false}
+      - --log.level=${TRAEFIK_LOG_LEVEL:-DEBUG}
+      - --accesslog=${TRAEFIK_ACCESSLOG:-true}
       - --entryPoints.metrics.address=:8082
       - --metrics.prometheus.entryPoint=metrics
       - --providers.docker
