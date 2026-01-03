@@ -4,6 +4,7 @@ operations.py - Declarative operations for OnRamp scaffold manifests
 
 Implements operation handlers for scaffold.yml manifests:
 - mkdir: Create directories
+- touch: Create empty file
 - generate_rsa_key: Generate RSA keypair via OpenSSL
 - generate_random: Generate random bytes (base64/hex)
 - download: Download file from URL
@@ -347,9 +348,32 @@ class ChmodOp(Operation):
             return False
 
 
+class TouchOp(Operation):
+    """Create empty file (like touch command)."""
+
+    def execute(self) -> bool:
+        path = self.resolve_path(self.config["path"])
+        skip_if_exists = self.config.get("skip_if_exists", True)
+
+        if skip_if_exists and path.exists():
+            print(f"    Skipped (exists): {path}")
+            return True
+
+        try:
+            # Ensure parent directory exists
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.touch()
+            print(f"    Created file: {path}")
+            return True
+        except Exception as e:
+            print(f"    Error creating file {path}: {e}")
+            return False
+
+
 # Registry of operation types
 OPERATIONS: dict[str, type[Operation]] = {
     "mkdir": MkdirOp,
+    "touch": TouchOp,
     "generate_rsa_key": GenerateRsaKeyOp,
     "generate_random": GenerateRandomOp,
     "download": DownloadOp,
