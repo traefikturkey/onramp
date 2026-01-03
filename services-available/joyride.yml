@@ -12,7 +12,7 @@ services:
     mem_limit: ${JOYRIDE_MEM_LIMIT:-128m}
     environment:
       - TZ=${TZ}
-      # HOST_IP auto-detected with host networking
+      - HOST_IP=${HOSTIP}
       # Legacy vars supported: JOYRIDE_ENABLE_SERF, JOYRIDE_NXDOMAIN_ENABLED
       - JOYRIDE_ENABLE_SERF=${JOYRIDE_ENABLE_SERF:-false}
       - JOYRIDE_NXDOMAIN_ENABLED=${JOYRIDE_NXDOMAIN_ENABLED:-false}
