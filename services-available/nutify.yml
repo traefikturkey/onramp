@@ -40,6 +40,7 @@ services:
       - SERVER_NAME=${NUTIFY_SERVER_NAME:-Nutify}       # Name of the server (displayed in UI)
       - SERVER_PORT=${NUTIFY_PORT:-5050}                # Port for web interface
       - SERVER_HOST=${NUTIFY_HOST:-0.0.0.0}             # Host address to bind web server (0.0.0.0 = all interfaces)
+      - SECRET_KEY=${NUTIFY_ENCRYPTION_KEY:-secretkey}  # Flask secret key for sessions (MUST be set, min 32 characters)
       - ENCRYPTION_KEY=${NUTIFY_ENCRYPTION_KEY:-secretkey} # Secret key for data encryption for mail password (MUST be set) and should be at least 32 characters long for security
       
       # ===== UPS CONNECTION SETTINGS =====
