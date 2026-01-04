@@ -1,0 +1,26 @@
+# description: P2P swarm counter - shows how many Docker users are connected globally
+# https://github.com/lklynet/hypermind
+# "The High-Availability Solution to a Problem That Doesn't Exist"
+
+services:
+  hypermind:
+    image: ghcr.io/lklynet/hypermind:${HYPERMIND_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/hypermind.env
+    container_name: ${HYPERMIND_CONTAINER_NAME:-hypermind}
+    restart: ${HYPERMIND_RESTART:-unless-stopped}
+    network_mode: host  # Required for P2P DHT discovery
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - PORT=${HYPERMIND_PORT:-3000}
+      - MAX_PEERS=${HYPERMIND_MAX_PEERS:-1000000}
+    labels:
+      - joyride.host.name=${HYPERMIND_CONTAINER_NAME:-hypermind}.${HOST_DOMAIN}
+      - traefik.enable=${HYPERMIND_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.hypermind.entrypoints=websecure
+      - traefik.http.routers.hypermind.rule=Host(`${HYPERMIND_CONTAINER_NAME:-hypermind}.${HOST_DOMAIN}`)
+      - traefik.http.services.hypermind.loadbalancer.server.port=${HYPERMIND_PORT:-3000}
+      - com.centurylinklabs.watchtower.enable=${HYPERMIND_WATCHTOWER_ENABLED:-true}
+      - autoheal=${HYPERMIND_AUTOHEAL_ENABLED:-true}
