@@ -18,7 +18,7 @@ services:
     ports:
       - 3493:3493                                       # NUT server port
     volumes:
-      - ./etc/nutify:/var/run/nut
+      - ./etc/nutify/run:/var/run/nut
       - ./etc/nutify/logs:/app/nutify/logs
       - ./etc/nutify/instance:/app/nutify/instance
       - /etc/localtime:/etc/localtime:ro

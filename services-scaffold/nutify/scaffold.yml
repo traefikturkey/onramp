@@ -1,0 +1,11 @@
+---
+# Nutify scaffold configuration
+# Creates required directory structure for NUT runtime files
+
+operations:
+  - operation: mkdir
+    paths:
+      - etc/nutify/run
+      - etc/nutify/logs
+      - etc/nutify/instance
+    mode: "0750"
