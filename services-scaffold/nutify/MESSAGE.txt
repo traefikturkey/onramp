@@ -1,0 +1,25 @@
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  NUTIFY - UPS Monitoring System
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⚠️  IMPORTANT: Set your encryption key before starting the service!
+
+A random encryption key has been generated for you:
+  📁 etc/nutify/keys/encryption-key.txt
+
+To configure it:
+  1. Copy the generated key:
+     cat etc/nutify/keys/encryption-key.txt
+
+  2. Edit your environment file:
+     make edit-env nutify
+
+  3. Replace the NUTIFY_ENCRYPTION_KEY value with the generated key
+
+  4. Start the service:
+     make start-service nutify
+
+📖 Documentation: https://github.com/DartSteven/Nutify
+🌐 Web Interface: http://<hostname>:5050 (or via Traefik)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

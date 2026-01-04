@@ -1,11 +1,28 @@
 ---
 # Nutify scaffold configuration
-# Creates required directory structure for NUT runtime files
+# Creates required directory structure and generates encryption key
+
+version: "1"
 
 operations:
-  - operation: mkdir
-    paths:
-      - etc/nutify/run
-      - etc/nutify/logs
-      - etc/nutify/instance
+  - type: mkdir
+    path: run
     mode: "0750"
+
+  - type: mkdir
+    path: logs
+    mode: "0750"
+
+  - type: mkdir
+    path: instance
+    mode: "0750"
+
+  - type: mkdir
+    path: keys
+    mode: "0750"
+
+  - type: generate_random
+    output: keys/encryption-key.txt
+    bytes: 32
+    encoding: hex
+    skip_if_exists: true
