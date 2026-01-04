@@ -1,0 +1,29 @@
+networks:
+  traefik:
+    external: true
+
+# description: Drag and drop rack visualizer for homelabs
+# https://github.com/RackulaLives/Rackula
+
+services:
+  rackula:
+    image: ghcr.io/rackulalives/rackula:${RACKULA_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/rackula.env
+    container_name: ${RACKULA_CONTAINER_NAME:-rackula}
+    restart: ${RACKULA_RESTART:-unless-stopped}
+    mem_limit: ${RACKULA_MEM_LIMIT:-128m}
+    networks:
+      - traefik
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=${RACKULA_HOST_NAME:-rackula}.${HOST_DOMAIN}
+      - traefik.enable=${RACKULA_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.rackula.entrypoints=websecure
+      - traefik.http.routers.rackula.rule=Host(`${RACKULA_HOST_NAME:-rackula}.${HOST_DOMAIN}`)
+      - traefik.http.services.rackula.loadbalancer.server.port=80
+      - com.centurylinklabs.watchtower.enable=${RACKULA_WATCHTOWER_ENABLED:-true}
+      - autoheal=${RACKULA_AUTOHEAL_ENABLED:-true}
