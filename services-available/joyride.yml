@@ -21,6 +21,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./etc/joyride/hosts.d:/etc/hosts.d:ro
+      - ./external-enabled:/etc/traefik/external-enabled:ro
     healthcheck:
       test: ["CMD", "wget", "-q", "-O-", "http://localhost:5454/health"]
       interval: 10s
