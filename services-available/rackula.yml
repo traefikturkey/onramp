@@ -13,6 +13,12 @@ services:
     container_name: ${RACKULA_CONTAINER_NAME:-rackula}
     restart: ${RACKULA_RESTART:-unless-stopped}
     mem_limit: ${RACKULA_MEM_LIMIT:-128m}
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:80/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
     networks:
       - traefik
     volumes:
