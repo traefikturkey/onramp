@@ -1,5 +1,5 @@
 # Available Services
-262 services and counting...
+263 services and counting...
 
 [1](#1)
 [A](#A)
@@ -274,6 +274,7 @@
 
 
 ## R
+- [rackula](https://github.com/RackulaLives/Rackula) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/rackula.yml)): Drag and drop rack visualizer for homelabs
 - [radarr-postgres](https://hub.docker.com/_/postgres) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/radarr-postgres.yml)): Container for running radarr with postgresql
 - [radarr](https://hub.docker.com/r/linuxserver/radarr) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/radarr.yml)): Manages movie collections and downloads
 - [recyclarr](https://github.com/recyclarr/recyclarr# ) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/recyclarr.yml)): Container for running recyclarr, a media indexer
