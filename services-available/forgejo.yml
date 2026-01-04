@@ -1,0 +1,31 @@
+networks:
+    traefik:
+        external: true
+
+# description: Forgejo is a self-hosted lightweight software forge.
+# https://forgejo.org/
+# https://forgejo.org/docs/latest/admin/installation/docker/
+
+services:
+    server:
+        image: codeberg.org/forgejo/forgejo:${FORGEJO_DOCKER_TAG:-13}
+        container_name: ${FORGEJO_CONTAINER_NAME:-forgejo}
+        environment:
+            - USER_UID=${PUID:-1000}
+            - USER_GID=${PGID:-1000}
+        restart: ${FORGEJO_RESTART:-unless-stopped}
+        networks:
+            - traefik
+        volumes:
+            - ./etc/forgejo:/data
+            - /etc/localtime:/etc/localtime:ro
+        ports:
+            - "222:22"
+        labels:
+            - joyride.host.name=${FORGEJO_CONTAINER_NAME:-forgejo}.${HOST_DOMAIN}
+            - traefik.enable=true
+            - traefik.http.routers.forgejo.rule=Host(`${FORGEJO_CONTAINER_NAME:-forgejo}.${HOST_DOMAIN}`)
+            - traefik.http.routers.forgejo.entrypoints=websecure
+            - traefik.http.services.forgejo.loadbalancer.server.port=3000
+            - com.centurylinklabs.watchtower.enable=${FORGEJO_WATCHTOWER_ENABLED:-true}
+            - autoheal=true

@@ -109,6 +109,7 @@
 - [firefox](https://github.com/jlesage/docker-firefox) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/firefox.yml)): Runs mozilla firefox browser in a container
 - [flame](https://github.com/pawelmalak/flame) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/flame.yml)): homepage/dashboard for docker containers and services
 - [fooocus](https://github.com/lllyasviel/Fooocus) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/fooocus.yml)): Focus on prompting and generating | a generative image generator
+- [forgejo](https://forgejo.org/docs/latest/admin/installation/docker/) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/fossflow.yml)): Forgejo is a self-hosted lightweight software forge. Soft fork from gitea
 - [fossflow](https://hub.docker.com/r/fitzzz/fossflow) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/fossflow.yml)): Open-source Progressive Web App (PWA) for creating isometric diagrams.
 - [foundryvtt](https://hub.docker.com/r/felddy/foundryvtt) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/foundryvtt.yml)): Virtual tabletop platform for role-playing games
 - [freshrss](https://github.com/FreshRSS/FreshRSS) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/freshrss.yml)): Self-hosted rss feed reader
@@ -393,5 +394,3 @@
 
 ## V
 - [valheim](https://github.com/lloesche/valheim-server-docker) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/games/valheim.yml)): Valheim is a game about exploring a huge fantasy world inspired by norse mythology and viking culture
-
-
