@@ -19,17 +19,19 @@ services:
     environment:
       - TZ=${TZ}
       - HOSTIP=${HOSTIP}
-      - JOYRIDE_NXDOMAIN_ENABLED=${JOYRIDE_NXDOMAIN_ENABLED:-false}
-      - JOYRIDE_LOG_DEBUG=${JOYRIDE_LOG_DEBUG:-false}
-      - JOYRIDE_LOG_QUERIES=${JOYRIDE_LOG_QUERIES:-false}
-      - JOYRIDE_ENABLE_SERF=${JOYRIDE_ENABLE_SERF:-false}
+      - HOST_IP=${HOSTIP}
+      - CLUSTER_ENABLED=${CLUSTER_ENABLED:-false}
+      - DNS_UNKNOWN_ACTION=${DNS_UNKNOWN_ACTION:-drop}
     network_mode: host
-    # ports:
-    #   - ${JOYRIDE_PORT:-54}:54/udp
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./etc/joyride/hosts.d:/etc/hosts.d:ro
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O-", "http://localhost:5454/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
     labels:
       - traefik.enable=${JOYRIDE_TRAEFIK_ENABLE:-false}
       - com.centurylinklabs.watchtower.enable=${JOYRIDE_WATCHTOWER_ENABLE:-true}
