@@ -1,5 +1,5 @@
 # Available Services
-258 services and counting...
+259 services and counting...
 
 [1](#1)
 [A](#A)
@@ -47,6 +47,7 @@
 ## B
 - [basaran](https://github.com/hyperonym/basaran) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/basaran.yml)): ( archived ) Container for running basaran, a lightweight LLM server
 - [bazarr](https://github.com/linuxserver/docker-bazarr) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/bazarr.yml)): Manages subtitles for media content
+- [bentopdf](https://github.com/alam00000/bentopdf) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/bentopdf.yml)): Privacy-first, client-side PDF toolkit for editing, merging, and processing PDFs in the browser
 - [beszel-agent](https://beszel.dev/guide/agent-installation) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/beszel-agent.yml)): agent to connect to the Beszel hub for monitoring of docker containers and servers.
 - [beszel-hub](https://github.com/henrygd/beszel) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/beszel-hub.yml)): lightweight server monitoring platform that includes Docker statistics, historical data, and alert functions.
 - [bind](https://hub.docker.com/r/ubuntu/bind9) ([yml](https://github.com/traefikturkey/onramp/tree/master/services-available/bind.yml)): A very flexible, full-featured DNS system
