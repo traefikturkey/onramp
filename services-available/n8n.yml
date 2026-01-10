@@ -15,10 +15,6 @@ services:
     mem_limit: ${N8N_MEM_LIMIT:-200g}
     networks:
       - traefik
-    #ports:
-    #  - 5678:5678
-    #expose:
-    #  - 5678
     volumes:
       - ./etc/n8n/:/home/node/.n8n/
       - ./media/n8n/workflows:/home/node/workflows
@@ -39,6 +35,12 @@ services:
 
       - WEBHOOK_URL=https://${N8N_HOST_NAME:-n8n}.${HOST_DOMAIN}/
       - GENERIC_TIMEZONE=${TZ}
+
+      - N8N_HOST=${N8N_HOST_NAME:-n8n}.${HOST_DOMAIN}
+      - N8N_PORT=${N8N_PORT:-5678}
+      - N8N_PROTOCOL=${N8N_PROTOCOL:-https}
+      - N8N_RUNNERS_ENABLED=${N8N_RUNNERS_ENABLED:-true}
+      - NODE_ENV=${N8N_NODE_ENV:-production}
 
       - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true # Enforce settings file permissions
 
@@ -61,7 +63,7 @@ services:
       - traefik.http.routers.n8n.entrypoints=websecure
       - traefik.http.routers.n8n.rule=Host(`${N8N_HOST_NAME:-n8n}.${HOST_DOMAIN}`)
       # - traefik.http.services.n8n.loadbalancer.server.scheme=https # enable if the service wants to connect over https
-      - traefik.http.services.n8n.loadbalancer.server.port=5678
+      - traefik.http.services.n8n.loadbalancer.server.port=${N8N_PORT:-5678}
       - com.centurylinklabs.watchtower.enable=${N8N_WATCHTOWER_ENABLED:-true}
       - autoheal=${N8N_AUTOHEAL_ENABLED:-true}
     depends_on:
