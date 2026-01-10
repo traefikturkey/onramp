@@ -37,6 +37,9 @@ services:
       - DB_POSTGRESDB_USER=${N8N_POSTGRES_USER:-n8n}
       - DB_POSTGRESDB_PASSWORD=${POSTGRES_PASSWORD_N8N:-n8n}
 
+      - WEBHOOK_URL=https://${N8N_HOST_NAME:-n8n}.${HOST_DOMAIN}/
+      - GENERIC_TIMEZONE=${TZ}
+
       - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true # Enforce settings file permissions
 
       # Allow these node modules to be imported in Function nodes
