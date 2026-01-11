@@ -14,7 +14,12 @@ $(SIETCH_MARKER): $(SIETCH_FILES)
 	docker build -t $(SIETCH_IMAGE) ./sietch
 	@touch $(SIETCH_MARKER)
 
-sietch-build: $(SIETCH_MARKER) ## Build the Sietch tool container
+sietch-build: ## Build the Sietch tool container (auto-rebuilds if image missing or files changed)
+	@if ! docker image inspect $(SIETCH_IMAGE) >/dev/null 2>&1; then \
+		echo "Sietch image not found, forcing rebuild..."; \
+		rm -f $(SIETCH_MARKER); \
+	fi
+	@$(MAKE) $(SIETCH_MARKER)
 
 sietch-rebuild: ## Force rebuild of Sietch container
 	@echo "Force rebuilding Sietch container..."
