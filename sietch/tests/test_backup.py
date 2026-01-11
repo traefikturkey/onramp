@@ -58,6 +58,10 @@ class TestConstants:
         """Should include services-enabled directory."""
         assert "services-enabled" in BACKUP_DIRS
 
+    def test_backup_dirs_contains_external_enabled(self):
+        """Should include external-enabled directory."""
+        assert "external-enabled" in BACKUP_DIRS
+
 
 class TestGenerateBackupName:
     """Tests for generate_backup_name() method."""
