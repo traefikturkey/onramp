@@ -202,11 +202,11 @@ By backing up your configuration and using tools like Ansible to provision the b
 ```
 make create-backup
 ```
-This will create a traefik-config-backup.tar.gz in the project directory
+This will create `onramp-config-backup-{hostname}-{timestamp}.tar.gz` in the `backups/` directory
 
 ### Copy backup file to another machine
 ```
-scp ./backups/traefik-config-backup.tar.gz <user>@<other_host>:/apps/onramp/backups/
+scp ./backups/onramp-config-backup-*.tar.gz <user>@<other_host>:/apps/onramp/backups/
 ```
 
 ### Restore backup file on the other machine

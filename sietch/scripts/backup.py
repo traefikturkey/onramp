@@ -72,6 +72,7 @@ BACKUP_DIRS = [
     "etc",
     "services-enabled",
     "overrides-enabled",
+    "external-enabled",
 ]
 
 

@@ -2,6 +2,25 @@
 
 Common issues and solutions for OnRamp.
 
+## Backup & Restore
+
+### What's Backed Up
+
+| Directory | Contents |
+|-----------|----------|
+| `etc/` | Service configuration files |
+| `services-enabled/` | Enabled service symlinks and env files |
+| `overrides-enabled/` | Active override symlinks |
+| `external-enabled/` | External service routing definitions |
+
+### Create and restore backups
+
+```bash
+make create-backup     # Creates backup in backups/ directory
+make restore-backup    # Restore from backup
+make create-nfs-backup # Backup to NFS share
+```
+
 ## Certificate Issues
 
 ### "Certificate not valid" or SSL errors
