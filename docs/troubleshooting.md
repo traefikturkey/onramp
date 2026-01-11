@@ -85,6 +85,23 @@ Check logs for the specific error:
 docker logs --tail 100 containername
 ```
 
+## Sietch Container Issues
+
+### "Unable to find image 'sietch:latest' locally"
+
+**Cause:** The sietch container is a local-only image that must be built before use. It's commonly lost after running `docker system prune` or `docker image prune -a`.
+
+**Solution:**
+```bash
+make sietch-build
+```
+
+If that still fails (stale marker file):
+```bash
+rm -f sietch/.built
+make sietch-build
+```
+
 ## Environment Issues
 
 ### Variables not loading
