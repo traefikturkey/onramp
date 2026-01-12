@@ -51,7 +51,7 @@ services:
       - --certificatesresolvers.letsencrypt.acme.dnschallenge.provider=${DNS_CHALLENGE_PROVIDER:-cloudflare}
       - --certificatesresolvers.letsencrypt.acme.email=${DNS_CHALLENGE_API_EMAIL:-${CF_API_EMAIL}}
       - --certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json
-      - --certificatesResolvers.letsencrypt.acme.dnsChallenge.delayBeforeCheck=${CF_RESOLVER_WAITTIME:-60}
+      - --certificatesResolvers.letsencrypt.acme.dnsChallenge.delayBeforeCheck=${CF_RESOLVER_WAITTIME:-120}
       - --certificatesresolvers.letsencrypt.acme.dnschallenge.resolvers=1.1.1.1:53,1.0.0.1:53
       - --certificatesresolvers.letsencrypt.acme.caserver=${ACME_CASERVER:-https://acme-v02.api.letsencrypt.org/directory}
     labels:
