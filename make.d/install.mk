@@ -55,8 +55,31 @@ else
 		$(MAKE) build; \
 	else \
 		echo ""; \
-		echo "Bootstrap complete. Run 'make install' again after refreshing your shell."; \
+		echo "Bootstrap complete. Run 'make continue-install' after refreshing your shell."; \
 	fi
+endif
+
+# Continue install after shell refresh (post-bootstrap)
+continue-install: ## Continue installation after Docker group refresh
+ifeq ($(DOCKER_AVAILABLE),yes)
+	$(MAKE) build
+else
+	@echo ""
+	@echo "ERROR: Docker is still not accessible."
+	@echo ""
+	@echo "Your shell session may not have refreshed properly."
+	@echo "Try one of the following:"
+	@if [ -n "$${VSCODE_IPC_HOOK_CLI:-}" ] || [ -n "$${VSCODE_GIT_ASKPASS_NODE:-}" ]; then \
+		echo "  1. Run: make kill-code"; \
+		echo "  2. Reconnect to this machine in VSCode"; \
+		echo "  3. Run: make continue-install"; \
+	else \
+		echo "  1. Run: newgrp docker"; \
+		echo "  2. Or log out and log back in"; \
+		echo "  3. Then run: make continue-install"; \
+	fi
+	@echo ""
+	@exit 1
 endif
 
 # Ensure environment is configured (new modular system or legacy)

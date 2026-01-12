@@ -204,16 +204,26 @@ log_info "=========================================="
 
 # Check if we need to handle docker group membership
 if [[ "$DOCKER_JUST_INSTALLED" == "true" ]]; then
-    if ! docker ps &>/dev/null 2>&1; then
+    if ! docker ps >/dev/null 2>&1; then
         echo ""
         log_warn "Docker was just installed. You need to refresh your shell session"
         log_warn "for docker group membership to take effect."
         echo ""
-        echo "Please run ONE of the following:"
-        echo "  1. newgrp docker    # Refresh group in current shell"
-        echo "  2. Log out and log back in"
-        echo ""
-        echo "Then run 'make install' again to complete setup."
+
+        # Detect VSCode remote environment
+        if [[ -n "${VSCODE_IPC_HOOK_CLI:-}" ]] || [[ -n "${VSCODE_GIT_ASKPASS_NODE:-}" ]]; then
+            echo "VSCode Remote detected. To refresh your session:"
+            echo ""
+            echo "  1. Run: make kill-code"
+            echo "  2. Reconnect to this machine in VSCode"
+            echo "  3. Run: make continue-install"
+            echo ""
+        else
+            echo "Please run ONE of the following:"
+            echo "  1. newgrp docker    # Refresh group in current shell, then: make continue-install"
+            echo "  2. Log out and log back in, then: make continue-install"
+            echo ""
+        fi
         exit 0
     fi
 fi
