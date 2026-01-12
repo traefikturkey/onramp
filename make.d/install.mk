@@ -13,6 +13,9 @@ export DEBIAN_FRONTEND = noninteractive
 export ANSIBLE_LOCALHOST_WARNING = False
 export ANSIBLE_INVENTORY_UNPARSED_WARNING = False
 
+# Check if Docker is available (used by targets that need Sietch)
+DOCKER_AVAILABLE := $(shell command -v docker >/dev/null 2>&1 && docker ps >/dev/null 2>&1 && echo yes || echo no)
+
 ifneq (,$(wildcard $(ACME_JSON_FILE)))
 BUILD_DEPENDENCIES += $(filter-out $(BUILD_DEPENDENCIES),fix-acme-json-permissions)
 endif
@@ -25,10 +28,28 @@ fix-acme-json-permissions:
 		fi \
 	fi
 
-build: install-dependencies ensure-env ensure-external-middleware migrate-legacy-env $(BUILD_DEPENDENCIES)
+check-docker:
+	@if [ "$(DOCKER_AVAILABLE)" != "yes" ]; then \
+		echo ""; \
+		echo "ERROR: Docker is not available."; \
+		echo ""; \
+		echo "Run 'make install' to bootstrap the system and install Docker,"; \
+		echo "or run './bootstrap.sh' directly."; \
+		echo ""; \
+		exit 1; \
+	fi
+
+build: install-dependencies check-docker ensure-env ensure-external-middleware migrate-legacy-env $(BUILD_DEPENDENCIES)
 #@echo "build steps completed"
 
-install: build install-docker
+# Install target: auto-bootstraps if Docker isn't available
+install: ## Install OnRamp (bootstraps fresh systems automatically)
+ifeq ($(DOCKER_AVAILABLE),yes)
+	$(MAKE) build
+else
+	@echo "Docker not found - running bootstrap..."
+	@./bootstrap.sh && $(MAKE) build
+endif
 
 # Ensure environment is configured (new modular system or legacy)
 ensure-env: services-enabled/.env ensure-env-files

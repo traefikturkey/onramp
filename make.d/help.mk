@@ -16,4 +16,4 @@ define help_function
 endef
 
 help: ## Show available targets
-	$(call help_function, Makefile)
+	$(call help_function, Makefile make.d/*.mk)
