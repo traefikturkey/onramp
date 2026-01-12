@@ -57,18 +57,18 @@ fix-traefik-network:
 		fi; \
 	fi
 
-# Fix root-owned top-level directories (can happen when Docker creates volume mount paths)
-fix-root-dirs:
+# Ensure etc/ and media/ directories exist with correct ownership
+# Creates them if missing, fixes ownership if root-owned
+ensure-dirs:
+	@mkdir -p etc media
 	@for dir in etc media; do \
-		if [ -d "$$dir" ]; then \
-			if find "$$dir" -maxdepth 0 -user root 2>/dev/null | grep -q .; then \
-				echo "Fixing root-owned $$dir/ directory..."; \
-				sudo chown $(PUID):$(PGID) "$$dir"; \
-			fi; \
+		if find "$$dir" -maxdepth 0 -user root 2>/dev/null | grep -q .; then \
+			echo "Fixing root-owned $$dir/ directory..."; \
+			sudo chown $(PUID):$(PGID) "$$dir"; \
 		fi; \
 	done
 
-build: install-dependencies check-docker fix-traefik-network fix-root-dirs ensure-env ensure-external-middleware migrate-legacy-env $(BUILD_DEPENDENCIES)
+build: install-dependencies check-docker fix-traefik-network ensure-dirs ensure-env ensure-external-middleware migrate-legacy-env $(BUILD_DEPENDENCIES)
 #@echo "build steps completed"
 
 # Install target: auto-bootstraps if Docker isn't available
