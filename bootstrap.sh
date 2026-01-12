@@ -170,6 +170,7 @@ mkdir -p services-enabled
 mkdir -p external-enabled
 mkdir -p etc
 mkdir -p media
+mkdir -p backups
 
 # Create services-enabled/.env from template if it doesn't exist
 if [[ ! -f services-enabled/.env ]]; then

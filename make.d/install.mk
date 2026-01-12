@@ -57,11 +57,11 @@ fix-traefik-network:
 		fi; \
 	fi
 
-# Ensure etc/ and media/ directories exist with correct ownership
+# Ensure data directories exist with correct ownership
 # Creates them if missing, fixes ownership if root-owned
 ensure-dirs:
-	@mkdir -p etc media
-	@for dir in etc media; do \
+	@mkdir -p etc media backups
+	@for dir in etc media backups; do \
 		if find "$$dir" -maxdepth 0 -user root 2>/dev/null | grep -q .; then \
 			echo "Fixing root-owned $$dir/ directory..."; \
 			sudo chown $(PUID):$(PGID) "$$dir"; \
