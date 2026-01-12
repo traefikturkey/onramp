@@ -20,7 +20,6 @@ sietch-build: ## Build the Sietch tool container (auto-rebuilds if image missing
 		rm -f $(SIETCH_MARKER); \
 	fi
 	@$(MAKE) $(SIETCH_MARKER)
-	@docker network create traefik 2>/dev/null || true
 
 sietch-rebuild: ## Force rebuild of Sietch container
 	@echo "Force rebuilding Sietch container..."
