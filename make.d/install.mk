@@ -53,8 +53,12 @@ fix-traefik-network:
 				done; \
 			fi; \
 			docker network rm traefik 2>/dev/null || true; \
-			echo "Traefik network removed. Docker Compose will recreate it."; \
 		fi; \
+	fi
+	@# Ensure traefik network exists (services declare it as external)
+	@if ! docker network inspect traefik >/dev/null 2>&1; then \
+		echo "Creating traefik network..."; \
+		docker network create traefik; \
 	fi
 
 # Ensure data directories exist with correct ownership
