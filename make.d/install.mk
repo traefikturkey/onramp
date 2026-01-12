@@ -48,7 +48,15 @@ ifeq ($(DOCKER_AVAILABLE),yes)
 	$(MAKE) build
 else
 	@echo "Docker not found - running bootstrap..."
-	@./bootstrap.sh && $(MAKE) build
+	@./bootstrap.sh
+	@# After bootstrap, check if docker is now accessible
+	@if command -v docker >/dev/null 2>&1 && docker ps >/dev/null 2>&1; then \
+		echo "Docker is now available, continuing with build..."; \
+		$(MAKE) build; \
+	else \
+		echo ""; \
+		echo "Bootstrap complete. Run 'make install' again after refreshing your shell."; \
+	fi
 endif
 
 # Ensure environment is configured (new modular system or legacy)
