@@ -56,7 +56,7 @@ endif
 
 # setup PLEX_ALLOWED_NETWORKS defaults if they are not already in the .env file
 ifndef PLEX_ALLOWED_NETWORKS
-	export PLEX_ALLOWED_NETWORKS := $(HOSTIP/24)
+	export PLEX_ALLOWED_NETWORKS := $(HOSTIP)/24
 endif
 
 # check what editor is available

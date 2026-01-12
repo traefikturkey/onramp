@@ -20,6 +20,7 @@ sietch-build: ## Build the Sietch tool container (auto-rebuilds if image missing
 		rm -f $(SIETCH_MARKER); \
 	fi
 	@$(MAKE) $(SIETCH_MARKER)
+	@docker network create traefik 2>/dev/null || true
 
 sietch-rebuild: ## Force rebuild of Sietch container
 	@echo "Force rebuilding Sietch container..."
@@ -181,15 +182,23 @@ ensure-env-files: sietch-build ## Recreate missing env files from templates (non
 		fi; \
 	done
 	@# Check enabled services for missing .env files
-	@for yml in services-enabled/*.yml; do \
+	@failures=0; \
+	for yml in services-enabled/*.yml; do \
 		[ -f "$$yml" ] || continue; \
 		svc=$$(basename "$$yml" .yml); \
 		if [ ! -f "services-enabled/$$svc.env" ]; then \
 			echo "⚠️  Missing .env for $$svc, running scaffold..."; \
-			$(SIETCH_RUN) python /scripts/scaffold.py build "$$svc"; \
+			if ! $(SIETCH_RUN) python /scripts/scaffold.py build "$$svc"; then \
+				echo "❌ Failed to scaffold $$svc"; \
+				failures=$$((failures+1)); \
+			fi; \
 		fi; \
-	done
-	@chmod 600 services-enabled/*.env 2>/dev/null || true
+	done; \
+	chmod 600 services-enabled/*.env 2>/dev/null || true; \
+	if [ $$failures -gt 0 ]; then \
+		echo "ERROR: $$failures service(s) failed to scaffold"; \
+		exit 1; \
+	fi
 	@echo "Environment files checked."
 
 env: ## Show all loaded environment variables (sorted, resolved)

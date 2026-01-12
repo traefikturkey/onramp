@@ -79,7 +79,12 @@ services-enabled/.env:
 	elif [ -f services-scaffold/onramp/.env.template ]; then \
 		echo "Creating initial environment configuration..."; \
 		$(MAKE) scaffold-build onramp || cp services-scaffold/onramp/.env.template services-enabled/.env; \
-		$(EDITOR) services-enabled/.env; \
+		if [ -t 0 ]; then \
+			$(EDITOR) services-enabled/.env; \
+		else \
+			echo "Non-interactive mode: edit services-enabled/.env manually"; \
+			echo "Run 'make edit-env-onramp' to configure"; \
+		fi; \
 	else \
 		echo "No environment template found. Creating minimal .env..."; \
 		touch services-enabled/.env; \
