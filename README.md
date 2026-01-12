@@ -46,12 +46,23 @@ cd onramp
 make install
 ```
 
-> **Note:** If this is a fresh system without Docker, `make install` will automatically install Docker and add your user to the docker group. After installation completes, you'll need to run `newgrp docker` (or log out and back in) to use Docker commands, then run `make install` again to complete setup.
+> **Note:** If this is a fresh system without Docker, `make install` will automatically install Docker and add your user to the docker group. After installation completes, you'll need to run `newgrp docker` (or log out and back in) to use Docker commands, then run `make continue-install` to complete setup.
 
-Edit the environment file (`services-enabled/.env`) to include Cloudflare credentials, your domain and the hostname of the current machine, save the file and exit.
+The install process includes an interactive wizard that will prompt you for:
+- Server hostname and domain
+- Timezone
+- Cloudflare credentials
+
+If you prefer to edit the configuration manually, you can skip the wizard and use:
 
 ```bash
 make edit-env-onramp
+```
+
+To re-run the wizard later:
+
+```bash
+make env-wizard
 ```
 
 Then start the staging environment:

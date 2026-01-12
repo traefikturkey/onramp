@@ -48,6 +48,8 @@ make nuke-service NAME        # Remove service AND all data
 
 ### Environment
 ```bash
+make env-wizard               # Interactive setup wizard for required vars
+make env-wizard-check         # Check if configuration is complete
 make edit-env-onramp          # Edit global .env (HOST_NAME, HOST_DOMAIN)
 make edit-env-nfs             # Edit NFS mounts
 make edit-env-external        # Edit external service URLs

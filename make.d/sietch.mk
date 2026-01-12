@@ -200,6 +200,16 @@ ensure-env-files: sietch-build ## Recreate missing env files from templates (non
 		exit 1; \
 	fi
 	@echo "Environment files checked."
+	@# Run interactive wizard if in terminal and config incomplete
+	@if [ -t 0 ]; then \
+		if ! $(SIETCH_RUN) python /scripts/env_wizard.py --check >/dev/null 2>&1; then \
+			echo ""; \
+			docker run --rm -it $(GLOBAL_ENV_FLAGS) $(SIETCH_COMPUTED_VARS) \
+				-v $(shell pwd):/app \
+				-u $(PUID):$(PGID) \
+				$(SIETCH_IMAGE) python /scripts/env_wizard.py; \
+		fi; \
+	fi
 
 env: ## Show all loaded environment variables (sorted, resolved)
 	@echo "=== Environment Variables (from services-enabled/*.env) ==="
@@ -245,6 +255,26 @@ edit-env-external: ## Edit the external services environment file
 
 edit-env-custom: ## Edit custom/unmapped variables file
 	$(EDITOR) services-enabled/custom.env
+
+#########################################################
+##
+## Environment Setup Wizard
+##
+#########################################################
+
+env-wizard: sietch-build ## Run interactive environment setup wizard
+	@if [ -t 0 ]; then \
+		docker run --rm -it $(GLOBAL_ENV_FLAGS) $(SIETCH_COMPUTED_VARS) \
+			-v $(shell pwd):/app \
+			-u $(PUID):$(PGID) \
+			$(SIETCH_IMAGE) python /scripts/env_wizard.py; \
+	else \
+		echo "Non-interactive mode: skipping env wizard"; \
+		echo "Run 'make env-wizard' manually to configure"; \
+	fi
+
+env-wizard-check: sietch-build ## Check if environment configuration is complete
+	@$(SIETCH_RUN) python /scripts/env_wizard.py --check
 
 #########################################################
 ##
