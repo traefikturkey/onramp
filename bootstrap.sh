@@ -47,6 +47,27 @@ export DEBIAN_FRONTEND=noninteractive
 # ============================================================================
 log_info "Step 1: Installing system packages..."
 
+# Update apt cache first
+sudo apt update
+
+# Detect Ubuntu using /etc/os-release (lsb_release may not exist on minimal installs)
+IS_UBUNTU=false
+if [[ -f /etc/os-release ]]; then
+    # shellcheck source=/dev/null
+    . /etc/os-release
+    [[ "$ID" == "ubuntu" ]] && IS_UBUNTU=true
+fi
+
+# On Ubuntu, add Ansible PPA for latest version (requires software-properties-common)
+if [[ "$IS_UBUNTU" == "true" ]]; then
+    if ! apt-cache policy | grep -q "ansible/ansible"; then
+        log_info "Adding Ansible PPA (requires software-properties-common)..."
+        sudo apt install -y software-properties-common
+        sudo apt-add-repository ppa:ansible/ansible -y
+        sudo apt update
+    fi
+fi
+
 PACKAGES=(
     git
     nano
@@ -62,23 +83,13 @@ PACKAGES=(
 # Check which packages are missing
 MISSING_PACKAGES=()
 for pkg in "${PACKAGES[@]}"; do
-    if ! dpkg -s "$pkg" &>/dev/null; then
+    if ! dpkg -s "$pkg" >/dev/null 2>&1; then
         MISSING_PACKAGES+=("$pkg")
     fi
 done
 
 if [[ ${#MISSING_PACKAGES[@]} -gt 0 ]]; then
     log_info "Installing missing packages: ${MISSING_PACKAGES[*]}"
-
-    # Add Ansible PPA on Ubuntu for latest version
-    if [[ "$(lsb_release -si 2>/dev/null)" == "Ubuntu" ]]; then
-        if ! apt-cache policy | grep -q "ansible/ansible"; then
-            log_info "Adding Ansible PPA..."
-            sudo apt-add-repository ppa:ansible/ansible -y
-        fi
-    fi
-
-    sudo apt update
     sudo apt install -y "${MISSING_PACKAGES[@]}"
 else
     log_info "All system packages already installed."
@@ -129,10 +140,23 @@ done
 log_info "Step 4: Installing Docker..."
 
 DOCKER_JUST_INSTALLED=false
-if command -v docker &>/dev/null && docker ps &>/dev/null; then
-    log_info "Docker is already installed and running."
+if command -v docker >/dev/null 2>&1; then
+    if docker ps >/dev/null 2>&1; then
+        log_info "Docker is already installed and accessible."
+    elif id -nG | grep -qw docker; then
+        # User is in docker group but can't access - likely needs re-login
+        log_warn "Docker is installed and you're in the docker group,"
+        log_warn "but the current shell session doesn't have access yet."
+        log_warn "Run 'newgrp docker' or log out and back in, then run 'make install' again."
+        exit 0
+    else
+        # Docker installed but user not in group - run ansible to add them
+        log_info "Docker is installed but user not in docker group. Running setup..."
+        ansible-playbook ansible/install-docker.yml
+        DOCKER_JUST_INSTALLED=true
+    fi
 else
-    log_info "Running Ansible playbook to install Docker..."
+    log_info "Installing Docker via Ansible..."
     ansible-playbook ansible/install-docker.yml
     DOCKER_JUST_INSTALLED=true
 fi

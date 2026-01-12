@@ -94,12 +94,12 @@ ifneq ($(strip $(MISSING_REPOS)),)
 		MISSING_REPOS += update-distro
 endif
 
-EXECUTABLES = git nano jq python3-pip yamllint python3-pathspec ansible 
-MISSING_PACKAGES := $(foreach exec,$(EXECUTABLES),$(if $(shell dpkg -s "$(exec)" &> /dev/null),,addpackage-$(exec)))
+EXECUTABLES = git nano jq python3-pip yamllint python3-pathspec ansible
+MISSING_PACKAGES := $(foreach exec,$(EXECUTABLES),$(if $(shell dpkg -s "$(exec)" >/dev/null 2>&1),,addpackage-$(exec)))
 
-# Add PPA repository (Ubuntu only)
+# Add PPA repository (Ubuntu only, uses /etc/os-release instead of lsb_release)
 addrepo/%:
-	@if [ "$(shell lsb_release -si | tail -n 1)" = "Ubuntu" ]; then \
+	@if [ -f /etc/os-release ] && grep -q '^ID=ubuntu' /etc/os-release; then \
 		sudo apt-add-repository ppa:$* -y; \
 	fi
 

@@ -34,6 +34,7 @@ After getting your Cloudflare API key
 you can run the following to do the basic setup automagically:
 
 ```bash
+sudo apt update
 sudo apt install git make -y
 
 sudo mkdir /apps

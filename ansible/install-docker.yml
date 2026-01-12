@@ -10,8 +10,9 @@
     docker_install_compose_plugin: true
     docker_compose_package: docker-compose-plugin
     docker_compose_package_state: present
+    # Fallback chain: USER -> SUDO_USER -> ansible detected user
     docker_users:
-      - "{{ lookup('env','USER') }}"
+      - "{{ lookup('env', 'USER') | default(lookup('env', 'SUDO_USER'), true) | default(ansible_user_id, true) }}"
   roles:
     - geerlingguy.docker
 
@@ -46,32 +47,33 @@
         name: vm.swappiness
         value: '1'
         sysctl_file: /etc/sysctl.conf
-    
+
     - name: Create disable-hugepages.service file
-      become: true
-      lineinfile:
-        path: /etc/systemd/system/disable-hugepages.service
-        line: |
+      ansible.builtin.copy:
+        content: |
           [Unit]
-          Description="Disable Transparent Hugepage"
+          Description=Disable Transparent Hugepage
           Before=docker.service
+
           [Service]
           Type=oneshot
           ExecStart=/bin/bash -c 'echo never > /sys/kernel/mm/transparent_hugepage/enabled'
           ExecStart=/bin/bash -c 'echo never > /sys/kernel/mm/transparent_hugepage/defrag'
+
           [Install]
           RequiredBy=docker.service
-        create: yes
+        dest: /etc/systemd/system/disable-hugepages.service
         mode: '0644'
+      notify: Reload systemd
 
     - name: Enable and start disable-hugepages.service
-      become: true
-      systemd:
+      ansible.builtin.systemd:
         name: disable-hugepages
         enabled: true
         state: started
+        daemon_reload: true
 
+  handlers:
     - name: Reload systemd
-      become: true
-      systemd:
+      ansible.builtin.systemd:
         daemon_reload: true
