@@ -37,8 +37,6 @@ you can run the following to do the basic setup automagically:
 sudo apt install git make -y
 
 sudo mkdir /apps
-sudo usermod -aG docker $USER # Add your user to the docker group to allow using docker commands without sudo.
-newgrp docker
 sudo chown -R $USER:$USER /apps
 cd /apps
 git clone https://github.com/traefikturkey/onramp.git onramp
