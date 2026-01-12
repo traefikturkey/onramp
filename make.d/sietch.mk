@@ -116,14 +116,13 @@ scaffold-list: sietch-build ## List available scaffolds
 scaffold-check: sietch-build ## Check if a service has scaffold files
 	$(SIETCH_RUN) python /scripts/scaffold.py check $(SERVICE_PASSED_DNCASED)
 
-# Fix etc directory ownership if root-owned (from previous docker runs)
-# Uses ls -ldn for portability (works on Linux and macOS)
+# Fix etc directory ownership if any files are root-owned (from docker runs)
+# Checks for ANY root-owned files, not just the directory itself
 fix-etc-ownership:
 ifdef SERVICE_PASSED_DNCASED
 	@if [ -d "etc/$(SERVICE_PASSED_DNCASED)" ]; then \
-		OWNER=$$(ls -ldn "etc/$(SERVICE_PASSED_DNCASED)" | awk '{print $$3}'); \
-		if [ "$$OWNER" = "0" ]; then \
-			echo "Fixing root-owned etc/$(SERVICE_PASSED_DNCASED) directory..."; \
+		if find "etc/$(SERVICE_PASSED_DNCASED)" -user root 2>/dev/null | grep -q .; then \
+			echo "Fixing root-owned files in etc/$(SERVICE_PASSED_DNCASED)..."; \
 			sudo chown -R $(PUID):$(PGID) "etc/$(SERVICE_PASSED_DNCASED)"; \
 		fi; \
 	fi
@@ -137,14 +136,12 @@ else
 	@echo "Example: make scaffold-build adguard"
 endif
 
-# Fix all root-owned etc directories
-# Uses ls -ldn for portability (works on Linux and macOS)
+# Fix all etc directories with any root-owned files
 fix-etc-ownership-all:
 	@for dir in etc/*/; do \
 		if [ -d "$$dir" ]; then \
-			OWNER=$$(ls -ldn "$$dir" | awk '{print $$3}'); \
-			if [ "$$OWNER" = "0" ]; then \
-				echo "Fixing root-owned $$dir..."; \
+			if find "$$dir" -user root 2>/dev/null | grep -q .; then \
+				echo "Fixing root-owned files in $$dir..."; \
 				sudo chown -R $(PUID):$(PGID) "$$dir"; \
 			fi; \
 		fi; \

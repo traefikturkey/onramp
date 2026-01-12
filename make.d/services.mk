@@ -76,7 +76,11 @@ disable-service: stop-service ## Disable a service
 nuke-service: disable-service ## Disable a service and remove its etc/ directory
 	@if [ -d ./etc/$(SERVICE_PASSED_DNCASED) ]; then \
 		echo "Removing ./etc/$(SERVICE_PASSED_DNCASED)..."; \
-		rm -rf ./etc/$(SERVICE_PASSED_DNCASED); \
+		if find "./etc/$(SERVICE_PASSED_DNCASED)" -user root 2>/dev/null | grep -q .; then \
+			sudo rm -rf "./etc/$(SERVICE_PASSED_DNCASED)"; \
+		else \
+			rm -rf "./etc/$(SERVICE_PASSED_DNCASED)"; \
+		fi; \
 	fi
 
 #########################################################
