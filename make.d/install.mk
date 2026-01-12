@@ -39,7 +39,25 @@ check-docker:
 		exit 1; \
 	fi
 
-build: install-dependencies check-docker ensure-env ensure-external-middleware migrate-legacy-env $(BUILD_DEPENDENCIES)
+fix-traefik-network:
+	@# Fix traefik network if it exists but wasn't created by compose
+	@if docker network inspect traefik >/dev/null 2>&1; then \
+		LABEL=$$(docker network inspect traefik --format '{{index .Labels "com.docker.compose.network"}}' 2>/dev/null || echo ""); \
+		if [ "$$LABEL" != "traefik" ]; then \
+			echo "Fixing traefik network (incorrect compose labels)..."; \
+			CONTAINERS=$$(docker network inspect traefik --format '{{range .Containers}}{{.Name}} {{end}}' 2>/dev/null || echo ""); \
+			if [ -n "$$CONTAINERS" ]; then \
+				echo "Disconnecting containers: $$CONTAINERS"; \
+				for c in $$CONTAINERS; do \
+					docker network disconnect -f traefik "$$c" 2>/dev/null || true; \
+				done; \
+			fi; \
+			docker network rm traefik 2>/dev/null || true; \
+			echo "Traefik network removed. Docker Compose will recreate it."; \
+		fi; \
+	fi
+
+build: install-dependencies check-docker fix-traefik-network ensure-env ensure-external-middleware migrate-legacy-env $(BUILD_DEPENDENCIES)
 #@echo "build steps completed"
 
 # Install target: auto-bootstraps if Docker isn't available
