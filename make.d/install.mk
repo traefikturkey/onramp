@@ -158,7 +158,7 @@ ifneq ($(strip $(MISSING_REPOS)),)
 endif
 
 EXECUTABLES = git nano jq python3-pip yamllint python3-pathspec ansible
-MISSING_PACKAGES := $(foreach exec,$(EXECUTABLES),$(if $(shell dpkg -s "$(exec)" >/dev/null 2>&1),,addpackage-$(exec)))
+MISSING_PACKAGES := $(foreach exec,$(EXECUTABLES),$(if $(shell dpkg -s "$(exec)" >/dev/null 2>&1 && echo installed),,addpackage-$(exec)))
 
 # Add PPA repository (Ubuntu only, uses /etc/os-release instead of lsb_release)
 addrepo/%:
