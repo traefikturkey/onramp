@@ -49,8 +49,6 @@ GLOBAL_VARS = {
     "ONRAMP_BACKUP_LOCATION_ENV",
     "ONRAMP_BACKUP_EXCLUSIONS",
     "ONRAMP_BACKUP_INCLUSIONS",
-    # Plex network
-    "PLEX_ALLOWED_NETWORKS",
 }
 
 # NFS-related variable prefixes -> services-enabled/.env.nfs
@@ -100,10 +98,12 @@ SERVICE_PREFIXES = {
     "CLOUDFLARED": "cloudflare-tunnel",
     "CLOUDFLARE_TUNNEL": "cloudflare-tunnel",
     "CODE_SERVER": "code-server",
+    "DOZZLE": "dozzle",
     "DRONECI": "droneci",
     "FACTORIO": "factorio",
     "FLAME": "flame",
     "FOUNDRYVTT": "foundryvtt",
+    "GF": "grafana",  # Grafana uses GF_ prefix for env vars
     "GHOST": "ghost",
     "GITEA": "gitea",
     "GOTIFY": "gotify",
@@ -129,6 +129,7 @@ SERVICE_PREFIXES = {
     "MEALIE": "mealie",
     "MINECRAFT": "minecraft",
     "MONOCKER": "monocker",
+    "N8N": "n8n",
     "NEXTCLOUD": "nextcloud",
     "NGINX_PROXY_MANAGER": "nginx-proxy-manager",
     "NOCODB": "nocodb",
@@ -160,6 +161,9 @@ SERVICE_PREFIXES = {
     "SCRUTINY": "scrutiny",
     "SEARXNG": "searxng",
     "SONARR": "sonarr",
+    "SQLITEWEB": "sqliteweb",
+    "SURREALDB": "surrealdb",
+    "SYNCTHING": "syncthing",
     "TAUTULLI": "tautulli",
     "TRAEFIK": "traefik",
     "TRANSMISSION": "transmission",
@@ -167,6 +171,8 @@ SERVICE_PREFIXES = {
     "TUBESYNC": "tubesync",
     "UNIFI": "unifi",
     "UPTIME_KUMA": "uptime-kuma",
+    "UPTIMEKUMA": "uptime-kuma",  # Variant without underscore
+    "AUTOKUMA": "uptime-kuma",  # AutoKuma companion tool
     "VAULTWARDEN": "vaultwarden",
     "WATCHTOWER": "watchtower",
     "WORDPRESS": "wordpress",
@@ -433,6 +439,13 @@ class EnvMigrator:
                     service_vars[service][var_name] = var_data
                 else:
                     custom_vars[var_name] = var_data
+
+        # Apply variable aliases - copy values for equivalent variables
+        # CF_API_EMAIL and DNS_CHALLENGE_API_EMAIL are typically the same
+        if "CF_API_EMAIL" not in global_vars and "DNS_CHALLENGE_API_EMAIL" in global_vars:
+            value, comments = global_vars["DNS_CHALLENGE_API_EMAIL"]
+            global_vars["CF_API_EMAIL"] = (value, ["# Copied from DNS_CHALLENGE_API_EMAIL"])
+            print("  Aliased: CF_API_EMAIL <- DNS_CHALLENGE_API_EMAIL")
 
         print(f"  Global vars: {len(global_vars)}")
         print(f"  NFS vars: {len(nfs_vars)}")
