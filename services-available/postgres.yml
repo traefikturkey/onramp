@@ -40,6 +40,7 @@ services:
       - POSTGRES_PASSWORD=${PG_PASS:?database password required}
       - POSTGRES_USER=${PG_USER:-admin}
       - POSTGRES_DB=${PG_DB:-admin}
+      - POSTGRES_MAX_CONNECTIONS=${PG_MAX_CONNECTIONS:-100} 
     ports:
       - 5432:5432
     healthcheck:
