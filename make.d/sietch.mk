@@ -116,8 +116,9 @@ scaffold-list: sietch-build ## List available scaffolds
 scaffold-check: sietch-build ## Check if a service has scaffold files
 	$(SIETCH_RUN) python /scripts/scaffold.py check $(SERVICE_PASSED_DNCASED)
 
-# Fix etc directory ownership if any files are root-owned (from docker runs)
-# Checks for ANY root-owned files, not just the directory itself
+# Manual utility: Fix etc directory ownership if any files are root-owned
+# Usage: make fix-etc-ownership <service>
+# Note: This is NOT run automatically - containers own their etc/ directories
 fix-etc-ownership:
 ifdef SERVICE_PASSED_DNCASED
 	@if [ -d "etc/$(SERVICE_PASSED_DNCASED)" ]; then \
@@ -128,15 +129,9 @@ ifdef SERVICE_PASSED_DNCASED
 	fi
 endif
 
-scaffold-build: sietch-build fix-etc-ownership ## Build scaffold for a service (e.g., make scaffold-build adguard)
-ifdef SERVICE_PASSED_DNCASED
-	$(SIETCH_RUN) python /scripts/scaffold.py build $(SERVICE_PASSED_DNCASED)
-else
-	@echo "Usage: make scaffold-build <service>"
-	@echo "Example: make scaffold-build adguard"
-endif
-
-# Fix all etc directories with any root-owned files
+# Manual utility: Fix all etc directories with any root-owned files
+# Usage: make fix-etc-ownership-all
+# Note: This is NOT run automatically - containers own their etc/ directories
 fix-etc-ownership-all:
 	@for dir in etc/*/; do \
 		if [ -d "$$dir" ]; then \
@@ -147,7 +142,23 @@ fix-etc-ownership-all:
 		fi; \
 	done
 
-scaffold-build-all: sietch-build fix-etc-ownership-all ## Build scaffolds for all enabled services
+scaffold-build: sietch-build ## Build scaffold for a service (e.g., make scaffold-build adguard)
+ifdef SERVICE_PASSED_DNCASED
+	$(SIETCH_RUN) python /scripts/scaffold.py build $(SERVICE_PASSED_DNCASED)
+else
+	@echo "Usage: make scaffold-build <service>"
+	@echo "Example: make scaffold-build adguard"
+endif
+
+scaffold-build-force: sietch-build ## Build scaffold, overwriting etc/ even if it has content
+ifdef SERVICE_PASSED_DNCASED
+	$(SIETCH_RUN) python /scripts/scaffold.py build --force $(SERVICE_PASSED_DNCASED)
+else
+	@echo "Usage: make scaffold-build-force <service>"
+	@echo "Example: make scaffold-build-force adguard"
+endif
+
+scaffold-build-all: sietch-build ## Build scaffolds for all enabled services
 	$(SIETCH_RUN) python /scripts/scaffold.py build --all
 
 scaffold-teardown: sietch-build ## Remove service env file (preserve etc/)

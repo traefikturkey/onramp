@@ -100,12 +100,14 @@ class Scaffolder:
         self,
         base_dir: str = "/app",
         executor: "CommandExecutor | None" = None,
+        force: bool = False,
     ):
         self.base_dir = Path(base_dir)
         self.scaffold_dir = self.base_dir / "services-scaffold"
         self.services_enabled = self.base_dir / "services-enabled"
         self.services_available = self.base_dir / "services-available"
         self.etc_dir = self.base_dir / "etc"
+        self.force = force
 
         # Track created files/directories for rollback on failure
         self._created_files: list[Path] = []
@@ -187,6 +189,24 @@ class Scaffolder:
         templates, statics = self.find_scaffold_files(service)
         manifest = self.find_manifest(service)
         return bool(templates or statics or manifest)
+
+    def etc_has_content(self, service: str) -> bool:
+        """Check if etc/<service>/ directory exists and has content.
+
+        Returns True if the directory exists and contains files/subdirectories
+        that were not created by scaffold (i.e., container-created content).
+        """
+        etc_service = self.etc_dir / service
+        if not etc_service.exists():
+            return False
+
+        # Check if there are any files or directories inside
+        try:
+            contents = list(etc_service.iterdir())
+            return len(contents) > 0
+        except PermissionError:
+            # Can't read directory - assume it has content to be safe
+            return True
 
     def get_output_path(self, service: str, source: Path) -> Path:
         """Determine output path for a scaffold file."""
@@ -520,6 +540,10 @@ class Scaffolder:
         """Build scaffold for a service.
 
         On failure, performs rollback of created files/directories.
+
+        If etc/<service>/ already has content (from container runs), etc/
+        operations are skipped to preserve container-managed files. Use
+        --force to override this behavior.
         """
         print(f"Building scaffold for '{service}'...")
 
@@ -528,12 +552,23 @@ class Scaffolder:
 
         success = True
 
+        # Check if etc/<service>/ already has content
+        skip_etc = False
+        if service != "onramp" and self.etc_has_content(service):
+            if self.force:
+                print(f"  Warning: etc/{service}/ has content, --force specified, proceeding...")
+            else:
+                print(f"  Skipping etc/{service}/ operations (directory has existing content)")
+                print(f"  Use --force to override and write to etc/{service}/ anyway")
+                skip_etc = True
+
         # Get scaffold files first (needed for volume creation check)
         templates, statics = self.find_scaffold_files(service)
 
         # Phase 0: Create etc/ volume directories from service YAML
         # Pass statics so it knows what scaffold will provide
-        if success and not self.create_etc_volumes(service, statics):
+        # Skip if etc/ already has content (unless force)
+        if success and not skip_etc and not self.create_etc_volumes(service, statics):
             success = False
 
         # Check if we have scaffold files (may have none, just volume creation)
@@ -556,18 +591,28 @@ class Scaffolder:
             return success
 
         # Phase 1: Render templates
+        # Skip templates targeting etc/ if skip_etc is True
         if success:
             for template in templates:
                 dest = self.get_output_path(service, template)
+                # Skip etc/ destinations if we're preserving existing content
+                if skip_etc and str(dest).startswith(str(self.etc_dir)):
+                    print(f"  Skipped (etc/ preserved): {template.name}")
+                    continue
                 if not self.render_template(template, dest):
                     success = False
                     break
                 self._track_created(dest)
 
         # Phase 2: Copy static files
+        # Skip statics targeting etc/ if skip_etc is True
         if success:
             for static in statics:
                 dest = self.get_output_path(service, static)
+                # Skip etc/ destinations if we're preserving existing content
+                if skip_etc and str(dest).startswith(str(self.etc_dir)):
+                    print(f"  Skipped (etc/ preserved): {static.name}")
+                    continue
                 if not self.copy_static(static, dest):
                     success = False
                     break
@@ -675,6 +720,11 @@ Examples:
         help="Build scaffolds for all enabled services",
     )
     parser.add_argument(
+        "--force",
+        action="store_true",
+        help="Force scaffold to write to etc/ even if it has existing content",
+    )
+    parser.add_argument(
         "--base-dir",
         default="/app",
         help="Base directory (default: /app)",
@@ -682,7 +732,7 @@ Examples:
 
     args = parser.parse_args()
 
-    scaffolder = Scaffolder(args.base_dir)
+    scaffolder = Scaffolder(args.base_dir, force=args.force)
 
     if args.action == "list":
         scaffolds = scaffolder.list_scaffolds()
