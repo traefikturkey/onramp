@@ -1,6 +1,7 @@
 networks:
   traefik:
     name: traefik
+    external: true
 
 # https://hub.docker.com/_/traefik
 
