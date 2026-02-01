@@ -276,6 +276,65 @@ operations:
     recursive: true
 ```
 
+## Env File Archive System
+
+When you disable a service, OnRamp preserves your configuration for future re-enablement:
+
+- **On disable:** `services-enabled/<service>.env` is moved to `services-enabled/archive/<service>.env`
+- **On re-enable:** You're prompted to restore the archived configuration
+- **Manual management:** Use `python sietch/scripts/services.py archive-env <service>` and `restore-env <service>`
+
+This ensures customizations (passwords, settings, paths) persist across disable/enable cycles. The archive directory is gitignored, keeping local configs out of version control.
+
+## Container-Created etc/ Protection
+
+The scaffolder protects directories that containers populate at runtime:
+
+- Scaffolding **skips** copying template/static files if `etc/<service>/` already contains files
+- This prevents overwriting container-generated configs (databases, caches, runtime settings)
+- Use `make scaffold-build-force <service>` to override this protection and re-scaffold
+- Applies to all file copy operations (.template rendering and static file copies)
+
+This safeguard prevents data loss when re-running scaffold operations on active services.
+
+## Scaffold Rollback on Failure
+
+If scaffolding fails midway, OnRamp automatically cleans up:
+
+- All created files and directories are **tracked** during execution
+- On failure: items are **removed in reverse order** (LIFO)
+- Directories are only removed if **empty** (preserves existing content)
+- Ensures clean state for retry attempts
+
+This prevents partial scaffolding from leaving orphaned files or broken configurations.
+
+## Auto-Volume Creation
+
+The scaffolder analyzes service YAML files to pre-create volume mount targets:
+
+- Parses `volumes:` directives for `./etc/<service>/*` patterns
+- Creates directories/files **before** container starts
+- Uses heuristics for file vs directory detection:
+  - Paths ending with `/` are directories
+  - Paths with file extensions (`.conf`, `.yaml`, etc.) are files
+  - Ambiguous paths default to directories
+- Rejects paths containing `..` (path traversal protection)
+
+This prevents permission errors when containers expect certain paths to exist at startup.
+
+## Template Rendering Phases
+
+Scaffolding executes in a strict order to ensure dependencies are met:
+
+1. **Create etc/ directories** from YAML volume analysis
+2. **Render .template files** with variable substitution
+3. **Copy static files** with no-clobber behavior
+4. **Execute scaffold.yml operations** (if present)
+5. **Auto-generate minimal .env** if no env.template exists
+6. **Display MESSAGE.txt** (if present)
+
+Each phase completes before the next begins. Failures trigger rollback of all previous phases, ensuring atomic scaffolding operations.
+
 ## Commands
 
 ```bash

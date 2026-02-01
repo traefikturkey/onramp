@@ -153,13 +153,127 @@ Example: `SYNCTHING_CONTAINER_NAME=sync` must be available during YAML parsing f
 
 ## Variable Precedence
 
-Variables are loaded in this order (later overrides earlier):
+Environment variables are resolved in a three-tier hierarchy, with later files overriding earlier ones:
 
-1. `services-enabled/.env` (base)
-2. `services-enabled/.env.nfs` (NFS paths)
-3. `services-enabled/.env.external` (external services)
-4. `services-enabled/<service>.env` (service-specific)
-5. `services-enabled/custom.env` (custom overrides)
+### Priority Levels
+
+**1. Global Defaults (Lowest Priority)**
+```
+services-enabled/.env
+```
+Base configuration loaded first. Contains core variables like `HOST_DOMAIN`, `HOST_NAME`, `TZ`, `PUID`, `PGID`.
+
+**2. Special-Purpose Files (Middle Priority)**
+```
+services-enabled/.env.nfs
+services-enabled/.env.external
+services-enabled/custom.env
+```
+Loaded after global defaults. NFS paths, external service URLs, and custom unmapped variables. Later files override earlier ones.
+
+**3. Service-Specific Configuration (Highest Priority)**
+```
+services-enabled/<service>.env
+```
+Always wins over global and special-purpose files. Each service's individual overrides take precedence.
+
+### Override Behavior
+
+If the same variable is defined in multiple files, the priority order determines which value is used:
+- Service-specific `.env` overrides all others
+- Special-purpose files (`.env.nfs`, `.env.external`, `custom.env`) override global `.env`
+- Global `.env` provides fallbacks for any undefined variables
+
+**Example:** If `TRAEFIK_LOG_LEVEL=INFO` in `services-enabled/.env` but `TRAEFIK_LOG_LEVEL=DEBUG` in `services-enabled/traefik.env`, the service-specific value (`DEBUG`) will be used.
+
+## Archive System
+
+When services are disabled, their environment configurations are preserved in an archive system to protect sensitive data and customizations across disable/enable cycles.
+
+### How Archiving Works
+
+When you disable a service:
+- Its `.env` file is moved to `services-enabled/archive/<service>.env`
+- All variables (passwords, API keys, custom settings) are preserved
+- When you re-enable the service, the scaffolder prompts to restore the archived configuration
+- This ensures sensitive data like database passwords and API tokens aren't lost
+
+### Manual Archive Operations
+
+```bash
+# Archive a service's current environment
+services.py archive-env SERVICE
+
+# Restore a service's environment from archive
+services.py restore-env SERVICE
+
+# Check the status of archived files
+services.py check-archive SERVICE
+```
+
+### Archive Directory Structure
+
+```
+services-enabled/
+├── archive/
+│   ├── plex.env          # Archived when disabled
+│   ├── jellyfin.env      # Archived when disabled
+│   └── paperless.env     # Archived when disabled
+├── plex.env              # Current (active services only)
+└── jellyfin.env
+```
+
+### Use Cases
+
+- **Temporary Service Disabling**: Archive preserves settings when you disable a service temporarily
+- **Experimentation**: Re-enable with original config without manual reconfiguration
+- **Password/Key Management**: Sensitive credentials are never lost
+- **Quick Recovery**: Restore exact configuration without remembering custom values
+
+## Auto-Generation
+
+The scaffolder ensures all services have a working environment file, even without explicit configuration.
+
+### How It Works
+
+When you enable a service, the scaffolder checks for a `services-scaffold/<service>/env.template`:
+
+- **If template exists**: Generates `services-enabled/<service>.env` from the template with variable substitution
+- **If no template**: Creates a minimal `services-enabled/<service>.env` automatically
+- This ensures the YAML `env_file:` directive always finds its file
+
+### Automatically Generated File Format
+
+For services without a scaffold template, an auto-generated `.env` looks like:
+
+```bash
+# Auto-generated for SERVICE
+# Created: 2024-01-15 10:30:00
+#
+# This file can be customized with service-specific variables.
+# For details, see docs/env-vars.md
+
+SERVICE_DOCKER_TAG=latest
+SERVICE_CONTAINER_NAME=service
+SERVICE_TRAEFIK_ENABLED=true
+```
+
+### Benefits
+
+- **No Boilerplate Required**: Services work immediately without requiring scaffold templates
+- **Flexible Customization**: Generated files can be edited to add service-specific variables
+- **Consistent Behavior**: All services follow the same env file pattern
+- **Self-Documenting**: Headers indicate the file was auto-generated and can be customized
+
+### Creating Custom Templates
+
+To replace auto-generation with custom configuration:
+
+1. Create `services-scaffold/<service>/env.template`
+2. Use `${VARIABLE_NAME}` for variable substitution
+3. Re-run `make scaffold-build <service>` to regenerate
+
+The custom template will then override auto-generation for that service.
 
 ## Default Values
 

@@ -69,6 +69,52 @@ Services needing configuration must have `services-scaffold/<service>/`:
 
 Without scaffolding, `make enable-service` only creates the symlink.
 
+## Service Linting
+
+Lint single service with strict mode and auto-fix:
+```bash
+services.py lint SERVICE --strict --fix
+```
+
+Lint all services and show outdated ones:
+```bash
+services.py lint --all --outdated
+```
+
+What linting checks:
+- Required labels (traefik.enable, watchtower.enable, autoheal)
+- Network configuration (must be on traefik network)
+- Volume mount patterns (./etc/ or ./media/ prefixes)
+- Metadata comments (description, config_version)
+- Port consistency (container port matches loadbalancer.server.port)
+
+## Config Versioning
+
+Services declare their configuration version with a YAML comment:
+```yaml
+# config_version: 2
+services:
+  myservice:
+    # ...
+```
+
+Version meanings:
+- v1 (legacy): Older services, may not follow current conventions
+- v2 (current): Follows all current standards and conventions
+
+The linter's `--outdated` flag identifies v1 services needing upgrade.
+
+## Archive System
+
+When services are disabled, their .env files are preserved in `services-enabled/archive/`. On re-enable, the scaffolder prompts to restore the archived config:
+
+```
+Found archived config for myservice.
+Restore previous configuration? [Y/n]
+```
+
+This preserves customizations (passwords, settings) across disable/enable cycles.
+
 ## Validation
 
 ```bash

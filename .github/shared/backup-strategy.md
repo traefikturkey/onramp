@@ -18,14 +18,14 @@ The following are excluded to reduce backup size:
 
 | Pattern | Reason |
 |---------|--------|
-| `*.log`, `logs/`, `Logs/` | Regeneratable, can be large |
-| `cache/`, `Cache/`, `.cache/` | Regeneratable |
-| `.git/objects/pack/` | Large git data, regeneratable |
-| `*.iso`, `*.img`, `*.qcow2` | Large binary artifacts |
-| `*.safetensors`, `*.gguf` | AI model files (downloadable) |
+| `.keep`, `.gitkeep` | Git placeholders |
+| `*.log`, `logs/`, `Logs/` | Log files (regeneratable, can be large) |
+| `cache/`, `Cache/`, `.cache/`, `__pycache__/` | Cache directories (regeneratable) |
+| `etc/plex/Library` | Plex library metadata (huge, regeneratable) |
+| `*.iso`, `*.img`, `*.qcow2` | Disk images (large binary artifacts) |
+| `*.safetensors`, `*.gguf`, `pytorch_model.bin` | AI model files (downloadable) |
 | `etc/games/` | Game server binaries (downloadable) |
-| `etc/plex/Library` | Plex library metadata (regeneratable) |
-| `etc/*/db/journal/` | Database journals (part of DB backup) |
+| `db/journal/`, `*.db-journal`, `*.db-wal` | Database journals and write-ahead logs |
 | `tmp/`, `temp/`, `*.tmp` | Temporary files |
 
 ### Database Data
@@ -71,6 +71,21 @@ make list-nfs-backups
 make restore-nfs-backup
 ```
 
+### Service-Specific Backups
+
+```bash
+# Backup single service configuration
+make create-backup-service SERVICE=plex
+
+# Restore single service from backup
+make restore-backup-service SERVICE=plex
+```
+
+Service-specific backups include:
+- `services-enabled/<service>.env`
+- `etc/<service>/` directory
+- Relevant override files
+
 ### Restore
 
 ```bash
@@ -80,6 +95,18 @@ make restore-backup
 # Restore specific backup
 make restore-backup FILE=backups/onramp-config-backup-hostname-24-12-14-1200.tar.gz
 ```
+
+## Backup Naming Convention
+
+Backups follow the pattern:
+
+```
+onramp-config-backup-{hostname}-{YY-MM-DD-HHMM}.tar.gz
+```
+
+Example: `onramp-config-backup-homelab-24-12-14-1200.tar.gz`
+
+The hostname helps identify backups from different servers when stored in shared locations.
 
 ## Full Backup Procedure
 

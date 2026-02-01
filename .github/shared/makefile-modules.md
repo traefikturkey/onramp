@@ -29,17 +29,25 @@ OnRamp uses modular Makefiles in `make.d/` to organize Docker Compose, service l
 ### Environment
 | Command | Description |
 |---------|-------------|
+| `make env-wizard` | Interactive setup wizard for required vars |
+| `make env-wizard-check` | Check if configuration is complete |
 | `make edit-env-onramp` | Edit global .env |
 | `make edit-env NAME` | Edit service .env |
 | `make edit-env-nfs` | Edit NFS config |
 | `make edit-env-external` | Edit external services |
+| `make env` | Show all environment variables |
+| `make fix-env-permissions` | Fix environment file permissions |
 
 ### Scaffolding
 | Command | Description |
 |---------|-------------|
 | `make scaffold-build NAME` | Re-run scaffold templates |
+| `make scaffold-build-force NAME` | Force rebuild scaffold templates |
+| `make scaffold-build-all` | Rebuild all scaffold templates |
 | `make scaffold-list` | List services with scaffolds |
 | `make scaffold-check NAME` | Validate scaffold exists |
+| `make scaffold-nuke NAME` | Remove scaffold for service |
+| `make create-scaffold-env NAME` | Create empty scaffold environment |
 
 ### Listing
 | Command | Description |
@@ -73,6 +81,55 @@ OnRamp uses modular Makefiles in `make.d/` to organize Docker Compose, service l
 | `make test` | Run pytest suite |
 | `make help` | Show all available targets |
 
+### Service Creation
+| Command | Description |
+|---------|-------------|
+| `make create-service NAME` | Generate new service YAML from template |
+| `make create-game NAME` | Generate game server from template |
+| `make edit-service NAME` | Edit existing service YAML |
+| `make generate-service-md` | Regenerate SERVICES.md |
+
+### Service Migrations
+| Command | Description |
+|---------|-------------|
+| `make migrate-service-list` | List available service migrations |
+| `make migrate-service NAME` | Migrate env vars for specific service |
+| `make migrate-service-all` | Run all pending migrations |
+| `make migrate-service-dry-run [NAME]` | Preview migration |
+
+### Cleanup/Reset
+| Command | Description |
+|---------|-------------|
+| `make prune` | Remove unused Docker images |
+| `make prune-force` | Force remove all unused images |
+| `make remove-etc NAME` | Remove etc/<service>/ directory |
+| `make reset-etc NAME` | Restore etc/ from git |
+| `make fix-etc-ownership NAME` | Fix root-owned files in etc/ |
+| `make fix-etc-ownership-all` | Fix all etc/ directories |
+
+### Cloudflare Tunnel
+| Command | Description |
+|---------|-------------|
+| `make create-tunnel` | Create Cloudflare tunnel and DNS |
+| `make remove-tunnel` | Remove tunnel and DNS entry |
+| `make show-tunnel` | Show tunnel status |
+| `make list-cloudflare-dns` | List all DNS records |
+
+### N8N Workflows
+| Command | Description |
+|---------|-------------|
+| `make n8n-export-workflows` | Export all workflows |
+| `make n8n-import-workflows` | Import workflows |
+| `make n8n-export-credentials` | Export credentials (encrypted) |
+| `make n8n-import-credentials` | Import credentials |
+
+### Validation
+| Command | Description |
+|---------|-------------|
+| `make check-cf` | Validate Cloudflare configuration |
+| `make check-authentik` | Validate Authentik configuration |
+| `make check-authelia` | Validate Authelia JWT secret |
+
 ---
 
 ## Structure
@@ -95,10 +152,12 @@ The root `Makefile` sets global variables and includes all modules, preventing d
 | `backup.mk` | Backup/restore configuration and databases |
 | `database.mk` | MariaDB operations (dump, restore, init) |
 | `cloudflare.mk` | Cloudflare DNS API operations |
+| `traefik.mk` | Cloudflare tunnel and DNS operations |
 | `install.mk` | Installation and setup (Docker, Compose, dependencies) |
 | `cleanup.mk` | Clean up containers, volumes, orphans |
 | `utils.mk` | Utility commands (logs, editor, help) |
 | `help.mk` | Help text and documentation |
+| `n8n.mk` | N8N workflow export/import |
 
 ## Conventions
 

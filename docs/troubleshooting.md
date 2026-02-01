@@ -172,6 +172,70 @@ For manual database creation:
 make mariadb-create-db servicename
 ```
 
+## Root-Owned Files in etc/
+
+Files created by containers running as root can't be modified by the user.
+
+**Solution:**
+```bash
+# Fix ownership for single service
+make fix-etc-ownership SERVICE
+
+# Fix all etc/ directories
+make fix-etc-ownership-all
+```
+
+This runs `chown -R $PUID:$PGID` on the affected directories.
+
+## Service Migration Issues
+
+When service env variable names change between versions:
+
+```bash
+# List available migrations
+make migrate-service-list
+
+# Preview what would change
+make migrate-service-dry-run SERVICE
+
+# Run migration for specific service
+make migrate-service SERVICE
+
+# Run all pending migrations
+make migrate-service-all
+```
+
+Migrations handle variable renames (e.g., `SAMBA_SHARES` → `SAMBA_SHARES_CONFIG`).
+
+## Cloudflare Configuration
+
+Validate Cloudflare API credentials:
+```bash
+make check-cf
+```
+
+This verifies:
+- `CF_API_EMAIL` is set
+- `CF_DNS_API_TOKEN` is valid
+- Token has correct zone permissions
+
+## Restore Archived Env
+
+When re-enabling a service, you may want the previous configuration:
+
+```bash
+# List archived configs
+ls services-enabled/archive/
+
+# Restore using Python script
+services.py restore-env SERVICE
+
+# Or manually
+cp services-enabled/archive/SERVICE.env services-enabled/SERVICE.env
+```
+
+The scaffolder automatically prompts to restore archived configs during `make enable-service`.
+
 ## Getting More Help
 
 1. Check service-specific documentation in the yml file comments

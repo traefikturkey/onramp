@@ -89,6 +89,16 @@ make scaffold-check <service> # Verify scaffold exists
 make scaffold-build <service> # Run scaffolding manually
 ```
 
+## Advanced Behaviors
+
+**Force Override**: Use `make scaffold-build-force SERVICE` to bypass etc/ protection and regenerate all scaffold content even if etc/<service>/ already has content.
+
+**Rollback on Failure**: If scaffolding fails, all created files/directories are removed in reverse order. Directories are only removed if empty.
+
+**Auto-Volume Creation**: Scaffolder parses service YAML for `./etc/<service>/*` mounts and pre-creates the targets. Paths ending with `/` or without extensions become directories; paths with extensions become empty files.
+
+**No-Clobber Default**: Existing files in etc/<service>/ are never overwritten during normal scaffolding. This preserves manual edits and container-generated configs.
+
 ## Reference
 
 See [shared context](../shared/scaffold-templates.md) for complete scaffold.yml operations and advanced patterns.

@@ -312,6 +312,58 @@ Files are copied with **no-clobber** — existing files in `etc/<service>/` are 
 
 Operations in `scaffold.yml` respect `skip_if_exists` flags for the same reason.
 
+## Advanced Behaviors
+
+### Rollback Mechanism
+
+The scaffolder tracks all created files and directories during execution. If any phase fails:
+1. Created files are deleted in reverse order
+2. Created directories are removed only if empty
+3. Env file is removed from services-enabled/
+4. Original state is preserved
+
+This ensures no partial scaffolds leave the system in an inconsistent state.
+
+### etc/ Protection Logic
+
+The scaffolder protects container-generated content in `etc/<service>/`:
+
+```python
+# Pseudocode for protection check
+if etc_dir.exists() and any(etc_dir.iterdir()):
+    # Skip copying templates - container content exists
+    # Use scaffold-build-force to override
+```
+
+This prevents overwriting configs that containers generate on first run (databases, caches, runtime configs).
+
+### Auto-Volume Creation Algorithm
+
+When analyzing service YAML for volume mounts:
+
+1. Parse all `volumes:` entries for `./etc/<service>/*` patterns
+2. Classify each path:
+   - Ends with `/` → directory
+   - Has file extension (`.conf`, `.yml`, etc.) → file
+   - Otherwise → directory (safe default)
+3. Create targets before scaffold operations
+4. Skip if target already exists (no-clobber)
+5. Reject paths with `..` (security)
+
+### Phase Execution Order
+
+Template rendering follows strict phases:
+
+1. **Pre-create volumes** - Create etc/ structure from YAML analysis
+2. **Render env.template** - Generate services-enabled/<service>.env
+3. **Render *.template** - Process templates to etc/<service>/
+4. **Copy static files** - Copy non-template files (no-clobber)
+5. **Execute scaffold.yml** - Run manifest operations
+6. **Auto-generate .env** - Create minimal env if no template
+7. **Display MESSAGE.txt** - Show post-enable instructions
+
+Each phase must complete before the next begins. Failures trigger rollback from current phase backward.
+
 ## Full Documentation
 
 For detailed scaffolding documentation, see `docs/scaffolding.md` in the repository.
