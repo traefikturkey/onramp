@@ -12,6 +12,41 @@ applyTo: "services-available/**/*.yml"
 - Include Traefik labels: `websecure` entrypoint, joyride host label, watchtower/autoheal flags
 - Verify container port matches `loadbalancer.server.port` in Traefik labels
 
+## Service Metadata (YAML Comments)
+
+Services can declare optional and required dependencies using YAML comment headers:
+
+### Optional Services
+
+Offer related services during `make enable-service`:
+
+```yaml
+# optional-service: ollama
+# optional-prompt: Enable Ollama for AI document processing?
+services:
+  paperless-ngx:
+    # ...
+```
+
+### Optional Groups (Multiple Services)
+
+```yaml
+# optional-group: ai-features
+# optional-group-prompt: Enable AI features (Ollama + OpenWebUI)?
+# optional-group-services: ollama, openwebui
+```
+
+### Required Dependencies (depends_on)
+
+Cross-service dependencies in `depends_on` are automatically enabled:
+
+```yaml
+services:
+  paperless-ngx:
+    depends_on:
+      - ollama  # If defined in ollama.yml, auto-enabled first
+```
+
 ## Database Connections
 
 If service has a dedicated database container (e.g., `db` or `<service>-db`):

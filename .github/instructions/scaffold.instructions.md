@@ -52,7 +52,15 @@ ${VAR:-default}     # Use default if unset
 ${VAR:?error msg}   # Error if unset
 ```
 
-**Password auto-generation:** Variables containing `_PASS`, `_PASSWORD`, `_SECRET`, `_KEY`, or `_TOKEN` with empty defaults get auto-generated 32-character random values.
+**Password auto-generation:** Variables containing `_PASS`, `_PASSWORD`, `_SECRET`, `_KEY`, or `_TOKEN` **without defaults** get auto-generated 32-character random values. Example:
+
+```bash
+# Auto-generates if MYSERVICE_DB_PASSWORD is unset:
+DB_PASSWORD=${MYSERVICE_DB_PASSWORD}
+
+# Does NOT auto-generate (has default):
+DB_PASSWORD=${MYSERVICE_DB_PASSWORD:-changeme}
+```
 
 ## Troubleshooting
 

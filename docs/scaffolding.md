@@ -124,6 +124,78 @@ Default values use shell syntax:
 DOCKER_TAG=${PLEX_DOCKER_TAG:-latest}
 ```
 
+## Password Auto-Generation
+
+Variables containing password-like patterns are **automatically generated** with secure 32-character random values when:
+- The variable is **unset** in the environment
+- The variable has **no default value**
+
+**Detected patterns:**
+- `_PASS`, `_PASSWORD`, `_SECRET`, `_KEY`, `_TOKEN`
+- `PASS_`, `PASSWORD_`, `SECRET_`, `KEY_`, `TOKEN_`
+
+**Example env.template:**
+```bash
+# These will auto-generate if unset:
+DB_PASSWORD=${MYSERVICE_DB_PASSWORD}
+SECRET_KEY=${MYSERVICE_SECRET_KEY}
+API_TOKEN=${MYSERVICE_API_TOKEN}
+
+# This will NOT auto-generate (has default):
+ADMIN_PASSWORD=${MYSERVICE_ADMIN_PASSWORD:-changeme}
+```
+
+When scaffolded, you'll see:
+```
+Generated secure value for MYSERVICE_DB_PASSWORD
+Generated secure value for MYSERVICE_SECRET_KEY
+Generated secure value for MYSERVICE_API_TOKEN
+```
+
+## Service Dependencies
+
+### Required Dependencies (depends_on)
+
+When a service's YAML file includes `depends_on` referencing services from other YAML files, those dependencies are **automatically enabled first**:
+
+```yaml
+# paperless-ngx.yml
+services:
+  paperless-ngx:
+    depends_on:
+      - ollama          # Defined in ollama.yml → auto-enabled
+      - paperless-db    # Same file → not re-enabled
+```
+
+Running `make enable-service paperless-ngx` will:
+```
+Enabling required dependency: ollama
+Enabling paperless-ngx...
+```
+
+### Optional Services
+
+Services can declare optional related services that users are prompted to enable:
+
+**Single optional service:**
+```yaml
+# optional-service: ollama
+# optional-prompt: Enable Ollama for AI document processing?
+services:
+  paperless-ngx:
+    # ...
+```
+
+**Optional group (multiple services):**
+```yaml
+# optional-group: ai-features
+# optional-group-prompt: Enable AI features (Ollama + OpenWebUI)?
+# optional-group-services: ollama, openwebui
+services:
+  paperless-ngx:
+    # ...
+```
+
 ## Manifest Operations (scaffold.yml)
 
 For complex operations beyond file copies (key generation, downloads, permissions), use a `scaffold.yml` manifest:
