@@ -34,19 +34,9 @@ pull-service:
 #########################################################
 
 .PHONY: enable-service build
-enable-service: services-enabled/$(SERVICE_PASSED_DNCASED).yml
-
-services-enabled/$(SERVICE_PASSED_DNCASED).yml:
+enable-service:
 ifneq (,$(wildcard ./services-available/$(SERVICE_PASSED_DNCASED).yml))
-	@echo "Enabling $(SERVICE_PASSED_DNCASED)..."
-	@ln -s ../services-available/$(SERVICE_PASSED_DNCASED).yml ./services-enabled/$(SERVICE_PASSED_DNCASED).yml || true
-	@# Check if archived .env exists and prompt to restore
-	@if $(SIETCH_RUN) python /scripts/services.py check-archive '$(SERVICE_PASSED_DNCASED)' 2>/dev/null | grep -q "yes"; then \
-		echo ""; \
-		echo "📦 Found archived .env file for $(SERVICE_PASSED_DNCASED)"; \
-		$(SIETCH_RUN) python /scripts/services.py restore-env '$(SERVICE_PASSED_DNCASED)'; \
-	fi
-	$(MAKE) scaffold-build $(SERVICE_PASSED_DNCASED)
+	@$(SIETCH_RUN) python /scripts/enable_service.py enable '$(SERVICE_PASSED_DNCASED)'
 	@$(MAKE) fix-env-permissions
 else
 	@echo "No such service file ./services-available/$(SERVICE_PASSED_DNCASED).yml!"
