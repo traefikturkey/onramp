@@ -20,6 +20,11 @@ import shutil
 import sys
 from pathlib import Path
 
+try:
+    import yaml
+except ImportError:
+    yaml = None
+
 
 class ServiceManager:
     """Manages service discovery and metadata."""
@@ -48,34 +53,88 @@ class ServiceManager:
             "config_version": 1,  # Default to v1 if not specified
             "database": None,
             "database_name": None,
+            "optional_services": [],
+            "optional_groups": [],
         }
 
         try:
             with open(yml_path, "r", encoding="utf-8") as f:
-                for line in f:
-                    line = line.strip()
-                    # Parse all comment lines in the file
-                    if not line.startswith("#"):
-                        continue
+                lines = [line.rstrip() for line in f]
 
-                    if line.startswith("# description:"):
-                        metadata["description"] = line.split(":", 1)[1].strip()
-                    elif line.startswith("# category:"):
-                        metadata["category"] = line.split(":", 1)[1].strip()
-                    elif line.startswith("# skip_services_file:"):
-                        val = line.split(":", 1)[1].strip().lower()
-                        metadata["skip_services_file"] = val in ("true", "yes", "1")
-                    elif line.startswith("# config_version:"):
-                        try:
-                            metadata["config_version"] = int(line.split(":", 1)[1].strip())
-                        except ValueError:
-                            metadata["config_version"] = 1
-                    elif line.startswith("# database:"):
-                        metadata["database"] = line.split(":", 1)[1].strip()
-                    elif line.startswith("# database_name:"):
-                        metadata["database_name"] = line.split(":", 1)[1].strip()
-                    elif line.startswith("# http"):
-                        metadata["url"] = line[2:].strip()
+            # Parse all comment lines in the file
+            i = 0
+            while i < len(lines):
+                line = lines[i].strip()
+
+                if not line.startswith("#"):
+                    i += 1
+                    continue
+
+                if line.startswith("# description:"):
+                    metadata["description"] = line.split(":", 1)[1].strip()
+                elif line.startswith("# category:"):
+                    metadata["category"] = line.split(":", 1)[1].strip()
+                elif line.startswith("# skip_services_file:"):
+                    val = line.split(":", 1)[1].strip().lower()
+                    metadata["skip_services_file"] = val in ("true", "yes", "1")
+                elif line.startswith("# config_version:"):
+                    try:
+                        metadata["config_version"] = int(line.split(":", 1)[1].strip())
+                    except ValueError:
+                        metadata["config_version"] = 1
+                elif line.startswith("# database:"):
+                    metadata["database"] = line.split(":", 1)[1].strip()
+                elif line.startswith("# database_name:"):
+                    metadata["database_name"] = line.split(":", 1)[1].strip()
+                elif line.startswith("# optional-service:"):
+                    service_name = line.split(":", 1)[1].strip()
+                    prompt = None
+                    # Check next line for prompt
+                    if i + 1 < len(lines):
+                        next_line = lines[i + 1].strip()
+                        if next_line.startswith("# optional-prompt:"):
+                            prompt = next_line.split(":", 1)[1].strip()
+                            i += 1
+                    # Default prompt if not provided
+                    if not prompt:
+                        prompt = f"Enable {service_name}?"
+                    metadata["optional_services"].append({
+                        "service": service_name,
+                        "prompt": prompt,
+                    })
+                elif line.startswith("# optional-group:"):
+                    group_name = line.split(":", 1)[1].strip()
+                    group_prompt = None
+                    group_services = []
+                    # Look ahead for prompt and services
+                    j = i + 1
+                    while j < len(lines):
+                        next_line = lines[j].strip()
+                        if not next_line.startswith("# optional-"):
+                            break
+                        if next_line.startswith("# optional-group-prompt:"):
+                            group_prompt = next_line.split(":", 1)[1].strip()
+                            j += 1
+                        elif next_line.startswith("# optional-group-services:"):
+                            services_str = next_line.split(":", 1)[1].strip()
+                            # Parse comma-separated services, strip whitespace
+                            group_services = [s.strip() for s in services_str.split(",")]
+                            j += 1
+                        else:
+                            break
+                    # Default prompt if not provided
+                    if not group_prompt:
+                        group_prompt = f"Enable {group_name}?"
+                    metadata["optional_groups"].append({
+                        "name": group_name,
+                        "prompt": group_prompt,
+                        "services": group_services,
+                    })
+                    i = j - 1  # Skip to where we left off
+                elif line.startswith("# http"):
+                    metadata["url"] = line[2:].strip()
+
+                i += 1
         except Exception:
             pass
 
@@ -298,12 +357,76 @@ class ServiceManager:
         """List all archived .env files."""
         if not self.archive_dir.exists():
             return []
-        
+
         archived = []
         for f in self.archive_dir.iterdir():
             if f.is_file() and f.suffix == ".env":
                 archived.append(self._strip_extension(f.name))
         return sorted(archived)
+
+    def get_depends_on(self, service: str) -> list[str]:
+        """Parse and return only EXTERNAL dependencies for a service.
+
+        External dependencies are services referenced in depends_on that are
+        NOT defined in the same YAML file (i.e., they're in other service files).
+
+        Args:
+            service: Service name (without .yml extension)
+
+        Returns:
+            Deduplicated sorted list of external service dependencies.
+            Returns empty list if service not found, no YAML, or no external deps.
+        """
+        yml_path = self.services_available / f"{service}.yml"
+
+        if not yml_path.exists():
+            return []
+
+        if yaml is None:
+            return []
+
+        try:
+            with open(yml_path, "r", encoding="utf-8") as f:
+                data = yaml.safe_load(f)
+        except Exception:
+            return []
+
+        if not data or "services" not in data:
+            return []
+
+        services_dict = data.get("services", {})
+        if not isinstance(services_dict, dict):
+            return []
+
+        # Collect all service names defined in this file
+        local_services = set(services_dict.keys())
+
+        # Collect all depends_on entries from all services in this file
+        all_deps = set()
+        for service_def in services_dict.values():
+            if not isinstance(service_def, dict):
+                continue
+
+            depends_on = service_def.get("depends_on")
+            if depends_on is None:
+                continue
+
+            # Handle both list format and dict format (for condition syntax)
+            if isinstance(depends_on, list):
+                # List format: [service1, service2]
+                for dep in depends_on:
+                    if isinstance(dep, str):
+                        all_deps.add(dep)
+            elif isinstance(depends_on, dict):
+                # Dict format: {service1: {condition: service_healthy}, service2: {...}}
+                for dep in depends_on.keys():
+                    if isinstance(dep, str):
+                        all_deps.add(dep)
+
+        # Filter to only external dependencies (not defined locally)
+        external_deps = all_deps - local_services
+
+        return sorted(external_deps)
 
 
 def main():
