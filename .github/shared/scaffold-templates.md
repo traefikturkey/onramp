@@ -18,7 +18,7 @@ OnRamp uses a convention-based templating system in `services-scaffold/` to auto
 
 ## Service Metadata (YAML Comments)
 
-Services can declare optional dependencies and required dependencies using metadata in YAML comment headers. This enables intelligent enablement workflows.
+Services can declare optional dependencies and required dependencies using metadata in YAML comment headers. This enables intelligent enablement workflows where users are prompted to enable related services.
 
 ### Optional Service Metadata
 
@@ -31,6 +31,7 @@ Declare related services that should be offered as optional when enabling this s
 services:
   paperless-ngx:
     image: paperless-ngx:latest
+    # ...
 ```
 
 **Grouped Optional Services (Multiple Services with One Prompt):**
@@ -41,16 +42,22 @@ services:
 services:
   paperless-ngx:
     image: paperless-ngx:latest
+    # ...
 ```
 
 Metadata syntax:
 - `# optional-service: <service-name>` — Declare a single optional service
-- `# optional-prompt: <text>` — Custom prompt text (defaults to "Enable {service}?")
+- `# optional-prompt: <text>` — Custom prompt text for the optional service (optional, defaults to "Enable {service}?")
 - `# optional-group: <group-name>` — Declare a named group of optional services
-- `# optional-group-prompt: <text>` — Custom prompt text for the group
-- `# optional-group-services: service1, service2` — Comma-separated service names
+- `# optional-group-prompt: <text>` — Custom prompt text for the group (optional, defaults to "Enable {group}?")
+- `# optional-group-services: service1, service2, service3` — Comma-separated service names in the group (whitespace trimmed)
 
-### Required Dependencies (depends_on)
+Behavior:
+- Multiple optional services and groups can be declared in a single service file
+- During `make enable-service`, users are prompted for each optional service/group
+- Service names in `optional-group-services` can include or exclude whitespace (e.g., `ollama,openwebui` or `ollama, openwebui`)
+
+### Required Dependencies
 
 Services can declare dependencies on other services using Docker Compose `depends_on`. Cross-service dependencies are automatically resolved:
 
@@ -68,6 +75,7 @@ Behavior:
 - If a dependency is defined in another service file (e.g., `ollama.yml`), it is automatically enabled
 - Cross-file dependencies print status: "Enabling required dependency: {service}"
 - Same-file dependencies are not re-enabled (they're part of the same enable operation)
+- Enables upstream dependencies before the requested service
 
 ### Auto-Generation of .env Files
 

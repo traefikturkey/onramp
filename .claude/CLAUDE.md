@@ -148,6 +148,63 @@ cat backups/environments-enabled.legacy/.env
 - Service YAMLs: Include `env_file:` directive pointing to `./services-enabled/<service>.env`
 - Services with databases: Use dedicated containers (e.g., `db` or `<service>-db`)
 
+## Service Dependencies and Metadata
+
+Services can declare optional related services and required dependencies using YAML comment metadata. This enables intelligent service enablement workflows.
+
+### Optional Services
+
+Services can offer optional features by declaring related services that users can choose to enable together:
+
+**Individual Optional Service:**
+```yaml
+# optional-service: ollama
+# optional-prompt: Enable Ollama for AI document processing?
+services:
+  paperless:
+    # ...
+```
+
+**Grouped Optional Services:**
+```yaml
+# optional-group: ai-features
+# optional-group-prompt: Enable AI features (Ollama + OpenWebUI)?
+# optional-group-services: ollama, openwebui
+services:
+  paperless:
+    # ...
+```
+
+Behavior:
+- Multiple optional services and groups can be defined in a single file
+- If `optional-prompt` is omitted, defaults to "Enable {service}?"
+- If `optional-group-prompt` is omitted, defaults to "Enable {group}?"
+- Service names in `optional-group-services` are comma-separated with trimmed whitespace
+- When you run `make enable-service <name>`, you're prompted to enable optional services
+
+### Required Dependencies
+
+The `depends_on` key in Docker Compose YAML is automatically resolved for cross-service dependencies. If a service depends on another service defined in a different YAML file, that dependency will be automatically enabled.
+
+Example:
+```yaml
+services:
+  paperless-ngx:
+    depends_on:
+      - ollama  # defined in ollama.yml, not this file
+```
+
+Running `make enable-service paperless-ngx` will automatically enable `ollama` first, printing:
+```
+Enabling required dependency: ollama
+```
+
+**Behavior:**
+- Dependencies are resolved before enabling the requested service
+- Only dependencies from other service files trigger auto-enable
+- Same-file dependencies (already enabled together) are not re-enabled
+- Prints status message for each auto-enabled service
+
 ## How Environment Variables Work
 
 OnRamp uses two mechanisms for environment variables:
