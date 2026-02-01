@@ -97,22 +97,23 @@ class EnableServiceWizard:
         print(f"Successfully enabled {service}")
         return True
 
-    def enable_service(self, service: str) -> bool:
+    def enable_service(self, service: str, _is_root: bool = True) -> bool:
         """Main entry point - enable a service with dependency resolution.
 
         Args:
             service: Service name to enable
+            _is_root: Internal flag - True if this is the top-level call (not recursive)
 
         Returns:
             True if successful (including if already enabled), False on error
         """
         # Check if already enabled OR already processed this session
         if self._is_enabled(service):
-            print(f"Service '{service}' is already enabled")
+            if _is_root:
+                print(f"Service '{service}' is already enabled")
             return True
 
         if service in self.enabled_this_session:
-            print(f"Service '{service}' already processed this session")
             return True
 
         # Add to tracking to prevent loops
@@ -122,21 +123,31 @@ class EnableServiceWizard:
         service_yml = self.services_available / f"{service}.yml"
         if not service_yml.exists():
             print(f"Error: Service '{service}' not found in services-available")
+            print(f"  Run 'make list-services' to see available services")
             return False
 
         # Get external dependencies
         dependencies = self.manager.get_depends_on(service)
+        deps_to_enable = [dep for dep in dependencies if not self._is_enabled(dep)]
 
         # Enable dependencies first
-        for dep in dependencies:
-            if not self._is_enabled(dep):
-                print(f"Enabling required dependency: {dep}")
-                if not self.enable_service(dep):
-                    print(f"Error: Failed to enable dependency '{dep}' for '{service}'")
+        if deps_to_enable:
+            if _is_root:
+                print(f"\n=== Resolving Dependencies for {service} ===")
+            for dep in deps_to_enable:
+                print(f"  Enabling required dependency: {dep}")
+                if not self.enable_service(dep, _is_root=False):
+                    print(f"Error: Failed to enable required dependency '{dep}'")
+                    print(f"  Cannot enable '{service}' without its dependencies.")
+                    print(f"  To retry: make enable-service {dep}")
                     return False
 
         # Get metadata for optional services/groups
         metadata = self.manager._parse_metadata(service_yml)
+        has_optionals = metadata.get("optional_groups") or metadata.get("optional_services")
+
+        if has_optionals and _is_root:
+            print(f"\n=== Optional Services for {service} ===")
 
         # Process optional groups
         for group in metadata.get("optional_groups", []):
@@ -146,7 +157,7 @@ class EnableServiceWizard:
 
             if self._prompt_yes_no(group_prompt, default=False):
                 for group_service in group_services:
-                    if not self.enable_service(group_service):
+                    if not self.enable_service(group_service, _is_root=False):
                         print(f"Warning: Failed to enable optional service '{group_service}' from group '{group_name}'")
 
         # Process optional services
@@ -155,11 +166,23 @@ class EnableServiceWizard:
             service_prompt = opt_service.get("prompt", f"Enable {service_name}?")
 
             if self._prompt_yes_no(service_prompt, default=False):
-                if not self.enable_service(service_name):
+                if not self.enable_service(service_name, _is_root=False):
                     print(f"Warning: Failed to enable optional service '{service_name}'")
 
         # Finally, enable this service
-        return self._do_enable(service)
+        if _is_root:
+            print(f"\n=== Enabling {service} ===")
+
+        success = self._do_enable(service)
+
+        # Show completion summary for root call
+        if success and _is_root and len(self.enabled_this_session) > 1:
+            print(f"\n=== Summary ===")
+            print(f"Services enabled this session:")
+            for s in sorted(self.enabled_this_session):
+                print(f"  - {s}")
+
+        return success
 
 
 def main():

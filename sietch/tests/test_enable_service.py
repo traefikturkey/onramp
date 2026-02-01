@@ -400,11 +400,8 @@ class TestDependencyResolution:
         wizard = EnableServiceWizard(str(tmp_path))
         result = wizard.enable_service("a")
 
-        # Should succeed without infinite loop
+        # Should succeed without infinite loop (circular deps handled via session tracking)
         assert result is True
-        captured = capsys.readouterr()
-        # Should see "already processed" message
-        assert "already processed this session" in captured.out or "already enabled" in captured.out
 
     def test_failed_dependency_returns_false(self, tmp_path, capsys):
         """Should return False if dependency fails to enable."""
@@ -427,7 +424,7 @@ class TestDependencyResolution:
 
         assert result is False
         captured = capsys.readouterr()
-        assert "Failed to enable dependency" in captured.out
+        assert "Failed to enable required dependency" in captured.out
 
 
 class TestOptionalServices:
@@ -756,12 +753,10 @@ class TestSessionTracking:
         # Remove symlink to simulate "not enabled"
         (services_enabled / "service1.yml").unlink()
 
-        # Try to enable again
+        # Try to enable again - should succeed silently (already in session tracking)
         result = wizard.enable_service("service1")
 
         assert result is True
-        captured = capsys.readouterr()
-        assert "already processed this session" in captured.out
 
 
 class TestComplexScenarios:
