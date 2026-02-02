@@ -1,0 +1,8 @@
+{
+  "sync.target": 10,
+  "sync.10.url": "${JOPLIN_SERVER_URL}",
+  "sync.10.username": "${JOPLIN_USERNAME}",
+  "sync.10.password": "${JOPLIN_PASSWORD}",
+  "api.port": 41185,
+  "api.token": "auto"
+}

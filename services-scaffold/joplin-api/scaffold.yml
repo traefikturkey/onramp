@@ -1,0 +1,13 @@
+version: "1"
+
+operations:
+  # Create config directory for Joplin sync configuration
+  # Mounted to /root/joplin in container
+  - type: mkdir
+    path: config/
+
+  # Create data directory for persistent Joplin data
+  # (database, resources, settings)
+  # Mounted to /root/.config/joplin in container
+  - type: mkdir
+    path: data/

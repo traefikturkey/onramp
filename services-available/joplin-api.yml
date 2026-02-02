@@ -1,0 +1,33 @@
+# description: Headless Joplin with Web Clipper API
+# https://github.com/RickoNoNo3/joplin-terminal-data-api
+#
+
+services:
+  joplin-api:
+    image: rickonono3/joplin-terminal-data-api:${JOPLIN_API_DOCKER_TAG:-latest}
+    container_name: ${JOPLIN_API_CONTAINER_NAME:-joplin-api}
+    restart: unless-stopped
+    env_file:
+      - ./services-enabled/joplin-api.env
+    networks:
+      - traefik
+    volumes:
+      # Joplin config (contains sync credentials)
+      - ./etc/joplin-api/config:/root/joplin
+      # Persistent Joplin data (database, resources, settings)
+      - ./etc/joplin-api/data:/root/.config/joplin
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:41185/ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 180s
+    labels:
+      # Not exposed via Traefik - internal service only
+      - traefik.enable=false
+      - com.centurylinklabs.watchtower.enable=${JOPLIN_API_WATCHTOWER_ENABLE:-true}
+      - autoheal=${JOPLIN_API_AUTOHEAL:-true}
+
+networks:
+  traefik:
+    external: true
