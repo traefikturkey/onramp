@@ -1,0 +1,68 @@
+networks:
+  traefik:
+    external: true
+
+# description: Scheduled internet speed testing dashboard
+# https://github.com/alexjustesen/speedtest-tracker
+# https://docs.linuxserver.io/images/docker-speedtest-tracker/
+
+services:
+  speedtest-tracker:
+    image: lscr.io/linuxserver/speedtest-tracker:${SPEEDTEST_TRACKER_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/speedtest-tracker.env
+    container_name: ${SPEEDTEST_TRACKER_CONTAINER_NAME:-speedtest-tracker}
+    restart: ${SPEEDTEST_TRACKER_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    depends_on:
+      speedtest-tracker-db:
+        condition: service_healthy
+    volumes:
+      - ./etc/speedtest-tracker/config:/config
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - APP_KEY=${SPEEDTEST_TRACKER_APP_KEY}
+      - APP_URL=https://${SPEEDTEST_TRACKER_HOST_NAME:-speedtest}.${HOST_DOMAIN}
+      - DB_CONNECTION=pgsql
+      - DB_HOST=${SPEEDTEST_TRACKER_DB_HOST:-speedtest-tracker-db}
+      - DB_PORT=${SPEEDTEST_TRACKER_DB_PORT:-5432}
+      - DB_DATABASE=${SPEEDTEST_TRACKER_DB_NAME:-speedtest}
+      - DB_USERNAME=${SPEEDTEST_TRACKER_DB_USER:-speedtest}
+      - DB_PASSWORD=${SPEEDTEST_TRACKER_DB_PASSWORD:-speedtest}
+      - SPEEDTEST_SCHEDULE=${SPEEDTEST_TRACKER_SCHEDULE:-0 */6 * * *}
+      - SPEEDTEST_SERVERS=${SPEEDTEST_TRACKER_SERVERS:-}
+      - DISPLAY_TIMEZONE=${TZ}
+      - PRUNE_RESULTS_OLDER_THAN=${SPEEDTEST_TRACKER_PRUNE_DAYS:-0}
+    labels:
+      - joyride.host.name=${SPEEDTEST_TRACKER_HOST_NAME:-speedtest}.${HOST_DOMAIN}
+      - traefik.enable=${SPEEDTEST_TRACKER_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.speedtest-tracker.entrypoints=websecure
+      - traefik.http.routers.speedtest-tracker.rule=Host(`${SPEEDTEST_TRACKER_HOST_NAME:-speedtest}.${HOST_DOMAIN}`)
+      - traefik.http.services.speedtest-tracker.loadbalancer.server.port=80
+      - com.centurylinklabs.watchtower.enable=${SPEEDTEST_TRACKER_WATCHTOWER_ENABLED:-true}
+      - autoheal=${SPEEDTEST_TRACKER_AUTOHEAL_ENABLED:-true}
+
+  speedtest-tracker-db:
+    image: postgres:${SPEEDTEST_TRACKER_POSTGRES_TAG:-16-alpine}
+    env_file:
+      - ./services-enabled/speedtest-tracker.env
+    container_name: ${SPEEDTEST_TRACKER_DB_CONTAINER_NAME:-speedtest-tracker-db}
+    restart: ${SPEEDTEST_TRACKER_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/speedtest-tracker/postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=${SPEEDTEST_TRACKER_DB_NAME:-speedtest}
+      - POSTGRES_USER=${SPEEDTEST_TRACKER_DB_USER:-speedtest}
+      - POSTGRES_PASSWORD=${SPEEDTEST_TRACKER_DB_PASSWORD:-speedtest}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER:-speedtest}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s

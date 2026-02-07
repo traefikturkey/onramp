@@ -1,0 +1,22 @@
+# Override to use shared PostgreSQL database for speedtest-tracker
+# Prerequisites: Enable postgres service first: make enable-service postgres
+# Usage: make enable-override speedtest-tracker-shared-postgres && make restart
+#
+# database: postgres
+# database_name: speedtest
+
+services:
+  speedtest-tracker:
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_DATABASE=${SPEEDTEST_TRACKER_DB_NAME:-speedtest}
+      - DB_USERNAME=${SPEEDTEST_TRACKER_DB_USER:-${PG_USER:-admin}}
+      - DB_PASSWORD=${SPEEDTEST_TRACKER_DB_PASSWORD:-${PG_PASS}}
+
+  speedtest-tracker-db:
+    profiles:
+      - disabled

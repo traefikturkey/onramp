@@ -1,5 +1,5 @@
 # Available Services
-263 services and counting...
+264 services and counting...
 
 [1](#1)
 [A](#A)
@@ -300,6 +300,7 @@
 - [snapdrop](https://docs.linuxserver.io/images/docker-pairdrop/) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/snapdrop.yml)): PairDrop - Web-based file sharing tool for local networks (Snapdrop fork with improvements)
 - [sonarr](https://hub.docker.com/r/linuxserver/sonarr) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/sonarr.yml)): Manages tv show collections and downloads
 - [spacebin](https://github.com/lukewhrit/spacebin) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/spacebin.yml)): spacebin: text sharing for the final frontier (Pastebin alternative)
+- [speedtest-tracker](https://github.com/alexjustesen/speedtest-tracker) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/speedtest-tracker.yml)): Scheduled internet speed testing dashboard
 - [sqliteweb](https://hub.docker.com/r/tomdesinto/sqliteweb/) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/sqliteweb.yml)): Web-based SQLite Database Browser
 - [stirling-pdf](https://github.com/Stirling-Tools/Stirling-PDF) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/stirling-pdf.yml)): Container for running stirling pdf, a web-based pdf viewer
 - [streaming-search](https://github.com/Colaski/global-streaming-search) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/streaming-search.yml)): (Archived Project) Global Streaming Search Service
