@@ -1,0 +1,60 @@
+networks:
+  traefik:
+    external: true
+
+# description: Shared MCP memory server for Claude Code and Claude.ai
+# https://github.com/your-org/claudememkeep
+
+services:
+  claude-connector:
+    build:
+      context: /home/dave/appdev/mcp/claudememkeep
+      dockerfile: Dockerfile
+    env_file:
+      - ./services-enabled/claude-connector.env
+    container_name: ${CLAUDE_CONNECTOR_CONTAINER_NAME:-claude-connector}
+    restart: ${CLAUDE_CONNECTOR_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    environment:
+      - DATABASE_URL=postgresql://${CLAUDE_CONNECTOR_DB_USER:-claude_connector}:${CLAUDE_CONNECTOR_DB_PASSWORD}@${CLAUDE_CONNECTOR_DB_HOST:-claude-connector-db}:${CLAUDE_CONNECTOR_DB_PORT:-5432}/${CLAUDE_CONNECTOR_DB_NAME:-claude_connector}
+      - MCP_AUTH_TOKEN=${CLAUDE_CONNECTOR_AUTH_TOKEN}
+    depends_on:
+      claude-connector-db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8080/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    labels:
+      - joyride.host.name=${CLAUDE_CONNECTOR_HOST_NAME:-claude-connector}.${HOST_DOMAIN}
+      - traefik.enable=${CLAUDE_CONNECTOR_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.claude-connector.entrypoints=websecure
+      - traefik.http.routers.claude-connector.rule=Host(`${CLAUDE_CONNECTOR_HOST_NAME:-claude-connector}.${HOST_DOMAIN}`)
+      - traefik.http.services.claude-connector.loadbalancer.server.port=8080
+      - com.centurylinklabs.watchtower.enable=${CLAUDE_CONNECTOR_WATCHTOWER_ENABLED:-false}
+      - autoheal=${CLAUDE_CONNECTOR_AUTOHEAL_ENABLED:-true}
+
+  claude-connector-db:
+    image: postgres:${CLAUDE_CONNECTOR_POSTGRES_TAG:-16-alpine}
+    env_file:
+      - ./services-enabled/claude-connector.env
+    container_name: ${CLAUDE_CONNECTOR_DB_CONTAINER_NAME:-claude-connector-db}
+    restart: ${CLAUDE_CONNECTOR_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - /apps/onramp/etc/claude-connector/pgdata:/var/lib/postgresql/data
+      - /home/dave/appdev/mcp/claudememkeep/sql/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    environment:
+      - POSTGRES_USER=${CLAUDE_CONNECTOR_DB_USER:-claude_connector}
+      - POSTGRES_PASSWORD=${CLAUDE_CONNECTOR_DB_PASSWORD}
+      - POSTGRES_DB=${CLAUDE_CONNECTOR_DB_NAME:-claude_connector}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${CLAUDE_CONNECTOR_DB_USER:-claude_connector}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
