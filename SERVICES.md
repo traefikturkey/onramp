@@ -1,5 +1,5 @@
 # Available Services
-264 services and counting...
+265 services and counting...
 
 [1](#1)
 [A](#A)
@@ -162,6 +162,7 @@
 ## J
 - [jellyfin](https://github.com/linuxserver/docker-jellyfin) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/jellyfin.yml)): Media server for streaming content
 - [jellyseerr](https://github.com/Fallenbagel/jellyseerr/tree/develop) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/jellyseerr.yml)): Container for running jellyseerr, a torrent indexer
+- [joplin-api](https://github.com/RickoNoNo3/joplin-terminal-data-api) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/joplin-api.yml)): Headless Joplin with Web Clipper API
 - [joplin](https://joplinapp.org/) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/joplin.yml)): Note-taking and to-do app
 - [joyride](https://github.com/traefikturkey/joyride/) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/joyride.yml)): dns server using docker labels
 
