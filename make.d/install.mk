@@ -13,6 +13,21 @@ export DEBIAN_FRONTEND = noninteractive
 export ANSIBLE_LOCALHOST_WARNING = False
 export ANSIBLE_INVENTORY_UNPARSED_WARNING = False
 
+# ---------------------------------------------------------------------------
+# sudo-rs compatibility  (Ubuntu 25+)  —  ansible/ansible#85837
+# sudo-rs changes the password-prompt format so Ansible's become plugin times
+# out waiting for a prompt it never recognises.  Remove this block once Ansible
+# merges PR #86175.
+# ---------------------------------------------------------------------------
+SUDO_IS_RS := $(shell sudo --version 2>&1 | grep -qi sudo-rs && echo yes || echo no)
+ifeq ($(SUDO_IS_RS),yes)
+  ifneq (,$(shell command -v sudo.ws 2>/dev/null))
+    export ANSIBLE_BECOME_EXE = sudo.ws
+  else
+    NEEDS_NOPASSWD = yes
+  endif
+endif
+
 # Check if Docker is available (used by targets that need Sietch)
 DOCKER_AVAILABLE := $(shell command -v docker >/dev/null 2>&1 && docker ps >/dev/null 2>&1 && echo yes || echo no)
 
@@ -169,20 +184,42 @@ install-ansible: install-dependencies
 	@echo "Installing ansible roles requirements..."
 	ansible-playbook ansible/ansible-requirements.yml
 
-nuke-snaps: 
+# ---------------------------------------------------------------------------
+# fix-sudo-rs  —  NOPASSWD fallback when sudo-rs is active and sudo.ws absent
+# ---------------------------------------------------------------------------
+NOPASSWD_FILE := /etc/sudoers.d/onramp-nopasswd
+
+.PHONY: fix-sudo-rs
+fix-sudo-rs:
+ifeq ($(NEEDS_NOPASSWD),yes)
+	@if [ ! -f $(NOPASSWD_FILE) ]; then \
+		echo ""; \
+		echo "[WARN] sudo-rs detected without sudo.ws — creating NOPASSWD rule."; \
+		echo "[WARN] This is required because sudo-rs changes the password prompt"; \
+		echo "[WARN] in a way Ansible cannot parse (ansible/ansible#85837)."; \
+		echo "[WARN] File: $(NOPASSWD_FILE) — remove once Ansible ships a fix."; \
+		echo "$$USER ALL=(ALL) NOPASSWD:ALL" | sudo tee $(NOPASSWD_FILE) > /dev/null; \
+		sudo chmod 0440 $(NOPASSWD_FILE); \
+		echo ""; \
+	else \
+		echo "[INFO] NOPASSWD sudoers rule already in place ($(NOPASSWD_FILE))."; \
+	fi
+endif
+
+nuke-snaps: fix-sudo-rs
 	@echo "Remove the evil that is snaps..."
 	ansible-playbook ansible/nuke-snaps.yml
 
-install-docker: install-ansible
+install-docker: install-ansible fix-sudo-rs
 	ansible-playbook ansible/install-docker.yml
 
 update-hosts:
 	ansible-playbook ansible/update-hosts.yml
 
-install-node-exporter: install-ansible
+install-node-exporter: install-ansible fix-sudo-rs
 	ansible-playbook ansible/install-node-exporter.yml
 
-install-nvidia-drivers: install-ansible
+install-nvidia-drivers: install-ansible fix-sudo-rs
 	ansible-playbook ansible/install-nvidia-drivers.yml
 
 # Kill all vscode-server instances on the host
