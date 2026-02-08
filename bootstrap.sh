@@ -40,6 +40,15 @@ fi
 # Keep sudo alive for the duration of the script
 while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
+# Ubuntu 25+ ships sudo-rs by default, which produces a different password prompt
+# format that Ansible's sudo become plugin can't parse (ansible/ansible#85837).
+# If sudo-rs is the active provider and sudo.ws (traditional sudo) is available,
+# tell Ansible to use it instead.
+if sudo-rs --version >/dev/null 2>&1 && command -v sudo.ws >/dev/null 2>&1; then
+    log_warn "Detected sudo-rs. Configuring Ansible to use sudo.ws for compatibility."
+    export ANSIBLE_BECOME_EXE=sudo.ws
+fi
+
 export DEBIAN_FRONTEND=noninteractive
 
 # ============================================================================
