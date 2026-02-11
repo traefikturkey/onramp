@@ -1,0 +1,22 @@
+Grocy is enabled and ready to start.
+
+Access at: https://grocy.${HOST_DOMAIN}
+
+## Optional: Enable NFS Storage
+
+To store Grocy data on an NFS share instead of locally:
+
+1. Enable the NFS override:
+   make enable-override grocy-nfs
+
+2. Ensure NFS is configured in your environment:
+   make edit-env-nfs
+   # Set NFS_SERVER if not already configured
+
+3. (Optional) Set a custom NFS path for Grocy data:
+   make edit-env-nfs
+   # Add: GROCY_NFS_SERVER_PATH=/your/nfs/path
+   # If not set, defaults to NFS_MEDIA_PATH
+
+4. Restart to apply:
+   make restart-service grocy

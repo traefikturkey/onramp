@@ -1,0 +1,15 @@
+volumes:
+  grocy-nfs-data:
+    labels:
+      - remove_volume_on=down
+    driver_opts:
+      type: nfs
+      o: "addr=${GROCY_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
+      device: ":${GROCY_NFS_SERVER_PATH:-${NFS_MEDIA_PATH}}"
+
+services:
+  grocy:
+    volumes:
+      - ${GROCY_CONFIG_VOLUME:-./etc/grocy/config}:/config
+      - ${GROCY_DATA_VOLUME:-grocy-nfs-data}:${GROCY_DATA_PATH:-/data}
+      - /etc/localtime:/etc/localtime:ro
