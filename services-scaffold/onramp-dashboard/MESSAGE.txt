@@ -1,8 +1,3 @@
 OnRamp Dashboard enabled successfully!
 
 Access your dashboard at: https://dashboard.${HOST_DOMAIN}
-
-Note: The dashboard requires docker-proxy to be running for container management.
-Make sure docker-proxy is enabled: make enable-service docker-proxy
-
-Authentication is handled by Authelia - ensure you have valid credentials.
