@@ -1,0 +1,14 @@
+volumes:
+  trilium-nfs-data:
+    labels:
+      - remove_volume_on=down
+    driver_opts:
+      type: nfs
+      o: "addr=${TRILIUM_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
+      device: ":${TRILIUM_NFS_SERVER_PATH:-${NFS_MEDIA_PATH}}"
+
+services:
+  trilium:
+    volumes:
+      - ${TRILIUM_DATA_VOLUME:-trilium-nfs-data}:${TRILIUM_DATA_PATH:-/home/node/trilium-data}
+      - /etc/localtime:/etc/localtime:ro
