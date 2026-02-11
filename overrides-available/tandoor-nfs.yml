@@ -1,0 +1,21 @@
+volumes:
+  tandoor-nfs-media:
+    labels:
+      - remove_volume_on=down
+    driver_opts:
+      type: nfs
+      o: "addr=${TANDOOR_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
+      device: ":${TANDOOR_NFS_SERVER_PATH:-${NFS_MEDIA_PATH}}"
+
+services:
+  tandoor-web:
+    volumes:
+      - ./etc/tandoor/static:/opt/recipes/staticfiles
+      - tandoor-nfs-media:/opt/recipes/mediafiles
+      - /etc/localtime:/etc/localtime:ro
+
+  tandoor-nginx:
+    volumes:
+      - ./etc/tandoor/nginx:/etc/nginx/conf.d:ro
+      - ./etc/tandoor/static:/opt/recipes/staticfiles:ro
+      - tandoor-nfs-media:/media:ro
