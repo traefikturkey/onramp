@@ -1,0 +1,22 @@
+Homebox is enabled and ready to start.
+
+Access at: https://${HOMEBOX_CONTAINER_NAME:-homebox}.${HOST_DOMAIN}
+
+## Optional: Enable NFS Storage
+
+To store Homebox data on an NFS share instead of locally:
+
+1. Enable the NFS override:
+   make enable-override homebox-nfs
+
+2. Ensure NFS is configured in your environment:
+   make edit-env-nfs
+   # Set NFS_SERVER if not already configured
+
+3. (Optional) Set a custom NFS path for Homebox data:
+   make edit-env-nfs
+   # Add: HOMEBOX_NFS_SERVER_PATH=/your/nfs/path
+   # If not set, defaults to NFS_MEDIA_PATH
+
+4. Restart to apply:
+   make restart-service homebox
