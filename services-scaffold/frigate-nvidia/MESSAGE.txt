@@ -1,0 +1,22 @@
+Frigate (NVIDIA) is enabled and ready to start.
+
+Access at: https://${FRIGATE_CONTAINER_NAME:-frigate}.${HOST_DOMAIN}
+
+## Optional: Enable NFS Storage
+
+To store Frigate media on an NFS share instead of locally:
+
+1. Enable the NFS override:
+   make enable-override frigate-nvidia-nfs
+
+2. Ensure NFS is configured in your environment:
+   make edit-env-nfs
+   # Set NFS_SERVER if not already configured
+
+3. (Optional) Set a custom NFS path for Frigate media:
+   make edit-env-nfs
+   # Add: FRIGATE_NVIDIA_NFS_SERVER_PATH=/your/nfs/path
+   # If not set, defaults to NFS_MEDIA_PATH
+
+4. Restart to apply:
+   make restart-service frigate-nvidia
