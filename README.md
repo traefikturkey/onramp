@@ -33,8 +33,6 @@ and an scoped API token created like shown below, [https://dash.cloudflare.com/p
 After getting your Cloudflare API key
 you can run the following to do the basic setup automagically:
 
-> **Pre-Note:** If you know you want to start on the main branch use this command in the place of the git clone command below:  git clone -b main https://github.com/traefikturkey/onramp.git
-
 ```bash
 sudo apt update
 sudo apt install git make -y
@@ -42,7 +40,7 @@ sudo apt install git make -y
 sudo mkdir /apps
 sudo chown -R $USER:$USER /apps
 cd /apps
-git clone https://github.com/traefikturkey/onramp.git onramp
+git clone -b main https://github.com/traefikturkey/onramp.git onramp
 cd onramp
 
 make install
