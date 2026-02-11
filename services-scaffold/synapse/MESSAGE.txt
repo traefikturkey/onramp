@@ -8,3 +8,22 @@ docker run -it --rm \
 
 Then start the service:
   make start-service synapse
+
+## Optional: Enable NFS Storage
+
+To store Synapse media on an NFS share instead of locally:
+
+1. Enable the NFS override:
+   make enable-override synapse-nfs
+
+2. Ensure NFS is configured in your environment:
+   make edit-env-nfs
+   # Set NFS_SERVER if not already configured
+
+3. (Optional) Set a custom NFS path for Synapse media:
+   make edit-env-nfs
+   # Add: SYNAPSE_NFS_SERVER_PATH=/your/nfs/path
+   # If not set, defaults to NFS_MEDIA_PATH
+
+4. Restart to apply:
+   make restart-service synapse
