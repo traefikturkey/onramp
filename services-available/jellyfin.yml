@@ -36,3 +36,9 @@ services:
       - traefik.http.services.jellyfin.loadbalancer.server.port=8096
       - com.centurylinklabs.watchtower.enable=${JELLYFIN_WATCHTOWER_ENABLED:-true}
       - autoheal=true
+    healthcheck:
+      test: curl --noproxy 'localhost' -Lk -fsS "http://localhost:8096" || exit 1
+      interval: 30s
+      timeout: 30s
+      start_period: 10s
+      retries: 3
