@@ -61,8 +61,8 @@ The fallback is always a **shared category path** — a path that multiple servi
 
 | Category Variable | Used By | In Global Template? |
 |-------------------|---------|---------------------|
-| `NFS_MEDIA_PATH` | plex, jellyfin, tdarr, samba, gitea, qdirstat, pinchflat | No (implicit) |
-| `NFS_DOWNLOADS_PATH` | sonarr, radarr, transmission, sabnzbd, nzbget, tdarr | No (implicit) |
+| `NFS_MEDIA_PATH` | plex, jellyfin, tdarr, samba, gitea, qdirstat, pinchflat | Yes |
+| `NFS_DOWNLOADS_PATH` | sonarr, radarr, transmission, sabnzbd, nzbget, tdarr | Yes |
 | `NFS_MOVIES_PATH` | radarr, bazarr | No (implicit) |
 | `NFS_SHOWS_PATH` | sonarr, bazarr | No (implicit) |
 | `NFS_MUSIC_PATH` | lidarr | No (implicit) |
@@ -216,8 +216,8 @@ Shared infrastructure variables used by multiple services or the system itself:
 | Variable | Purpose |
 |----------|---------|
 | `NFS_SERVER` | NFS server address (used by all NFS overrides) |
-| `NFS_MEDIA_SHARE` | Media share mount point |
-| `NFS_DOWNLOADS_SHARE` | Downloads share mount point |
+| `NFS_MEDIA_PATH` | Media share mount point |
+| `NFS_DOWNLOADS_PATH` | Downloads share mount point |
 | `NFS_MOUNT_OPTIONS` | Default mount options |
 | `NFS_BACKUP_PATH` | Backup path (used by backup tooling) |
 
