@@ -4,13 +4,12 @@ volumes:
       - remove_volume_on=down
     driver_opts:
       type: nfs
-      o: "addr=${SYNAPSE_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
-      device: ":${SYNAPSE_NFS_SERVER_PATH:-${NFS_MEDIA_PATH}}"
+      o: "addr=${SYNAPSE_DATA_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
+      device: ":${SYNAPSE_DATA_NFS_SERVER_PATH:-${NFS_MEDIA_PATH}}"
 
 services:
   synapse:
     volumes:
-      # you should not put synapse config directory on nfs, there are serious performance issues
-      - ./etc/synapse:/data
-      - ${SYNAPSE_DATA_VOLUME:-synapse-nfs-data}:${SYNAPSE_MEDIA_PATH:-/data/media_store}
+      - ${SYNAPSE_CONFIG_VOLUME:-./etc/synapse}:/data
+      - ${SYNAPSE_DATA_VOLUME:-synapse-nfs-data}:${SYNAPSE_DATA_PATH:-/data/media_store}
       - /etc/localtime:/etc/localtime:ro
