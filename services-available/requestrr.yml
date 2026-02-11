@@ -16,6 +16,12 @@ services:
       - traefik
     volumes:
       - ./etc/requestrr:/root/config
+    healthcheck:
+      test: ["CMD-SHELL", "timeout 2 bash -c '</dev/tcp/127.0.0.1/4545' || exit 1"]
+      interval: 60s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
     labels:
       - joyride.host.name=requestrr.${HOST_DOMAIN}
       - traefik.enable=true
