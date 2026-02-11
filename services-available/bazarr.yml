@@ -26,6 +26,12 @@ services:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
       - TZ=${TZ}
+    healthcheck:
+      test: curl --fail http://localhost:6767 || exit 1
+      interval: 60s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
     labels:
       - joyride.host.name=${BAZARR_CONTAINER_NAME:-bazarr}.${HOST_DOMAIN}
       - traefik.enable=true
