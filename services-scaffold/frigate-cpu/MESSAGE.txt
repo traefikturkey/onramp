@@ -1,0 +1,20 @@
+Frigate NVR with CPU-only object detection.
+
+## Optional: Enable NFS Storage
+
+To store recordings and media on an NFS share:
+
+1. Enable the NFS override:
+   make enable-override frigate-cpu-nfs
+
+2. Ensure NFS is configured:
+   make edit-env-nfs
+   # Set NFS_SERVER if not already configured
+
+3. (Optional) Set a custom NFS path:
+   make edit-env-nfs
+   # Add: FRIGATE_CPU_NFS_SERVER_PATH=/your/nfs/path
+   # If not set, defaults to NFS_MEDIA_PATH
+
+4. Restart to apply:
+   make restart-service frigate-cpu
