@@ -1,0 +1,20 @@
+Firefly III is enabled and ready to start.
+
+Before first start, generate required secrets:
+  echo "FIREFLY_CRON_TOKEN='$(openssl rand -base64 32 | tr -d /=+ | cut -c -32)'" >> services-enabled/firefly3.env
+  echo "FIREFLY_DB_PASSWORD=$(openssl rand -base64 16 | tr -d /=+ | cut -c -16)" >> services-enabled/firefly3.env
+
+Access at: https://${FIREFLY3_CONTAINER_NAME:-firefly}.${HOST_DOMAIN}
+
+NFS Storage:
+  An NFS override is available to store uploaded files on a network share.
+  The database volume (firefly_db) remains local for performance.
+
+  To enable:
+    make enable-override firefly3-nfs
+
+  Configure NFS server/path in services-enabled/firefly3.env:
+    FIREFLY3_NFS_SERVER=<your-nfs-server>
+    FIREFLY3_NFS_SERVER_PATH=<your-nfs-export-path>
+
+  Or set defaults in services-enabled/.env.nfs for all NFS services.

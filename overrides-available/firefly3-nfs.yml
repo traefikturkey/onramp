@@ -1,0 +1,14 @@
+volumes:
+  firefly3-nfs-upload:
+    labels:
+      - remove_volume_on=down
+    driver_opts:
+      type: nfs
+      o: "addr=${FIREFLY3_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
+      device: ":${FIREFLY3_NFS_SERVER_PATH:-${NFS_MEDIA_PATH}}"
+
+services:
+  firefly3:
+    volumes:
+      - ${FIREFLY3_UPLOAD_VOLUME:-firefly3-nfs-upload}:/var/www/html/storage/upload
+      - /etc/localtime:/etc/localtime:ro
