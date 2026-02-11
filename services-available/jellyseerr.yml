@@ -25,6 +25,12 @@ services:
       - TZ=${TZ}
     # ports:
     #   - 5055:5055
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:5055"]
+      interval: 60s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
     labels:
       - joyride.host.name=${JELLYSEERR_CONTAINER_NAME:-jellyseerr}.${HOST_DOMAIN}
       - traefik.enable=true
