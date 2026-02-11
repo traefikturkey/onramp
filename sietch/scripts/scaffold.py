@@ -484,7 +484,8 @@ class Scaffolder:
             print("\n" + "=" * 60)
             print(f"POST-ENABLE INSTRUCTIONS FOR {service.upper()}")
             print("=" * 60)
-            print(message_file.read_text().strip())
+            content = self._render_template_string(message_file.read_text())
+            print(content.strip())
             print("=" * 60 + "\n")
 
     def execute_manifest(self, service: str) -> bool:

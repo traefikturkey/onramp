@@ -1,3 +1,3 @@
 OnRamp Dashboard enabled successfully!
 
-Access your dashboard at: https://dashboard.${HOST_DOMAIN}
+Access your dashboard at: https://${ONRAMP_DASHBOARD_HOST_NAME:-dashboard}.${HOST_DOMAIN}
