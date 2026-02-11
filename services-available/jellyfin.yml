@@ -28,6 +28,12 @@ services:
       # - 8920:8920 # https web gui
       - 7359:7359/udp # Jellyfin client discovery
       # - 1900:1900/udp # DNLA discovery uncomment if required
+    healthcheck:
+      test: curl --fail http://localhost:8096/health || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
     labels:
       - joyride.host.name=${JELLYFIN_CONTAINER_NAME:-jellyfin}.${HOST_DOMAIN}
       - traefik.enable=true
