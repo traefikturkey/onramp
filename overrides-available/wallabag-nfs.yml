@@ -1,0 +1,13 @@
+volumes:
+  wallabag-nfs-data:
+    labels:
+      - remove_volume_on=down
+    driver_opts:
+      type: nfs
+      o: "addr=${WALLABAG_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
+      device: ":${WALLABAG_NFS_SERVER_PATH:-${NFS_MEDIA_PATH}}"
+
+services:
+  wallabag:
+    volumes:
+      - ${WALLABAG_DATA_VOLUME:-wallabag-nfs-data}:${WALLABAG_DATA_PATH:-/var/www/wallabag/web/assets/images}

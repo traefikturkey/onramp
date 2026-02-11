@@ -1,0 +1,31 @@
+Wallabag is enabled and ready to start.
+
+Access at: https://wallabag.${HOST_DOMAIN}
+
+## Default Credentials
+
+Username: wallabag
+Password: wallabag
+
+Change these immediately after first login.
+
+## Optional: Enable NFS Storage
+
+To store Wallabag images on an NFS share instead of locally:
+
+1. Enable the NFS override:
+   make enable-override wallabag-nfs
+
+2. Ensure NFS is configured in your environment:
+   make edit-env-nfs
+   # Set NFS_SERVER if not already configured
+
+3. (Optional) Set a custom NFS path for Wallabag data:
+   make edit-env-nfs
+   # Add: WALLABAG_NFS_SERVER_PATH=/your/nfs/path
+   # If not set, defaults to NFS_MEDIA_PATH
+
+4. Restart to apply:
+   make restart-service wallabag
+
+Note: The MariaDB database volume remains local for performance.
