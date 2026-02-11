@@ -14,6 +14,7 @@ docker-compose.*.yml
 !sietch/docker-compose.*.yml
 .vscode/
 .specstory/
+.specs/
 .chat/
 .restore_latest
 .plan/
