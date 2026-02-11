@@ -1,0 +1,16 @@
+volumes:
+  owncast-nfs-data:
+    labels:
+      - remove_volume_on=down
+    driver_opts:
+      type: nfs
+      o: "addr=${OWNCAST_NFS_SERVER:-${NFS_SERVER}},nolock,noatime,soft,rw"
+      device: ":${OWNCAST_NFS_SERVER_PATH:-${NFS_MEDIA_PATH}}"
+
+services:
+  owncast:
+    volumes:
+      # keep config local — owncast stores its database in /app/data
+      - ${OWNCAST_CONFIG_VOLUME:-./etc/owncast}:/app/data
+      - ${OWNCAST_MEDIA_VOLUME:-owncast-nfs-data}:${OWNCAST_MEDIA_PATH:-/app/media}
+      - /etc/localtime:/etc/localtime:ro
