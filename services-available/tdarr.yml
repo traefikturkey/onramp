@@ -35,6 +35,12 @@ services:
       - webUIPort=${TDARR_WEB_PORT:-8265}
       - internalNode=${TDARR_INTERNAL_NODE:-true}
       - nodeID=${TDARR_NODE_ID:-TdarrInternalNode}
+    healthcheck:
+      test: curl --fail http://localhost:8265 || exit 1
+      interval: 60s
+      retries: 5
+      start_period: 60s
+      timeout: 10s
     labels:
       - joyride.host.name=${TDARR_CONTAINER_NAME:-tdarr}.${HOST_DOMAIN}
       - traefik.enable=true
