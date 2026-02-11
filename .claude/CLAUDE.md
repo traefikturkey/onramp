@@ -147,6 +147,7 @@ cat backups/environments-enabled.legacy/.env
 - Env vars: `${VAR:-default}` pattern
 - Service YAMLs: Include `env_file:` directive pointing to `./services-enabled/<service>.env`
 - Services with databases: Use dedicated containers (e.g., `db` or `<service>-db`)
+- NFS overrides: `overrides-available/<service>-nfs.yml` pattern, fall back to shared global paths (`NFS_MEDIA_PATH`, `NFS_DOWNLOADS_PATH`), never add service-specific paths to the global `.env.nfs.template`
 
 ## How Environment Variables Work
 
@@ -179,6 +180,7 @@ For detailed documentation:
 - **Makefiles**: `.github/shared/makefile-modules.md`
 - **Sietch Scripts**: `.github/shared/sietch-scripts.md`
 - **Troubleshooting**: `.github/shared/troubleshooting.md`
+- **NFS Architecture**: `.github/shared/nfs-architecture.md`
 - **User Docs**: `docs/` directory
 
 ## Guardrails
