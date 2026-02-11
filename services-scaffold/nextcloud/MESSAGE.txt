@@ -1,0 +1,22 @@
+Nextcloud is enabled and ready to start.
+
+Access at: https://nextcloud.${HOST_DOMAIN}
+
+## Optional: Enable NFS Storage
+
+To store Nextcloud data on an NFS share instead of locally:
+
+1. Enable the NFS override:
+   make enable-override nextcloud-nfs
+
+2. Ensure NFS is configured in your environment:
+   make edit-env-nfs
+   # Set NFS_SERVER if not already configured
+
+3. (Optional) Set a custom NFS path for Nextcloud data:
+   make edit-env-nfs
+   # Add: NEXTCLOUD_NFS_SERVER_PATH=/your/nfs/path
+   # If not set, defaults to NFS_MEDIA_PATH
+
+4. Restart to apply:
+   make restart-service nextcloud
