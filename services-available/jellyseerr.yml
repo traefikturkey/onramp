@@ -2,6 +2,8 @@
 
 # description: Container for running jellyseerr, a torrent indexer
 # https://github.com/Fallenbagel/jellyseerr/tree/develop
+# with seerr changes
+# https://docs.seerr.dev/migration-guide
 
 networks:
   traefik:
@@ -9,8 +11,10 @@ networks:
 
 services:
   jellyseerr:
-    image: fallenbagel/jellyseerr:${JELLYSEERR_DOCKER_TAG:-latest}
+    # image: fallenbagel/jellyseerr:${JELLYSEERR_DOCKER_TAG:-latest}
+    image: ghcr.io/seerr-team/seerr:${SEERR_DOCKER_TAG:-latest}
     container_name: ${JELLYSEERR_CONTAINER_NAME:-jellyseerr}
+    init: true
     restart: ${JELLYSEERR_RESTART:-unless-stopped}
     networks:
       - traefik
@@ -23,6 +27,12 @@ services:
       - TZ=${TZ}
     # ports:
     #   - 5055:5055
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://localhost:5055/api/v1/status || exit 1
+      start_period: 20s
+      timeout: 3s
+      interval: 15s
+      retries: 3
     labels:
       - joyride.host.name=${JELLYSEERR_CONTAINER_NAME:-jellyseerr}.${HOST_DOMAIN}
       - traefik.enable=true

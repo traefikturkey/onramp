@@ -1,0 +1,40 @@
+---
+
+# description: Container for running jellyseerr, a torrent indexer
+# https://github.com/Fallenbagel/jellyseerr/tree/develop
+
+networks:
+  traefik:
+    external: true
+
+services:
+  seerr:
+    image: ghcr.io/seerr-team/seerr:${SEERR_DOCKER_TAG:-latest}
+    container_name: ${SEERR_CONTAINER_NAME:-seerr}
+    restart: ${SEERR_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/seerr:/app/config
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    # ports:
+    #   - 5055:5055
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://localhost:5055/api/v1/status || exit 1
+      start_period: 20s
+      timeout: 3s
+      interval: 15s
+      retries: 3
+    labels:
+      - joyride.host.name=${SEERR_CONTAINER_NAME:-seerr}.${HOST_DOMAIN}
+      - traefik.enable=true
+      - traefik.http.routers.seerr.entrypoints=websecure
+      - traefik.http.routers.seerr.rule=Host(`${SEERR_CONTAINER_NAME:-seerr}.${HOST_DOMAIN}`)
+      #- traefik.http.services.seerr.loadbalancer.server.scheme=https # enable if the service wants to connect over>
+      - traefik.http.services.seerr.loadbalancer.server.port=5055
+      - com.centurylinklabs.watchtower.enable=${SEERR_WATCHTOWER_ENABLED:-true}
+      - autoheal=true
