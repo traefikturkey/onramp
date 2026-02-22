@@ -93,6 +93,18 @@ $(eval $(EMPTY_TARGETS):;@:)
 
 #########################################################
 ##
+## Getting Started
+##
+## 1. make list-services          - see what's available
+## 2. make enable-service NAME    - enable a service
+## 3. make edit-env NAME          - configure it
+## 4. make start-service NAME     - start it
+## 5. make logs NAME              - check logs
+##
+#########################################################
+
+#########################################################
+##
 ## basic commands
 ##
 #########################################################

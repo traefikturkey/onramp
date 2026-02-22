@@ -14,6 +14,8 @@ create-backup-service: sietch-build backups ## create a backup of a specific ser
 	$(SIETCH_RUN) python /scripts/backup.py create --service $(SERVICE_PASSED_DNCASED)
 
 restore-backup: sietch-build ## restore the latest backup (or specific: BACKUP=filename)
+	@echo "This will overwrite your current services-enabled/, etc/, and overrides-enabled/ with backup contents."
+	@read -p "Continue? [y/N] " confirm && [ "$$confirm" = "y" ] || { echo "Cancelled."; exit 1; }
 ifdef BACKUP
 	$(SIETCH_RUN) python /scripts/backup.py restore --file /backups/$(BACKUP)
 else

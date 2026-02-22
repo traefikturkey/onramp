@@ -951,3 +951,76 @@ operations:
 
         # Config file that was created should be rolled back
         # (This tests the rollback behavior)
+
+
+class TestRequiredVars:
+    """Tests for # required: VAR_NAME convention in env templates."""
+
+    def test_parse_required_vars_finds_declarations(self):
+        """Should parse required: comments from template content."""
+        mock_exec = MockCommandExecutor()
+        scaffolder = Scaffolder.__new__(Scaffolder)
+
+        content = """# required: NFS_SERVER
+# NFS server hostname or IP
+NFS_SERVER=
+
+# required: NFS_MEDIA_PATH
+NFS_MEDIA_PATH=/mnt/media
+"""
+        result = scaffolder._parse_required_vars(content)
+        assert result == ["NFS_SERVER", "NFS_MEDIA_PATH"]
+
+    def test_parse_required_vars_ignores_regular_comments(self):
+        """Should not match regular comments."""
+        scaffolder = Scaffolder.__new__(Scaffolder)
+
+        content = """# This is a regular comment
+# NFS server is required for mounts
+NFS_SERVER=192.168.1.1
+"""
+        result = scaffolder._parse_required_vars(content)
+        assert result == []
+
+    def test_parse_required_vars_empty_content(self):
+        """Should return empty list for content with no required declarations."""
+        scaffolder = Scaffolder.__new__(Scaffolder)
+        assert scaffolder._parse_required_vars("") == []
+        assert scaffolder._parse_required_vars("FOO=bar\n") == []
+
+    def test_check_required_vars_warns_on_empty(self, tmp_path, capsys):
+        """Should warn when required vars are empty in rendered file."""
+        scaffolder = Scaffolder.__new__(Scaffolder)
+
+        env_file = tmp_path / "test.env"
+        env_file.write_text("NFS_SERVER=\nNFS_MEDIA_PATH=/mnt/media\n")
+
+        scaffolder._check_required_vars(env_file, ["NFS_SERVER", "NFS_MEDIA_PATH"])
+
+        captured = capsys.readouterr()
+        assert "NFS_SERVER" in captured.out
+        assert "NFS_MEDIA_PATH" not in captured.out  # has a value
+
+    def test_check_required_vars_silent_when_set(self, tmp_path, capsys):
+        """Should not warn when all required vars have values."""
+        scaffolder = Scaffolder.__new__(Scaffolder)
+
+        env_file = tmp_path / "test.env"
+        env_file.write_text("NFS_SERVER=192.168.1.100\nNFS_MEDIA_PATH=/mnt/media\n")
+
+        scaffolder._check_required_vars(env_file, ["NFS_SERVER", "NFS_MEDIA_PATH"])
+
+        captured = capsys.readouterr()
+        assert "Warning" not in captured.out
+
+    def test_check_required_vars_suggests_edit_env(self, tmp_path, capsys):
+        """Should suggest make edit-env command."""
+        scaffolder = Scaffolder.__new__(Scaffolder)
+
+        env_file = tmp_path / "myservice.env"
+        env_file.write_text("MY_VAR=\n")
+
+        scaffolder._check_required_vars(env_file, ["MY_VAR"])
+
+        captured = capsys.readouterr()
+        assert "make edit-env myservice" in captured.out

@@ -48,8 +48,14 @@ ifneq (,$(wildcard ./services-available/$(SERVICE_PASSED_DNCASED).yml))
 	fi
 	$(MAKE) scaffold-build $(SERVICE_PASSED_DNCASED)
 	@$(MAKE) fix-env-permissions
+	@echo ""
+	@echo "$(SERVICE_PASSED_DNCASED) enabled. Next steps:"
+	@echo "  1. make edit-env $(SERVICE_PASSED_DNCASED)           # review/edit configuration"
+	@echo "  2. make start-service $(SERVICE_PASSED_DNCASED)      # start the service"
+	@echo "  3. make logs $(SERVICE_PASSED_DNCASED)               # check logs"
 else
 	@echo "No such service file ./services-available/$(SERVICE_PASSED_DNCASED).yml!"
+	@echo "Run 'make list-services' to see available services."
 endif
 
 enable-game: etc/$(SERVICE_PASSED_DNCASED)
@@ -58,6 +64,7 @@ ifneq (,$(wildcard ./services-available/games/$(SERVICE_PASSED_DNCASED).yml))
 	@ln -s ../services-available/games/$(SERVICE_PASSED_DNCASED).yml ./services-enabled/$(SERVICE_PASSED_DNCASED).yml || true
 else
 	@echo "No such game file ./services-available/games/$(SERVICE_PASSED_DNCASED).yml!"
+	@echo "Run 'make list-games' to see available games."
 endif
 
 remove-game: disable-service
@@ -73,7 +80,10 @@ disable-service: stop-service ## Disable a service
 	rm -f ./services-enabled/$(SERVICE_PASSED_DNCASED).yml
 	rm -f ./overrides-enabled/$(SERVICE_PASSED_DNCASED)-*.yml
 
-nuke-service: disable-service ## Disable a service and remove its etc/ directory
+nuke-service: ## Disable a service and remove its etc/ directory
+	@echo "This will disable $(SERVICE_PASSED_DNCASED) and permanently delete ./etc/$(SERVICE_PASSED_DNCASED)/."
+	@read -p "Continue? [y/N] " confirm && [ "$$confirm" = "y" ] || { echo "Cancelled."; exit 1; }
+	@$(MAKE) disable-service $(SERVICE_PASSED_DNCASED)
 	@if [ -d ./etc/$(SERVICE_PASSED_DNCASED) ]; then \
 		echo "Removing ./etc/$(SERVICE_PASSED_DNCASED)..."; \
 		if find "./etc/$(SERVICE_PASSED_DNCASED)" -user root 2>/dev/null | grep -q .; then \

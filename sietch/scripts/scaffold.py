@@ -289,6 +289,43 @@ class Scaffolder:
 
         return pattern.sub(replace_var, content)
 
+    def _parse_required_vars(self, template_content: str) -> list[str]:
+        """Parse '# required: VAR_NAME' comments from template content.
+
+        Returns a list of variable names declared as required.
+        """
+        required = []
+        for line in template_content.splitlines():
+            match = re.match(r'^#\s*required:\s*(\w+)', line)
+            if match:
+                required.append(match.group(1))
+        return required
+
+    def _check_required_vars(self, dest: Path, required_vars: list[str]) -> None:
+        """Check rendered env file for empty required variables and warn."""
+        if not required_vars or not dest.exists():
+            return
+
+        try:
+            content = dest.read_text()
+        except Exception:
+            return
+
+        missing = []
+        for var in required_vars:
+            # Match VAR= or VAR= (with only whitespace after =)
+            pattern = re.compile(rf'^{re.escape(var)}\s*=\s*$', re.MULTILINE)
+            if pattern.search(content):
+                missing.append(var)
+
+        if missing:
+            print(f"\n  Warning: required variables not set in {dest.name}:")
+            for var in missing:
+                print(f"    - {var}")
+            # Extract service name from dest filename
+            service = dest.stem
+            print(f"  Run: make edit-env {service}")
+
     def render_template(self, source: Path, dest: Path, skip_if_exists: bool = True) -> bool:
         """Render a template file using Python string substitution.
 
@@ -301,18 +338,24 @@ class Scaffolder:
             # Skip if destination exists (don't overwrite user configs)
             if skip_if_exists and dest.exists():
                 print(f"  Skipped (exists): {dest}")
+                # Still check required vars on existing files
+                with open(source, "r") as f:
+                    required_vars = self._parse_required_vars(f.read())
+                self._check_required_vars(dest, required_vars)
                 return True
 
             dest.parent.mkdir(parents=True, exist_ok=True)
             with open(source, "r") as f:
                 template_content = f.read()
 
+            required_vars = self._parse_required_vars(template_content)
             rendered_content = self._render_template_string(template_content)
 
             with open(dest, "w") as f:
                 f.write(rendered_content)
 
             print(f"  Rendered: {source.name} -> {dest}")
+            self._check_required_vars(dest, required_vars)
             return True
         except Exception as e:
             print(f"  Error rendering {source}: {e}", file=sys.stderr)
