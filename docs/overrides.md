@@ -25,23 +25,118 @@ overrides-enabled/      # Active overrides (symlinked)
 
 ### NFS Mounts
 
-Add network storage to media services:
+Add network storage to services. Configure paths first with `make edit-env-nfs`:
+
+```bash
+NFS_SERVER=192.168.1.100
+NFS_MEDIA_PATH=/mnt/media
+NFS_MOVIES_PATH=${NFS_MEDIA_PATH}/movies
+NFS_SHOWS_PATH=${NFS_MEDIA_PATH}/shows
+NFS_DOWNLOADS_PATH=${NFS_MEDIA_PATH}/downloads
+```
+
+#### Media Servers
 
 | Override | Service | Description |
 |----------|---------|-------------|
 | `plex-nfs` | Plex | Mount NFS media library |
+| `plex-nfs-extra` | Plex | Additional NFS mount paths |
 | `jellyfin-nfs` | Jellyfin | Mount NFS media library |
-| `sonarr-nfs` | Sonarr | Mount NFS for TV shows |
-| `radarr-nfs` | Radarr | Mount NFS for movies |
-| `audiobookshelf-nfs` | Audiobookshelf | Mount NFS audiobooks |
 
-Configuration in `services-enabled/.env.nfs`:
-```bash
-NFS_MEDIA_SERVER=192.168.1.100
-NFS_MEDIA_PATH=/mnt/media
-NFS_TV_PATH=/mnt/media/tv
-NFS_MOVIES_PATH=/mnt/media/movies
-```
+#### Media Management (Arr Stack)
+
+| Override | Service | Description |
+|----------|---------|-------------|
+| `sonarr-nfs` | Sonarr | Mount NFS for TV shows |
+| `sonarr-nfs-extra` | Sonarr | Additional NFS paths for Sonarr |
+| `radarr-nfs` | Radarr | Mount NFS for movies |
+| `lidarr-nfs` | Lidarr | Mount NFS for music |
+| `bazarr-nfs` | Bazarr | Mount NFS for subtitles |
+| `kapowarr-nfs` | Kapowarr | Mount NFS for comics |
+| `headphones-nfs` | Headphones | Mount NFS for music |
+| `lazylibrarian-nfs` | LazyLibrarian | Mount NFS for books |
+
+#### Download Clients
+
+| Override | Service | Description |
+|----------|---------|-------------|
+| `sabnzbd-nfs` | SABnzbd | Mount NFS downloads directory |
+| `nzbget-nfs` | NZBGet | Mount NFS downloads directory |
+| `transmission-vpn-nfs` | Transmission (VPN) | Mount NFS downloads via VPN container |
+| `pinchflat-nfs` | Pinchflat | Mount NFS for YouTube downloads |
+| `youtube-dl-nfs` | youtube-dl | Mount NFS for downloaded videos |
+
+#### Transcoding
+
+| Override | Service | Description |
+|----------|---------|-------------|
+| `tdarr-nfs` | Tdarr | Mount NFS media library for transcoding |
+| `makemkv-nfs` | MakeMKV | Mount NFS for ripped media |
+| `unmanic-nfs` | Unmanic | Mount NFS media library |
+
+#### Photos & Books
+
+| Override | Service | Description |
+|----------|---------|-------------|
+| `immich-nfs` | Immich | Mount NFS photo library |
+| `photoprism-nfs` | PhotoPrism | Mount NFS photo library |
+| `librephotos-nfs` | LibrePhotos | Mount NFS photo library |
+| `lychee-nfs` | Lychee | Mount NFS photo library |
+| `audiobookshelf-nfs` | Audiobookshelf | Mount NFS audiobooks |
+| `komga-nfs` | Komga | Mount NFS for comics/books |
+| `kaizoku-nfs` | Kaizoku | Mount NFS for manga |
+| `booklore-nfs` | Booklore | Mount NFS book library |
+
+#### Audio & Podcasts
+
+| Override | Service | Description |
+|----------|---------|-------------|
+| `navidrome-nfs` | Navidrome | Mount NFS music library |
+| `owncast-nfs` | Owncast | Mount NFS for streaming content |
+
+#### Storage & Backup
+
+| Override | Service | Description |
+|----------|---------|-------------|
+| `nextcloud-nfs` | Nextcloud | Mount NFS user data |
+| `syncthing-nfs` | Syncthing | Mount NFS sync directories |
+| `minio-nfs` | MinIO | Mount NFS object storage |
+| `duplicati-nfs` | Duplicati | Mount NFS backup source |
+| `sietch-nfs-backup` | Sietch | Mount NFS for backup destination |
+| `samba-nfs` | Samba | Re-export NFS share via SMB |
+| `qdirstat-nfs` | QDirStat | Mount NFS for disk usage analysis |
+| `ubuntu-nfs` | Ubuntu | Mount NFS in Ubuntu container |
+
+#### Surveillance
+
+| Override | Service | Description |
+|----------|---------|-------------|
+| `frigate-cpu-nfs` | Frigate | Mount NFS recordings (CPU mode) |
+| `frigate-nvidia-nfs` | Frigate | Mount NFS recordings (Nvidia GPU mode) |
+
+#### Productivity & Notes
+
+| Override | Service | Description |
+|----------|---------|-------------|
+| `obsidian-nfs` | Obsidian | Mount NFS vault |
+| `joplin-api-nfs` | Joplin API | Mount NFS notes |
+| `trilium-nfs` | Trilium | Mount NFS notes |
+| `gitea-nfs` | Gitea | Mount NFS repositories |
+| `influxdb-nfs` | InfluxDB | Mount NFS data directory |
+| `synapse-nfs` | Synapse | Mount NFS Matrix data |
+
+#### Food & Home
+
+| Override | Service | Description |
+|----------|---------|-------------|
+| `mealie-nfs` | Mealie | Mount NFS recipe data |
+| `grocy-nfs` | Grocy | Mount NFS grocery data |
+| `tandoor-nfs` | Tandoor | Mount NFS recipe data |
+| `homebox-nfs` | Homebox | Mount NFS inventory data |
+| `copyparty-nfs` | Copyparty | Mount NFS file storage |
+| `netbootxyz-nfs` | netboot.xyz | Mount NFS for boot assets |
+| `wallabag-nfs` | Wallabag | Mount NFS read-later data |
+| `firefly3-nfs` | Firefly III | Mount NFS financial data |
 
 ### GPU Passthrough
 
@@ -55,6 +150,7 @@ Enable hardware transcoding:
 | `jellyfin-nvidia` | Nvidia | Jellyfin |
 | `tdarr-quicksync` | Intel | Tdarr |
 | `tdarr-nvidia` | Nvidia | Tdarr |
+| `unmanic-quicksync` | Intel | Unmanic |
 | `ollama-nvidia` | Nvidia | Ollama |
 | `ollama-amd` | AMD | Ollama |
 
@@ -66,8 +162,36 @@ Run service-specific database containers:
 |----------|----------|---------|
 | `odoo-dedicated-postgres` | PostgreSQL | Odoo |
 | `authentik-dedicated-redis` | Redis | Authentik |
+| `booklore-dedicated-mariadb` | MariaDB | Booklore |
+| `dawarich-dedicated-redis` | Redis | Dawarich |
+| `docmost-dedicated-postgres` | PostgreSQL | Docmost |
+| `docmost-dedicated-redis` | Redis | Docmost |
+| `firefly3-dedicated-mariadb` | MariaDB | Firefly III |
+| `healthchecks-postgres` | PostgreSQL | Healthchecks |
+| `immich-dedicated-valkey` | Valkey | Immich |
+| `itflow-dedicated-mariadb` | MariaDB | ITFlow |
+| `joplin-dedicated-postgres` | PostgreSQL | Joplin |
+| `kaizoku-dedicated-redis` | Redis | Kaizoku |
+| `kaneo-postgres` | PostgreSQL | Kaneo |
+| `manyfold-dedicated-postgres` | PostgreSQL | Manyfold |
+| `manyfold-dedicated-redis` | Redis | Manyfold |
+| `mediamanager-postgres` | PostgreSQL | Media Manager |
+| `n8n-postgres` | PostgreSQL | n8n |
+| `netbox-dedicated-postgres` | PostgreSQL | NetBox |
+| `netbox-dedicated-redis` | Redis | NetBox |
+| `newsdash-dedicated-redis` | Redis | Newsdash |
 | `paperless-ngx-dedicated-mariadb` | MariaDB | Paperless-ngx |
+| `paperless-ngx-dedicated-redis` | Redis | Paperless-ngx |
+| `paperless-ngx-postgres-dedicated-redis` | Redis | Paperless-ngx (Postgres) |
+| `semaphore-dedicated-mysql` | MySQL | Semaphore |
+| `semaphore-pg` | PostgreSQL | Semaphore |
+| `spacebin-dedicated-postgres` | PostgreSQL | Spacebin |
+| `speedtest-tracker-shared-postgres` | PostgreSQL | Speedtest Tracker |
+| `unimus-dedicated-mariadb` | MariaDB | Unimus |
 | `vikunja-dedicated-mariadb` | MariaDB | Vikunja |
+| `wallabag-dedicated-mariadb` | MariaDB | Wallabag |
+| `wallabag-dedicated-redis` | Redis | Wallabag |
+| `yamtrack-dedicated-redis` | Redis | Yamtrack |
 
 ### VPN Integration
 
@@ -83,9 +207,17 @@ Route traffic through VPN:
 
 | Override | Description |
 |----------|-------------|
-| `wordpress-upload` | Increase upload limits |
-| `pihole-admin` | Enable admin interface |
+| `bazarr-extra` | Additional Bazarr configuration |
+| `joyride-adguard` | AdGuard integration for Joyride |
 | `minecraft-dynmap` | Enable Dynmap web map |
+| `omada-cert` | Custom certificate for Omada |
+| `pihole-admin` | Enable admin interface |
+| `prestashop-arm` | ARM architecture support for PrestaShop |
+| `promtail-syslog` | Enable syslog input for Promtail |
+| `traefik-idrac` | iDRAC proxy via Traefik |
+| `traefik-podman-socket` | Podman socket for Traefik |
+| `ubuntu-smb` | SMB mount in Ubuntu container |
+| `wordpress-upload` | Increase upload limits |
 
 ## Usage Example
 

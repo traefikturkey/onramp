@@ -54,14 +54,28 @@ TRAEFIK_LOG_LEVEL=ERROR
 
 ## NFS Variables (.env.nfs)
 
-For services using NFS-mounted storage:
+For services using NFS-mounted storage. Edit with `make edit-env-nfs`:
 
 ```bash
-# Media paths
-NFS_MOVIES=/mnt/nfs/movies
-NFS_TV=/mnt/nfs/tv
-NFS_MUSIC=/mnt/nfs/music
-NFS_DOWNLOADS=/mnt/nfs/downloads
+# NFS server hostname or IP (required)
+NFS_SERVER=192.168.1.100
+
+# Base media path on the NFS server
+NFS_MEDIA_PATH=/mnt/media
+
+# Share paths (derived from NFS_MEDIA_PATH)
+NFS_MOVIES_PATH=${NFS_MEDIA_PATH}/movies
+NFS_SHOWS_PATH=${NFS_MEDIA_PATH}/shows
+NFS_MUSIC_PATH=${NFS_MEDIA_PATH}/music
+NFS_DOWNLOADS_PATH=${NFS_MEDIA_PATH}/downloads
+NFS_BOOKS_PATH=${NFS_MEDIA_PATH}/audiobooks
+NFS_SYNC_PATH=${NFS_MEDIA_PATH}/sync
+
+# NFS mount options
+NFS_MOUNT_OPTIONS=soft,rw,nfsvers=4
+
+# Backup location
+NFS_BACKUP_PATH=${NFS_MEDIA_PATH}/backups
 ```
 
 ## External Services (.env.external)
@@ -105,9 +119,10 @@ Each service can have its own variables. Common patterns:
 ```bash
 PLEX_DOCKER_TAG=latest
 PLEX_CONTAINER_NAME=plex
-PLEX_HOST_NAME=plex
 PLEX_CLAIM=claim-xxxx
-PLEX_TRAEFIK_ENABLED=true
+PLEX_ALLOWED_NETWORKS=192.168.0.0/16,10.0.0.0/8
+PLEX_TRAEFIK_ENABLE=true
+PLEX_WATCHTOWER_ENABLE=true
 ```
 
 ## How Environment Variables Are Loaded

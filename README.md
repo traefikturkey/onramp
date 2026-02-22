@@ -14,7 +14,7 @@ Architecture documentation in [.github/shared/](.github/shared/):
 - [Backup Strategy](.github/shared/backup-strategy.md) - Backup and restore procedures
 - [Health Check Patterns](.github/shared/healthcheck-patterns.md) - Standard health checks
 
-Onramp uses Docker and it installs docker if you don't alerady have it installed (a check is run as part of the 'make install' command below).
+Onramp uses Docker and it installs docker if you don't already have it installed (a check is run as part of the 'make install' command below).
 
 This repo assumes that you are running a debian linux disto like Ubuntu!
 
@@ -145,6 +145,43 @@ make restart
 > In addition users can place there own custom docker compose files into ./overrides-enabled and they will be included on normal start up 
 > as well as included in the backup file created when running make create-backup
 > for more info on docker compose overrides see: https://docs.docker.com/compose/extends/#adding-and-overriding-configuration
+
+### NFS Quick Start
+
+If your media (movies, TV shows, downloads) lives on a NAS or NFS server:
+
+**1. Configure your NFS server and paths:**
+```bash
+make edit-env-nfs
+```
+
+Set at minimum:
+```bash
+NFS_SERVER=192.168.1.100          # Your NAS/NFS server IP
+NFS_MEDIA_PATH=/mnt/media         # Base path on the NFS server
+NFS_MOVIES_PATH=${NFS_MEDIA_PATH}/movies
+NFS_SHOWS_PATH=${NFS_MEDIA_PATH}/shows
+NFS_DOWNLOADS_PATH=${NFS_MEDIA_PATH}/downloads
+```
+
+**2. Enable NFS overrides for your services:**
+```bash
+make enable-override radarr-nfs
+make enable-override sonarr-nfs
+make enable-override plex-nfs
+```
+
+**3. Restart:**
+```bash
+make restart
+```
+
+> **Troubleshooting:** If you see `permission denied` or `device: "::"` in mount errors, your `.env.nfs` is missing or has empty paths. Run `make edit-env-nfs` and verify `NFS_SERVER` and the path variables are set correctly. Also ensure your NFS server allows access from this machine's IP.
+
+To see all available NFS overrides:
+```bash
+make list-overrides | grep nfs
+```
 
 ## Docker Game servers
 
