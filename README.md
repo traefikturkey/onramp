@@ -46,6 +46,8 @@ cd onramp
 make install
 ```
 
+> **Important:** You must use `-b main` when cloning. The `master` branch is legacy and no longer maintained. If you cloned without `-b main`, switch with: `git checkout main && git pull`
+
 > **Note:** If this is a fresh system without Docker, `make install` will automatically install Docker and add your user to the docker group. After installation completes, you'll need to run `newgrp docker` (or log out and back in) to use Docker commands, then run `make continue-install` to complete setup.
 
 The install process includes an interactive wizard that will prompt you for:

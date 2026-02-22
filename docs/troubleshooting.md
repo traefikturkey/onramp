@@ -41,6 +41,34 @@ make clean-acme
 make start
 ```
 
+### Expired certificates (ERR_CERT_DATE_INVALID)
+
+If your browser shows "Your connection is not private" or `NET::ERR_CERT_DATE_INVALID`:
+
+1. **Check Cloudflare credentials are still valid:**
+   ```bash
+   make check-cf
+   ```
+
+2. **Verify Traefik is running and can reach Cloudflare:**
+   ```bash
+   docker logs traefik 2>&1 | grep -i "acme\|certificate\|error"
+   ```
+
+3. **Force certificate renewal by clearing the ACME store:**
+   ```bash
+   make down
+   make clean-acme
+   make start
+   ```
+
+4. **If the Cloudflare API token expired**, generate a new one at [dash.cloudflare.com/profile/api-tokens](https://dash.cloudflare.com/profile/api-tokens) and update:
+   ```bash
+   make edit-env-onramp
+   # Update CF_DNS_API_TOKEN=your-new-token
+   make restart
+   ```
+
 ## Service Won't Start
 
 ### Check service logs

@@ -26,6 +26,10 @@ HOST_NAME=myserver
 # Cloudflare credentials
 CF_API_EMAIL=your-email@example.com
 CF_DNS_API_TOKEN=your-api-token
+
+# Optional: override the ACME email used for Let's Encrypt
+# Defaults to CF_API_EMAIL if not set
+# DNS_CHALLENGE_API_EMAIL=acme-email@example.com
 ```
 
 ### System
@@ -108,10 +112,10 @@ Each service can have its own variables. Common patterns:
 <SERVICE>_HOST_NAME=servicename
 
 # Enable/disable Traefik routing
-<SERVICE>_TRAEFIK_ENABLED=true
+<SERVICE>_TRAEFIK_ENABLE=true
 
 # Enable/disable Watchtower updates
-<SERVICE>_WATCHTOWER_ENABLED=true
+<SERVICE>_WATCHTOWER_ENABLE=true
 ```
 
 ### Example: Plex
@@ -299,6 +303,25 @@ Services use default values if variables aren't set:
 image: service:${SERVICE_DOCKER_TAG:-latest}
 #                                  ^^^^^^^ default value
 ```
+
+## Pinning a Service Version
+
+To lock a service to a specific image version (for security or stability):
+
+```bash
+make edit-env servicename
+```
+
+Set the Docker tag to a specific version instead of `latest`:
+```bash
+# Example: pin n8n to a specific safe version
+N8N_DOCKER_TAG=2.5.1
+
+# Example: pin Plex to a specific version
+PLEX_DOCKER_TAG=1.40.0.7998-c29d4c0c8
+```
+
+This prevents Watchtower from auto-updating to a potentially broken or vulnerable version. To resume auto-updates, change the tag back to `latest` and run `make update-service servicename`.
 
 ## Editing Environment Files
 
