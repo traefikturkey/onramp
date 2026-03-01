@@ -28,6 +28,9 @@ restore-backup-service: sietch-build ## restore the latest backup of a specific 
 list-backups: sietch-build ## list available backups
 	$(SIETCH_RUN) python /scripts/backup.py list
 
+dump-databases: sietch-build backups ## dump all discovered database containers (postgres, mariadb)
+	$(SIETCH_RUN) python /scripts/backup.py dump-databases
+
 #########################################################
 ##
 ## NFS backup commands
