@@ -182,6 +182,21 @@ docker exec containername nslookup google.com
 
 ## Database Issues
 
+### Database restore: missing data or broken logins
+
+If you restored a `pg_dumpall` dump and the application is missing data or you can't log in:
+
+**Cause:** The application started before the restore and ran its migrations, creating default
+rows that collided with your dump data. Rows with conflicting IDs are silently skipped.
+
+**Solution:** Stop the app, drop the database, restore, then start the app. See the full
+procedure in [`.github/shared/backup-strategy.md`](../.github/shared/backup-strategy.md#3-restore-databases).
+
+**Password auth failures after cross-version restore:** Re-set the database password:
+```bash
+docker exec <db-container> psql -U <user> -c "ALTER USER <user> WITH PASSWORD '<password>';"
+```
+
 ### MariaDB connection refused
 
 ```bash

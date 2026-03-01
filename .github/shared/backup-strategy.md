@@ -165,13 +165,38 @@ make restore-backup FILE=backups/backup.tar.gz
 
 ### 3. Restore Databases
 
-```bash
-# Start database containers
-make start-service postgres
+> **WARNING: You must stop application containers and drop the target database before restoring.**
+> If the app starts first, its migrations create default rows (users, permissions, etc.)
+> that collide with the data in your dump, causing silent data loss from ID conflicts.
 
-# Restore dumps
-docker exec -i postgres psql -U admin < dbname.sql
+```bash
+# Start ONLY the database container (not the full service)
+docker start db-for-paperless  # or: n8n_postgres, etc.
+
+# Drop and recreate the target database
+docker exec db-for-paperless psql -U paperless -c "DROP DATABASE IF EXISTS paperless;"
+docker exec db-for-paperless psql -U paperless -c "CREATE DATABASE paperless OWNER paperless;"
+
+# Restore the dump
+docker exec -i db-for-paperless psql -U paperless < paperless-backup.sql
+
+# Now start the full service
+make start-service paperless-ngx-postgres
 ```
+
+#### Cross-version restores (e.g. postgres 13 → 16)
+
+When restoring a dump from an older postgres major version:
+
+1. **Password hashes will break.** Older versions use md5; postgres 14+ defaults to
+   scram-sha-256. After restoring, re-set passwords for all database users:
+   ```bash
+   docker exec db-for-paperless psql -U paperless -c "ALTER USER paperless WITH PASSWORD 'paperless';"
+   ```
+
+2. **Application passwords may also break.** If the app stores password hashes in the
+   database (e.g. Django's `auth_user` table), you may need to reset user passwords
+   through the application's management tools after restore.
 
 ### 4. Restart Services
 
