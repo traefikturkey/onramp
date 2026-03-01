@@ -9,16 +9,13 @@ networks:
 # https://hub.docker.com/r/linuxserver/paperless-ngx
 # https://docs.paperless-ngx.com/
 #
-# IMPORTANT: Upgraded from postgres:13 to postgres:16
-# If you get "PostgreSQL 14 or later is required" error after upgrade:
-# 1. make stop-service paperless-ngx-postgres
-# 2. sudo rm -rf /apps/onramp/etc/paperless-ngx-postgres/pgdata/*
-# 3. make start-service paperless-ngx-postgres
-# (This recreates the database - only do this if data is not important)
+# IMPORTANT: Postgres data directory must match the image version.
+# To upgrade postgres, do a pg_dump on the old version, update the tag,
+# then restore. Never change the tag without migrating data first.
 
 services:
   broker:
-    image: docker.io/library/redis:6.0 #pinned for kitty
+    image: docker.io/library/redis:${PAPERLESS_REDIS_TAG:-7}
     env_file:
       - ./services-enabled/paperless-ngx-postgres.env
     restart: unless-stopped
@@ -28,7 +25,7 @@ services:
       - ./etc/paperless-ngx-postgres/redisdata:/data
 
   db:
-    image: postgres:16
+    image: postgres:${PAPERLESS_POSTGRES_TAG:-13}
     env_file:
       - ./services-enabled/paperless-ngx-postgres.env
     restart: unless-stopped
@@ -42,7 +39,7 @@ services:
       POSTGRES_PASSWORD: paperless
 
   gotenberg:
-    image: docker.io/gotenberg/gotenberg:7.4 #pinned for kitty
+    image: docker.io/gotenberg/gotenberg:${PAPERLESS_GOTENBERG_TAG:-8}
     env_file:
       - ./services-enabled/paperless-ngx-postgres.env
     restart: unless-stopped
