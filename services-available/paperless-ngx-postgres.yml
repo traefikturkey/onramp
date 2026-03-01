@@ -26,6 +26,7 @@ services:
 
   db:
     image: postgres:${PAPERLESS_POSTGRES_TAG:-13}
+    container_name: ${PAPERLESS_DB_CONTAINER_NAME:-db-for-paperless}
     env_file:
       - ./services-enabled/paperless-ngx-postgres.env
     restart: unless-stopped
