@@ -1,0 +1,40 @@
+networks:
+  traefik:
+    external: true
+
+# config_version: 2
+# description: Self-hosted lightweight software forge, a fork of Gitea
+# https://forgejo.org/
+# https://forgejo.org/docs/latest/admin/installation/docker/
+
+services:
+  forgejo:
+    image: codeberg.org/forgejo/forgejo:${FORGEJO_DOCKER_TAG:-13}
+    env_file:
+      - ./services-enabled/forgejo.env
+    container_name: ${FORGEJO_CONTAINER_NAME:-forgejo}
+    restart: ${FORGEJO_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    environment:
+      - USER_UID=${PUID:-1000}
+      - USER_GID=${PGID:-1000}
+    volumes:
+      - ./etc/forgejo:/data
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "${FORGEJO_SSH_PORT:-222}:22"
+    healthcheck:
+      test: curl --fail http://localhost:3000 || exit 1
+      interval: 60s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+    labels:
+      - joyride.host.name=${FORGEJO_CONTAINER_NAME:-forgejo}.${HOST_DOMAIN}
+      - traefik.enable=${FORGEJO_TRAEFIK_ENABLE:-true}
+      - traefik.http.routers.forgejo.entrypoints=websecure
+      - traefik.http.routers.forgejo.rule=Host(`${FORGEJO_CONTAINER_NAME:-forgejo}.${HOST_DOMAIN}`)
+      - traefik.http.services.forgejo.loadbalancer.server.port=3000
+      - com.centurylinklabs.watchtower.enable=${FORGEJO_WATCHTOWER_ENABLE:-true}
+      - autoheal=${FORGEJO_AUTOHEAL:-true}
