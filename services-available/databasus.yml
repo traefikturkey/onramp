@@ -1,0 +1,38 @@
+networks:
+  traefik:
+    external: true
+
+# config_version: 2
+# description: Self-hosted database backup tool with S3, Google Drive, FTP storage and Slack, Discord, Telegram notifications
+# https://github.com/databasus/databasus
+
+services:
+  databasus:
+    image: databasus/databasus:${DATABASUS_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/databasus.env
+    container_name: ${DATABASUS_CONTAINER_NAME:-databasus}
+    restart: ${DATABASUS_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    volumes:
+      - ./etc/databasus:/databasus-data
+      - /etc/localtime:/etc/localtime:ro
+    healthcheck:
+      test: curl --fail http://localhost:4005 || exit 1
+      interval: 60s
+      retries: 5
+      start_period: 20s
+      timeout: 10s
+    labels:
+      - joyride.host.name=${DATABASUS_CONTAINER_NAME:-databasus}.${HOST_DOMAIN}
+      - traefik.enable=${DATABASUS_TRAEFIK_ENABLE:-true}
+      - traefik.http.routers.databasus.entrypoints=websecure
+      - traefik.http.routers.databasus.rule=Host(`${DATABASUS_CONTAINER_NAME:-databasus}.${HOST_DOMAIN}`)
+      - traefik.http.services.databasus.loadbalancer.server.port=4005
+      - com.centurylinklabs.watchtower.enable=${DATABASUS_WATCHTOWER_ENABLE:-true}
+      - autoheal=${DATABASUS_AUTOHEAL:-true}
