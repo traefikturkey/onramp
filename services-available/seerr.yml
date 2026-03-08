@@ -1,0 +1,39 @@
+networks:
+  traefik:
+    external: true
+
+# config_version: 2
+# description: Media request and discovery tool for Plex, Jellyfin, and Emby
+# https://docs.seerr.dev/
+# https://github.com/seerr-team/seerr
+
+services:
+  seerr:
+    image: ghcr.io/seerr-team/seerr:${SEERR_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/seerr.env
+    container_name: ${SEERR_CONTAINER_NAME:-seerr}
+    restart: ${SEERR_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/seerr:/app/config
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:5055"]
+      interval: 60s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+    labels:
+      - joyride.host.name=${SEERR_CONTAINER_NAME:-seerr}.${HOST_DOMAIN}
+      - traefik.enable=${SEERR_TRAEFIK_ENABLE:-true}
+      - traefik.http.routers.seerr.entrypoints=websecure
+      - traefik.http.routers.seerr.rule=Host(`${SEERR_CONTAINER_NAME:-seerr}.${HOST_DOMAIN}`)
+      - traefik.http.services.seerr.loadbalancer.server.port=5055
+      - com.centurylinklabs.watchtower.enable=${SEERR_WATCHTOWER_ENABLE:-true}
+      - autoheal=${SEERR_AUTOHEAL:-true}
