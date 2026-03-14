@@ -32,17 +32,17 @@ make edit-env-external
 
 Example variables:
 ```bash
-# TrueNAS
-TRUENAS_HOST=192.168.1.100
-TRUENAS_PORT=443
+# TrueNAS (default HTTPS port, no _PORT needed in YAML)
+TRUENAS_HOST_NAME=truenas
+TRUENAS_ADDRESS=192.168.1.100
 
-# Proxmox
-PROXMOX_HOST=192.168.1.50
-PROXMOX_PORT=8006
+# Proxmox (custom port, hardcoded in YAML)
+PROXMOX_HOST_NAME=proxmox
+PROXMOX_ADDRESS=192.168.1.50
 
-# Home Assistant
-HOMEASSISTANT_HOST=192.168.1.75
-HOMEASSISTANT_PORT=8123
+# Home Assistant (custom port, hardcoded in YAML)
+HOMEASSISTANT_HOST_NAME=homeassistant
+HOMEASSISTANT_ADDRESS=192.168.1.75
 ```
 
 ## Available External Services
@@ -69,28 +69,39 @@ Common external services included:
    make create-external myservice
    ```
 
-2. Edit the generated file to set host/port:
+2. The generated file opens in your editor. Set the protocol and port for your service:
    ```yaml
    # external-available/myservice.yml
-   services:
-     myservice-external:
-       image: traefik/whoami  # Dummy, not used
-       labels:
-         - traefik.enable=true
-         - traefik.http.routers.myservice.rule=Host(`myservice.${HOST_DOMAIN}`)
-         - traefik.http.services.myservice.loadbalancer.server.url=http://${MYSERVICE_HOST}:${MYSERVICE_PORT}
+   http:
+     routers:
+       myservice:
+         entryPoints:
+           - websecure
+         rule: "Host(`{{env "MYSERVICE_HOST_NAME"}}.{{env "HOST_DOMAIN"}}`)"
+         middlewares:
+           - default-headers
+         tls: {}
+         service: myservice
+
+     services:
+       myservice:
+         loadBalancer:
+           servers:
+             - url: "https://{{env "MYSERVICE_ADDRESS"}}:{{env "MYSERVICE_PORT"}}/"
+           passHostHeader: true
    ```
 
 3. Add variables to `.env.external`:
    ```bash
-   MYSERVICE_HOST=192.168.1.x
+   MYSERVICE_HOST_NAME=myservice
+   MYSERVICE_ADDRESS=192.168.1.x
    MYSERVICE_PORT=8080
    ```
 
-4. Enable and restart:
+4. Enable and restart Traefik:
    ```bash
    make enable-external myservice
-   make restart
+   make restart-service traefik
    ```
 
 ## Middleware
@@ -107,22 +118,17 @@ External services can use middleware for authentication:
 
 1. Check the host is reachable:
    ```bash
-   ping ${MYSERVICE_HOST}
-   curl http://${MYSERVICE_HOST}:${MYSERVICE_PORT}
+   ping ${MYSERVICE_ADDRESS}
+   curl https://${MYSERVICE_ADDRESS}:${MYSERVICE_PORT}
    ```
 
 2. Verify variables are set in `.env.external`
 
 3. Check Traefik logs:
    ```bash
-   docker logs traefik 2>&1 | grep myservice
+   make logs traefik
    ```
 
 ### SSL certificate issues
 
-For HTTPS backends, you may need to configure `serversTransport`:
-```yaml
-labels:
-  - traefik.http.services.myservice.loadbalancer.server.scheme=https
-  - traefik.http.serversTransports.myservice.insecureSkipVerify=true
-```
+Traefik is configured with `--serverstransport.insecureskipverify=true` so self-signed backend certificates are accepted by default. If you still have issues, check that the protocol in the YAML (`http://` vs `https://`) matches what the backend service expects.

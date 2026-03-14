@@ -16,6 +16,6 @@ http:
     ${SERVICE_PASSED_DNCASED}:
       loadBalancer:
         servers:
-          - url: "https://{{env "${SERVICE_PASSED_UPCASED}_ADDRESS"}}"
+          - url: "https://{{env "${SERVICE_PASSED_UPCASED}_ADDRESS"}}:{{env "${SERVICE_PASSED_UPCASED}_PORT"}}/"
         passHostHeader: true
         
