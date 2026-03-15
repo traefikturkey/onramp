@@ -5,6 +5,28 @@ set -e
 # Get the list of changed YAML files
 changed_yaml_files=$(git diff --cached --name-only --diff-filter=ACMRTUXB ./**/*.yml)
 
+# Filter out files listed in .yamlignore
+if [ -f .yamlignore ]; then
+  filtered_files=""
+  for f in $changed_yaml_files; do
+    skip=false
+    while IFS= read -r pattern; do
+      # Skip empty lines and comments
+      case "$pattern" in
+        ""|\#*) continue ;;
+      esac
+      # Check if file matches the ignore pattern
+      case "$f" in
+        $pattern*) skip=true; break ;;
+      esac
+    done < .yamlignore
+    if [ "$skip" = false ]; then
+      filtered_files="$filtered_files $f"
+    fi
+  done
+  changed_yaml_files=$(echo "$filtered_files" | xargs)
+fi
+
 # Run yamllint only on the changed YAML files
 if [ -n "$changed_yaml_files" ]; then
   echo "Running pre-commit yamllint checks..."
