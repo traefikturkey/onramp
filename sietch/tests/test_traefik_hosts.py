@@ -1,6 +1,5 @@
 """Tests for traefik_hosts.py - Traefik external Host() rule extraction."""
 
-import pytest
 import sys
 from pathlib import Path
 
@@ -234,8 +233,8 @@ class TestHostExtraction:
         assert ("svc1.example.com", "multi") in hosts
         assert ("svc2.example.com", "multi") in hosts
 
-    def test_skips_host_with_missing_variable(self, tmp_path, capsys):
-        """Should skip hosts where required variable is missing."""
+    def test_skips_host_with_missing_variable(self, tmp_path):
+        """Should silently skip hosts where required variable is missing."""
         external_enabled = tmp_path / "external-enabled"
         external_enabled.mkdir()
         (external_enabled / "service.yml").write_text(
@@ -251,10 +250,39 @@ class TestHostExtraction:
 
         assert len(hosts) == 0
 
-        # Check that warning was printed
-        captured = capsys.readouterr()
-        assert "Skipped service" in captured.err
-        assert "MISSING_HOST_NAME" in captured.err
+    def test_proxmox_template_extracts_primary_instance_only(self):
+        """Should extract the primary Proxmox host when only primary vars are set."""
+        proxmox_yml = Path(__file__).parents[1] / ".." / "external-available" / "proxmox.yml"
+        extractor = TraefikHostsExtractor(
+            env_vars={
+                "PROXMOX_HOST_NAME": "proxmox",
+                "PROXMOX_ADDRESS": "192.168.1.50",
+                "HOST_DOMAIN": "example.com",
+            },
+        )
+
+        hosts = extractor.extract_hosts_from_file(proxmox_yml.resolve())
+
+        assert hosts == [("proxmox.example.com", "proxmox")]
+
+    def test_proxmox_template_extracts_additional_instance(self):
+        """Should extract additional Proxmox hosts when their vars are set."""
+        proxmox_yml = Path(__file__).parents[1] / ".." / "external-available" / "proxmox.yml"
+        extractor = TraefikHostsExtractor(
+            env_vars={
+                "PROXMOX_HOST_NAME": "proxmox",
+                "PROXMOX_ADDRESS": "192.168.1.50",
+                "PROXMOX2_HOST_NAME": "proxmox2",
+                "PROXMOX2_ADDRESS": "192.168.1.51",
+                "HOST_DOMAIN": "example.com",
+            },
+        )
+
+        hosts = extractor.extract_hosts_from_file(proxmox_yml.resolve())
+
+        assert ("proxmox.example.com", "proxmox") in hosts
+        assert ("proxmox2.example.com", "proxmox") in hosts
+        assert len(hosts) == 2
 
 
 class TestMiddlewareExclusion:
@@ -376,8 +404,9 @@ class TestHostsFileDeduplication:
 class TestSyncEarlyExit:
     """Tests for sync early exit conditions."""
 
-    def test_exits_when_joyride_not_enabled(self, tmp_path, capsys):
+    def test_exits_when_joyride_not_enabled(self, tmp_path, caplog):
         """Should exit with error when joyride is not enabled."""
+        caplog.set_level("INFO")
         services_enabled = tmp_path / "services-enabled"
         services_enabled.mkdir()
         # No joyride.yml
@@ -388,11 +417,11 @@ class TestSyncEarlyExit:
 
         assert result == 1
 
-        captured = capsys.readouterr()
-        assert "Joyride service is not enabled" in captured.err
+        assert "Joyride service is not enabled" in caplog.text
 
-    def test_exits_when_hostip_not_set(self, tmp_path, capsys):
+    def test_exits_when_hostip_not_set(self, tmp_path, caplog):
         """Should exit with error when HOSTIP is not set."""
+        caplog.set_level("ERROR")
         services_enabled = tmp_path / "services-enabled"
         services_enabled.mkdir()
         (services_enabled / "joyride.yml").write_text("# enabled")
@@ -404,11 +433,11 @@ class TestSyncEarlyExit:
 
         assert result == 1
 
-        captured = capsys.readouterr()
-        assert "HOSTIP not set" in captured.err
+        assert "HOSTIP not set" in caplog.text
 
-    def test_exits_when_host_domain_not_set(self, tmp_path, capsys):
+    def test_exits_when_host_domain_not_set(self, tmp_path, caplog):
         """Should exit with error when HOST_DOMAIN is not set."""
+        caplog.set_level("ERROR")
         services_enabled = tmp_path / "services-enabled"
         services_enabled.mkdir()
         (services_enabled / "joyride.yml").write_text("# enabled")
@@ -420,15 +449,15 @@ class TestSyncEarlyExit:
 
         assert result == 1
 
-        captured = capsys.readouterr()
-        assert "HOST_DOMAIN not set" in captured.err
+        assert "HOST_DOMAIN not set" in caplog.text
 
 
 class TestFullSync:
     """Integration tests for full sync operation."""
 
-    def test_full_sync_creates_hosts_file(self, tmp_path, capsys):
+    def test_full_sync_creates_hosts_file(self, tmp_path, caplog):
         """Should create hosts file with extracted entries."""
+        caplog.set_level("INFO")
         # Set up joyride as enabled
         services_enabled = tmp_path / "services-enabled"
         services_enabled.mkdir()
@@ -471,6 +500,5 @@ class TestFullSync:
         assert "192.168.1.10 pve.lab.local" in content
 
         # Check output
-        captured = capsys.readouterr()
-        assert "Added:" in captured.out
-        assert "Wrote 2 host entries" in captured.out
+        assert "Added:" in caplog.text
+        assert "Wrote 2 host entries" in caplog.text
