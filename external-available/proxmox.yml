@@ -1,3 +1,10 @@
+# Proxmox VE external service definitions
+# Supports up to 10 Proxmox instances via environment variables.
+# The primary instance uses PROXMOX_HOST_NAME and PROXMOX_ADDRESS.
+# Additional instances use PROXMOX2_ through PROXMOX10_ prefixes.
+# Only instances with a defined _ADDRESS variable are activated.
+# Configure variables in: services-enabled/.env.external
+
 http:
   routers:
     proxmox:
@@ -8,6 +15,96 @@ http:
         - default-headers
       tls: {}
       service: proxmox
+{{if env "PROXMOX2_ADDRESS"}}
+    proxmox2:
+      entryPoints:
+        - "websecure"
+      rule: "Host(`{{env "PROXMOX2_HOST_NAME"}}.{{env "HOST_DOMAIN"}}`)"
+      middlewares:
+        - default-headers
+      tls: {}
+      service: proxmox2
+{{end}}
+{{if env "PROXMOX3_ADDRESS"}}
+    proxmox3:
+      entryPoints:
+        - "websecure"
+      rule: "Host(`{{env "PROXMOX3_HOST_NAME"}}.{{env "HOST_DOMAIN"}}`)"
+      middlewares:
+        - default-headers
+      tls: {}
+      service: proxmox3
+{{end}}
+{{if env "PROXMOX4_ADDRESS"}}
+    proxmox4:
+      entryPoints:
+        - "websecure"
+      rule: "Host(`{{env "PROXMOX4_HOST_NAME"}}.{{env "HOST_DOMAIN"}}`)"
+      middlewares:
+        - default-headers
+      tls: {}
+      service: proxmox4
+{{end}}
+{{if env "PROXMOX5_ADDRESS"}}
+    proxmox5:
+      entryPoints:
+        - "websecure"
+      rule: "Host(`{{env "PROXMOX5_HOST_NAME"}}.{{env "HOST_DOMAIN"}}`)"
+      middlewares:
+        - default-headers
+      tls: {}
+      service: proxmox5
+{{end}}
+{{if env "PROXMOX6_ADDRESS"}}
+    proxmox6:
+      entryPoints:
+        - "websecure"
+      rule: "Host(`{{env "PROXMOX6_HOST_NAME"}}.{{env "HOST_DOMAIN"}}`)"
+      middlewares:
+        - default-headers
+      tls: {}
+      service: proxmox6
+{{end}}
+{{if env "PROXMOX7_ADDRESS"}}
+    proxmox7:
+      entryPoints:
+        - "websecure"
+      rule: "Host(`{{env "PROXMOX7_HOST_NAME"}}.{{env "HOST_DOMAIN"}}`)"
+      middlewares:
+        - default-headers
+      tls: {}
+      service: proxmox7
+{{end}}
+{{if env "PROXMOX8_ADDRESS"}}
+    proxmox8:
+      entryPoints:
+        - "websecure"
+      rule: "Host(`{{env "PROXMOX8_HOST_NAME"}}.{{env "HOST_DOMAIN"}}`)"
+      middlewares:
+        - default-headers
+      tls: {}
+      service: proxmox8
+{{end}}
+{{if env "PROXMOX9_ADDRESS"}}
+    proxmox9:
+      entryPoints:
+        - "websecure"
+      rule: "Host(`{{env "PROXMOX9_HOST_NAME"}}.{{env "HOST_DOMAIN"}}`)"
+      middlewares:
+        - default-headers
+      tls: {}
+      service: proxmox9
+{{end}}
+{{if env "PROXMOX10_ADDRESS"}}
+    proxmox10:
+      entryPoints:
+        - "websecure"
+      rule: "Host(`{{env "PROXMOX10_HOST_NAME"}}.{{env "HOST_DOMAIN"}}`)"
+      middlewares:
+        - default-headers
+      tls: {}
+      service: proxmox10
+{{end}}
 
   services:
     proxmox:
@@ -15,3 +112,66 @@ http:
         servers:
           - url: "https://{{env "PROXMOX_ADDRESS"}}:8006/"
         passHostHeader: true
+{{if env "PROXMOX2_ADDRESS"}}
+    proxmox2:
+      loadBalancer:
+        servers:
+          - url: "https://{{env "PROXMOX2_ADDRESS"}}:8006/"
+        passHostHeader: true
+{{end}}
+{{if env "PROXMOX3_ADDRESS"}}
+    proxmox3:
+      loadBalancer:
+        servers:
+          - url: "https://{{env "PROXMOX3_ADDRESS"}}:8006/"
+        passHostHeader: true
+{{end}}
+{{if env "PROXMOX4_ADDRESS"}}
+    proxmox4:
+      loadBalancer:
+        servers:
+          - url: "https://{{env "PROXMOX4_ADDRESS"}}:8006/"
+        passHostHeader: true
+{{end}}
+{{if env "PROXMOX5_ADDRESS"}}
+    proxmox5:
+      loadBalancer:
+        servers:
+          - url: "https://{{env "PROXMOX5_ADDRESS"}}:8006/"
+        passHostHeader: true
+{{end}}
+{{if env "PROXMOX6_ADDRESS"}}
+    proxmox6:
+      loadBalancer:
+        servers:
+          - url: "https://{{env "PROXMOX6_ADDRESS"}}:8006/"
+        passHostHeader: true
+{{end}}
+{{if env "PROXMOX7_ADDRESS"}}
+    proxmox7:
+      loadBalancer:
+        servers:
+          - url: "https://{{env "PROXMOX7_ADDRESS"}}:8006/"
+        passHostHeader: true
+{{end}}
+{{if env "PROXMOX8_ADDRESS"}}
+    proxmox8:
+      loadBalancer:
+        servers:
+          - url: "https://{{env "PROXMOX8_ADDRESS"}}:8006/"
+        passHostHeader: true
+{{end}}
+{{if env "PROXMOX9_ADDRESS"}}
+    proxmox9:
+      loadBalancer:
+        servers:
+          - url: "https://{{env "PROXMOX9_ADDRESS"}}:8006/"
+        passHostHeader: true
+{{end}}
+{{if env "PROXMOX10_ADDRESS"}}
+    proxmox10:
+      loadBalancer:
+        servers:
+          - url: "https://{{env "PROXMOX10_ADDRESS"}}:8006/"
+        passHostHeader: true
+{{end}}
