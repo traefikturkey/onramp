@@ -9,6 +9,7 @@ networks:
 services:
   onramp-dashboard:
     image: sietch
+    pull_policy: build
     build:
       context: ./sietch
       dockerfile: Dockerfile
