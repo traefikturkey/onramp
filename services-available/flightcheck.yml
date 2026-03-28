@@ -1,0 +1,30 @@
+networks:
+  traefik:
+    external: true
+
+# description: Google Flights MCP server - search flights via MCP protocol
+# https://github.com/crack-kitty/google-flights-mcp
+
+services:
+  flightcheck:
+    image: ghcr.io/crack-kitty/google-flights-mcp:${FLIGHTCHECK_DOCKER_TAG:-latest}
+    container_name: ${FLIGHTCHECK_CONTAINER_NAME:-flightcheck}
+    hostname: flightcheck
+    restart: ${FLIGHTCHECK_RESTART:-unless-stopped}
+    mem_limit: ${FLIGHTCHECK_MEM_LIMIT:-200g}
+    networks:
+      - traefik
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./services-enabled/flightcheck.env
+    environment:
+      - TZ=${TZ}
+    labels:
+      - joyride.host.name=${FLIGHTCHECK_HOST_NAME:-flightcheck}.${HOST_DOMAIN}
+      - traefik.enable=${FLIGHTCHECK_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.flightcheck.entrypoints=websecure
+      - traefik.http.routers.flightcheck.rule=Host(`${FLIGHTCHECK_HOST_NAME:-flightcheck}.${HOST_DOMAIN}`)
+      - traefik.http.services.flightcheck.loadbalancer.server.port=8000
+      - com.centurylinklabs.watchtower.enable=${FLIGHTCHECK_WATCHTOWER_ENABLED:-true}
+      - autoheal=${FLIGHTCHECK_AUTOHEAL_ENABLED:-true}
