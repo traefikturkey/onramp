@@ -2,12 +2,12 @@ networks:
   traefik:
     external: true
 
-# description: Google Flights MCP server - search flights via MCP protocol
-# https://github.com/crack-kitty/google-flights-mcp
+# description: Google Flights MCP server (fli) - search flights via MCP protocol
+# https://github.com/crack-kitty/fli
 
 services:
   flightcheck:
-    image: ghcr.io/crack-kitty/google-flights-mcp:${FLIGHTCHECK_DOCKER_TAG:-latest}
+    image: ghcr.io/crack-kitty/fli:${FLIGHTCHECK_DOCKER_TAG:-latest}
     container_name: ${FLIGHTCHECK_CONTAINER_NAME:-flightcheck}
     hostname: flightcheck
     restart: ${FLIGHTCHECK_RESTART:-unless-stopped}

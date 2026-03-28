@@ -111,7 +111,7 @@
 - [firefly3](https://github.com/firefly-iii/firefly-iii/tree/main) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/firefly3.yml)): Manages personal finances and budgets
 - [firefox](https://github.com/linuxserver/docker-firefox) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/firefox.yml)): Runs mozilla firefox browser in a container
 - [flame](https://github.com/pawelmalak/flame) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/flame.yml)): homepage/dashboard for docker containers and services
-- [flightcheck](https://github.com/crack-kitty/google-flights-mcp) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/flightcheck.yml)): Google Flights MCP server - search flights via MCP protocol
+- [flightcheck](https://github.com/crack-kitty/fli) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/flightcheck.yml)): Google Flights MCP server (fli) - search flights via MCP protocol
 - [fooocus](https://github.com/lllyasviel/Fooocus) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/fooocus.yml)): Focus on prompting and generating | a generative image generator
 - [forgejo](https://forgejo.org/) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/forgejo.yml)): Self-hosted lightweight software forge, a fork of Gitea
 - [fossflow](https://hub.docker.com/r/fitzzz/fossflow) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/fossflow.yml)): Open-source Progressive Web App (PWA) for creating isometric diagrams.
