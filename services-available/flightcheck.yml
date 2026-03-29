@@ -6,12 +6,38 @@ networks:
 # https://github.com/crack-kitty/fli
 
 services:
+  flightcheck-db:
+    image: postgres:16-alpine
+    container_name: flightcheck-db
+    restart: unless-stopped
+    networks:
+      - traefik
+    volumes:
+      - flightcheck-pgdata:/var/lib/postgresql/data
+      - ./etc/flightcheck/initdb:/docker-entrypoint-initdb.d:ro
+    env_file:
+      - ./services-enabled/flightcheck.env
+    environment:
+      POSTGRES_DB: flightcheck
+      POSTGRES_USER: flightcheck
+      POSTGRES_PASSWORD: ${FLIGHTCHECK_POSTGRES_PASSWORD:-flightcheck-pg-2026}
+      TZ: ${TZ}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U flightcheck -d flightcheck"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
   flightcheck:
     image: ghcr.io/crack-kitty/fli:${FLIGHTCHECK_DOCKER_TAG:-latest}
     container_name: ${FLIGHTCHECK_CONTAINER_NAME:-flightcheck}
     hostname: flightcheck
     restart: ${FLIGHTCHECK_RESTART:-unless-stopped}
     mem_limit: ${FLIGHTCHECK_MEM_LIMIT:-200g}
+    depends_on:
+      flightcheck-db:
+        condition: service_healthy
     networks:
       - traefik
     ports:
@@ -28,3 +54,6 @@ services:
       - traefik.http.services.flightcheck.loadbalancer.server.port=8000
       - com.centurylinklabs.watchtower.enable=${FLIGHTCHECK_WATCHTOWER_ENABLED:-true}
       - autoheal=${FLIGHTCHECK_AUTOHEAL_ENABLED:-true}
+
+volumes:
+  flightcheck-pgdata:
