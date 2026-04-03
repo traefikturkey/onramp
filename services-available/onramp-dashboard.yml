@@ -9,10 +9,7 @@ networks:
 services:
   onramp-dashboard:
     image: sietch
-    pull_policy: build
-    build:
-      context: ./sietch
-      dockerfile: Dockerfile
+    pull_policy: never
     container_name: ${ONRAMP_DASHBOARD_CONTAINER_NAME:-onramp-dashboard}
     restart: ${ONRAMP_DASHBOARD_RESTART:-unless-stopped}
     mem_limit: ${ONRAMP_DASHBOARD_MEM_LIMIT:-256m}

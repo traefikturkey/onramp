@@ -36,14 +36,20 @@ make.d/                          # Makefile modules
 ## Commands
 
 ### Services
+
+**Important:** Service name is a positional argument, NOT a `NAME=` variable.
+Use `make restart-service onramp-dashboard`, not `make restart-service NAME=onramp-dashboard`.
+The Makefile extracts the second word from `MAKECMDGOALS` to build `SERVICE_FLAGS` (compose `-f` flags).
+Using `NAME=` silently results in an empty service name and wrong compose behavior.
+
 ```bash
-make enable-service NAME      # Enable + scaffold
-make disable-service NAME     # Disable (keeps etc/ data)
-make start-service NAME       # Start container
-make stop-service NAME        # Stop container
-make restart-service NAME     # Restart container
-make logs NAME                # View logs
-make nuke-service NAME        # Remove service AND all data
+make enable-service <name>      # Enable + scaffold
+make disable-service <name>     # Disable (keeps etc/ data)
+make start-service <name>       # Start container
+make stop-service <name>        # Stop container
+make restart-service <name>     # Restart container
+make logs <name>                # View logs
+make nuke-service <name>        # Remove service AND all data
 ```
 
 ### Environment

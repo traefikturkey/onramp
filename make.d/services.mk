@@ -11,7 +11,7 @@ fix-env-permissions:
 
 # Core service lifecycle
 start-service: COMPOSE_IGNORE_ORPHANS = true
-start-service: enable-service build
+start-service: enable-service build sietch-build
 	$(DOCKER_COMPOSE) $(SERVICE_FLAGS) up -d --force-recreate --pull=missing $(SERVICE_PASSED_DNCASED)
 
 down-service: stop-service
