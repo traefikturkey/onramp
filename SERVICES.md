@@ -84,10 +84,10 @@
 - [dashy](https://github.com/Lissy93/dashy) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/dashy.yml)): Customizable dashboard for displaying information
 - [databasus](https://github.com/databasus/databasus) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/databasus.yml)): Self-hosted database backup tool with S3, Google Drive, FTP storage and Slack, Discord, Telegram notifications
 - [dawarich](https://github.com/Freika/dawarich) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/dawarich.yml)): Self-hostable alternative to Google Location History (Google Maps Timeline)
-- [dockerizalo](https://github.com/undernightcore/dockerizalo) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/dockerizalo.yml)): Docker build and deployment platform
 - [docker-mirror](https://hub.docker.com/_/registry) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/docker-mirror.yml)): docker mirror / registry for caching docker images
 - [docker-proxy](https://github.com/Tecnativa/docker-socket-proxy) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/docker-proxy.yml)): Proxy for docker containers
 - [docker-registry](https://hub.docker.com/_/registry) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/docker-registry.yml)): Registry for storing and distributing container images
+- [dockerizalo](https://github.com/undernightcore/dockerizalo) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/dockerizalo.yml)): Docker build and deployment platform
 - [dockpeek-socket-proxy](https://github.com/dockpeek/dockpeek) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/dockpeek-socket-proxy.yml)): Proxy service for Dockpeek
 - [dockpeek](https://github.com/dockpeek/dockpeek) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/dockpeek.yml)): Docker Port Dashboard for Easy Container Access
 - [docling](https://github.com/docling-project/docling-serve) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/docling.yml)): AI-powered document parsing and processing service with GPU acceleration
@@ -107,8 +107,8 @@
 
 ## F
 - [feishin](https://github.com/jeffvli/feishin) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/feishin.yml)): A modern self-hosted music player.
-- [firefly3](https://github.com/firefly-iii/firefly-iii/tree/main) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/firefly3.yml)): Manages personal finances and budgets
 - [firefly-data-importer](https://github.com/firefly-iii/firefly-iii/tree/main) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/firefly-data-importer.yml)): Imports data into firefly iii, a personal finance manager
+- [firefly3](https://github.com/firefly-iii/firefly-iii/tree/main) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/firefly3.yml)): Manages personal finances and budgets
 - [firefox](https://github.com/linuxserver/docker-firefox) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/firefox.yml)): Runs mozilla firefox browser in a container
 - [flame](https://github.com/pawelmalak/flame) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/flame.yml)): homepage/dashboard for docker containers and services
 - [flightcheck](https://github.com/crack-kitty/fli) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/flightcheck.yml)): Google Flights MCP server (fli) - search flights via MCP protocol
@@ -133,8 +133,8 @@
 - [gitea](https://github.com/go-gitea/gitea) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/gitea.yml)): Lightweight git service similar to github
 - [github-backup](https://github-backup.sierrasoftworks.com/) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/github-backup.yml)): Runs GitHub Backup to periodically archive GitHub repositories and releases
 - [gitlab](https://docs.gitlab.com/ee/install/docker.html) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/gitlab.yml)): Self-hosted git repository management system
-- [glances](https://github.com/nicolargo/glances) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/glances.yml)): System monitoring tool
 - [glance](https://github.com/glanceapp/glance) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/glance.yml)): A self-hosted dashboard that puts all your feeds in one place
+- [glances](https://github.com/nicolargo/glances) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/glances.yml)): System monitoring tool
 - [gluetun](https://github.com/qdm12/gluetun) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/gluetun.yml)): VPN Client for Docker Containers and More
 - [go2rtc](https://github.com/AlexxIT/go2rtc) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/go2rtc.yml)): Webrtc gateway for camera restreaming 
 - [gotify](https://github.com/gotify/server) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/gotify.yml)): Self-hosted push notification service
@@ -341,8 +341,8 @@
 
 ## V
 - [valkey](https://valkey.io) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/valkey.yml)): Shared Valkey cache server for multiple services
-- [vaultwarden](https://github.com/dani-garcia/vaultwarden) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/vaultwarden.yml)): Self-hosted bitwarden password manager
 - [vault](https://github.com/hashicorp/vault) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/vault.yml)): A tool for secrets management, encryption as a service, and privileged access management
+- [vaultwarden](https://github.com/dani-garcia/vaultwarden) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/vaultwarden.yml)): Self-hosted bitwarden password manager
 - [vert](https://github.com/VERT-sh/VERT) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/vert.yml)): 
 - [vikunja](https://vikunja.io/docs/full-docker-example/) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/vikunja.yml)): Task and time management app
 
