@@ -91,7 +91,7 @@ cat backups/environments-enabled.legacy/.env
 - **Path-scoped**: `.github/instructions/*.instructions.md`
 - **Architecture docs**: `.github/shared/*.md`
 - **User docs**: `docs/` directory
-- **Full context**: `.claude/CLAUDE.md`
+- **Full context**: `AGENTS.md`
 
 ## Guardrails
 
