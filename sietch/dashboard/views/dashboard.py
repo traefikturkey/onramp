@@ -38,9 +38,9 @@ async def home(request: Request):
     )
 
     return templates.TemplateResponse(
+        request,
         "index.html",
         {
-            "request": request,
             "stats": {
                 "services_running": running_services,
                 "services_enabled": enabled_count,
@@ -99,9 +99,9 @@ async def load_more_services(request: Request, offset: int = 0):
     has_more = end < len(enabled_services)
 
     return templates.TemplateResponse(
+        request,
         "partials/service_cards_batch.html",
         {
-            "request": request,
             "services": page_services,
             "has_more": has_more,
             "next_offset": end,

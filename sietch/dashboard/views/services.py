@@ -23,9 +23,9 @@ async def service_catalog(request: Request, category: str = None, q: str = None)
     categories = services_mgr.get_categories()
 
     return templates.TemplateResponse(
+        request,
         "services/catalog.html",
         {
-            "request": request,
             "services": services,
             "categories": categories,
             "current_category": category,
@@ -77,9 +77,9 @@ async def enabled_services(request: Request):
         )
 
     return templates.TemplateResponse(
+        request,
         "services/enabled.html",
         {
-            "request": request,
             "services": enabled,
         },
     )
@@ -116,14 +116,16 @@ async def service_detail(request: Request, name: str):
             }
         else:
             return templates.TemplateResponse(
+                request,
                 "services/not_found.html",
-                {"request": request, "name": name},
+                {"name": name},
                 status_code=404,
             )
     elif not service:
         return templates.TemplateResponse(
+            request,
             "services/not_found.html",
-            {"request": request, "name": name},
+            {"name": name},
             status_code=404,
         )
     else:
@@ -132,9 +134,9 @@ async def service_detail(request: Request, name: str):
     container = docker.get_container(name)
 
     return templates.TemplateResponse(
+        request,
         "services/detail.html",
         {
-            "request": request,
             "service": service,
             "container": container,
         },

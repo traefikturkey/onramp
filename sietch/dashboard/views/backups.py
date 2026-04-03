@@ -32,9 +32,9 @@ async def backup_list(request: Request):
                 total_size += stat.st_size
 
     return templates.TemplateResponse(
+        request,
         "backups/index.html",
         {
-            "request": request,
             "backups": backups,
             "total_size": _format_size(total_size),
             "backup_count": len(backups),

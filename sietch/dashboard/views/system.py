@@ -30,9 +30,9 @@ async def system_home(request: Request):
         pass
 
     return templates.TemplateResponse(
+        request,
         "system/index.html",
         {
-            "request": request,
             "docker_info": docker_info,
         },
     )
@@ -44,8 +44,8 @@ async def dns_management(request: Request):
     templates = request.app.state.templates
 
     return templates.TemplateResponse(
+        request,
         "system/dns.html",
-        {"request": request},
     )
 
 
@@ -55,8 +55,8 @@ async def database_management(request: Request):
     templates = request.app.state.templates
 
     return templates.TemplateResponse(
+        request,
         "system/database.html",
-        {"request": request},
     )
 
 

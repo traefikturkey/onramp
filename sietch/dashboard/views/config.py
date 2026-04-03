@@ -15,9 +15,9 @@ async def config_home(request: Request):
     enabled = services_mgr.get_enabled_names()
 
     return templates.TemplateResponse(
+        request,
         "config/index.html",
         {
-            "request": request,
             "enabled_services": enabled,
         },
     )
@@ -35,9 +35,9 @@ async def global_env_editor(request: Request):
         content = env_path.read_text(encoding="utf-8")
 
     return templates.TemplateResponse(
+        request,
         "config/editor.html",
         {
-            "request": request,
             "title": "Global Environment",
             "file_path": str(env_path),
             "content": content,
@@ -56,8 +56,9 @@ async def service_env_editor(request: Request, name: str):
     service = services_mgr.get_service_info(name)
     if not service:
         return templates.TemplateResponse(
+            request,
             "services/not_found.html",
-            {"request": request, "name": name},
+            {"name": name},
             status_code=404,
         )
 
@@ -76,9 +77,9 @@ async def service_env_editor(request: Request, name: str):
         template_content = template_path.read_text(encoding="utf-8")
 
     return templates.TemplateResponse(
+        request,
         "config/editor.html",
         {
-            "request": request,
             "title": f"{name} Environment",
             "file_path": str(env_path),
             "content": content,
