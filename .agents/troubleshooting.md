@@ -35,10 +35,23 @@ cat backups/environments-enabled.legacy/.env
 
 ## Resources
 
-For detailed documentation:
-- **Scaffolding**: `.github/shared/scaffold-templates.md`
-- **Makefiles**: `.github/shared/makefile-modules.md`
+User documentation (`docs/`):
+- **Getting Started**: `docs/getting-started.md`
+- **Commands**: `docs/commands.md`
+- **Environment Variables**: `docs/env-vars.md`
+- **Scaffolding**: `docs/scaffolding.md`
+- **Service Creation**: `docs/service-creation.md`
+- **Overrides**: `docs/overrides.md`
+- **External Services**: `docs/external-services.md`
+- **Troubleshooting**: `docs/troubleshooting.md`
+- **Dashboard**: `docs/dashboard.md`
+- **Fix Env Deletion**: `docs/fix-env-deletion.md`
+- **Migration (legacy env)**: `docs/migration-from-legacy-env.md`
+- **Migration (feature branch)**: `docs/migration-from-feature-branch.md`
+
+Architecture docs (`.github/shared/`):
+- **Scaffold Templates**: `.github/shared/scaffold-templates.md`
+- **Makefile Modules**: `.github/shared/makefile-modules.md`
 - **Sietch Scripts**: `.github/shared/sietch-scripts.md`
-- **Troubleshooting**: `.github/shared/troubleshooting.md`
+- **Troubleshooting (extended)**: `.github/shared/troubleshooting.md`
 - **NFS Architecture**: `.github/shared/nfs-architecture.md`
-- **User Docs**: `docs/` directory
