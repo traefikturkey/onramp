@@ -1,5 +1,5 @@
 # Available Services
-273 services and counting...
+274 services and counting...
 
 [1](#1)
 [A](#A)
@@ -219,6 +219,7 @@
 - [netbox](https://docs.linuxserver.io/images/docker-netbox) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/netbox.yml)): Web-based ip address management (ipam) and data center infrastructure management (dcim) tool
 - [newsdash](https://github.com/buzz/newsdash) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/newsdash.yml)): Self-hosted rss feed reader and dashboard
 - [nextcloud](https://github.com/linuxserver/docker-nextcloud) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/nextcloud.yml)): Powerful self-hosted file sync and sharing platform
+- [nginx](https://hub.docker.com/_/nginx) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/nginx.yml)): High-performance static file server and reverse proxy
 - [nightscout](https://github.com/nightscout/cgm-remote-monitor) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/nightscout.yml)):  web-based CGM (Continuous Glucose Monitor) 
 - [nocodb](https://github.com/nocodb/nocodb) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/nocodb.yml)): Databases As Spreadsheets
 - [nodered](https://hub.docker.com/r/nodered/node-red/) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/nodered.yml)): Flow-based development tool for visual programming

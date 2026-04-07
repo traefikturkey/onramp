@@ -1,0 +1,28 @@
+networks:
+  traefik:
+    external: true
+
+# description: High-performance static file server and reverse proxy
+# https://hub.docker.com/_/nginx
+
+services:
+  nginx:
+    image: nginx:${NGINX_DOCKER_TAG:-alpine}
+    container_name: ${NGINX_CONTAINER_NAME:-nginx}
+    restart: ${NGINX_RESTART:-unless-stopped}
+    mem_limit: ${NGINX_MEM_LIMIT:-200m}
+    env_file:
+      - ./services-enabled/nginx.env
+    networks:
+      - traefik
+    volumes:
+      - ./media/nginx:/usr/share/nginx/html
+      - /etc/localtime:/etc/localtime:ro
+    labels:
+      - joyride.host.name=${NGINX_HOST_NAME:-nginx}.${HOST_DOMAIN}
+      - traefik.enable=${NGINX_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.nginx.entrypoints=websecure
+      - traefik.http.routers.nginx.rule=Host(`${NGINX_HOST_NAME:-nginx}.${HOST_DOMAIN}`)
+      - traefik.http.services.nginx.loadbalancer.server.port=80
+      - com.centurylinklabs.watchtower.enable=${NGINX_WATCHTOWER_ENABLED:-true}
+      - autoheal=${NGINX_AUTOHEAL_ENABLED:-true}
