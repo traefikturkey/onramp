@@ -18,6 +18,7 @@ services:
     volumes:
       - ./etc/n8n/:/home/node/.n8n/
       - ./media/n8n/workflows:/home/node/workflows
+      - ${N8N_DATA_PATH:-./media/n8n}:/home/node/data
 
     environment:
       # Basic auth
