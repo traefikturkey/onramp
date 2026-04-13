@@ -234,8 +234,8 @@ class TestHostExtraction:
         assert ("svc1.example.com", "multi") in hosts
         assert ("svc2.example.com", "multi") in hosts
 
-    def test_skips_host_with_missing_variable(self, tmp_path, capsys):
-        """Should skip hosts where required variable is missing."""
+    def test_skips_host_with_missing_variable(self, tmp_path):
+        """Should silently skip hosts where required variable is missing."""
         external_enabled = tmp_path / "external-enabled"
         external_enabled.mkdir()
         (external_enabled / "service.yml").write_text(
@@ -250,11 +250,6 @@ class TestHostExtraction:
         hosts = extractor.extract_hosts_from_file(external_enabled / "service.yml")
 
         assert len(hosts) == 0
-
-        # Check that warning was printed
-        captured = capsys.readouterr()
-        assert "Skipped service" in captured.err
-        assert "MISSING_HOST_NAME" in captured.err
 
 
 class TestMiddlewareExclusion:

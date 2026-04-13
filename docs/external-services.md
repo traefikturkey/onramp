@@ -45,13 +45,38 @@ HOMEASSISTANT_HOST=192.168.1.75
 HOMEASSISTANT_PORT=8123
 ```
 
+## Multi-Instance Services
+
+Some external services support multiple instances from a single YAML definition using Traefik Go template conditionals. Additional instances activate automatically when their environment variables are set — no extra files or repo changes needed.
+
+### Proxmox (up to 10 instances)
+
+The `proxmox.yml` definition supports up to 10 Proxmox VE servers. Each instance requires a `_HOST_NAME` (subdomain) and `_ADDRESS` (IP) variable in `.env.external`:
+
+```bash
+# Primary instance (always active when proxmox is enabled)
+PROXMOX_HOST_NAME=proxmox
+PROXMOX_ADDRESS=192.168.1.50
+
+# Additional instances (activate when _ADDRESS is set)
+PROXMOX2_HOST_NAME=proxmox2
+PROXMOX2_ADDRESS=192.168.1.51
+
+PROXMOX3_HOST_NAME=proxmox3
+PROXMOX3_ADDRESS=192.168.1.52
+```
+
+Each instance gets its own Traefik router at `<HOST_NAME>.<HOST_DOMAIN>`, proxying to `https://<ADDRESS>:8006/`.
+
+To add a new Proxmox server, just add its variables to `.env.external` and restart Traefik — no need to edit any YAML files.
+
 ## Available External Services
 
 Common external services included:
 
 | Service | Description |
 |---------|-------------|
-| `proxmox` | Proxmox VE hypervisor |
+| `proxmox` | Proxmox VE hypervisor (supports up to 10 instances) |
 | `truenas` | TrueNAS storage |
 | `homeassistant` | Home Assistant |
 | `pfsense` | pfSense firewall |
