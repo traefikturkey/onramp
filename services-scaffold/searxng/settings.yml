@@ -16,3 +16,8 @@ general:
   enable_metrics: true
 search:
   autocomplete: "google"
+  formats:
+    - html
+    - json
+    - csv
+    - rss
