@@ -9,7 +9,7 @@ services:
       - ./services-enabled/joyride.env
     container_name: ${JOYRIDE_CONTAINER_NAME:-joyride}
     restart: ${JOYRIDE_RESTART:-unless-stopped}
-    mem_limit: ${JOYRIDE_MEM_LIMIT:-128m}
+    mem_limit: ${JOYRIDE_MEM_LIMIT:-256m}
     environment:
       - TZ=${TZ}
       - HOSTIP=${HOSTIP}
