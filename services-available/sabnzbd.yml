@@ -37,6 +37,7 @@ services:
       - traefik.enable=${SABNZBD_TRAEFIK_ENABLE:-true}
       - traefik.http.routers.sabnzbd.entrypoints=websecure
       - traefik.http.routers.sabnzbd.rule=Host(`${SABNZBD_CONTAINER_NAME:-sabnzbd}.${HOST_DOMAIN}`)
+      - traefik.http.routers.sabnzbd.middlewares=${SABNZBD_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.sabnzbd.loadbalancer.server.port=8080
       - com.centurylinklabs.watchtower.enable=${SABNZBD_WATCHTOWER_ENABLE:-true}
       - autoheal=${SABNZBD_AUTOHEAL:-true}

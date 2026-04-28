@@ -32,6 +32,7 @@ services:
       - traefik.enable=${WINDOWS_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.windows.entrypoints=websecure
       - traefik.http.routers.windows.rule=Host(`${WINDOWS_HOST_NAME:-windows}.${HOST_DOMAIN}`)
+      - traefik.http.routers.windows.middlewares=${WINDOWS_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       #- traefik.http.services.windows.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.windows.loadbalancer.server.port=8006
       - com.centurylinklabs.watchtower.enable=${WINDOWS_WATCHTOWER_ENABLED:-true}

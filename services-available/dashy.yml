@@ -28,6 +28,7 @@ services:
       - traefik.enable=${DASHY_TRAEFIK_ENABLE:-true}
       - traefik.http.routers.dashy.entrypoints=websecure
       - traefik.http.routers.dashy.rule=Host(`${DASHY_CONTAINER_NAME:-dashy}.${HOST_DOMAIN}`)
+      - traefik.http.routers.dashy.middlewares=${DASHY_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.dashy.loadbalancer.server.port=80
       - com.centurylinklabs.watchtower.enable=${DASHY_WATCHTOWER_ENABLE:-true}
       - autoheal=${DASHY_AUTOHEAL:-true}

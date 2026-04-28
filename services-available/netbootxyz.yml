@@ -33,6 +33,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.netbootxyz.entrypoints=websecure
       - traefik.http.routers.netbootxyz.rule=Host(`${NETBOOTXYZ_CONTAINER_NAME:-netbootxyz}.${HOST_DOMAIN}`)
+      - traefik.http.routers.netbootxyz.middlewares=${NETBOOTXYZ_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.netbootxyz.loadbalancer.server.port=3000
       - com.centurylinklabs.watchtower.enable=${NETBOOTXYZ_WATCHTOWER_ENABLED:-true}
       - autoheal=true

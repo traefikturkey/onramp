@@ -28,6 +28,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.wikijs.entrypoints=websecure
       - traefik.http.routers.wikijs.rule=Host(`${WIKIJS_CONTAINER_NAME:-wikijs}.${HOST_DOMAIN}`)
+      - traefik.http.routers.wikijs.middlewares=${WIKIJS_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.wikijs.loadbalancer.server.port=3000
       - com.centurylinklabs.watchtower.enable=${WIKIJS_WATCHTOWER_ENABLED:-true}
       - autoheal=true

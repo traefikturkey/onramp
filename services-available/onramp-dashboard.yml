@@ -40,6 +40,7 @@ services:
       - traefik.enable=${ONRAMP_DASHBOARD_TRAEFIK_ENABLE:-true}
       - traefik.http.routers.onramp-dashboard.entrypoints=websecure
       - traefik.http.routers.onramp-dashboard.rule=Host(`${ONRAMP_DASHBOARD_HOST_NAME:-dashboard}.${HOST_DOMAIN}`)
+      - traefik.http.routers.onramp-dashboard.middlewares=${ONRAMP_DASHBOARD_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.onramp-dashboard.loadbalancer.server.port=8000
       - com.centurylinklabs.watchtower.enable=${ONRAMP_DASHBOARD_WATCHTOWER:-true}
       - autoheal=${ONRAMP_DASHBOARD_AUTOHEAL:-true}

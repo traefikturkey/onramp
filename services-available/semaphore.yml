@@ -74,6 +74,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.semaphore.entrypoints=websecure
       - traefik.http.routers.semaphore.rule=Host(`${SEMAPHORE_CONTAINER_NAME:-semaphore}.${HOST_DOMAIN}`)
+      - traefik.http.routers.semaphore.middlewares=${SEMAPHORE_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.semaphore.loadbalancer.server.scheme=http
       - traefik.http.services.semaphore.loadbalancer.server.port=3000
       - com.centurylinklabs.watchtower.enable=${SEMAPHORE_WATCHTOWER_ENABLED:-true}

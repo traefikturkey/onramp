@@ -37,6 +37,7 @@ services:
       - traefik.enable=${ADGUARD_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.adguard.entrypoints=websecure
       - traefik.http.routers.adguard.rule=Host(`${ADGUARD_CONTAINER_NAME:-adguard}.${HOST_DOMAIN}`)
+      - traefik.http.routers.adguard.middlewares=${ADGUARD_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.adguard.loadbalancer.server.port=80
       - com.centurylinklabs.watchtower.enable=${ADGUARD_WATCHTOWER_ENABLED:-true}
       - autoheal=true

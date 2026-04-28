@@ -40,6 +40,7 @@ services:
       - traefik.docker.network=traefik
       - traefik.http.routers.immich.entrypoints=websecure
       - traefik.http.routers.immich.rule=Host(`${IMMICH_CONTAINER_NAME:-immich}.${HOST_DOMAIN}`)
+      - traefik.http.routers.immich.middlewares=${IMMICH_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.immich.loadbalancer.server.port=2283
       - com.centurylinklabs.watchtower.enable=${IMMICH_WATCHTOWER_ENABLED:-false}
       - autoheal=true

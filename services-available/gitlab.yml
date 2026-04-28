@@ -36,6 +36,7 @@ services:
       - traefik.http.routers.gitlab.rule=Host(`${GITLAB_CONTAINER_NAME:-gitlab}.${HOST_DOMAIN}`)
       - traefik.http.routers.gitlab.tls=true
       - traefik.http.routers.gitlab.service=gitlab
+      - traefik.http.routers.gitlab.middlewares=${GITLAB_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.gitlab.loadbalancer.server.scheme=https
       - traefik.http.services.gitlab.loadbalancer.server.port=443
       - com.centurylinklabs.watchtower.enable=${GITLAB_WATCHTOWER_ENABLED:-true}

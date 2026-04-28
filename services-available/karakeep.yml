@@ -59,6 +59,7 @@ services:
       - traefik.enable=${KARAKEEP_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.karakeep.entrypoints=websecure
       - traefik.http.routers.karakeep.rule=Host(`${KARAKEEP_HOST_NAME:-karakeep}.${HOST_DOMAIN}`)
+      - traefik.http.routers.karakeep.middlewares=${KARAKEEP_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.karakeep.loadbalancer.server.port=3000
       - com.centurylinklabs.watchtower.enable=${KARAKEEP_WATCHTOWER_ENABLED:-true}
       - autoheal=${KARAKEEP_AUTOHEAL_ENABLED:-true}

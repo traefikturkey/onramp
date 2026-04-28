@@ -37,6 +37,7 @@ services:
       - traefik.enable=${MANYFOLD_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.manyfold.entrypoints=websecure
       - traefik.http.routers.manyfold.rule=Host(`${MANYFOLD_HOST_NAME:-manyfold}.${HOST_DOMAIN}`)
+      - traefik.http.routers.manyfold.middlewares=${MANYFOLD_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       #- traefik.http.services.manyfold.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.manyfold.loadbalancer.server.port=3214
       - com.centurylinklabs.watchtower.enable=${MANYFOLD_WATCHTOWER_ENABLED:-true}

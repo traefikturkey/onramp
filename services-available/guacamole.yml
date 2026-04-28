@@ -29,6 +29,7 @@ services:
       - traefik.enable=${GUACAMOLE_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.guacamole.entrypoints=websecure
       - traefik.http.routers.guacamole.rule=Host(`${GUACAMOLE_CONTAINER_NAME:-guacamole}.${HOST_DOMAIN}`)
+      - traefik.http.routers.guacamole.middlewares=${GUACAMOLE_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.guacamole.loadbalancer.server.port=8080
       - com.centurylinklabs.watchtower.enable=${GUACAMOLE_WATCHTOWER_ENABLED:-true}
       - autoheal=${GUACAMOLE_AUTOHEAL_ENABLED:-true}

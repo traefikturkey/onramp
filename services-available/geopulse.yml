@@ -141,6 +141,7 @@ services:
       - traefik.enable=${GEOPULSE_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.geopulse.entrypoints=websecure
       - traefik.http.routers.geopulse.rule=Host(`${GEOPULSE_HOST_NAME:-geopulse}.${HOST_DOMAIN}`)
+      - traefik.http.routers.geopulse.middlewares=${GEOPULSE_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.geopulse.loadbalancer.server.port=80
       - com.centurylinklabs.watchtower.enable=${GEOPULSE_WATCHTOWER_ENABLED:-true}
       - autoheal=${GEOPULSE_AUTOHEAL_ENABLED:-true}

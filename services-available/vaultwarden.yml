@@ -40,6 +40,7 @@ services:
       - traefik.enable=${VAULTWARDEN_TRAEFIK_ENABLE:-true}
       - traefik.http.routers.vaultwarden.entrypoints=websecure
       - traefik.http.routers.vaultwarden.rule=Host(`${VAULTWARDEN_HOSTNAME:-vaultwarden}.${HOST_DOMAIN}`)
+      - traefik.http.routers.vaultwarden.middlewares=${VAULTWARDEN_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.vaultwarden.loadbalancer.server.port=80
       - com.centurylinklabs.watchtower.enable=${VAULTWARDEN_WATCHTOWER_ENABLE:-true}
       - autoheal=${VAULTWARDEN_AUTOHEAL:-true}

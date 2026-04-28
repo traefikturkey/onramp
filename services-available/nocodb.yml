@@ -35,6 +35,7 @@ services:
       - traefik.enable=${NOCODB_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.nocodb.entrypoints=websecure
       - traefik.http.routers.nocodb.rule=Host(`${NOCODB_HOST_NAME:-nocodb}.${HOST_DOMAIN}`)
+      - traefik.http.routers.nocodb.middlewares=${NOCODB_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       #- traefik.http.services.nocodb.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.nocodb.loadbalancer.server.port=8080
       - com.centurylinklabs.watchtower.enable=${NOCODB_WATCHTOWER_ENABLED:-true}

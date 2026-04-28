@@ -32,6 +32,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.ghost.entrypoints=websecure
       - traefik.http.routers.ghost.rule=Host(`${GHOST_CONTAINER_NAME:-ghost}.${HOST_DOMAIN}`)
+      - traefik.http.routers.ghost.middlewares=${GHOST_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.ghost.loadbalancer.server.port=2368
       - com.centurylinklabs.watchtower.enable=${GHOST_WATCHTOWER_ENABLED:-true}
       - autoheal=true

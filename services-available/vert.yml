@@ -29,6 +29,7 @@ services:
       - traefik.enable=${VERT_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.vert.entrypoints=websecure
       - traefik.http.routers.vert.rule=Host(`${VERT_HOST_NAME:-vert}.${HOST_DOMAIN}`)
+      - traefik.http.routers.vert.middlewares=${VERT_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       #- traefik.http.services.vert.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.vert.loadbalancer.server.port=3000
       - com.centurylinklabs.watchtower.enable=${VERT_WATCHTOWER_ENABLED:-true}

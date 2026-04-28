@@ -51,6 +51,7 @@ services:
       - traefik.enable=${FLIGHTCHECK_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.flightcheck.entrypoints=websecure
       - traefik.http.routers.flightcheck.rule=Host(`${FLIGHTCHECK_HOST_NAME:-flightcheck}.${HOST_DOMAIN}`)
+      - traefik.http.routers.flightcheck.middlewares=${FLIGHTCHECK_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.flightcheck.loadbalancer.server.port=8000
       - com.centurylinklabs.watchtower.enable=${FLIGHTCHECK_WATCHTOWER_ENABLED:-true}
       - autoheal=${FLIGHTCHECK_AUTOHEAL_ENABLED:-true}

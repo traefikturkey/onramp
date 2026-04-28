@@ -27,6 +27,7 @@ services:
       - traefik.enable=${OBSIDIAN_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.obsidian.entrypoints=websecure
       - traefik.http.routers.obsidian.rule=Host(`${OBSIDIAN_HOST_NAME:-obsidian}.${HOST_DOMAIN}`)
+      - traefik.http.routers.obsidian.middlewares=${OBSIDIAN_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       #- traefik.http.services.obsidian.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.obsidian.loadbalancer.server.port=3000
       - com.centurylinklabs.watchtower.enable=${OBSIDIAN_WATCHTOWER_ENABLED:-true}

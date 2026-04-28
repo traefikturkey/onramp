@@ -24,6 +24,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.postman.entrypoints=websecure
       - traefik.http.routers.postman.rule=Host(`${POSTMAN_CONTAINER_NAME:-hoppscotch}.${HOST_DOMAIN}`)
+      - traefik.http.routers.postman.middlewares=${POSTMAN_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.postman.loadbalancer.server.port=3000
       - com.centurylinklabs.watchtower.enable=${POSTMAN_WATCHTOWER_ENABLED:-true}
       - autoheal=true

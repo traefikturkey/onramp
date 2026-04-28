@@ -79,6 +79,7 @@ services:
       - traefik.enable=${DAWARICH_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.dawarich.entrypoints=websecure
       - traefik.http.routers.dawarich.rule=Host(`${DAWARICH_HOST_NAME:-dawarich}.${HOST_DOMAIN}`)
+      - traefik.http.routers.dawarich.middlewares=${DAWARICH_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       # - traefik.http.services.dawarich.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.dawarich.loadbalancer.server.port=3000
       - com.centurylinklabs.watchtower.enable=${DAWARICH_WATCHTOWER_ENABLED:-true}

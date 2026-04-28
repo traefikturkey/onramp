@@ -31,6 +31,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.audiobookshelf.entrypoints=websecure
       - traefik.http.routers.audiobookshelf.rule=Host(`${AUDIOBOOKSHELF_CONTAINER_NAME:-audiobookshelf}.${HOST_DOMAIN}`)
+      - traefik.http.routers.audiobookshelf.middlewares=${AUDIOBOOKSHELF_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.audiobookshelf.loadbalancer.server.port=80
       - com.centurylinklabs.watchtower.enable=${AUDIOBOOKSHELF_WATCHTOWER_ENABLED:-true}
       - autoheal=true

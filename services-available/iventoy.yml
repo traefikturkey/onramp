@@ -34,6 +34,7 @@ services:
       - traefik.enable=${IVENTOY_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.iventoy.entrypoints=websecure
       - traefik.http.routers.iventoy.rule=Host(`${IVENTOY_CONTAINER_NAME:-iventoy}.${HOST_DOMAIN}`)
+      - traefik.http.routers.iventoy.middlewares=${IVENTOY_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.iventoy.loadbalancer.server.port=26000
       - com.centurylinklabs.watchtower.enable=${IVENTOY_WATCHTOWER_ENABLED:-true}
       - autoheal=${IVENTOY_AUTOHEAL_ENABLED:-true}

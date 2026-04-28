@@ -29,6 +29,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.glances.entrypoints=websecure
       - traefik.http.routers.glances.rule=Host(`${GLANCES_CONTAINER_NAME:-glances}.${HOST_DOMAIN}`)
+      - traefik.http.routers.glances.middlewares=${GLANCES_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.glances.loadbalancer.server.port=61208
       - com.centurylinklabs.watchtower.enable=${GLANCES_WATCHTOWER_ENABLED:-true}
       - autoheal=true

@@ -24,6 +24,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.dozzle.rule=PathPrefix(`${DOZZLE_BASE:-/logs}`)
       - traefik.http.routers.dozzle.entrypoints=websecure
+      - traefik.http.routers.dozzle.middlewares=${DOZZLE_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.dozzle.loadbalancer.server.scheme=http
       - traefik.http.services.dozzle.loadbalancer.server.port=8080
       - com.centurylinklabs.watchtower.enable=${DOZZLE_WATCHTOWER_ENABLED:-true}

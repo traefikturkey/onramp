@@ -29,6 +29,7 @@ services:
       - traefik.enable=${DOCKER_REGISTRY_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.registry.entrypoints=websecure
       - traefik.http.routers.registry.rule=Host(`${DOCKER_REGISTRY_CONTAINER_NAME:-registry}.${HOST_DOMAIN}`)
+      - traefik.http.routers.registry.middlewares=${DOCKER_REGISTRY_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.registry.loadbalancer.server.port=5000
       # https://bcrypt-generator.com/ Generate DOCKER_REGISTRY_AUTH_PASS - make sure you double up the $$ to escape them
       - traefik.http.middlewares.auth.basicauth.users=${DOCKER_REGISTRY_AUTH_USER:-admin}:${DOCKER_REGISTRY_AUTH_PASS:-password}}

@@ -32,5 +32,6 @@ services:
       - traefik.enable=true
       - traefik.http.routers.alertmanager.rule=Host(`${ALERTMANAGER_HOST_NAME:-alertmanager}.${HOST_DOMAIN}`)
       - traefik.http.routers.alertmanager.entrypoints=websecure
+      - traefik.http.routers.alertmanager.middlewares=${ALERTMANAGER_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.alertmanager.loadbalancer.server.port=9093
       - com.centurylinklabs.watchtower.enable=${ALERTMANAGER_WATCHTOWER_ENABLED:-true}

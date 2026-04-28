@@ -40,6 +40,7 @@ services:
       - traefik.enable=${REDLIB_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.redlib.entrypoints=websecure
       - traefik.http.routers.redlib.rule=Host(`${REDLIB_HOST_NAME:-redlib}.${HOST_DOMAIN}`)
+      - traefik.http.routers.redlib.middlewares=${REDLIB_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.redlib.loadbalancer.server.port=8080
       - com.centurylinklabs.watchtower.enable=${REDLIB_WATCHTOWER_ENABLED:-true}
       - autoheal=${REDLIB_AUTOHEAL_ENABLED:-true}

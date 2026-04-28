@@ -32,6 +32,7 @@ services:
       - traefik.enable=${HOMEPAGE_TRAEFIK_ENABLE:-true}
       - traefik.http.routers.homepage.entrypoints=websecure
       - traefik.http.routers.homepage.rule=Host(`${HOMEPAGE_CONTAINER_NAME:-homepage}.${HOST_DOMAIN}`)
+      - traefik.http.routers.homepage.middlewares=${HOMEPAGE_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.homepage.loadbalancer.server.port=3000
       - com.centurylinklabs.watchtower.enable=${HOMEPAGE_WATCHTOWER:-true}
       - autoheal=${HOMEPAGE_AUTOHEAL:-true}

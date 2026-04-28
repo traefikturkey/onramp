@@ -45,6 +45,7 @@ services:
       - traefik.enable=${RWMARKABLE_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.rwmarkable.entrypoints=websecure
       - traefik.http.routers.rwmarkable.rule=Host(`${RWMARKABLE_HOST_NAME:-rwmarkable}.${HOST_DOMAIN}`)
+      - traefik.http.routers.rwmarkable.middlewares=${RWMARKABLE_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       #- traefik.http.services.rwmarkable.loadbalancer.server.scheme=https # enable if the service wants to connect over >      
       - traefik.http.services.rwmarkable.loadbalancer.server.port=3000
       - com.centurylinklabs.watchtower.enable=${RWMARKABLE_WATCHTOWER_ENABLED:-true}

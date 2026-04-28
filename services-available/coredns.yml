@@ -40,6 +40,7 @@ services:
       - traefik.enable=${COREDNS_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.coredns.entrypoints=websecure
       - traefik.http.routers.coredns.rule=Host(`${COREDNS_CONTAINER_NAME:-coredns}.${HOST_DOMAIN}`)
+      - traefik.http.routers.coredns.middlewares=${COREDNS_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.coredns.loadbalancer.server.port=80
       - com.centurylinklabs.watchtower.enable=${COREDNS_WATCHTOWER_ENABLED:-true}
       - autoheal=${COREDNS_AUTOHEAL_ENABLED:-true}

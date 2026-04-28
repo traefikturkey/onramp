@@ -31,6 +31,7 @@ services:
       - traefik.enable=${SHLINK_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.shlink.entrypoints=websecure
       - traefik.http.routers.shlink.rule=Host(`${SHLINK_HOST_NAME:-shlink}.${HOST_DOMAIN}`)
+      - traefik.http.routers.shlink.middlewares=${SHLINK_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       #- traefik.http.services.shlink.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.shlink.loadbalancer.server.port=8080
       - com.centurylinklabs.watchtower.enable=${SHLINK_WATCHTOWER_ENABLED:-true}

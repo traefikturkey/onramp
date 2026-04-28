@@ -33,6 +33,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.linkding.entrypoints=websecure
       - traefik.http.routers.linkding.rule=Host(`${LINKDING_CONTAINER_NAME:-linkding}.${HOST_DOMAIN}`)
+      - traefik.http.routers.linkding.middlewares=${LINKDING_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       #- traefik.http.services.linkding.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.linkding.loadbalancer.server.port=9090
       - com.centurylinklabs.watchtower.enable=${LINKDING_WATCHTOWER_ENABLED:-true}

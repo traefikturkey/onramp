@@ -29,6 +29,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.kasm.entrypoints=websecure
       - traefik.http.routers.kasm.rule=Host(`${KASM_CONTAINER_NAME:-kasm}.${HOST_DOMAIN}`)
+      - traefik.http.routers.kasm.middlewares=${KASM_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.kasm.loadbalancer.server.scheme=https
       - traefik.http.services.kasm.loadbalancer.server.port=443
       - com.centurylinklabs.watchtower.enable=${KASM_WATCHTOWER_ENABLED:-true}

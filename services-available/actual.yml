@@ -45,6 +45,7 @@ services:
       - traefik.enable=${ACTUAL_TRAEFIK_ENABLE:-true}
       - traefik.http.routers.actual.entrypoints=websecure
       - traefik.http.routers.actual.rule=Host(`${ACTUAL_CONTAINER_NAME:-actual}.${HOST_DOMAIN}`)
+      - traefik.http.routers.actual.middlewares=${ACTUAL_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.actual.loadbalancer.server.port=5006
       - com.centurylinklabs.watchtower.enable=${ACTUAL_WATCHTOWER_ENABLE:-true}
       - autoheal=${ACTUAL_AUTOHEAL:-true}

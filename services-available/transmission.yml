@@ -37,6 +37,7 @@ services:
       - traefik.enable=${TRANSMISSION_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.transmission.entrypoints=websecure
       - traefik.http.routers.transmission.rule=Host(`${TRANSMISSION_HOST_NAME:-transmission}.${HOST_DOMAIN}`)
+      - traefik.http.routers.transmission.middlewares=${TRANSMISSION_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.transmission.loadbalancer.server.port=9091
       - com.centurylinklabs.watchtower.enable=${TRANSMISSION_WATCHTOWER_ENABLED:-true}
       - autoheal=${TRANSMISSION_AUTOHEAL_ENABLED:-true}

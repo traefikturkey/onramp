@@ -25,6 +25,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.whoami.entrypoints=websecure
       - traefik.http.routers.whoami.rule=Host(`${WHOAMI_CONTAINER_NAME:-whoami}.${HOST_DOMAIN}`)
+      - traefik.http.routers.whoami.middlewares=${WHOAMI_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.whoami.loadbalancer.server.port=80
       #- traefik.http.routers.whoami.middlewares=authentik@docker
       #- traefik.http.routers.whoami.middlewares=authelia@docker

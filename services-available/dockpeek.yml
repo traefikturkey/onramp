@@ -41,6 +41,7 @@ services:
       - traefik.enable=${DOCKPEEK_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.dockpeek.entrypoints=websecure
       - traefik.http.routers.dockpeek.rule=Host(`${DOCKPEEK_HOST_NAME:-dockpeek}.${HOST_DOMAIN}`)
+      - traefik.http.routers.dockpeek.middlewares=${DOCKPEEK_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       #- traefik.http.services.dockpeek.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.dockpeek.loadbalancer.server.port=8000
       - com.centurylinklabs.watchtower.enable=${DOCKPEEK_WATCHTOWER_ENABLED:-true}

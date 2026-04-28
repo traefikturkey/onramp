@@ -29,6 +29,7 @@ services:
       - traefik.enable=${TASKTROVE_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.tasktrove.entrypoints=websecure
       - traefik.http.routers.tasktrove.rule=Host(`${TASKTROVE_HOST_NAME:-tasktrove}.${HOST_DOMAIN}`)
+      - traefik.http.routers.tasktrove.middlewares=${TASKTROVE_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.tasktrove.loadbalancer.server.port=3000
       - com.centurylinklabs.watchtower.enable=${TASKTROVE_WATCHTOWER_ENABLED:-true}
       - autoheal=${TASKTROVE_AUTOHEAL_ENABLED:-true}

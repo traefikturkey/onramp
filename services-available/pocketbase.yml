@@ -33,6 +33,7 @@ services:
       - traefik.enable=${POCKETBASE_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.pocketbase.entrypoints=websecure
       - traefik.http.routers.pocketbase.rule=Host(`${POCKETBASE_HOST_NAME:-pocketbase}.${HOST_DOMAIN}`)
+      - traefik.http.routers.pocketbase.middlewares=${POCKETBASE_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.pocketbase.loadbalancer.server.port=8090
       - com.centurylinklabs.watchtower.enable=${POCKETBASE_WATCHTOWER_ENABLED:-true}
       - autoheal=${POCKETBASE_AUTOHEAL_ENABLED:-true}

@@ -28,6 +28,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.synapse.entrypoints=websecure
       - traefik.http.routers.synapse.rule=Host(`${SYNAPSE_CONTAINER_NAME:-synapse}.${HOST_DOMAIN}`)
+      - traefik.http.routers.synapse.middlewares=${SYNAPSE_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.synapse.loadbalancer.server.port=8008
       - com.centurylinklabs.watchtower.enable=${SYNAPSE_WATCHTOWER_ENABLED:-true}
       - autoheal=true

@@ -28,6 +28,7 @@ services:
       - traefik.enable=${WALLOS_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.wallos.entrypoints=websecure
       - traefik.http.routers.wallos.rule=Host(`${WALLOS_CONTAINER_NAME:-wallos}.${HOST_DOMAIN}`)
+      - traefik.http.routers.wallos.middlewares=${WALLOS_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       #- traefik.http.services.wallos.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.wallos.loadbalancer.server.port=80
       - com.centurylinklabs.watchtower.enable=${WALLOS_WATCHTOWER_ENABLED:-true}

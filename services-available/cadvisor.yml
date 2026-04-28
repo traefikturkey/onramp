@@ -38,4 +38,5 @@ services:
       - traefik.enable=true
       - traefik.http.routers.cadvisor.rule=Host(`${CADVISOR_CONTAINER_NAME:-cadvisor}.${HOST_DOMAIN}`)
       - traefik.http.routers.cadvisor.entrypoints=websecure
+      - traefik.http.routers.cadvisor.middlewares=${CADVISOR_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.cadvisor.loadbalancer.server.port=8080

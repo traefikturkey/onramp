@@ -28,6 +28,7 @@ services:
       - traefik.enable=${SQLITEWEB_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.sqliteweb.entrypoints=websecure
       - traefik.http.routers.sqliteweb.rule=Host(`${SQLITEWEB_CONTAINER_NAME:-sqliteweb}.${HOST_DOMAIN}`)
+      - traefik.http.routers.sqliteweb.middlewares=${SQLITEWEB_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.sqliteweb.loadbalancer.server.port=8080
       - com.centurylinklabs.watchtower.enable=${SQLITEWEB_WATCHTOWER_ENABLED:-true}
       - autoheal=${SQLITEWEB_AUTOHEAL_ENABLED:-true}

@@ -30,6 +30,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.navidrome.entrypoints=websecure
       - traefik.http.routers.navidrome.rule=Host(`${NAVIDROME_CONTAINER_NAME:-navidrome}.${HOST_DOMAIN}`)
+      - traefik.http.routers.navidrome.middlewares=${NAVIDROME_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.navidrome.loadbalancer.server.port=4533
       - com.centurylinklabs.watchtower.enable=${NAVIDROME_WATCHTOWER_ENABLED:-true}
       - autoheal=true

@@ -88,6 +88,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.authentik.entrypoints=websecure
       - traefik.http.routers.authentik.rule=Host(`${AUTHENTIK_AUTH_DOMAIN}`) || HostRegexp(`{subdomain:[a-z]+}.${HOST_DOMAIN}`) && PathPrefix(`/outpost.goauthentik.io/`)
+      - traefik.http.routers.authentik.middlewares=${AUTHENTIK_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.authentik.loadbalancer.server.port=9000
       - traefik.http.middlewares.authentik.forwardauth.address=http://authentik-server:9000/outpost.goauthentik.io/auth/traefik
       - traefik.http.middlewares.authentik.forwardauth.trustForwardHeader=true

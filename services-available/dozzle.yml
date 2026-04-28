@@ -27,6 +27,7 @@ services:
       - traefik.enable=${DOZZLE_TRAEFIK_ENABLE:-true}
       - traefik.http.routers.dozzle.entrypoints=websecure
       - traefik.http.routers.dozzle.rule=Host(`${DOZZLE_CONTAINER_NAME:-dozzle}.${HOST_DOMAIN}`)
+      - traefik.http.routers.dozzle.middlewares=${DOZZLE_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.dozzle.loadbalancer.server.port=8080
       - com.centurylinklabs.watchtower.enable=${DOZZLE_WATCHTOWER_ENABLE:-true}
       - autoheal=${DOZZLE_AUTOHEAL:-true}

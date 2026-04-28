@@ -25,6 +25,7 @@ services:
       - traefik.enable=${MAZANOKE_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.mazanoke.entrypoints=websecure
       - traefik.http.routers.mazanoke.rule=Host(`${MAZANOKE_HOST_NAME:-mazanoke}.${HOST_DOMAIN}`)
+      - traefik.http.routers.mazanoke.middlewares=${MAZANOKE_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.mazanoke.loadbalancer.server.port=80
       - com.centurylinklabs.watchtower.enable=${MAZANOKE_WATCHTOWER_ENABLED:-true}
       - autoheal=${MAZANOKE_AUTOHEAL_ENABLED:-true}

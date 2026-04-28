@@ -27,6 +27,7 @@ services:
       - traefik.enable=${CHROMADB_TRAEFIK_ENABLE:-true}
       - traefik.http.routers.chromadb.entrypoints=websecure
       - traefik.http.routers.chromadb.rule=Host(`${CHROMADB_CONTAINER_NAME:-chromadb}.${HOST_DOMAIN}`)
+      - traefik.http.routers.chromadb.middlewares=${CHROMADB_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.chromadb.loadbalancer.server.port=8000
       - com.centurylinklabs.watchtower.enable=${CHROMADB_WATCHTOWER_ENABLE:-true}
       - autoheal=${CHROMADB_AUTOHEAL:-true}

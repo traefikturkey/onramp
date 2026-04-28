@@ -37,6 +37,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.photoprism.entrypoints=websecure
       - traefik.http.routers.photoprism.rule=Host(`${PHOTOPRISM_CONTAINER_NAME:-photoprism}.${HOST_DOMAIN}`)
+      - traefik.http.routers.photoprism.middlewares=${PHOTOPRISM_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.photoprism.loadbalancer.server.port=2342
       - com.centurylinklabs.watchtower.enable=${PHOTOPRISM_WATCHTOWER_ENABLED:-true}
       - autoheal=true

@@ -30,6 +30,7 @@ services:
       - traefik.enable=${CUP_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.cup.entrypoints=websecure
       - traefik.http.routers.cup.rule=Host(`${CUP_HOST_NAME:-cup}.${HOST_DOMAIN}`)
+      - traefik.http.routers.cup.middlewares=${CUP_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       #- traefik.http.services.cup.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.cup.loadbalancer.server.port=9000
       - com.centurylinklabs.watchtower.enable=${CUP_WATCHTOWER_ENABLED:-true}

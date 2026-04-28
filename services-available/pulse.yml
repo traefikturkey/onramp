@@ -31,6 +31,7 @@ services:
       - traefik.enable=${PULSE_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.pulse.entrypoints=websecure
       - traefik.http.routers.pulse.rule=Host(`${PULSE_HOST_NAME:-pulse}.${HOST_DOMAIN}`)
+      - traefik.http.routers.pulse.middlewares=${PULSE_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       #- traefik.http.services.pulse.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.pulse.loadbalancer.server.port=7655
       - com.centurylinklabs.watchtower.enable=${PULSE_WATCHTOWER_ENABLED:-true}

@@ -43,6 +43,7 @@ services:
       - traefik.enable=${YOUTUBE_TRANSCRIPT_MCP_TRAEFIK_ENABLE:-true}
       - traefik.http.routers.youtube-transcript-mcp.entrypoints=websecure
       - traefik.http.routers.youtube-transcript-mcp.rule=Host(`${YOUTUBE_TRANSCRIPT_MCP_HOST_NAME:-youtube-transcript}.${HOST_DOMAIN}`)
+      - traefik.http.routers.youtube-transcript-mcp.middlewares=${YOUTUBE_TRANSCRIPT_MCP_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.youtube-transcript-mcp.loadbalancer.server.port=${YOUTUBE_TRANSCRIPT_MCP_PORT:-8080}
       - com.centurylinklabs.watchtower.enable=${YOUTUBE_TRANSCRIPT_MCP_WATCHTOWER_ENABLE:-true}
       - autoheal=${YOUTUBE_TRANSCRIPT_MCP_AUTOHEAL:-true}

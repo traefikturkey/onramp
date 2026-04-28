@@ -28,6 +28,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.librespeed.entrypoints=websecure
       - traefik.http.routers.librespeed.rule=Host(`librespeed.${HOST_DOMAIN}`)
+      - traefik.http.routers.librespeed.middlewares=${LIBRESPEED_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.librespeed.loadbalancer.server.port=80
       - com.centurylinklabs.watchtower.enable=${LIBRESPEED_WATCHTOWER_ENABLED:-true}
       - autoheal=true

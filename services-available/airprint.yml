@@ -30,6 +30,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.airprint.entrypoints=websecure
       - traefik.http.routers.airprint.rule=Host(`${AIRPRINT_CONTAINER_NAME:-airprint}.${HOST_DOMAIN}`)
+      - traefik.http.routers.airprint.middlewares=${AIRPRINT_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.airprint.loadbalancer.server.port=631
       - com.centurylinklabs.watchtower.enable=${AIRPRINT_WATCHTOWER_ENABLED:-true}
       - autoheal=true

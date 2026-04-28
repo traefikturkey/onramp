@@ -35,6 +35,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.homarr.entrypoints=websecure
       - traefik.http.routers.homarr.rule=Host(`${HOMARR_CONTAINER_NAME:-homarr}.${HOST_DOMAIN}`)
+      - traefik.http.routers.homarr.middlewares=${HOMARR_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.homarr.loadbalancer.server.port=7575
       - com.centurylinklabs.watchtower.enable=${HOMARR_WATCHTOWER_ENABLED:-true}
       - autoheal=true

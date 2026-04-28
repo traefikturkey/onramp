@@ -61,6 +61,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.itflow.entrypoints=websecure
       - traefik.http.routers.itflow.rule=Host(`${ITFLOW_CONTAINER_NAME:-itflow}.${HOST_DOMAIN}`)
+      - traefik.http.routers.itflow.middlewares=${ITFLOW_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.itflow.loadbalancer.server.port=8080
       - com.centurylinklabs.watchtower.enable=${ITFLOW_WATCHTOWER_ENABLED:-true}
       - autoheal=true

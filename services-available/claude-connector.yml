@@ -31,6 +31,7 @@ services:
       - traefik.enable=${CLAUDE_CONNECTOR_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.claude-connector.entrypoints=websecure
       - traefik.http.routers.claude-connector.rule=Host(`${CLAUDE_CONNECTOR_HOST_NAME:-claude-connector}.${HOST_DOMAIN}`)
+      - traefik.http.routers.claude-connector.middlewares=${CLAUDE_CONNECTOR_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.claude-connector.loadbalancer.server.port=8080
       - com.centurylinklabs.watchtower.enable=${CLAUDE_CONNECTOR_WATCHTOWER_ENABLED:-true}
       - autoheal=${CLAUDE_CONNECTOR_AUTOHEAL_ENABLED:-true}

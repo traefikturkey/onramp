@@ -27,6 +27,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.ongoing.entrypoints=websecure
       - traefik.http.routers.ongoing.rule=Host(`${ONGOING_CONTAINER_NAME:-ongoing}.${HOST_DOMAIN}`)
+      - traefik.http.routers.ongoing.middlewares=${ONGOING_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.ongoing.loadbalancer.server.port=9380
       - com.centurylinklabs.watchtower.enable=${ONGOING_WATCHTOWER_ENABLED:-true}
       - autoheal=true

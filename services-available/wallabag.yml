@@ -34,6 +34,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.wallabag.entrypoints=websecure
       - traefik.http.routers.wallabag.rule=Host(`${WALLABAG_CONTAINER_NAME:-wallabag}.${HOST_DOMAIN}`)
+      - traefik.http.routers.wallabag.middlewares=${WALLABAG_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.wallabag.loadbalancer.server.port=80
       - com.centurylinklabs.watchtower.enable=${WALLABAG_WATCHTOWER_ENABLED:-true}
       - autoheal=true

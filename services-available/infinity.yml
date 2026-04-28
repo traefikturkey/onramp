@@ -46,6 +46,7 @@ services:
       - traefik.enable=${INFINITY_TRAEFIK_ENABLE:-true}
       - traefik.http.routers.infinity.entrypoints=websecure
       - traefik.http.routers.infinity.rule=Host(`${INFINITY_CONTAINER_NAME:-infinity}.${HOST_DOMAIN}`)
+      - traefik.http.routers.infinity.middlewares=${INFINITY_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.infinity.loadbalancer.server.port=7997
       - com.centurylinklabs.watchtower.enable=${INFINITY_WATCHTOWER_ENABLE:-true}
       - autoheal=${INFINITY_AUTOHEAL:-true}

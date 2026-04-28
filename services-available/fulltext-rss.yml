@@ -27,6 +27,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.fulltext-rss.entrypoints=websecure
       - traefik.http.routers.fulltext-rss.rule=Host(`${FULLTEXT_RSS_CONTAINER_NAME:-fulltext-rss}.${HOST_DOMAIN}`)
+      - traefik.http.routers.fulltext-rss.middlewares=${FULLTEXT_RSS_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.fulltext-rss.loadbalancer.server.port=8096
       - com.centurylinklabs.watchtower.enable=${FULLTEXT_RSS_WATCHTOWER_ENABLED:-true}
       - autoheal=true

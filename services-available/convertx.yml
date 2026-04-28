@@ -29,6 +29,7 @@ services:
       - traefik.enable=${CONVERTX_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.convertx.entrypoints=websecure
       - traefik.http.routers.convertx.rule=Host(`${CONVERTX_HOST_NAME:-convertx}.${HOST_DOMAIN}`)
+      - traefik.http.routers.convertx.middlewares=${CONVERTX_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       #- traefik.http.services.convertx.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.convertx.loadbalancer.server.port=3000
       - com.centurylinklabs.watchtower.enable=${CONVERTX_WATCHTOWER_ENABLED:-true}

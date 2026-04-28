@@ -30,6 +30,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.code-server.entrypoints=websecure
       - traefik.http.routers.code-server.rule=Host(`${CODE_SERVER_CONTAINER_NAME:-code-server}.${HOST_DOMAIN}`)
+      - traefik.http.routers.code-server.middlewares=${CODE_SERVER_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.code-server.loadbalancer.server.port=8443
       - com.centurylinklabs.watchtower.enable=${CODE_SERVER_WATCHTOWER_ENABLED:-true}
       - autoheal=true

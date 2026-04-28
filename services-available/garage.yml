@@ -117,6 +117,7 @@ services:
       - traefik.http.routers.garage-s3.tls=true
       - traefik.http.routers.garage-s3.rule=Host(`${GARAGE_S3_HOST:-s3}.${HOST_DOMAIN}`)
       - traefik.http.routers.garage-s3.service=garage-s3-backend
+      - traefik.http.routers.garage-s3.middlewares=${GARAGE_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.garage-s3-backend.loadbalancer.server.port=${GARAGE_S3_PORT:-3900}
 
       # Also route bucket subdomains to S3 API (for virtual-hosted style access)
@@ -124,12 +125,14 @@ services:
       - traefik.http.routers.garage-s3-buckets.tls=true
       - traefik.http.routers.garage-s3-buckets.rule=HostRegexp(`{subdomain:[a-z0-9-]+}.${GARAGE_S3_HOST:-s3}.${HOST_DOMAIN}`)
       - traefik.http.routers.garage-s3-buckets.service=garage-s3-backend
+      - traefik.http.routers.garage-s3-buckets.middlewares=${GARAGE_MIDDLEWARES:-default-headers@file,noindex-headers@file}
 
       # Admin API service settings (metrics, cluster status, key management)
       - traefik.http.routers.garage-admin.entrypoints=websecure
       - traefik.http.routers.garage-admin.tls=true
       - traefik.http.routers.garage-admin.rule=Host(`${GARAGE_ADMIN_HOST:-garage}.${HOST_DOMAIN}`)
       - traefik.http.routers.garage-admin.service=garage-admin-backend
+      - traefik.http.routers.garage-admin.middlewares=${GARAGE_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.garage-admin-backend.loadbalancer.server.port=${GARAGE_ADMIN_PORT:-3903}
 
       - com.centurylinklabs.watchtower.enable=${GARAGE_WATCHTOWER_ENABLED:-true}

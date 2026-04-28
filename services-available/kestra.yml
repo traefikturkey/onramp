@@ -32,6 +32,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.kestra.entrypoints=websecure
       - traefik.http.routers.kestra.rule=Host(`${KESTRA_CONTAINER_NAME:-kestra}.${HOST_DOMAIN}`)
+      - traefik.http.routers.kestra.middlewares=${KESTRA_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.kestra.loadbalancer.server.port=8080
       - com.centurylinklabs.watchtower.enable=${KESTRA_WATCHTOWER_ENABLED:-true}
       - autoheal=true
