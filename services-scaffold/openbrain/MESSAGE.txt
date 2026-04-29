@@ -1,0 +1,26 @@
+OpenBrain enabled.
+
+Defaults assume the `ollama` service is also enabled and `nomic-embed-text` is
+pulled into it. If you have not done so:
+
+  make enable-service ollama          # if not already enabled
+  docker exec ollama ollama pull nomic-embed-text
+
+After first start, the MCP server is reachable at:
+
+  https://openbrain.${HOST_DOMAIN}/mcp/
+
+MCP clients authenticate via:
+
+  Authorization: Bearer <OPENBRAIN_MCP_ACCESS_KEY>
+
+The access key was auto-generated in services-enabled/openbrain.env — copy it
+out of there and feed it to your MCP client(s) (Claude Desktop, Claude Code,
+Cursor, ChatGPT, etc.).
+
+A dedicated Postgres+pgvector container backs OpenBrain. It is NOT shared with
+any other service — your memory store stays isolated.
+
+If you want to switch off Ollama and use OpenAI or OpenRouter for embeddings,
+edit services-enabled/openbrain.env and set OPENBRAIN_EMBEDDING_PROVIDER plus
+the corresponding API key.

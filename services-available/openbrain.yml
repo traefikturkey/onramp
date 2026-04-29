@@ -1,0 +1,84 @@
+networks:
+  traefik:
+    external: true
+
+# config_version: 2
+# description: Typed-table memory layer for AI agents (MCP server + dedicated pgvector)
+# https://github.com/crack-kitty/openbrain-mcp
+# https://github.com/NateBJones-Projects/OB1
+
+services:
+  openbrain:
+    image: ghcr.io/crack-kitty/openbrain-mcp:${OPENBRAIN_IMAGE_TAG:-latest}
+    env_file:
+      - ./services-enabled/openbrain.env
+    container_name: ${OPENBRAIN_CONTAINER_NAME:-openbrain}
+    restart: ${OPENBRAIN_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    environment:
+      - DATABASE_URL=postgres://${OPENBRAIN_DB_USER:-openbrain}:${OPENBRAIN_DB_PASSWORD}@${OPENBRAIN_DB_HOST:-openbrain-db}:${OPENBRAIN_DB_PORT:-5432}/${OPENBRAIN_DB_NAME:-openbrain}
+      - OPENBRAIN_MCP_ACCESS_KEY=${OPENBRAIN_MCP_ACCESS_KEY}
+      - OPENBRAIN_HOST=0.0.0.0
+      - OPENBRAIN_PORT=8080
+      - OPENBRAIN_EMBEDDING_PROVIDER=${OPENBRAIN_EMBEDDING_PROVIDER:-ollama}
+      - OPENBRAIN_EMBEDDING_MODEL=${OPENBRAIN_EMBEDDING_MODEL:-nomic-embed-text}
+      - OPENBRAIN_EMBEDDING_DIMENSIONS=${OPENBRAIN_EMBEDDING_DIMENSIONS:-768}
+      - OPENBRAIN_OLLAMA_BASE_URL=${OPENBRAIN_OLLAMA_BASE_URL:-http://ollama:11434}
+      - OPENBRAIN_OPENAI_API_KEY=${OPENBRAIN_OPENAI_API_KEY:-}
+      - OPENBRAIN_OPENAI_MODEL=${OPENBRAIN_OPENAI_MODEL:-text-embedding-3-small}
+      - OPENBRAIN_OPENROUTER_API_KEY=${OPENBRAIN_OPENROUTER_API_KEY:-}
+      - OPENBRAIN_METADATA_LLM_PROVIDER=${OPENBRAIN_METADATA_LLM_PROVIDER:-ollama}
+      - OPENBRAIN_METADATA_LLM_MODEL=${OPENBRAIN_METADATA_LLM_MODEL:-qwen2.5-coder:14b}
+      - OPENBRAIN_HYBRID_WEIGHT=${OPENBRAIN_HYBRID_WEIGHT:-0.3}
+      - OPENBRAIN_DEDUP_THRESHOLD=${OPENBRAIN_DEDUP_THRESHOLD:-0.92}
+      - OPENBRAIN_MERGE_LOWER_THRESHOLD=${OPENBRAIN_MERGE_LOWER_THRESHOLD:-0.70}
+      - OPENBRAIN_DECAY_LAMBDA=${OPENBRAIN_DECAY_LAMBDA:-0.005}
+      - OPENBRAIN_CONSOLIDATION_INTERVAL=${OPENBRAIN_CONSOLIDATION_INTERVAL:-0}
+      - OPENBRAIN_HEADLINE_MAX_WORDS=${OPENBRAIN_HEADLINE_MAX_WORDS:-15}
+      - OPENBRAIN_BODY_MAX_WORDS=${OPENBRAIN_BODY_MAX_WORDS:-400}
+      - OPENBRAIN_BOOT_TOKEN_CAP=${OPENBRAIN_BOOT_TOKEN_CAP:-2000}
+      - OPENBRAIN_BOOT_BLOCKER_CAP=${OPENBRAIN_BOOT_BLOCKER_CAP:-5}
+      - OPENBRAIN_BOOT_PATTERN_CAP=${OPENBRAIN_BOOT_PATTERN_CAP:-5}
+      - OPENBRAIN_BOOT_TASK_CAP=${OPENBRAIN_BOOT_TASK_CAP:-20}
+    depends_on:
+      openbrain-db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    labels:
+      - joyride.host.name=${OPENBRAIN_HOST_NAME:-openbrain}.${HOST_DOMAIN}
+      - traefik.enable=${OPENBRAIN_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.openbrain.entrypoints=websecure
+      - traefik.http.routers.openbrain.rule=Host(`${OPENBRAIN_HOST_NAME:-openbrain}.${HOST_DOMAIN}`)
+      - traefik.http.services.openbrain.loadbalancer.server.port=8080
+      - com.centurylinklabs.watchtower.enable=${OPENBRAIN_WATCHTOWER_ENABLED:-true}
+      - autoheal=${OPENBRAIN_AUTOHEAL_ENABLED:-true}
+
+  openbrain-db:
+    image: pgvector/pgvector:${OPENBRAIN_PGVECTOR_TAG:-pg16}
+    env_file:
+      - ./services-enabled/openbrain.env
+    container_name: ${OPENBRAIN_DB_CONTAINER_NAME:-openbrain-db}
+    restart: ${OPENBRAIN_RESTART:-unless-stopped}
+    networks:
+      - traefik
+    volumes:
+      - /apps/onramp/etc/openbrain/pgdata:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=${OPENBRAIN_DB_USER:-openbrain}
+      - POSTGRES_PASSWORD=${OPENBRAIN_DB_PASSWORD}
+      - POSTGRES_DB=${OPENBRAIN_DB_NAME:-openbrain}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${OPENBRAIN_DB_USER:-openbrain}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    labels:
+      - com.centurylinklabs.watchtower.enable=${OPENBRAIN_DB_WATCHTOWER_ENABLED:-false}
+      - autoheal=${OPENBRAIN_DB_AUTOHEAL_ENABLED:-true}

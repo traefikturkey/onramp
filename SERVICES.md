@@ -1,5 +1,5 @@
 # Available Services
-274 services and counting...
+275 services and counting...
 
 [1](#1)
 [A](#A)
@@ -238,6 +238,7 @@
 - [onboard](https://github.com/traefikturkey/onboard) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/onboard.yml)): An RSS and Bookmarks Dashboard 
 - [ongoing](https://github.com/traefikturkey/ongoing) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/ongoing.yml)): A self hosted url expander (opposite of url shortener)
 - [onramp-dashboard](https://github.com/your-repo/onramp) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/onramp-dashboard.yml)): Web dashboard for OnRamp homelab management
+- [openbrain](https://github.com/crack-kitty/openbrain-mcp) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/openbrain.yml)): Typed-table memory layer for AI agents (MCP server + dedicated pgvector)
 - [openspeedtest](https://github.com/openspeedtest/Docker-Image) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/openspeedtest.yml)): web-based speed test application
 - [overseerr](https://hub.docker.com/r/linuxserver/overseerr) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/overseerr.yml)): Request management and notification system for media content
 - [owncast](https://github.com/owncast/owncast) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/owncast.yml)): Self-hosted live video streaming server
