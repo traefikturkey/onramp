@@ -37,6 +37,7 @@ services:
       - traefik.enable=${KAPOWARR_TRAEFIK_ENABLE:-true}
       - traefik.http.routers.kapowarr.entrypoints=websecure
       - traefik.http.routers.kapowarr.rule=Host(`${KAPOWARR_CONTAINER_NAME:-kapowarr}.${HOST_DOMAIN}`)
+      - traefik.http.routers.kapowarr.middlewares=${KAPOWARR_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.kapowarr.loadbalancer.server.port=5656
       - com.centurylinklabs.watchtower.enable=${KAPOWARR_WATCHTOWER_ENABLE:-true}
       - autoheal=${KAPOWARR_AUTOHEAL:-true}

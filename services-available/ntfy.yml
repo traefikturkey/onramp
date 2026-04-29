@@ -57,6 +57,7 @@ services:
       - traefik.enable=${NTFY_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.ntfy.entrypoints=websecure
       - traefik.http.routers.ntfy.rule=Host(`${NTFY_HOST_NAME:-ntfy}.${HOST_DOMAIN}`)
+      - traefik.http.routers.ntfy.middlewares=${NTFY_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.ntfy.loadbalancer.server.port=80
       - com.centurylinklabs.watchtower.enable=${NTFY_WATCHTOWER_ENABLED:-true}
       - autoheal=${NTFY_AUTOHEAL_ENABLED:-true}

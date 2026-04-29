@@ -30,6 +30,7 @@ services:
       - traefik.enable=${LIDIFY_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.lidify.entrypoints=websecure
       - traefik.http.routers.lidify.rule=Host(`${LIDIFY_HOST_NAME:-lidify}.${HOST_DOMAIN}`)
+      - traefik.http.routers.lidify.middlewares=${LIDIFY_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       #- traefik.http.services.lidify.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.lidify.loadbalancer.server.port=5000
       - com.centurylinklabs.watchtower.enable=${LIDIFY_WATCHTOWER_ENABLED:-true}

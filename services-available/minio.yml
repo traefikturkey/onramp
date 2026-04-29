@@ -71,7 +71,7 @@ services:
       # - HTTPS-related settings:
       - traefik.http.routers.minio-https.entrypoints=websecure
       - traefik.http.routers.minio-https.tls=true
-      - traefik.http.routers.minio-https.middlewares=gzip-compress@docker
+      - traefik.http.routers.minio-https.middlewares=${MINIO_MIDDLEWARES:-default-headers@file,gzip-compress@docker,noindex-headers@file}
       - traefik.http.routers.minio-https.rule=Host(`${MINIO_API_HOST}.${HOST_DOMAIN}`)
       - traefik.http.routers.minio-https.service=minio-backend
       
@@ -89,7 +89,7 @@ services:
       # - HTTPS-related settings:
       - traefik.http.routers.minio-admin-https.entrypoints=websecure
       - traefik.http.routers.minio-admin-https.tls=true
-      - traefik.http.routers.minio-admin-https.middlewares=gzip-compress@docker
+      - traefik.http.routers.minio-admin-https.middlewares=${MINIO_MIDDLEWARES:-default-headers@file,gzip-compress@docker,noindex-headers@file}
       - traefik.http.routers.minio-admin-https.rule=Host(`${MINIO_DASHBOARD_HOST}.${HOST_DOMAIN}`)
       - traefik.http.routers.minio-admin-https.service=minio-admin-backend
       

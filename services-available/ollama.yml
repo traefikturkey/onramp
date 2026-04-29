@@ -36,6 +36,7 @@ services:
       - traefik.enable=${OLLAMA_TRAEFIK_ENABLE:-true}
       - traefik.http.routers.ollama.entrypoints=websecure
       - traefik.http.routers.ollama.rule=Host(`${OLLAMA_CONTAINER_NAME:-ollama}.${HOST_DOMAIN}`)
+      - traefik.http.routers.ollama.middlewares=${OLLAMA_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.ollama.loadbalancer.server.port=11434
       - com.centurylinklabs.watchtower.enable=${OLLAMA_WATCHTOWER_ENABLE:-true}
       - autoheal=${OLLAMA_AUTOHEAL:-true}

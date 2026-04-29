@@ -29,6 +29,7 @@ services:
       - traefik.enable=${GLANCE_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.glance.entrypoints=websecure
       - traefik.http.routers.glance.rule=Host(`${GLANCE_HOST_NAME:-glance}.${HOST_DOMAIN}`)
+      - traefik.http.routers.glance.middlewares=${GLANCE_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       #- traefik.http.services.glance.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.glance.loadbalancer.server.port=8080
       - com.centurylinklabs.watchtower.enable=${GLANCE_WATCHTOWER_ENABLED:-true}

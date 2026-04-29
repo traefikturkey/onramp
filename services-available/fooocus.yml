@@ -40,6 +40,7 @@ services:
       - traefik.enable=${FOOOCUS_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.fooocus.entrypoints=websecure
       - traefik.http.routers.fooocus.rule=Host(`${FOOOCUS_HOST_NAME:-fooocus}.${HOST_DOMAIN}`)
+      - traefik.http.routers.fooocus.middlewares=${FOOOCUS_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       #- traefik.http.services.fooocus.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.fooocus.loadbalancer.server.port=7865
       - com.centurylinklabs.watchtower.enable=${FOOOCUS_WATCHTOWER_ENABLED:-true}

@@ -29,6 +29,7 @@ services:
       - traefik.enable=${DOKU_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.doku.entrypoints=websecure
       - traefik.http.routers.doku.rule=Host(`${DOKU_CONTAINER_NAME:-doku}.${HOST_DOMAIN}`)
+      - traefik.http.routers.doku.middlewares=${DOKU_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.doku.loadbalancer.server.port=9090
       - com.centurylinklabs.watchtower.enable=${DOKU_WATCHTOWER_ENABLED:-true}
       - autoheal=${DOKU_AUTOHEAL_ENABLED:-true}

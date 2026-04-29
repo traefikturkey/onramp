@@ -30,6 +30,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.drawio.entrypoints=websecure
       - traefik.http.routers.drawio.rule=Host(`${DRAW_IO_CONTAINER_NAME:-drawio}.${HOST_DOMAIN}`)
+      - traefik.http.routers.drawio.middlewares=${DRAW_IO_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.drawio.loadbalancer.server.port=8080
       - com.centurylinklabs.watchtower.enable=${DRAW_IO_WATCHTOWER_ENABLED:-true}
       - autoheal=true

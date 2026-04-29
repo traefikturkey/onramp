@@ -50,6 +50,7 @@ services:
       - traefik.http.routers.netbox.rule=Host(`${NETBOX_CONTAINER_NAME:-netbox}.${HOST_DOMAIN}`)
       - traefik.http.services.netbox.loadbalancer.server.scheme=http # enable if the service wants to connect over https
       - traefik.http.routers.netbox.service=netbox
+      - traefik.http.routers.netbox.middlewares=${NETBOX_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.netbox.loadbalancer.server.port=8000
       - com.centurylinklabs.watchtower.enable=${NETBOX_WATCHTOWER_ENABLED:-true}
       - autoheal=true

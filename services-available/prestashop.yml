@@ -29,6 +29,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.prestashop.entrypoints=websecure
       - traefik.http.routers.prestashop.rule=Host(`${PRESTASHOP_CONTAINER_NAME:-prestashop}.${HOST_DOMAIN}`)
+      - traefik.http.routers.prestashop.middlewares=${PRESTASHOP_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.prestashop.loadbalancer.server.port=80
       - com.centurylinklabs.watchtower.enable=${PRESTASHOP_WATCHTOWER_ENABLED:-true}
       - autoheal=true

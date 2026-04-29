@@ -28,6 +28,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.owncast.entrypoints=websecure
       - traefik.http.routers.owncast.rule=Host(`${OWNCAST_CONTAINER_NAME:-owncast}.${HOST_DOMAIN}`)
+      - traefik.http.routers.owncast.middlewares=${OWNCAST_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.owncast.loadbalancer.server.port=8080
       - com.centurylinklabs.watchtower.enable=${OWNCAST_WATCHTOWER_ENABLED:-true}
       - autoheal=true

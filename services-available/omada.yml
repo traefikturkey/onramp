@@ -58,6 +58,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.omada.entrypoints=websecure
       - traefik.http.routers.omada.rule=Host(`${OMADA_CONTAINER_NAME:-omada}.${HOST_DOMAIN}`)
+      - traefik.http.routers.omada.middlewares=${OMADA_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.omada.loadbalancer.server.scheme=https
       - traefik.http.services.omada.loadbalancer.server.port=8043
       - com.centurylinklabs.watchtower.enable=${OMADA_WATCHTOWER_ENABLED:-true}

@@ -103,6 +103,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.paperless-ngx-postgres.entrypoints=websecure
       - traefik.http.routers.paperless-ngx-postgres.rule=Host(`${PAPERLESS_NGX_CONTAINER_NAME:-paperless}.${HOST_DOMAIN}`)
+      - traefik.http.routers.paperless-ngx-postgres.middlewares=${PAPERLESS_DB_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.paperless-ngx-postgres.loadbalancer.server.port=8000
       - com.centurylinklabs.watchtower.enable=${PAPERLESS_NGX_WATCHTOWER_ENABLED:-true}
       - autoheal=true

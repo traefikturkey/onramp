@@ -42,6 +42,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.searxng.entrypoints=websecure
       - traefik.http.routers.searxng.rule=Host(`${SEARXNG_CONTAINER_NAME:-searxng}.${HOST_DOMAIN}`)
+      - traefik.http.routers.searxng.middlewares=${SEARXNG_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.searxng.loadbalancer.server.port=8080
       - com.centurylinklabs.watchtower.enable=${SEARXNG_WATCHTOWER_ENABLED:-true}
       - autoheal=true

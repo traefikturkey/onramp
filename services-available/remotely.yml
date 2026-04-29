@@ -29,6 +29,6 @@ services:
       - traefik.http.routers.remotely.rule=Host(`${REMOTELY_CONTAINER_NAME:-remotely}.${HOST_DOMAIN}`)
       - traefik.http.services.remotely.loadbalancer.server.port=8080
       - traefik.http.services.remotely.loadbalancer.server.scheme=http
-      - traefik.http.routers.remotely.middlewares=default-headers@file
+      - traefik.http.routers.remotely.middlewares=${REMOTELY_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - com.centurylinklabs.watchtower.enable=${REMOTELY_WATCHTOWER_ENABLED:-true}
       - autoheal=true

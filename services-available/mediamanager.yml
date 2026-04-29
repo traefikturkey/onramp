@@ -106,6 +106,7 @@ services:
       - traefik.enable=${MEDIAMANAGER_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.mediamanager.entrypoints=websecure
       - traefik.http.routers.mediamanager.rule=Host(`${MEDIAMANAGER_HOST_NAME:-mediamanager}.${HOST_DOMAIN}`)
+      - traefik.http.routers.mediamanager.middlewares=${MEDIAMANAGERBACKEND_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       #- traefik.http.services.mediamanager.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.mediamanager.loadbalancer.server.port=3000
       - com.centurylinklabs.watchtower.enable=${MEDIAMANAGER_WATCHTOWER_ENABLED:-true}

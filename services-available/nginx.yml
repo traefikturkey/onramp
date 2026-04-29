@@ -23,6 +23,7 @@ services:
       - traefik.enable=${NGINX_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.nginx.entrypoints=websecure
       - traefik.http.routers.nginx.rule=Host(`${NGINX_HOST_NAME:-nginx}.${HOST_DOMAIN}`)
+      - traefik.http.routers.nginx.middlewares=${NGINX_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.nginx.loadbalancer.server.port=80
       - com.centurylinklabs.watchtower.enable=${NGINX_WATCHTOWER_ENABLED:-true}
       - autoheal=${NGINX_AUTOHEAL_ENABLED:-true}

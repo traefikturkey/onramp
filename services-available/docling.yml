@@ -42,6 +42,7 @@ services:
       - traefik.enable=${DOCLING_TRAEFIK_ENABLE:-true}
       - traefik.http.routers.docling.entrypoints=websecure
       - traefik.http.routers.docling.rule=Host(`${DOCLING_CONTAINER_NAME:-docling}.${HOST_DOMAIN}`)
+      - traefik.http.routers.docling.middlewares=${DOCLING_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.docling.loadbalancer.server.port=5001
       - com.centurylinklabs.watchtower.enable=${DOCLING_WATCHTOWER_ENABLE:-true}
       - autoheal=${DOCLING_AUTOHEAL:-true}

@@ -36,6 +36,7 @@ services:
       - traefik.enable=${COPYPARTY_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.copyparty.entrypoints=websecure
       - traefik.http.routers.copyparty.rule=Host(`${COPYPARTY_HOST_NAME:-copyparty}.${HOST_DOMAIN}`)
+      - traefik.http.routers.copyparty.middlewares=${COPYPARTY_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       #- traefik.http.services.copyparty.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.copyparty.loadbalancer.server.port=3923
       - com.centurylinklabs.watchtower.enable=${COPYPARTY_WATCHTOWER_ENABLED:-true}

@@ -31,7 +31,7 @@ services:
       - traefik.enable=${FEISHIN_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.feishin.entrypoints=websecure
       - traefik.http.routers.feishin.rule=Host(`${FEISHIN_HOST_NAME:-feishin}.${HOST_DOMAIN}`)
-      - traefik.http.routers.feishin.middlewares=default-headers@file
+      - traefik.http.routers.feishin.middlewares=${FEISHIN_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.feishin.loadbalancer.server.port=9180
       - com.centurylinklabs.watchtower.enable=${FEISHIN_WATCHTOWER_ENABLED:-true}
       - autoheal=${FEISHIN_AUTOHEAL_ENABLED:-true}

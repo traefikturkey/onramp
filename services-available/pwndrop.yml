@@ -28,6 +28,7 @@ services:
       - traefik.enable=${PWNDROP_TRAEFIK_ENABLE:-true}
       - traefik.http.routers.pwndrop.entrypoints=websecure
       - traefik.http.routers.pwndrop.rule=Host(`${PWNDROP_CONTAINER_NAME:-pwndrop}.${HOST_DOMAIN}`)
+      - traefik.http.routers.pwndrop.middlewares=${PWNDROP_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.pwndrop.loadbalancer.server.port=8080
       - com.centurylinklabs.watchtower.enable=${PWNDROP_WATCHTOWER_ENABLE:-true}
       - autoheal=${PWNDROP_AUTOHEAL:-true}

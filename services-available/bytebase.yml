@@ -29,6 +29,7 @@ services:
       - traefik.enable=${BYTEBASE_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.bytebase.entrypoints=websecure
       - traefik.http.routers.bytebase.rule=Host(`${BYTEBASE_HOST_NAME:-bytebase}.${HOST_DOMAIN}`)
+      - traefik.http.routers.bytebase.middlewares=${BYTEBASE_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       #- traefik.http.services.bytebase.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.bytebase.loadbalancer.server.port=8080
       - com.centurylinklabs.watchtower.enable=${BYTEBASE_WATCHTOWER_ENABLED:-true}

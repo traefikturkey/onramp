@@ -30,6 +30,7 @@ services:
       - traefik.enable=${UNMANIC_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.unmanic.entrypoints=websecure
       - traefik.http.routers.unmanic.rule=Host(`${UNMANIC_HOST_NAME:-unmanic}.${HOST_DOMAIN}`)
+      - traefik.http.routers.unmanic.middlewares=${UNMANIC_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       #- traefik.http.services.unmanic.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.unmanic.loadbalancer.server.port=8888
       - com.centurylinklabs.watchtower.enable=${UNMANIC_WATCHTOWER_ENABLED:-true}

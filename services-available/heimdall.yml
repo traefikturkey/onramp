@@ -23,4 +23,5 @@ services:
       - traefik.http.routers.heimdall.rule=Host(`${HEIMDALL_CONTAINER_NAME:-heimdall}.${HOST_DOMAIN}`)
       - traefik.http.routers.heimdall.tls=true
       - traefik.http.routers.heimdall.service=heimdall
+      - traefik.http.routers.heimdall.middlewares=${HEIMDALL_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.heimdall.loadbalancer.server.port=80

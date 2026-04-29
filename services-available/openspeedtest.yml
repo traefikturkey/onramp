@@ -27,6 +27,6 @@ services:
       - traefik.http.routers.openspeedtest.rule=Host(`${OPENSPEEDTEST_CONTAINER_NAME:-openspeedtest}.${HOST_DOMAIN}`)
       - traefik.http.services.openspeedtest.loadbalancer.server.port=3000
       - traefik.http.middlewares.limit.buffering.maxRequestBodyBytes=10000000000
-      - traefik.http.routers.openspeedtest.middlewares=limit
+      - traefik.http.routers.openspeedtest.middlewares=${OPENSPEEDTEST_MIDDLEWARES:-default-headers@file,limit,noindex-headers@file}
       - com.centurylinklabs.watchtower.enable=${OPENSPEEDTEST_WATCHTOWER_ENABLED:-true}
       - autoheal=true

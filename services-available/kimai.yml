@@ -29,6 +29,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.kimai.entrypoints=websecure
       - traefik.http.routers.kimai.rule=Host(`${KIMAI_CONTAINER_NAME:-kimai}.${HOST_DOMAIN}`)
+      - traefik.http.routers.kimai.middlewares=${KIMAI_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.kimai.loadbalancer.server.port=8001
       - com.centurylinklabs.watchtower.enable=${KIMAI_WATCHTOWER_ENABLED:-true}
       - autoheal=true

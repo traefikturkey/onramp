@@ -50,7 +50,7 @@ services:
       - traefik.http.routers.healthchecks.entrypoints=websecure
       - traefik.http.routers.healthchecks.rule=Host(`${HEALTHCHECKS_CONTAINER_NAME:-healthchecks}.${HOST_DOMAIN}`)
       - traefik.http.services.healthchecks.loadbalancer.server.port=8000
-      - traefik.http.routers.healthchecks.middlewares=default-headers@file
+      - traefik.http.routers.healthchecks.middlewares=${HEALTHCHECKS_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - com.centurylinklabs.watchtower.enable=${HEALTHCHECKS_WATCHTOWER_ENABLED:-true}
       - autoheal=true
 

@@ -30,6 +30,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.duplicati.entrypoints=websecure
       - traefik.http.routers.duplicati.rule=Host(`${DUPLICATI_HOST_NAME:-duplicati}.${HOST_DOMAIN}`)
+      - traefik.http.routers.duplicati.middlewares=${DUPLICATI_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.duplicati.loadbalancer.server.port=8200
       - com.centurylinklabs.watchtower.enable=${DUPLICATI_WATCHTOWER_ENABLED:-true}
       - autoheal=true

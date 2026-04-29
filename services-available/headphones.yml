@@ -29,6 +29,7 @@ services:
       - traefik.enable=${HEADPHONES_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.headphones.entrypoints=websecure
       - traefik.http.routers.headphones.rule=Host(`${HEADPHONES_HOST_NAME:-headphones}.${HOST_DOMAIN}`)
+      - traefik.http.routers.headphones.middlewares=${HEADPHONES_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       #- traefik.http.services.headphones.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.headphones.loadbalancer.server.port=8181
       - com.centurylinklabs.watchtower.enable=${HEADPHONES_WATCHTOWER_ENABLED:-true}

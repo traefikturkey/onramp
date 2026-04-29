@@ -27,6 +27,7 @@ services:
       - traefik.enable=${_13FT_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.13ft.entrypoints=websecure
       - traefik.http.routers.13ft.rule=Host(`${_13FT_HOST_NAME:-13ft}.${HOST_DOMAIN}`)
+      - traefik.http.routers.13ft.middlewares=${_13FT_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.13ft.loadbalancer.server.port=5000
       - com.centurylinklabs.watchtower.enable=${_13FT_WATCHTOWER_ENABLED:-true}
       - autoheal=${_13FT_AUTOHEAL_ENABLED:-true}

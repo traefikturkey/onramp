@@ -24,4 +24,5 @@ services:
       - traefik.http.routers.yacht.rule=Host(`${YACHT_CONTAINER_NAME:-yacht}.${HOST_DOMAIN}`)
       - traefik.http.routers.yacht.tls=true
       - traefik.http.routers.yacht.service=yacht
+      - traefik.http.routers.yacht.middlewares=${YACHT_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.yacht.loadbalancer.server.port=8000

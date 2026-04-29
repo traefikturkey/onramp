@@ -44,6 +44,7 @@ services:
       - traefik.docker.network=traefik
       - traefik.http.routers.nightscout.entrypoints=websecure
       - traefik.http.routers.nightscout.rule=Host(`${NIGHTSCOUNT_CONTAINER_NAME:-nightscout}.${HOST_DOMAIN}`)
+      - traefik.http.routers.nightscout.middlewares=${NSMONGO_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.nightscout.loadbalancer.server.port=1337
       - com.centurylinklabs.watchtower.enable=${NIGHTSCOUNT_WATCHTOWER_ENABLED:-false}
       - autoheal=true

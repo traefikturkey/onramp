@@ -34,6 +34,7 @@ services:
       - traefik.enable=${SEERR_TRAEFIK_ENABLE:-true}
       - traefik.http.routers.seerr.entrypoints=websecure
       - traefik.http.routers.seerr.rule=Host(`${SEERR_CONTAINER_NAME:-seerr}.${HOST_DOMAIN}`)
+      - traefik.http.routers.seerr.middlewares=${SEERR_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.seerr.loadbalancer.server.port=5055
       - com.centurylinklabs.watchtower.enable=${SEERR_WATCHTOWER_ENABLE:-true}
       - autoheal=${SEERR_AUTOHEAL:-true}

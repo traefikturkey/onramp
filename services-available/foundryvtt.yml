@@ -29,6 +29,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.foundryvtt.entrypoints=websecure
       - traefik.http.routers.foundryvtt.rule=Host(`${FOUNDRYVTT_CONTAINER_NAME:-foundryvtt}.${HOST_DOMAIN}`)
+      - traefik.http.routers.foundryvtt.middlewares=${FOUNDRYVTT_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.foundryvtt.loadbalancer.server.port=30000
       - com.centurylinklabs.watchtower.enable=${FOUNDRYVTT_WATCHTOWER_ENABLED:-true}
       - autoheal=true

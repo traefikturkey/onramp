@@ -40,6 +40,7 @@ services:
       - traefik.enable=${KITCHENOWL_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.kitchenowl.entrypoints=websecure
       - traefik.http.routers.kitchenowl.rule=Host(`${KITCHENOWL_CONTAINER_NAME:-kitchenowl}.${HOST_DOMAIN}`)
+      - traefik.http.routers.kitchenowl.middlewares=${KITCHENOWL_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.kitchenowl.loadbalancer.server.port=80
       - com.centurylinklabs.watchtower.enable=${KITCHENOWL_WATCHTOWER_ENABLED:-true}
       - autoheal=${KITCHENOWL_AUTOHEAL_ENABLED:-true}  

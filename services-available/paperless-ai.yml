@@ -27,6 +27,7 @@ services:
       - traefik.enable=${PAPERLESS_AI_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.paperless-ai.entrypoints=websecure
       - traefik.http.routers.paperless-ai.rule=Host(`${PAPERLESS_AI_HOST_NAME:-paperless-ai}.${HOST_DOMAIN}`)
+      - traefik.http.routers.paperless-ai.middlewares=${PAPERLESS_AI_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       #- traefik.http.services.paperless-ai.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.paperless-ai.loadbalancer.server.port=3000
       - com.centurylinklabs.watchtower.enable=${PAPERLESS_AI_WATCHTOWER_ENABLED:-true}

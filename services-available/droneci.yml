@@ -44,6 +44,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.drone.rule=Host(`${DRONE_CONTAINER_NAME:-drone}.${HOST_DOMAIN}`)
       - traefik.http.routers.drone.entrypoints=websecure
+      - traefik.http.routers.drone.middlewares=${DRONE_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.drone.loadbalancer.server.port=80
       - com.centurylinklabs.watchtower.enable=${DRONE_WATCHTOWER_ENABLED:-true}
       - autoheal=true

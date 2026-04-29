@@ -46,6 +46,7 @@ services:
       - traefik.docker.network=traefik
       - traefik.http.routers.transmission-vpn.entrypoints=websecure
       - traefik.http.routers.transmission-vpn.rule=Host(`${TRANSMISSION_VPN_CONTAINER_NAME:-transmission-vpn}.${HOST_DOMAIN}`)
+      - traefik.http.routers.transmission-vpn.middlewares=${TRANSMISSION_VPN_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.transmission-vpn.loadbalancer.server.port=9091
       - com.centurylinklabs.watchtower.enable=${TRANSMISSION_VPN_WATCHTOWER_ENABLED:-true}
       - traefik.http.services.transmission-vpn.loadbalancer.server.scheme=http

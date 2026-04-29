@@ -60,6 +60,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.joplin.entrypoints=websecure
       - traefik.http.routers.joplin.rule=Host(`${JOPLIN_CONTAINER_NAME:-joplin}.${HOST_DOMAIN}`)
+      - traefik.http.routers.joplin.middlewares=${JOPLIN_DB_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       #- traefik.http.services.joplin.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.joplin.loadbalancer.server.port=22300
       - com.centurylinklabs.watchtower.enable=${JOPLIN_WATCHTOWER_ENABLED:-true}

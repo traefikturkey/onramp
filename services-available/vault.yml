@@ -44,6 +44,7 @@ services:
       - traefik.enable=${VAULT_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.vault.entrypoints=websecure
       - traefik.http.routers.vault.rule=Host(`${VAULT_HOST_NAME:-vault}.${HOST_DOMAIN}`)
+      - traefik.http.routers.vault.middlewares=${VAULT_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       #- traefik.http.services.vault.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.vault.loadbalancer.server.port=8200
       - com.centurylinklabs.watchtower.enable=${VAULT_WATCHTOWER_ENABLED:-true}

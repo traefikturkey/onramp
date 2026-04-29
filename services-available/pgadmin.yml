@@ -31,6 +31,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.pgadmin.entrypoints=websecure
       - traefik.http.routers.pgadmin.rule=Host(`pgadmin.${HOST_DOMAIN}`)
+      - traefik.http.routers.pgadmin.middlewares=${PGADMIN_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.pgadmin.loadbalancer.server.port=80
       - com.centurylinklabs.watchtower.enable=${PGADMIN_WATCHTOWER_ENABLED:-true}
       - autoheal=true

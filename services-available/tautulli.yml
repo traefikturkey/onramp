@@ -25,6 +25,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.tautulli.entrypoints=websecure
       - traefik.http.routers.tautulli.rule=Host(`tautulli.${HOST_DOMAIN}`)
+      - traefik.http.routers.tautulli.middlewares=${TAUTULLI_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.tautulli.loadbalancer.server.port=8181
       - com.centurylinklabs.watchtower.enable=${TAUTULLI_WATCHTOWER_ENABLED:-true}
       - autoheal=true

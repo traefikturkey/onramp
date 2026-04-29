@@ -30,6 +30,7 @@ services:
       - traefik.enable=${RACKULA_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.rackula.entrypoints=websecure
       - traefik.http.routers.rackula.rule=Host(`${RACKULA_HOST_NAME:-rackula}.${HOST_DOMAIN}`)
+      - traefik.http.routers.rackula.middlewares=${RACKULA_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.rackula.loadbalancer.server.port=80
       - com.centurylinklabs.watchtower.enable=${RACKULA_WATCHTOWER_ENABLED:-true}
       - autoheal=${RACKULA_AUTOHEAL_ENABLED:-true}

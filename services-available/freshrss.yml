@@ -28,6 +28,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.freshrss.entrypoints=websecure
       - traefik.http.routers.freshrss.rule=Host(`${FRESHRSS_CONTAINER_NAME:-freshrss}.${HOST_DOMAIN}`)
+      - traefik.http.routers.freshrss.middlewares=${FRESHRSS_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.freshrss.loadbalancer.server.port=80
       - com.centurylinklabs.watchtower.enable=${FRESHRSS_WATCHTOWER_ENABLED:-true}
       - autoheal=true

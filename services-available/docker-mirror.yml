@@ -29,6 +29,7 @@ services:
       - traefik.enable=${DOCKER_MIRROR_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.docker-mirror.entrypoints=websecure
       - traefik.http.routers.docker-mirror.rule=Host(`${DOCKER_MIRROR_HOST_NAME:-docker-mirror}.${HOST_DOMAIN}`)
+      - traefik.http.routers.docker-mirror.middlewares=${DOCKER_MIRROR_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       #- traefik.http.services.docker-mirror.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.docker-mirror.loadbalancer.server.port=5000
       - com.centurylinklabs.watchtower.enable=${DOCKER_MIRROR_WATCHTOWER_ENABLED:-true}

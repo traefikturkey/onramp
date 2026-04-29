@@ -31,6 +31,7 @@ services:
       - traefik.enable=${COMFYUI_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.comfyui.entrypoints=websecure
       - traefik.http.routers.comfyui.rule=Host(`${COMFYUI_HOST_NAME:-comfyui}.${HOST_DOMAIN}`)
+      - traefik.http.routers.comfyui.middlewares=${COMFYUI_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       #- traefik.http.services.comfyui.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.comfyui.loadbalancer.server.port=8188
       - com.centurylinklabs.watchtower.enable=${COMFYUI_WATCHTOWER_ENABLED:-true}

@@ -31,6 +31,7 @@ services:
       - traefik.docker.network=traefik
       - traefik.http.routers.unimus.entrypoints=websecure
       - traefik.http.routers.unimus.rule=Host(`${UNIMUS_CONTAINER_NAME:-unimus}.${HOST_DOMAIN}`)
+      - traefik.http.routers.unimus.middlewares=${UNIMUS_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.unimus.loadbalancer.server.port=8085
       - com.centurylinklabs.watchtower.enable=${UNIMUS_WATCHTOWER_ENABLED:-false}
       - autoheal=true

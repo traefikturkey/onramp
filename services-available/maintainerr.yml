@@ -26,6 +26,7 @@ services:
       - traefik.enable=${MAINTAINERR_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.maintainerr.entrypoints=websecure
       - traefik.http.routers.maintainerr.rule=Host(`${MAINTAINERR_CONTAINER_NAME:-maintainerr}.${HOST_DOMAIN}`)
+      - traefik.http.routers.maintainerr.middlewares=${MAINTAINERR_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       #- traefik.http.services.maintainerr.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.maintainerr.loadbalancer.server.port=6246
       - com.centurylinklabs.watchtower.enable=${MAINTAINERR_WATCHTOWER_ENABLED:-true}

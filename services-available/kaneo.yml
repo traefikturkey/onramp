@@ -45,6 +45,7 @@ services:
       - traefik.enable=${KANEO_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.kaneo-api.entrypoints=websecure
       - traefik.http.routers.kaneo-api.rule=Host(`${KANEO_API_HOST_NAME:-kaneo-api}.${HOST_DOMAIN}`)
+      - traefik.http.routers.kaneo-api.middlewares=${KANEO_POSTGRES_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       # Uncomment the following line if the service wants to connect over HTTPS
       # - traefik.http.services.kaneo.loadbalancer.server.scheme=https
       - traefik.http.services.kaneo-api.loadbalancer.server.port=1337
@@ -70,6 +71,7 @@ services:
       - traefik.enable=${KANEO_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.kaneo.entrypoints=websecure
       - traefik.http.routers.kaneo.rule=Host(`${KANEO_HOST_NAME:-kaneo}.${HOST_DOMAIN}`)
+      - traefik.http.routers.kaneo.middlewares=${KANEO_POSTGRES_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       # Uncomment the following line if the service wants to connect over HTTPS
       # - traefik.http.services.kaneo.loadbalancer.server.scheme=https
       - traefik.http.services.kaneo.loadbalancer.server.port=5173

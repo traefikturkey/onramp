@@ -68,6 +68,7 @@ services:
       - traefik.enable=${NUTIFY_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.nutify.entrypoints=websecure
       - traefik.http.routers.nutify.rule=Host(`${NUTIFY_HOST_NAME:-nutify}.${HOST_DOMAIN}`)
+      - traefik.http.routers.nutify.middlewares=${NUTIFY_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       #- traefik.http.services.nutify.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.nutify.loadbalancer.server.port=5050
       - com.centurylinklabs.watchtower.enable=${NUTIFY_WATCHTOWER_ENABLED:-true}

@@ -39,6 +39,7 @@ services:
       - traefik.enable=${UNIFI_TRAEFIK_ENABLE:-true}
       - traefik.http.routers.unifi.entrypoints=websecure
       - traefik.http.routers.unifi.rule=Host(`${UNIFI_CONTAINER_NAME:-unifi}.${HOST_DOMAIN}`)
+      - traefik.http.routers.unifi.middlewares=${UNIFI_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.unifi.loadbalancer.server.scheme=https
       - traefik.http.services.unifi.loadbalancer.server.port=8443
       - com.centurylinklabs.watchtower.enable=${UNIFI_WATCHTOWER_ENABLE:-true}

@@ -33,6 +33,7 @@ services:
       - traefik.enable=${DATABASUS_TRAEFIK_ENABLE:-true}
       - traefik.http.routers.databasus.entrypoints=websecure
       - traefik.http.routers.databasus.rule=Host(`${DATABASUS_CONTAINER_NAME:-databasus}.${HOST_DOMAIN}`)
+      - traefik.http.routers.databasus.middlewares=${DATABASUS_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.databasus.loadbalancer.server.port=4005
       - com.centurylinklabs.watchtower.enable=${DATABASUS_WATCHTOWER_ENABLE:-true}
       - autoheal=${DATABASUS_AUTOHEAL:-true}

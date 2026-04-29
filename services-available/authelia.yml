@@ -30,6 +30,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.authelia.rule=Host(`${AUTHELIA_AUTH_DOMAIN}`)
       - traefik.http.routers.authelia.entrypoints=websecure
+      - traefik.http.routers.authelia.middlewares=${AUTHELIA_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.middlewares.authelia.forwardauth.address=http://authelia:9091/api/verify?rd=${AUTHELIA_REDIR_DOMAIN}
       - traefik.http.middlewares.authelia.forwardauth.trustForwardHeader=true
       - traefik.http.middlewares.authelia.forwardauth.authResponseHeaders=Remote-User,Remote-Groups,Remote-Name,Remote-Email

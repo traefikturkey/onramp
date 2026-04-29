@@ -36,6 +36,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.jellyseerr.entrypoints=websecure
       - traefik.http.routers.jellyseerr.rule=Host(`${JELLYSEERR_CONTAINER_NAME:-jellyseerr}.${HOST_DOMAIN}`)
+      - traefik.http.routers.jellyseerr.middlewares=${JELLYSEERR_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       #- traefik.http.services.jellyseerr.loadbalancer.server.scheme=https # enable if the service wants to connect over>
       - traefik.http.services.jellyseerr.loadbalancer.server.port=5055
       - com.centurylinklabs.watchtower.enable=${JELLYSEERR_WATCHTOWER_ENABLED:-true}

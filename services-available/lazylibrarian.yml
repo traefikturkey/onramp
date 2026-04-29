@@ -37,6 +37,7 @@ services:
       - traefik.enable=${LAZYLIBRARIAN_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.lazylibrarian.entrypoints=websecure
       - traefik.http.routers.lazylibrarian.rule=Host(`${LAZYLIBRARIAN_HOST_NAME:-lazylibrarian}.${HOST_DOMAIN}`)
+      - traefik.http.routers.lazylibrarian.middlewares=${LAZYLIBRARIAN_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       #- traefik.http.services.lazylibrarian.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.lazylibrarian.loadbalancer.server.port=5299
       - com.centurylinklabs.watchtower.enable=${LAZYLIBRARIAN_WATCHTOWER_ENABLED:-true}

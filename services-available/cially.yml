@@ -64,6 +64,7 @@ services:
       - traefik.enable=${CIALLY_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.cially.entrypoints=websecure
       - traefik.http.routers.cially.rule=Host(`${CIALLY_HOST_NAME:-cially}.${HOST_DOMAIN}`)
+      - traefik.http.routers.cially.middlewares=${CIALLY_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.cially.loadbalancer.server.port=3000
       - com.centurylinklabs.watchtower.enable=${CIALLY_WATCHTOWER_ENABLED:-true}
       - autoheal=${CIALLY_AUTOHEAL_ENABLED:-true}
@@ -86,6 +87,7 @@ services:
       - traefik.enable=${CIALLY_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.cially-pb.entrypoints=websecure
       - traefik.http.routers.cially-pb.rule=Host(`${CIALLY_POCKETBASE_HOST_NAME:-cially-pb}.${HOST_DOMAIN}`)
+      - traefik.http.routers.cially-pb.middlewares=${CIALLY_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.cially-pb.loadbalancer.server.port=8090
       - com.centurylinklabs.watchtower.enable=${CIALLY_WATCHTOWER_ENABLED:-true}
       - autoheal=${CIALLY_AUTOHEAL_ENABLED:-true}

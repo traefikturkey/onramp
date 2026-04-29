@@ -30,4 +30,5 @@ services:
       - traefik.docker.network=traefik
       - traefik.http.routers.grafana.rule=Host(`${GRAFANA_CONTAINER_NAME:-grafana}.${HOST_DOMAIN}`)
       - traefik.http.routers.grafana.entrypoints=websecure
+      - traefik.http.routers.grafana.middlewares=${GRAFANA_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.grafana.loadbalancer.server.port=3000

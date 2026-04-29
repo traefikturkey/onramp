@@ -39,6 +39,7 @@ services:
       - traefik.enable=${READARR_TRAEFIK_ENABLE:-true}
       - traefik.http.routers.readarr.entrypoints=websecure
       - traefik.http.routers.readarr.rule=Host(`${READARR_CONTAINER_NAME:-readarr}.${HOST_DOMAIN}`)
+      - traefik.http.routers.readarr.middlewares=${READARR_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.readarr.loadbalancer.server.port=8787
       - com.centurylinklabs.watchtower.enable=${READARR_WATCHTOWER_ENABLE:-true}
       - autoheal=${READARR_AUTOHEAL:-true}

@@ -39,6 +39,7 @@ services:
       - traefik.enable=${WETTY_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.wetty.entrypoints=websecure
       - traefik.http.routers.wetty.rule=Host(`${WETTY_CONTAINER_NAME:-wetty}.${HOST_DOMAIN}`)
+      - traefik.http.routers.wetty.middlewares=${WETTY_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.wetty.loadbalancer.server.port=3000
       - com.centurylinklabs.watchtower.enable=${WETTY_WATCHTOWER_ENABLED:-true}
       - autoheal=${WETTY_AUTOHEAL_ENABLED:-true}

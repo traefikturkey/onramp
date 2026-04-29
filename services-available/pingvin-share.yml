@@ -27,6 +27,7 @@ services:
       - traefik.enable=${PINGVIN_SHARE_TRAEFIK_ENABLE:-true}
       - traefik.http.routers.pingvin.entrypoints=websecure
       - traefik.http.routers.pingvin.rule=Host(`${PINGVIN_SHARE_CONTAINER_NAME:-pingvin}.${HOST_DOMAIN}`)
+      - traefik.http.routers.pingvin.middlewares=${PINGVIN_SHARE_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.pingvin.loadbalancer.server.port=3000
       - com.centurylinklabs.watchtower.enable=${PINGVIN_SHARE_WATCHTOWER_ENABLE:-true}
       - autoheal=${PINGVIN_SHARE_AUTOHEAL:-true}

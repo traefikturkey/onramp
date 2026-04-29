@@ -74,6 +74,7 @@ services:
       - traefik.docker.network=traefik
       - traefik.http.routers.komodo.entrypoints=websecure
       - traefik.http.routers.komodo.rule=Host(`${KOMODO_CORE_CONTAINER_NAME:-komodo}.${HOST_DOMAIN}`)
+      - traefik.http.routers.komodo.middlewares=${KOMODO_DB_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.komodo.loadbalancer.server.port=9120
       - com.centurylinklabs.watchtower.enable=${KOMODO_WATCHTOWER_ENABLED:-false}
       - komodo.skip=true  

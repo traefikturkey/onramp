@@ -23,6 +23,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.portainer.entrypoints=websecure
       - traefik.http.routers.portainer.rule=Host(`portainer-ee.${HOST_DOMAIN}`)
+      - traefik.http.routers.portainer.middlewares=${PORTAINER_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.portainer.loadbalancer.server.port=9000
       - com.centurylinklabs.watchtower.enable=${PORTAINER_WATCHTOWER_ENABLED:-true}
       - autoheal=true

@@ -21,6 +21,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.olivetin.entrypoints=websecure
       - traefik.http.routers.olivetin.rule=Host(`${OLIVETIN_HOST_NAME:-olivetin}.${HOST_DOMAIN}`)
+      - traefik.http.routers.olivetin.middlewares=${OLIVETIN_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.olivetin.loadbalancer.server.port=1337
       - com.centurylinklabs.watchtower.enable=${OLIVETIN_WATCHTOWER_ENABLED:-true}
       - autoheal=true

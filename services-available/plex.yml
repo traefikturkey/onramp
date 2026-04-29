@@ -43,6 +43,7 @@ services:
       - traefik.enable=${PLEX_TRAEFIK_ENABLE:-true}
       - traefik.http.routers.plex.entrypoints=websecure
       - traefik.http.routers.plex.rule=Host(`${PLEX_CONTAINER_NAME:-plex}.${HOST_DOMAIN}`)
+      - traefik.http.routers.plex.middlewares=${PLEX_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.plex.loadbalancer.server.port=32400
       - com.centurylinklabs.watchtower.enable=${PLEX_WATCHTOWER_ENABLE:-true}
       - autoheal=${PLEX_AUTOHEAL:-true}

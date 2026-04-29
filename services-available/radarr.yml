@@ -40,6 +40,7 @@ services:
       - traefik.enable=${RADARR_TRAEFIK_ENABLE:-true}
       - traefik.http.routers.radarr.entrypoints=websecure
       - traefik.http.routers.radarr.rule=Host(`${RADARR_CONTAINER_NAME:-radarr}.${HOST_DOMAIN}`)
+      - traefik.http.routers.radarr.middlewares=${RADARR_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.radarr.loadbalancer.server.port=7878
       - com.centurylinklabs.watchtower.enable=${RADARR_WATCHTOWER_ENABLE:-true}
       - autoheal=${RADARR_AUTOHEAL:-true}

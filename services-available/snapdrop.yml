@@ -25,6 +25,7 @@ services:
       - traefik.enable=${SNAPDROP_TRAEFIK_ENABLE:-true}
       - traefik.http.routers.snapdrop.entrypoints=websecure
       - traefik.http.routers.snapdrop.rule=Host(`${SNAPDROP_CONTAINER_NAME:-snapdrop}.${HOST_DOMAIN}`)
+      - traefik.http.routers.snapdrop.middlewares=${SNAPDROP_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.snapdrop.loadbalancer.server.port=80
       - com.centurylinklabs.watchtower.enable=${SNAPDROP_WATCHTOWER_ENABLE:-true}
       - autoheal=${SNAPDROP_AUTOHEAL:-true}

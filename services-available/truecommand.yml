@@ -26,6 +26,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.truecommand.entrypoints=websecure
       - traefik.http.routers.truecommand.rule=Host(`${TRUECOMMAND_CONTAINER_NAME:-truecommand}.${HOST_DOMAIN}`)
+      - traefik.http.routers.truecommand.middlewares=${TRUECOMMAND_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.truecommand.loadbalancer.server.port=80
       - com.centurylinklabs.watchtower.enable=${TRUECOMMAND_WATCHTOWER_ENABLED:-true}
       - autoheal=true

@@ -28,7 +28,7 @@ services:
       - traefik.enable=${PINCHFLAT_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.pinchflat.entrypoints=websecure
       - traefik.http.routers.pinchflat.rule=Host(`${PINCHFLAT_HOST_NAME:-pinchflat}.${HOST_DOMAIN}`)
-      - traefik.http.routers.pinchflat.middlewares=default-headers@file
+      - traefik.http.routers.pinchflat.middlewares=${PINCHFLAT_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       #- traefik.http.services.pinchflat.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.pinchflat.loadbalancer.server.port=8945
       - com.centurylinklabs.watchtower.enable=${PINCHFLAT_WATCHTOWER_ENABLED:-true}

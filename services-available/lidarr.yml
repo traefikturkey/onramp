@@ -40,6 +40,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.lidarr.entrypoints=websecure
       - traefik.http.routers.lidarr.rule=Host(`lidarr.${HOST_DOMAIN}`)
+      - traefik.http.routers.lidarr.middlewares=${LIDARR_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.lidarr.loadbalancer.server.port=8686
       - com.centurylinklabs.watchtower.enable=${LIDARR_WATCHTOWER_ENABLED:-true}
       - autoheal=true

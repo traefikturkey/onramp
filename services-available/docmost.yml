@@ -34,6 +34,7 @@ services:
       - traefik.enable=${DOCMOST_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.docmost.entrypoints=websecure
       - traefik.http.routers.docmost.rule=Host(`${DOCMOST_CONTAINER_NAME:-docmost}.${HOST_DOMAIN}`)
+      - traefik.http.routers.docmost.middlewares=${DOCMOST_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       #- traefik.http.services.docmost.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.docmost.loadbalancer.server.port=3000
       - com.centurylinklabs.watchtower.enable=${DOCMOST_WATCHTOWER_ENABLED:-true}

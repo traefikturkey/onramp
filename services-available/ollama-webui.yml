@@ -28,6 +28,7 @@ services:
       - traefik.enable=${OLLAMA_WEBUI_TRAEFIK_ENABLE:-true}
       - traefik.http.routers.ollama-webui.entrypoints=websecure
       - traefik.http.routers.ollama-webui.rule=Host(`${OLLAMA_WEBUI_CONTAINER_NAME:-chat}.${HOST_DOMAIN}`)
+      - traefik.http.routers.ollama-webui.middlewares=${OLLAMA_WEBUI_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.ollama-webui.loadbalancer.server.port=8080
       - com.centurylinklabs.watchtower.enable=${OLLAMA_WEBUI_WATCHTOWER_ENABLE:-true}
       - autoheal=${OLLAMA_WEBUI_AUTOHEAL:-true}

@@ -28,6 +28,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.blackbox.rule=Host(`blackbox.${HOST_DOMAIN}`)
       - traefik.http.routers.blackbox.entrypoints=websecure
+      - traefik.http.routers.blackbox.middlewares=${BLACKBOX_EXPORTER_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.blackbox.loadbalancer.server.port=9115
       - com.centurylinklabs.watchtower.enable=${BLACKBOX_EXPORTER_WATCHTOWER_ENABLED:-true}
       - autoheal=true

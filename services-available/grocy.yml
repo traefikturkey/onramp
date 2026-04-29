@@ -26,6 +26,7 @@ services:
       - traefik.enable=${GROCY_TRAEFIK_ENABLE:-true}
       - traefik.http.routers.grocy.entrypoints=websecure
       - traefik.http.routers.grocy.rule=Host(`${GROCY_CONTAINER_NAME:-grocy}.${HOST_DOMAIN}`)
+      - traefik.http.routers.grocy.middlewares=${GROCY_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.grocy.loadbalancer.server.port=80
       - com.centurylinklabs.watchtower.enable=${GROCY_WATCHTOWER_ENABLE:-true}
       - autoheal=${GROCY_AUTOHEAL:-true}

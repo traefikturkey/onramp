@@ -29,6 +29,7 @@ services:
       - traefik.enable=${FOSSFLOW_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.fossflow.entrypoints=websecure
       - traefik.http.routers.fossflow.rule=Host(`${FOSSFLOW_HOST_NAME:-fossflow}.${HOST_DOMAIN}`)
+      - traefik.http.routers.fossflow.middlewares=${FOSSFLOW_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       #- traefik.http.services.fossflow.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.fossflow.loadbalancer.server.port=3000
       - com.centurylinklabs.watchtower.enable=${FOSSFLOW_WATCHTOWER_ENABLED:-true}

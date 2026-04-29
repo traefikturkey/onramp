@@ -30,6 +30,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.sablier.entrypoints=websecure
       - traefik.http.routers.sablier.rule=Host(`${SABLIER_CONTAINER_NAME:-sablier}.${HOST_DOMAIN}`)
+      - traefik.http.routers.sablier.middlewares=${SABLIER_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       #- traefik.http.services.sablier.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.sablier.loadbalancer.server.port=10000
       - traefik.http.middlewares.dynamic.plugin.sablier.names=sablier_whoami_1

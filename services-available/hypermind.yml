@@ -21,6 +21,7 @@ services:
       - traefik.enable=${HYPERMIND_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.hypermind.entrypoints=websecure
       - traefik.http.routers.hypermind.rule=Host(`${HYPERMIND_CONTAINER_NAME:-hypermind}.${HOST_DOMAIN}`)
+      - traefik.http.routers.hypermind.middlewares=${HYPERMIND_MIDDLEWARES:-default-headers@file,noindex-headers@file}
       - traefik.http.services.hypermind.loadbalancer.server.port=${HYPERMIND_PORT:-3000}
       - com.centurylinklabs.watchtower.enable=${HYPERMIND_WATCHTOWER_ENABLED:-true}
       - autoheal=${HYPERMIND_AUTOHEAL_ENABLED:-true}
