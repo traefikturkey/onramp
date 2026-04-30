@@ -42,11 +42,27 @@ while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
 # Ubuntu 25+ ships sudo-rs by default, which produces a different password prompt
 # format that Ansible's sudo become plugin can't parse (ansible/ansible#85837).
-# If sudo-rs is the active provider and sudo.ws (traditional sudo) is available,
-# tell Ansible to use it instead.
-if sudo-rs --version >/dev/null 2>&1 && command -v sudo.ws >/dev/null 2>&1; then
-    log_warn "Detected sudo-rs. Configuring Ansible to use sudo.ws for compatibility."
-    export ANSIBLE_BECOME_EXE=sudo.ws
+# Workaround 1: If traditional sudo (sudo.ws) is available, use it.
+# Workaround 2: Otherwise, add a NOPASSWD sudoers rule to bypass the prompt entirely.
+# This block can be removed once Ansible merges PR #86175.
+if sudo --version 2>&1 | grep -qi sudo-rs; then
+    log_warn "Detected sudo-rs (Ubuntu 25+). Applying Ansible compatibility workaround..."
+    if command -v sudo.ws >/dev/null 2>&1; then
+        log_info "Using traditional sudo (sudo.ws) for Ansible become."
+        export ANSIBLE_BECOME_EXE=sudo.ws
+    else
+        NOPASSWD_FILE="/etc/sudoers.d/onramp-nopasswd"
+        if [[ ! -f "$NOPASSWD_FILE" ]]; then
+            log_warn "sudo.ws not available. Creating NOPASSWD sudoers rule for $USER."
+            log_warn "This is required because sudo-rs changes the password prompt format"
+            log_warn "in a way that Ansible cannot parse (ansible/ansible#85837)."
+            log_warn "File: $NOPASSWD_FILE  —  remove it once Ansible ships a fix."
+            echo "$USER ALL=(ALL) NOPASSWD:ALL" | sudo tee "$NOPASSWD_FILE" > /dev/null
+            sudo chmod 0440 "$NOPASSWD_FILE"
+        else
+            log_info "NOPASSWD sudoers rule already in place ($NOPASSWD_FILE)."
+        fi
+    fi
 fi
 
 export DEBIAN_FRONTEND=noninteractive
