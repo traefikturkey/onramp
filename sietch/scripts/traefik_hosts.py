@@ -151,19 +151,6 @@ class TraefikHostsExtractor:
 
             if resolved:
                 hosts.append((resolved, source_name))
-            else:
-                # Identify which variable is missing
-                missing_vars = []
-                for env_match in ENV_TEMPLATE_PATTERN.finditer(host_template):
-                    var_name = env_match.group(1)
-                    if not self.env_vars.get(var_name):
-                        missing_vars.append(var_name)
-
-                if missing_vars:
-                    print(
-                        f"Skipped {source_name}: {', '.join(missing_vars)} not set",
-                        file=sys.stderr,
-                    )
 
         return hosts
 
