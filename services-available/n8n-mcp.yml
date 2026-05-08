@@ -1,0 +1,45 @@
+networks:
+  traefik:
+    external: true
+
+# description: MCP server for n8n node documentation and workflow management
+# https://github.com/czlonkowski/n8n-mcp
+
+services:
+  n8n-mcp:
+    image: ghcr.io/czlonkowski/n8n-mcp:${N8N_MCP_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/n8n-mcp.env
+    container_name: ${N8N_MCP_CONTAINER_NAME:-n8n-mcp}
+    restart: ${N8N_MCP_RESTART:-unless-stopped}
+    mem_limit: ${N8N_MCP_MEM_LIMIT:-512m}
+    networks:
+      - traefik
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - MCP_MODE=http
+      - PORT=3000
+      - NODE_ENV=production
+      - LOG_LEVEL=${N8N_MCP_LOG_LEVEL:-info}
+      - NODE_DB_PATH=/app/data/nodes.db
+      - AUTH_TOKEN=${N8N_MCP_AUTH_TOKEN}
+      - N8N_API_URL=https://${N8N_HOST_NAME:-n8n}.${HOST_DOMAIN}
+      - N8N_API_KEY=${N8N_MCP_N8N_API_KEY}
+      - TRUST_PROXY=1
+      - WEBHOOK_SECURITY_MODE=permissive
+      - TZ=${TZ}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    labels:
+      - joyride.host.name=${N8N_MCP_HOST_NAME:-n8n-mcp}.${HOST_DOMAIN}
+      - traefik.enable=${N8N_MCP_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.n8n-mcp.entrypoints=websecure
+      - traefik.http.routers.n8n-mcp.rule=Host(`${N8N_MCP_HOST_NAME:-n8n-mcp}.${HOST_DOMAIN}`)
+      - traefik.http.services.n8n-mcp.loadbalancer.server.port=3000
+      - com.centurylinklabs.watchtower.enable=${N8N_MCP_WATCHTOWER_ENABLED:-true}
+      - autoheal=${N8N_MCP_AUTOHEAL_ENABLED:-true}

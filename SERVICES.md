@@ -1,5 +1,5 @@
 # Available Services
-275 services and counting...
+276 services and counting...
 
 [1](#1)
 [A](#A)
@@ -212,6 +212,7 @@
 
 
 ## N
+- [n8n-mcp](https://github.com/czlonkowski/n8n-mcp) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/n8n-mcp.yml)): MCP server for n8n node documentation and workflow management
 - [n8n](https://github.com/n8n-io/n8n) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/n8n.yml)): workflow automation platform with native AI capabilities
 - [navidrome](https://www.navidrome.org/) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/navidrome.yml)): A music collection server and web client for streaming your music
 - [nebula-sync](https://github.com/lovelaze/nebula-sync) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/nebula-sync.yml)): Synchronize Pi-hole v6.x configuration to replicas.
