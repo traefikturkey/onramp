@@ -24,8 +24,12 @@ from datetime import datetime
 from pathlib import Path
 from typing import TYPE_CHECKING
 
+from logging_config import get_logger, setup_logging
+
 if TYPE_CHECKING:
     from ports.command import CommandExecutor
+
+logger = get_logger(__name__)
 
 
 # Default exclusions - patterns to skip during backup
@@ -213,7 +217,7 @@ class BackupManager:
             # Service-specific backup
             service_etc = self.base_dir / "etc" / service
             if not service_etc.exists():
-                print(f"Error: Service directory not found: {service_etc}", file=sys.stderr)
+                logger.error("Service directory not found", extra={"path": str(service_etc), "service": service})
                 return 1, None
             cmd.append(f"./etc/{service}")
         else:
@@ -228,20 +232,20 @@ class BackupManager:
             if env_inclusions:
                 cmd.extend(env_inclusions.split())
 
-        print(f"Creating backup: {backup_name}")
-        print(f"  Directories: {' '.join(cmd[cmd.index('-czf') + 2 :])}")
+        dirs_to_backup = ' '.join(cmd[cmd.index('-czf') + 2 :])
+        logger.info("Creating backup", extra={"backup_name": backup_name, "directories": dirs_to_backup})
 
         # Run from base directory
         code, stdout, stderr = self._run_cmd(cmd, sudo=True)
 
         if code != 0:
-            print(f"Error creating backup: {stderr}", file=sys.stderr)
+            logger.error("Backup creation failed", extra={"stderr": stderr, "backup": backup_name})
             return code, None
 
         # Get file size
         if backup_path.exists():
             size_mb = backup_path.stat().st_size / (1024 * 1024)
-            print(f"  Created: {backup_path} ({size_mb:.1f} MB)")
+            logger.info("Backup created successfully", extra={"path": str(backup_path), "size_mb": f"{size_mb:.1f}"})
 
         return 0, str(backup_path)
 
@@ -250,24 +254,24 @@ class BackupManager:
         if backup_path is None:
             backup_path = self.find_latest_backup(service)
             if not backup_path:
-                print("Error: No backup file found", file=sys.stderr)
+                logger.error("No backup file found", extra={"service": service} if service else {})
                 return 1
 
         backup_file = Path(backup_path)
         if not backup_file.exists():
-            print(f"Error: Backup file not found: {backup_path}", file=sys.stderr)
+            logger.error("Backup file not found", extra={"path": backup_path})
             return 1
 
-        print(f"Restoring from: {backup_file.name}")
+        logger.info("Restoring backup", extra={"backup": backup_file.name})
 
         cmd = ["tar", "-xvf", str(backup_file)]
         code, stdout, stderr = self._run_cmd(cmd, sudo=True)
 
         if code != 0:
-            print(f"Error restoring backup: {stderr}", file=sys.stderr)
+            logger.error("Restore failed", extra={"stderr": stderr, "backup": backup_file.name})
             return code
 
-        print("Restore complete. Run 'make restart' to apply changes.")
+        logger.info("Restore complete - run 'make restart' to apply changes")
         return 0
 
     def _mount_nfs(self) -> bool:
@@ -279,13 +283,14 @@ class BackupManager:
         # Pre-mounted via Docker NFS volume - just verify path is accessible
         if self.nfs_premounted:
             if self.nfs_tmp_dir.exists() and self.nfs_tmp_dir.is_dir():
+                logger.debug("Using pre-mounted NFS volume", extra={"path": str(self.nfs_tmp_dir)})
                 return True
-            print(f"Error: NFS_PREMOUNTED=true but {self.nfs_tmp_dir} not accessible", file=sys.stderr)
+            logger.error("NFS_PREMOUNTED=true but path not accessible", extra={"path": str(self.nfs_tmp_dir)})
             return False
 
         # Runtime mount path - requires NFS_SERVER and NFS_BACKUP_PATH
         if not self.nfs_server or not self.nfs_backup_path:
-            print("Error: NFS_SERVER and NFS_BACKUP_PATH must be set", file=sys.stderr)
+            logger.error("NFS_SERVER and NFS_BACKUP_PATH must be set for NFS operations")
             return False
 
         # Create mount point
@@ -293,12 +298,14 @@ class BackupManager:
 
         # Mount
         nfs_source = f"{self.nfs_server}:{self.nfs_backup_path}"
+        logger.debug("Mounting NFS", extra={"source": nfs_source, "target": str(self.nfs_tmp_dir)})
         code, _, stderr = self._run_cmd(["mount", "-t", "nfs", nfs_source, str(self.nfs_tmp_dir)], sudo=True)
 
         if code != 0:
-            print(f"Error mounting NFS: {stderr}", file=sys.stderr)
+            logger.error("NFS mount failed", extra={"source": nfs_source, "stderr": stderr})
             return False
 
+        logger.info("NFS mounted successfully", extra={"source": nfs_source})
         return True
 
     def _unmount_nfs(self) -> bool:
@@ -320,7 +327,7 @@ class BackupManager:
         if not self.nfs_tmp_dir.exists():
             code, _, stderr = self._run_cmd(["mkdir", "-p", str(self.nfs_tmp_dir)], sudo=True)
             if code != 0:
-                print(f"Error creating NFS mount point: {stderr}", file=sys.stderr)
+                logger.error("Failed to create NFS mount point", extra={"stderr": stderr, "path": str(self.nfs_tmp_dir)})
                 return 1
 
         if not self._mount_nfs():
@@ -329,14 +336,16 @@ class BackupManager:
         try:
             if direct:
                 # Create backup directly to NFS
+                logger.info("Creating backup directly to NFS")
                 code, backup_path = self.create_backup(output_dir=self.nfs_tmp_dir)
             else:
                 # Create locally, then move
+                logger.info("Creating local backup then moving to NFS")
                 code, backup_path = self.create_backup()
                 if code == 0 and backup_path:
                     # Move to NFS
                     self._run_cmd(["mv", backup_path, str(self.nfs_tmp_dir)], sudo=True)
-                    print(f"Moved backup to NFS")
+                    logger.info("Moved backup to NFS", extra={"backup": Path(backup_path).name})
         finally:
             self._unmount_nfs()
 
@@ -351,12 +360,13 @@ class BackupManager:
             # Find latest backup on NFS
             backup_path = self.find_latest_backup(location="nfs")
             if not backup_path:
-                print("Error: No backup found on NFS", file=sys.stderr)
+                logger.error("No backup found on NFS")
                 return 1
 
             # Copy to local backups
             self.ensure_backup_dir()
             local_path = self.backup_dir / Path(backup_path).name
+            logger.info("Copying backup from NFS", extra={"backup": Path(backup_path).name})
             self._run_cmd(["cp", "-p", backup_path, str(local_path)], sudo=False)
 
             # Restore
@@ -379,7 +389,7 @@ class BackupManager:
             ["docker", "ps", "--format", "{{.Names}}"]
         )
         if code != 0:
-            print(f"Error listing containers: {stderr}", file=sys.stderr)
+            logger.error("Failed to list Docker containers", extra={"stderr": stderr})
             return containers
 
         for name in stdout.strip().split("\n"):
@@ -428,7 +438,7 @@ class BackupManager:
         timestamp = datetime.now().strftime("%Y%m%d-%H%M")
         dump_file = output_dir / f"{container}-{timestamp}.sql"
 
-        print(f"  Dumping PostgreSQL: {container} -> {dump_file.name}")
+        logger.info("Dumping PostgreSQL", extra={"container": container, "output": dump_file.name})
 
         # Use pg_dumpall to get all databases
         code, stdout, stderr = self._run_cmd([
@@ -444,7 +454,7 @@ class BackupManager:
             ])
 
         if code != 0:
-            print(f"    Error: {stderr}", file=sys.stderr)
+            logger.error("PostgreSQL dump failed", extra={"container": container, "stderr": stderr})
             return code, None
 
         # Write dump to file
@@ -452,7 +462,7 @@ class BackupManager:
             f.write(stdout)
 
         size_mb = dump_file.stat().st_size / (1024 * 1024)
-        print(f"    Created: {dump_file.name} ({size_mb:.1f} MB)")
+        logger.info("PostgreSQL dump created", extra={"file": dump_file.name, "size_mb": f"{size_mb:.1f}"})
         return 0, str(dump_file)
 
     def dump_mariadb(self, container: str, output_dir: Path) -> tuple[int, str | None]:
@@ -460,7 +470,7 @@ class BackupManager:
         timestamp = datetime.now().strftime("%Y%m%d-%H%M")
         dump_file = output_dir / f"{container}-{timestamp}.sql"
 
-        print(f"  Dumping MariaDB: {container} -> {dump_file.name}")
+        logger.info("Dumping MariaDB", extra={"container": container, "output": dump_file.name})
 
         # Use mysqldump with --all-databases
         code, stdout, stderr = self._run_cmd([
@@ -469,7 +479,7 @@ class BackupManager:
         ])
 
         if code != 0:
-            print(f"    Error: {stderr}", file=sys.stderr)
+            logger.error("MariaDB dump failed", extra={"container": container, "stderr": stderr})
             return code, None
 
         # Write dump to file
@@ -477,7 +487,7 @@ class BackupManager:
             f.write(stdout)
 
         size_mb = dump_file.stat().st_size / (1024 * 1024)
-        print(f"    Created: {dump_file.name} ({size_mb:.1f} MB)")
+        logger.info("MariaDB dump created", extra={"file": dump_file.name, "size_mb": f"{size_mb:.1f}"})
         return 0, str(dump_file)
 
     def dump_databases(self) -> int:
@@ -485,14 +495,14 @@ class BackupManager:
         db_backup_dir = self.backup_dir / "databases"
         db_backup_dir.mkdir(parents=True, exist_ok=True)
 
-        print("Discovering database containers...")
+        logger.info("Discovering database containers")
         containers = self.discover_database_containers()
 
         if not containers:
-            print("No database containers found")
+            logger.info("No database containers found")
             return 0
 
-        print(f"Found {len(containers)} database container(s)")
+        logger.info("Found database containers", extra={"count": len(containers)})
         success_count = 0
         error_count = 0
 
@@ -509,7 +519,10 @@ class BackupManager:
             else:
                 error_count += 1
 
-        print(f"\nDatabase dump complete: {success_count} succeeded, {error_count} failed")
+        logger.info(
+            "Database dump complete",
+            extra={"succeeded": success_count, "failed": error_count}
+        )
         return 1 if error_count > 0 else 0
 
 
@@ -547,6 +560,9 @@ Examples:
 
     args = parser.parse_args()
 
+    # Setup logging
+    setup_logging(level="INFO", enable_colors=True)
+
     # Change to base directory for relative paths in tar
     os.chdir(args.base_dir)
 
@@ -565,14 +581,14 @@ Examples:
     if args.action == "list":
         backups = mgr.list_backups(location=args.location)
         if not backups:
-            print(f"No backups found in {args.location}")
+            logger.info("No backups found", extra={"location": args.location})
             return 0
 
-        print(f"Backups in {args.location}:")
+        logger.info(f"Backups in {args.location}:")
         for b in backups:
             size_mb = b["size"] / (1024 * 1024)
             date_str = b["modified"].strftime("%Y-%m-%d %H:%M")
-            print(f"  {b['name']} ({size_mb:.1f} MB, {date_str})")
+            logger.info(f"  {b['name']} ({size_mb:.1f} MB, {date_str})")
         return 0
 
     if args.action == "create-nfs":

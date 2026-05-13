@@ -16,6 +16,9 @@ Note: Tunnel creation/deletion is handled via cloudflared CLI (docker compose).
 This script handles the DNS API operations that were done via curl/jq.
 """
 
+from logging_config import get_logger, setup_logging
+nlogger = get_logger(__name__)
+
 import argparse
 import json
 import os
@@ -140,7 +143,7 @@ class CloudflareAPI:
         # Find the record first
         record = self.find_dns_record(name, record_type)
         if not record:
-            print(f"DNS record not found: {name} ({record_type})")
+            logger.info(DNS record not found: {name} ({record_type})")
             return False
 
         record_id = record["id"]
@@ -190,6 +193,9 @@ Examples:
     zone_subparsers.add_parser("info", help="Show zone information")
 
     args = parser.parse_args()
+    
+    # Setup logging
+    setup_logging(level="INFO", enable_colors=True)
 
     if not args.command:
         parser.print_help()
@@ -198,7 +204,7 @@ Examples:
     try:
         api = CloudflareAPI()
     except ValueError as e:
-        print(f"Error: {e}", file=sys.stderr)
+        logger.error( {e}"))
         return 1
 
     try:
@@ -206,33 +212,33 @@ Examples:
             if args.dns_action == "list":
                 records = api.list_dns_records(record_type=args.type)
                 if not records:
-                    print("No DNS records found")
+                    logger.info(No DNS records found")
                     return 0
 
-                print(f"{'Name':<40} {'Type':<8} {'Content':<50}")
-                print("-" * 100)
+                logger.info({'Name':<40} {'Type':<8} {'Content':<50}")
+                logger.info(-" * 100)
                 for r in records:
-                    print(f"{r['name']:<40} {r['type']:<8} {r['content']:<50}")
+                    logger.info({r['name']:<40} {r['type']:<8} {r['content']:<50}")
                 return 0
 
             if args.dns_action == "delete":
                 if api.delete_dns_record(args.name, args.type):
-                    print(f"Deleted DNS record: {args.name}")
+                    logger.info(Deleted DNS record: {args.name}")
                     return 0
                 return 1
 
         if args.command == "zone":
             if args.zone_action == "info":
                 info = api.get_zone_info()
-                print(f"Zone: {info.get('name')}")
-                print(f"  ID: {info.get('id')}")
-                print(f"  Status: {info.get('status')}")
-                print(f"  Plan: {info.get('plan', {}).get('name')}")
-                print(f"  Name servers: {', '.join(info.get('name_servers', []))}")
+                logger.info(Zone: {info.get('name')}")
+                logger.info(  ID: {info.get('id')}")
+                logger.info(  Status: {info.get('status')}")
+                logger.info(  Plan: {info.get('plan', {}).get('name')}")
+                logger.info(  Name servers: {', '.join(info.get('name_servers', []))}")
                 return 0
 
     except RuntimeError as e:
-        print(f"Error: {e}", file=sys.stderr)
+        logger.error( {e}"))
         return 1
 
     parser.print_help()

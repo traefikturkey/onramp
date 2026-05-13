@@ -20,8 +20,12 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
+from logging_config import get_logger
+
 if TYPE_CHECKING:
     from ports.command import CommandExecutor
+
+logger = get_logger(__name__)
 
 
 @dataclass
@@ -74,7 +78,7 @@ class Condition:
                 return False
             return len(list(path.iterdir())) > 0
         else:
-            print(f"    Unknown condition type: {cond_type}")
+            logger.warning("Unknown condition type", extra={"type": cond_type})
             return False
 
 
@@ -116,10 +120,10 @@ class MkdirOp(Operation):
         try:
             path.mkdir(parents=True, exist_ok=True)
             path.chmod(mode)
-            print(f"    Created directory: {path}")
+            logger.info("Created directory", extra={"path": str(path), "mode": oct(mode)})
             return True
         except Exception as e:
-            print(f"    Error creating directory {path}: {e}")
+            logger.error(f"Failed to create directory: {e}", extra={"path": str(path)})
             return False
 
 
@@ -135,7 +139,7 @@ class GenerateRsaKeyOp(Operation):
 
         # Check if should skip
         if skip_if_exists and private_path.exists():
-            print(f"    Skipped (exists): {private_path}")
+            logger.debug("Skipped existing RSA key", extra={"path": str(private_path)})
             return True
 
         try:
@@ -157,12 +161,12 @@ class GenerateRsaKeyOp(Operation):
                 check=True,
             )
             if result.returncode != 0:
-                print(f"    OpenSSL error: {result.stderr}")
+                logger.error("OpenSSL key generation failed", extra={"stderr": result.stderr, "path": str(private_path)})
                 return False
 
             private_path.write_text(result.stdout)
             private_path.chmod(0o644)
-            print(f"    Generated private key: {private_path}")
+            logger.info("Generated RSA private key", extra={"path": str(private_path), "bits": bits})
 
             # Extract public key if requested
             if public_path:
@@ -173,15 +177,15 @@ class GenerateRsaKeyOp(Operation):
                     check=True,
                 )
                 if result.returncode != 0:
-                    print(f"    OpenSSL error: {result.stderr}")
+                    logger.error("OpenSSL public key extraction failed", extra={"stderr": result.stderr})
                     return False
                 public_path.write_text(result.stdout)
                 public_path.chmod(0o644)
-                print(f"    Extracted public key: {public_path}")
+                logger.info("Extracted RSA public key", extra={"path": str(public_path)})
 
             return True
         except Exception as e:
-            print(f"    Error generating RSA key: {e}")
+            logger.error(f"Failed to generate RSA key: {e}", extra={"path": str(private_path)}, exc_info=True)
             return False
 
 
@@ -195,7 +199,7 @@ class GenerateRandomOp(Operation):
         skip_if_exists = self.config.get("skip_if_exists", True)
 
         if skip_if_exists and output_path.exists():
-            print(f"    Skipped (exists): {output_path}")
+            logger.debug("Skipped existing random data file", extra={"path": str(output_path)})
             return True
 
         try:
@@ -208,15 +212,15 @@ class GenerateRandomOp(Operation):
                 check=True,
             )
             if result.returncode != 0:
-                print(f"    OpenSSL error: {result.stderr}")
+                logger.error("OpenSSL random generation failed", extra={"stderr": result.stderr})
                 return False
 
             output_path.write_text(result.stdout)
             output_path.chmod(0o644)
-            print(f"    Generated random data: {output_path}")
+            logger.info("Generated random data", extra={"path": str(output_path), "bytes": num_bytes, "encoding": encoding})
             return True
         except Exception as e:
-            print(f"    Error generating random data: {e}")
+            logger.error(f"Failed to generate random data: {e}", extra={"path": str(output_path)}, exc_info=True)
             return False
 
 
@@ -230,7 +234,7 @@ class DownloadOp(Operation):
         skip_if_exists = self.config.get("skip_if_exists", False)
 
         if skip_if_exists and output_path.exists():
-            print(f"    Skipped (exists): {output_path}")
+            logger.debug("Skipped existing download", extra={"path": str(output_path)})
             return True
 
         try:
@@ -244,17 +248,17 @@ class DownloadOp(Operation):
                 check=True,
             )
             if result.returncode != 0:
-                print(f"    Download error: {result.stderr or 'unknown error'}")
+                logger.error("Download failed", extra={"url": url, "stderr": result.stderr or "unknown error"})
                 return False
 
-            print(f"    Downloaded: {url} -> {output_path}")
+            logger.info("Downloaded file", extra={"url": url, "path": str(output_path)})
 
             if mode:
                 output_path.chmod(int(mode, 8))
 
             return True
         except Exception as e:
-            print(f"    Error downloading {url}: {e}")
+            logger.error(f"Failed to download file: {e}", extra={"url": url}, exc_info=True)
             return False
 
 
@@ -265,18 +269,19 @@ class DeleteOp(Operation):
         path = self.resolve_path(self.config["path"])
 
         if not path.exists():
-            print(f"    Skipped (not found): {path}")
+            logger.debug("Skipped delete - path not found", extra={"path": str(path)})
             return True
 
         try:
             if path.is_dir():
                 shutil.rmtree(path)
+                logger.info("Deleted directory", extra={"path": str(path)})
             else:
                 path.unlink()
-            print(f"    Deleted: {path}")
+                logger.info("Deleted file", extra={"path": str(path)})
             return True
         except Exception as e:
-            print(f"    Error deleting {path}: {e}")
+            logger.error(f"Failed to delete path: {e}", extra={"path": str(path)}, exc_info=True)
             return False
 
 
@@ -290,7 +295,7 @@ class ChownOp(Operation):
         recursive = self.config.get("recursive", False)
 
         if not path.exists():
-            print(f"    Skipped (not found): {path}")
+            logger.debug("Skipped chown - path not found", extra={"path": str(path)})
             return True
 
         try:
@@ -305,15 +310,16 @@ class ChownOp(Operation):
             result = executor.run(cmd, capture_output=True, check=True)
             if result.returncode != 0:
                 # chown may fail in containers - treat as warning
-                print(
-                    f"    Warning: chown failed (may be expected in container): {result.stderr}"
+                logger.warning(
+                    "chown failed (may be expected in container)",
+                    extra={"path": str(path), "ownership": ownership, "stderr": result.stderr}
                 )
                 return True
 
-            print(f"    Changed ownership: {path} -> {ownership}")
+            logger.info("Changed ownership", extra={"path": str(path), "ownership": ownership})
             return True
         except Exception as e:
-            print(f"    Error changing ownership of {path}: {e}")
+            logger.error(f"Failed to change ownership: {e}", extra={"path": str(path)}, exc_info=True)
             return False
 
 
@@ -326,7 +332,7 @@ class ChmodOp(Operation):
         recursive = self.config.get("recursive", False)
 
         if not path.exists():
-            print(f"    Skipped (not found): {path}")
+            logger.debug("Skipped chmod - path not found", extra={"path": str(path)})
             return True
 
         try:
@@ -338,13 +344,13 @@ class ChmodOp(Operation):
             executor = self.ctx.command_executor
             result = executor.run(cmd, capture_output=True, check=True)
             if result.returncode != 0:
-                print(f"    Error: chmod failed: {result.stderr}")
+                logger.error("chmod failed", extra={"path": str(path), "mode": mode, "stderr": result.stderr})
                 return False
 
-            print(f"    Changed permissions: {path} -> {mode}")
+            logger.info("Changed permissions", extra={"path": str(path), "mode": mode})
             return True
         except Exception as e:
-            print(f"    Error changing permissions of {path}: {e}")
+            logger.error(f"Failed to change permissions: {e}", extra={"path": str(path)}, exc_info=True)
             return False
 
 
@@ -356,17 +362,17 @@ class TouchOp(Operation):
         skip_if_exists = self.config.get("skip_if_exists", True)
 
         if skip_if_exists and path.exists():
-            print(f"    Skipped (exists): {path}")
+            logger.debug("Skipped existing file", extra={"path": str(path)})
             return True
 
         try:
             # Ensure parent directory exists
             path.parent.mkdir(parents=True, exist_ok=True)
             path.touch()
-            print(f"    Created file: {path}")
+            logger.info("Created file", extra={"path": str(path)})
             return True
         except Exception as e:
-            print(f"    Error creating file {path}: {e}")
+            logger.error(f"Failed to create file: {e}", extra={"path": str(path)}, exc_info=True)
             return False
 
 
@@ -388,14 +394,14 @@ def execute_operation(config: dict[str, Any], ctx: OperationContext) -> bool:
     op_type = config.get("type", "")
 
     if op_type not in OPERATIONS:
-        print(f"    Unknown operation type: {op_type}")
+        logger.warning("Unknown operation type: {op_type}")
         return False
 
     op_class = OPERATIONS[op_type]
     operation = op_class(config, ctx)
 
     if not operation.should_execute():
-        print(f"    Skipped (condition not met): {op_type}")
+        logger.debug("Skipped (condition not met): {op_type}")
         return True
 
     return operation.execute()

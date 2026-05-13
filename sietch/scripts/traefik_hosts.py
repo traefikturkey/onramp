@@ -16,6 +16,9 @@ Features:
 - Preserves existing host entries and comments
 """
 
+from logging_config import get_logger, setup_logging
+nlogger = get_logger(__name__)
+
 import argparse
 import os
 import re
@@ -142,7 +145,7 @@ class TraefikHostsExtractor:
         try:
             content = yaml_path.read_text(encoding="utf-8")
         except OSError as e:
-            print(f"Warning: Could not read {yaml_path}: {e}", file=sys.stderr)
+            logger.warning( Could not read {yaml_path}: {e}"))
             return hosts
 
         for match in HOST_RULE_PATTERN.finditer(content):
@@ -160,7 +163,7 @@ class TraefikHostsExtractor:
                         missing_vars.append(var_name)
 
                 if missing_vars:
-                    print(
+                    logger.info(
                         f"Skipped {source_name}: {', '.join(missing_vars)} not set",
                         file=sys.stderr,
                     )
@@ -259,7 +262,7 @@ class TraefikHostsExtractor:
         """
         # Early exit if joyride not enabled
         if not self.check_joyride_enabled():
-            print(
+            logger.info(
                 "Joyride service is not enabled. "
                 "Enable it with: make enable-service NAME=joyride",
                 file=sys.stderr,
@@ -274,18 +277,18 @@ class TraefikHostsExtractor:
         host_domain = self.env_vars.get("HOST_DOMAIN", "")
 
         if not hostip:
-            print("Error: HOSTIP not set in environment", file=sys.stderr)
+            logger.error( HOSTIP not set in environment"))
             return 1
 
         if not host_domain:
-            print("Error: HOST_DOMAIN not set in environment", file=sys.stderr)
+            logger.error( HOST_DOMAIN not set in environment"))
             return 1
 
         # Get external files to process
         external_files = self.get_external_files()
 
         if not external_files:
-            print("No external configs found in external-enabled/")
+            logger.info(No external configs found in external-enabled/")
             return 0
 
         # Read existing hosts file
@@ -314,11 +317,11 @@ class TraefikHostsExtractor:
 
         # Print summary
         if added:
-            print(f"Added: {', '.join(added)}")
+            logger.info(Added: {', '.join(added)}")
         if updated:
-            print(f"Updated: {', '.join(updated)}")
+            logger.info(Updated: {', '.join(updated)}")
 
-        print(f"Wrote {total} host entries to {self.hosts_file}")
+        logger.info(Wrote {total} host entries to {self.hosts_file}")
 
         return 0
 
@@ -341,6 +344,9 @@ def main() -> int:
     )
 
     args = parser.parse_args()
+    
+    # Setup logging
+    setup_logging(level="INFO", enable_colors=True)
 
     extractor = TraefikHostsExtractor(base_dir=args.base_dir)
 

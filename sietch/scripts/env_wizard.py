@@ -11,6 +11,9 @@ Usage:
     python env_wizard.py --check        Check if configuration is complete
 """
 
+from logging_config import get_logger, setup_logging
+nlogger = get_logger(__name__)
+
 import argparse
 import getpass
 import os
@@ -194,9 +197,9 @@ class EnvWizard:
 
     def prompt_text(self, var: EnvVariable, default: str | None = None) -> str:
         """Prompt for a text value with help text."""
-        print(f"\n{var.name}")
-        print("-" * len(var.name))
-        print(var.help_text)
+        logger.info(\n{var.name}")
+        logger.info(-" * len(var.name))
+        logger.info(var.help_text)
 
         if default:
             prompt = f"> [{default}]: "
@@ -212,7 +215,7 @@ class EnvWizard:
                     return value
                 if not var.required:
                     return ""
-                print("This field is required. Please enter a value.")
+                logger.info(This field is required. Please enter a value.")
             except EOFError:
                 # Non-interactive, use default if available
                 if default:
@@ -221,9 +224,9 @@ class EnvWizard:
 
     def prompt_sensitive(self, var: EnvVariable) -> str:
         """Prompt for a sensitive value (hidden input)."""
-        print(f"\n{var.name}")
-        print("-" * len(var.name))
-        print(var.help_text)
+        logger.info(\n{var.name}")
+        logger.info(-" * len(var.name))
+        logger.info(var.help_text)
 
         while True:
             try:
@@ -232,20 +235,20 @@ class EnvWizard:
                     return value
                 if not var.required:
                     return ""
-                print("This field is required. Please enter a value.")
+                logger.info(This field is required. Please enter a value.")
             except EOFError:
                 return ""
 
     def prompt_choice(self, var: EnvVariable, choices: list[tuple[str, str]]) -> str:
         """Prompt with a numbered menu of choices."""
-        print(f"\n{var.name}")
-        print("-" * len(var.name))
-        print(var.help_text)
-        print()
+        logger.info(\n{var.name}")
+        logger.info(-" * len(var.name))
+        logger.info(var.help_text)
+        logger.info("")
 
         for i, (value, label) in enumerate(choices, 1):
-            print(f"  {i}. {label}")
-        print(f"  {len(choices) + 1}. Other (enter manually)")
+            logger.info(  {i}. {label}")
+        logger.info(  {len(choices) + 1}. Other (enter manually)")
 
         while True:
             try:
@@ -271,7 +274,7 @@ class EnvWizard:
 
                 if not var.required:
                     return ""
-                print("Please select an option or enter a value.")
+                logger.info(Please select an option or enter a value.")
             except EOFError:
                 return ""
 
@@ -285,10 +288,10 @@ class EnvWizard:
 
         if system_tz:
             # System has a non-UTC timezone, offer it as default
-            print(f"\nTZ")
-            print("-" * 2)
-            print(f"Detected system timezone: {system_tz}")
-            print()
+            logger.info(\nTZ")
+            logger.info(-" * 2)
+            logger.info(Detected system timezone: {system_tz}")
+            logger.info("")
             try:
                 use_system = input(f"Use {system_tz}? [Y/n]: ").strip().lower()
                 if use_system in ("", "y", "yes"):
@@ -361,9 +364,9 @@ class EnvWizard:
 
         Returns True if configuration is complete, False otherwise.
         """
-        print("=" * 50)
-        print("OnRamp Environment Setup Wizard")
-        print("=" * 50)
+        logger.info(=" * 50)
+        logger.info(OnRamp Environment Setup Wizard")
+        logger.info(=" * 50)
 
         # Load existing values
         main_env = self.load_env_file(self.main_env_file)
@@ -372,19 +375,19 @@ class EnvWizard:
         # Check what's already configured
         is_complete, missing = self.check_complete()
         if is_complete:
-            print("\nAll required values are already configured.")
+            logger.info(\nAll required values are already configured.")
             return True
 
         if skip_wizard:
-            print("\nSkipping wizard (--skip-wizard flag).")
-            print(f"Missing required values: {', '.join(missing)}")
-            print("Run 'make edit-env-onramp' to configure manually.")
+            logger.info(\nSkipping wizard (--skip-wizard flag).")
+            logger.info(Missing required values: {', '.join(missing)}")
+            logger.info(Run 'make edit-env-onramp' to configure manually.")
             return False
 
         # Offer escape hatch
-        print(f"\nMissing configuration: {', '.join(missing)}")
+        logger.info(\nMissing configuration: {', '.join(missing)}")
         if not self.prompt_yes_no("Would you like to configure these now?", default=True):
-            print("\nSkipping wizard. Run 'make edit-env-onramp' to configure manually.")
+            logger.info(\nSkipping wizard. Run 'make edit-env-onramp' to configure manually.")
             return False
 
         # Collect new values
@@ -397,11 +400,11 @@ class EnvWizard:
 
         if not self.get_existing_value("PUID", main_env):
             main_updates["PUID"] = puid
-            print(f"\nAuto-detected PUID: {puid}")
+            logger.info(\nAuto-detected PUID: {puid}")
 
         if not self.get_existing_value("PGID", main_env):
             main_updates["PGID"] = pgid
-            print(f"Auto-detected PGID: {pgid}")
+            logger.info(Auto-detected PGID: {pgid}")
 
         # Prompt for main env vars
         for var in MAIN_ENV_VARS:
@@ -421,15 +424,15 @@ class EnvWizard:
         # Write updates
         if main_updates:
             self.update_env_file(self.main_env_file, main_updates)
-            print(f"\nUpdated: {self.main_env_file}")
+            logger.info(\nUpdated: {self.main_env_file}")
 
         if nfs_updates:
             self.update_env_file(self.nfs_env_file, nfs_updates)
-            print(f"Updated: {self.nfs_env_file}")
+            logger.info(Updated: {self.nfs_env_file}")
 
-        print("\n" + "=" * 50)
-        print("Configuration complete!")
-        print("=" * 50)
+        logger.info(\n" + "=" * 50)
+        logger.info(Configuration complete!")
+        logger.info(=" * 50)
 
         return True
 
@@ -457,16 +460,19 @@ def main():
     )
 
     args = parser.parse_args()
+    
+    # Setup logging
+    setup_logging(level="INFO", enable_colors=True)
 
     wizard = EnvWizard(args.base_dir)
 
     if args.check:
         is_complete, missing = wizard.check_complete()
         if is_complete:
-            print("Configuration is complete.")
+            logger.info(Configuration is complete.")
             return 0
         else:
-            print(f"Missing required values: {', '.join(missing)}")
+            logger.info(Missing required values: {', '.join(missing)}")
             return 1
 
     success = wizard.run_wizard(skip_wizard=args.skip_wizard)

@@ -11,6 +11,9 @@ Usage:
   healthcheck_audit.py [--enabled-only] [--format=text|json]
 """
 
+from logging_config import get_logger, setup_logging
+nlogger = get_logger(__name__)
+
 import argparse
 import json
 import re
@@ -108,56 +111,56 @@ def audit_services(
 
 def print_text_report(results: list[dict], stats: dict) -> None:
     """Print human-readable audit report."""
-    print("=" * 60)
-    print("HEALTH CHECK AUDIT REPORT")
-    print("=" * 60)
-    print()
+    logger.info(=" * 60)
+    logger.info(HEALTH CHECK AUDIT REPORT")
+    logger.info(=" * 60)
+    logger.info("")
 
     # Statistics
-    print("STATISTICS")
-    print("-" * 40)
-    print(f"Total services scanned: {stats['total']}")
-    print(f"With health checks: {stats['with_healthcheck']}")
-    print(f"With autoheal label: {stats['with_autoheal']}")
-    print(f"Autoheal WITHOUT healthcheck: {stats['autoheal_no_healthcheck']}")
-    print()
+    logger.info(STATISTICS")
+    logger.info(-" * 40)
+    logger.info(Total services scanned: {stats['total']}")
+    logger.info(With health checks: {stats['with_healthcheck']}")
+    logger.info(With autoheal label: {stats['with_autoheal']}")
+    logger.info(Autoheal WITHOUT healthcheck: {stats['autoheal_no_healthcheck']}")
+    logger.info("")
 
     if stats["total"] > 0:
         coverage = (stats["with_healthcheck"] / stats["total"]) * 100
-        print(f"Health check coverage: {coverage:.1f}%")
-        print()
+        logger.info(Health check coverage: {coverage:.1f}%")
+        logger.info("")
 
     # Critical: autoheal without healthcheck
     critical = [r for r in results if r["has_autoheal"] and not r["has_healthcheck"]]
     if critical:
-        print("CRITICAL: Services with autoheal but NO healthcheck")
-        print("-" * 40)
+        logger.info(CRITICAL: Services with autoheal but NO healthcheck")
+        logger.info(-" * 40)
         for r in critical:
             status = "[enabled]" if r["enabled"] else "[available]"
-            print(f"  {status} {r['service']}")
-        print()
+            logger.info(  {status} {r['service']}")
+        logger.info("")
 
     # Services without health checks (enabled only)
     no_healthcheck = [
         r for r in results if not r["has_healthcheck"] and r["enabled"]
     ]
     if no_healthcheck:
-        print("ENABLED services without health checks")
-        print("-" * 40)
+        logger.info(ENABLED services without health checks")
+        logger.info(-" * 40)
         for r in no_healthcheck:
             autoheal = " (autoheal)" if r["has_autoheal"] else ""
-            print(f"  {r['service']}{autoheal}")
-        print()
+            logger.info(  {r['service']}{autoheal}")
+        logger.info("")
 
     # Services with health checks
     with_healthcheck = [r for r in results if r["has_healthcheck"]]
     if with_healthcheck:
-        print("Services WITH health checks")
-        print("-" * 40)
+        logger.info(Services WITH health checks")
+        logger.info(-" * 40)
         for r in with_healthcheck:
             status = "[enabled]" if r["enabled"] else "[available]"
-            print(f"  {status} {r['service']}")
-        print()
+            logger.info(  {status} {r['service']}")
+        logger.info("")
 
 
 def print_json_report(results: list[dict], stats: dict) -> None:
@@ -171,7 +174,7 @@ def print_json_report(results: list[dict], stats: dict) -> None:
             if r["has_autoheal"] and not r["has_healthcheck"]
         ],
     }
-    print(json.dumps(report, indent=2))
+    logger.info(json.dumps(report, indent=2))
 
 
 def main() -> int:
@@ -196,6 +199,9 @@ def main() -> int:
     )
 
     args = parser.parse_args()
+    
+    # Setup logging
+    setup_logging(level="INFO", enable_colors=True)
     base_dir = Path(args.base_dir)
 
     results, stats = audit_services(base_dir, args.enabled_only)

@@ -282,6 +282,7 @@ dependencies = [
 
 [package.optional-dependencies]
 dev = [
+    { name = "colorama" },
     { name = "pytest" },
     { name = "pytest-asyncio" },
     { name = "pytest-cov" },
@@ -289,6 +290,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "colorama", marker = "extra == 'dev'", specifier = ">=0.4.6" },
     { name = "docker", specifier = ">=7.0.0" },
     { name = "fastapi", specifier = ">=0.109.0" },
     { name = "httpx", specifier = ">=0.26.0" },
