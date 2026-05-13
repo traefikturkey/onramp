@@ -23,6 +23,9 @@ Each of the 287+ services has comprehensive documentation including configuratio
 - [Backup Strategy](.github/shared/backup-strategy.md) - Backup and restore procedures
 - [Health Check Patterns](.github/shared/healthcheck-patterns.md) - Standard health checks
 
+### For AI Agents
+- [Agent Guide](.agents/README.md) - Comprehensive guide for AI assistants working on OnRamp
+
 Onramp uses Docker and it installs docker if you don't already have it installed (a check is run as part of the 'make install' command below).
 
 This repo assumes that you are running a debian linux disto like Ubuntu!
