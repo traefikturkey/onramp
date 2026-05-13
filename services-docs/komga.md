@@ -49,6 +49,26 @@
 - `autoheal=true`
 - `joyride.host.name=${KOMGA_CONTAINER_NAME:-komga}.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### komga-nfs
+
+**Purpose**: Configures NFS volume mounts for remote storage
+
+**Changes**:
+- **Adds/modifies volumes**: `komga-nfs-media`, `komga-nfs-downloads`
+- **Adds/modifies services**: `komga`
+
+**Usage**:
+```bash
+make enable-override komga-nfs
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/komga-nfs.yml)
+
 ## Quick Start
 
 ```bash

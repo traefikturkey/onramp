@@ -71,6 +71,26 @@ This service depends on:
 - `tandoor-db`
 - `tandoor-web`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### tandoor-nfs
+
+**Purpose**: Configures NFS volume mounts for remote storage
+
+**Changes**:
+- **Adds/modifies volumes**: `tandoor-nfs-media`
+- **Adds/modifies services**: `tandoor-web`, `tandoor-nginx`
+
+**Usage**:
+```bash
+make enable-override tandoor-nfs
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/tandoor-nfs.yml)
+
 ## Quick Start
 
 ```bash

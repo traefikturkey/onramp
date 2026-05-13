@@ -43,6 +43,25 @@
 **Other Labels:**
 - `autoheal=${JOYRIDE_AUTOHEAL:-true}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### joyride-adguard
+
+**Purpose**: Integrates with AdGuard Home
+
+**Changes**:
+- **Adds/modifies services**: `joyride`
+
+**Usage**:
+```bash
+make enable-override joyride-adguard
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/joyride-adguard.yml)
+
 ## Quick Start
 
 ```bash

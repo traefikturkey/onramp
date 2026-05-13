@@ -52,6 +52,41 @@
 - `autoheal=${UNMANIC_AUTOHEAL_ENABLED:-true}`
 - `joyride.host.name=${UNMANIC_HOST_NAME:-unmanic}.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### unmanic-nfs
+
+**Purpose**: Configures NFS volume mounts for remote storage
+
+**Changes**:
+- **Adds/modifies volumes**: `unmanic-nfs-media`
+- **Adds/modifies services**: `unmanic`
+
+**Usage**:
+```bash
+make enable-override unmanic-nfs
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/unmanic-nfs.yml)
+
+### unmanic-quicksync
+
+**Purpose**: Enables Intel QuickSync hardware acceleration
+
+**Changes**:
+- **Adds/modifies services**: `unmanic`
+
+**Usage**:
+```bash
+make enable-override unmanic-quicksync
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/unmanic-quicksync.yml)
+
 ## Quick Start
 
 ```bash

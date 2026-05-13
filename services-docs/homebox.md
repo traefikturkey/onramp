@@ -46,6 +46,26 @@
 - `autoheal=true`
 - `joyride.host.name=${HOMEBOX_CONTAINER_NAME:-homebox}.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### homebox-nfs
+
+**Purpose**: Configures NFS volume mounts for remote storage
+
+**Changes**:
+- **Adds/modifies volumes**: `homebox-nfs-data`
+- **Adds/modifies services**: `homebox`
+
+**Usage**:
+```bash
+make enable-override homebox-nfs
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/homebox-nfs.yml)
+
 ## Quick Start
 
 ```bash

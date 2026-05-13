@@ -57,6 +57,25 @@
 - `autoheal=${ODOO_AUTOHEAL_ENABLED:-true}`
 - `joyride.host.name=${ODOO_HOST_NAME:-odoo}.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### odoo-dedicated-postgres
+
+**Purpose**: Rollback override for odoo
+
+**Changes**:
+- **Adds/modifies services**: `odoo`, `odoo-db`
+
+**Usage**:
+```bash
+make enable-override odoo-dedicated-postgres
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/odoo-dedicated-postgres.yml)
+
 ## Quick Start
 
 ```bash

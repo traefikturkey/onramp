@@ -47,6 +47,26 @@
 - `autoheal=true`
 - `joyride.host.name=${YOUTUBE_DL_CONTAINER_NAME:-youtube-dl}.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### youtube-dl-nfs
+
+**Purpose**: Configures NFS volume mounts for remote storage
+
+**Changes**:
+- **Adds/modifies volumes**: `youtube-dl-nfs-media`
+- **Adds/modifies services**: `youtube-dl`
+
+**Usage**:
+```bash
+make enable-override youtube-dl-nfs
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/youtube-dl-nfs.yml)
+
 ## Quick Start
 
 ```bash

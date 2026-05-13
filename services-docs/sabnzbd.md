@@ -51,6 +51,38 @@
 - `autoheal=${SABNZBD_AUTOHEAL:-true}`
 - `joyride.host.name=${SABNZBD_CONTAINER_NAME:-sabnzbd}.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### sabnzbd-gluetun
+
+**Purpose**: Alternative configuration for this service
+
+**Usage**:
+```bash
+make enable-override sabnzbd-gluetun
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/sabnzbd-gluetun.yml)
+
+### sabnzbd-nfs
+
+**Purpose**: Configures NFS volume mounts for remote storage
+
+**Changes**:
+- **Adds/modifies volumes**: `sabnzbd-nfs-downloads`
+- **Adds/modifies services**: `sabnzbd`
+
+**Usage**:
+```bash
+make enable-override sabnzbd-nfs
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/sabnzbd-nfs.yml)
+
 ## Quick Start
 
 ```bash

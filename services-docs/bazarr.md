@@ -52,6 +52,42 @@
 - `autoheal=true`
 - `joyride.host.name=${BAZARR_CONTAINER_NAME:-bazarr}.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### bazarr-extra
+
+**Purpose**: Provides additional configuration options
+
+**Changes**:
+- **Adds/modifies volumes**: `bazarr-nfs-movies`, `bazarr-nfs-shows`, `bazarr-nfs-extra`
+- **Adds/modifies services**: `bazarr`
+
+**Usage**:
+```bash
+make enable-override bazarr-extra
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/bazarr-extra.yml)
+
+### bazarr-nfs
+
+**Purpose**: Configures NFS volume mounts for remote storage
+
+**Changes**:
+- **Adds/modifies volumes**: `bazarr-nfs-movies`, `bazarr-nfs-shows`
+- **Adds/modifies services**: `bazarr`
+
+**Usage**:
+```bash
+make enable-override bazarr-nfs
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/bazarr-nfs.yml)
+
 ## Quick Start
 
 ```bash

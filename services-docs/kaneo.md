@@ -65,6 +65,26 @@ This service depends on:
 - `kaneo-postgres`
 - `kaneo-backend`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### kaneo-postgres
+
+**Purpose**: Override to use dedicated PostgreSQL database for kaneo
+
+**Changes**:
+- **Adds/modifies services**: `kaneo-backend`, `kaneo-postgres`
+- **Adds/modifies environment variables**: `DATABASE_URL`, `POSTGRES_USER`, `POSTGRES_DB`, `POSTGRES_PASSWORD`
+
+**Usage**:
+```bash
+make enable-override kaneo-postgres
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/kaneo-postgres.yml)
+
 ## Quick Start
 
 ```bash

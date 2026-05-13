@@ -54,6 +54,26 @@
 - `autoheal=true`
 - `joyride.host.name=${AUDIOBOOKSHELF_CONTAINER_NAME:-audiobookshelf}.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### audiobookshelf-nfs
+
+**Purpose**: Configures NFS volume mounts for remote storage
+
+**Changes**:
+- **Adds/modifies volumes**: `audiobookshelf-nfs-media`, `audiobookshelf-nfs-podcasts`
+- **Adds/modifies services**: `audiobookshelf`
+
+**Usage**:
+```bash
+make enable-override audiobookshelf-nfs
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/audiobookshelf-nfs.yml)
+
 ## Quick Start
 
 ```bash

@@ -59,6 +59,42 @@
 This service depends on:
 - `db`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### joplin-api-nfs
+
+**Purpose**: Configures NFS volume mounts for remote storage
+
+**Changes**:
+- **Adds/modifies volumes**: `joplin-api-nfs-data`
+- **Adds/modifies services**: `joplin-api`
+
+**Usage**:
+```bash
+make enable-override joplin-api-nfs
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/joplin-api-nfs.yml)
+
+### joplin-dedicated-postgres
+
+**Purpose**: Rollback override for joplin
+
+**Changes**:
+- **Adds/modifies services**: `joplin`, `joplin-db`
+- **Adds/modifies environment variables**: `POSTGRES_HOST`, `POSTGRES_PASSWORD`, `POSTGRES_USER`, `POSTGRES_DATABASE`, `POSTGRES_DB`
+
+**Usage**:
+```bash
+make enable-override joplin-dedicated-postgres
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/joplin-dedicated-postgres.yml)
+
 ## Quick Start
 
 ```bash

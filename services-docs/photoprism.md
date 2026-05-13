@@ -51,6 +51,26 @@
 - `autoheal=true`
 - `joyride.host.name=${PHOTOPRISM_CONTAINER_NAME:-photoprism}.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### photoprism-nfs
+
+**Purpose**: Configures NFS volume mounts for remote storage
+
+**Changes**:
+- **Adds/modifies volumes**: `photoprism-nfs-root`
+- **Adds/modifies services**: `photoprism`
+
+**Usage**:
+```bash
+make enable-override photoprism-nfs
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/photoprism-nfs.yml)
+
 ## Quick Start
 
 ```bash

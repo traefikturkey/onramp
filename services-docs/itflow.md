@@ -55,6 +55,26 @@
 This service depends on:
 - `itflow-db`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### itflow-dedicated-mariadb
+
+**Purpose**: Rollback override for itflow
+
+**Changes**:
+- **Adds/modifies services**: `itflow`, `itflow-db`
+- **Adds/modifies environment variables**: `ITFLOW_DB_HOST`, `MARIADB_RANDOM_ROOT_PASSWORD`, `MARIADB_DATABASE`, `MARIADB_USER`, `MARIADB_PASSWORD`
+
+**Usage**:
+```bash
+make enable-override itflow-dedicated-mariadb
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/itflow-dedicated-mariadb.yml)
+
 ## Quick Start
 
 ```bash

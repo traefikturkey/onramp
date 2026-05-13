@@ -59,6 +59,42 @@
 - `autoheal=${BOOKLORE_AUTOHEAL_ENABLED:-true}`
 - `joyride.host.name=${BOOKLORE_HOST_NAME:-booklore}.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### booklore-dedicated-mariadb
+
+**Purpose**: Rollback override for booklore
+
+**Changes**:
+- **Adds/modifies services**: `booklore`, `booklore-db`
+- **Adds/modifies environment variables**: `DATABASE_URL`, `PUID`, `PGID`, `TZ`, `MYSQL_ROOT_PASSWORD`, `MYSQL_DATABASE`, `MYSQL_USER`, `MYSQL_PASSWORD`
+
+**Usage**:
+```bash
+make enable-override booklore-dedicated-mariadb
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/booklore-dedicated-mariadb.yml)
+
+### booklore-nfs
+
+**Purpose**: Configures NFS volume mounts for remote storage
+
+**Changes**:
+- **Adds/modifies volumes**: `booklore-nfs-media`
+- **Adds/modifies services**: `booklore`
+
+**Usage**:
+```bash
+make enable-override booklore-nfs
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/booklore-nfs.yml)
+
 ## Quick Start
 
 ```bash

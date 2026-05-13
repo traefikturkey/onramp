@@ -51,6 +51,57 @@
 - `autoheal=true`
 - `joyride.host.name=${JELLYFIN_CONTAINER_NAME:-jellyfin}.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### jellyfin-nfs
+
+**Purpose**: Configures NFS volume mounts for remote storage
+
+**Changes**:
+- **Adds/modifies volumes**: `jellyfin-nfs-media`
+- **Adds/modifies services**: `jellyfin`
+
+**Usage**:
+```bash
+make enable-override jellyfin-nfs
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/jellyfin-nfs.yml)
+
+### jellyfin-nvidia
+
+**Purpose**: Enables NVIDIA GPU hardware acceleration
+
+**Changes**:
+- **Adds/modifies services**: `jellyfin`
+- **Adds/modifies environment variables**: `PUID`, `PGID`, `TZ`, `JELLYFIN_PublishedServerUrl`, `NVIDIA_DRIVER_CAPABILITIES`, `NVIDIA_VISIBLE_DEVICES`
+
+**Usage**:
+```bash
+make enable-override jellyfin-nvidia
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/jellyfin-nvidia.yml)
+
+### jellyfin-quicksync
+
+**Purpose**: Enables Intel QuickSync hardware acceleration
+
+**Changes**:
+- **Adds/modifies services**: `jellyfin`
+
+**Usage**:
+```bash
+make enable-override jellyfin-quicksync
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/jellyfin-quicksync.yml)
+
 ## Quick Start
 
 ```bash

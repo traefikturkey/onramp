@@ -64,6 +64,26 @@
 - `autoheal=${DAWARICH_AUTOHEAL_ENABLED:-true}`
 - `joyride.host.name=${DAWARICH_HOST_NAME:-dawarich}.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### dawarich-dedicated-redis
+
+**Purpose**: Rollback override for dawarich
+
+**Changes**:
+- **Adds/modifies services**: `dawarich`, `dawarich_sidekiq`, `dawarich_redis`
+- **Adds/modifies environment variables**: `REDIS_URL`
+
+**Usage**:
+```bash
+make enable-override dawarich-dedicated-redis
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/dawarich-dedicated-redis.yml)
+
 ## Quick Start
 
 ```bash

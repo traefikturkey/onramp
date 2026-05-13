@@ -58,6 +58,26 @@
 - `autoheal=${RADARR_AUTOHEAL:-true}`
 - `joyride.host.name=${RADARR_CONTAINER_NAME:-radarr}.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### radarr-nfs
+
+**Purpose**: Configures NFS volume mounts for remote storage
+
+**Changes**:
+- **Adds/modifies volumes**: `radarr-nfs-media`, `radarr-nfs-downloads`
+- **Adds/modifies services**: `radarr`
+
+**Usage**:
+```bash
+make enable-override radarr-nfs
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/radarr-nfs.yml)
+
 ## Quick Start
 
 ```bash

@@ -58,6 +58,26 @@
 - `autoheal=true`
 - `joyride.host.name=${FRIGATE_CONTAINER_NAME:-frigate}.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### frigate-nvidia-nfs
+
+**Purpose**: Configures NFS volume mounts for NVIDIA GPU setup
+
+**Changes**:
+- **Adds/modifies volumes**: `frigate-nvidia-nfs-media`
+- **Adds/modifies services**: `frigate-nvidia`
+
+**Usage**:
+```bash
+make enable-override frigate-nvidia-nfs
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/frigate-nvidia-nfs.yml)
+
 ## Quick Start
 
 ```bash

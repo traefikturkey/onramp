@@ -61,6 +61,42 @@ This service depends on:
 - `manyfold-postgres`
 - `manyfold-redis`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### manyfold-dedicated-postgres
+
+**Purpose**: Rollback override for manyfold
+
+**Changes**:
+- **Adds/modifies services**: `manyfold`, `manyfold-postgres`
+- **Adds/modifies environment variables**: `DATABASE_HOST`, `DATABASE_USER`, `DATABASE_PASSWORD`, `DATABASE_NAME`, `POSTGRES_USER`, `POSTGRES_PASSWORD`
+
+**Usage**:
+```bash
+make enable-override manyfold-dedicated-postgres
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/manyfold-dedicated-postgres.yml)
+
+### manyfold-dedicated-redis
+
+**Purpose**: Rollback override for manyfold
+
+**Changes**:
+- **Adds/modifies services**: `manyfold`, `manyfold-redis`
+- **Adds/modifies environment variables**: `REDIS_URL`
+
+**Usage**:
+```bash
+make enable-override manyfold-dedicated-redis
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/manyfold-dedicated-redis.yml)
+
 ## Quick Start
 
 ```bash

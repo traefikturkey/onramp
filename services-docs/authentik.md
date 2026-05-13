@@ -65,6 +65,26 @@
 - `autoheal=true`
 - `joyride.host.name=${AUTHENTIK_AUTH_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### authentik-dedicated-redis
+
+**Purpose**: Rollback override for authentik
+
+**Changes**:
+- **Adds/modifies services**: `authentik-server`, `worker`, `redis`
+- **Adds/modifies environment variables**: `AUTHENTIK_REDIS__HOST`, `AUTHENTIK_REDIS__DB`
+
+**Usage**:
+```bash
+make enable-override authentik-dedicated-redis
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/authentik-dedicated-redis.yml)
+
 ## Quick Start
 
 ```bash

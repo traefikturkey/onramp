@@ -49,6 +49,26 @@
 - `autoheal=${COPYPARTY_AUTOHEAL_ENABLED:-true}`
 - `joyride.host.name=${COPYPARTY_HOST_NAME:-copyparty}.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### copyparty-nfs
+
+**Purpose**: Configures NFS volume mounts for remote storage
+
+**Changes**:
+- **Adds/modifies volumes**: `copyparty-nfs-media`
+- **Adds/modifies services**: `copyparty`
+
+**Usage**:
+```bash
+make enable-override copyparty-nfs
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/copyparty-nfs.yml)
+
 ## Quick Start
 
 ```bash

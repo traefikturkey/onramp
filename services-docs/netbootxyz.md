@@ -49,6 +49,26 @@
 - `autoheal=true`
 - `joyride.host.name=${NETBOOTXYZ_CONTAINER_NAME:-netbootxyz}.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### netbootxyz-nfs
+
+**Purpose**: Configures NFS volume mounts for remote storage
+
+**Changes**:
+- **Adds/modifies volumes**: `netbootxyz-nfs-assets`
+- **Adds/modifies services**: `netbootxyz`
+
+**Usage**:
+```bash
+make enable-override netbootxyz-nfs
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/netbootxyz-nfs.yml)
+
 ## Quick Start
 
 ```bash

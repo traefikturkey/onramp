@@ -56,6 +56,26 @@
 - `autoheal=${SYNCTHING_AUTOHEAL:-true}`
 - `joyride.host.name=${SYNCTHING_CONTAINER_NAME:-syncthing}.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### syncthing-nfs
+
+**Purpose**: Configures NFS volume mounts for remote storage
+
+**Changes**:
+- **Adds/modifies volumes**: `syncthing-nfs-media`
+- **Adds/modifies services**: `syncthing`
+
+**Usage**:
+```bash
+make enable-override syncthing-nfs
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/syncthing-nfs.yml)
+
 ## Quick Start
 
 ```bash

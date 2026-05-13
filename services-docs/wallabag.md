@@ -55,6 +55,57 @@ This service depends on:
 - `db`
 - `redis`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### wallabag-dedicated-mariadb
+
+**Purpose**: Rollback override for wallabag
+
+**Changes**:
+- **Adds/modifies services**: `wallabag`, `db`
+- **Adds/modifies environment variables**: `SYMFONY__ENV__DATABASE_HOST`, `MYSQL_ROOT_PASSWORD`
+
+**Usage**:
+```bash
+make enable-override wallabag-dedicated-mariadb
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/wallabag-dedicated-mariadb.yml)
+
+### wallabag-dedicated-redis
+
+**Purpose**: Rollback override for wallabag
+
+**Changes**:
+- **Adds/modifies services**: `wallabag`, `redis`
+
+**Usage**:
+```bash
+make enable-override wallabag-dedicated-redis
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/wallabag-dedicated-redis.yml)
+
+### wallabag-nfs
+
+**Purpose**: Configures NFS volume mounts for remote storage
+
+**Changes**:
+- **Adds/modifies volumes**: `wallabag-nfs-data`
+- **Adds/modifies services**: `wallabag`
+
+**Usage**:
+```bash
+make enable-override wallabag-nfs
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/wallabag-nfs.yml)
+
 ## Quick Start
 
 ```bash

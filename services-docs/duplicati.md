@@ -50,6 +50,26 @@
 - `autoheal=true`
 - `joyride.host.name=${DUPLICATI_HOST_NAME:-duplicati}.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### duplicati-nfs
+
+**Purpose**: Configures NFS volume mounts for remote storage
+
+**Changes**:
+- **Adds/modifies volumes**: `duplicati-nfs-backup`
+- **Adds/modifies services**: `duplicati`
+
+**Usage**:
+```bash
+make enable-override duplicati-nfs
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/duplicati-nfs.yml)
+
 ## Quick Start
 
 ```bash

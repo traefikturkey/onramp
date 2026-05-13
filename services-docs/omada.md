@@ -62,6 +62,26 @@
 - `autoheal=true`
 - `joyride.host.name=${OMADA_CONTAINER_NAME:-omada}.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### omada-cert
+
+**Purpose**: Alternative configuration for this service
+
+**Changes**:
+- **Adds/modifies services**: `omada`
+- **Adds/modifies environment variables**: `SSL_CERT_NAME`, `SSL_KEY_NAME`
+
+**Usage**:
+```bash
+make enable-override omada-cert
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/omada-cert.yml)
+
 ## Quick Start
 
 ```bash

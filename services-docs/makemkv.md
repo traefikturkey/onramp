@@ -51,6 +51,26 @@
 - `autoheal=true`
 - `joyride.host.name=${MAKEMKV_CONTAINER_NAME:-makemkv}.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### makemkv-nfs
+
+**Purpose**: Configures NFS volume mounts for remote storage
+
+**Changes**:
+- **Adds/modifies volumes**: `makemkv-nfs-media`
+- **Adds/modifies services**: `makemkv`
+
+**Usage**:
+```bash
+make enable-override makemkv-nfs
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/makemkv-nfs.yml)
+
 ## Quick Start
 
 ```bash

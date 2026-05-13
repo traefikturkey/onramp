@@ -52,6 +52,42 @@
 - `autoheal=${SONARR_AUTOHEAL:-true}`
 - `joyride.host.name=${SONARR_CONTAINER_NAME:-sonarr}.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### sonarr-nfs-extra
+
+**Purpose**: Configures NFS volume mounts for remote storage
+
+**Changes**:
+- **Adds/modifies volumes**: `sonarr-nfs-media`, `sonarr-nfs-downloads`, `sonarr-nfs-extra`
+- **Adds/modifies services**: `sonarr`
+
+**Usage**:
+```bash
+make enable-override sonarr-nfs-extra
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/sonarr-nfs-extra.yml)
+
+### sonarr-nfs
+
+**Purpose**: Configures NFS volume mounts for remote storage
+
+**Changes**:
+- **Adds/modifies volumes**: `sonarr-nfs-media`, `sonarr-nfs-downloads`
+- **Adds/modifies services**: `sonarr`
+
+**Usage**:
+```bash
+make enable-override sonarr-nfs
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/sonarr-nfs.yml)
+
 ## Quick Start
 
 ```bash

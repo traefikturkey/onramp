@@ -52,6 +52,25 @@
 - `autoheal=true`
 - `joyride.host.name=${WORDPRESS_HOST_NAME:-wordpress}.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### wordpress-upload
+
+**Purpose**: Alternative configuration for this service
+
+**Changes**:
+- **Adds/modifies services**: `wordpress`
+
+**Usage**:
+```bash
+make enable-override wordpress-upload
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/wordpress-upload.yml)
+
 ## Quick Start
 
 ```bash

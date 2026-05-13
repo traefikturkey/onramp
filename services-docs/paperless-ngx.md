@@ -76,6 +76,58 @@ This service depends on:
 - `gotenberg`
 - `tika`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### paperless-ngx-dedicated-mariadb
+
+**Purpose**: Rollback override for paperless-ngx
+
+**Changes**:
+- **Adds/modifies services**: `paperless-ngx`, `db`
+- **Adds/modifies environment variables**: `PAPERLESS_DBHOST`, `MARIADB_HOST`, `MARIADB_DATABASE`, `MARIADB_USER`, `MARIADB_PASSWORD`, `MARIADB_ROOT_PASSWORD`
+
+**Usage**:
+```bash
+make enable-override paperless-ngx-dedicated-mariadb
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/paperless-ngx-dedicated-mariadb.yml)
+
+### paperless-ngx-dedicated-redis
+
+**Purpose**: Rollback override for paperless-ngx
+
+**Changes**:
+- **Adds/modifies services**: `broker`, `paperless-ngx`
+- **Adds/modifies environment variables**: `PAPERLESS_REDIS`
+
+**Usage**:
+```bash
+make enable-override paperless-ngx-dedicated-redis
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/paperless-ngx-dedicated-redis.yml)
+
+### paperless-ngx-postgres-dedicated-redis
+
+**Purpose**: Rollback override for paperless-ngx-postgres
+
+**Changes**:
+- **Adds/modifies services**: `broker`, `paperless-ngx-postgres`
+- **Adds/modifies environment variables**: `PAPERLESS_REDIS`
+
+**Usage**:
+```bash
+make enable-override paperless-ngx-postgres-dedicated-redis
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/paperless-ngx-postgres-dedicated-redis.yml)
+
 ## Quick Start
 
 ```bash

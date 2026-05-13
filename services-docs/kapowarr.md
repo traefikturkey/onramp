@@ -52,6 +52,26 @@
 - `autoheal=${KAPOWARR_AUTOHEAL:-true}`
 - `joyride.host.name=${KAPOWARR_CONTAINER_NAME:-kapowarr}.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### kapowarr-nfs
+
+**Purpose**: Configures NFS volume mounts for remote storage
+
+**Changes**:
+- **Adds/modifies volumes**: `kapowarr-nfs-media`, `kapowarr-nfs-downloads`
+- **Adds/modifies services**: `kapowarr`
+
+**Usage**:
+```bash
+make enable-override kapowarr-nfs
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/kapowarr-nfs.yml)
+
 ## Quick Start
 
 ```bash

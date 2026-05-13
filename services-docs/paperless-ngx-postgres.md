@@ -78,6 +78,26 @@ This service depends on:
 - `gotenberg`
 - `tika`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### paperless-ngx-postgres-dedicated-redis
+
+**Purpose**: Rollback override for paperless-ngx-postgres
+
+**Changes**:
+- **Adds/modifies services**: `broker`, `paperless-ngx-postgres`
+- **Adds/modifies environment variables**: `PAPERLESS_REDIS`
+
+**Usage**:
+```bash
+make enable-override paperless-ngx-postgres-dedicated-redis
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/paperless-ngx-postgres-dedicated-redis.yml)
+
 ## Quick Start
 
 ```bash

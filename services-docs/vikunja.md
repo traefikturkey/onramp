@@ -59,6 +59,26 @@
 - `flame.url=https://${VIKUNJA_CONTAINER_NAME:-vikunja}.${HOST_DOMAIN}`
 - `joyride.host.name=${VIKUNJA_CONTAINER_NAME:-vikunja}.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### vikunja-dedicated-mariadb
+
+**Purpose**: Rollback override for vikunja
+
+**Changes**:
+- **Adds/modifies services**: `vikunja`, `vikunja-db`
+- **Adds/modifies environment variables**: `VIKUNJA_DATABASE_HOST`, `MYSQL_ROOT_PASSWORD`, `MYSQL_USER`, `MYSQL_PASSWORD`, `MYSQL_DATABASE`
+
+**Usage**:
+```bash
+make enable-override vikunja-dedicated-mariadb
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/vikunja-dedicated-mariadb.yml)
+
 ## Quick Start
 
 ```bash

@@ -6,7 +6,9 @@ This script:
 1. Reads all .yml files from services-available/
 2. Extracts metadata (description, URL, etc.)
 3. Parses environment variables from service yml and env.template files
-4. Generates detailed markdown documentation for each service
+4. Scans overrides-available/ for service-specific override configurations
+5. Analyzes override files to document alternative configurations
+6. Generates detailed markdown documentation for each service
 """
 
 import os
@@ -23,6 +25,7 @@ class ServiceDocGenerator:
         self.services_available_dir = root_dir / "services-available"
         self.services_scaffold_dir = root_dir / "services-scaffold"
         self.services_docs_dir = root_dir / "services-docs"
+        self.overrides_available_dir = root_dir / "overrides-available"
 
         # Create docs directory if it doesn't exist
         self.services_docs_dir.mkdir(exist_ok=True)
@@ -266,6 +269,195 @@ class ServiceDocGenerator:
 
         return info
 
+    def find_service_overrides(self, service_name: str) -> List[Path]:
+        """Find all override files for a given service."""
+        if not self.overrides_available_dir.exists():
+            return []
+
+        # Strip games- prefix if present
+        base_service_name = service_name.replace('games-', '')
+
+        # Find all overrides matching the pattern {service}*.yml
+        pattern = f"{base_service_name}*.yml"
+        overrides = sorted(self.overrides_available_dir.glob(pattern))
+
+        return overrides
+
+    def analyze_override(self, override_path: Path) -> Dict:
+        """Analyze an override file to determine what it modifies."""
+        analysis = {
+            'filename': override_path.name,
+            'override_name': override_path.stem,
+            'purpose': '',
+            'volumes': [],
+            'services': [],
+            'environment_vars': [],
+            'comments': []
+        }
+
+        try:
+            # Read file for comments
+            with open(override_path, 'r', encoding='utf-8') as f:
+                lines = f.readlines()
+
+                # Extract comments from first 10 lines
+                for line in lines[:10]:
+                    line = line.strip()
+                    if line.startswith('#') and line != '#':
+                        comment = line.lstrip('#').strip()
+                        if comment:
+                            analysis['comments'].append(comment)
+
+            # Parse YAML content
+            yaml_data = self.parse_yaml_content(override_path)
+
+            if yaml_data:
+                # Extract volumes
+                if 'volumes' in yaml_data:
+                    for vol_name in yaml_data['volumes'].keys():
+                        analysis['volumes'].append(vol_name)
+
+                # Extract services
+                if 'services' in yaml_data:
+                    for svc_name, svc_config in yaml_data['services'].items():
+                        analysis['services'].append(svc_name)
+
+                        # Extract environment variables
+                        if isinstance(svc_config, dict) and 'environment' in svc_config:
+                            env = svc_config['environment']
+                            if isinstance(env, list):
+                                for env_var in env:
+                                    if isinstance(env_var, str) and '=' in env_var:
+                                        var_name = env_var.split('=')[0].strip()
+                                        if var_name not in analysis['environment_vars']:
+                                            analysis['environment_vars'].append(var_name)
+
+            # Infer purpose from filename and content
+            analysis['purpose'] = self.infer_override_purpose(analysis)
+
+        except Exception as e:
+            print(f"Warning: Could not analyze override {override_path}: {e}")
+
+        return analysis
+
+    def infer_override_purpose(self, analysis: Dict) -> str:
+        """Infer the purpose of an override from its filename and content."""
+        filename = analysis['override_name'].lower()
+
+        # Check comments for purpose - use first meaningful comment
+        for comment in analysis['comments']:
+            comment_lower = comment.lower()
+            # Skip usage lines
+            if 'usage:' in comment_lower or 'make enable-override' in comment_lower:
+                continue
+            # Use descriptive comments
+            if any(word in comment_lower for word in ['override', 'backward', 'compatibility', 'configuration']):
+                return comment
+
+        # Check filename patterns (order matters - check most specific first)
+
+        # NFS patterns
+        if 'nfs' in filename:
+            if 'cpu' in filename:
+                return "Configures NFS volume mounts for CPU-based setup"
+            elif 'nvidia' in filename or 'gpu' in filename:
+                return "Configures NFS volume mounts for NVIDIA GPU setup"
+            else:
+                return "Configures NFS volume mounts for remote storage"
+
+        # Dedicated database patterns
+        if 'dedicated-redis' in filename:
+            return "Adds a dedicated Redis container for this service"
+        if 'dedicated-postgres' in filename or 'dedicated-postgresql' in filename:
+            return "Adds a dedicated PostgreSQL database container for this service"
+        if 'dedicated-mariadb' in filename or 'dedicated-mysql' in filename:
+            return "Adds a dedicated MariaDB database container for this service"
+        if 'dedicated-valkey' in filename:
+            return "Adds a dedicated Valkey container for this service"
+
+        # Standalone database patterns (without "dedicated" prefix)
+        if filename.endswith('-postgres') or filename.endswith('-postgresql'):
+            return "Configures PostgreSQL database for this service"
+        if filename.endswith('-mariadb') or filename.endswith('-mysql'):
+            return "Configures MariaDB database for this service"
+        if filename.endswith('-redis'):
+            return "Configures Redis for this service"
+
+        # Hardware acceleration patterns
+        if 'nvidia' in filename or 'gpu' in filename:
+            return "Enables NVIDIA GPU hardware acceleration"
+        if 'quicksync' in filename:
+            return "Enables Intel QuickSync hardware acceleration"
+        if 'amd' in filename:
+            return "Enables AMD GPU hardware acceleration"
+        if 'cpu' in filename:
+            return "Configuration optimized for CPU-based processing"
+
+        # Integration patterns
+        if 'adguard' in filename:
+            return "Integrates with AdGuard Home"
+        if 'dynmap' in filename:
+            return "Enables Dynmap web map for Minecraft"
+
+        # Other patterns
+        if 'extra' in filename:
+            return "Provides additional configuration options"
+
+        # Default
+        return "Alternative configuration for this service"
+
+    def format_override_section(self, overrides: List[Dict]) -> str:
+        """Format the override section for markdown."""
+        if not overrides:
+            return ""
+
+        md = []
+        md.append("## Available Overrides")
+        md.append("")
+        md.append("OnRamp supports configuration overrides to customize this service. The following overrides are available:")
+        md.append("")
+
+        for override in overrides:
+            override_name = override['override_name']
+
+            # Override header
+            md.append(f"### {override_name}")
+            md.append("")
+
+            # Purpose
+            if override['purpose']:
+                md.append(f"**Purpose**: {override['purpose']}")
+                md.append("")
+
+            # Changes
+            changes = []
+            if override['volumes']:
+                changes.append(f"- **Adds/modifies volumes**: {', '.join([f'`{v}`' for v in override['volumes']])}")
+            if override['services']:
+                changes.append(f"- **Adds/modifies services**: {', '.join([f'`{s}`' for s in override['services']])}")
+            if override['environment_vars']:
+                changes.append(f"- **Adds/modifies environment variables**: {', '.join([f'`{e}`' for e in override['environment_vars']])}")
+
+            if changes:
+                md.append("**Changes**:")
+                md.extend(changes)
+                md.append("")
+
+            # Usage
+            md.append("**Usage**:")
+            md.append("```bash")
+            md.append(f"make enable-override {override_name}")
+            md.append("make up")
+            md.append("```")
+            md.append("")
+
+            # Configuration link
+            github_override_url = f"https://github.com/traefikturkey/onramp/tree/main/overrides-available/{override['filename']}"
+            md.append(f"**Configuration**: [View override file]({github_override_url})")
+            md.append("")
+
+        return '\n'.join(md)
+
     def generate_markdown(self, service_name: str, yml_path: Path) -> str:
         """Generate markdown documentation for a service."""
         metadata = self.extract_yml_metadata(yml_path)
@@ -273,6 +465,10 @@ class ServiceDocGenerator:
         env_vars_yml = self.extract_env_vars_from_yml(yml_path)
         env_template = self.parse_env_template(service_name)
         service_info = self.extract_service_info(yaml_data)
+
+        # Find and analyze overrides
+        override_paths = self.find_service_overrides(service_name)
+        overrides = [self.analyze_override(p) for p in override_paths]
 
         # Build markdown content
         md = []
@@ -406,6 +602,12 @@ class ServiceDocGenerator:
             for dep in service_info['depends_on']:
                 md.append(f"- `{dep}`")
             md.append("")
+
+        # Available Overrides
+        if overrides:
+            override_section = self.format_override_section(overrides)
+            if override_section:
+                md.append(override_section)
 
         # Quick Start
         md.append("## Quick Start")

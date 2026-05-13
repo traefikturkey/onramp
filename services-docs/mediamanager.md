@@ -82,6 +82,26 @@
 This service depends on:
 - `mediamanager-backend`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### mediamanager-postgres
+
+**Purpose**: Override to use dedicated PostgreSQL database for mediamanager
+
+**Changes**:
+- **Adds/modifies services**: `mediamanager-backend`, `mediamanager-frontend`, `mediamanager-db`
+- **Adds/modifies environment variables**: `DB_HOST`, `DB_USER`, `DB_PASSWORD`, `DB_DBNAME`, `POSTGRES_USER`, `POSTGRES_DB`, `POSTGRES_PASSWORD`
+
+**Usage**:
+```bash
+make enable-override mediamanager-postgres
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/mediamanager-postgres.yml)
+
 ## Quick Start
 
 ```bash

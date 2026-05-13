@@ -46,6 +46,26 @@
 - `autoheal=true`
 - `joyride.host.name=${PRESTASHOP_CONTAINER_NAME:-prestashop}.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### prestashop-arm
+
+**Purpose**: Alternative configuration for this service
+
+**Changes**:
+- **Adds/modifies services**: `prestashop`
+- **Adds/modifies environment variables**: `URL`, `PS_INSTALL_AUTO`
+
+**Usage**:
+```bash
+make enable-override prestashop-arm
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/prestashop-arm.yml)
+
 ## Quick Start
 
 ```bash

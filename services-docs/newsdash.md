@@ -46,6 +46,27 @@
 - `autoheal=true`
 - `joyride.host.name=newsdash.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### newsdash-dedicated-redis
+
+**Purpose**: Rollback override for newsdash
+
+**Changes**:
+- **Adds/modifies volumes**: `redis`
+- **Adds/modifies services**: `newsdash`, `redis`
+- **Adds/modifies environment variables**: `REDIS_URL`, `ALLOW_EMPTY_PASSWORD`
+
+**Usage**:
+```bash
+make enable-override newsdash-dedicated-redis
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/newsdash-dedicated-redis.yml)
+
 ## Quick Start
 
 ```bash

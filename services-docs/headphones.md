@@ -53,6 +53,26 @@
 - `autoheal=${HEADPHONES_AUTOHEAL_ENABLED:-true}`
 - `joyride.host.name=${HEADPHONES_HOST_NAME:-headphones}.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### headphones-nfs
+
+**Purpose**: Configures NFS volume mounts for remote storage
+
+**Changes**:
+- **Adds/modifies volumes**: `headphones-nfs-media`, `headphones-nfs-downloads`
+- **Adds/modifies services**: `headphones`
+
+**Usage**:
+```bash
+make enable-override headphones-nfs
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/headphones-nfs.yml)
+
 ## Quick Start
 
 ```bash

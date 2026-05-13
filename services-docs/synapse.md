@@ -45,6 +45,26 @@
 - `autoheal=true`
 - `joyride.host.name=${SYNAPSE_CONTAINER_NAME:-synapse}.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### synapse-nfs
+
+**Purpose**: Configures NFS volume mounts for remote storage
+
+**Changes**:
+- **Adds/modifies volumes**: `synapse-nfs-data`
+- **Adds/modifies services**: `synapse`
+
+**Usage**:
+```bash
+make enable-override synapse-nfs
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/synapse-nfs.yml)
+
 ## Quick Start
 
 ```bash

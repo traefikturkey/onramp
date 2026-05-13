@@ -59,6 +59,26 @@
 - `autoheal=${SPACEBIN_AUTOHEAL_ENABLED:-true}`
 - `joyride.host.name=${SPACEBIN_HOST_NAME:-spacebin}.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### spacebin-dedicated-postgres
+
+**Purpose**: Rollback override for spacebin
+
+**Changes**:
+- **Adds/modifies services**: `spacebin`, `spacebin-db`
+- **Adds/modifies environment variables**: `SPIRIT_CONNECTION_URI`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`
+
+**Usage**:
+```bash
+make enable-override spacebin-dedicated-postgres
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/spacebin-dedicated-postgres.yml)
+
 ## Quick Start
 
 ```bash

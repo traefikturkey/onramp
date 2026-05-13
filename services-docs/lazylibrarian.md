@@ -53,6 +53,26 @@
 - `autoheal=${LAZYLIBRARIAN_AUTOHEAL_ENABLED:-true}`
 - `joyride.host.name=${LAZYLIBRARIAN_HOST_NAME:-lazylibrarian}.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### lazylibrarian-nfs
+
+**Purpose**: Configures NFS volume mounts for remote storage
+
+**Changes**:
+- **Adds/modifies volumes**: `lazylibrarian-nfs-media`, `lazylibrarian-nfs-downloads`
+- **Adds/modifies services**: `lazylibrarian`
+
+**Usage**:
+```bash
+make enable-override lazylibrarian-nfs
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/lazylibrarian-nfs.yml)
+
 ## Quick Start
 
 ```bash

@@ -53,6 +53,41 @@
 - `autoheal=${OLLAMA_AUTOHEAL:-true}`
 - `joyride.host.name=${OLLAMA_CONTAINER_NAME:-ollama}.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### ollama-amd
+
+**Purpose**: Enables AMD GPU hardware acceleration
+
+**Changes**:
+- **Adds/modifies services**: `ollama`
+
+**Usage**:
+```bash
+make enable-override ollama-amd
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/ollama-amd.yml)
+
+### ollama-nvidia
+
+**Purpose**: Enables NVIDIA GPU hardware acceleration
+
+**Changes**:
+- **Adds/modifies services**: `ollama`
+- **Adds/modifies environment variables**: `PUID`, `PGID`, `TZ`, `gpus`
+
+**Usage**:
+```bash
+make enable-override ollama-nvidia
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/ollama-nvidia.yml)
+
 ## Quick Start
 
 ```bash

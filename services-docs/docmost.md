@@ -63,6 +63,42 @@ This service depends on:
 - `docmost-db`
 - `docmost-redis`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### docmost-dedicated-postgres
+
+**Purpose**: Rollback override for docmost
+
+**Changes**:
+- **Adds/modifies services**: `docmost`, `docmost-db`
+- **Adds/modifies environment variables**: `DATABASE_URL`, `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`
+
+**Usage**:
+```bash
+make enable-override docmost-dedicated-postgres
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/docmost-dedicated-postgres.yml)
+
+### docmost-dedicated-redis
+
+**Purpose**: Rollback override for docmost
+
+**Changes**:
+- **Adds/modifies services**: `docmost`, `docmost-redis`
+- **Adds/modifies environment variables**: `REDIS_URL`
+
+**Usage**:
+```bash
+make enable-override docmost-dedicated-redis
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/docmost-dedicated-redis.yml)
+
 ## Quick Start
 
 ```bash

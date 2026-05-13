@@ -54,6 +54,25 @@
 - `autoheal=true`
 - `joyride.host.name=${PIHOLE_CONTAINER_NAME:-pihole}.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### pihole-admin
+
+**Purpose**: Alternative configuration for this service
+
+**Changes**:
+- **Adds/modifies services**: `pihole`
+
+**Usage**:
+```bash
+make enable-override pihole-admin
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/pihole-admin.yml)
+
 ## Quick Start
 
 ```bash

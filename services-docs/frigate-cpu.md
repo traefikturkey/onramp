@@ -56,6 +56,26 @@
 - `autoheal=${FRIGATE_AUTOHEAL:-true}`
 - `joyride.host.name=${FRIGATE_HOST_NAME:-frigate}.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### frigate-cpu-nfs
+
+**Purpose**: Configures NFS volume mounts for CPU-based setup
+
+**Changes**:
+- **Adds/modifies volumes**: `frigate-cpu-nfs-media`
+- **Adds/modifies services**: `frigate-cpu`
+
+**Usage**:
+```bash
+make enable-override frigate-cpu-nfs
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/frigate-cpu-nfs.yml)
+
 ## Quick Start
 
 ```bash

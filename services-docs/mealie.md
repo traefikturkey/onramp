@@ -46,6 +46,26 @@
 - `autoheal=true`
 - `joyride.host.name=${MEALIE_CONTAINER_NAME:-mealie}.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### mealie-nfs
+
+**Purpose**: Configures NFS volume mounts for remote storage
+
+**Changes**:
+- **Adds/modifies volumes**: `mealie-nfs-data`
+- **Adds/modifies services**: `mealie`
+
+**Usage**:
+```bash
+make enable-override mealie-nfs
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/mealie-nfs.yml)
+
 ## Quick Start
 
 ```bash

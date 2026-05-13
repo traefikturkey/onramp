@@ -45,6 +45,26 @@
 - `autoheal=true`
 - `joyride.host.name=${TRILIUM_CONTAINER_NAME:-trilium}.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### trilium-nfs
+
+**Purpose**: Configures NFS volume mounts for remote storage
+
+**Changes**:
+- **Adds/modifies volumes**: `trilium-nfs-data`
+- **Adds/modifies services**: `trilium`
+
+**Usage**:
+```bash
+make enable-override trilium-nfs
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/trilium-nfs.yml)
+
 ## Quick Start
 
 ```bash

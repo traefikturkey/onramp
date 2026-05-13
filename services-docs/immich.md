@@ -68,6 +68,42 @@ This service depends on:
 - `redis`
 - `database`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### immich-dedicated-valkey
+
+**Purpose**: Rollback override for immich
+
+**Changes**:
+- **Adds/modifies services**: `immich`, `redis`
+- **Adds/modifies environment variables**: `REDIS_HOSTNAME`
+
+**Usage**:
+```bash
+make enable-override immich-dedicated-valkey
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/immich-dedicated-valkey.yml)
+
+### immich-nfs
+
+**Purpose**: Configures NFS volume mounts for remote storage
+
+**Changes**:
+- **Adds/modifies volumes**: `immich-nfs-upload`
+- **Adds/modifies services**: `immich`
+
+**Usage**:
+```bash
+make enable-override immich-nfs
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/immich-nfs.yml)
+
 ## Quick Start
 
 ```bash

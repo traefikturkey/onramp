@@ -65,6 +65,43 @@
 This service depends on:
 - `db`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### firefly3-dedicated-mariadb
+
+**Purpose**: Rollback override for firefly3
+
+**Changes**:
+- **Adds/modifies volumes**: `firefly_db`
+- **Adds/modifies services**: `firefly3`, `db`
+- **Adds/modifies environment variables**: `DB_HOST`, `MYSQL_DATABASE`, `MYSQL_USER`, `MYSQL_PASSWORD`, `MYSQL_RANDOM_ROOT_PASSWORD`
+
+**Usage**:
+```bash
+make enable-override firefly3-dedicated-mariadb
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/firefly3-dedicated-mariadb.yml)
+
+### firefly3-nfs
+
+**Purpose**: Configures NFS volume mounts for remote storage
+
+**Changes**:
+- **Adds/modifies volumes**: `firefly3-nfs-upload`
+- **Adds/modifies services**: `firefly3`
+
+**Usage**:
+```bash
+make enable-override firefly3-nfs
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/firefly3-nfs.yml)
+
 ## Quick Start
 
 ```bash

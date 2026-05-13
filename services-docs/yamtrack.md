@@ -56,6 +56,26 @@
 This service depends on:
 - `yamtrack-redis`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### yamtrack-dedicated-redis
+
+**Purpose**: Rollback override for yamtrack
+
+**Changes**:
+- **Adds/modifies services**: `yamtrack`, `yamtrack-redis`
+- **Adds/modifies environment variables**: `REDIS_URL`
+
+**Usage**:
+```bash
+make enable-override yamtrack-dedicated-redis
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/yamtrack-dedicated-redis.yml)
+
 ## Quick Start
 
 ```bash

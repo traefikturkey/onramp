@@ -59,6 +59,43 @@
 - `autoheal=true`
 - `joyride.host.name=${KAIZOKU_CONTAINER_NAME:-kaizoku}.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### kaizoku-dedicated-redis
+
+**Purpose**: Rollback override for kaizoku
+
+**Changes**:
+- **Adds/modifies volumes**: `kaizoku-redis`
+- **Adds/modifies services**: `kaizoku`, `kaizoku-redis`
+- **Adds/modifies environment variables**: `REDIS_HOST`, `REDIS_PORT`
+
+**Usage**:
+```bash
+make enable-override kaizoku-dedicated-redis
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/kaizoku-dedicated-redis.yml)
+
+### kaizoku-nfs
+
+**Purpose**: Configures NFS volume mounts for remote storage
+
+**Changes**:
+- **Adds/modifies volumes**: `kaizoku-nfs-manga`
+- **Adds/modifies services**: `kaizoku`
+
+**Usage**:
+```bash
+make enable-override kaizoku-nfs
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/kaizoku-nfs.yml)
+
 ## Quick Start
 
 ```bash

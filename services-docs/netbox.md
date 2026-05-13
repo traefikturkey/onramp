@@ -62,6 +62,43 @@ This service depends on:
 - `netbox-postgresql`
 - `netbox-redis`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### netbox-dedicated-postgres
+
+**Purpose**: Rollback override for netbox
+
+**Changes**:
+- **Adds/modifies services**: `netbox`, `netbox-postgresql`
+- **Adds/modifies environment variables**: `DB_HOST`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`, `PUID`, `PGID`, `POSTGRES_PASSWORD`, `POSTGRES_USER`, `POSTGRES_DB`
+
+**Usage**:
+```bash
+make enable-override netbox-dedicated-postgres
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/netbox-dedicated-postgres.yml)
+
+### netbox-dedicated-redis
+
+**Purpose**: Rollback override for netbox
+
+**Changes**:
+- **Adds/modifies volumes**: `netbox-redis`
+- **Adds/modifies services**: `netbox`, `netbox-redis`
+- **Adds/modifies environment variables**: `REDIS_HOST`
+
+**Usage**:
+```bash
+make enable-override netbox-dedicated-redis
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/netbox-dedicated-redis.yml)
+
 ## Quick Start
 
 ```bash

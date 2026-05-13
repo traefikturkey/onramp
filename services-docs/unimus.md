@@ -55,6 +55,26 @@
 This service depends on:
 - `unimus-database`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### unimus-dedicated-mariadb
+
+**Purpose**: Rollback override for unimus
+
+**Changes**:
+- **Adds/modifies services**: `unimus-app`, `unimus-database`
+- **Adds/modifies environment variables**: `POSTGRES_USER`, `MYSQL_ROOT_PASSWORD`, `MYSQL_DATABASE`, `MYSQL_USER`, `MYSQL_PASSWORD`
+
+**Usage**:
+```bash
+make enable-override unimus-dedicated-mariadb
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/unimus-dedicated-mariadb.yml)
+
 ## Quick Start
 
 ```bash

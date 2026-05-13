@@ -51,6 +51,26 @@
 - `autoheal=${PINCHFLAT_AUTOHEAL_ENABLED:-true}`
 - `joyride.host.name=${PINCHFLAT_HOST_NAME:-pinchflat}.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### pinchflat-nfs
+
+**Purpose**: Configures NFS volume mounts for remote storage
+
+**Changes**:
+- **Adds/modifies volumes**: `pinchflat-nfs-media`
+- **Adds/modifies services**: `pinchflat`
+
+**Usage**:
+```bash
+make enable-override pinchflat-nfs
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/pinchflat-nfs.yml)
+
 ## Quick Start
 
 ```bash

@@ -55,6 +55,26 @@
 - `autoheal=${READARR_AUTOHEAL:-true}`
 - `joyride.host.name=${READARR_CONTAINER_NAME:-readarr}.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### readarr-nfs
+
+**Purpose**: Configures NFS volume mounts for remote storage
+
+**Changes**:
+- **Adds/modifies volumes**: `readarr-nfs-media`, `readarr-nfs-downloads`
+- **Adds/modifies services**: `readarr`
+
+**Usage**:
+```bash
+make enable-override readarr-nfs
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/readarr-nfs.yml)
+
 ## Quick Start
 
 ```bash

@@ -74,6 +74,41 @@
 This service depends on:
 - `semaphore-db`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### semaphore-dedicated-mysql
+
+**Purpose**: Rollback override for semaphore
+
+**Changes**:
+- **Adds/modifies services**: `semaphore`, `semaphore-db`
+- **Adds/modifies environment variables**: `SEMAPHORE_DB_HOST`, `SEMAPHORE_DB_USER`, `SEMAPHORE_DB_PASS`
+
+**Usage**:
+```bash
+make enable-override semaphore-dedicated-mysql
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/semaphore-dedicated-mysql.yml)
+
+### semaphore-pg
+
+**Purpose**: Alternative configuration for this service
+
+**Changes**:
+- **Adds/modifies services**: `semaphore-db`
+
+**Usage**:
+```bash
+make enable-override semaphore-pg
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/semaphore-pg.yml)
+
 ## Quick Start
 
 ```bash

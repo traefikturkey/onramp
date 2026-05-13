@@ -63,6 +63,26 @@
 - `autoheal=${SPEEDTEST_TRACKER_AUTOHEAL_ENABLED:-true}`
 - `joyride.host.name=${SPEEDTEST_TRACKER_HOST_NAME:-speedtest}.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### speedtest-tracker-shared-postgres
+
+**Purpose**: Override to use shared PostgreSQL database for speedtest-tracker
+
+**Changes**:
+- **Adds/modifies services**: `speedtest-tracker`, `speedtest-tracker-db`
+- **Adds/modifies environment variables**: `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`
+
+**Usage**:
+```bash
+make enable-override speedtest-tracker-shared-postgres
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/speedtest-tracker-shared-postgres.yml)
+
 ## Quick Start
 
 ```bash

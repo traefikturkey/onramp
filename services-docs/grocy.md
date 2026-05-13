@@ -45,6 +45,26 @@
 - `autoheal=${GROCY_AUTOHEAL:-true}`
 - `joyride.host.name=${GROCY_CONTAINER_NAME:-grocy}.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### grocy-nfs
+
+**Purpose**: Configures NFS volume mounts for remote storage
+
+**Changes**:
+- **Adds/modifies volumes**: `grocy-nfs-data`
+- **Adds/modifies services**: `grocy`
+
+**Usage**:
+```bash
+make enable-override grocy-nfs
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/grocy-nfs.yml)
+
 ## Quick Start
 
 ```bash

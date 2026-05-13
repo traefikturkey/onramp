@@ -73,6 +73,26 @@
 - `autoheal=true`
 - `joyride.host.name=${MINIO_CONTAINER_NAME:-minio}.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### minio-nfs
+
+**Purpose**: Configures NFS volume mounts for remote storage
+
+**Changes**:
+- **Adds/modifies volumes**: `minio-nfs-root`
+- **Adds/modifies services**: `minio`
+
+**Usage**:
+```bash
+make enable-override minio-nfs
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/minio-nfs.yml)
+
 ## Quick Start
 
 ```bash

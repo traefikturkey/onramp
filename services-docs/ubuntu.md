@@ -20,6 +20,42 @@
 ### Volumes
 - `${UBUNTU_TEST_VOLUME:-.}` - Volume mount
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### ubuntu-nfs
+
+**Purpose**: Configures NFS volume mounts for remote storage
+
+**Changes**:
+- **Adds/modifies volumes**: `ubuntu-test-nfs-volume`
+- **Adds/modifies services**: `ubuntu-test`
+
+**Usage**:
+```bash
+make enable-override ubuntu-nfs
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/ubuntu-nfs.yml)
+
+### ubuntu-smb
+
+**Purpose**: Alternative configuration for this service
+
+**Changes**:
+- **Adds/modifies volumes**: `ubuntu-test-smb-volume`
+- **Adds/modifies services**: `ubuntu-test`
+
+**Usage**:
+```bash
+make enable-override ubuntu-smb
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/ubuntu-smb.yml)
+
 ## Quick Start
 
 ```bash

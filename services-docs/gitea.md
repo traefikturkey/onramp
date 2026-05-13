@@ -49,6 +49,26 @@
 - `autoheal=true`
 - `joyride.host.name=${GITEA_CONTAINER_NAME:-gitea}.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### gitea-nfs
+
+**Purpose**: Configures NFS volume mounts for remote storage
+
+**Changes**:
+- **Adds/modifies volumes**: `gitea-nfs-data`
+- **Adds/modifies services**: `gitea`
+
+**Usage**:
+```bash
+make enable-override gitea-nfs
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/gitea-nfs.yml)
+
 ## Quick Start
 
 ```bash

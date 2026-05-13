@@ -52,6 +52,26 @@
 - `autoheal=true`
 - `joyride.host.name=lidarr.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### lidarr-nfs
+
+**Purpose**: Configures NFS volume mounts for remote storage
+
+**Changes**:
+- **Adds/modifies volumes**: `lidarr-nfs-media`, `lidarr-nfs-downloads`
+- **Adds/modifies services**: `lidarr`
+
+**Usage**:
+```bash
+make enable-override lidarr-nfs
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/lidarr-nfs.yml)
+
 ## Quick Start
 
 ```bash

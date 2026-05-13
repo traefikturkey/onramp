@@ -63,6 +63,73 @@
 - `autoheal=${PLEX_AUTOHEAL:-true}`
 - `joyride.host.name=${PLEX_CONTAINER_NAME:-plex}.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### plex-nfs-extra
+
+**Purpose**: Configures NFS volume mounts for remote storage
+
+**Changes**:
+- **Adds/modifies volumes**: `plex-nfs-media`, `plex-nfs-extra`
+- **Adds/modifies services**: `plex`
+
+**Usage**:
+```bash
+make enable-override plex-nfs-extra
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/plex-nfs-extra.yml)
+
+### plex-nfs
+
+**Purpose**: Configures NFS volume mounts for remote storage
+
+**Changes**:
+- **Adds/modifies volumes**: `plex-nfs-media`
+- **Adds/modifies services**: `plex`
+
+**Usage**:
+```bash
+make enable-override plex-nfs
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/plex-nfs.yml)
+
+### plex-nvidia
+
+**Purpose**: Enables NVIDIA GPU hardware acceleration
+
+**Changes**:
+- **Adds/modifies services**: `plex`
+- **Adds/modifies environment variables**: `TZ`, `ADVERTISE_IP`, `ALLOWED_NETWORKS`, `PLEX_CLAIM`, `PLEX_UID`, `PLEX_GID`, `VERSION`, `NVIDIA_VISIBLE_DEVICES`, `NVIDIA_DRIVER_CAPABILITIES`
+
+**Usage**:
+```bash
+make enable-override plex-nvidia
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/plex-nvidia.yml)
+
+### plex-quicksync
+
+**Purpose**: Enables Intel QuickSync hardware acceleration
+
+**Changes**:
+- **Adds/modifies services**: `plex`
+
+**Usage**:
+```bash
+make enable-override plex-quicksync
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/plex-quicksync.yml)
+
 ## Quick Start
 
 ```bash

@@ -48,6 +48,26 @@
 - `autoheal=true`
 - `joyride.host.name=${OWNCAST_CONTAINER_NAME:-owncast}.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### owncast-nfs
+
+**Purpose**: Configures NFS volume mounts for remote storage
+
+**Changes**:
+- **Adds/modifies volumes**: `owncast-nfs-data`
+- **Adds/modifies services**: `owncast`
+
+**Usage**:
+```bash
+make enable-override owncast-nfs
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/owncast-nfs.yml)
+
 ## Quick Start
 
 ```bash

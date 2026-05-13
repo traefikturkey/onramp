@@ -55,6 +55,26 @@
 This service depends on:
 - `hc-postgres`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### healthchecks-postgres
+
+**Purpose**: Override to use dedicated PostgreSQL database for healthchecks
+
+**Changes**:
+- **Adds/modifies services**: `healthchecks`, `hc-postgres`
+- **Adds/modifies environment variables**: `DB_HOST`, `DB_USER`, `DB_PASSWORD`
+
+**Usage**:
+```bash
+make enable-override healthchecks-postgres
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/healthchecks-postgres.yml)
+
 ## Quick Start
 
 ```bash

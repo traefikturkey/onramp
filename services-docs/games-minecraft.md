@@ -48,6 +48,25 @@
 - `autoheal=true`
 - `joyride.host.name=${MINECRAFT_HOSTNAME:-minecraft}.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### minecraft-dynmap
+
+**Purpose**: Enables Dynmap web map for Minecraft
+
+**Changes**:
+- **Adds/modifies services**: `minecraft`
+
+**Usage**:
+```bash
+make enable-override minecraft-dynmap
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/minecraft-dynmap.yml)
+
 ## Quick Start
 
 ```bash

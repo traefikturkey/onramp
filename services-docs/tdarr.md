@@ -60,6 +60,57 @@
 - `autoheal=true`
 - `joyride.host.name=${TDARR_CONTAINER_NAME:-tdarr}.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### tdarr-nfs
+
+**Purpose**: Configures NFS volume mounts for remote storage
+
+**Changes**:
+- **Adds/modifies volumes**: `tdarr-nfs-media`, `tdarr-nfs-temp`
+- **Adds/modifies services**: `tdarr`
+
+**Usage**:
+```bash
+make enable-override tdarr-nfs
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/tdarr-nfs.yml)
+
+### tdarr-nvidia
+
+**Purpose**: Enables NVIDIA GPU hardware acceleration
+
+**Changes**:
+- **Adds/modifies services**: `tdarr`
+- **Adds/modifies environment variables**: `PUID`, `PGID`, `TZ`, `NVIDIA_DRIVER_CAPABILITIES`, `NVIDIA_VISIBLE_DEVICES`
+
+**Usage**:
+```bash
+make enable-override tdarr-nvidia
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/tdarr-nvidia.yml)
+
+### tdarr-quicksync
+
+**Purpose**: Enables Intel QuickSync hardware acceleration
+
+**Changes**:
+- **Adds/modifies services**: `tdarr`
+
+**Usage**:
+```bash
+make enable-override tdarr-quicksync
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/tdarr-quicksync.yml)
+
 ## Quick Start
 
 ```bash

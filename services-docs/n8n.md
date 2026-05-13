@@ -68,6 +68,26 @@
 This service depends on:
 - `n8n_postgres`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### n8n-postgres
+
+**Purpose**: Override to add PostgreSQL database backend for n8n using shared postgres service
+
+**Changes**:
+- **Adds/modifies services**: `n8n`
+- **Adds/modifies environment variables**: `DB_TYPE`, `DB_POSTGRESDB_HOST`, `DB_POSTGRESDB_PORT`, `DB_POSTGRESDB_DATABASE`, `DB_POSTGRESDB_USER`, `DB_POSTGRESDB_PASSWORD`
+
+**Usage**:
+```bash
+make enable-override n8n-postgres
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/n8n-postgres.yml)
+
 ## Quick Start
 
 ```bash

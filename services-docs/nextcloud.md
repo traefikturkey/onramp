@@ -50,6 +50,26 @@
 - `autoheal=true`
 - `joyride.host.name=${NEXTCLOUD_CONTAINER_NAME:-nextcloud}.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### nextcloud-nfs
+
+**Purpose**: Configures NFS volume mounts for remote storage
+
+**Changes**:
+- **Adds/modifies volumes**: `nextcloud-nfs-data`
+- **Adds/modifies services**: `nextcloud`
+
+**Usage**:
+```bash
+make enable-override nextcloud-nfs
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/nextcloud-nfs.yml)
+
 ## Quick Start
 
 ```bash

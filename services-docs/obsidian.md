@@ -49,6 +49,26 @@
 - `autoheal=${OBSIDIAN_AUTOHEAL_ENABLED:-true}`
 - `joyride.host.name=${OBSIDIAN_HOST_NAME:-obsidian}.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### obsidian-nfs
+
+**Purpose**: Configures NFS volume mounts for remote storage
+
+**Changes**:
+- **Adds/modifies volumes**: `obsidian-nfs-data`
+- **Adds/modifies services**: `obsidian`
+
+**Usage**:
+```bash
+make enable-override obsidian-nfs
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/obsidian-nfs.yml)
+
 ## Quick Start
 
 ```bash

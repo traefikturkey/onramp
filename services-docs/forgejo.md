@@ -50,6 +50,26 @@
 - `autoheal=${FORGEJO_AUTOHEAL:-true}`
 - `joyride.host.name=${FORGEJO_CONTAINER_NAME:-forgejo}.${HOST_DOMAIN}`
 
+## Available Overrides
+
+OnRamp supports configuration overrides to customize this service. The following overrides are available:
+
+### forgejo-nfs
+
+**Purpose**: Configures NFS volume mounts for remote storage
+
+**Changes**:
+- **Adds/modifies volumes**: `forgejo-nfs-data`
+- **Adds/modifies services**: `forgejo`
+
+**Usage**:
+```bash
+make enable-override forgejo-nfs
+make up
+```
+
+**Configuration**: [View override file](https://github.com/traefikturkey/onramp/tree/main/overrides-available/forgejo-nfs.yml)
+
 ## Quick Start
 
 ```bash
