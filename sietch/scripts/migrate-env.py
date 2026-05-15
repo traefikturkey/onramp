@@ -22,6 +22,10 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
+from logging_config import get_logger, setup_logging
+
+logger = get_logger(__name__)
+
 
 # Global variables that should go to services-enabled/.env
 GLOBAL_VARS = {
@@ -307,7 +311,7 @@ class EnvMigrator:
         - Only env files exist (templates already cleaned up)
         - Both exist (full feature branch state)
         """
-        print("Starting migration from feature branch...")
+        logger.info("Starting migration from feature branch")
 
         # Check what exists
         has_env_dir = self.environments_enabled.exists()
@@ -318,7 +322,7 @@ class EnvMigrator:
 
         if has_templates:
             template_count = len(list(self.environments_available.glob("*.template")))
-            print(f"  Found {template_count} template files in environments-available/")
+            logger.info("Found template files", extra={"count": template_count, "location": "environments-available/"})
 
         # Track files to migrate
         migrations: list[tuple[Path, Path, str]] = []  # (source, dest, description)
@@ -342,16 +346,16 @@ class EnvMigrator:
                     dest = self.services_enabled / f"{stem}.env"
                     migrations.append((env_file, dest, f"service config ({stem})"))
 
-            print(f"  Found {len(migrations)} environment files to migrate:")
+            logger.info("Found {len(migrations)} environment files to migrate:")
             for source, dest, desc in migrations:
-                print(f"    {source.name} -> {dest.name} ({desc})")
+                logger.info(    {source.name} -> {dest.name} ({desc})")
         else:
-            print("  No environment files found in environments-enabled/")
+            logger.info("No environment files found in environments-enabled/")
             if has_templates:
-                print("  Will clean up templates directory only")
+                logger.info("Will clean up templates directory only")
 
         if dry_run:
-            print("\nDry run - no changes made")
+            logger.info(\nDry run - no changes made")
             return True
 
         # Create backup directory
@@ -372,7 +376,7 @@ class EnvMigrator:
                     f.write("\n")
                     f.write(content)
 
-                print(f"  Created: {dest.name}")
+                logger.info("Created file", extra={"name": {dest.name}")
 
         # Backup and remove environments-enabled/ if it exists
         if has_env_dir:
@@ -380,10 +384,10 @@ class EnvMigrator:
             if backup_path.exists():
                 shutil.rmtree(backup_path)
             shutil.copytree(self.environments_enabled, backup_path)
-            print(f"  Backed up: environments-enabled/ -> backups/environments-enabled.legacy/")
+            logger.info("Backed up", extra={"message": environments-enabled/ -> backups/environments-enabled.legacy/")
 
             shutil.rmtree(self.environments_enabled)
-            print("  Removed: environments-enabled/")
+            logger.info("Removed", extra={"message": environments-enabled/")
 
         # Clean up environments-available/ templates if they exist
         if has_templates:
@@ -391,12 +395,12 @@ class EnvMigrator:
             if templates_backup.exists():
                 shutil.rmtree(templates_backup)
             shutil.copytree(self.environments_available, templates_backup)
-            print(f"  Backed up: environments-available/ -> backups/environments-available.legacy/")
+            logger.info("Backed up", extra={"message": environments-available/ -> backups/environments-available.legacy/")
 
             shutil.rmtree(self.environments_available)
-            print("  Removed: environments-available/")
+            logger.info("Removed", extra={"message": environments-available/")
 
-        print("\nMigration complete!")
+        logger.info(\nMigration complete!")
         return True
 
     def _is_nfs_var(self, var_name: str) -> bool:
@@ -411,11 +415,11 @@ class EnvMigrator:
 
     def migrate_legacy(self, dry_run: bool = False) -> bool:
         """Migrate from legacy monolithic .env file."""
-        print("Starting migration from legacy .env...")
+        logger.info("Starting migration from legacy .env...")
 
         # Parse the legacy env file
         all_vars = self.parse_env_file(self.legacy_env)
-        print(f"  Found {len(all_vars)} variables")
+        logger.info("Found {len(all_vars)} variables")
 
         # Sort variables into buckets
         global_vars: dict[str, tuple[str, list[str]]] = {}
@@ -445,34 +449,34 @@ class EnvMigrator:
         if "CF_API_EMAIL" not in global_vars and "DNS_CHALLENGE_API_EMAIL" in global_vars:
             value, comments = global_vars["DNS_CHALLENGE_API_EMAIL"]
             global_vars["CF_API_EMAIL"] = (value, ["# Copied from DNS_CHALLENGE_API_EMAIL"])
-            print("  Aliased: CF_API_EMAIL <- DNS_CHALLENGE_API_EMAIL")
+            logger.info(  Aliased: CF_API_EMAIL <- DNS_CHALLENGE_API_EMAIL")
 
-        print(f"  Global vars: {len(global_vars)}")
-        print(f"  NFS vars: {len(nfs_vars)}")
-        print(f"  External service vars: {len(external_vars)}")
-        print(f"  Service-specific vars: {sum(len(v) for v in service_vars.values())} across {len(service_vars)} services")
-        print(f"  Custom/unmapped vars: {len(custom_vars)}")
+        logger.info("Global vars: {len(global_vars)}")
+        logger.info("NFS vars: {len(nfs_vars)}")
+        logger.info("External service vars: {len(external_vars)}")
+        logger.info("Service-specific vars: {sum(len(v) for v in service_vars.values())} across {len(service_vars)} services")
+        logger.info("Custom/unmapped vars: {len(custom_vars)}")
 
         if dry_run:
-            print("\nDry run - no changes made")
-            print("\nGlobal vars would be written to services-enabled/.env:")
+            logger.info(\nDry run - no changes made")
+            logger.info(\nGlobal vars would be written to services-enabled/.env:")
             for var in sorted(global_vars.keys()):
-                print(f"  {var}")
+                logger.info(  {var}")
             if nfs_vars:
-                print("\nNFS vars would be written to services-enabled/.env.nfs:")
+                logger.info("NFS vars would be written to services-enabled/.env.nfs:")
                 for var in sorted(nfs_vars.keys()):
-                    print(f"  {var}")
+                    logger.info(f"  {var}")
             if external_vars:
-                print("\nExternal vars would be written to services-enabled/.env.external:")
+                logger.info("External vars would be written to services-enabled/.env.external:")
                 for var in sorted(external_vars.keys()):
-                    print(f"  {var}")
-            print("\nService vars:")
+                    logger.info(f"  {var}")
+            logger.info("Service vars:")
             for service, svars in sorted(service_vars.items()):
-                print(f"  {service}.env: {', '.join(sorted(svars.keys()))}")
+                logger.info(f"  {service}.env: {', '.join(sorted(svars.keys()))}")
             if custom_vars:
-                print("\nCustom vars would be written to services-enabled/custom.env:")
+                logger.info("Custom vars would be written to services-enabled/custom.env:")
                 for var in sorted(custom_vars.keys()):
-                    print(f"  {var}")
+                    logger.info(f"  {var}")
             return True
 
         # Create services-enabled directory
@@ -483,54 +487,54 @@ class EnvMigrator:
         if global_vars:
             header = f"# OnRamp Global Configuration\n# Migrated from legacy .env on {timestamp}"
             self.write_env_file(self.services_enabled / ".env", global_vars, header)
-            print(f"  Created: services-enabled/.env ({len(global_vars)} vars)")
+            logger.info("Created file", extra={"name": services-enabled/.env ({len(global_vars)} vars)")
 
         # Write NFS config
         if nfs_vars:
             header = f"# NFS/SAMBA Configuration\n# Migrated from legacy .env on {timestamp}"
             self.write_env_file(self.services_enabled / ".env.nfs", nfs_vars, header)
-            print(f"  Created: services-enabled/.env.nfs ({len(nfs_vars)} vars)")
+            logger.info("Created file", extra={"name": services-enabled/.env.nfs ({len(nfs_vars)} vars)")
 
         # Write external services config
         if external_vars:
             header = f"# External Service Proxying\n# Migrated from legacy .env on {timestamp}"
             self.write_env_file(self.services_enabled / ".env.external", external_vars, header)
-            print(f"  Created: services-enabled/.env.external ({len(external_vars)} vars)")
+            logger.info("Created file", extra={"name": services-enabled/.env.external ({len(external_vars)} vars)")
 
         # Write service-specific configs
         for service, svars in service_vars.items():
             header = f"# {service.upper()} Configuration\n# Migrated from legacy .env on {timestamp}"
             self.write_env_file(self.services_enabled / f"{service}.env", svars, header)
-            print(f"  Created: services-enabled/{service}.env ({len(svars)} vars)")
+            logger.info("Created file", extra={"name": services-enabled/{service}.env ({len(svars)} vars)")
 
         # Write unmapped variables to custom.env
         if custom_vars:
             header = f"# Custom/Unmapped Variables\n# Migrated from legacy .env on {timestamp}"
             self.write_env_file(self.services_enabled / "custom.env", custom_vars, header)
-            print(f"  Created: services-enabled/custom.env ({len(custom_vars)} vars)")
+            logger.info("Created file", extra={"name": services-enabled/custom.env ({len(custom_vars)} vars)")
 
         # Backup and remove legacy .env
         self.backups_dir.mkdir(parents=True, exist_ok=True)
         backup_path = self.backups_dir / ".env.legacy"
         shutil.copy2(self.legacy_env, backup_path)
-        print(f"  Backed up: .env -> {backup_path}")
+        logger.info("Backed up", extra={"message": .env -> {backup_path}")
 
         self.legacy_env.unlink()
-        print("  Removed: .env")
+        logger.info("Removed", extra={"message": .env")
 
-        print("\nMigration complete!")
+        logger.info(\nMigration complete!")
         return True
 
     def migrate(self, dry_run: bool = False) -> bool:
         """Route to appropriate migration based on detected source."""
         if (self.services_enabled / ".env").exists():
-            print("services-enabled/.env already exists. Migration already complete.")
+            logger.info(services-enabled/.env already exists. Migration already complete.")
             return True
         if self.should_migrate_feature_branch():
             return self.migrate_feature_branch(dry_run)
         if self.should_migrate_legacy():
             return self.migrate_legacy(dry_run)
-        print("No migration source found (.env or environments-enabled/).")
+        logger.info(No migration source found (.env or environments-enabled/).")
         return True
 
 
@@ -563,6 +567,9 @@ Examples:
     )
 
     args = parser.parse_args()
+
+    # Setup logging
+    setup_logging(level="INFO", enable_colors=True)
 
     migrator = EnvMigrator(args.base_dir)
 

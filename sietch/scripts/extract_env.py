@@ -16,6 +16,9 @@ Usage:
     python extract_env.py <service_name> --dry-run
 """
 
+from logging_config import get_logger, setup_logging
+nlogger = get_logger(__name__)
+
 import argparse
 import re
 import sys
@@ -217,15 +220,18 @@ def main() -> int:
     )
 
     args = parser.parse_args()
+    
+    # Setup logging
+    setup_logging(level="INFO", enable_colors=True)
 
     extractor = EnvExtractor(base_dir=Path(args.base_dir))
     success, result = extractor.create_scaffold_env(args.service, dry_run=args.dry_run)
 
     if success:
-        print(result)
+        logger.info(result)
         return 0
     else:
-        print(f"Error: {result}", file=sys.stderr)
+        logger.error( {result}"))
         return 1
 
 

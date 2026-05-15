@@ -26,8 +26,12 @@ import sys
 from pathlib import Path
 from typing import TYPE_CHECKING
 
+from logging_config import get_logger, setup_logging
+
 if TYPE_CHECKING:
     from ports.docker import DockerExecutor
+
+logger = get_logger(__name__)
 
 
 class DatabaseManager:
@@ -84,14 +88,14 @@ class DatabaseManager:
 
     def console(self) -> int:
         """Open interactive MySQL console."""
-        print(f"Connecting to {self.container_name}...")
+        logger.info("Connecting to database", extra={"container": self.container_name})
         return self._docker_exec(["mysql", "-p"], interactive=True)[0]
 
     def list_databases(self) -> tuple[int, list[str]]:
         """List all databases."""
         code, stdout, stderr = self._mysql_exec("SHOW DATABASES;")
         if code != 0:
-            print(f"Error: {stderr}", file=sys.stderr)
+            logger.error("Failed to list databases", extra={"stderr": stderr})
             return code, []
 
         # Parse output (skip header line)
@@ -102,7 +106,7 @@ class DatabaseManager:
         """List all database users."""
         code, stdout, stderr = self._mysql_exec("SELECT User, Host FROM mysql.user;")
         if code != 0:
-            print(f"Error: {stderr}", file=sys.stderr)
+            logger.error("Failed to list users", extra={"stderr": stderr})
             return code, []
 
         users = [line.strip() for line in stdout.strip().split("\n")[1:] if line.strip()]
@@ -113,9 +117,9 @@ class DatabaseManager:
         sql = f"CREATE DATABASE IF NOT EXISTS `{dbname}`;"
         code, stdout, stderr = self._mysql_exec(sql)
         if code != 0:
-            print(f"Error creating database: {stderr}", file=sys.stderr)
+            logger.error("Failed to create database", extra={"database": dbname, "stderr": stderr})
         else:
-            print(f"Database '{dbname}' created successfully")
+            logger.info("Database created successfully", extra={"database": dbname})
         return code
 
     def create_user(self, username: str, password: str | None = None, generate: bool = False) -> tuple[int, str | None]:
@@ -123,23 +127,22 @@ class DatabaseManager:
         if generate:
             password = self.generate_password()
         elif not password:
-            print("Error: Either --password or --generate required", file=sys.stderr)
+            logger.error("Either --password or --generate required")
             return 1, None
 
         sql = f"CREATE USER IF NOT EXISTS '{username}'@'%' IDENTIFIED BY '{password}';"
         code, stdout, stderr = self._mysql_exec(sql)
 
         if code != 0:
-            print(f"Error creating user: {stderr}", file=sys.stderr)
+            logger.error("Failed to create user", extra={"username": username, "stderr": stderr})
             return code, None
 
         if generate:
             password_file = self.save_password(username, password)
-            print(f"User '{username}' created successfully")
-            print(f"Password saved to: {password_file}")
+            logger.info("User created with generated password", extra={"username": username, "password_file": str(password_file)})
             return 0, password
         else:
-            print(f"User '{username}' created successfully")
+            logger.info("User created successfully", extra={"username": username})
             return 0, None
 
     def grant_privileges(self, dbname: str, username: str) -> int:
@@ -148,9 +151,9 @@ class DatabaseManager:
         code, stdout, stderr = self._mysql_exec(sql)
 
         if code != 0:
-            print(f"Error granting privileges: {stderr}", file=sys.stderr)
+            logger.error("Failed to grant privileges", extra={"database": dbname, "username": username, "stderr": stderr})
         else:
-            print(f"Granted all privileges on '{dbname}' to '{username}'")
+            logger.info("Granted privileges", extra={"database": dbname, "username": username})
 
         # Flush privileges
         self._mysql_exec("FLUSH PRIVILEGES;")
@@ -162,9 +165,9 @@ class DatabaseManager:
         code, stdout, stderr = self._mysql_exec(sql)
 
         if code != 0:
-            print(f"Error removing user: {stderr}", file=sys.stderr)
+            logger.error("Failed to remove user", extra={"username": username, "stderr": stderr})
         else:
-            print(f"User '{username}' removed")
+            logger.info("User removed", extra={"username": username})
         return code
 
     def drop_database(self, dbname: str) -> int:
@@ -173,14 +176,14 @@ class DatabaseManager:
         code, stdout, stderr = self._mysql_exec(sql)
 
         if code != 0:
-            print(f"Error dropping database: {stderr}", file=sys.stderr)
+            logger.error("Failed to drop database", extra={"database": dbname, "stderr": stderr})
         else:
-            print(f"Database '{dbname}' dropped")
+            logger.info("Database dropped", extra={"database": dbname})
         return code
 
     def setup(self, name: str) -> int:
         """Create user with generated password, database, and grant privileges."""
-        print(f"Setting up database and user for '{name}'...")
+        logger.info("Setting up database and user", extra={"name": name})
 
         # Create user with generated password
         code, password = self.create_user(name, generate=True)
@@ -197,11 +200,8 @@ class DatabaseManager:
         if code != 0:
             return code
 
-        print(f"\nSetup complete for '{name}'")
-        print(f"Add the following to your service's .env file:")
-        print(f"  DB_USER={name}")
-        print(f"  DB_NAME={name}")
-        print(f"  DB_PASSWORD=<see password file>")
+        logger.info("Setup complete", extra={"name": name})
+        logger.info(f"Add to your service's .env file: DB_USER={name}, DB_NAME={name}, DB_PASSWORD=<see password file>")
         return 0
 
 
@@ -233,6 +233,10 @@ Examples:
     parser.add_argument("--base-dir", default="/app", help="Base directory (default: /app)")
 
     args = parser.parse_args()
+
+    # Setup logging
+    setup_logging(level="INFO", enable_colors=True)
+
     mgr = DatabaseManager(container_name=args.container, base_dir=args.base_dir)
 
     if args.action == "console":
@@ -242,14 +246,14 @@ Examples:
         code, databases = mgr.list_databases()
         if code == 0:
             for db in databases:
-                print(db)
+                logger.info(db)
         return code
 
     if args.action == "list-users":
         code, users = mgr.list_users()
         if code == 0:
             for user in users:
-                print(user)
+                logger.info(user)
         return code
 
     if args.action == "create-db":

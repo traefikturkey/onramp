@@ -20,6 +20,10 @@ import shutil
 import sys
 from pathlib import Path
 
+from logging_config import get_logger, setup_logging
+
+logger = get_logger(__name__)
+
 
 class ServiceManager:
     """Manages service discovery and metadata."""
@@ -342,6 +346,10 @@ def main():
     )
 
     args = parser.parse_args()
+
+    # Setup logging
+    setup_logging(level="INFO", enable_colors=True)
+
     mgr = ServiceManager(args.base_dir)
 
     if args.action == "list":
@@ -406,10 +414,10 @@ def main():
             parser.error("Service name required for 'info' action")
         info = mgr.get_service_info(args.service)
         if not info:
-            print(f"Service '{args.service}' not found", file=sys.stderr)
+            logger.error("Service not found", extra={"service": args.service})
             return 1
         for k, v in info.items():
-            print(f"{k}: {v}")
+            print(f"{k}: {v}")  # Keep as print - structured output
         return 0
 
     if args.action == "validate":
@@ -417,12 +425,12 @@ def main():
             parser.error("Service name required for 'validate' action")
         valid, errors = mgr.validate_service(args.service)
         if valid:
-            print(f"Service '{args.service}' is valid")
+            logger.info("Service is valid", extra={"service": args.service})
             return 0
         else:
-            print(f"Service '{args.service}' has errors:", file=sys.stderr)
+            logger.error("Service has validation errors", extra={"service": args.service, "error_count": len(errors)})
             for err in errors:
-                print(f"  - {err}", file=sys.stderr)
+                logger.error(f"  - {err}")
             return 1
 
     if args.action == "markdown":
@@ -433,7 +441,10 @@ def main():
         if not args.service:
             parser.error("Service name required for 'archive-env' action")
         success, message = mgr.archive_env(args.service)
-        print(message)
+        if success:
+            logger.info(message)
+        else:
+            logger.error(message)
         return 0 if success else 1
 
     if args.action == "restore-env":
@@ -441,18 +452,22 @@ def main():
             parser.error("Service name required for 'restore-env' action")
         interactive = not args.no_interactive
         success, message = mgr.restore_env(args.service, interactive=interactive, force=args.force)
-        print(message)
+        if success:
+            logger.info(message)
+        else:
+            logger.error(message)
         return 0 if success else 1
 
     if args.action == "check-archive":
         if not args.service:
             parser.error("Service name required for 'check-archive' action")
         exists = mgr.check_archive(args.service)
+        # Keep as print - command returns yes/no for scripts
         if exists:
-            print(f"yes")
+            print("yes")
             return 0
         else:
-            print(f"no")
+            print("no")
             return 1
 
     if args.action == "get-version":
@@ -460,9 +475,10 @@ def main():
             parser.error("Service name required for 'get-version' action")
         yml_path = mgr.services_available / f"{args.service}.yml"
         if not yml_path.exists():
-            print(f"Service '{args.service}' not found", file=sys.stderr)
+            logger.error("Service not found", extra={"service": args.service})
             return 1
         metadata = mgr._parse_metadata(yml_path)
+        # Keep as print - command output for scripts
         print(metadata.get("config_version", 1))
         return 0
 
@@ -471,12 +487,13 @@ def main():
             parser.error("Service name required for 'check-version' action")
         yml_path = mgr.services_available / f"{args.service}.yml"
         if not yml_path.exists():
-            print(f"Service '{args.service}' not found", file=sys.stderr)
+            logger.error("Service not found", extra={"service": args.service})
             return 1
         metadata = mgr._parse_metadata(yml_path)
         version = metadata.get("config_version", 1)
         min_version = args.min_version or 2
-        
+
+        # Silent check - return code only
         if version >= min_version:
             return 0
         else:
@@ -487,75 +504,74 @@ def main():
         try:
             import yaml
         except ImportError:
-            print("Error: pyyaml not installed", file=sys.stderr)
+            logger.error("pyyaml not installed")
             return 1
-        
+
         from services_linter import ServiceLinter
         linter = ServiceLinter(args.base_dir)
-        
+
         if args.service:
             # Lint single service
             is_valid, errors, warnings = linter.lint(args.service, strict=args.strict, auto_fix=args.fix)
-            
-            print(f"Linting {args.service}...")
+
+            logger.info(f"Linting {args.service}...", extra={"service": args.service})
             if errors:
-                print(f"  ❌ Errors ({len(errors)}):")
+                logger.error(f"Errors ({len(errors)}):", extra={"service": args.service, "error_count": len(errors)})
                 for err in errors:
-                    print(f"    - {err}")
+                    logger.error(f"  - {err}", extra={"service": args.service})
             if warnings:
-                print(f"  ⚠️  Warnings ({len(warnings)}):")
+                logger.warning(f"Warnings ({len(warnings)}):", extra={"service": args.service, "warning_count": len(warnings)})
                 for warn in warnings:
-                    print(f"    - {warn}")
+                    logger.warning(f"  - {warn}", extra={"service": args.service})
             if is_valid:
-                print(f"  ✓ Service configuration is valid")
-            
+                logger.info("Service configuration is valid", extra={"service": args.service})
+
             return 0 if is_valid else 1
-        
+
         elif args.all or args.outdated:
             # Lint all services or only outdated ones
             services = mgr.list_available()
             failed = []
             outdated = []
-            
+
             for service in services:
                 yml_path = mgr.services_available / f"{service}.yml"
                 metadata = mgr._parse_metadata(yml_path)
                 version = metadata.get("config_version", 1)
-                
+
                 if args.outdated and version >= 2:
                     continue  # Skip up-to-date services
-                
+
                 if args.outdated:
                     outdated.append(service)
                     continue
-                
+
                 is_valid, errors, warnings = linter.lint(service, strict=args.strict, auto_fix=args.fix)
                 if not is_valid:
                     failed.append((service, errors, warnings))
-            
+
             if args.outdated:
                 if outdated:
-                    print(f"Services with outdated config (v1):")
+                    logger.info("Services with outdated config (v1):", extra={"count": len(outdated)})
                     for service in outdated:
-                        print(f"  - {service}")
+                        logger.info(f"  - {service}")
                 else:
-                    print("All services are up-to-date!")
+                    logger.info("All services are up-to-date!")
                 return 0
-            
+
             if failed:
-                print(f"\n❌ {len(failed)} services failed validation:\n")
+                logger.error(f"{len(failed)} services failed validation:", extra={"failed_count": len(failed)})
                 for service, errors, warnings in failed:
-                    print(f"{service}:")
+                    logger.error(f"{service}:", extra={"service": service})
                     if errors:
                         for err in errors:
-                            print(f"  ❌ {err}")
+                            logger.error(f"  - {err}", extra={"service": service})
                     if warnings:
                         for warn in warnings:
-                            print(f"  ⚠️  {warn}")
-                    print()
+                            logger.warning(f"  - {warn}", extra={"service": service})
                 return 1
             else:
-                print(f"✓ All {len(services)} services passed validation")
+                logger.info(f"All {len(services)} services passed validation", extra={"service_count": len(services)})
                 return 0
         else:
             parser.error("Service name or --all required for 'lint' action")

@@ -3,16 +3,28 @@
 
 Here is a complete list of [available services](SERVICES.md) and [available games](SERVICES.md#available-games)
 
-For detailed documentation, see the [docs/](docs/) folder:
+## 📚 Documentation
+
+### Service Documentation
+Each of the 287+ services has comprehensive documentation including configuration details, environment variables, and available overrides:
+- **[Service Documentation Index](services-docs/README.md)** - Browse all service docs
+- **[SERVICES.md](SERVICES.md)** - Quick service list with links to detailed docs
+
+**Example service docs:** [Plex](services-docs/plex.md) • [Jellyfin](services-docs/jellyfin.md) • [Immich](services-docs/immich.md) • [Nextcloud](services-docs/nextcloud.md)
+
+### User Guides
 - [Dashboard Guide](docs/dashboard.md) - Web UI for managing your homelab
 - [Scaffolding Guide](docs/scaffolding.md) - Convention-based service configuration
 - [Migration Guide](docs/main-branch-announcement.md) - Switching from master to main
 
-Architecture documentation in [.github/shared/](.github/shared/):
+### Architecture Documentation
 - [Database Architecture](.github/shared/database-architecture.md) - Dedicated vs shared databases
 - [Network Architecture](.github/shared/network-architecture.md) - Traefik and network patterns
 - [Backup Strategy](.github/shared/backup-strategy.md) - Backup and restore procedures
 - [Health Check Patterns](.github/shared/healthcheck-patterns.md) - Standard health checks
+
+### For AI Agents
+- [Agent Guide](.agents/README.md) - Comprehensive guide for AI assistants working on OnRamp
 
 Onramp uses Docker and it installs docker if you don't already have it installed (a check is run as part of the 'make install' command below).
 
@@ -87,66 +99,86 @@ make
 
 ## Docker Services
 
-Other docker services are included in the ./services-available directory.
-The configuration files include links to the web page for the services which has 
-the available documentation.
+OnRamp includes **287+ services** in the `./services-available` directory, each with comprehensive documentation including configuration details, environment variables, Docker images, port mappings, and available overrides.
 
-> Note : This also includes cautions and notices for some of the different services, so be sure to look at them.
+**Browse services:**
+- **[Service Documentation](services-docs/README.md)** - Full documentation for all services
+- **[SERVICES.md](SERVICES.md)** - Quick reference list with links
 
-To list them:
-```
+To list available services:
+```bash
 make list-services
 ```
 
-They can be enabled by running the following commands:
-
-```
+To enable a service:
+```bash
 make enable-service uptime-kuma
 make restart
 ```
-> Note: This creates a symlink file in `./services-enabled` to the service.yml file in `./services-available`.
-> A `.env` file is always generated at `services-enabled/<service>.env` (from template if available, or auto-generated).
-> Each service YAML has an `env_file:` directive pointing to this file.
+> **Note:** This creates a symlink in `./services-enabled/` to the service config in `./services-available/`.
+> A `.env` file is auto-generated at `services-enabled/<service>.env` from the template (if available).
 
-and disabled with the following:
+To view service documentation:
+```bash
+# View full documentation with configuration details and overrides
+cat services-docs/uptime-kuma.md
+
+# Or browse all services
+ls services-docs/
 ```
+
+To disable a service:
+```bash
 make disable-service uptime-kuma
 make restart
 ```
 
 To create a new service:
-```
+```bash
 make create-service name-of-service
 ```
 
-This will create a file in /services-available that is built using the make.d/templates/service.template
+This creates a file in `./services-available/` using the template from `make.d/templates/service.template`
 
 
 
 ## Docker Overrides
 
-Several docker overrides are included that allow extending the functionallity of existing services to add features like NFS mounted media directories and Intel Quicksync or Nvidia GPU support to the Plex and Jellyfin containers.
+OnRamp includes **109 override configurations** that extend service functionality with features like:
+- **NFS storage** - Mount media from NAS/NFS servers
+- **GPU acceleration** - NVIDIA, AMD, Intel QuickSync support
+- **Dedicated databases** - Dedicated Redis, PostgreSQL, MariaDB containers
+- **Extra configurations** - Additional features and integrations
 
-To list avaliable overrides:
-```
+**Each service's documentation lists available overrides.** For example, see [Plex overrides](services-docs/plex.md#available-overrides) or [Jellyfin overrides](services-docs/jellyfin.md#available-overrides).
+
+To list all available overrides:
+```bash
 make list-overrides
 ```
 
-To enable an override:
+To view what an override does before enabling:
+```bash
+# Check the service documentation for override details
+cat services-docs/plex.md  # Shows all Plex overrides
 ```
+
+To enable an override:
+```bash
 make enable-override plex-nfs
 make restart
 ```
 
 To disable an override:
-```
+```bash
 make disable-override plex-nfs
 make restart
 ```
-> Note: this creates a symlink file in ./overrides-enabled to the override.yml file in ./overrides-available
-> In addition users can place there own custom docker compose files into ./overrides-enabled and they will be included on normal start up 
-> as well as included in the backup file created when running make create-backup
-> for more info on docker compose overrides see: https://docs.docker.com/compose/extends/#adding-and-overriding-configuration
+
+> **Note:** Overrides create symlinks in `./overrides-enabled/` pointing to configs in `./overrides-available/`.
+> You can also place custom docker-compose files in `./overrides-enabled/` - they'll be included on startup and in backups.
+> 
+> For more on Docker Compose overrides: https://docs.docker.com/compose/extends/#adding-and-overriding-configuration
 
 ### NFS Quick Start
 

@@ -35,8 +35,12 @@ import sys
 from pathlib import Path
 from typing import TYPE_CHECKING
 
+from logging_config import get_logger, setup_logging
+
 if TYPE_CHECKING:
     from ports.command import CommandExecutor
+
+logger = get_logger(__name__)
 
 
 def validate_path_within_base(path: Path, base: Path) -> bool:
@@ -140,17 +144,17 @@ class Scaffolder:
                 if path.exists():
                     if path.is_file():
                         path.unlink()
-                        print(f"  Rollback: removed file {path}")
+                        logger.info("Rollback removed file", extra={"path": str(path)})
                     elif path.is_dir():
                         # Only remove if empty
                         try:
                             path.rmdir()
-                            print(f"  Rollback: removed directory {path}")
+                            logger.info("Rollback removed directory", extra={"path": str(path)})
                         except OSError:
                             # Directory not empty, skip
                             pass
             except Exception as e:
-                print(f"  Rollback warning: could not remove {path}: {e}", file=sys.stderr)
+                logger.warning(f"Rollback could not remove path: {e}", extra={"path": str(path)})
 
         self._created_files.clear()
 
@@ -276,12 +280,12 @@ class Scaffolder:
             if self._is_password_var(var_name):
                 if var_name not in generated_passwords:
                     generated_passwords[var_name] = self._generate_secure_password()
-                    print(f"    Generated secure value for {var_name}")
+                    logger.info("Generated secure value for variable", extra={"variable": var_name})
                 return generated_passwords[var_name]
 
             # For error syntax ${VAR:?msg}, return empty (user must set it)
             if error_msg is not None:
-                print(f"    Warning: {var_name} not set ({error_msg})")
+                logger.warning("Variable not set", extra={"variable": var_name, "message": error_msg})
                 return ''
 
             # Variable not set and no default - return empty
@@ -319,12 +323,15 @@ class Scaffolder:
                 missing.append(var)
 
         if missing:
-            print(f"\n  Warning: required variables not set in {dest.name}:")
-            for var in missing:
-                print(f"    - {var}")
-            # Extract service name from dest filename
-            service = dest.stem
-            print(f"  Run: make edit-env {service}")
+            logger.warning(
+                "Required variables not set",
+                extra={
+                    "file": dest.name,
+                    "missing_vars": ", ".join(missing),
+                    "service": dest.stem,
+                    "hint": f"Run: make edit-env {dest.stem}"
+                }
+            )
 
     def render_template(self, source: Path, dest: Path, skip_if_exists: bool = True) -> bool:
         """Render a template file using Python string substitution.
@@ -337,7 +344,7 @@ class Scaffolder:
         try:
             # Skip if destination exists (don't overwrite user configs)
             if skip_if_exists and dest.exists():
-                print(f"  Skipped (exists): {dest}")
+                logger.debug("Skipped existing file", extra={"path": str(dest)})
                 # Still check required vars on existing files
                 with open(source, "r") as f:
                     required_vars = self._parse_required_vars(f.read())
@@ -354,11 +361,11 @@ class Scaffolder:
             with open(dest, "w") as f:
                 f.write(rendered_content)
 
-            print(f"  Rendered: {source.name} -> {dest}")
+            logger.info("Rendered template", extra={"source": source.name, "dest": str(dest)})
             self._check_required_vars(dest, required_vars)
             return True
         except Exception as e:
-            print(f"  Error rendering {source}: {e}", file=sys.stderr)
+            logger.error(f"Failed to render template: {e}", extra={"source": str(source)}, exc_info=True)
             return False
 
     def copy_static(self, source: Path, dest: Path) -> bool:
@@ -368,12 +375,12 @@ class Scaffolder:
             # Only copy if dest doesn't exist (no-clobber behavior)
             if not dest.exists():
                 shutil.copy2(source, dest)
-                print(f"  Copied: {source.name} -> {dest}")
+                logger.info("Copied static file", extra={"source": source.name, "dest": str(dest)})
             else:
-                print(f"  Skipped (exists): {dest}")
+                logger.debug("Skipped existing file", extra={"path": str(dest)})
             return True
         except Exception as e:
-            print(f"  Error copying {source}: {e}", file=sys.stderr)
+            logger.error(f"Failed to copy static file: {e}", extra={"source": str(source)}, exc_info=True)
             return False
 
     def create_etc_volumes(self, service: str, scaffold_statics: list[Path] = None) -> bool:
@@ -409,7 +416,7 @@ class Scaffolder:
             with open(service_yml, "r") as f:
                 content = f.read()
         except Exception as e:
-            print(f"  Error reading {service_yml}: {e}", file=sys.stderr)
+            logger.error(f"Failed to read service YAML: {e}", extra={"file": str(service_yml)}, exc_info=True)
             return False
 
         # Pattern to match ./etc/<service>/* volume mounts
@@ -421,7 +428,7 @@ class Scaffolder:
         if not matches:
             return True
 
-        print(f"  Creating etc/ volumes for {service}...")
+        logger.debug("Creating etc/ volumes", extra={"service": service, "count": len(matches)})
 
         # The allowed base for this service's etc files
         allowed_base = self.etc_dir / service
@@ -442,15 +449,15 @@ class Scaffolder:
 
                 # Check it's under the etc directory
                 if not str(normalized).startswith(str(self.etc_dir)):
-                    print(f"    Skipping (path traversal attempt): {volume_path}")
+                    logger.warning("Skipped path traversal attempt", extra={"path": volume_path})
                     continue
 
                 # For existing paths, also check resolved path (handles symlinks)
                 if abs_path.exists() and not validate_path_within_base(abs_path, self.etc_dir):
-                    print(f"    Skipping (path escapes via symlink): {volume_path}")
+                    logger.warning("Skipped path escaping via symlink", extra={"path": volume_path})
                     continue
             except Exception as e:
-                print(f"    Skipping (path validation error): {volume_path} - {e}")
+                logger.warning(f"Skipped path validation error: {e}", extra={"path": volume_path})
                 continue
 
             # Check if path relative to etc/<service>/ is provided by scaffold
@@ -460,7 +467,7 @@ class Scaffolder:
 
                 # Skip if scaffold will provide this file
                 if remainder in scaffold_provides:
-                    print(f"    Skipping (scaffold provides): {remainder}")
+                    logger.debug("Skipped - scaffold provides", extra={"path": remainder})
                     continue
 
                 # Determine if this is a file or directory
@@ -469,19 +476,19 @@ class Scaffolder:
                 if is_directory:
                     abs_path.mkdir(parents=True, exist_ok=True)
                     self._track_created(abs_path)
-                    print(f"    Created dir: {abs_path}")
+                    logger.info("Created directory", extra={"path": str(abs_path)})
                 else:
                     # It's a file - create parent dir and touch file
                     abs_path.parent.mkdir(parents=True, exist_ok=True)
                     if not abs_path.exists():
                         abs_path.touch()
                         self._track_created(abs_path)
-                        print(f"    Created file: {abs_path}")
+                        logger.info("Created file", extra={"path": str(abs_path)})
             else:
                 # Just the service directory
                 abs_path.mkdir(parents=True, exist_ok=True)
                 self._track_created(abs_path)
-                print(f"    Created dir: {abs_path}")
+                logger.info("Created directory", extra={"path": str(abs_path)})
 
         return True
 
@@ -524,12 +531,12 @@ class Scaffolder:
         """Display post-enable message if MESSAGE.txt exists."""
         message_file = self.scaffold_dir / service / "MESSAGE.txt"
         if message_file.exists():
-            print("\n" + "=" * 60)
-            print(f"POST-ENABLE INSTRUCTIONS FOR {service.upper()}")
-            print("=" * 60)
+            logger.info("=" * 60)
+            logger.info(f"POST-ENABLE INSTRUCTIONS FOR {service.upper()}")
+            logger.info("=" * 60)
             content = self._render_template_string(message_file.read_text())
-            print(content.strip())
-            print("=" * 60 + "\n")
+            logger.info(content.strip())
+            logger.info("=" * 60)
 
     def execute_manifest(self, service: str) -> bool:
         """Execute operations from scaffold.yml manifest."""
@@ -538,26 +545,26 @@ class Scaffolder:
             return True  # No manifest is not an error
 
         if not YAML_AVAILABLE:
-            print(f"  Warning: pyyaml not installed, skipping manifest for {service}")
+            logger.warning("pyyaml not installed, skipping manifest", extra={"service": service})
             return True
 
         if not OPERATIONS_AVAILABLE:
-            print(f"  Warning: operations module not available, skipping manifest for {service}")
+            logger.warning("operations module not available, skipping manifest", extra={"service": service})
             return True
 
-        print(f"  Executing manifest operations...")
+        logger.debug("Executing manifest operations", extra={"service": service})
 
         try:
             with open(manifest_path, "r") as f:
                 manifest = yaml.safe_load(f)
         except Exception as e:
-            print(f"  Error reading manifest: {e}", file=sys.stderr)
+            logger.error(f"Failed to read manifest: {e}", extra={"path": str(manifest_path)}, exc_info=True)
             return False
 
         # Validate version
         version = manifest.get("version", "1")
         if version != "1":
-            print(f"  Unsupported manifest version: {version}", file=sys.stderr)
+            logger.error("Unsupported manifest version", extra={"version": version, "service": service})
             return False
 
         # Create context (share executor with operations)
@@ -575,7 +582,7 @@ class Scaffolder:
         for i, op_config in enumerate(operations, 1):
             op_type = op_config.get("type", "unknown")
             if not execute_operation(op_config, ctx):
-                print(f"  Failed at operation {i}: {op_type}", file=sys.stderr)
+                logger.error("Manifest operation failed", extra={"operation_num": i, "type": op_type, "service": service})
                 return False
 
         return True
@@ -589,7 +596,7 @@ class Scaffolder:
         operations are skipped to preserve container-managed files. Use
         --force to override this behavior.
         """
-        print(f"Building scaffold for '{service}'...")
+        logger.info("Building scaffold", extra={"service": service})
 
         # Clear any previous tracking
         self._clear_tracking()
@@ -600,10 +607,15 @@ class Scaffolder:
         skip_etc = False
         if service != "onramp" and self.etc_has_content(service):
             if self.force:
-                print(f"  Warning: etc/{service}/ has content, --force specified, proceeding...")
+                logger.warning(
+                    "etc/ directory has content but --force specified",
+                    extra={"service": service, "path": f"etc/{service}/"}
+                )
             else:
-                print(f"  Skipping etc/{service}/ operations (directory has existing content)")
-                print(f"  Use --force to override and write to etc/{service}/ anyway")
+                logger.info(
+                    "Skipping etc/ operations - directory has existing content (use --force to override)",
+                    extra={"service": service, "path": f"etc/{service}/"}
+                )
                 skip_etc = True
 
         # Get scaffold files first (needed for volume creation check)
@@ -617,7 +629,7 @@ class Scaffolder:
 
         # Check if we have scaffold files (may have none, just volume creation)
         if not templates and not statics and not self.find_manifest(service):
-            print(f"  No scaffold templates for '{service}'")
+            logger.debug("No scaffold templates found", extra={"service": service})
             # Auto-generate minimal .env if none exists (for env_file: directive in YAML)
             if service != "onramp" and self.services_enabled.exists():
                 env_file_path = self.services_enabled / f"{service}.env"
@@ -626,7 +638,7 @@ class Scaffolder:
                         f"# {service.upper()} Configuration\n"
                         f"# Auto-generated by scaffold.py\n\n"
                     )
-                    print(f"  Created: {env_file_path}")
+                    logger.info("Created minimal env file", extra={"path": str(env_file_path)})
                     self._track_created(env_file_path)
             if success:
                 self._clear_tracking()
@@ -641,7 +653,7 @@ class Scaffolder:
                 dest = self.get_output_path(service, template)
                 # Skip etc/ destinations if we're preserving existing content
                 if skip_etc and str(dest).startswith(str(self.etc_dir)):
-                    print(f"  Skipped (etc/ preserved): {template.name}")
+                    logger.debug("Skipped template (etc/ preserved)", extra={"file": template.name})
                     continue
                 if not self.render_template(template, dest):
                     success = False
@@ -655,7 +667,7 @@ class Scaffolder:
                 dest = self.get_output_path(service, static)
                 # Skip etc/ destinations if we're preserving existing content
                 if skip_etc and str(dest).startswith(str(self.etc_dir)):
-                    print(f"  Skipped (etc/ preserved): {static.name}")
+                    logger.debug("Skipped static file (etc/ preserved)", extra={"file": static.name})
                     continue
                 if not self.copy_static(static, dest):
                     success = False
@@ -675,37 +687,39 @@ class Scaffolder:
                     f"# {service.upper()} Configuration\n"
                     f"# Auto-generated by scaffold.py\n\n"
                 )
-                print(f"  Created: {env_file_path}")
+                logger.info("Created minimal env file", extra={"path": str(env_file_path)})
                 self._track_created(env_file_path)
 
         # On failure, rollback created files
         if not success:
-            print(f"  Build failed, rolling back changes...")
+            logger.error("Build failed, rolling back changes", extra={"service": service})
             self.rollback()
         else:
             # Success - clear tracking and display message
             self._clear_tracking()
             self._display_message(service)
+            logger.info("Scaffold build completed successfully", extra={"service": service})
 
         return success
 
     def teardown(self, service: str, preserve_etc: bool = True) -> bool:
         """Tear down scaffold for a service."""
-        print(f"Tearing down scaffold for '{service}'...")
+        logger.info("Tearing down scaffold", extra={"service": service, "preserve_etc": preserve_etc})
 
         # Remove service.env from services-enabled
         env_file = self.services_enabled / f"{service}.env"
         if env_file.exists():
             env_file.unlink()
-            print(f"  Removed: {env_file}")
+            logger.info("Removed env file", extra={"path": str(env_file)})
 
         # Optionally remove etc/<service>
         if not preserve_etc:
             etc_service = self.etc_dir / service
             if etc_service.exists():
                 shutil.rmtree(etc_service)
-                print(f"  Removed directory: {etc_service}")
+                logger.info("Removed directory", extra={"path": str(etc_service)})
 
+        logger.info("Teardown completed", extra={"service": service})
         return True
 
     def build_all_enabled(self) -> bool:
@@ -776,16 +790,19 @@ Examples:
 
     args = parser.parse_args()
 
+    # Setup logging
+    setup_logging(level="INFO", enable_colors=True)
+
     scaffolder = Scaffolder(args.base_dir, force=args.force)
 
     if args.action == "list":
         scaffolds = scaffolder.list_scaffolds()
         if scaffolds:
-            print("Available scaffolds:")
+            logger.info("Available scaffolds:")
             for s in scaffolds:
-                print(f"  {s}")
+                logger.info(f"  {s}")
         else:
-            print("No scaffolds found in services-scaffold/")
+            logger.info("No scaffolds found in services-scaffold/")
         return 0
 
     if args.action == "build" and args.all:
@@ -798,10 +815,10 @@ Examples:
     if args.action == "check":
         has_scaffold = scaffolder.has_scaffold(args.service)
         if has_scaffold:
-            print(f"Service '{args.service}' has scaffold files")
+            logger.info("Service has scaffold files", extra={"service": args.service})
             return 0
         else:
-            print(f"Service '{args.service}' has no scaffold files")
+            logger.info("Service has no scaffold files", extra={"service": args.service})
             return 1
 
     if args.action == "build":
