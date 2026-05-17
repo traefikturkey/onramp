@@ -9,7 +9,7 @@ Migrations are versioned and tracked to ensure they only run once.
 """
 
 from logging_config import get_logger, setup_logging
-nlogger = get_logger(__name__)
+logger = get_logger(__name__)
 
 import argparse
 import json
@@ -282,7 +282,7 @@ class ServiceEnvMigrator:
         Returns True if successful, False if errors occurred.
         """
         if service not in SERVICE_MIGRATIONS:
-            logger.info(No migrations defined for service: {service}")
+            logger.info(f"No migrations defined for service: {service}")
             return True
 
         migrations = SERVICE_MIGRATIONS[service]
@@ -290,31 +290,31 @@ class ServiceEnvMigrator:
         pending = [m for m in migrations if m["version"] > current_version]
 
         if not pending:
-            logger.info({service}: Already at latest version (v{current_version})")
+            logger.info(f"{service}: Already at latest version (v{current_version})")
             return True
 
         env_file = self.get_env_file(service)
 
-        logger.info(\n{'='*60}")
-        logger.info(Service: {service}")
-        logger.info(Current version: {current_version}")
-        logger.info(Pending migrations: {len(pending)}")
-        logger.info({'='*60}")
+        logger.info(f"\n{'='*60}")
+        logger.info(f"Service: {service}")
+        logger.info(f"Current version: {current_version}")
+        logger.info(f"Pending migrations: {len(pending)}")
+        logger.info(f"{'='*60}")
 
         for migration in pending:
             version = migration["version"]
             desc = migration["description"]
 
-            logger.info(\n[v{version}] {desc}")
+            logger.info(f"\n[v{version}] {desc}")
 
             if migration.get("notes"):
-                logger.info(\nNotes:")
+                logger.info("\nNotes:")
                 for note in migration["notes"]:
-                    logger.info(  {note}")
+                    logger.info(f"  {note}")
 
             if not env_file.exists():
-                logger.info(\n  No env file found at {env_file}")
-                logger.info(  Creating placeholder for manual configuration...")
+                logger.info(f"\n  No env file found at {env_file}")
+                logger.info("  Creating placeholder for manual configuration...")
 
                 if not dry_run:
                     env_file.parent.mkdir(parents=True, exist_ok=True)
@@ -342,7 +342,7 @@ class ServiceEnvMigrator:
                 for line_type, var_name, content in lines:
                     if line_type == "var" and var_name in transforms:
                         new_var = transforms[var_name]
-                        logger.info(  Transform: {var_name} -> {new_var}")
+                        logger.info(f"  Transform: {var_name} -> {new_var}")
                         # Comment out old var
                         new_lines.append(("comment", None, f"# MIGRATED: {var_name}={content}"))
                         # Add new var
@@ -353,14 +353,14 @@ class ServiceEnvMigrator:
                 lines = new_lines
 
             if dry_run:
-                logger.info(\n  [DRY RUN] Would apply migration")
+                logger.info("\n  [DRY RUN] Would apply migration")
                 if modified:
-                    logger.info(  Changes would be written to env file")
+                    logger.info("  Changes would be written to env file")
             else:
                 # Backup before modifying
                 backup = self.backup_env_file(service)
                 if backup:
-                    logger.info(\n  Backup: {backup.name}")
+                    logger.info(f"\n  Backup: {backup.name}")
 
                 # Add migration header if not already present
                 header_lines = [
@@ -380,7 +380,7 @@ class ServiceEnvMigrator:
 
                 self.write_env_file(env_file, lines)
                 self.set_applied_version(service, version)
-                logger.info(\n  Applied migration v{version}")
+                logger.info(f"\n  Applied migration v{version}")
 
         return True
 
@@ -397,20 +397,20 @@ class ServiceEnvMigrator:
         state = self.load_state()
         applied = state.get("applied", {})
 
-        logger.info(\nService Environment Migrations")
-        logger.info(=" * 60)
+        logger.info("\nService Environment Migrations")
+        logger.info("=" * 60)
 
         for service, migrations in sorted(SERVICE_MIGRATIONS.items()):
             current = applied.get(service, 0)
             latest = max(m["version"] for m in migrations)
             status = "up-to-date" if current >= latest else f"pending ({latest - current} migration(s))"
 
-            logger.info(\n{service}:")
-            logger.info(  Current: v{current}, Latest: v{latest} [{status}]")
+            logger.info(f"\n{service}:")
+            logger.info(f"  Current: v{current}, Latest: v{latest} [{status}]")
 
             for m in migrations:
                 marker = "[x]" if m["version"] <= current else "[ ]"
-                logger.info(  {marker} v{m['version']}: {m['description']}")
+                logger.info(f"  {marker} v{m['version']}: {m['description']}")
 
     def check_service(self, service: str) -> dict:
         """Check migration status for a service."""
@@ -490,12 +490,12 @@ Examples:
     elif args.command == "check":
         status = migrator.check_service(args.service)
         if not status["defined"]:
-            logger.info(No migrations defined for: {args.service}")
+            logger.info(f"No migrations defined for: {args.service}")
             return 0
-        logger.info(Service: {status['service']}")
-        logger.info(Current version: {status['current_version']}")
-        logger.info(Latest version: {status['latest_version']}")
-        logger.info(Status: {'up-to-date' if status['up_to_date'] else f'{status[\"pending_count\"]} pending'}")
+        logger.info(f"Service: {status['service']}")
+        logger.info(f"Current version: {status['current_version']}")
+        logger.info(f"Latest version: {status['latest_version']}")
+        logger.info(f"Status: {'up-to-date' if status['up_to_date'] else f'{status["pending_count"]} pending'}")
         return 0
 
     else:

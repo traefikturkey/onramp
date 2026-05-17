@@ -17,7 +17,7 @@ This script handles the DNS API operations that were done via curl/jq.
 """
 
 from logging_config import get_logger, setup_logging
-nlogger = get_logger(__name__)
+logger = get_logger(__name__)
 
 import argparse
 import json
@@ -143,7 +143,7 @@ class CloudflareAPI:
         # Find the record first
         record = self.find_dns_record(name, record_type)
         if not record:
-            logger.info(DNS record not found: {name} ({record_type})")
+            logger.info(f"DNS record not found: {name} ({record_type})")
             return False
 
         record_id = record["id"]
@@ -204,7 +204,7 @@ Examples:
     try:
         api = CloudflareAPI()
     except ValueError as e:
-        logger.error( {e}"))
+        logger.error(f"{e}")
         return 1
 
     try:
@@ -212,33 +212,33 @@ Examples:
             if args.dns_action == "list":
                 records = api.list_dns_records(record_type=args.type)
                 if not records:
-                    logger.info(No DNS records found")
+                    logger.info("No DNS records found")
                     return 0
 
-                logger.info({'Name':<40} {'Type':<8} {'Content':<50}")
-                logger.info(-" * 100)
+                logger.info(f"{'Name':<40} {'Type':<8} {'Content':<50}")
+                logger.info("-" * 100)
                 for r in records:
-                    logger.info({r['name']:<40} {r['type']:<8} {r['content']:<50}")
+                    logger.info(f"{r['name']:<40} {r['type']:<8} {r['content']:<50}")
                 return 0
 
             if args.dns_action == "delete":
                 if api.delete_dns_record(args.name, args.type):
-                    logger.info(Deleted DNS record: {args.name}")
+                    logger.info(f"Deleted DNS record: {args.name}")
                     return 0
                 return 1
 
         if args.command == "zone":
             if args.zone_action == "info":
                 info = api.get_zone_info()
-                logger.info(Zone: {info.get('name')}")
-                logger.info(  ID: {info.get('id')}")
-                logger.info(  Status: {info.get('status')}")
-                logger.info(  Plan: {info.get('plan', {}).get('name')}")
-                logger.info(  Name servers: {', '.join(info.get('name_servers', []))}")
+                logger.info(f"Zone: {info.get('name')}")
+                logger.info(f"  ID: {info.get('id')}")
+                logger.info(f"  Status: {info.get('status')}")
+                logger.info(f"  Plan: {info.get('plan', {}).get('name')}")
+                logger.info(f"  Name servers: {', '.join(info.get('name_servers', []))}")
                 return 0
 
     except RuntimeError as e:
-        logger.error( {e}"))
+        logger.error(f"{e}")
         return 1
 
     parser.print_help()

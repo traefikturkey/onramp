@@ -17,7 +17,7 @@ Usage:
 """
 
 from logging_config import get_logger, setup_logging
-nlogger = get_logger(__name__)
+logger = get_logger(__name__)
 
 import argparse
 import re
@@ -231,7 +231,7 @@ def main() -> int:
         logger.info(result)
         return 0
     else:
-        logger.error( {result}"))
+        logger.error(f"{result}")
         return 1
 
 

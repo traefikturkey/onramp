@@ -17,7 +17,7 @@ Features:
 """
 
 from logging_config import get_logger, setup_logging
-nlogger = get_logger(__name__)
+logger = get_logger(__name__)
 
 import argparse
 import os
@@ -145,7 +145,7 @@ class TraefikHostsExtractor:
         try:
             content = yaml_path.read_text(encoding="utf-8")
         except OSError as e:
-            logger.warning( Could not read {yaml_path}: {e}"))
+            logger.warning(f"Could not read {yaml_path}: {e}")
             return hosts
 
         for match in HOST_RULE_PATTERN.finditer(content):
@@ -277,18 +277,18 @@ class TraefikHostsExtractor:
         host_domain = self.env_vars.get("HOST_DOMAIN", "")
 
         if not hostip:
-            logger.error( HOSTIP not set in environment"))
+            logger.error("HOSTIP not set in environment")
             return 1
 
         if not host_domain:
-            logger.error( HOST_DOMAIN not set in environment"))
+            logger.error("HOST_DOMAIN not set in environment")
             return 1
 
         # Get external files to process
         external_files = self.get_external_files()
 
         if not external_files:
-            logger.info(No external configs found in external-enabled/")
+            logger.info("No external configs found in external-enabled/")
             return 0
 
         # Read existing hosts file
@@ -317,11 +317,11 @@ class TraefikHostsExtractor:
 
         # Print summary
         if added:
-            logger.info(Added: {', '.join(added)}")
+            logger.info(f"Added: {', '.join(added)}")
         if updated:
-            logger.info(Updated: {', '.join(updated)}")
+            logger.info(f"Updated: {', '.join(updated)}")
 
-        logger.info(Wrote {total} host entries to {self.hosts_file}")
+        logger.info(f"Wrote {total} host entries to {self.hosts_file}")
 
         return 0
 

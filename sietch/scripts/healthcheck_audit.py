@@ -12,7 +12,7 @@ Usage:
 """
 
 from logging_config import get_logger, setup_logging
-nlogger = get_logger(__name__)
+logger = get_logger(__name__)
 
 import argparse
 import json
@@ -111,33 +111,33 @@ def audit_services(
 
 def print_text_report(results: list[dict], stats: dict) -> None:
     """Print human-readable audit report."""
-    logger.info(=" * 60)
-    logger.info(HEALTH CHECK AUDIT REPORT")
-    logger.info(=" * 60)
+    logger.info("=" * 60)
+    logger.info("HEALTH CHECK AUDIT REPORT")
+    logger.info("=" * 60)
     logger.info("")
 
     # Statistics
-    logger.info(STATISTICS")
-    logger.info(-" * 40)
-    logger.info(Total services scanned: {stats['total']}")
-    logger.info(With health checks: {stats['with_healthcheck']}")
-    logger.info(With autoheal label: {stats['with_autoheal']}")
-    logger.info(Autoheal WITHOUT healthcheck: {stats['autoheal_no_healthcheck']}")
+    logger.info("STATISTICS")
+    logger.info("-" * 40)
+    logger.info(f"Total services scanned: {stats['total']}")
+    logger.info(f"With health checks: {stats['with_healthcheck']}")
+    logger.info(f"With autoheal label: {stats['with_autoheal']}")
+    logger.info(f"Autoheal WITHOUT healthcheck: {stats['autoheal_no_healthcheck']}")
     logger.info("")
 
     if stats["total"] > 0:
         coverage = (stats["with_healthcheck"] / stats["total"]) * 100
-        logger.info(Health check coverage: {coverage:.1f}%")
+        logger.info(f"Health check coverage: {coverage:.1f}%")
         logger.info("")
 
     # Critical: autoheal without healthcheck
     critical = [r for r in results if r["has_autoheal"] and not r["has_healthcheck"]]
     if critical:
-        logger.info(CRITICAL: Services with autoheal but NO healthcheck")
-        logger.info(-" * 40)
+        logger.info("CRITICAL: Services with autoheal but NO healthcheck")
+        logger.info("-" * 40)
         for r in critical:
             status = "[enabled]" if r["enabled"] else "[available]"
-            logger.info(  {status} {r['service']}")
+            logger.info(f"  {status} {r['service']}")
         logger.info("")
 
     # Services without health checks (enabled only)
@@ -145,21 +145,21 @@ def print_text_report(results: list[dict], stats: dict) -> None:
         r for r in results if not r["has_healthcheck"] and r["enabled"]
     ]
     if no_healthcheck:
-        logger.info(ENABLED services without health checks")
-        logger.info(-" * 40)
+        logger.info("ENABLED services without health checks")
+        logger.info("-" * 40)
         for r in no_healthcheck:
             autoheal = " (autoheal)" if r["has_autoheal"] else ""
-            logger.info(  {r['service']}{autoheal}")
+            logger.info(f"  {r['service']}{autoheal}")
         logger.info("")
 
     # Services with health checks
     with_healthcheck = [r for r in results if r["has_healthcheck"]]
     if with_healthcheck:
-        logger.info(Services WITH health checks")
-        logger.info(-" * 40)
+        logger.info("Services WITH health checks")
+        logger.info("-" * 40)
         for r in with_healthcheck:
             status = "[enabled]" if r["enabled"] else "[available]"
-            logger.info(  {status} {r['service']}")
+            logger.info(f"  {status} {r['service']}")
         logger.info("")
 
 

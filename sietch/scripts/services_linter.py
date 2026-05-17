@@ -6,7 +6,7 @@ Validates service YAML files against OnRamp standards and best practices.
 """
 
 from logging_config import get_logger, setup_logging
-nlogger = get_logger(__name__)
+logger = get_logger(__name__)
 
 import re
 import sys
@@ -386,18 +386,18 @@ Examples:
     if args.all or args.enabled:
         results = linter.lint_all(enabled_only=args.enabled)
 
-        logger.info(Passed: {len(results['passed'])}")
-        logger.info(Failed: {len(results['failed'])}")
+        logger.info(f"Passed: {len(results['passed'])}")
+        logger.info(f"Failed: {len(results['failed'])}")
 
         if results["all_errors"]:
-            logger.info(\nErrors:")
+            logger.info("\nErrors:")
             for err in results["all_errors"]:
-                logger.info(  - {err}")
+                logger.info(f"  - {err}")
 
         if results["all_warnings"]:
-            logger.info(\nWarnings:")
+            logger.info("\nWarnings:")
             for warn in results["all_warnings"]:
-                logger.info(  - {warn}")
+                logger.info(f"  - {warn}")
 
         return 1 if results["failed"] else 0
 
@@ -406,18 +406,18 @@ Examples:
 
     is_valid, errors, warnings = linter.lint(args.service, strict=args.strict)
 
-    logger.info(Linting: {args.service}")
-    logger.info(Valid: {is_valid}")
+    logger.info(f"Linting: {args.service}")
+    logger.info(f"Valid: {is_valid}")
 
     if errors:
-        logger.info(\nErrors:")
+        logger.info("\nErrors:")
         for err in errors:
-            logger.info(  - {err}")
+            logger.info(f"  - {err}")
 
     if warnings:
-        logger.info(\nWarnings:")
+        logger.info("\nWarnings:")
         for warn in warnings:
-            logger.info(  - {warn}")
+            logger.info(f"  - {warn}")
 
     return 0 if is_valid else 1
 
