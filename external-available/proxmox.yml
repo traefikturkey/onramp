@@ -1,9 +1,18 @@
+# Proxmox VE external service fallback
+#
+# Single-instance legacy fallback for users who have not migrated yet.
+# Multi-instance Proxmox routing is generated from:
+#   services-enabled/proxmox.external.yml
+# with:
+#   make migrate-external proxmox
+#   make generate-external proxmox
+
 http:
   routers:
     proxmox:
       entryPoints:
         - "websecure"
-      rule: "Host(`{{env "PROXMOX_HOST_NAME"}}.{{env "HOST_DOMAIN"}}`)"
+      rule: 'Host(`{{env "PROXMOX_HOST_NAME"}}.{{env "HOST_DOMAIN"}}`)'
       middlewares:
         - default-headers
       tls: {}
@@ -13,5 +22,5 @@ http:
     proxmox:
       loadBalancer:
         servers:
-          - url: "https://{{env "PROXMOX_ADDRESS"}}:8006/"
+          - url: 'https://{{env "PROXMOX_ADDRESS"}}:8006/'
         passHostHeader: true

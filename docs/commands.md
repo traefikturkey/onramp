@@ -79,6 +79,8 @@ Complete list of OnRamp make commands.
 | Command | Description |
 |---------|-------------|
 | `make enable-external NAME` | Enable external service proxy |
+| `make generate-external proxmox` | Generate Proxmox Traefik YAML from `services-enabled/proxmox.external.yml` |
+| `make migrate-external proxmox` | Migrate legacy Proxmox env vars to `services-enabled/proxmox.external.yml` |
 | `make disable-external NAME` | Disable external service proxy |
 | `make create-external NAME` | Create new external service from template |
 

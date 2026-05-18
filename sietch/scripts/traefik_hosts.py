@@ -16,14 +16,15 @@ Features:
 - Preserves existing host entries and comments
 """
 
-from logging_config import get_logger, setup_logging
-logger = get_logger(__name__)
-
 import argparse
 import os
 import re
 import sys
 from pathlib import Path
+
+from logging_config import get_logger, setup_logging
+
+logger = get_logger(__name__)
 
 
 # Files that only define middlewares, not routers with Host() rules
@@ -36,7 +37,7 @@ MIDDLEWARE_ONLY_FILES = frozenset({
 
 # Regex to extract Host() rules from Traefik dynamic config
 # Matches: Host(`{{env "VAR"}}.{{env "HOST_DOMAIN"}}`) or Host(`hostname.domain`)
-HOST_RULE_PATTERN = re.compile(r'rule:\s*"Host\(`([^`]+)`\)"')
+HOST_RULE_PATTERN = re.compile(r"rule:\s*[\"']Host\(`([^`]+)`\)[\"']")
 
 # Regex to extract {{env "VAR"}} Go template syntax
 ENV_TEMPLATE_PATTERN = re.compile(r'\{\{env\s+"([^"]+)"\}\}')
@@ -154,19 +155,6 @@ class TraefikHostsExtractor:
 
             if resolved:
                 hosts.append((resolved, source_name))
-            else:
-                # Identify which variable is missing
-                missing_vars = []
-                for env_match in ENV_TEMPLATE_PATTERN.finditer(host_template):
-                    var_name = env_match.group(1)
-                    if not self.env_vars.get(var_name):
-                        missing_vars.append(var_name)
-
-                if missing_vars:
-                    logger.info(
-                        f"Skipped {source_name}: {', '.join(missing_vars)} not set",
-                        file=sys.stderr,
-                    )
 
         return hosts
 
@@ -264,8 +252,7 @@ class TraefikHostsExtractor:
         if not self.check_joyride_enabled():
             logger.info(
                 "Joyride service is not enabled. "
-                "Enable it with: make enable-service NAME=joyride",
-                file=sys.stderr,
+                "Enable it with: make enable-service NAME=joyride"
             )
             return 1
 
