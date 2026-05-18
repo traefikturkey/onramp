@@ -40,6 +40,7 @@ services:
       - traefik.enable=${N8N_MCP_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.n8n-mcp.entrypoints=websecure
       - traefik.http.routers.n8n-mcp.rule=Host(`${N8N_MCP_HOST_NAME:-n8n-mcp}.${HOST_DOMAIN}`)
+      - traefik.http.routers.n8n-mcp.middlewares=${N8N_MCP_MIDDLEWARES:-default-headers@file}
       - traefik.http.services.n8n-mcp.loadbalancer.server.port=3000
       - com.centurylinklabs.watchtower.enable=${N8N_MCP_WATCHTOWER_ENABLED:-true}
       - autoheal=${N8N_MCP_AUTOHEAL_ENABLED:-true}

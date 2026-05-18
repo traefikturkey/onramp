@@ -16,3 +16,8 @@ http:
           server: ""
         customRequestHeaders:
           X-Forwarded-Proto: https
+
+    allow-indexing-headers:
+      headers:
+        customResponseHeaders:
+          X-Robots-Tag: ""
