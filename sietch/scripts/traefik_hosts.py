@@ -37,7 +37,7 @@ MIDDLEWARE_ONLY_FILES = frozenset({
 
 # Regex to extract Host() rules from Traefik dynamic config
 # Matches: Host(`{{env "VAR"}}.{{env "HOST_DOMAIN"}}`) or Host(`hostname.domain`)
-HOST_RULE_PATTERN = re.compile(r'rule:\s*"Host\(`([^`]+)`\)"')
+HOST_RULE_PATTERN = re.compile(r"rule:\s*[\"']Host\(`([^`]+)`\)[\"']")
 
 # Regex to extract {{env "VAR"}} Go template syntax
 ENV_TEMPLATE_PATTERN = re.compile(r'\{\{env\s+"([^"]+)"\}\}')

@@ -64,6 +64,17 @@ Variables for proxying to external devices/services not managed by OnRamp:
 | `RANCHER_*` | Rancher proxy |
 | `PIHOLE_ADDRESS` / `PIHOLE_HOST_NAME` | External Pi-hole proxy |
 
+### Proxmox external YAML migration
+
+The legacy env migration preserves Proxmox variables in `services-enabled/.env.external`. To use multi-instance Proxmox routing, convert those preserved vars into the user-owned YAML source file:
+
+```bash
+make migrate-external proxmox
+make generate-external proxmox
+```
+
+This creates `services-enabled/proxmox.external.yml` from `PROXMOX_HOST_NAME` / `PROXMOX_ADDRESS` and any complete `PROXMOX2_` through `PROXMOX10_` pairs. The legacy `.env.external` file is not modified. If you need to roll back, remove the generated `external-enabled/proxmox.yml` and restore any backup created during replacement.
+
 ### Service Variables → `services-enabled/<service>.env`
 
 Variables are automatically categorized by their prefix:

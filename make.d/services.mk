@@ -165,12 +165,33 @@ disable-override:
 ##
 #########################################################
 
+EXTERNAL_BASE_DIR ?= $(or $(ONRAMP_BASE_DIR),$(CURDIR))
+EXTERNAL_DRY_RUN_FLAG := $(if $(DRY_RUN),--dry-run,)
+EXTERNAL_FORCE_FLAG := $(if $(FORCE),--force,)
+EXTERNAL_REPLACE_FLAG := $(if $(REPLACE_UNMANAGED),--replace-unmanaged,)
+EXTERNAL_INSTANCE_CMD = cd sietch && uv run python -m scripts.external_instances
+
 disable-external: ## Disable external service routing
 	rm -f ./external-enabled/$(SERVICE_PASSED_DNCASED).yml
 
+generate-external: ## Generate external service routing from user-owned instance config
+	@$(EXTERNAL_INSTANCE_CMD) generate '$(SERVICE_PASSED_DNCASED)' --base-dir '$(EXTERNAL_BASE_DIR)' $(EXTERNAL_DRY_RUN_FLAG) $(EXTERNAL_FORCE_FLAG) $(EXTERNAL_REPLACE_FLAG)
+
+migrate-external: ## Migrate legacy external service env vars to user-owned instance config
+	@$(EXTERNAL_INSTANCE_CMD) migrate '$(SERVICE_PASSED_DNCASED)' --base-dir '$(EXTERNAL_BASE_DIR)' $(EXTERNAL_DRY_RUN_FLAG) $(EXTERNAL_FORCE_FLAG) $(EXTERNAL_REPLACE_FLAG)
+
 enable-external: ## Enable external service routing
-	@mkdir -p ./etc/traefik/enabled
-	@cp external-available/$(SERVICE_PASSED_DNCASED).yml ./external-enabled/$(SERVICE_PASSED_DNCASED).yml || true
+	@mkdir -p ./etc/traefik/enabled ./external-enabled
+	@if [ '$(SERVICE_PASSED_DNCASED)' = 'proxmox' ] && [ -f '$(EXTERNAL_BASE_DIR)/services-enabled/proxmox.external.yml' ]; then \
+		$(EXTERNAL_INSTANCE_CMD) generate proxmox --base-dir '$(EXTERNAL_BASE_DIR)' $(EXTERNAL_DRY_RUN_FLAG) $(EXTERNAL_FORCE_FLAG) $(EXTERNAL_REPLACE_FLAG); \
+	elif [ '$(SERVICE_PASSED_DNCASED)' = 'proxmox' ] && [ -f './external-enabled/proxmox.yml' ]; then \
+		echo 'Refusing to overwrite existing external-enabled/proxmox.yml.' >&2; \
+		echo 'Run make migrate-external proxmox, then make generate-external proxmox; use REPLACE_UNMANAGED=1 only after backing up operator-edited config.' >&2; \
+		exit 1; \
+	else \
+		mkdir -p '$(EXTERNAL_BASE_DIR)/external-enabled'; \
+		cp '$(EXTERNAL_BASE_DIR)/external-available/$(SERVICE_PASSED_DNCASED).yml' '$(EXTERNAL_BASE_DIR)/external-enabled/$(SERVICE_PASSED_DNCASED).yml'; \
+	fi
 
 create-external: ## Create external service from template
 	envsubst '$${SERVICE_PASSED_DNCASED},$${SERVICE_PASSED_UPCASED}' < ./services-scaffold/_templates/external.template > ./external-available/$(SERVICE_PASSED_DNCASED).yml
