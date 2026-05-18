@@ -43,7 +43,6 @@ services:
       - N8N_EDITOR_BASE_URL=https://${N8N_HOST_NAME:-n8n}.${HOST_DOMAIN}/
       - N8N_PROXY_HOPS=${N8N_PROXY_HOPS:-1}
 
-      - N8N_RUNNERS_ENABLED=${N8N_RUNNERS_ENABLED:-true}
       - NODE_ENV=${N8N_NODE_ENV:-production}
 
       - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true # Enforce settings file permissions
