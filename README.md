@@ -15,6 +15,7 @@ Each of the 287+ services has comprehensive documentation including configuratio
 ### User Guides
 - [Dashboard Guide](docs/dashboard.md) - Web UI for managing your homelab
 - [Scaffolding Guide](docs/scaffolding.md) - Convention-based service configuration
+- [Search Indexing](docs/search-indexing.md) - Allow specific services to be indexed
 - [Migration Guide](docs/main-branch-announcement.md) - Switching from master to main
 
 ### Architecture Documentation

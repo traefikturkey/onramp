@@ -33,6 +33,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.nextcloud.entrypoints=websecure
       - traefik.http.routers.nextcloud.rule=Host(`${NEXTCLOUD_CONTAINER_NAME:-nextcloud}.${HOST_DOMAIN}`)
+      - traefik.http.routers.nextcloud.middlewares=${NEXTCLOUD_MIDDLEWARES:-default-headers@file}
       - traefik.http.routers.nextcloud.tls=true
       - traefik.http.routers.nextcloud.service=nextcloud
       - traefik.http.services.nextcloud.loadbalancer.server.scheme=https

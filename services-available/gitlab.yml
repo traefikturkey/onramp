@@ -34,6 +34,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.gitlab.entrypoints=websecure
       - traefik.http.routers.gitlab.rule=Host(`${GITLAB_CONTAINER_NAME:-gitlab}.${HOST_DOMAIN}`)
+      - traefik.http.routers.gitlab.middlewares=${GITLAB_MIDDLEWARES:-default-headers@file}
       - traefik.http.routers.gitlab.tls=true
       - traefik.http.routers.gitlab.service=gitlab
       - traefik.http.services.gitlab.loadbalancer.server.scheme=https
