@@ -3,7 +3,7 @@ http:
     whoami:
       loadBalancer:
         servers:
-        - url: "http://whoami:80"
+          - url: "http://whoami:80"
 
   routers:
     whoami-dynamic:

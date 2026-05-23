@@ -1,3 +1,4 @@
+# yamllint disable-file
 # Remember to add the host name to the pfsense admin page so that you wont get a DNS rebind error
 # See https://github.com/traefikturkey/guides/blob/master/pfsense-configuration-traefik.md for tips 
 

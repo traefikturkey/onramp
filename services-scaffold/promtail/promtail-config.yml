@@ -14,11 +14,11 @@ scrape_configs:
 
   - job_name: local
     static_configs:
-    - targets:
-        - localhost
-      labels:
-        job: varlogs
-        __path__: /var/log/*log
+      - targets:
+          - localhost
+        labels:
+          job: varlogs
+          __path__: /var/log/*log
 
   # syslog target
 

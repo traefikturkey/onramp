@@ -1,15 +1,15 @@
 global:
-  scrape_interval:     15s
+  scrape_interval: 15s
   evaluation_interval: 15s
   scrape_timeout: 10s
- 
+
 # Alertmanager configuration
 alerting:
   alertmanagers:
-  - scheme: http
-    static_configs:
-    - targets:
-      - prometheus-alertmanager:9093
+    - scheme: http
+      static_configs:
+        - targets:
+            - prometheus-alertmanager:9093
 
 rule_files:
   - "alert-rules-enabled/*.yaml"
@@ -49,7 +49,7 @@ scrape_configs:
   - job_name: 'node-exporters'
     file_sd_configs:
       - files:
-        - exporter-lin-servers.json
+          - exporter-lin-servers.json
   
   # - job_name: 'win-exporter'
   #   file_sd_configs:

@@ -1,8 +1,8 @@
 modules:
   icmp_ipv4:
-   prober: icmp
-   icmp:
-     preferred_ip_protocol: ip4
+    prober: icmp
+    icmp:
+      preferred_ip_protocol: ip4
   http_2xx:
     prober: http
     http:
