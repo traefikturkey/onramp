@@ -17,6 +17,8 @@ services:
       - CLUSTER_ENABLED=${CLUSTER_ENABLED:-false}
       - DNS_UNKNOWN_ACTION=${DNS_UNKNOWN_ACTION:-drop}
     network_mode: host
+    cap_add:
+      - NET_BIND_SERVICE
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
