@@ -21,6 +21,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.dalai.entrypoints=websecure
       - traefik.http.routers.dalai.rule=Host(`${DALAI_CONTAINER_NAME:-dalai}.${HOST_DOMAIN}`)
+      - traefik.http.routers.dalai.middlewares=${DALAI_MIDDLEWARES:-default-headers@file}
       - traefik.http.services.dalai.loadbalancer.server.port=3000
       - com.centurylinklabs.watchtower.enable=${DALAI_WATCHTOWER_ENABLED:-true}
       - autoheal=true

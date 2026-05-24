@@ -40,6 +40,7 @@ services:
       - traefik.docker.network=traefik
       - traefik.http.routers.prometheus.rule=Host(`prometheus.${HOST_DOMAIN}`)
       - traefik.http.routers.prometheus.entrypoints=websecure
+      - traefik.http.routers.prometheus.middlewares=${PROMETHEUS_MIDDLEWARES:-default-headers@file}
       - traefik.http.services.prometheus.loadbalancer.server.scheme=http
       - traefik.http.services.prometheus.loadbalancer.server.port=9090
 
@@ -77,6 +78,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.blackbox.rule=Host(`blackbox.${HOST_DOMAIN}`)
       - traefik.http.routers.blackbox.entrypoints=websecure
+      - traefik.http.routers.blackbox.middlewares=${PROMETHEUS_MIDDLEWARES:-default-headers@file}
       - traefik.http.routers.blackbox.tls=true
       - traefik.http.routers.blackbox.tls.certresolver=letsencrypt
       - traefik.http.services.blackbox.loadbalancer.server.scheme=http
@@ -104,6 +106,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.alertmanager.rule=Host(`alertmanager.${HOST_DOMAIN}`)
       - traefik.http.routers.alertmanager.entrypoints=websecure
+      - traefik.http.routers.alertmanager.middlewares=${PROMETHEUS_MIDDLEWARES:-default-headers@file}
       - traefik.http.routers.alertmanager.tls=true
       - traefik.http.routers.alertmanager.tls.certresolver=letsencrypt
       - traefik.http.services.alertmanager.loadbalancer.server.scheme=http

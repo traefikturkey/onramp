@@ -26,6 +26,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.rust.entrypoints=websecure
       - traefik.http.routers.rust.rule=Host(`rust.${HOST_DOMAIN}`)
+      - traefik.http.routers.rust.middlewares=${RUST_MIDDLEWARES:-default-headers@file}
       - traefik.http.services.rust.loadbalancer.server.port=8080
       - com.centurylinklabs.watchtower.enable=${RUST_WATCHTOWER_ENABLED:-true}
       - autoheal=true

@@ -63,6 +63,7 @@ services:
       - traefik.enable=${NETVISOR_TRAEFIK_ENABLED:-true}
       - traefik.http.routers.netvisor.entrypoints=websecure
       - traefik.http.routers.netvisor.rule=Host(`${NETVISOR_HOST_NAME:-netvisor}.${HOST_DOMAIN}`)
+      - traefik.http.routers.netvisor.middlewares=${NETVISOR_MIDDLEWARES:-default-headers@file}
       #- traefik.http.services.netvisor.loadbalancer.server.scheme=https # enable if the service wants to connect over https
       - traefik.http.services.netvisor.loadbalancer.server.port=60072
       - com.centurylinklabs.watchtower.enable=${NETVISOR_WATCHTOWER_ENABLED:-true}
