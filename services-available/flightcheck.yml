@@ -23,11 +23,11 @@ services:
       POSTGRES_PASSWORD: ${FLIGHTCHECK_POSTGRES_PASSWORD:-flightcheck-pg-2026}
       TZ: ${TZ}
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U flightcheck -d flightcheck"]
+      test: ["CMD-SHELL", "pg_isready -h localhost -U flightcheck -d flightcheck"]
       interval: 10s
       timeout: 5s
       retries: 5
-      start_period: 10s
+      start_period: 60s
 
   flightcheck:
     image: ghcr.io/crack-kitty/fli:${FLIGHTCHECK_DOCKER_TAG:-latest}
