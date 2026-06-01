@@ -1,0 +1,163 @@
+networks:
+  traefik:
+    external: true
+
+# description: Postiz is an open-source social media scheduling and management tool.
+# https://github.com/gitroomhq/postiz-app
+
+services:
+  postiz:
+    image: ghcr.io/gitroomhq/postiz-app:${POSTIZ_DOCKER_TAG:-v2.21.8}
+    env_file:
+      - ./services-enabled/postiz.env
+    container_name: ${POSTIZ_CONTAINER_NAME:-postiz}
+    restart: ${POSTIZ_RESTART:-unless-stopped}
+    mem_limit: ${POSTIZ_MEM_LIMIT:-4g}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/postiz/config:/config
+      - ./media/postiz/uploads:/uploads
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      postiz-postgres:
+        condition: service_healthy
+      postiz-redis:
+        condition: service_healthy
+      # Temporal has no upstream healthcheck, so use service_started (NOT
+      # service_healthy, which would hang forever). This also ensures OnRamp's
+      # single-service `make start-service postiz` brings up the Temporal stack,
+      # since compose only starts the named service plus its depends_on graph.
+      postiz-temporal:
+        condition: service_started
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      - MAIN_URL=https://${POSTIZ_HOST_NAME:-postiz}.${HOST_DOMAIN}
+      - FRONTEND_URL=https://${POSTIZ_HOST_NAME:-postiz}.${HOST_DOMAIN}
+      - NEXT_PUBLIC_BACKEND_URL=https://${POSTIZ_HOST_NAME:-postiz}.${HOST_DOMAIN}/api
+      - JWT_SECRET=${POSTIZ_JWT_SECRET}
+      - DATABASE_URL=postgresql://${POSTIZ_POSTGRES_USER:-postiz}:${POSTIZ_POSTGRES_PASSWORD}@postiz-postgres:5432/${POSTIZ_POSTGRES_DB:-postiz}
+      - REDIS_URL=redis://postiz-redis:6379
+      - BACKEND_INTERNAL_URL=http://localhost:3000
+      - TEMPORAL_ADDRESS=postiz-temporal:7233
+      - IS_GENERAL=true
+      - DISABLE_REGISTRATION=${POSTIZ_DISABLE_REGISTRATION:-false}
+      - STORAGE_PROVIDER=local
+      - UPLOAD_DIRECTORY=/uploads
+      - NEXT_PUBLIC_UPLOAD_DIRECTORY=/uploads
+      - NX_ADD_PLUGINS=false
+    labels:
+      - joyride.host.name=${POSTIZ_HOST_NAME:-postiz}.${HOST_DOMAIN}
+      - traefik.enable=${POSTIZ_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.postiz.entrypoints=websecure
+      - traefik.http.routers.postiz.rule=Host(`${POSTIZ_HOST_NAME:-postiz}.${HOST_DOMAIN}`)
+      - traefik.http.services.postiz.loadbalancer.server.port=5000
+      - com.centurylinklabs.watchtower.enable=${POSTIZ_WATCHTOWER_ENABLED:-false}
+      - autoheal=${POSTIZ_AUTOHEAL_ENABLED:-false}
+
+  postiz-postgres:
+    image: postgres:17-alpine
+    env_file:
+      - ./services-enabled/postiz.env
+    container_name: postiz-postgres
+    networks:
+      - traefik
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=${POSTIZ_POSTGRES_DB:-postiz}
+      - POSTGRES_USER=${POSTIZ_POSTGRES_USER:-postiz}
+      - POSTGRES_PASSWORD=${POSTIZ_POSTGRES_PASSWORD}
+    volumes:
+      - ./etc/postiz/postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: pg_isready -U ${POSTIZ_POSTGRES_USER:-postiz} -d ${POSTIZ_POSTGRES_DB:-postiz}
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    labels:
+      - traefik.enable=false
+
+  postiz-redis:
+    image: redis:7.2
+    env_file:
+      - ./services-enabled/postiz.env
+    container_name: postiz-redis
+    networks:
+      - traefik
+    restart: unless-stopped
+    volumes:
+      - ./etc/postiz/redis:/data
+    healthcheck:
+      test: redis-cli ping
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    labels:
+      - traefik.enable=false
+
+  postiz-temporal-postgres:
+    image: postgres:16
+    env_file:
+      - ./services-enabled/postiz.env
+    container_name: postiz-temporal-postgres
+    networks:
+      - traefik
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=temporal
+      - POSTGRES_PASSWORD=temporal
+    volumes:
+      - ./etc/postiz/temporal-postgres:/var/lib/postgresql/data
+    labels:
+      - traefik.enable=false
+
+  postiz-temporal-elasticsearch:
+    image: elasticsearch:7.17.27
+    env_file:
+      - ./services-enabled/postiz.env
+    container_name: postiz-temporal-elasticsearch
+    networks:
+      - traefik
+    restart: unless-stopped
+    mem_limit: ${POSTIZ_ES_MEM_LIMIT:-1g}
+    environment:
+      - cluster.routing.allocation.disk.threshold_enabled=true
+      - cluster.routing.allocation.disk.watermark.low=512mb
+      - cluster.routing.allocation.disk.watermark.high=256mb
+      - cluster.routing.allocation.disk.watermark.flood_stage=128mb
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms256m -Xmx256m
+      - xpack.security.enabled=false
+    volumes:
+      - ./etc/postiz/temporal-elasticsearch:/usr/share/elasticsearch/data
+    labels:
+      - traefik.enable=false
+
+  postiz-temporal:
+    image: temporalio/auto-setup:1.28.1
+    env_file:
+      - ./services-enabled/postiz.env
+    container_name: postiz-temporal
+    networks:
+      - traefik
+    restart: unless-stopped
+    depends_on:
+      - postiz-temporal-postgres
+      - postiz-temporal-elasticsearch
+    environment:
+      - DB=postgres12
+      - DB_PORT=5432
+      - POSTGRES_USER=temporal
+      - POSTGRES_PWD=temporal
+      - POSTGRES_SEEDS=postiz-temporal-postgres
+      - DYNAMIC_CONFIG_FILE_PATH=config/dynamicconfig/development-sql.yaml
+      - ENABLE_ES=true
+      - ES_SEEDS=postiz-temporal-elasticsearch
+      - ES_VERSION=v7
+      - TEMPORAL_NAMESPACE=default
+    volumes:
+      - ./etc/postiz/dynamicconfig:/etc/temporal/config/dynamicconfig
+    labels:
+      - traefik.enable=false
