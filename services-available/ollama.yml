@@ -2,6 +2,7 @@ networks:
   traefik:
     external: true
 
+# config_version: 2
 # description: Easy way to run large language models locally - Nvidia GPU
 # https://hub.docker.com/r/ollama/ollama
 # https://github.com/ollama/ollama
@@ -21,7 +22,9 @@ services:
     container_name: ${OLLAMA_CONTAINER_NAME:-ollama}
     restart: ${OLLAMA_RESTART:-unless-stopped}
     networks:
-      - traefik
+      traefik:
+        aliases:
+          - ollama
     volumes:
       - ${OLLAMA_DATA_PATH:-./media/ollama}:/root/.ollama
       - /etc/localtime:/etc/localtime:ro
@@ -32,10 +35,10 @@ services:
     ports:
       - ${OLLAMA_PORT:-11434}:11434
     labels:
-      - joyride.host.name=${OLLAMA_CONTAINER_NAME:-ollama}.${HOST_DOMAIN}
+      - joyride.host.name=${OLLAMA_HOST_NAME:-ollama}.${HOST_DOMAIN}
       - traefik.enable=${OLLAMA_TRAEFIK_ENABLE:-true}
       - traefik.http.routers.ollama.entrypoints=websecure
-      - traefik.http.routers.ollama.rule=Host(`${OLLAMA_CONTAINER_NAME:-ollama}.${HOST_DOMAIN}`)
+      - traefik.http.routers.ollama.rule=Host(`${OLLAMA_HOST_NAME:-ollama}.${HOST_DOMAIN}`)
       - traefik.http.services.ollama.loadbalancer.server.port=11434
       - com.centurylinklabs.watchtower.enable=${OLLAMA_WATCHTOWER_ENABLE:-true}
-      - autoheal=${OLLAMA_AUTOHEAL:-true}
+      - autoheal=${OLLAMA_AUTOHEAL:-false}

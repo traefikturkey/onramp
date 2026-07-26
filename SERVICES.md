@@ -1,5 +1,5 @@
 # Available Services
-277 services and counting...
+278 services and counting...
 
 [1](#1)
 [A](#A)
@@ -255,6 +255,7 @@
 - [pihole](https://github.com/pi-hole/docker-pi-hole/blob/master/README.md) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/pihole.yml)): Network-wide ad blocker and dns sinkhole
 - [pinchflat](https://github.com/kieraneglin/pinchflat) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/pinchflat.yml)): Pinchflat is a self-hosted app for downloading YouTube content built using yt-dlp
 - [pingvin-share](https://github.com/stautonico/pingvin-share) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/pingvin-share.yml)): File-sharing platform
+- [pipelines](https://github.com/open-webui/pipelines) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/pipelines.yml)): Open WebUI Pipelines OpenAI-compatible function and filter backend
 - [playit-docker](https://github.com/mafen/playit-docker) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/playit-docker.yml)): An agent to expose local game servers to the internet using playit proxy service.
 - [plex](https://github.com/plexinc/pms-docker) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/plex.yml)): Media server for streaming movies, tv shows, and music
 - [pocketbase](https://pocketbase.io/) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/pocketbase.yml)): Open Source realtime backend in 1 file

@@ -1,0 +1,7 @@
+# SearXNG limiter configuration.
+# This file is scaffolded into etc/searxng/limiter.toml.
+
+[botdetection.ip_limit]
+# Keep the default limiter behavior explicit for local deployments.
+filter_link_local = false
+link_token = false

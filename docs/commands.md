@@ -166,6 +166,10 @@ NFS backups require `NFS_SERVER` and `NFS_BACKUP_PATH` in `services-enabled/.env
 
 | Command | Description |
 |---------|-------------|
+| `make enable-ollama-stack` | Enable Ollama, Open WebUI, Docling, SearXNG, and Pipelines |
+| `make plan-ollama-stack` | Validate and preview Ollama stack changes |
+| `make deploy-ollama-stack` | Deploy the enabled Ollama stack |
+| `make validate-ollama-stack` | Check Ollama stack DNS and HTTP connectivity |
 | `make pull-model MODEL_NAME` | Pull ollama model |
 | `make update-ollama-models` | Update all ollama models |
 
