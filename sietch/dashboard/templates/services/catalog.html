@@ -39,15 +39,17 @@
     <article class="service-card">
         <header>
             <div class="service-title">
-                <img src="{{ service.icon_url }}" alt="" class="service-icon" width="32" height="32" loading="lazy" onerror="this.src='/static/icons/docker.svg'">
+                <img src="{{ service.icon_url }}" alt="" class="service-icon" width="64" height="64" loading="lazy" onerror="this.src='/static/icons/docker.svg'">
                 <strong>{{ service.name }}</strong>
             </div>
+            <div class="service-badges">
             {% if service.enabled %}
             <span class="status-badge enabled">Enabled</span>
             {% endif %}
             {% if service.category %}
             <span class="category-badge">{{ service.category }}</span>
             {% endif %}
+            </div>
         </header>
 
         <div class="service-body">
