@@ -1,3 +1,8 @@
 # Environment files should never be tracked
 services-enabled/.env export-ignore
 services-enabled/.env.* export-ignore
+
+# Dashboard icons are binary files downloaded from selfhst/icons
+sietch/dashboard/static/icons/*.png binary
+sietch/dashboard/static/icons/*.ico binary
+sietch/dashboard/static/icons/*.svg binary

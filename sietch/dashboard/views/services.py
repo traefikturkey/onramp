@@ -39,6 +39,7 @@ CORE_SERVICES = {
     "traefik": {
         "description": "Cloud native application proxy and load balancer",
         "url": "https://doc.traefik.io/traefik/",
+        "icon_url": "/static/icons/traefik.svg",
     },
 }
 
@@ -62,6 +63,7 @@ async def enabled_services(request: Request):
                     "container": container,
                     "core": True,
                     "url": info.get("url"),
+                    "icon_url": info.get("icon_url", "/static/icons/docker.svg"),
                 }
             )
 
@@ -110,6 +112,7 @@ async def service_detail(request: Request, name: str):
                 "enabled": True,
                 "core": True,
                 "url": None,
+                "icon_url": CORE_SERVICES.get(name, {}).get("icon_url", "/static/icons/docker.svg"),
                 "has_env": True,  # Core services use the main .env file
                 "has_etc": has_etc,
                 "category": "core",

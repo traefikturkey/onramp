@@ -29,6 +29,18 @@ sietch-rebuild: ## Force rebuild of Sietch container
 sietch-shell: sietch-build ## Open a shell in the Sietch container
 	docker run --rm -it -v $(shell pwd):/app -u $(PUID):$(PGID) $(SIETCH_IMAGE) /bin/bash
 
+#########################################################
+##
+## Dashboard Icons
+##
+## Download service SVG icons from selfhst/icons into
+## sietch/dashboard/static/icons/ for local serving.
+##
+#########################################################
+
+download-icons: ## Download dashboard icons for all services
+	@python3 sietch/scripts/download_icons.py
+
 sietch-test: ## Run dashboard unit tests
 	@./sietch/run-tests.sh
 
@@ -220,9 +232,9 @@ ensure-env-files: sietch-build ## Recreate missing env files from templates (non
 		[ -f "$$yml" ] || continue; \
 		svc=$$(basename "$$yml" .yml); \
 		if [ ! -f "services-enabled/$$svc.env" ]; then \
-			echo "⚠️  Missing .env for $$svc, running scaffold..."; \
+			echo "WARNING: Missing .env for $$svc, running scaffold..."; \
 			if ! $(SIETCH_RUN) python /scripts/scaffold.py build "$$svc"; then \
-				echo "❌ Failed to scaffold $$svc"; \
+				echo "ERROR: Failed to scaffold $$svc"; \
 				failures=$$((failures+1)); \
 			fi; \
 		fi; \

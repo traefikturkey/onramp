@@ -107,6 +107,95 @@ When debug mode is enabled (`ONRAMP_DASHBOARD_DEBUG=true`), API documentation is
 | `GET /api/system/health` | Health check |
 | `GET /api/system/stats` | System statistics |
 
+## Dashboard Icons
+
+The dashboard shows the official logo/icon for each service on the home page, service catalog, enabled services list, and service detail page. Icons are sourced from the [selfhst/icons](https://github.com/selfhst/icons) collection and are served locally as SVG files so the dashboard works without internet access.
+
+### How Icons Are Matched
+
+Service names in OnRamp are mapped to upstream icon references in `sietch/dashboard/core/icons.py`. When a service name doesn't match an upstream icon exactly, a manual override or a suffix-stripping fallback is used. Services without a matching SVG upstream use the generic Docker icon as a fallback.
+
+### Refreshing Icons
+
+If you add a new service or want to update icons after the upstream collection changes, run:
+
+```bash
+make download-icons
+```
+
+This downloads the latest icon index, resolves each service name, and saves SVG files to `sietch/dashboard/static/icons/<service>.svg`. Each SVG is also normalized so the artwork is centered and fills the same fraction of the canvas, ensuring icons render at a consistent visual size. Rebuild the Sietch image afterward so the new icons are included in the dashboard container:
+
+```bash
+make sietch-rebuild
+```
+
+### Overriding an Icon
+
+The dashboard picks an icon automatically, but if a service shows the generic Docker icon (or the wrong logo), you can pin it to a specific upstream icon.
+
+**All icon overrides live in one file: `sietch/dashboard/core/icons.py`, in the `MANUAL_ICON_OVERRIDES` dictionary.**
+
+#### Step 1: Find your service name
+
+The service name is the compose filename without the extension. For example:
+
+| File | Service name |
+|---|---|
+| `services-available/jellyfin.yml` | `jellyfin` |
+| `services-available/gitea-runner.yml` | `gitea-runner` |
+| `services-available/games/minecraft-bedrock.yml` | `minecraft-bedrock` |
+
+#### Step 2: Find the upstream icon reference
+
+Icons come from the [selfhst/icons](https://github.com/selfhst/icons) collection. Browse [selfh.st/icons](https://selfh.st/icons/) to find the icon, or search the index from your terminal:
+
+```bash
+curl -s https://raw.githubusercontent.com/selfhst/icons/main/index.json \
+  | python3 -c "import json,sys; [print(f\"{i['Reference']:<30} SVG={i['SVG']}\") for i in json.load(sys.stdin) if 'plex' in i['Reference'].lower()]"
+```
+
+Replace `plex` with what you're looking for. The value you need is the **`Reference`** slug, and the entry **must have `SVG=Yes`** — entries without an SVG variant are skipped and the service falls back to the Docker icon.
+
+#### Step 3: Add the override in `sietch/dashboard/core/icons.py`
+
+Open **`sietch/dashboard/core/icons.py`** and add an entry to the `MANUAL_ICON_OVERRIDES` dictionary mapping your service name to the reference:
+
+```python
+MANUAL_ICON_OVERRIDES = {
+    # ... existing mappings ...
+    "myapp": "some-upstream-reference",
+}
+```
+
+Notes:
+
+- Keys are matched lowercase, so `"MyApp"` and `"myapp"` are equivalent; use lowercase for consistency.
+- Multiple services can share one icon. For example `gitea-runner` maps to `gitea`.
+- Map a service to `"docker"` explicitly if you want to force the generic icon.
+
+#### Step 4: Refresh the icons and rebuild
+
+```bash
+make download-icons
+make restart-service onramp-dashboard
+```
+
+The download output shows exactly which reference each service resolved to, so you can confirm your override took effect:
+
+```text
+myapp: some-upstream-reference.svg
+```
+
+#### Troubleshooting
+
+| Symptom | Likely cause | Fix |
+|---|---|---|
+| Still shows the Docker icon | The reference has `SVG=No` upstream | Pick a different reference that has an SVG variant |
+| Still shows the Docker icon | Override key doesn't match the service filename | The key must equal the `.yml` filename minus extension, lowercased |
+| Download says `using fallback 'docker'` | Reference slug is misspelled | Re-check the slug in `index.json` |
+| Icon didn't change after rebuild | Browser cache | Hard-refresh the page (Ctrl+Shift+R) |
+| No matching icon exists upstream | Collection doesn't have one | Keep the `"docker"` fallback, or request the icon in the [selfhst/icons](https://github.com/selfhst/icons/issues) repo |
+
 ## Architecture
 
 The dashboard is built with:

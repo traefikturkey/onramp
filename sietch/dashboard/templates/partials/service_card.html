@@ -1,6 +1,10 @@
 <article class="service-card" id="service-{{ service.name }}">
     <header>
-        <strong>{{ service.name }}</strong>
+        <div class="service-title">
+            <img src="{{ service.icon_url }}" alt="" class="service-icon" width="64" height="64" loading="lazy" onerror="this.src='/static/icons/docker.svg'">
+            <strong>{{ service.name }}</strong>
+        </div>
+        <div class="service-badges">
         {% if service.core %}
         <span class="status-badge core">Core</span>
         {% endif %}
@@ -15,6 +19,7 @@
         {% else %}
         <span class="status-badge unknown">Unknown</span>
         {% endif %}
+        </div>
     </header>
 
     <p class="service-description">

@@ -12,6 +12,7 @@ CORE_SERVICES = {
     "traefik": {
         "description": "Cloud native application proxy and load balancer",
         "url": "https://doc.traefik.io/traefik/",
+        "icon_url": "/static/icons/traefik.svg",
     },
 }
 
@@ -66,6 +67,7 @@ def _get_enabled_services_with_status(services_mgr, docker):
                     "name": name,
                     "description": info.get("description", f"Core service - {name}"),
                     "url": info.get("url"),
+                    "icon_url": info.get("icon_url", "/static/icons/docker.svg"),
                     "container": container,
                     "core": True,  # Mark as core - can't be stopped/restarted
                 }

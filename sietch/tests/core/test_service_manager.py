@@ -28,6 +28,9 @@ class TestServiceManagerListAvailable:
             assert "name" in service
             assert "description" in service
             assert "category" in service
+            assert "icon_url" in service
+            assert service["icon_url"].startswith("/static/icons/")
+            assert service["icon_url"].endswith(".svg")
 
     def test_list_available_empty_dir(self, tmp_path):
         """Should return empty list for empty directory."""

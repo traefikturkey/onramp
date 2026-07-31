@@ -33,6 +33,7 @@ backups/                         # Backup archives
 overrides-available/             # Optional service extensions (109 overrides)
 overrides-enabled/               # Active overrides
 sietch/scripts/                  # Python tools (scaffold.py, backup.py, etc.)
+sietch/dashboard/static/icons/   # Service logos from selfhst/icons (SVG)
 make.d/                          # Makefile modules
 docs/                            # User documentation
 docs/internal/                   # Internal/developer documentation
