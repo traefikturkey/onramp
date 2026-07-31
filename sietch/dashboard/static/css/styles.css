@@ -29,6 +29,8 @@
 .service-icon {
     width: 32px;
     height: 32px;
+    max-width: 32px;
+    max-height: 32px;
     object-fit: contain;
     flex-shrink: 0;
     border-radius: 0.35rem;
@@ -37,6 +39,8 @@
 .service-icon-inline {
     width: 24px;
     height: 24px;
+    max-width: 24px;
+    max-height: 24px;
     object-fit: contain;
     flex-shrink: 0;
     border-radius: 0.25rem;
@@ -47,6 +51,8 @@
 .service-icon-large {
     width: 64px;
     height: 64px;
+    max-width: 64px;
+    max-height: 64px;
     object-fit: contain;
     flex-shrink: 0;
     border-radius: 0.5rem;

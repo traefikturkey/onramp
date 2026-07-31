@@ -123,7 +123,7 @@ If you add a new service or want to update icons after the upstream collection c
 make download-icons
 ```
 
-This downloads the latest icon index, resolves each service name, and saves SVG files to `sietch/dashboard/static/icons/<service>.svg`. Rebuild the Sietch image afterward so the new icons are included in the dashboard container:
+This downloads the latest icon index, resolves each service name, and saves SVG files to `sietch/dashboard/static/icons/<service>.svg`. Each SVG is also normalized so the artwork is centered and fills the same fraction of the canvas, ensuring icons render at a consistent visual size. Rebuild the Sietch image afterward so the new icons are included in the dashboard container:
 
 ```bash
 make sietch-rebuild

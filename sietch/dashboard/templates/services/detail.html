@@ -12,7 +12,7 @@
 </nav>
 
 <hgroup class="service-detail-header">
-    <img src="{{ service.icon_url }}" alt="" class="service-icon-large" onerror="this.src='/static/icons/docker.svg'">
+    <img src="{{ service.icon_url }}" alt="" class="service-icon-large" width="64" height="64" onerror="this.src='/static/icons/docker.svg'">
     <div>
         <h1>{{ service.name }}</h1>
         <p>{{ service.description or 'No description available' }}</p>

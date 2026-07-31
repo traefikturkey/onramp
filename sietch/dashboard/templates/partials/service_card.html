@@ -1,7 +1,7 @@
 <article class="service-card" id="service-{{ service.name }}">
     <header>
         <div class="service-title">
-            <img src="{{ service.icon_url }}" alt="" class="service-icon" loading="lazy" onerror="this.src='/static/icons/docker.svg'">
+            <img src="{{ service.icon_url }}" alt="" class="service-icon" width="32" height="32" loading="lazy" onerror="this.src='/static/icons/docker.svg'">
             <strong>{{ service.name }}</strong>
         </div>
         {% if service.core %}
