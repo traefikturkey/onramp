@@ -10,6 +10,79 @@
 }
 
 /* ===================
+   Service Icons
+   =================== */
+.service-title {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.service-title strong {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.service-icon {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    flex-shrink: 0;
+    border-radius: 0.35rem;
+}
+
+.service-icon-inline {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    flex-shrink: 0;
+    border-radius: 0.25rem;
+    vertical-align: middle;
+    margin-right: 0.4rem;
+}
+
+.service-icon-large {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+    flex-shrink: 0;
+    border-radius: 0.5rem;
+}
+
+.service-detail-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.service-detail-header h1 {
+    margin-bottom: 0.25rem;
+}
+
+.service-detail-header p {
+    margin-bottom: 0;
+    color: var(--pico-muted-color);
+}
+
+@media (max-width: 768px) {
+    /* Stack detail header on mobile */
+    .service-detail-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .service-icon-large {
+        width: 48px;
+        height: 48px;
+    }
+}
+
+/* ===================
    Service Grid
    =================== */
 .service-grid {

@@ -107,6 +107,41 @@ When debug mode is enabled (`ONRAMP_DASHBOARD_DEBUG=true`), API documentation is
 | `GET /api/system/health` | Health check |
 | `GET /api/system/stats` | System statistics |
 
+## Dashboard Icons
+
+The dashboard shows the official logo/icon for each service on the home page, service catalog, enabled services list, and service detail page. Icons are sourced from the [selfhst/icons](https://github.com/selfhst/icons) collection and are served locally as SVG files so the dashboard works without internet access.
+
+### How Icons Are Matched
+
+Service names in OnRamp are mapped to upstream icon references in `sietch/dashboard/core/icons.py`. When a service name doesn't match an upstream icon exactly, a manual override or a suffix-stripping fallback is used. Services without a matching SVG upstream use the generic Docker icon as a fallback.
+
+### Refreshing Icons
+
+If you add a new service or want to update icons after the upstream collection changes, run:
+
+```bash
+make download-icons
+```
+
+This downloads the latest icon index, resolves each service name, and saves SVG files to `sietch/dashboard/static/icons/<service>.svg`. Rebuild the Sietch image afterward so the new icons are included in the dashboard container:
+
+```bash
+make sietch-rebuild
+```
+
+### Adding a New Icon Mapping
+
+If a service shows the generic Docker icon instead of its real logo, you can add a mapping in `sietch/dashboard/core/icons.py` under `MANUAL_ICON_OVERRIDES`. For example, if a new service `myapp` should use the upstream icon `my-app`:
+
+```python
+MANUAL_ICON_OVERRIDES = {
+    # ... existing mappings ...
+    "myapp": "my-app",
+}
+```
+
+Then run `make download-icons` again.
+
 ## Architecture
 
 The dashboard is built with:

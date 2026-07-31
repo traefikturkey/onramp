@@ -11,6 +11,8 @@ sys.path.insert(0, "/scripts")
 
 from services import ServiceManager as SietchServiceManager
 
+from .icons import get_icon_url
+
 
 class ServiceManager:
     """Async-friendly wrapper around sietch ServiceManager."""
@@ -25,6 +27,7 @@ class ServiceManager:
         for name in self._manager.list_available():
             info = self._manager.get_service_info(name)
             if info:
+                info["icon_url"] = get_icon_url(name)
                 services.append(info)
         return services
 
@@ -34,6 +37,7 @@ class ServiceManager:
         for name in self._manager.list_enabled():
             info = self._manager.get_service_info(name)
             if info:
+                info["icon_url"] = get_icon_url(name)
                 services.append(info)
         return services
 
@@ -43,12 +47,16 @@ class ServiceManager:
         for name in self._manager.list_games():
             info = self._manager.get_service_info(name)
             if info:
+                info["icon_url"] = get_icon_url(name)
                 services.append(info)
         return services
 
     def get_service_info(self, name: str) -> dict | None:
         """Get detailed info for a specific service."""
-        return self._manager.get_service_info(name)
+        info = self._manager.get_service_info(name)
+        if info:
+            info["icon_url"] = get_icon_url(name)
+        return info
 
     def get_enabled_names(self) -> list[str]:
         """Get just the names of enabled services."""
@@ -74,6 +82,7 @@ class ServiceManager:
         for name in self._manager.list_available():
             info = self._manager.get_service_info(name)
             if info:
+                info["icon_url"] = get_icon_url(name)
                 if query in name.lower():
                     results.append(info)
                 elif info.get("description") and query in info["description"].lower():
@@ -86,5 +95,6 @@ class ServiceManager:
         for name in self._manager.list_available():
             info = self._manager.get_service_info(name)
             if info and info.get("category") == category:
+                info["icon_url"] = get_icon_url(name)
                 results.append(info)
         return results
