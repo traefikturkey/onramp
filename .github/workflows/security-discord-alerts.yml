@@ -1,0 +1,134 @@
+name: Discord Security Alerts
+
+on:
+  workflow_run:
+    workflows:
+      - CodeQL Security Analysis
+      - Dependency Review
+      - Dependency Supply Chain Review
+      - Dependency Vulnerability Scan
+    types:
+      - completed
+
+permissions:
+  actions: read
+  contents: read
+  security-events: read
+
+jobs:
+  notify-failed-check:
+    name: Report failed security check
+    if: >-
+      github.event.workflow_run.conclusion == 'failure' ||
+      github.event.workflow_run.conclusion == 'timed_out'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Send failure to Discord
+        env:
+          CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+          EVENT_NAME: ${{ github.event.workflow_run.event }}
+          HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
+          REPOSITORY: ${{ github.repository }}
+          RUN_URL: ${{ github.event.workflow_run.html_url }}
+          WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK }}
+          WORKFLOW_NAME: ${{ github.event.workflow_run.name }}
+        run: |
+          payload="$(jq -n \
+            --arg title "Security check failed: ${WORKFLOW_NAME}" \
+            --arg description "The ${WORKFLOW_NAME} workflow completed with ${CONCLUSION}." \
+            --arg repository "${REPOSITORY}" \
+            --arg branch "${HEAD_BRANCH}" \
+            --arg event "${EVENT_NAME}" \
+            --arg url "${RUN_URL}" \
+            '{
+              username: "OnRamp Security",
+              embeds: [{
+                title: $title,
+                description: $description,
+                color: 15158332,
+                fields: [
+                  {name: "Repository", value: $repository, inline: true},
+                  {name: "Branch", value: $branch, inline: true},
+                  {name: "Event", value: $event, inline: true}
+                ],
+                url: $url,
+                footer: {text: "OnRamp security monitoring"}
+              }]
+            }')"
+
+          curl --silent --show-error --fail-with-body \
+            --header "Content-Type: application/json" \
+            --data "${payload}" \
+            "${WEBHOOK_URL}"
+
+  notify-new-codeql-alerts:
+    name: Report new CodeQL findings
+    if: >-
+      github.event.workflow_run.name == 'CodeQL Security Analysis' &&
+      github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Find new CodeQL alerts
+        id: alerts
+        env:
+          GH_TOKEN: ${{ github.token }}
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          REPOSITORY: ${{ github.repository }}
+          RUN_STARTED_AT: ${{ github.event.workflow_run.run_started_at }}
+        run: |
+          gh api --paginate --method GET \
+            "repos/${REPOSITORY}/code-scanning/alerts?state=open&tool_name=CodeQL&per_page=100" \
+            | jq --slurp 'add' > "${RUNNER_TEMP}/open-codeql-alerts.json"
+
+          jq \
+            --arg head_sha "${HEAD_SHA}" \
+            --arg started_at "${RUN_STARTED_AT}" \
+            '[.[] | select(
+              .created_at >= $started_at and
+              .most_recent_instance.commit_sha == $head_sha
+            )]' \
+            "${RUNNER_TEMP}/open-codeql-alerts.json" \
+            > "${RUNNER_TEMP}/new-codeql-alerts.json"
+
+          count="$(jq 'length' "${RUNNER_TEMP}/new-codeql-alerts.json")"
+          echo "count=${count}" >> "${GITHUB_OUTPUT}"
+
+          jq -r '
+            .[0:10]
+            | map("- [\(.rule.description)](\(.html_url)) -- \(.rule.security_severity_level // .rule.severity)")
+            | join("\n")
+          ' "${RUNNER_TEMP}/new-codeql-alerts.json" \
+            > "${RUNNER_TEMP}/codeql-alert-summary.txt"
+
+      - name: Send findings to Discord
+        if: steps.alerts.outputs.count != '0'
+        env:
+          ALERT_COUNT: ${{ steps.alerts.outputs.count }}
+          REPOSITORY: ${{ github.repository }}
+          RUN_URL: ${{ github.event.workflow_run.html_url }}
+          WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK }}
+        run: |
+          alert_summary="$(cat "${RUNNER_TEMP}/codeql-alert-summary.txt")"
+          payload="$(jq -n \
+            --arg title "New CodeQL security findings" \
+            --arg description "CodeQL opened ${ALERT_COUNT} finding(s) in ${REPOSITORY}.\n\n${alert_summary}" \
+            --arg url "${RUN_URL}" \
+            '{
+              username: "OnRamp Security",
+              embeds: [{
+                title: $title,
+                description: $description,
+                color: 15105570,
+                url: $url,
+                footer: {text: "OnRamp security monitoring"}
+              }]
+            }')"
+
+          curl --silent --show-error --fail-with-body \
+            --header "Content-Type: application/json" \
+            --data "${payload}" \
+            "${WEBHOOK_URL}"
