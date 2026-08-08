@@ -3,8 +3,9 @@ FROM python:3.14-slim
 LABEL maintainer="OnRamp Project"
 LABEL description="Tool container for OnRamp scaffolding and dashboard"
 
-# Install uv from official image
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
+# Install uv from its official PyPI package without depending on GHCR
+ARG UV_VERSION=0.12.1
+RUN pip install --no-cache-dir "uv==${UV_VERSION}"
 
 # Install system dependencies:
 # - gettext-base: provides envsubst for template rendering
