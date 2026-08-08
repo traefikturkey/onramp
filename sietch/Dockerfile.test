@@ -20,10 +20,10 @@ RUN apt-get update && \
 WORKDIR /app
 
 # Copy project files for dependency installation
-COPY pyproject.toml ./
+COPY pyproject.toml uv.lock ./
 
 # Install ALL dependencies including dev (pytest, etc.)
-RUN uv sync --all-extras --no-install-project
+RUN uv sync --locked --all-extras --no-install-project
 
 # Copy source code
 COPY scripts/ /scripts/

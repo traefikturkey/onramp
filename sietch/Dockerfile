@@ -39,10 +39,10 @@ RUN pip install --no-cache-dir pyyaml
 WORKDIR /app
 
 # Copy project files for dependency installation
-COPY pyproject.toml ./
+COPY pyproject.toml uv.lock ./
 
 # Install Python dependencies with uv (without installing the project itself)
-RUN uv sync --no-dev --no-install-project
+RUN uv sync --locked --no-dev --no-install-project
 
 # Copy scripts and tests
 COPY scripts/ /scripts/
