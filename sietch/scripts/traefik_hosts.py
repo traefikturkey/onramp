@@ -16,23 +16,26 @@ Features:
 - Preserves existing host entries and comments
 """
 
-from logging_config import get_logger, setup_logging
-logger = get_logger(__name__)
-
 import argparse
 import os
 import re
 import sys
 from pathlib import Path
 
+from logging_config import get_logger, setup_logging
+
+logger = get_logger(__name__)
+
 
 # Files that only define middlewares, not routers with Host() rules
-MIDDLEWARE_ONLY_FILES = frozenset({
-    "middleware.yml",
-    "authentik_middleware.yml",
-    "authelia_middlewares.yml",
-    "crowdsec-bouncer.yml",
-})
+MIDDLEWARE_ONLY_FILES = frozenset(
+    {
+        "middleware.yml",
+        "authentik_middleware.yml",
+        "authelia_middlewares.yml",
+        "crowdsec-bouncer.yml",
+    }
+)
 
 # Regex to extract Host() rules from Traefik dynamic config
 # Matches: Host(`{{env "VAR"}}.{{env "HOST_DOMAIN"}}`) or Host(`hostname.domain`)
@@ -163,9 +166,8 @@ class TraefikHostsExtractor:
                         missing_vars.append(var_name)
 
                 if missing_vars:
-                    logger.info(
-                        f"Skipped {source_name}: {', '.join(missing_vars)} not set",
-                        file=sys.stderr,
+                    logger.warning(
+                        f"Skipped {source_name}: {', '.join(missing_vars)} not set"
                     )
 
         return hosts
@@ -262,10 +264,9 @@ class TraefikHostsExtractor:
         """
         # Early exit if joyride not enabled
         if not self.check_joyride_enabled():
-            logger.info(
+            logger.error(
                 "Joyride service is not enabled. "
-                "Enable it with: make enable-service NAME=joyride",
-                file=sys.stderr,
+                "Enable it with: make enable-service NAME=joyride"
             )
             return 1
 
@@ -344,7 +345,7 @@ def main() -> int:
     )
 
     args = parser.parse_args()
-    
+
     # Setup logging
     setup_logging(level="INFO", enable_colors=True)
 

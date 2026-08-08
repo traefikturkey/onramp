@@ -69,9 +69,10 @@ def validate_path_within_base(path: Path, base: Path) -> bool:
         except ValueError:
             # Different drives on Windows, or one path is relative
             return False
-    except (OSError, RuntimeError):
+    except OSError, RuntimeError:
         # Path doesn't exist or can't be resolved - be safe and reject
         return False
+
 
 try:
     import yaml
@@ -149,12 +150,16 @@ class Scaffolder:
                         # Only remove if empty
                         try:
                             path.rmdir()
-                            logger.info("Rollback removed directory", extra={"path": str(path)})
+                            logger.info(
+                                "Rollback removed directory", extra={"path": str(path)}
+                            )
                         except OSError:
                             # Directory not empty, skip
                             pass
             except Exception as e:
-                logger.warning(f"Rollback could not remove path: {e}", extra={"path": str(path)})
+                logger.warning(
+                    f"Rollback could not remove path: {e}", extra={"path": str(path)}
+                )
 
         self._created_files.clear()
 
@@ -239,13 +244,21 @@ class Scaffolder:
     def _generate_secure_password(self, length: int = 32) -> str:
         """Generate a secure random password."""
         alphabet = string.ascii_letters + string.digits
-        return ''.join(secrets.choice(alphabet) for _ in range(length))
+        return "".join(secrets.choice(alphabet) for _ in range(length))
 
     def _is_password_var(self, var_name: str) -> bool:
         """Check if a variable name looks like a password/secret."""
         password_patterns = (
-            '_PASS', '_PASSWORD', '_SECRET', '_KEY', '_TOKEN',
-            'PASS_', 'PASSWORD_', 'SECRET_', 'KEY_', 'TOKEN_',
+            "_PASS",
+            "_PASSWORD",
+            "_SECRET",
+            "_KEY",
+            "_TOKEN",
+            "PASS_",
+            "PASSWORD_",
+            "SECRET_",
+            "KEY_",
+            "TOKEN_",
         )
         upper_name = var_name.upper()
         return any(pattern in upper_name for pattern in password_patterns)
@@ -257,7 +270,7 @@ class Scaffolder:
         For password-like variables that are unset, generates secure random values.
         """
         # Pattern matches ${VAR} or ${VAR:-default} or ${VAR:?error}
-        pattern = re.compile(r'\$\{([A-Z][A-Z0-9_]*)(?::-([^}]*)|:\?([^}]*))?\}')
+        pattern = re.compile(r"\$\{([A-Z][A-Z0-9_]*)(?::-([^}]*)|:\?([^}]*))?\}")
 
         generated_passwords = {}
 
@@ -269,7 +282,7 @@ class Scaffolder:
             # Check environment first
             env_value = os.environ.get(var_name)
 
-            if env_value is not None and env_value != '':
+            if env_value is not None and env_value != "":
                 return env_value
 
             # If there's a default, use it
@@ -280,16 +293,22 @@ class Scaffolder:
             if self._is_password_var(var_name):
                 if var_name not in generated_passwords:
                     generated_passwords[var_name] = self._generate_secure_password()
-                    logger.info("Generated secure value for variable", extra={"variable": var_name})
+                    logger.info(
+                        "Generated secure value for variable",
+                        extra={"variable": var_name},
+                    )
                 return generated_passwords[var_name]
 
             # For error syntax ${VAR:?msg}, return empty (user must set it)
             if error_msg is not None:
-                logger.warning("Variable not set", extra={"variable": var_name, "message": error_msg})
-                return ''
+                logger.warning(
+                    "Variable not set",
+                    extra={"variable": var_name, "reason": error_msg},
+                )
+                return ""
 
             # Variable not set and no default - return empty
-            return ''
+            return ""
 
         return pattern.sub(replace_var, content)
 
@@ -300,7 +319,7 @@ class Scaffolder:
         """
         required = []
         for line in template_content.splitlines():
-            match = re.match(r'^#\s*required:\s*(\w+)', line)
+            match = re.match(r"^#\s*required:\s*(\w+)", line)
             if match:
                 required.append(match.group(1))
         return required
@@ -318,7 +337,7 @@ class Scaffolder:
         missing = []
         for var in required_vars:
             # Match VAR= or VAR= (with only whitespace after =)
-            pattern = re.compile(rf'^{re.escape(var)}\s*=\s*$', re.MULTILINE)
+            pattern = re.compile(rf"^{re.escape(var)}\s*=\s*$", re.MULTILINE)
             if pattern.search(content):
                 missing.append(var)
 
@@ -329,11 +348,13 @@ class Scaffolder:
                     "file": dest.name,
                     "missing_vars": ", ".join(missing),
                     "service": dest.stem,
-                    "hint": f"Run: make edit-env {dest.stem}"
-                }
+                    "hint": f"Run: make edit-env {dest.stem}",
+                },
             )
 
-    def render_template(self, source: Path, dest: Path, skip_if_exists: bool = True) -> bool:
+    def render_template(
+        self, source: Path, dest: Path, skip_if_exists: bool = True
+    ) -> bool:
         """Render a template file using Python string substitution.
 
         Args:
@@ -361,11 +382,17 @@ class Scaffolder:
             with open(dest, "w") as f:
                 f.write(rendered_content)
 
-            logger.info("Rendered template", extra={"source": source.name, "dest": str(dest)})
+            logger.info(
+                "Rendered template", extra={"source": source.name, "dest": str(dest)}
+            )
             self._check_required_vars(dest, required_vars)
             return True
         except Exception as e:
-            logger.error(f"Failed to render template: {e}", extra={"source": str(source)}, exc_info=True)
+            logger.error(
+                f"Failed to render template: {e}",
+                extra={"source": str(source)},
+                exc_info=True,
+            )
             return False
 
     def copy_static(self, source: Path, dest: Path) -> bool:
@@ -375,15 +402,24 @@ class Scaffolder:
             # Only copy if dest doesn't exist (no-clobber behavior)
             if not dest.exists():
                 shutil.copy2(source, dest)
-                logger.info("Copied static file", extra={"source": source.name, "dest": str(dest)})
+                logger.info(
+                    "Copied static file",
+                    extra={"source": source.name, "dest": str(dest)},
+                )
             else:
                 logger.debug("Skipped existing file", extra={"path": str(dest)})
             return True
         except Exception as e:
-            logger.error(f"Failed to copy static file: {e}", extra={"source": str(source)}, exc_info=True)
+            logger.error(
+                f"Failed to copy static file: {e}",
+                extra={"source": str(source)},
+                exc_info=True,
+            )
             return False
 
-    def create_etc_volumes(self, service: str, scaffold_statics: list[Path] = None) -> bool:
+    def create_etc_volumes(
+        self, service: str, scaffold_statics: list[Path] = None
+    ) -> bool:
         """Create etc/ volume directories/files from service YAML.
 
         Parses the docker-compose YAML to find volume mounts pointing to
@@ -416,7 +452,11 @@ class Scaffolder:
             with open(service_yml, "r") as f:
                 content = f.read()
         except Exception as e:
-            logger.error(f"Failed to read service YAML: {e}", extra={"file": str(service_yml)}, exc_info=True)
+            logger.error(
+                f"Failed to read service YAML: {e}",
+                extra={"file": str(service_yml)},
+                exc_info=True,
+            )
             return False
 
         # Pattern to match ./etc/<service>/* volume mounts
@@ -428,10 +468,9 @@ class Scaffolder:
         if not matches:
             return True
 
-        logger.debug("Creating etc/ volumes", extra={"service": service, "count": len(matches)})
-
-        # The allowed base for this service's etc files
-        allowed_base = self.etc_dir / service
+        logger.debug(
+            "Creating etc/ volumes", extra={"service": service, "count": len(matches)}
+        )
 
         for match in matches:
             # Remove everything after : (the container path)
@@ -449,15 +488,23 @@ class Scaffolder:
 
                 # Check it's under the etc directory
                 if not str(normalized).startswith(str(self.etc_dir)):
-                    logger.warning("Skipped path traversal attempt", extra={"path": volume_path})
+                    logger.warning(
+                        "Skipped path traversal attempt", extra={"path": volume_path}
+                    )
                     continue
 
                 # For existing paths, also check resolved path (handles symlinks)
-                if abs_path.exists() and not validate_path_within_base(abs_path, self.etc_dir):
-                    logger.warning("Skipped path escaping via symlink", extra={"path": volume_path})
+                if abs_path.exists() and not validate_path_within_base(
+                    abs_path, self.etc_dir
+                ):
+                    logger.warning(
+                        "Skipped path escaping via symlink", extra={"path": volume_path}
+                    )
                     continue
             except Exception as e:
-                logger.warning(f"Skipped path validation error: {e}", extra={"path": volume_path})
+                logger.warning(
+                    f"Skipped path validation error: {e}", extra={"path": volume_path}
+                )
                 continue
 
             # Check if path relative to etc/<service>/ is provided by scaffold
@@ -467,7 +514,9 @@ class Scaffolder:
 
                 # Skip if scaffold will provide this file
                 if remainder in scaffold_provides:
-                    logger.debug("Skipped - scaffold provides", extra={"path": remainder})
+                    logger.debug(
+                        "Skipped - scaffold provides", extra={"path": remainder}
+                    )
                     continue
 
                 # Determine if this is a file or directory
@@ -492,7 +541,9 @@ class Scaffolder:
 
         return True
 
-    def _is_volume_directory(self, service: str, remainder: str, abs_path: Path) -> bool:
+    def _is_volume_directory(
+        self, service: str, remainder: str, abs_path: Path
+    ) -> bool:
         """Determine if a volume mount path should be a directory or file.
 
         Uses multiple heuristics since we can't always know from the path alone:
@@ -519,7 +570,14 @@ class Scaffolder:
             # Common file extensions are 1-4 alphanumeric chars
             # Directories like "hosts.d", "conf.d" have .d which is just 1 char
             # but we should treat those as directories
-            if ext.lower() in ("d", "daily", "weekly", "monthly", "available", "enabled"):
+            if ext.lower() in (
+                "d",
+                "daily",
+                "weekly",
+                "monthly",
+                "available",
+                "enabled",
+            ):
                 return True  # These are directory naming conventions
             if len(ext) <= 4 and ext.isalnum():
                 return False  # Likely a file extension
@@ -545,11 +603,16 @@ class Scaffolder:
             return True  # No manifest is not an error
 
         if not YAML_AVAILABLE:
-            logger.warning("pyyaml not installed, skipping manifest", extra={"service": service})
+            logger.warning(
+                "pyyaml not installed, skipping manifest", extra={"service": service}
+            )
             return True
 
         if not OPERATIONS_AVAILABLE:
-            logger.warning("operations module not available, skipping manifest", extra={"service": service})
+            logger.warning(
+                "operations module not available, skipping manifest",
+                extra={"service": service},
+            )
             return True
 
         logger.debug("Executing manifest operations", extra={"service": service})
@@ -558,13 +621,20 @@ class Scaffolder:
             with open(manifest_path, "r") as f:
                 manifest = yaml.safe_load(f)
         except Exception as e:
-            logger.error(f"Failed to read manifest: {e}", extra={"path": str(manifest_path)}, exc_info=True)
+            logger.error(
+                f"Failed to read manifest: {e}",
+                extra={"path": str(manifest_path)},
+                exc_info=True,
+            )
             return False
 
         # Validate version
         version = manifest.get("version", "1")
         if version != "1":
-            logger.error("Unsupported manifest version", extra={"version": version, "service": service})
+            logger.error(
+                "Unsupported manifest version",
+                extra={"version": version, "service": service},
+            )
             return False
 
         # Create context (share executor with operations)
@@ -582,7 +652,10 @@ class Scaffolder:
         for i, op_config in enumerate(operations, 1):
             op_type = op_config.get("type", "unknown")
             if not execute_operation(op_config, ctx):
-                logger.error("Manifest operation failed", extra={"operation_num": i, "type": op_type, "service": service})
+                logger.error(
+                    "Manifest operation failed",
+                    extra={"operation_num": i, "type": op_type, "service": service},
+                )
                 return False
 
         return True
@@ -609,12 +682,12 @@ class Scaffolder:
             if self.force:
                 logger.warning(
                     "etc/ directory has content but --force specified",
-                    extra={"service": service, "path": f"etc/{service}/"}
+                    extra={"service": service, "path": f"etc/{service}/"},
                 )
             else:
                 logger.info(
                     "Skipping etc/ operations - directory has existing content (use --force to override)",
-                    extra={"service": service, "path": f"etc/{service}/"}
+                    extra={"service": service, "path": f"etc/{service}/"},
                 )
                 skip_etc = True
 
@@ -638,7 +711,9 @@ class Scaffolder:
                         f"# {service.upper()} Configuration\n"
                         f"# Auto-generated by scaffold.py\n\n"
                     )
-                    logger.info("Created minimal env file", extra={"path": str(env_file_path)})
+                    logger.info(
+                        "Created minimal env file", extra={"path": str(env_file_path)}
+                    )
                     self._track_created(env_file_path)
             if success:
                 self._clear_tracking()
@@ -653,7 +728,10 @@ class Scaffolder:
                 dest = self.get_output_path(service, template)
                 # Skip etc/ destinations if we're preserving existing content
                 if skip_etc and str(dest).startswith(str(self.etc_dir)):
-                    logger.debug("Skipped template (etc/ preserved)", extra={"file": template.name})
+                    logger.debug(
+                        "Skipped template (etc/ preserved)",
+                        extra={"file": template.name},
+                    )
                     continue
                 if not self.render_template(template, dest):
                     success = False
@@ -667,7 +745,10 @@ class Scaffolder:
                 dest = self.get_output_path(service, static)
                 # Skip etc/ destinations if we're preserving existing content
                 if skip_etc and str(dest).startswith(str(self.etc_dir)):
-                    logger.debug("Skipped static file (etc/ preserved)", extra={"file": static.name})
+                    logger.debug(
+                        "Skipped static file (etc/ preserved)",
+                        extra={"file": static.name},
+                    )
                     continue
                 if not self.copy_static(static, dest):
                     success = False
@@ -687,24 +768,33 @@ class Scaffolder:
                     f"# {service.upper()} Configuration\n"
                     f"# Auto-generated by scaffold.py\n\n"
                 )
-                logger.info("Created minimal env file", extra={"path": str(env_file_path)})
+                logger.info(
+                    "Created minimal env file", extra={"path": str(env_file_path)}
+                )
                 self._track_created(env_file_path)
 
         # On failure, rollback created files
         if not success:
-            logger.error("Build failed, rolling back changes", extra={"service": service})
+            logger.error(
+                "Build failed, rolling back changes", extra={"service": service}
+            )
             self.rollback()
         else:
             # Success - clear tracking and display message
             self._clear_tracking()
             self._display_message(service)
-            logger.info("Scaffold build completed successfully", extra={"service": service})
+            logger.info(
+                "Scaffold build completed successfully", extra={"service": service}
+            )
 
         return success
 
     def teardown(self, service: str, preserve_etc: bool = True) -> bool:
         """Tear down scaffold for a service."""
-        logger.info("Tearing down scaffold", extra={"service": service, "preserve_etc": preserve_etc})
+        logger.info(
+            "Tearing down scaffold",
+            extra={"service": service, "preserve_etc": preserve_etc},
+        )
 
         # Remove service.env from services-enabled
         env_file = self.services_enabled / f"{service}.env"
@@ -818,7 +908,9 @@ Examples:
             logger.info("Service has scaffold files", extra={"service": args.service})
             return 0
         else:
-            logger.info("Service has no scaffold files", extra={"service": args.service})
+            logger.info(
+                "Service has no scaffold files", extra={"service": args.service}
+            )
             return 1
 
     if args.action == "build":
