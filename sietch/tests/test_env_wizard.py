@@ -1,10 +1,7 @@
 """Tests for env_wizard.py - Interactive environment setup wizard."""
 
 import os
-from pathlib import Path
 from unittest.mock import patch
-
-import pytest
 
 from scripts.env_wizard import (
     COMMON_TIMEZONES,
@@ -346,7 +343,7 @@ class TestCheckComplete:
 class TestRunWizard:
     """Tests for EnvWizard.run_wizard() behavior."""
 
-    def test_skips_when_complete(self, tmp_path, capsys):
+    def test_skips_when_complete(self, tmp_path, find_log_record):
         env_file = tmp_path / "services-enabled" / ".env"
         env_file.parent.mkdir(parents=True)
         env_file.write_text(
@@ -361,10 +358,9 @@ class TestRunWizard:
         result = wizard.run_wizard()
 
         assert result is True
-        captured = capsys.readouterr()
-        assert "already configured" in captured.out
+        find_log_record("already configured")
 
-    def test_skip_wizard_flag(self, tmp_path, capsys):
+    def test_skip_wizard_flag(self, tmp_path, find_log_record):
         env_file = tmp_path / "services-enabled" / ".env"
         env_file.parent.mkdir(parents=True)
         env_file.write_text("")
@@ -373,5 +369,4 @@ class TestRunWizard:
         result = wizard.run_wizard(skip_wizard=True)
 
         assert result is False
-        captured = capsys.readouterr()
-        assert "Skipping wizard" in captured.out
+        find_log_record("Skipping wizard")

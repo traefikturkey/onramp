@@ -175,7 +175,7 @@ class TestCreateDatabase:
     def mgr(self, mock_docker, tmp_path):
         return DatabaseManager(base_dir=str(tmp_path), docker=mock_docker)
 
-    def test_creates_database(self, mgr, mock_docker, capsys):
+    def test_creates_database(self, mgr, mock_docker, find_log_record):
         """Should execute CREATE DATABASE statement."""
         mock_docker.set_response("mysql", 0, "", "")
 
@@ -183,9 +183,8 @@ class TestCreateDatabase:
 
         assert code == 0
         mock_docker.assert_sql_executed("CREATE DATABASE")
-        captured = capsys.readouterr()
-        assert "testdb" in captured.out
-        assert "created successfully" in captured.out
+        record = find_log_record("Database created successfully")
+        assert record.database == "testdb"
 
     def test_handles_error(self, mgr, mock_docker, capsys):
         """Should handle database creation errors."""
@@ -207,7 +206,7 @@ class TestCreateUser:
     def mgr(self, mock_docker, tmp_path):
         return DatabaseManager(base_dir=str(tmp_path), docker=mock_docker)
 
-    def test_creates_user_with_password(self, mgr, mock_docker, capsys):
+    def test_creates_user_with_password(self, mgr, mock_docker, find_log_record):
         """Should create user with provided password."""
         mock_docker.set_response("mysql", 0, "", "")
 
@@ -216,10 +215,12 @@ class TestCreateUser:
         assert code == 0
         assert returned_password is None  # Not returned when provided
         mock_docker.assert_sql_executed("CREATE USER")
-        captured = capsys.readouterr()
-        assert "created successfully" in captured.out
+        record = find_log_record("User created successfully")
+        assert record.username == "testuser"
 
-    def test_creates_user_with_generated_password(self, mgr, mock_docker, capsys):
+    def test_creates_user_with_generated_password(
+        self, mgr, mock_docker, find_log_record
+    ):
         """Should create user with generated password."""
         mock_docker.set_response("mysql", 0, "", "")
 
@@ -228,8 +229,9 @@ class TestCreateUser:
         assert code == 0
         assert returned_password is not None
         assert len(returned_password) == 32
-        captured = capsys.readouterr()
-        assert "Password saved to" in captured.out
+        record = find_log_record("User created with generated password")
+        assert record.username == "testuser"
+        assert Path(record.password_file).name == "testuser.txt"
 
     def test_requires_password_or_generate(self, mgr, mock_docker, capsys):
         """Should fail when neither password nor generate is provided."""
@@ -249,7 +251,7 @@ class TestGrantPrivileges:
     def mgr(self, mock_docker, tmp_path):
         return DatabaseManager(base_dir=str(tmp_path), docker=mock_docker)
 
-    def test_grants_privileges(self, mgr, mock_docker, capsys):
+    def test_grants_privileges(self, mgr, mock_docker, find_log_record):
         """Should execute GRANT statement."""
         mock_docker.set_response("mysql", 0, "", "")
 
@@ -257,8 +259,9 @@ class TestGrantPrivileges:
 
         assert code == 0
         mock_docker.assert_sql_executed("GRANT")
-        captured = capsys.readouterr()
-        assert "Granted" in captured.out
+        record = find_log_record("Granted privileges")
+        assert record.database == "testdb"
+        assert record.username == "testuser"
 
     def test_handles_error(self, mgr, mock_docker, capsys):
         """Should handle grant errors."""
@@ -280,7 +283,7 @@ class TestRemoveUser:
     def mgr(self, mock_docker, tmp_path):
         return DatabaseManager(base_dir=str(tmp_path), docker=mock_docker)
 
-    def test_removes_user(self, mgr, mock_docker, capsys):
+    def test_removes_user(self, mgr, mock_docker, find_log_record):
         """Should execute DROP USER statement."""
         mock_docker.set_response("mysql", 0, "", "")
 
@@ -288,8 +291,8 @@ class TestRemoveUser:
 
         assert code == 0
         mock_docker.assert_sql_executed("DROP USER")
-        captured = capsys.readouterr()
-        assert "removed" in captured.out
+        record = find_log_record("User removed")
+        assert record.username == "testuser"
 
     def test_handles_error(self, mgr, mock_docker, capsys):
         """Should handle removal errors."""
@@ -311,7 +314,7 @@ class TestDropDatabase:
     def mgr(self, mock_docker, tmp_path):
         return DatabaseManager(base_dir=str(tmp_path), docker=mock_docker)
 
-    def test_drops_database(self, mgr, mock_docker, capsys):
+    def test_drops_database(self, mgr, mock_docker, find_log_record):
         """Should execute DROP DATABASE statement."""
         mock_docker.set_response("mysql", 0, "", "")
 
@@ -319,8 +322,8 @@ class TestDropDatabase:
 
         assert code == 0
         mock_docker.assert_sql_executed("DROP DATABASE")
-        captured = capsys.readouterr()
-        assert "dropped" in captured.out
+        record = find_log_record("Database dropped")
+        assert record.database == "testdb"
 
     def test_handles_error(self, mgr, mock_docker, capsys):
         """Should handle drop errors."""
@@ -342,17 +345,17 @@ class TestSetup:
     def mgr(self, mock_docker, tmp_path):
         return DatabaseManager(base_dir=str(tmp_path), docker=mock_docker)
 
-    def test_complete_setup(self, mgr, mock_docker, capsys):
+    def test_complete_setup(self, mgr, mock_docker, find_log_record):
         """Should create user, database, and grant privileges."""
         mock_docker.set_response("mysql", 0, "", "")
 
         code = mgr.setup("myapp")
 
         assert code == 0
-        captured = capsys.readouterr()
-        assert "Setup complete" in captured.out
-        assert "DB_USER=myapp" in captured.out
-        assert "DB_NAME=myapp" in captured.out
+        record = find_log_record("Setup complete")
+        assert record.target == "myapp"
+        find_log_record("DB_USER=myapp")
+        find_log_record("DB_NAME=myapp")
 
     def test_fails_on_user_creation_error(self, mgr, mock_docker, capsys):
         """Should fail if user creation fails."""
@@ -373,7 +376,9 @@ class TestDockerExec:
 
     @pytest.fixture
     def mgr(self, mock_docker, tmp_path):
-        return DatabaseManager(container_name="mydb", base_dir=str(tmp_path), docker=mock_docker)
+        return DatabaseManager(
+            container_name="mydb", base_dir=str(tmp_path), docker=mock_docker
+        )
 
     def test_uses_correct_container(self, mgr, mock_docker):
         """Should execute in the configured container."""

@@ -3,7 +3,6 @@
 import pytest
 import sys
 from pathlib import Path
-from datetime import datetime
 
 # Add scripts to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent / "scripts"))
@@ -144,6 +143,7 @@ class TestListBackups:
 
         # Create backup directory and files with different mtime
         import time
+
         backup_dir = tmp_path / "backups"
         backup_dir.mkdir()
         old_file = backup_dir / "onramp-config-backup-testhost-24-01-14-1200.tar.gz"
@@ -194,6 +194,7 @@ class TestFindLatestBackup:
     def test_finds_most_recent(self, tmp_path, monkeypatch):
         """Should return the most recent backup."""
         import time
+
         monkeypatch.setenv("HOST_NAME", "testhost")
         mock_exec = MockCommandExecutor()
         mgr = BackupManager(base_dir=str(tmp_path), executor=mock_exec)
@@ -299,7 +300,9 @@ class TestCreateBackup:
         cmd_str = " ".join(tar_calls[0])
         assert "./etc/plex" in cmd_str
 
-    def test_returns_error_for_missing_service(self, tmp_path, monkeypatch, mock_exec, capsys):
+    def test_returns_error_for_missing_service(
+        self, tmp_path, monkeypatch, mock_exec, capsys
+    ):
         """Should return error if service directory doesn't exist."""
         monkeypatch.setenv("HOST_NAME", "testhost")
         mgr = BackupManager(base_dir=str(tmp_path), executor=mock_exec)
@@ -318,7 +321,9 @@ class TestRestoreBackup:
     def mock_exec(self):
         return MockCommandExecutor()
 
-    def test_restores_from_path(self, tmp_path, monkeypatch, mock_exec, capsys):
+    def test_restores_from_path(
+        self, tmp_path, monkeypatch, mock_exec, find_log_record
+    ):
         """Should restore from specified backup path."""
         monkeypatch.setenv("HOST_NAME", "testhost")
         mock_exec.set_response("sudo", CommandResult(0, "", ""))
@@ -332,8 +337,7 @@ class TestRestoreBackup:
         code = mgr.restore_backup(str(backup_file))
 
         assert code == 0
-        captured = capsys.readouterr()
-        assert "Restore complete" in captured.out
+        find_log_record("Restore complete")
 
     def test_uses_latest_when_no_path(self, tmp_path, monkeypatch, mock_exec):
         """Should use latest backup when no path specified."""
@@ -351,7 +355,9 @@ class TestRestoreBackup:
 
         assert code == 0
 
-    def test_returns_error_for_missing_file(self, tmp_path, monkeypatch, mock_exec, capsys):
+    def test_returns_error_for_missing_file(
+        self, tmp_path, monkeypatch, mock_exec, capsys
+    ):
         """Should return error if backup file doesn't exist."""
         monkeypatch.setenv("HOST_NAME", "testhost")
         mgr = BackupManager(base_dir=str(tmp_path), executor=mock_exec)
@@ -464,7 +470,9 @@ class TestNfsPreMount:
         # Should NOT have called any commands (no mount needed)
         assert len(mock_exec.calls) == 0
 
-    def test_mount_nfs_fails_if_premount_path_missing(self, tmp_path, monkeypatch, mock_exec, capsys):
+    def test_mount_nfs_fails_if_premount_path_missing(
+        self, tmp_path, monkeypatch, mock_exec, find_log_record
+    ):
         """Should fail if NFS_PREMOUNTED=true but path doesn't exist."""
         monkeypatch.setenv("NFS_PREMOUNTED", "true")
         monkeypatch.setenv("NFS_BACKUP_TMP_DIR", str(tmp_path / "nonexistent"))
@@ -473,8 +481,7 @@ class TestNfsPreMount:
         result = mgr._mount_nfs()
 
         assert result is False
-        captured = capsys.readouterr()
-        assert "not accessible" in captured.err
+        find_log_record("not accessible")
 
     def test_unmount_nfs_skips_when_premounted(self, tmp_path, monkeypatch, mock_exec):
         """Should skip unmount command when pre-mounted via Docker volume."""

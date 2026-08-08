@@ -1,6 +1,5 @@
 """Tests for cloudflare.py with mocked HTTP client."""
 
-import json
 import pytest
 import sys
 from pathlib import Path
@@ -196,8 +195,18 @@ class TestListDnsRecords:
             {
                 "success": True,
                 "result": [
-                    {"id": "rec1", "type": "A", "name": "example.com", "content": "1.2.3.4"},
-                    {"id": "rec2", "type": "CNAME", "name": "www.example.com", "content": "example.com"},
+                    {
+                        "id": "rec1",
+                        "type": "A",
+                        "name": "example.com",
+                        "content": "1.2.3.4",
+                    },
+                    {
+                        "id": "rec2",
+                        "type": "CNAME",
+                        "name": "www.example.com",
+                        "content": "example.com",
+                    },
                 ],
             },
         )
@@ -223,7 +232,12 @@ class TestListDnsRecords:
             {
                 "success": True,
                 "result": [
-                    {"id": "rec2", "type": "CNAME", "name": "www.example.com", "content": "example.com"},
+                    {
+                        "id": "rec2",
+                        "type": "CNAME",
+                        "name": "www.example.com",
+                        "content": "example.com",
+                    },
                 ],
             },
         )
@@ -378,7 +392,7 @@ class TestDeleteDnsRecord:
         assert result is True
         mock_http.assert_called_with("DELETE", "/zones/zone123/dns_records/rec456")
 
-    def test_returns_false_when_record_not_found(self, api, mock_http, capsys):
+    def test_returns_false_when_record_not_found(self, api, mock_http, find_log_record):
         """Should return False when record doesn't exist."""
         mock_http.set_response(
             "GET",
@@ -396,8 +410,7 @@ class TestDeleteDnsRecord:
         result = api.delete_dns_record("nonexistent")
 
         assert result is False
-        captured = capsys.readouterr()
-        assert "not found" in captured.out
+        find_log_record("not found")
 
     def test_raises_on_api_error(self, api, mock_http):
         """Should raise RuntimeError on API failure."""

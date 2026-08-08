@@ -1,13 +1,28 @@
 """Pytest configuration and shared fixtures for OnRamp Dashboard tests."""
 
+import logging
 import sys
 from pathlib import Path
-from unittest.mock import MagicMock, Mock
+from unittest.mock import Mock
 
 import pytest
 
 # Add sietch to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
+
+
+@pytest.fixture
+def find_log_record(caplog):
+    """Find a captured log record by message text."""
+    caplog.set_level(logging.DEBUG)
+
+    def find(message: str) -> logging.LogRecord:
+        for record in reversed(caplog.records):
+            if message in record.getMessage():
+                return record
+        pytest.fail(f"Log message not found: {message}")
+
+    return find
 
 
 # =============================================================================

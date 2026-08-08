@@ -1,6 +1,5 @@
 """Tests for scaffold.py - path resolution and file filtering."""
 
-import pytest
 from pathlib import Path
 import sys
 
@@ -101,7 +100,9 @@ class TestGetOutputPath:
     def test_nested_template_preserved(self, tmp_path):
         scaffolder = Scaffolder(str(tmp_path))
 
-        source = tmp_path / "services-scaffold" / "plex" / "subdir" / "config.yml.template"
+        source = (
+            tmp_path / "services-scaffold" / "plex" / "subdir" / "config.yml.template"
+        )
         result = scaffolder.get_output_path("plex", source)
 
         assert result == tmp_path / "etc" / "plex" / "subdir" / "config.yml"
@@ -375,7 +376,7 @@ class TestRenderTemplate:
         assert result is True
         assert dest.parent.exists()
 
-    def test_handles_error_syntax(self, tmp_path, capsys):
+    def test_handles_error_syntax(self, tmp_path, find_log_record):
         """Should warn and return empty for ${VAR:?error} syntax."""
         mock_exec = MockCommandExecutor()
         scaffolder = Scaffolder(str(tmp_path), executor=mock_exec)
@@ -389,8 +390,9 @@ class TestRenderTemplate:
 
         assert result is True
         assert dest.read_text() == "VAR="
-        captured = capsys.readouterr()
-        assert "REQUIRED_VAR not set" in captured.out
+        record = find_log_record("Variable not set")
+        assert record.variable == "REQUIRED_VAR"
+        assert record.reason == "must be set"
 
     def test_handles_missing_source_file(self, tmp_path, capsys):
         """Should handle missing source file gracefully."""
@@ -404,7 +406,7 @@ class TestRenderTemplate:
 
         assert result is False
 
-    def test_skips_existing_files_by_default(self, tmp_path, capsys):
+    def test_skips_existing_files_by_default(self, tmp_path, find_log_record):
         """Should not overwrite existing destination files."""
         mock_exec = MockCommandExecutor()
         scaffolder = Scaffolder(str(tmp_path), executor=mock_exec)
@@ -419,8 +421,7 @@ class TestRenderTemplate:
 
         assert result is True
         assert dest.read_text() == "EXISTING_CONTENT"  # Not overwritten
-        captured = capsys.readouterr()
-        assert "Skipped (exists)" in captured.out
+        find_log_record("Skipped existing file")
 
     def test_overwrites_when_skip_if_exists_false(self, tmp_path, monkeypatch):
         """Should overwrite existing files when skip_if_exists=False."""
@@ -476,7 +477,7 @@ class TestCopyStatic:
         assert dest.parent.exists()
         assert dest.exists()
 
-    def test_skips_existing_file(self, tmp_path, capsys):
+    def test_skips_existing_file(self, tmp_path, find_log_record):
         """Should not overwrite existing files (no-clobber)."""
         mock_exec = MockCommandExecutor()
         scaffolder = Scaffolder(str(tmp_path), executor=mock_exec)
@@ -491,8 +492,7 @@ class TestCopyStatic:
 
         assert result is True
         assert dest.read_text() == "existing content"
-        captured = capsys.readouterr()
-        assert "Skipped (exists)" in captured.out
+        find_log_record("Skipped existing file")
 
 
 class TestBuild:
@@ -535,18 +535,17 @@ class TestBuild:
         # Check static file was copied to etc/
         assert (tmp_path / "etc" / "plex" / "config.conf").exists()
 
-    def test_returns_true_for_no_scaffold(self, tmp_path, capsys):
+    def test_returns_true_for_no_scaffold(self, tmp_path, find_log_record):
         """Should return True when no scaffold files exist."""
         mock_exec = MockCommandExecutor()
         scaffolder = Scaffolder(str(tmp_path), executor=mock_exec)
 
-        result = scaffolder.build("nonexistent")
+        scaffolder.build("nonexistent")
 
-        # Should succeed but print message
-        captured = capsys.readouterr()
-        assert "No scaffold templates" in captured.out
+        # Should succeed and log the missing scaffold
+        find_log_record("No scaffold templates")
 
-    def test_displays_message_on_success(self, tmp_path, capsys):
+    def test_displays_message_on_success(self, tmp_path, find_log_record):
         """Should display MESSAGE.txt content on successful build."""
         mock_exec = MockCommandExecutor()
         mock_exec.set_response("envsubst", CommandResult(0, "rendered", ""))
@@ -563,9 +562,8 @@ class TestBuild:
 
         scaffolder.build("plex")
 
-        captured = capsys.readouterr()
-        assert "POST-ENABLE INSTRUCTIONS" in captured.out
-        assert "Please configure your Plex token!" in captured.out
+        find_log_record("POST-ENABLE INSTRUCTIONS")
+        find_log_record("Please configure your Plex token!")
 
     def test_auto_generates_env_when_no_scaffold_files(self, tmp_path, capsys):
         """Should auto-generate .env file when service has no scaffold templates."""
@@ -750,8 +748,15 @@ class TestIsVolumeDirectory:
         mock_exec = MockCommandExecutor()
         scaffolder = Scaffolder(str(tmp_path), executor=mock_exec)
 
-        file_extensions = ["config.yml", "config.yaml", "settings.conf",
-                           "data.json", "data.xml", "settings.ini", "readme.txt"]
+        file_extensions = [
+            "config.yml",
+            "config.yaml",
+            "settings.conf",
+            "data.json",
+            "data.xml",
+            "settings.ini",
+            "readme.txt",
+        ]
 
         for filename in file_extensions:
             abs_path = tmp_path / "etc" / "service" / filename
@@ -835,7 +840,7 @@ class TestPathTraversalPrevention:
         escaped_path = symlink / "passwd"
         assert validate_path_within_base(escaped_path, base) is False
 
-    def test_create_etc_volumes_rejects_traversal(self, tmp_path, capsys):
+    def test_create_etc_volumes_rejects_traversal(self, tmp_path, find_log_record):
         """Should reject volume paths with traversal attempts."""
         mock_exec = MockCommandExecutor()
         scaffolder = Scaffolder(str(tmp_path), executor=mock_exec)
@@ -863,8 +868,7 @@ services:
         assert not (tmp_path / "tmp" / "pwned").exists()
         assert not (tmp_path / "passwd").exists()
 
-        captured = capsys.readouterr()
-        assert "path traversal" in captured.out.lower() or "skipping" in captured.out.lower()
+        find_log_record("path traversal")
 
 
 class TestRollbackOnFailure:
@@ -876,7 +880,9 @@ class TestRollbackOnFailure:
         scaffolder = Scaffolder(str(tmp_path), executor=mock_exec)
 
         # Scaffolder should have a way to track created files
-        assert hasattr(scaffolder, '_created_files') or hasattr(scaffolder, 'created_files')
+        assert hasattr(scaffolder, "_created_files") or hasattr(
+            scaffolder, "created_files"
+        )
 
     def test_rollback_removes_created_files(self, tmp_path):
         """Should remove created files on rollback."""
@@ -958,7 +964,6 @@ class TestRequiredVars:
 
     def test_parse_required_vars_finds_declarations(self):
         """Should parse required: comments from template content."""
-        mock_exec = MockCommandExecutor()
         scaffolder = Scaffolder.__new__(Scaffolder)
 
         content = """# required: NFS_SERVER
@@ -988,7 +993,7 @@ NFS_SERVER=192.168.1.1
         assert scaffolder._parse_required_vars("") == []
         assert scaffolder._parse_required_vars("FOO=bar\n") == []
 
-    def test_check_required_vars_warns_on_empty(self, tmp_path, capsys):
+    def test_check_required_vars_warns_on_empty(self, tmp_path, find_log_record):
         """Should warn when required vars are empty in rendered file."""
         scaffolder = Scaffolder.__new__(Scaffolder)
 
@@ -997,9 +1002,9 @@ NFS_SERVER=192.168.1.1
 
         scaffolder._check_required_vars(env_file, ["NFS_SERVER", "NFS_MEDIA_PATH"])
 
-        captured = capsys.readouterr()
-        assert "NFS_SERVER" in captured.out
-        assert "NFS_MEDIA_PATH" not in captured.out  # has a value
+        record = find_log_record("Required variables not set")
+        assert record.missing_vars == "NFS_SERVER"
+        assert "NFS_MEDIA_PATH" not in record.missing_vars  # has a value
 
     def test_check_required_vars_silent_when_set(self, tmp_path, capsys):
         """Should not warn when all required vars have values."""
@@ -1013,7 +1018,7 @@ NFS_SERVER=192.168.1.1
         captured = capsys.readouterr()
         assert "Warning" not in captured.out
 
-    def test_check_required_vars_suggests_edit_env(self, tmp_path, capsys):
+    def test_check_required_vars_suggests_edit_env(self, tmp_path, find_log_record):
         """Should suggest make edit-env command."""
         scaffolder = Scaffolder.__new__(Scaffolder)
 
@@ -1022,5 +1027,5 @@ NFS_SERVER=192.168.1.1
 
         scaffolder._check_required_vars(env_file, ["MY_VAR"])
 
-        captured = capsys.readouterr()
-        assert "make edit-env myservice" in captured.out
+        record = find_log_record("Required variables not set")
+        assert record.hint == "Run: make edit-env myservice"

@@ -1,6 +1,5 @@
 """Tests for operations.py - conditions and path resolution."""
 
-import os
 import pytest
 from pathlib import Path
 import sys
@@ -167,13 +166,13 @@ class TestConditionDirNotEmpty:
 class TestConditionUnknownType:
     """Tests for unknown condition types."""
 
-    def test_returns_false_for_unknown(self, ctx, capsys):
+    def test_returns_false_for_unknown(self, ctx, find_log_record):
         condition = Condition({"type": "unknown_type", "path": "data"}, ctx)
         result = condition.evaluate()
 
         assert result is False
-        captured = capsys.readouterr()
-        assert "Unknown condition type" in captured.out
+        record = find_log_record("Unknown condition type")
+        assert record.type == "unknown_type"
 
 
 class TestOperationShouldExecute:
@@ -267,7 +266,9 @@ class TestMkdirOp:
         expected = ctx.etc_dir / ctx.service / "data" / "subdir" / "nested"
         assert expected.exists()
 
-    @pytest.mark.skipif(sys.platform == "win32", reason="chmod not supported on Windows")
+    @pytest.mark.skipif(
+        sys.platform == "win32", reason="chmod not supported on Windows"
+    )
     def test_applies_mode(self, ctx):
         config = {"type": "mkdir", "path": "data", "mode": "0700"}
         op = MkdirOp(config, ctx)
@@ -325,7 +326,15 @@ class TestOperationsRegistry:
     """Tests for OPERATIONS registry."""
 
     def test_contains_expected_operations(self):
-        expected = ["mkdir", "generate_rsa_key", "generate_random", "download", "delete", "chown", "chmod"]
+        expected = [
+            "mkdir",
+            "generate_rsa_key",
+            "generate_random",
+            "download",
+            "delete",
+            "chown",
+            "chmod",
+        ]
         for op_type in expected:
             assert op_type in OPERATIONS
 
@@ -337,8 +346,10 @@ class TestOperationsRegistry:
 class TestGenerateRsaKeyOp:
     """Tests for GenerateRsaKeyOp with mocked executor."""
 
-    @pytest.mark.skipif(sys.platform == "win32", reason="chmod not supported on Windows")
-    def test_generates_private_key(self, ctx, mock_exec, capsys):
+    @pytest.mark.skipif(
+        sys.platform == "win32", reason="chmod not supported on Windows"
+    )
+    def test_generates_private_key(self, ctx, mock_exec, find_log_record):
         """Should call openssl genpkey and write output."""
         mock_exec.set_response("openssl", CommandResult(0, "---PRIVATE KEY---", ""))
 
@@ -353,8 +364,7 @@ class TestGenerateRsaKeyOp:
 
         assert result is True
         mock_exec.assert_called_with_command("openssl")
-        captured = capsys.readouterr()
-        assert "Generated private key" in captured.out
+        find_log_record("Generated RSA private key")
 
     def test_generates_public_key_when_requested(self, ctx, mock_exec, capsys):
         """Should extract public key when public_key is specified."""
@@ -374,14 +384,18 @@ class TestGenerateRsaKeyOp:
         openssl_calls = mock_exec.get_calls_for("openssl")
         assert len(openssl_calls) == 2
 
-    def test_skips_if_exists(self, ctx, mock_exec, capsys):
+    def test_skips_if_exists(self, ctx, mock_exec, find_log_record):
         """Should skip generation if key already exists."""
         # Create the key file
         service_dir = ctx.etc_dir / ctx.service
         service_dir.mkdir(parents=True)
         (service_dir / "key.pem").write_text("existing key")
 
-        config = {"type": "generate_rsa_key", "output": "key.pem", "skip_if_exists": True}
+        config = {
+            "type": "generate_rsa_key",
+            "output": "key.pem",
+            "skip_if_exists": True,
+        }
         op = GenerateRsaKeyOp(config, ctx)
 
         result = op.execute()
@@ -389,8 +403,7 @@ class TestGenerateRsaKeyOp:
         assert result is True
         # Should not have called openssl
         assert len(mock_exec.calls) == 0
-        captured = capsys.readouterr()
-        assert "Skipped" in captured.out
+        find_log_record("Skipped existing RSA key")
 
     def test_handles_openssl_error(self, ctx, mock_exec, capsys):
         """Should return False on OpenSSL failure."""
@@ -407,7 +420,7 @@ class TestGenerateRsaKeyOp:
 class TestGenerateRandomOp:
     """Tests for GenerateRandomOp with mocked executor."""
 
-    def test_generates_random_data(self, ctx, mock_exec, capsys):
+    def test_generates_random_data(self, ctx, mock_exec, find_log_record):
         """Should call openssl rand and write output."""
         mock_exec.set_response("openssl", CommandResult(0, "random-base64-data", ""))
 
@@ -418,8 +431,7 @@ class TestGenerateRandomOp:
 
         assert result is True
         mock_exec.assert_called_with_command("openssl")
-        captured = capsys.readouterr()
-        assert "Generated random data" in captured.out
+        find_log_record("Generated random data")
 
     def test_uses_encoding_parameter(self, ctx, mock_exec):
         """Should pass encoding to openssl rand."""
@@ -441,7 +453,11 @@ class TestGenerateRandomOp:
         service_dir.mkdir(parents=True)
         (service_dir / "secret.txt").write_text("existing")
 
-        config = {"type": "generate_random", "output": "secret.txt", "skip_if_exists": True}
+        config = {
+            "type": "generate_random",
+            "output": "secret.txt",
+            "skip_if_exists": True,
+        }
         op = GenerateRandomOp(config, ctx)
 
         result = op.execute()
@@ -453,7 +469,7 @@ class TestGenerateRandomOp:
 class TestDownloadOp:
     """Tests for DownloadOp with mocked executor."""
 
-    def test_downloads_file(self, ctx, mock_exec, capsys):
+    def test_downloads_file(self, ctx, mock_exec, find_log_record):
         """Should call wget and report success."""
         mock_exec.set_response("wget", CommandResult(0, "", ""))
 
@@ -468,8 +484,7 @@ class TestDownloadOp:
 
         assert result is True
         mock_exec.assert_called_with_command("wget")
-        captured = capsys.readouterr()
-        assert "Downloaded" in captured.out
+        find_log_record("Downloaded file")
 
     def test_skips_if_exists(self, ctx, mock_exec, capsys):
         """Should skip download if file exists."""
@@ -509,7 +524,7 @@ class TestDownloadOp:
 class TestChownOp:
     """Tests for ChownOp with mocked executor."""
 
-    def test_changes_ownership(self, ctx, mock_exec, capsys):
+    def test_changes_ownership(self, ctx, mock_exec, find_log_record):
         """Should call chown command."""
         mock_exec.set_response("chown", CommandResult(0, "", ""))
 
@@ -517,15 +532,19 @@ class TestChownOp:
         service_dir.mkdir(parents=True)
         (service_dir / "file.txt").write_text("content")
 
-        config = {"type": "chown", "path": "file.txt", "user": "myuser", "group": "mygroup"}
+        config = {
+            "type": "chown",
+            "path": "file.txt",
+            "user": "myuser",
+            "group": "mygroup",
+        }
         op = ChownOp(config, ctx)
 
         result = op.execute()
 
         assert result is True
         mock_exec.assert_called_with_command("chown")
-        captured = capsys.readouterr()
-        assert "Changed ownership" in captured.out
+        find_log_record("Changed ownership")
 
     def test_recursive_chown(self, ctx, mock_exec):
         """Should pass -R flag when recursive=True."""
@@ -542,7 +561,7 @@ class TestChownOp:
         chown_calls = mock_exec.get_calls_for("chown")
         assert "-R" in chown_calls[0]
 
-    def test_skips_if_path_missing(self, ctx, mock_exec, capsys):
+    def test_skips_if_path_missing(self, ctx, mock_exec, find_log_record):
         """Should skip if path doesn't exist."""
         config = {"type": "chown", "path": "nonexistent", "user": "myuser"}
         op = ChownOp(config, ctx)
@@ -551,14 +570,13 @@ class TestChownOp:
 
         assert result is True
         assert len(mock_exec.calls) == 0
-        captured = capsys.readouterr()
-        assert "Skipped" in captured.out
+        find_log_record("Skipped chown - path not found")
 
 
 class TestChmodOp:
     """Tests for ChmodOp with mocked executor."""
 
-    def test_changes_permissions(self, ctx, mock_exec, capsys):
+    def test_changes_permissions(self, ctx, mock_exec, find_log_record):
         """Should call chmod command."""
         mock_exec.set_response("chmod", CommandResult(0, "", ""))
 
@@ -573,8 +591,7 @@ class TestChmodOp:
 
         assert result is True
         mock_exec.assert_called_with_command("chmod")
-        captured = capsys.readouterr()
-        assert "Changed permissions" in captured.out
+        find_log_record("Changed permissions")
 
     def test_recursive_chmod(self, ctx, mock_exec):
         """Should pass -R flag when recursive=True."""

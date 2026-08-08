@@ -1,6 +1,5 @@
 """Tests for traefik_hosts.py - Traefik external Host() rule extraction."""
 
-import pytest
 import sys
 from pathlib import Path
 
@@ -11,12 +10,14 @@ from traefik_hosts import TraefikHostsExtractor
 
 
 # Helper function to create Traefik YAML with proper formatting
-def traefik_yaml(router_name: str, host_var: str, domain_var: str = "HOST_DOMAIN") -> str:
+def traefik_yaml(
+    router_name: str, host_var: str, domain_var: str = "HOST_DOMAIN"
+) -> str:
     """Generate Traefik YAML with Host() rule using Go template syntax."""
     return (
-        f'http:\n'
-        f'  routers:\n'
-        f'    {router_name}:\n'
+        f"http:\n"
+        f"  routers:\n"
+        f"    {router_name}:\n"
         f'      rule: "Host(`{{{{env "{host_var}"}}}}.{{{{env "{domain_var}"}}}}`)"'
     )
 
@@ -51,7 +52,9 @@ class TestEnvFileLoading:
         """Should load variables from .env file."""
         services_enabled = tmp_path / "services-enabled"
         services_enabled.mkdir()
-        (services_enabled / ".env").write_text("HOST_DOMAIN=example.com\nHOSTIP=192.168.1.10\n")
+        (services_enabled / ".env").write_text(
+            "HOST_DOMAIN=example.com\nHOSTIP=192.168.1.10\n"
+        )
 
         extractor = TraefikHostsExtractor(base_dir=tmp_path, env_vars={})
         extractor.load_env_files()
@@ -63,7 +66,9 @@ class TestEnvFileLoading:
         """Should load variables from .env.external file."""
         services_enabled = tmp_path / "services-enabled"
         services_enabled.mkdir()
-        (services_enabled / ".env.external").write_text("HOMEASSISTANT_HOST_NAME=hass\n")
+        (services_enabled / ".env.external").write_text(
+            "HOMEASSISTANT_HOST_NAME=hass\n"
+        )
 
         extractor = TraefikHostsExtractor(base_dir=tmp_path, env_vars={})
         extractor.load_env_files()
@@ -75,10 +80,7 @@ class TestEnvFileLoading:
         services_enabled = tmp_path / "services-enabled"
         services_enabled.mkdir()
         (services_enabled / ".env").write_text(
-            "# This is a comment\n"
-            "\n"
-            "VALID_VAR=value\n"
-            "# Another comment\n"
+            "# This is a comment\n\nVALID_VAR=value\n# Another comment\n"
         )
 
         extractor = TraefikHostsExtractor(base_dir=tmp_path, env_vars={})
@@ -92,9 +94,7 @@ class TestEnvFileLoading:
         services_enabled = tmp_path / "services-enabled"
         services_enabled.mkdir()
         (services_enabled / ".env").write_text(
-            'DOUBLE_QUOTED="value1"\n'
-            "SINGLE_QUOTED='value2'\n"
-            "UNQUOTED=value3\n"
+            "DOUBLE_QUOTED=\"value1\"\nSINGLE_QUOTED='value2'\nUNQUOTED=value3\n"
         )
 
         extractor = TraefikHostsExtractor(base_dir=tmp_path, env_vars={})
@@ -207,12 +207,12 @@ class TestHostExtraction:
     def test_extracts_multiple_hosts_from_file(self, tmp_path):
         """Should extract multiple Host() rules from a single file."""
         yaml_content = (
-            'http:\n'
-            '  routers:\n'
-            '    service1:\n'
+            "http:\n"
+            "  routers:\n"
+            "    service1:\n"
             '      rule: "Host(`{{env "SVC1_HOST_NAME"}}.{{env "HOST_DOMAIN"}}`)"'
-            '\n'
-            '    service2:\n'
+            "\n"
+            "    service2:\n"
             '      rule: "Host(`{{env "SVC2_HOST_NAME"}}.{{env "HOST_DOMAIN"}}`)"'
         )
         external_enabled = tmp_path / "external-enabled"
@@ -234,7 +234,7 @@ class TestHostExtraction:
         assert ("svc1.example.com", "multi") in hosts
         assert ("svc2.example.com", "multi") in hosts
 
-    def test_skips_host_with_missing_variable(self, tmp_path, capsys):
+    def test_skips_host_with_missing_variable(self, tmp_path, find_log_record):
         """Should skip hosts where required variable is missing."""
         external_enabled = tmp_path / "external-enabled"
         external_enabled.mkdir()
@@ -251,10 +251,8 @@ class TestHostExtraction:
 
         assert len(hosts) == 0
 
-        # Check that warning was printed
-        captured = capsys.readouterr()
-        assert "Skipped service" in captured.err
-        assert "MISSING_HOST_NAME" in captured.err
+        # Check that a warning was logged
+        find_log_record("Skipped service: MISSING_HOST_NAME not set")
 
 
 class TestMiddlewareExclusion:
@@ -309,7 +307,9 @@ class TestHostsFileDeduplication:
         services_enabled = tmp_path / "services-enabled"
         services_enabled.mkdir()
         (services_enabled / "joyride.yml").write_text("# enabled")
-        (services_enabled / ".env").write_text("HOSTIP=192.168.1.10\nHOST_DOMAIN=example.com\n")
+        (services_enabled / ".env").write_text(
+            "HOSTIP=192.168.1.10\nHOST_DOMAIN=example.com\n"
+        )
         (services_enabled / ".env.external").write_text("SVC_HOST_NAME=svc\n")
 
         # Create existing hosts file with old IP
@@ -341,16 +341,16 @@ class TestHostsFileDeduplication:
         services_enabled = tmp_path / "services-enabled"
         services_enabled.mkdir()
         (services_enabled / "joyride.yml").write_text("# enabled")
-        (services_enabled / ".env").write_text("HOSTIP=192.168.1.10\nHOST_DOMAIN=example.com\n")
+        (services_enabled / ".env").write_text(
+            "HOSTIP=192.168.1.10\nHOST_DOMAIN=example.com\n"
+        )
         (services_enabled / ".env.external").write_text("SVC_HOST_NAME=svc\n")
 
         # Create existing hosts file with comments
         hosts_dir = tmp_path / "etc" / "joyride" / "hosts.d"
         hosts_dir.mkdir(parents=True)
         (hosts_dir / "hosts").write_text(
-            "# Manual entries\n"
-            "# Do not remove\n"
-            "192.168.1.50 manual.example.com\n"
+            "# Manual entries\n# Do not remove\n192.168.1.50 manual.example.com\n"
         )
 
         # Create external config
@@ -376,7 +376,7 @@ class TestHostsFileDeduplication:
 class TestSyncEarlyExit:
     """Tests for sync early exit conditions."""
 
-    def test_exits_when_joyride_not_enabled(self, tmp_path, capsys):
+    def test_exits_when_joyride_not_enabled(self, tmp_path, find_log_record):
         """Should exit with error when joyride is not enabled."""
         services_enabled = tmp_path / "services-enabled"
         services_enabled.mkdir()
@@ -387,11 +387,9 @@ class TestSyncEarlyExit:
         result = extractor.sync()
 
         assert result == 1
+        find_log_record("Joyride service is not enabled")
 
-        captured = capsys.readouterr()
-        assert "Joyride service is not enabled" in captured.err
-
-    def test_exits_when_hostip_not_set(self, tmp_path, capsys):
+    def test_exits_when_hostip_not_set(self, tmp_path, find_log_record):
         """Should exit with error when HOSTIP is not set."""
         services_enabled = tmp_path / "services-enabled"
         services_enabled.mkdir()
@@ -403,11 +401,9 @@ class TestSyncEarlyExit:
         result = extractor.sync()
 
         assert result == 1
+        find_log_record("HOSTIP not set")
 
-        captured = capsys.readouterr()
-        assert "HOSTIP not set" in captured.err
-
-    def test_exits_when_host_domain_not_set(self, tmp_path, capsys):
+    def test_exits_when_host_domain_not_set(self, tmp_path, find_log_record):
         """Should exit with error when HOST_DOMAIN is not set."""
         services_enabled = tmp_path / "services-enabled"
         services_enabled.mkdir()
@@ -419,27 +415,23 @@ class TestSyncEarlyExit:
         result = extractor.sync()
 
         assert result == 1
-
-        captured = capsys.readouterr()
-        assert "HOST_DOMAIN not set" in captured.err
+        find_log_record("HOST_DOMAIN not set")
 
 
 class TestFullSync:
     """Integration tests for full sync operation."""
 
-    def test_full_sync_creates_hosts_file(self, tmp_path, capsys):
+    def test_full_sync_creates_hosts_file(self, tmp_path, find_log_record):
         """Should create hosts file with extracted entries."""
         # Set up joyride as enabled
         services_enabled = tmp_path / "services-enabled"
         services_enabled.mkdir()
         (services_enabled / "joyride.yml").write_text("# enabled")
         (services_enabled / ".env").write_text(
-            "HOSTIP=192.168.1.10\n"
-            "HOST_DOMAIN=lab.local\n"
+            "HOSTIP=192.168.1.10\nHOST_DOMAIN=lab.local\n"
         )
         (services_enabled / ".env.external").write_text(
-            "HOMEASSISTANT_HOST_NAME=hass\n"
-            "PROXMOX_HOST_NAME=pve\n"
+            "HOMEASSISTANT_HOST_NAME=hass\nPROXMOX_HOST_NAME=pve\n"
         )
 
         # Create external configs
@@ -471,6 +463,5 @@ class TestFullSync:
         assert "192.168.1.10 pve.lab.local" in content
 
         # Check output
-        captured = capsys.readouterr()
-        assert "Added:" in captured.out
-        assert "Wrote 2 host entries" in captured.out
+        find_log_record("Added:")
+        find_log_record("Wrote 2 host entries")
