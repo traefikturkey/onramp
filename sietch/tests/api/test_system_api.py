@@ -1,6 +1,6 @@
 """Tests for System API endpoints."""
 
-import pytest
+from unittest.mock import Mock
 
 
 class TestSystemHealthAPI:
@@ -16,6 +16,26 @@ class TestSystemHealthAPI:
         assert "docker" in data
         assert data["docker"] is True
         assert data["status"] == "healthy"
+
+
+class TestSystemInfoAPI:
+    """Tests for /api/system/info endpoint."""
+
+    def test_hides_internal_docker_errors(self, client, docker_client, find_log_record):
+        """Should log internal errors without returning their details."""
+        docker_client._client.info = Mock(
+            side_effect=RuntimeError("private socket details")
+        )
+
+        response = client.get("/api/system/info")
+
+        assert response.status_code == 200
+        assert response.json() == {
+            "error": "Unable to retrieve Docker system information"
+        }
+        assert "private socket details" not in response.text
+        record = find_log_record("Failed to retrieve Docker system information")
+        assert record.exc_info is not None
 
 
 class TestSystemStatsAPI:

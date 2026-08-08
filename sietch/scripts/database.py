@@ -76,17 +76,28 @@ class DatabaseManager:
         return secrets.token_hex(length // 2)
 
     def save_password(self, username: str, password: str) -> Path:
-        """Save generated password to file."""
-        # Save to a per-user file for security
-        password_file = self.base_dir / "etc" / ".db_passwords" / f"{username}.txt"
-        password_file.parent.mkdir(parents=True, exist_ok=True)
+        """Save a generated password in a private per-user file."""
+        password_dir = self.base_dir / "etc" / ".db_passwords"
+        password_dir.mkdir(mode=0o700, parents=True, exist_ok=True)
+        os.chmod(password_dir, 0o700)
 
-        with open(password_file, "w") as f:
-            f.write(f"Username: {username}\n")
-            f.write(f"Password: {password}\n")
-
-        # Secure permissions
-        os.chmod(password_file, 0o600)
+        password_file = password_dir / f"{username}.txt"
+        flags = os.O_WRONLY | os.O_CREAT | getattr(os, "O_CLOEXEC", 0)
+        flags |= getattr(os, "O_NOFOLLOW", 0)
+        fd = os.open(password_file, flags, 0o600)
+        try:
+            if hasattr(os, "fchmod"):
+                os.fchmod(fd, 0o600)
+            else:
+                os.chmod(password_file, 0o600)
+            os.ftruncate(fd, 0)
+            with os.fdopen(fd, "w") as password_stream:
+                fd = -1
+                password_stream.write(f"Username: {username}\n")
+                password_stream.write(f"Password: {password}\n")
+        finally:
+            if fd >= 0:
+                os.close(fd)
 
         return password_file
 

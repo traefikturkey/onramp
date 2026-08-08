@@ -79,6 +79,9 @@ class TestSavePassword:
         content = result.read_text()
         assert "testuser" in content
         assert "testpass123" in content
+        if sys.platform != "win32":
+            assert result.stat().st_mode & 0o777 == 0o600
+            assert result.parent.stat().st_mode & 0o777 == 0o700
 
     def test_creates_parent_directories(self, tmp_path):
         """Should create parent directories if they don't exist."""

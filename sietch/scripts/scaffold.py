@@ -352,6 +352,41 @@ class Scaffolder:
                 },
             )
 
+    def _is_sensitive_output(self, dest: Path, template_content: str) -> bool:
+        """Return whether rendered content should use private file permissions."""
+        try:
+            dest.relative_to(self.services_enabled)
+            return True
+        except ValueError:
+            pass
+
+        variable_pattern = re.compile(
+            r"\$\{([A-Z][A-Z0-9_]*)(?::-([^}]*)|:\?([^}]*))?\}"
+        )
+        return any(
+            self._is_password_var(match.group(1))
+            for match in variable_pattern.finditer(template_content)
+        )
+
+    @staticmethod
+    def _write_private_text(dest: Path, content: str) -> None:
+        """Write text with mode 0600 in place before exposing its content."""
+        flags = os.O_WRONLY | os.O_CREAT | getattr(os, "O_CLOEXEC", 0)
+        flags |= getattr(os, "O_NOFOLLOW", 0)
+        fd = os.open(dest, flags, 0o600)
+        try:
+            if hasattr(os, "fchmod"):
+                os.fchmod(fd, 0o600)
+            else:
+                os.chmod(dest, 0o600)
+            os.ftruncate(fd, 0)
+            with os.fdopen(fd, "w") as output:
+                fd = -1
+                output.write(content)
+        finally:
+            if fd >= 0:
+                os.close(fd)
+
     def render_template(
         self, source: Path, dest: Path, skip_if_exists: bool = True
     ) -> bool:
@@ -379,8 +414,11 @@ class Scaffolder:
             required_vars = self._parse_required_vars(template_content)
             rendered_content = self._render_template_string(template_content)
 
-            with open(dest, "w") as f:
-                f.write(rendered_content)
+            if self._is_sensitive_output(dest, template_content):
+                self._write_private_text(dest, rendered_content)
+            else:
+                with open(dest, "w") as f:
+                    f.write(rendered_content)
 
             logger.info(
                 "Rendered template", extra={"source": source.name, "dest": str(dest)}

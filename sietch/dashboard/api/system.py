@@ -1,7 +1,10 @@
 """System health and status API routes."""
 
+import logging
+
 from fastapi import APIRouter, Request
 
+logger = logging.getLogger(__name__)
 router = APIRouter()
 
 
@@ -59,5 +62,6 @@ async def system_info(request: Request):
             "containers": info.get("Containers", 0),
             "images": info.get("Images", 0),
         }
-    except Exception as e:
-        return {"error": str(e)}
+    except Exception:
+        logger.exception("Failed to retrieve Docker system information")
+        return {"error": "Unable to retrieve Docker system information"}

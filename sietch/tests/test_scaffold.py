@@ -361,6 +361,37 @@ class TestRenderTemplate:
         assert len(password) == 32  # Default password length
         assert "${" not in password
 
+    def test_sensitive_env_output_uses_private_permissions(self, tmp_path):
+        """Should restrict generated environment files to their owner."""
+        mock_exec = MockCommandExecutor()
+        scaffolder = Scaffolder(str(tmp_path), executor=mock_exec)
+
+        source = tmp_path / "env.template"
+        source.write_text("API_TOKEN=${API_TOKEN}")
+        scaffolder.services_enabled.mkdir()
+        dest = scaffolder.services_enabled / "service.env"
+
+        result = scaffolder.render_template(source, dest)
+
+        assert result is True
+        if sys.platform != "win32":
+            assert dest.stat().st_mode & 0o777 == 0o600
+
+    def test_sensitive_config_output_uses_private_permissions(self, tmp_path):
+        """Should restrict rendered configuration containing secret variables."""
+        mock_exec = MockCommandExecutor()
+        scaffolder = Scaffolder(str(tmp_path), executor=mock_exec)
+
+        source = tmp_path / "config.template"
+        source.write_text("token=${API_TOKEN}")
+        dest = tmp_path / "config.yml"
+
+        result = scaffolder.render_template(source, dest)
+
+        assert result is True
+        if sys.platform != "win32":
+            assert dest.stat().st_mode & 0o777 == 0o600
+
     def test_creates_parent_directories(self, tmp_path):
         """Should create parent directories for output."""
         mock_exec = MockCommandExecutor()
