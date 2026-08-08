@@ -1,0 +1,44 @@
+name: CodeQL Security Analysis
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "sietch/**/*.py"
+      - ".github/workflows/codeql.yml"
+  pull_request:
+    paths:
+      - "sietch/**/*.py"
+      - ".github/workflows/codeql.yml"
+  schedule:
+    - cron: "19 4 * * 2"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  analyze:
+    name: Analyze Python
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      security-events: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@5595ccaf912efad79be6eef63a5619ff05969be3 # v4
+        with:
+          languages: python
+          build-mode: none
+          queries: security-extended
+
+      - name: Analyze
+        uses: github/codeql-action/analyze@5595ccaf912efad79be6eef63a5619ff05969be3 # v4
+        with:
+          category: "/language:python"

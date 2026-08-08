@@ -1,0 +1,42 @@
+name: Dependency Supply Chain Review
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "**/uv.lock"
+      - "**/pyproject.toml"
+      - ".github/vet/**"
+      - ".github/workflows/safedep-vet.yml"
+  pull_request:
+    paths:
+      - "**/uv.lock"
+      - "**/pyproject.toml"
+      - ".github/vet/**"
+      - ".github/workflows/safedep-vet.yml"
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: read
+
+jobs:
+  vet:
+    name: Vet dependency changes
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Check dependency supply chain risk
+        uses: safedep/vet-action@6247cccd1b6683a27946ea3a0d45d3865346918b # v1.1.12
+        with:
+          policy: .github/vet/policy.yml
+          version: v1.18.1
+          upload-sarif: true
+          add-step-summary: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
