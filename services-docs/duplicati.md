@@ -74,11 +74,11 @@ make up
 
 ```bash
 # Enable the service
-make enable duplicati
+make enable-service duplicati
 
 # Configure environment variables (if needed)
-make scaffold duplicati
+make edit-env duplicati
 
 # Start the service
-make up
+make start-service duplicati
 ```

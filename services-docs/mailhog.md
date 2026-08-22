@@ -53,11 +53,11 @@
 
 ```bash
 # Enable the service
-make enable mailhog
+make enable-service mailhog
 
 # Configure environment variables (if needed)
-make scaffold mailhog
+make edit-env mailhog
 
 # Start the service
-make up
+make start-service mailhog
 ```

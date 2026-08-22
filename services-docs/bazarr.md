@@ -92,11 +92,11 @@ make up
 
 ```bash
 # Enable the service
-make enable bazarr
+make enable-service bazarr
 
 # Configure environment variables (if needed)
-make scaffold bazarr
+make edit-env bazarr
 
 # Start the service
-make up
+make start-service bazarr
 ```

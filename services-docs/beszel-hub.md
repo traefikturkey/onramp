@@ -63,13 +63,13 @@
 
 ```bash
 # Enable the service
-make enable beszel-hub
+make enable-service beszel-hub
 
 # Configure environment variables (if needed)
-make scaffold beszel-hub
+make edit-env beszel-hub
 
 # Start the service
-make up
+make start-service beszel-hub
 ```
 
 ## Notes

@@ -50,11 +50,11 @@
 
 ```bash
 # Enable the service
-make enable apprise
+make enable-service apprise
 
 # Configure environment variables (if needed)
-make scaffold apprise
+make edit-env apprise
 
 # Start the service
-make up
+make start-service apprise
 ```

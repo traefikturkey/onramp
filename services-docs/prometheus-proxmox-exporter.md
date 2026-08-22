@@ -25,11 +25,11 @@
 
 ```bash
 # Enable the service
-make enable prometheus-proxmox-exporter
+make enable-service prometheus-proxmox-exporter
 
 # Configure environment variables (if needed)
-make scaffold prometheus-proxmox-exporter
+make edit-env prometheus-proxmox-exporter
 
 # Start the service
-make up
+make start-service prometheus-proxmox-exporter
 ```

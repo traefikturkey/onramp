@@ -57,11 +57,11 @@
 
 ```bash
 # Enable the service
-make enable onboard
+make enable-service onboard
 
 # Configure environment variables (if needed)
-make scaffold onboard
+make edit-env onboard
 
 # Start the service
-make up
+make start-service onboard
 ```

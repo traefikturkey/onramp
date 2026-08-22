@@ -70,11 +70,11 @@ make up
 
 ```bash
 # Enable the service
-make enable mealie
+make enable-service mealie
 
 # Configure environment variables (if needed)
-make scaffold mealie
+make edit-env mealie
 
 # Start the service
-make up
+make start-service mealie
 ```

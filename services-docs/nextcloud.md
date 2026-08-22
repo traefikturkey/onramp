@@ -74,11 +74,11 @@ make up
 
 ```bash
 # Enable the service
-make enable nextcloud
+make enable-service nextcloud
 
 # Configure environment variables (if needed)
-make scaffold nextcloud
+make edit-env nextcloud
 
 # Start the service
-make up
+make start-service nextcloud
 ```

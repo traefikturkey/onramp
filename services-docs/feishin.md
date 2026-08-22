@@ -57,11 +57,11 @@
 
 ```bash
 # Enable the service
-make enable feishin
+make enable-service feishin
 
 # Configure environment variables (if needed)
-make scaffold feishin
+make edit-env feishin
 
 # Start the service
-make up
+make start-service feishin
 ```

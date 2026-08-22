@@ -61,13 +61,13 @@ This service depends on:
 
 ```bash
 # Enable the service
-make enable droneci
+make enable-service droneci
 
 # Configure environment variables (if needed)
-make scaffold droneci
+make edit-env droneci
 
 # Start the service
-make up
+make start-service droneci
 ```
 
 ## Notes

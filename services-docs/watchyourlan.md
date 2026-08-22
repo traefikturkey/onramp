@@ -51,11 +51,11 @@
 
 ```bash
 # Enable the service
-make enable watchyourlan
+make enable-service watchyourlan
 
 # Configure environment variables (if needed)
-make scaffold watchyourlan
+make edit-env watchyourlan
 
 # Start the service
-make up
+make start-service watchyourlan
 ```

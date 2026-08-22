@@ -79,11 +79,11 @@ make up
 
 ```bash
 # Enable the service
-make enable readarr
+make enable-service readarr
 
 # Configure environment variables (if needed)
-make scaffold readarr
+make edit-env readarr
 
 # Start the service
-make up
+make start-service readarr
 ```

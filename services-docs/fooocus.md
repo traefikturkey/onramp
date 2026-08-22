@@ -53,11 +53,11 @@
 
 ```bash
 # Enable the service
-make enable fooocus
+make enable-service fooocus
 
 # Configure environment variables (if needed)
-make scaffold fooocus
+make edit-env fooocus
 
 # Start the service
-make up
+make start-service fooocus
 ```

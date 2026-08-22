@@ -48,11 +48,11 @@
 
 ```bash
 # Enable the service
-make enable phpmyadmin
+make enable-service phpmyadmin
 
 # Configure environment variables (if needed)
-make scaffold phpmyadmin
+make edit-env phpmyadmin
 
 # Start the service
-make up
+make start-service phpmyadmin
 ```

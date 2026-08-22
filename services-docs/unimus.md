@@ -79,13 +79,13 @@ make up
 
 ```bash
 # Enable the service
-make enable unimus
+make enable-service unimus
 
 # Configure environment variables (if needed)
-make scaffold unimus
+make edit-env unimus
 
 # Start the service
-make up
+make start-service unimus
 ```
 
 ## Notes

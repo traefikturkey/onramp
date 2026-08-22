@@ -89,13 +89,13 @@ make up
 
 ```bash
 # Enable the service
-make enable authentik
+make enable-service authentik
 
 # Configure environment variables (if needed)
-make scaffold authentik
+make edit-env authentik
 
 # Start the service
-make up
+make start-service authentik
 ```
 
 ## Notes

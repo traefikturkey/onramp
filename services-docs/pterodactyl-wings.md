@@ -49,11 +49,11 @@
 
 ```bash
 # Enable the service
-make enable pterodactyl-wings
+make enable-service pterodactyl-wings
 
 # Configure environment variables (if needed)
-make scaffold pterodactyl-wings
+make edit-env pterodactyl-wings
 
 # Start the service
-make up
+make start-service pterodactyl-wings
 ```

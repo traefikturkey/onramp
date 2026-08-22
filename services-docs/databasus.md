@@ -51,11 +51,11 @@
 
 ```bash
 # Enable the service
-make enable databasus
+make enable-service databasus
 
 # Configure environment variables (if needed)
-make scaffold databasus
+make edit-env databasus
 
 # Start the service
-make up
+make start-service databasus
 ```

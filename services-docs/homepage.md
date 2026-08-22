@@ -53,11 +53,11 @@
 
 ```bash
 # Enable the service
-make enable homepage
+make enable-service homepage
 
 # Configure environment variables (if needed)
-make scaffold homepage
+make edit-env homepage
 
 # Start the service
-make up
+make start-service homepage
 ```

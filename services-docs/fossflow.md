@@ -53,11 +53,11 @@
 
 ```bash
 # Enable the service
-make enable fossflow
+make enable-service fossflow
 
 # Configure environment variables (if needed)
-make scaffold fossflow
+make edit-env fossflow
 
 # Start the service
-make up
+make start-service fossflow
 ```

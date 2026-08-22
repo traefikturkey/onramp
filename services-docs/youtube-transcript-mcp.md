@@ -52,11 +52,11 @@
 
 ```bash
 # Enable the service
-make enable youtube-transcript-mcp
+make enable-service youtube-transcript-mcp
 
 # Configure environment variables (if needed)
-make scaffold youtube-transcript-mcp
+make edit-env youtube-transcript-mcp
 
 # Start the service
-make up
+make start-service youtube-transcript-mcp
 ```

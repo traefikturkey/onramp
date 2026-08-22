@@ -46,11 +46,11 @@
 
 ```bash
 # Enable the service
-make enable gitea-runner
+make enable-service gitea-runner
 
 # Configure environment variables (if needed)
-make scaffold gitea-runner
+make edit-env gitea-runner
 
 # Start the service
-make up
+make start-service gitea-runner
 ```

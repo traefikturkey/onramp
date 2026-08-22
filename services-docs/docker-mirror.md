@@ -56,11 +56,11 @@
 
 ```bash
 # Enable the service
-make enable docker-mirror
+make enable-service docker-mirror
 
 # Configure environment variables (if needed)
-make scaffold docker-mirror
+make edit-env docker-mirror
 
 # Start the service
-make up
+make start-service docker-mirror
 ```

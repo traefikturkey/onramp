@@ -46,11 +46,11 @@
 
 ```bash
 # Enable the service
-make enable games-minecraft-direwolf20-119
+make enable-service games-minecraft-direwolf20-119
 
 # Configure environment variables (if needed)
-make scaffold games-minecraft-direwolf20-119
+make edit-env games-minecraft-direwolf20-119
 
 # Start the service
-make up
+make start-service games-minecraft-direwolf20-119
 ```

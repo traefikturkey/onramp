@@ -47,11 +47,11 @@
 
 ```bash
 # Enable the service
-make enable whoami
+make enable-service whoami
 
 # Configure environment variables (if needed)
-make scaffold whoami
+make edit-env whoami
 
 # Start the service
-make up
+make start-service whoami
 ```

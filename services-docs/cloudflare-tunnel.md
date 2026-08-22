@@ -50,13 +50,13 @@ This service depends on:
 
 ```bash
 # Enable the service
-make enable cloudflare-tunnel
+make enable-service cloudflare-tunnel
 
 # Configure environment variables (if needed)
-make scaffold cloudflare-tunnel
+make edit-env cloudflare-tunnel
 
 # Start the service
-make up
+make start-service cloudflare-tunnel
 ```
 
 ## Notes

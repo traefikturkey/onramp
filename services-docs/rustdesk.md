@@ -60,13 +60,13 @@ This service depends on:
 
 ```bash
 # Enable the service
-make enable rustdesk
+make enable-service rustdesk
 
 # Configure environment variables (if needed)
-make scaffold rustdesk
+make edit-env rustdesk
 
 # Start the service
-make up
+make start-service rustdesk
 ```
 
 ## Notes

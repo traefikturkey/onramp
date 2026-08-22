@@ -64,11 +64,11 @@
 
 ```bash
 # Enable the service
-make enable adguard
+make enable-service adguard
 
 # Configure environment variables (if needed)
-make scaffold adguard
+make edit-env adguard
 
 # Start the service
-make up
+make start-service adguard
 ```

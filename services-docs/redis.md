@@ -54,11 +54,11 @@
 
 ```bash
 # Enable the service
-make enable redis
+make enable-service redis
 
 # Configure environment variables (if needed)
-make scaffold redis
+make edit-env redis
 
 # Start the service
-make up
+make start-service redis
 ```

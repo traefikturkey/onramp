@@ -48,11 +48,11 @@
 
 ```bash
 # Enable the service
-make enable portainer
+make enable-service portainer
 
 # Configure environment variables (if needed)
-make scaffold portainer
+make edit-env portainer
 
 # Start the service
-make up
+make start-service portainer
 ```

@@ -49,11 +49,11 @@
 
 ```bash
 # Enable the service
-make enable gotify
+make enable-service gotify
 
 # Configure environment variables (if needed)
-make scaffold gotify
+make edit-env gotify
 
 # Start the service
-make up
+make start-service gotify
 ```

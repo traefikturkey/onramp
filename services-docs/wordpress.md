@@ -75,11 +75,11 @@ make up
 
 ```bash
 # Enable the service
-make enable wordpress
+make enable-service wordpress
 
 # Configure environment variables (if needed)
-make scaffold wordpress
+make edit-env wordpress
 
 # Start the service
-make up
+make start-service wordpress
 ```

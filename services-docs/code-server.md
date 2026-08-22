@@ -51,11 +51,11 @@
 
 ```bash
 # Enable the service
-make enable code-server
+make enable-service code-server
 
 # Configure environment variables (if needed)
-make scaffold code-server
+make edit-env code-server
 
 # Start the service
-make up
+make start-service code-server
 ```

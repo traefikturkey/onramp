@@ -58,11 +58,11 @@
 
 ```bash
 # Enable the service
-make enable vault
+make enable-service vault
 
 # Configure environment variables (if needed)
-make scaffold vault
+make edit-env vault
 
 # Start the service
-make up
+make start-service vault
 ```

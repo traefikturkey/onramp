@@ -49,11 +49,11 @@
 
 ```bash
 # Enable the service
-make enable actual
+make enable-service actual
 
 # Configure environment variables (if needed)
-make scaffold actual
+make edit-env actual
 
 # Start the service
-make up
+make start-service actual
 ```

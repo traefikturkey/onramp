@@ -48,11 +48,11 @@
 
 ```bash
 # Enable the service
-make enable mssql
+make enable-service mssql
 
 # Configure environment variables (if needed)
-make scaffold mssql
+make edit-env mssql
 
 # Start the service
-make up
+make start-service mssql
 ```

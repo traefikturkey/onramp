@@ -77,11 +77,11 @@ make up
 
 ```bash
 # Enable the service
-make enable lazylibrarian
+make enable-service lazylibrarian
 
 # Configure environment variables (if needed)
-make scaffold lazylibrarian
+make edit-env lazylibrarian
 
 # Start the service
-make up
+make start-service lazylibrarian
 ```

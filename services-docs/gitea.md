@@ -73,11 +73,11 @@ make up
 
 ```bash
 # Enable the service
-make enable gitea
+make enable-service gitea
 
 # Configure environment variables (if needed)
-make scaffold gitea
+make edit-env gitea
 
 # Start the service
-make up
+make start-service gitea
 ```

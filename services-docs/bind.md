@@ -46,11 +46,11 @@
 
 ```bash
 # Enable the service
-make enable bind
+make enable-service bind
 
 # Configure environment variables (if needed)
-make scaffold bind
+make edit-env bind
 
 # Start the service
-make up
+make start-service bind
 ```

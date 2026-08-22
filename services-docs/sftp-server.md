@@ -53,11 +53,11 @@
 
 ```bash
 # Enable the service
-make enable sftp-server
+make enable-service sftp-server
 
 # Configure environment variables (if needed)
-make scaffold sftp-server
+make edit-env sftp-server
 
 # Start the service
-make up
+make start-service sftp-server
 ```

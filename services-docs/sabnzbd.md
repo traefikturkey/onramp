@@ -87,11 +87,11 @@ make up
 
 ```bash
 # Enable the service
-make enable sabnzbd
+make enable-service sabnzbd
 
 # Configure environment variables (if needed)
-make scaffold sabnzbd
+make edit-env sabnzbd
 
 # Start the service
-make up
+make start-service sabnzbd
 ```

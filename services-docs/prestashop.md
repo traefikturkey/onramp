@@ -70,11 +70,11 @@ make up
 
 ```bash
 # Enable the service
-make enable prestashop
+make enable-service prestashop
 
 # Configure environment variables (if needed)
-make scaffold prestashop
+make edit-env prestashop
 
 # Start the service
-make up
+make start-service prestashop
 ```

@@ -52,11 +52,11 @@
 
 ```bash
 # Enable the service
-make enable mariadb
+make enable-service mariadb
 
 # Configure environment variables (if needed)
-make scaffold mariadb
+make edit-env mariadb
 
 # Start the service
-make up
+make start-service mariadb
 ```

@@ -50,11 +50,11 @@
 
 ```bash
 # Enable the service
-make enable glances
+make enable-service glances
 
 # Configure environment variables (if needed)
-make scaffold glances
+make edit-env glances
 
 # Start the service
-make up
+make start-service glances
 ```

@@ -53,11 +53,11 @@
 
 ```bash
 # Enable the service
-make enable games-valheim
+make enable-service games-valheim
 
 # Configure environment variables (if needed)
-make scaffold games-valheim
+make edit-env games-valheim
 
 # Start the service
-make up
+make start-service games-valheim
 ```

@@ -77,11 +77,11 @@ make up
 
 ```bash
 # Enable the service
-make enable headphones
+make enable-service headphones
 
 # Configure environment variables (if needed)
-make scaffold headphones
+make edit-env headphones
 
 # Start the service
-make up
+make start-service headphones
 ```

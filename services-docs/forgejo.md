@@ -74,11 +74,11 @@ make up
 
 ```bash
 # Enable the service
-make enable forgejo
+make enable-service forgejo
 
 # Configure environment variables (if needed)
-make scaffold forgejo
+make edit-env forgejo
 
 # Start the service
-make up
+make start-service forgejo
 ```

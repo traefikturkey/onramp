@@ -110,13 +110,13 @@ make up
 
 ```bash
 # Enable the service
-make enable wallabag
+make enable-service wallabag
 
 # Configure environment variables (if needed)
-make scaffold wallabag
+make edit-env wallabag
 
 # Start the service
-make up
+make start-service wallabag
 ```
 
 ## Notes

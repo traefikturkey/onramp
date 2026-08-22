@@ -42,11 +42,11 @@
 
 ```bash
 # Enable the service
-make enable games-minecraft-bedrock
+make enable-service games-minecraft-bedrock
 
 # Configure environment variables (if needed)
-make scaffold games-minecraft-bedrock
+make edit-env games-minecraft-bedrock
 
 # Start the service
-make up
+make start-service games-minecraft-bedrock
 ```

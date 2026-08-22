@@ -55,11 +55,11 @@
 
 ```bash
 # Enable the service
-make enable tasktrove
+make enable-service tasktrove
 
 # Configure environment variables (if needed)
-make scaffold tasktrove
+make edit-env tasktrove
 
 # Start the service
-make up
+make start-service tasktrove
 ```

@@ -48,11 +48,11 @@
 
 ```bash
 # Enable the service
-make enable drawio
+make enable-service drawio
 
 # Configure environment variables (if needed)
-make scaffold drawio
+make edit-env drawio
 
 # Start the service
-make up
+make start-service drawio
 ```

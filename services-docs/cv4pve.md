@@ -50,11 +50,11 @@
 
 ```bash
 # Enable the service
-make enable cv4pve
+make enable-service cv4pve
 
 # Configure environment variables (if needed)
-make scaffold cv4pve
+make edit-env cv4pve
 
 # Start the service
-make up
+make start-service cv4pve
 ```

@@ -63,11 +63,11 @@
 
 ```bash
 # Enable the service
-make enable wetty
+make enable-service wetty
 
 # Configure environment variables (if needed)
-make scaffold wetty
+make edit-env wetty
 
 # Start the service
-make up
+make start-service wetty
 ```

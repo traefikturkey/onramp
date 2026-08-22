@@ -63,11 +63,11 @@
 
 ```bash
 # Enable the service
-make enable coredns
+make enable-service coredns
 
 # Configure environment variables (if needed)
-make scaffold coredns
+make edit-env coredns
 
 # Start the service
-make up
+make start-service coredns
 ```

@@ -60,11 +60,11 @@
 
 ```bash
 # Enable the service
-make enable iventoy
+make enable-service iventoy
 
 # Configure environment variables (if needed)
-make scaffold iventoy
+make edit-env iventoy
 
 # Start the service
-make up
+make start-service iventoy
 ```

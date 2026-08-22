@@ -49,11 +49,11 @@
 
 ```bash
 # Enable the service
-make enable fulltext-rss
+make enable-service fulltext-rss
 
 # Configure environment variables (if needed)
-make scaffold fulltext-rss
+make edit-env fulltext-rss
 
 # Start the service
-make up
+make start-service fulltext-rss
 ```

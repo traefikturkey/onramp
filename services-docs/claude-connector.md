@@ -57,13 +57,13 @@
 
 ```bash
 # Enable the service
-make enable claude-connector
+make enable-service claude-connector
 
 # Configure environment variables (if needed)
-make scaffold claude-connector
+make edit-env claude-connector
 
 # Start the service
-make up
+make start-service claude-connector
 ```
 
 ## Notes

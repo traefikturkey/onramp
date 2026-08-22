@@ -54,11 +54,11 @@
 
 ```bash
 # Enable the service
-make enable autokuma
+make enable-service autokuma
 
 # Configure environment variables (if needed)
-make scaffold autokuma
+make edit-env autokuma
 
 # Start the service
-make up
+make start-service autokuma
 ```

@@ -95,13 +95,13 @@ make up
 
 ```bash
 # Enable the service
-make enable tandoor
+make enable-service tandoor
 
 # Configure environment variables (if needed)
-make scaffold tandoor
+make edit-env tandoor
 
 # Start the service
-make up
+make start-service tandoor
 ```
 
 ## Notes

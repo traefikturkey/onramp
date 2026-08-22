@@ -101,13 +101,13 @@ make up
 
 ```bash
 # Enable the service
-make enable manyfold
+make enable-service manyfold
 
 # Configure environment variables (if needed)
-make scaffold manyfold
+make edit-env manyfold
 
 # Start the service
-make up
+make start-service manyfold
 ```
 
 ## Notes

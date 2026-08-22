@@ -48,11 +48,11 @@
 
 ```bash
 # Enable the service
-make enable airprint
+make enable-service airprint
 
 # Configure environment variables (if needed)
-make scaffold airprint
+make edit-env airprint
 
 # Start the service
-make up
+make start-service airprint
 ```

@@ -59,11 +59,11 @@
 
 ```bash
 # Enable the service
-make enable onramp-dashboard
+make enable-service onramp-dashboard
 
 # Configure environment variables (if needed)
-make scaffold onramp-dashboard
+make edit-env onramp-dashboard
 
 # Start the service
-make up
+make start-service onramp-dashboard
 ```
