@@ -55,11 +55,11 @@
 
 ```bash
 # Enable the service
-make enable prowlarr
+make enable-service prowlarr
 
 # Configure environment variables (if needed)
-make scaffold prowlarr
+make edit-env prowlarr
 
 # Start the service
-make up
+make start-service prowlarr
 ```

@@ -49,11 +49,11 @@
 
 ```bash
 # Enable the service
-make enable jellyseerr
+make enable-service jellyseerr
 
 # Configure environment variables (if needed)
-make scaffold jellyseerr
+make edit-env jellyseerr
 
 # Start the service
-make up
+make start-service jellyseerr
 ```

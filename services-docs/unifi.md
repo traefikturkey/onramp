@@ -64,11 +64,11 @@
 
 ```bash
 # Enable the service
-make enable unifi
+make enable-service unifi
 
 # Configure environment variables (if needed)
-make scaffold unifi
+make edit-env unifi
 
 # Start the service
-make up
+make start-service unifi
 ```

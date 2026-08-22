@@ -71,13 +71,13 @@ make up
 
 ```bash
 # Enable the service
-make enable newsdash
+make enable-service newsdash
 
 # Configure environment variables (if needed)
-make scaffold newsdash
+make edit-env newsdash
 
 # Start the service
-make up
+make start-service newsdash
 ```
 
 ## Notes

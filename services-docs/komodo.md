@@ -67,13 +67,13 @@ This service depends on:
 
 ```bash
 # Enable the service
-make enable komodo
+make enable-service komodo
 
 # Configure environment variables (if needed)
-make scaffold komodo
+make edit-env komodo
 
 # Start the service
-make up
+make start-service komodo
 ```
 
 ## Notes

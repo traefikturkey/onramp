@@ -32,11 +32,11 @@
 
 ```bash
 # Enable the service
-make enable avahi
+make enable-service avahi
 
 # Configure environment variables (if needed)
-make scaffold avahi
+make edit-env avahi
 
 # Start the service
-make up
+make start-service avahi
 ```

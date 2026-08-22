@@ -115,11 +115,11 @@ make up
 
 ```bash
 # Enable the service
-make enable tdarr
+make enable-service tdarr
 
 # Configure environment variables (if needed)
-make scaffold tdarr
+make edit-env tdarr
 
 # Start the service
-make up
+make start-service tdarr
 ```

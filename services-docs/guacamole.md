@@ -53,11 +53,11 @@
 
 ```bash
 # Enable the service
-make enable guacamole
+make enable-service guacamole
 
 # Configure environment variables (if needed)
-make scaffold guacamole
+make edit-env guacamole
 
 # Start the service
-make up
+make start-service guacamole
 ```

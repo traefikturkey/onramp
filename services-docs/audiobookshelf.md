@@ -78,11 +78,11 @@ make up
 
 ```bash
 # Enable the service
-make enable audiobookshelf
+make enable-service audiobookshelf
 
 # Configure environment variables (if needed)
-make scaffold audiobookshelf
+make edit-env audiobookshelf
 
 # Start the service
-make up
+make start-service audiobookshelf
 ```

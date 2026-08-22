@@ -55,11 +55,11 @@
 
 ```bash
 # Enable the service
-make enable cloudbeaver
+make enable-service cloudbeaver
 
 # Configure environment variables (if needed)
-make scaffold cloudbeaver
+make edit-env cloudbeaver
 
 # Start the service
-make up
+make start-service cloudbeaver
 ```

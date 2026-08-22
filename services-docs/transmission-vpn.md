@@ -97,11 +97,11 @@ make up
 
 ```bash
 # Enable the service
-make enable transmission-vpn
+make enable-service transmission-vpn
 
 # Configure environment variables (if needed)
-make scaffold transmission-vpn
+make edit-env transmission-vpn
 
 # Start the service
-make up
+make start-service transmission-vpn
 ```

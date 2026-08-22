@@ -54,11 +54,11 @@
 
 ```bash
 # Enable the service
-make enable ghost
+make enable-service ghost
 
 # Configure environment variables (if needed)
-make scaffold ghost
+make edit-env ghost
 
 # Start the service
-make up
+make start-service ghost
 ```

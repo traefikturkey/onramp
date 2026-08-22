@@ -49,11 +49,11 @@
 
 ```bash
 # Enable the service
-make enable webmap
+make enable-service webmap
 
 # Configure environment variables (if needed)
-make scaffold webmap
+make edit-env webmap
 
 # Start the service
-make up
+make start-service webmap
 ```

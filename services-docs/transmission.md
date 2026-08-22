@@ -108,11 +108,11 @@ make up
 
 ```bash
 # Enable the service
-make enable transmission
+make enable-service transmission
 
 # Configure environment variables (if needed)
-make scaffold transmission
+make edit-env transmission
 
 # Start the service
-make up
+make start-service transmission
 ```

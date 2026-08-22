@@ -76,11 +76,11 @@ make up
 
 ```bash
 # Enable the service
-make enable lidarr
+make enable-service lidarr
 
 # Configure environment variables (if needed)
-make scaffold lidarr
+make edit-env lidarr
 
 # Start the service
-make up
+make start-service lidarr
 ```

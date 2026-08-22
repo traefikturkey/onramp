@@ -51,11 +51,11 @@
 
 ```bash
 # Enable the service
-make enable sd-web
+make enable-service sd-web
 
 # Configure environment variables (if needed)
-make scaffold sd-web
+make edit-env sd-web
 
 # Start the service
-make up
+make start-service sd-web
 ```

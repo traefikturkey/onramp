@@ -50,11 +50,11 @@
 
 ```bash
 # Enable the service
-make enable homer
+make enable-service homer
 
 # Configure environment variables (if needed)
-make scaffold homer
+make edit-env homer
 
 # Start the service
-make up
+make start-service homer
 ```

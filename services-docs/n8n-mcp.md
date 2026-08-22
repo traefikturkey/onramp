@@ -54,11 +54,11 @@
 
 ```bash
 # Enable the service
-make enable n8n-mcp
+make enable-service n8n-mcp
 
 # Configure environment variables (if needed)
-make scaffold n8n-mcp
+make edit-env n8n-mcp
 
 # Start the service
-make up
+make start-service n8n-mcp
 ```

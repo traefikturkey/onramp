@@ -53,11 +53,11 @@
 
 ```bash
 # Enable the service
-make enable prometheus
+make enable-service prometheus
 
 # Configure environment variables (if needed)
-make scaffold prometheus
+make edit-env prometheus
 
 # Start the service
-make up
+make start-service prometheus
 ```

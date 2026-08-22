@@ -41,11 +41,11 @@
 
 ```bash
 # Enable the service
-make enable cyberchef
+make enable-service cyberchef
 
 # Configure environment variables (if needed)
-make scaffold cyberchef
+make edit-env cyberchef
 
 # Start the service
-make up
+make start-service cyberchef
 ```

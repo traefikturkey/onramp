@@ -48,11 +48,11 @@
 
 ```bash
 # Enable the service
-make enable nodered
+make enable-service nodered
 
 # Configure environment variables (if needed)
-make scaffold nodered
+make edit-env nodered
 
 # Start the service
-make up
+make start-service nodered
 ```

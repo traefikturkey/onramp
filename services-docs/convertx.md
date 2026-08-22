@@ -54,11 +54,11 @@
 
 ```bash
 # Enable the service
-make enable convertx
+make enable-service convertx
 
 # Configure environment variables (if needed)
-make scaffold convertx
+make edit-env convertx
 
 # Start the service
-make up
+make start-service convertx
 ```

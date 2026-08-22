@@ -43,11 +43,11 @@
 
 ```bash
 # Enable the service
-make enable requestrr
+make enable-service requestrr
 
 # Configure environment variables (if needed)
-make scaffold requestrr
+make edit-env requestrr
 
 # Start the service
-make up
+make start-service requestrr
 ```

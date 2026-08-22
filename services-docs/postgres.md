@@ -53,11 +53,11 @@
 
 ```bash
 # Enable the service
-make enable postgres
+make enable-service postgres
 
 # Configure environment variables (if needed)
-make scaffold postgres
+make edit-env postgres
 
 # Start the service
-make up
+make start-service postgres
 ```

@@ -48,11 +48,11 @@
 
 ```bash
 # Enable the service
-make enable truecommand
+make enable-service truecommand
 
 # Configure environment variables (if needed)
-make scaffold truecommand
+make edit-env truecommand
 
 # Start the service
-make up
+make start-service truecommand
 ```

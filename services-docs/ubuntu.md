@@ -60,11 +60,11 @@ make up
 
 ```bash
 # Enable the service
-make enable ubuntu
+make enable-service ubuntu
 
 # Configure environment variables (if needed)
-make scaffold ubuntu
+make edit-env ubuntu
 
 # Start the service
-make up
+make start-service ubuntu
 ```

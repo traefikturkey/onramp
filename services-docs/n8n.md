@@ -92,13 +92,13 @@ make up
 
 ```bash
 # Enable the service
-make enable n8n
+make enable-service n8n
 
 # Configure environment variables (if needed)
-make scaffold n8n
+make edit-env n8n
 
 # Start the service
-make up
+make start-service n8n
 ```
 
 ## Notes

@@ -69,11 +69,11 @@ make up
 
 ```bash
 # Enable the service
-make enable grocy
+make enable-service grocy
 
 # Configure environment variables (if needed)
-make scaffold grocy
+make edit-env grocy
 
 # Start the service
-make up
+make start-service grocy
 ```

@@ -61,11 +61,11 @@
 
 ```bash
 # Enable the service
-make enable infinity
+make enable-service infinity
 
 # Configure environment variables (if needed)
-make scaffold infinity
+make edit-env infinity
 
 # Start the service
-make up
+make start-service infinity
 ```

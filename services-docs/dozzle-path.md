@@ -47,11 +47,11 @@
 
 ```bash
 # Enable the service
-make enable dozzle-path
+make enable-service dozzle-path
 
 # Configure environment variables (if needed)
-make scaffold dozzle-path
+make edit-env dozzle-path
 
 # Start the service
-make up
+make start-service dozzle-path
 ```

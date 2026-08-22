@@ -48,11 +48,11 @@
 
 ```bash
 # Enable the service
-make enable monocker
+make enable-service monocker
 
 # Configure environment variables (if needed)
-make scaffold monocker
+make edit-env monocker
 
 # Start the service
-make up
+make start-service monocker
 ```

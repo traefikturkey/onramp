@@ -42,11 +42,11 @@
 
 ```bash
 # Enable the service
-make enable yacht
+make enable-service yacht
 
 # Configure environment variables (if needed)
-make scaffold yacht
+make edit-env yacht
 
 # Start the service
-make up
+make start-service yacht
 ```

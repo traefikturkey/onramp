@@ -75,11 +75,11 @@ make up
 
 ```bash
 # Enable the service
-make enable pinchflat
+make enable-service pinchflat
 
 # Configure environment variables (if needed)
-make scaffold pinchflat
+make edit-env pinchflat
 
 # Start the service
-make up
+make start-service pinchflat
 ```

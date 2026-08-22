@@ -55,11 +55,11 @@
 
 ```bash
 # Enable the service
-make enable authelia
+make enable-service authelia
 
 # Configure environment variables (if needed)
-make scaffold authelia
+make edit-env authelia
 
 # Start the service
-make up
+make start-service authelia
 ```

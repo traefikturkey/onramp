@@ -54,11 +54,11 @@
 
 ```bash
 # Enable the service
-make enable bytebase
+make enable-service bytebase
 
 # Configure environment variables (if needed)
-make scaffold bytebase
+make edit-env bytebase
 
 # Start the service
-make up
+make start-service bytebase
 ```

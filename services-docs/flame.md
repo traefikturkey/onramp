@@ -51,11 +51,11 @@
 
 ```bash
 # Enable the service
-make enable flame
+make enable-service flame
 
 # Configure environment variables (if needed)
-make scaffold flame
+make edit-env flame
 
 # Start the service
-make up
+make start-service flame
 ```

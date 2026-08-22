@@ -46,11 +46,11 @@
 
 ```bash
 # Enable the service
-make enable tautulli
+make enable-service tautulli
 
 # Configure environment variables (if needed)
-make scaffold tautulli
+make edit-env tautulli
 
 # Start the service
-make up
+make start-service tautulli
 ```

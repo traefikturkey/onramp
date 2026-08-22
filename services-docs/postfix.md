@@ -46,11 +46,11 @@
 
 ```bash
 # Enable the service
-make enable postfix
+make enable-service postfix
 
 # Configure environment variables (if needed)
-make scaffold postfix
+make edit-env postfix
 
 # Start the service
-make up
+make start-service postfix
 ```

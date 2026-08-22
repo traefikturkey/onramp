@@ -79,13 +79,13 @@
 
 ```bash
 # Enable the service
-make enable openbrain
+make enable-service openbrain
 
 # Configure environment variables (if needed)
-make scaffold openbrain
+make edit-env openbrain
 
 # Start the service
-make up
+make start-service openbrain
 ```
 
 ## Notes

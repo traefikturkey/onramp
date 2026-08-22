@@ -30,11 +30,11 @@
 
 ```bash
 # Enable the service
-make enable cloudflare-ddns
+make enable-service cloudflare-ddns
 
 # Configure environment variables (if needed)
-make scaffold cloudflare-ddns
+make edit-env cloudflare-ddns
 
 # Start the service
-make up
+make start-service cloudflare-ddns
 ```

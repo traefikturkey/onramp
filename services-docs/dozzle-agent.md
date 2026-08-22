@@ -25,11 +25,11 @@
 
 ```bash
 # Enable the service
-make enable dozzle-agent
+make enable-service dozzle-agent
 
 # Configure environment variables (if needed)
-make scaffold dozzle-agent
+make edit-env dozzle-agent
 
 # Start the service
-make up
+make start-service dozzle-agent
 ```

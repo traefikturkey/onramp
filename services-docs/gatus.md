@@ -53,11 +53,11 @@
 
 ```bash
 # Enable the service
-make enable gatus
+make enable-service gatus
 
 # Configure environment variables (if needed)
-make scaffold gatus
+make edit-env gatus
 
 # Start the service
-make up
+make start-service gatus
 ```

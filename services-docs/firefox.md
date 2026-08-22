@@ -52,11 +52,11 @@
 
 ```bash
 # Enable the service
-make enable firefox
+make enable-service firefox
 
 # Configure environment variables (if needed)
-make scaffold firefox
+make edit-env firefox
 
 # Start the service
-make up
+make start-service firefox
 ```

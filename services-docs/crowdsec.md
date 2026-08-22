@@ -43,11 +43,11 @@
 
 ```bash
 # Enable the service
-make enable crowdsec
+make enable-service crowdsec
 
 # Configure environment variables (if needed)
-make scaffold crowdsec
+make edit-env crowdsec
 
 # Start the service
-make up
+make start-service crowdsec
 ```

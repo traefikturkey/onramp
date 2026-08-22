@@ -45,11 +45,11 @@
 
 ```bash
 # Enable the service
-make enable dockpeek-socket-proxy
+make enable-service dockpeek-socket-proxy
 
 # Configure environment variables (if needed)
-make scaffold dockpeek-socket-proxy
+make edit-env dockpeek-socket-proxy
 
 # Start the service
-make up
+make start-service dockpeek-socket-proxy
 ```

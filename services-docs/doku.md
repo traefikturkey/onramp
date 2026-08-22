@@ -53,11 +53,11 @@
 
 ```bash
 # Enable the service
-make enable doku
+make enable-service doku
 
 # Configure environment variables (if needed)
-make scaffold doku
+make edit-env doku
 
 # Start the service
-make up
+make start-service doku
 ```

@@ -86,11 +86,11 @@ make up
 
 ```bash
 # Enable the service
-make enable omada
+make enable-service omada
 
 # Configure environment variables (if needed)
-make scaffold omada
+make edit-env omada
 
 # Start the service
-make up
+make start-service omada
 ```

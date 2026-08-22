@@ -47,11 +47,11 @@
 
 ```bash
 # Enable the service
-make enable kimai
+make enable-service kimai
 
 # Configure environment variables (if needed)
-make scaffold kimai
+make edit-env kimai
 
 # Start the service
-make up
+make start-service kimai
 ```

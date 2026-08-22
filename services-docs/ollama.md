@@ -92,11 +92,11 @@ make up
 
 ```bash
 # Enable the service
-make enable ollama
+make enable-service ollama
 
 # Configure environment variables (if needed)
-make scaffold ollama
+make edit-env ollama
 
 # Start the service
-make up
+make start-service ollama
 ```

@@ -43,11 +43,11 @@
 
 ```bash
 # Enable the service
-make enable prometheus-blackbox-exporter
+make enable-service prometheus-blackbox-exporter
 
 # Configure environment variables (if needed)
-make scaffold prometheus-blackbox-exporter
+make edit-env prometheus-blackbox-exporter
 
 # Start the service
-make up
+make start-service prometheus-blackbox-exporter
 ```

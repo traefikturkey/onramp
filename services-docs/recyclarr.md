@@ -45,11 +45,11 @@
 
 ```bash
 # Enable the service
-make enable recyclarr
+make enable-service recyclarr
 
 # Configure environment variables (if needed)
-make scaffold recyclarr
+make edit-env recyclarr
 
 # Start the service
-make up
+make start-service recyclarr
 ```

@@ -52,11 +52,11 @@
 
 ```bash
 # Enable the service
-make enable bentopdf
+make enable-service bentopdf
 
 # Configure environment variables (if needed)
-make scaffold bentopdf
+make edit-env bentopdf
 
 # Start the service
-make up
+make start-service bentopdf
 ```

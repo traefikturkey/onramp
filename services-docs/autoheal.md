@@ -36,11 +36,11 @@
 
 ```bash
 # Enable the service
-make enable autoheal
+make enable-service autoheal
 
 # Configure environment variables (if needed)
-make scaffold autoheal
+make edit-env autoheal
 
 # Start the service
-make up
+make start-service autoheal
 ```

@@ -57,11 +57,11 @@
 
 ```bash
 # Enable the service
-make enable pocketbase
+make enable-service pocketbase
 
 # Configure environment variables (if needed)
-make scaffold pocketbase
+make edit-env pocketbase
 
 # Start the service
-make up
+make start-service pocketbase
 ```

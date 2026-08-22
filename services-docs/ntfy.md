@@ -62,11 +62,11 @@
 
 ```bash
 # Enable the service
-make enable ntfy
+make enable-service ntfy
 
 # Configure environment variables (if needed)
-make scaffold ntfy
+make edit-env ntfy
 
 # Start the service
-make up
+make start-service ntfy
 ```

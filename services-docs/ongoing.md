@@ -49,11 +49,11 @@
 
 ```bash
 # Enable the service
-make enable ongoing
+make enable-service ongoing
 
 # Configure environment variables (if needed)
-make scaffold ongoing
+make edit-env ongoing
 
 # Start the service
-make up
+make start-service ongoing
 ```

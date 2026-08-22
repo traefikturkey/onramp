@@ -52,11 +52,11 @@
 
 ```bash
 # Enable the service
-make enable rundeck
+make enable-service rundeck
 
 # Configure environment variables (if needed)
-make scaffold rundeck
+make edit-env rundeck
 
 # Start the service
-make up
+make start-service rundeck
 ```

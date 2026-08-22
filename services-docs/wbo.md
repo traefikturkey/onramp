@@ -48,11 +48,11 @@
 
 ```bash
 # Enable the service
-make enable wbo
+make enable-service wbo
 
 # Configure environment variables (if needed)
-make scaffold wbo
+make edit-env wbo
 
 # Start the service
-make up
+make start-service wbo
 ```

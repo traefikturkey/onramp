@@ -48,11 +48,11 @@
 
 ```bash
 # Enable the service
-make enable games-rust
+make enable-service games-rust
 
 # Configure environment variables (if needed)
-make scaffold games-rust
+make edit-env games-rust
 
 # Start the service
-make up
+make start-service games-rust
 ```

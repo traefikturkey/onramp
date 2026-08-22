@@ -53,11 +53,11 @@
 
 ```bash
 # Enable the service
-make enable wallos
+make enable-service wallos
 
 # Configure environment variables (if needed)
-make scaffold wallos
+make edit-env wallos
 
 # Start the service
-make up
+make start-service wallos
 ```

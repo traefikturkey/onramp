@@ -100,13 +100,13 @@ make up
 
 ```bash
 # Enable the service
-make enable kaizoku
+make enable-service kaizoku
 
 # Configure environment variables (if needed)
-make scaffold kaizoku
+make edit-env kaizoku
 
 # Start the service
-make up
+make start-service kaizoku
 ```
 
 ## Notes

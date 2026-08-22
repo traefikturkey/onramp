@@ -87,13 +87,13 @@ make up
 
 ```bash
 # Enable the service
-make enable speedtest-tracker
+make enable-service speedtest-tracker
 
 # Configure environment variables (if needed)
-make scaffold speedtest-tracker
+make edit-env speedtest-tracker
 
 # Start the service
-make up
+make start-service speedtest-tracker
 ```
 
 ## Notes

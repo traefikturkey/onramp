@@ -71,11 +71,11 @@ make up
 
 ```bash
 # Enable the service
-make enable youtube-dl
+make enable-service youtube-dl
 
 # Configure environment variables (if needed)
-make scaffold youtube-dl
+make edit-env youtube-dl
 
 # Start the service
-make up
+make start-service youtube-dl
 ```

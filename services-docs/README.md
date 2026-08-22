@@ -43,9 +43,9 @@ Other services that this service depends on
 ### Quick Start
 Standard commands to enable, configure, and start the service:
 ```bash
-make enable <service>
-make scaffold <service>
-make up
+make enable-service <service>
+make edit-env <service>
+make start-service <service>
 ```
 
 ### Notes

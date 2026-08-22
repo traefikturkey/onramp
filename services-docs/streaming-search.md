@@ -48,11 +48,11 @@
 
 ```bash
 # Enable the service
-make enable streaming-search
+make enable-service streaming-search
 
 # Configure environment variables (if needed)
-make scaffold streaming-search
+make edit-env streaming-search
 
 # Start the service
-make up
+make start-service streaming-search
 ```

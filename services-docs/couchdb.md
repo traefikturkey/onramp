@@ -57,11 +57,11 @@
 
 ```bash
 # Enable the service
-make enable couchdb
+make enable-service couchdb
 
 # Configure environment variables (if needed)
-make scaffold couchdb
+make edit-env couchdb
 
 # Start the service
-make up
+make start-service couchdb
 ```

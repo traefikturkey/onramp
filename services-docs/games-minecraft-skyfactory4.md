@@ -52,11 +52,11 @@
 
 ```bash
 # Enable the service
-make enable games-minecraft-skyfactory4
+make enable-service games-minecraft-skyfactory4
 
 # Configure environment variables (if needed)
-make scaffold games-minecraft-skyfactory4
+make edit-env games-minecraft-skyfactory4
 
 # Start the service
-make up
+make start-service games-minecraft-skyfactory4
 ```

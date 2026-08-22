@@ -50,11 +50,11 @@
 
 ```bash
 # Enable the service
-make enable freshrss
+make enable-service freshrss
 
 # Configure environment variables (if needed)
-make scaffold freshrss
+make edit-env freshrss
 
 # Start the service
-make up
+make start-service freshrss
 ```

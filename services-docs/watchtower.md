@@ -53,11 +53,11 @@
 
 ```bash
 # Enable the service
-make enable watchtower
+make enable-service watchtower
 
 # Configure environment variables (if needed)
-make scaffold watchtower
+make edit-env watchtower
 
 # Start the service
-make up
+make start-service watchtower
 ```

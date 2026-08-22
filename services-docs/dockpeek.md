@@ -55,11 +55,11 @@
 
 ```bash
 # Enable the service
-make enable dockpeek
+make enable-service dockpeek
 
 # Configure environment variables (if needed)
-make scaffold dockpeek
+make edit-env dockpeek
 
 # Start the service
-make up
+make start-service dockpeek
 ```

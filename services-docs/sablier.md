@@ -54,11 +54,11 @@
 
 ```bash
 # Enable the service
-make enable sablier
+make enable-service sablier
 
 # Configure environment variables (if needed)
-make scaffold sablier
+make edit-env sablier
 
 # Start the service
-make up
+make start-service sablier
 ```

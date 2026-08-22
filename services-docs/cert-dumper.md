@@ -37,11 +37,11 @@
 
 ```bash
 # Enable the service
-make enable cert-dumper
+make enable-service cert-dumper
 
 # Configure environment variables (if needed)
-make scaffold cert-dumper
+make edit-env cert-dumper
 
 # Start the service
-make up
+make start-service cert-dumper
 ```

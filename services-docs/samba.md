@@ -58,11 +58,11 @@ make up
 
 ```bash
 # Enable the service
-make enable samba
+make enable-service samba
 
 # Configure environment variables (if needed)
-make scaffold samba
+make edit-env samba
 
 # Start the service
-make up
+make start-service samba
 ```

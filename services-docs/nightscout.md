@@ -61,13 +61,13 @@ This service depends on:
 
 ```bash
 # Enable the service
-make enable nightscout
+make enable-service nightscout
 
 # Configure environment variables (if needed)
-make scaffold nightscout
+make edit-env nightscout
 
 # Start the service
-make up
+make start-service nightscout
 ```
 
 ## Notes

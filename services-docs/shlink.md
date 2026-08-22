@@ -56,11 +56,11 @@
 
 ```bash
 # Enable the service
-make enable shlink
+make enable-service shlink
 
 # Configure environment variables (if needed)
-make scaffold shlink
+make edit-env shlink
 
 # Start the service
-make up
+make start-service shlink
 ```

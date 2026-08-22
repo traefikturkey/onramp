@@ -75,11 +75,11 @@ make up
 
 ```bash
 # Enable the service
-make enable makemkv
+make enable-service makemkv
 
 # Configure environment variables (if needed)
-make scaffold makemkv
+make edit-env makemkv
 
 # Start the service
-make up
+make start-service makemkv
 ```

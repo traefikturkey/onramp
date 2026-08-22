@@ -53,11 +53,11 @@
 
 ```bash
 # Enable the service
-make enable vert
+make enable-service vert
 
 # Configure environment variables (if needed)
-make scaffold vert
+make edit-env vert
 
 # Start the service
-make up
+make start-service vert
 ```

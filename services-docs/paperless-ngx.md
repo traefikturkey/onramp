@@ -132,13 +132,13 @@ make up
 
 ```bash
 # Enable the service
-make enable paperless-ngx
+make enable-service paperless-ngx
 
 # Configure environment variables (if needed)
-make scaffold paperless-ngx
+make edit-env paperless-ngx
 
 # Start the service
-make up
+make start-service paperless-ngx
 ```
 
 ## Notes

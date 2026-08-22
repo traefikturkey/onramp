@@ -42,11 +42,11 @@
 
 ```bash
 # Enable the service
-make enable radarr-postgres
+make enable-service radarr-postgres
 
 # Configure environment variables (if needed)
-make scaffold radarr-postgres
+make edit-env radarr-postgres
 
 # Start the service
-make up
+make start-service radarr-postgres
 ```

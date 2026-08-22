@@ -51,11 +51,11 @@
 
 ```bash
 # Enable the service
-make enable seerr
+make enable-service seerr
 
 # Configure environment variables (if needed)
-make scaffold seerr
+make edit-env seerr
 
 # Start the service
-make up
+make start-service seerr
 ```

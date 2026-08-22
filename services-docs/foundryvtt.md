@@ -51,11 +51,11 @@
 
 ```bash
 # Enable the service
-make enable foundryvtt
+make enable-service foundryvtt
 
 # Configure environment variables (if needed)
-make scaffold foundryvtt
+make edit-env foundryvtt
 
 # Start the service
-make up
+make start-service foundryvtt
 ```

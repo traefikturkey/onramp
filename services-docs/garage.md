@@ -74,11 +74,11 @@
 
 ```bash
 # Enable the service
-make enable garage
+make enable-service garage
 
 # Configure environment variables (if needed)
-make scaffold garage
+make edit-env garage
 
 # Start the service
-make up
+make start-service garage
 ```

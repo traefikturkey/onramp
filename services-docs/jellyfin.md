@@ -106,11 +106,11 @@ make up
 
 ```bash
 # Enable the service
-make enable jellyfin
+make enable-service jellyfin
 
 # Configure environment variables (if needed)
-make scaffold jellyfin
+make edit-env jellyfin
 
 # Start the service
-make up
+make start-service jellyfin
 ```
