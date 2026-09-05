@@ -113,13 +113,13 @@ make up
 
 ```bash
 # Enable the service
-make enable semaphore
+make enable-service semaphore
 
 # Configure environment variables (if needed)
-make scaffold semaphore
+make edit-env semaphore
 
 # Start the service
-make up
+make start-service semaphore
 ```
 
 ## Notes

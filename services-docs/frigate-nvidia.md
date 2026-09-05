@@ -82,11 +82,11 @@ make up
 
 ```bash
 # Enable the service
-make enable frigate-nvidia
+make enable-service frigate-nvidia
 
 # Configure environment variables (if needed)
-make scaffold frigate-nvidia
+make edit-env frigate-nvidia
 
 # Start the service
-make up
+make start-service frigate-nvidia
 ```

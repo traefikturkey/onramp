@@ -72,11 +72,11 @@ make up
 
 ```bash
 # Enable the service
-make enable owncast
+make enable-service owncast
 
 # Configure environment variables (if needed)
-make scaffold owncast
+make edit-env owncast
 
 # Start the service
-make up
+make start-service owncast
 ```

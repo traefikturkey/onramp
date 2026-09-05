@@ -56,11 +56,11 @@
 
 ```bash
 # Enable the service
-make enable pterodactyl-panel
+make enable-service pterodactyl-panel
 
 # Configure environment variables (if needed)
-make scaffold pterodactyl-panel
+make edit-env pterodactyl-panel
 
 # Start the service
-make up
+make start-service pterodactyl-panel
 ```

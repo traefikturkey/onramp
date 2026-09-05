@@ -71,11 +71,11 @@ make up
 
 ```bash
 # Enable the service
-make enable games-minecraft
+make enable-service games-minecraft
 
 # Configure environment variables (if needed)
-make scaffold games-minecraft
+make edit-env games-minecraft
 
 # Start the service
-make up
+make start-service games-minecraft
 ```

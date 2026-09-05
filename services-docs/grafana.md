@@ -48,11 +48,11 @@
 
 ```bash
 # Enable the service
-make enable grafana
+make enable-service grafana
 
 # Configure environment variables (if needed)
-make scaffold grafana
+make edit-env grafana
 
 # Start the service
-make up
+make start-service grafana
 ```

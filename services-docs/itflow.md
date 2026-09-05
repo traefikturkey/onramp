@@ -79,13 +79,13 @@ make up
 
 ```bash
 # Enable the service
-make enable itflow
+make enable-service itflow
 
 # Configure environment variables (if needed)
-make scaffold itflow
+make edit-env itflow
 
 # Start the service
-make up
+make start-service itflow
 ```
 
 ## Notes

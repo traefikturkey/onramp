@@ -41,11 +41,11 @@
 
 ```bash
 # Enable the service
-make enable heimdall
+make enable-service heimdall
 
 # Configure environment variables (if needed)
-make scaffold heimdall
+make edit-env heimdall
 
 # Start the service
-make up
+make start-service heimdall
 ```

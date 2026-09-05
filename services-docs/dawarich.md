@@ -88,13 +88,13 @@ make up
 
 ```bash
 # Enable the service
-make enable dawarich
+make enable-service dawarich
 
 # Configure environment variables (if needed)
-make scaffold dawarich
+make edit-env dawarich
 
 # Start the service
-make up
+make start-service dawarich
 ```
 
 ## Notes

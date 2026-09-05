@@ -83,13 +83,13 @@ make up
 
 ```bash
 # Enable the service
-make enable spacebin
+make enable-service spacebin
 
 # Configure environment variables (if needed)
-make scaffold spacebin
+make edit-env spacebin
 
 # Start the service
-make up
+make start-service spacebin
 ```
 
 ## Notes

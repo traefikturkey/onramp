@@ -52,11 +52,11 @@
 
 ```bash
 # Enable the service
-make enable dashy
+make enable-service dashy
 
 # Configure environment variables (if needed)
-make scaffold dashy
+make edit-env dashy
 
 # Start the service
-make up
+make start-service dashy
 ```

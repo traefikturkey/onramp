@@ -48,11 +48,11 @@
 
 ```bash
 # Enable the service
-make enable nebula-sync
+make enable-service nebula-sync
 
 # Configure environment variables (if needed)
-make scaffold nebula-sync
+make edit-env nebula-sync
 
 # Start the service
-make up
+make start-service nebula-sync
 ```

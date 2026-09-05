@@ -74,11 +74,11 @@
 
 ```bash
 # Enable the service
-make enable nutify
+make enable-service nutify
 
 # Configure environment variables (if needed)
-make scaffold nutify
+make edit-env nutify
 
 # Start the service
-make up
+make start-service nutify
 ```

@@ -50,11 +50,11 @@
 
 ```bash
 # Enable the service
-make enable firefly-data-importer
+make enable-service firefly-data-importer
 
 # Configure environment variables (if needed)
-make scaffold firefly-data-importer
+make edit-env firefly-data-importer
 
 # Start the service
-make up
+make start-service firefly-data-importer
 ```

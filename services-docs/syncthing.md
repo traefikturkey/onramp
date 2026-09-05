@@ -80,11 +80,11 @@ make up
 
 ```bash
 # Enable the service
-make enable syncthing
+make enable-service syncthing
 
 # Configure environment variables (if needed)
-make scaffold syncthing
+make edit-env syncthing
 
 # Start the service
-make up
+make start-service syncthing
 ```

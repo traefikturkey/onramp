@@ -82,11 +82,11 @@ make up
 
 ```bash
 # Enable the service
-make enable radarr
+make enable-service radarr
 
 # Configure environment variables (if needed)
-make scaffold radarr
+make edit-env radarr
 
 # Start the service
-make up
+make start-service radarr
 ```

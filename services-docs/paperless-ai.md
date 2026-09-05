@@ -53,11 +53,11 @@
 
 ```bash
 # Enable the service
-make enable paperless-ai
+make enable-service paperless-ai
 
 # Configure environment variables (if needed)
-make scaffold paperless-ai
+make edit-env paperless-ai
 
 # Start the service
-make up
+make start-service paperless-ai
 ```

@@ -51,11 +51,11 @@
 
 ```bash
 # Enable the service
-make enable remotely
+make enable-service remotely
 
 # Configure environment variables (if needed)
-make scaffold remotely
+make edit-env remotely
 
 # Start the service
-make up
+make start-service remotely
 ```

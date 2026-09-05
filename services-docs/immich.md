@@ -108,13 +108,13 @@ make up
 
 ```bash
 # Enable the service
-make enable immich
+make enable-service immich
 
 # Configure environment variables (if needed)
-make scaffold immich
+make edit-env immich
 
 # Start the service
-make up
+make start-service immich
 ```
 
 ## Notes

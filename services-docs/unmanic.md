@@ -91,11 +91,11 @@ make up
 
 ```bash
 # Enable the service
-make enable unmanic
+make enable-service unmanic
 
 # Configure environment variables (if needed)
-make scaffold unmanic
+make edit-env unmanic
 
 # Start the service
-make up
+make start-service unmanic
 ```

@@ -58,11 +58,11 @@
 
 ```bash
 # Enable the service
-make enable games-satisfactory
+make enable-service games-satisfactory
 
 # Configure environment variables (if needed)
-make scaffold games-satisfactory
+make edit-env games-satisfactory
 
 # Start the service
-make up
+make start-service games-satisfactory
 ```

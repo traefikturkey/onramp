@@ -55,11 +55,11 @@
 
 ```bash
 # Enable the service
-make enable lidify
+make enable-service lidify
 
 # Configure environment variables (if needed)
-make scaffold lidify
+make edit-env lidify
 
 # Start the service
-make up
+make start-service lidify
 ```

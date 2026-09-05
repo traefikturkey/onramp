@@ -83,13 +83,13 @@ make up
 
 ```bash
 # Enable the service
-make enable vikunja
+make enable-service vikunja
 
 # Configure environment variables (if needed)
-make scaffold vikunja
+make edit-env vikunja
 
 # Start the service
-make up
+make start-service vikunja
 ```
 
 ## Notes

@@ -56,11 +56,11 @@
 
 ```bash
 # Enable the service
-make enable comfyui
+make enable-service comfyui
 
 # Configure environment variables (if needed)
-make scaffold comfyui
+make edit-env comfyui
 
 # Start the service
-make up
+make start-service comfyui
 ```

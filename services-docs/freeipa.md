@@ -50,11 +50,11 @@
 
 ```bash
 # Enable the service
-make enable freeipa
+make enable-service freeipa
 
 # Configure environment variables (if needed)
-make scaffold freeipa
+make edit-env freeipa
 
 # Start the service
-make up
+make start-service freeipa
 ```

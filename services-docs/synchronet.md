@@ -75,11 +75,11 @@
 
 ```bash
 # Enable the service
-make enable synchronet
+make enable-service synchronet
 
 # Configure environment variables (if needed)
-make scaffold synchronet
+make edit-env synchronet
 
 # Start the service
-make up
+make start-service synchronet
 ```

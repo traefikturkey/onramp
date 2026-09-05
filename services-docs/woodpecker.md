@@ -60,13 +60,13 @@ This service depends on:
 
 ```bash
 # Enable the service
-make enable woodpecker
+make enable-service woodpecker
 
 # Configure environment variables (if needed)
-make scaffold woodpecker
+make edit-env woodpecker
 
 # Start the service
-make up
+make start-service woodpecker
 ```
 
 ## Notes

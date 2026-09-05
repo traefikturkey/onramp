@@ -66,11 +66,11 @@
 
 ```bash
 # Enable the service
-make enable games-project-zomboid
+make enable-service games-project-zomboid
 
 # Configure environment variables (if needed)
-make scaffold games-project-zomboid
+make edit-env games-project-zomboid
 
 # Start the service
-make up
+make start-service games-project-zomboid
 ```

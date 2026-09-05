@@ -79,13 +79,13 @@ make up
 
 ```bash
 # Enable the service
-make enable healthchecks
+make enable-service healthchecks
 
 # Configure environment variables (if needed)
-make scaffold healthchecks
+make edit-env healthchecks
 
 # Start the service
-make up
+make start-service healthchecks
 ```
 
 ## Notes

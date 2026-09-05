@@ -58,11 +58,11 @@
 
 ```bash
 # Enable the service
-make enable stirling-pdf
+make enable-service stirling-pdf
 
 # Configure environment variables (if needed)
-make scaffold stirling-pdf
+make edit-env stirling-pdf
 
 # Start the service
-make up
+make start-service stirling-pdf
 ```

@@ -102,13 +102,13 @@ make up
 
 ```bash
 # Enable the service
-make enable paperless-ngx-postgres
+make enable-service paperless-ngx-postgres
 
 # Configure environment variables (if needed)
-make scaffold paperless-ngx-postgres
+make edit-env paperless-ngx-postgres
 
 # Start the service
-make up
+make start-service paperless-ngx-postgres
 ```
 
 ## Notes

@@ -73,11 +73,11 @@ make up
 
 ```bash
 # Enable the service
-make enable obsidian
+make enable-service obsidian
 
 # Configure environment variables (if needed)
-make scaffold obsidian
+make edit-env obsidian
 
 # Start the service
-make up
+make start-service obsidian
 ```

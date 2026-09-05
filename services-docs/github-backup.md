@@ -51,11 +51,11 @@
 
 ```bash
 # Enable the service
-make enable github-backup
+make enable-service github-backup
 
 # Configure environment variables (if needed)
-make scaffold github-backup
+make edit-env github-backup
 
 # Start the service
-make up
+make start-service github-backup
 ```

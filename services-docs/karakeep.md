@@ -75,13 +75,13 @@
 
 ```bash
 # Enable the service
-make enable karakeep
+make enable-service karakeep
 
 # Configure environment variables (if needed)
-make scaffold karakeep
+make edit-env karakeep
 
 # Start the service
-make up
+make start-service karakeep
 ```
 
 ## Notes

@@ -44,11 +44,11 @@
 
 ```bash
 # Enable the service
-make enable docker-proxy
+make enable-service docker-proxy
 
 # Configure environment variables (if needed)
-make scaffold docker-proxy
+make edit-env docker-proxy
 
 # Start the service
-make up
+make start-service docker-proxy
 ```

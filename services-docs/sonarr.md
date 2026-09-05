@@ -92,11 +92,11 @@ make up
 
 ```bash
 # Enable the service
-make enable sonarr
+make enable-service sonarr
 
 # Configure environment variables (if needed)
-make scaffold sonarr
+make edit-env sonarr
 
 # Start the service
-make up
+make start-service sonarr
 ```

@@ -55,11 +55,11 @@
 
 ```bash
 # Enable the service
-make enable huginn
+make enable-service huginn
 
 # Configure environment variables (if needed)
-make scaffold huginn
+make edit-env huginn
 
 # Start the service
-make up
+make start-service huginn
 ```

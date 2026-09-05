@@ -50,11 +50,11 @@
 
 ```bash
 # Enable the service
-make enable rackula
+make enable-service rackula
 
 # Configure environment variables (if needed)
-make scaffold rackula
+make edit-env rackula
 
 # Start the service
-make up
+make start-service rackula
 ```

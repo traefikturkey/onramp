@@ -49,11 +49,11 @@
 
 ```bash
 # Enable the service
-make enable super-productivity
+make enable-service super-productivity
 
 # Configure environment variables (if needed)
-make scaffold super-productivity
+make edit-env super-productivity
 
 # Start the service
-make up
+make start-service super-productivity
 ```

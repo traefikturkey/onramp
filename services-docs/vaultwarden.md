@@ -61,11 +61,11 @@
 
 ```bash
 # Enable the service
-make enable vaultwarden
+make enable-service vaultwarden
 
 # Configure environment variables (if needed)
-make scaffold vaultwarden
+make edit-env vaultwarden
 
 # Start the service
-make up
+make start-service vaultwarden
 ```

@@ -47,11 +47,11 @@
 
 ```bash
 # Enable the service
-make enable postman
+make enable-service postman
 
 # Configure environment variables (if needed)
-make scaffold postman
+make edit-env postman
 
 # Start the service
-make up
+make start-service postman
 ```

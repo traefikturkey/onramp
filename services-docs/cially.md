@@ -69,13 +69,13 @@ This service depends on:
 
 ```bash
 # Enable the service
-make enable cially
+make enable-service cially
 
 # Configure environment variables (if needed)
-make scaffold cially
+make edit-env cially
 
 # Start the service
-make up
+make start-service cially
 ```
 
 ## Notes

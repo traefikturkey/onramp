@@ -68,11 +68,11 @@
 
 ```bash
 # Enable the service
-make enable lubelog
+make enable-service lubelog
 
 # Configure environment variables (if needed)
-make scaffold lubelog
+make edit-env lubelog
 
 # Start the service
-make up
+make start-service lubelog
 ```

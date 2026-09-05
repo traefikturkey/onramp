@@ -55,11 +55,11 @@
 
 ```bash
 # Enable the service
-make enable gluetun
+make enable-service gluetun
 
 # Configure environment variables (if needed)
-make scaffold gluetun
+make edit-env gluetun
 
 # Start the service
-make up
+make start-service gluetun
 ```

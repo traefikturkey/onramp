@@ -56,11 +56,11 @@
 
 ```bash
 # Enable the service
-make enable rwmarkable
+make enable-service rwmarkable
 
 # Configure environment variables (if needed)
-make scaffold rwmarkable
+make edit-env rwmarkable
 
 # Start the service
-make up
+make start-service rwmarkable
 ```

@@ -49,11 +49,11 @@
 
 ```bash
 # Enable the service
-make enable homarr
+make enable-service homarr
 
 # Configure environment variables (if needed)
-make scaffold homarr
+make edit-env homarr
 
 # Start the service
-make up
+make start-service homarr
 ```

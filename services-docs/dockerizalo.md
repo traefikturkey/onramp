@@ -60,13 +60,13 @@ This service depends on:
 
 ```bash
 # Enable the service
-make enable dockerizalo
+make enable-service dockerizalo
 
 # Configure environment variables (if needed)
-make scaffold dockerizalo
+make edit-env dockerizalo
 
 # Start the service
-make up
+make start-service dockerizalo
 ```
 
 ## Notes

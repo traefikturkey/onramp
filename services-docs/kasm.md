@@ -52,11 +52,11 @@
 
 ```bash
 # Enable the service
-make enable kasm
+make enable-service kasm
 
 # Configure environment variables (if needed)
-make scaffold kasm
+make edit-env kasm
 
 # Start the service
-make up
+make start-service kasm
 ```

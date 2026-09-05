@@ -65,13 +65,13 @@ This service depends on:
 
 ```bash
 # Enable the service
-make enable nocodb
+make enable-service nocodb
 
 # Configure environment variables (if needed)
-make scaffold nocodb
+make edit-env nocodb
 
 # Start the service
-make up
+make start-service nocodb
 ```
 
 ## Notes

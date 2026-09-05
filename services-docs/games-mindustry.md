@@ -43,11 +43,11 @@
 
 ```bash
 # Enable the service
-make enable games-mindustry
+make enable-service games-mindustry
 
 # Configure environment variables (if needed)
-make scaffold games-mindustry
+make edit-env games-mindustry
 
 # Start the service
-make up
+make start-service games-mindustry
 ```

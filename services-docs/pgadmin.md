@@ -51,11 +51,11 @@
 
 ```bash
 # Enable the service
-make enable pgadmin
+make enable-service pgadmin
 
 # Configure environment variables (if needed)
-make scaffold pgadmin
+make edit-env pgadmin
 
 # Start the service
-make up
+make start-service pgadmin
 ```

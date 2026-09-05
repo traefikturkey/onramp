@@ -73,11 +73,11 @@ make up
 
 ```bash
 # Enable the service
-make enable komga
+make enable-service komga
 
 # Configure environment variables (if needed)
-make scaffold komga
+make edit-env komga
 
 # Start the service
-make up
+make start-service komga
 ```

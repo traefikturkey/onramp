@@ -47,11 +47,11 @@
 
 ```bash
 # Enable the service
-make enable games-factorio
+make enable-service games-factorio
 
 # Configure environment variables (if needed)
-make scaffold games-factorio
+make edit-env games-factorio
 
 # Start the service
-make up
+make start-service games-factorio
 ```

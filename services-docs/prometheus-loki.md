@@ -49,13 +49,13 @@ This service depends on:
 
 ```bash
 # Enable the service
-make enable prometheus-loki
+make enable-service prometheus-loki
 
 # Configure environment variables (if needed)
-make scaffold prometheus-loki
+make edit-env prometheus-loki
 
 # Start the service
-make up
+make start-service prometheus-loki
 ```
 
 ## Notes

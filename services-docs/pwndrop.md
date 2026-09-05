@@ -50,11 +50,11 @@
 
 ```bash
 # Enable the service
-make enable pwndrop
+make enable-service pwndrop
 
 # Configure environment variables (if needed)
-make scaffold pwndrop
+make edit-env pwndrop
 
 # Start the service
-make up
+make start-service pwndrop
 ```

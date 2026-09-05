@@ -26,11 +26,11 @@
 
 ```bash
 # Enable the service
-make enable prometheus-node-exporter
+make enable-service prometheus-node-exporter
 
 # Configure environment variables (if needed)
-make scaffold prometheus-node-exporter
+make edit-env prometheus-node-exporter
 
 # Start the service
-make up
+make start-service prometheus-node-exporter
 ```

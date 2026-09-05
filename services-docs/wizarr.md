@@ -54,11 +54,11 @@
 
 ```bash
 # Enable the service
-make enable wizarr
+make enable-service wizarr
 
 # Configure environment variables (if needed)
-make scaffold wizarr
+make edit-env wizarr
 
 # Start the service
-make up
+make start-service wizarr
 ```

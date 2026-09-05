@@ -103,13 +103,13 @@ make up
 
 ```bash
 # Enable the service
-make enable docmost
+make enable-service docmost
 
 # Configure environment variables (if needed)
-make scaffold docmost
+make edit-env docmost
 
 # Start the service
-make up
+make start-service docmost
 ```
 
 ## Notes

@@ -75,11 +75,11 @@ make up
 
 ```bash
 # Enable the service
-make enable photoprism
+make enable-service photoprism
 
 # Configure environment variables (if needed)
-make scaffold photoprism
+make edit-env photoprism
 
 # Start the service
-make up
+make start-service photoprism
 ```

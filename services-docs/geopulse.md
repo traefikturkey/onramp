@@ -88,13 +88,13 @@
 
 ```bash
 # Enable the service
-make enable geopulse
+make enable-service geopulse
 
 # Configure environment variables (if needed)
-make scaffold geopulse
+make edit-env geopulse
 
 # Start the service
-make up
+make start-service geopulse
 ```
 
 ## Notes

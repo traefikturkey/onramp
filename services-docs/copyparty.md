@@ -73,11 +73,11 @@ make up
 
 ```bash
 # Enable the service
-make enable copyparty
+make enable-service copyparty
 
 # Configure environment variables (if needed)
-make scaffold copyparty
+make edit-env copyparty
 
 # Start the service
-make up
+make start-service copyparty
 ```

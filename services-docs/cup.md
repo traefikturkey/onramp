@@ -55,11 +55,11 @@
 
 ```bash
 # Enable the service
-make enable cup
+make enable-service cup
 
 # Configure environment variables (if needed)
-make scaffold cup
+make edit-env cup
 
 # Start the service
-make up
+make start-service cup
 ```

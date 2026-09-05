@@ -56,13 +56,13 @@
 
 ```bash
 # Enable the service
-make enable flightcheck
+make enable-service flightcheck
 
 # Configure environment variables (if needed)
-make scaffold flightcheck
+make edit-env flightcheck
 
 # Start the service
-make up
+make start-service flightcheck
 ```
 
 ## Notes

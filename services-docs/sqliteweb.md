@@ -54,11 +54,11 @@
 
 ```bash
 # Enable the service
-make enable sqliteweb
+make enable-service sqliteweb
 
 # Configure environment variables (if needed)
-make scaffold sqliteweb
+make edit-env sqliteweb
 
 # Start the service
-make up
+make start-service sqliteweb
 ```

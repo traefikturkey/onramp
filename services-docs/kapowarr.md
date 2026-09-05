@@ -76,11 +76,11 @@ make up
 
 ```bash
 # Enable the service
-make enable kapowarr
+make enable-service kapowarr
 
 # Configure environment variables (if needed)
-make scaffold kapowarr
+make edit-env kapowarr
 
 # Start the service
-make up
+make start-service kapowarr
 ```

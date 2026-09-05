@@ -46,11 +46,11 @@
 
 ```bash
 # Enable the service
-make enable olivetin
+make enable-service olivetin
 
 # Configure environment variables (if needed)
-make scaffold olivetin
+make edit-env olivetin
 
 # Start the service
-make up
+make start-service olivetin
 ```

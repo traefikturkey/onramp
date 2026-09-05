@@ -52,11 +52,11 @@
 
 ```bash
 # Enable the service
-make enable linkding
+make enable-service linkding
 
 # Configure environment variables (if needed)
-make scaffold linkding
+make edit-env linkding
 
 # Start the service
-make up
+make start-service linkding
 ```

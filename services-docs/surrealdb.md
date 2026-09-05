@@ -56,11 +56,11 @@
 
 ```bash
 # Enable the service
-make enable surrealdb
+make enable-service surrealdb
 
 # Configure environment variables (if needed)
-make scaffold surrealdb
+make edit-env surrealdb
 
 # Start the service
-make up
+make start-service surrealdb
 ```

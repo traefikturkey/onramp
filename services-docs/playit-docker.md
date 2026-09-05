@@ -42,11 +42,11 @@
 
 ```bash
 # Enable the service
-make enable playit-docker
+make enable-service playit-docker
 
 # Configure environment variables (if needed)
-make scaffold playit-docker
+make edit-env playit-docker
 
 # Start the service
-make up
+make start-service playit-docker
 ```

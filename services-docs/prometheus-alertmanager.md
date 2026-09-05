@@ -45,11 +45,11 @@
 
 ```bash
 # Enable the service
-make enable prometheus-alertmanager
+make enable-service prometheus-alertmanager
 
 # Configure environment variables (if needed)
-make scaffold prometheus-alertmanager
+make edit-env prometheus-alertmanager
 
 # Start the service
-make up
+make start-service prometheus-alertmanager
 ```

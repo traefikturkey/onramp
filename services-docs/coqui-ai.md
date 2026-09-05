@@ -48,11 +48,11 @@
 
 ```bash
 # Enable the service
-make enable coqui-ai
+make enable-service coqui-ai
 
 # Configure environment variables (if needed)
-make scaffold coqui-ai
+make edit-env coqui-ai
 
 # Start the service
-make up
+make start-service coqui-ai
 ```

@@ -97,11 +97,11 @@ make up
 
 ```bash
 # Enable the service
-make enable minio
+make enable-service minio
 
 # Configure environment variables (if needed)
-make scaffold minio
+make edit-env minio
 
 # Start the service
-make up
+make start-service minio
 ```

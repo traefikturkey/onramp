@@ -134,11 +134,11 @@ make up
 
 ```bash
 # Enable the service
-make enable plex
+make enable-service plex
 
 # Configure environment variables (if needed)
-make scaffold plex
+make edit-env plex
 
 # Start the service
-make up
+make start-service plex
 ```

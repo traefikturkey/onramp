@@ -56,11 +56,11 @@
 
 ```bash
 # Enable the service
-make enable gitlab
+make enable-service gitlab
 
 # Configure environment variables (if needed)
-make scaffold gitlab
+make edit-env gitlab
 
 # Start the service
-make up
+make start-service gitlab
 ```

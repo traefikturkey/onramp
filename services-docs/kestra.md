@@ -55,11 +55,11 @@
 
 ```bash
 # Enable the service
-make enable kestra
+make enable-service kestra
 
 # Configure environment variables (if needed)
-make scaffold kestra
+make edit-env kestra
 
 # Start the service
-make up
+make start-service kestra
 ```

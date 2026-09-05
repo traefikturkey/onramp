@@ -60,11 +60,11 @@
 
 ```bash
 # Enable the service
-make enable frigate-coral
+make enable-service frigate-coral
 
 # Configure environment variables (if needed)
-make scaffold frigate-coral
+make edit-env frigate-coral
 
 # Start the service
-make up
+make start-service frigate-coral
 ```

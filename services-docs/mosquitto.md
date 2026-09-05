@@ -45,11 +45,11 @@
 
 ```bash
 # Enable the service
-make enable mosquitto
+make enable-service mosquitto
 
 # Configure environment variables (if needed)
-make scaffold mosquitto
+make edit-env mosquitto
 
 # Start the service
-make up
+make start-service mosquitto
 ```

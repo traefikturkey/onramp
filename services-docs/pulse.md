@@ -53,11 +53,11 @@
 
 ```bash
 # Enable the service
-make enable pulse
+make enable-service pulse
 
 # Configure environment variables (if needed)
-make scaffold pulse
+make edit-env pulse
 
 # Start the service
-make up
+make start-service pulse
 ```

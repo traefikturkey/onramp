@@ -49,11 +49,11 @@
 
 ```bash
 # Enable the service
-make enable go2rtc
+make enable-service go2rtc
 
 # Configure environment variables (if needed)
-make scaffold go2rtc
+make edit-env go2rtc
 
 # Start the service
-make up
+make start-service go2rtc
 ```

@@ -99,13 +99,13 @@ make up
 
 ```bash
 # Enable the service
-make enable joplin
+make enable-service joplin
 
 # Configure environment variables (if needed)
-make scaffold joplin
+make edit-env joplin
 
 # Start the service
-make up
+make start-service joplin
 ```
 
 ## Notes

@@ -70,11 +70,11 @@ make up
 
 ```bash
 # Enable the service
-make enable nzbget
+make enable-service nzbget
 
 # Configure environment variables (if needed)
-make scaffold nzbget
+make edit-env nzbget
 
 # Start the service
-make up
+make start-service nzbget
 ```

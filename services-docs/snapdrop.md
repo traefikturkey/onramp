@@ -49,11 +49,11 @@
 
 ```bash
 # Enable the service
-make enable snapdrop
+make enable-service snapdrop
 
 # Configure environment variables (if needed)
-make scaffold snapdrop
+make edit-env snapdrop
 
 # Start the service
-make up
+make start-service snapdrop
 ```

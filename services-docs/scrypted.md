@@ -54,11 +54,11 @@
 
 ```bash
 # Enable the service
-make enable scrypted
+make enable-service scrypted
 
 # Configure environment variables (if needed)
-make scaffold scrypted
+make edit-env scrypted
 
 # Start the service
-make up
+make start-service scrypted
 ```

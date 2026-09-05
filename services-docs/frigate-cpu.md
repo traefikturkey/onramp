@@ -80,11 +80,11 @@ make up
 
 ```bash
 # Enable the service
-make enable frigate-cpu
+make enable-service frigate-cpu
 
 # Configure environment variables (if needed)
-make scaffold frigate-cpu
+make edit-env frigate-cpu
 
 # Start the service
-make up
+make start-service frigate-cpu
 ```

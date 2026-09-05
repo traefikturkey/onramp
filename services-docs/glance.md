@@ -53,11 +53,11 @@
 
 ```bash
 # Enable the service
-make enable glance
+make enable-service glance
 
 # Configure environment variables (if needed)
-make scaffold glance
+make edit-env glance
 
 # Start the service
-make up
+make start-service glance
 ```

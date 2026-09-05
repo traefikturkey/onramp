@@ -54,11 +54,11 @@
 
 ```bash
 # Enable the service
-make enable wireguard-server
+make enable-service wireguard-server
 
 # Configure environment variables (if needed)
-make scaffold wireguard-server
+make edit-env wireguard-server
 
 # Start the service
-make up
+make start-service wireguard-server
 ```

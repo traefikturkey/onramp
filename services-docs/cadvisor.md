@@ -51,11 +51,11 @@
 
 ```bash
 # Enable the service
-make enable cadvisor
+make enable-service cadvisor
 
 # Configure environment variables (if needed)
-make scaffold cadvisor
+make edit-env cadvisor
 
 # Start the service
-make up
+make start-service cadvisor
 ```

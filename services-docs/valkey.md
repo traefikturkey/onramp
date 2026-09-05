@@ -50,11 +50,11 @@
 
 ```bash
 # Enable the service
-make enable valkey
+make enable-service valkey
 
 # Configure environment variables (if needed)
-make scaffold valkey
+make edit-env valkey
 
 # Start the service
-make up
+make start-service valkey
 ```

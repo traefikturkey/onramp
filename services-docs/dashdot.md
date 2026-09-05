@@ -48,11 +48,11 @@
 
 ```bash
 # Enable the service
-make enable dashdot
+make enable-service dashdot
 
 # Configure environment variables (if needed)
-make scaffold dashdot
+make edit-env dashdot
 
 # Start the service
-make up
+make start-service dashdot
 ```

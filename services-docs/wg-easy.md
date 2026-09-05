@@ -54,11 +54,11 @@
 
 ```bash
 # Enable the service
-make enable wg-easy
+make enable-service wg-easy
 
 # Configure environment variables (if needed)
-make scaffold wg-easy
+make edit-env wg-easy
 
 # Start the service
-make up
+make start-service wg-easy
 ```

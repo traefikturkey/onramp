@@ -69,11 +69,11 @@ make up
 
 ```bash
 # Enable the service
-make enable synapse
+make enable-service synapse
 
 # Configure environment variables (if needed)
-make scaffold synapse
+make edit-env synapse
 
 # Start the service
-make up
+make start-service synapse
 ```

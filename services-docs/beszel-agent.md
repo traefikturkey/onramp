@@ -44,11 +44,11 @@
 
 ```bash
 # Enable the service
-make enable beszel-agent
+make enable-service beszel-agent
 
 # Configure environment variables (if needed)
-make scaffold beszel-agent
+make edit-env beszel-agent
 
 # Start the service
-make up
+make start-service beszel-agent
 ```

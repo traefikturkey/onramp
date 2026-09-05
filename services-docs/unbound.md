@@ -40,11 +40,11 @@
 
 ```bash
 # Enable the service
-make enable unbound
+make enable-service unbound
 
 # Configure environment variables (if needed)
-make scaffold unbound
+make edit-env unbound
 
 # Start the service
-make up
+make start-service unbound
 ```

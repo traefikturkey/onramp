@@ -70,11 +70,11 @@ make up
 
 ```bash
 # Enable the service
-make enable homebox
+make enable-service homebox
 
 # Configure environment variables (if needed)
-make scaffold homebox
+make edit-env homebox
 
 # Start the service
-make up
+make start-service homebox
 ```

@@ -52,11 +52,11 @@
 
 ```bash
 # Enable the service
-make enable ittools
+make enable-service ittools
 
 # Configure environment variables (if needed)
-make scaffold ittools
+make edit-env ittools
 
 # Start the service
-make up
+make start-service ittools
 ```

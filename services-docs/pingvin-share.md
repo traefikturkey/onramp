@@ -53,11 +53,11 @@
 
 ```bash
 # Enable the service
-make enable pingvin-share
+make enable-service pingvin-share
 
 # Configure environment variables (if needed)
-make scaffold pingvin-share
+make edit-env pingvin-share
 
 # Start the service
-make up
+make start-service pingvin-share
 ```

@@ -99,13 +99,13 @@ make up
 
 ```bash
 # Enable the service
-make enable booklore
+make enable-service booklore
 
 # Configure environment variables (if needed)
-make scaffold booklore
+make edit-env booklore
 
 # Start the service
-make up
+make start-service booklore
 ```
 
 ## Notes

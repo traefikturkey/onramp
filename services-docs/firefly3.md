@@ -106,13 +106,13 @@ make up
 
 ```bash
 # Enable the service
-make enable firefly3
+make enable-service firefly3
 
 # Configure environment variables (if needed)
-make scaffold firefly3
+make edit-env firefly3
 
 # Start the service
-make up
+make start-service firefly3
 ```
 
 ## Notes

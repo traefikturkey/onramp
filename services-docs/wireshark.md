@@ -52,11 +52,11 @@
 
 ```bash
 # Enable the service
-make enable wireshark
+make enable-service wireshark
 
 # Configure environment variables (if needed)
-make scaffold wireshark
+make edit-env wireshark
 
 # Start the service
-make up
+make start-service wireshark
 ```

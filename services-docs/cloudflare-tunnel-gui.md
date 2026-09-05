@@ -48,11 +48,11 @@
 
 ```bash
 # Enable the service
-make enable cloudflare-tunnel-gui
+make enable-service cloudflare-tunnel-gui
 
 # Configure environment variables (if needed)
-make scaffold cloudflare-tunnel-gui
+make edit-env cloudflare-tunnel-gui
 
 # Start the service
-make up
+make start-service cloudflare-tunnel-gui
 ```

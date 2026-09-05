@@ -70,11 +70,11 @@ make up
 
 ```bash
 # Enable the service
-make enable qdirstat
+make enable-service qdirstat
 
 # Configure environment variables (if needed)
-make scaffold qdirstat
+make edit-env qdirstat
 
 # Start the service
-make up
+make start-service qdirstat
 ```

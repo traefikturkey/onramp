@@ -51,11 +51,11 @@
 
 ```bash
 # Enable the service
-make enable maintainerr
+make enable-service maintainerr
 
 # Configure environment variables (if needed)
-make scaffold maintainerr
+make edit-env maintainerr
 
 # Start the service
-make up
+make start-service maintainerr
 ```

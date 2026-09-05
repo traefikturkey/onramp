@@ -53,11 +53,11 @@
 
 ```bash
 # Enable the service
-make enable chromadb
+make enable-service chromadb
 
 # Configure environment variables (if needed)
-make scaffold chromadb
+make edit-env chromadb
 
 # Start the service
-make up
+make start-service chromadb
 ```

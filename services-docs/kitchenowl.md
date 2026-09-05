@@ -51,13 +51,13 @@ This service depends on:
 
 ```bash
 # Enable the service
-make enable kitchenowl
+make enable-service kitchenowl
 
 # Configure environment variables (if needed)
-make scaffold kitchenowl
+make edit-env kitchenowl
 
 # Start the service
-make up
+make start-service kitchenowl
 ```
 
 ## Notes

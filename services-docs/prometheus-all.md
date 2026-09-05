@@ -64,13 +64,13 @@
 
 ```bash
 # Enable the service
-make enable prometheus-all
+make enable-service prometheus-all
 
 # Configure environment variables (if needed)
-make scaffold prometheus-all
+make edit-env prometheus-all
 
 # Start the service
-make up
+make start-service prometheus-all
 ```
 
 ## Notes

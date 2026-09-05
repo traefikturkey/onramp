@@ -52,11 +52,11 @@
 
 ```bash
 # Enable the service
-make enable dozzle
+make enable-service dozzle
 
 # Configure environment variables (if needed)
-make scaffold dozzle
+make edit-env dozzle
 
 # Start the service
-make up
+make start-service dozzle
 ```

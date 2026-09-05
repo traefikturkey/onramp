@@ -33,11 +33,11 @@
 
 ```bash
 # Enable the service
-make enable crowdsec-traefik-bouncer
+make enable-service crowdsec-traefik-bouncer
 
 # Configure environment variables (if needed)
-make scaffold crowdsec-traefik-bouncer
+make edit-env crowdsec-traefik-bouncer
 
 # Start the service
-make up
+make start-service crowdsec-traefik-bouncer
 ```

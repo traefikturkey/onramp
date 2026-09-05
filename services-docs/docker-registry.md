@@ -58,11 +58,11 @@
 
 ```bash
 # Enable the service
-make enable docker-registry
+make enable-service docker-registry
 
 # Configure environment variables (if needed)
-make scaffold docker-registry
+make edit-env docker-registry
 
 # Start the service
-make up
+make start-service docker-registry
 ```

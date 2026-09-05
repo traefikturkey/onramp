@@ -76,11 +76,11 @@ make up
 
 ```bash
 # Enable the service
-make enable influxdb
+make enable-service influxdb
 
 # Configure environment variables (if needed)
-make scaffold influxdb
+make edit-env influxdb
 
 # Start the service
-make up
+make start-service influxdb
 ```

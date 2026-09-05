@@ -49,11 +49,11 @@
 
 ```bash
 # Enable the service
-make enable excalidraw
+make enable-service excalidraw
 
 # Configure environment variables (if needed)
-make scaffold excalidraw
+make edit-env excalidraw
 
 # Start the service
-make up
+make start-service excalidraw
 ```

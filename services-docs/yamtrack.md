@@ -80,13 +80,13 @@ make up
 
 ```bash
 # Enable the service
-make enable yamtrack
+make enable-service yamtrack
 
 # Configure environment variables (if needed)
-make scaffold yamtrack
+make edit-env yamtrack
 
 # Start the service
-make up
+make start-service yamtrack
 ```
 
 ## Notes

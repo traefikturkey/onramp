@@ -51,11 +51,11 @@
 
 ```bash
 # Enable the service
-make enable basaran
+make enable-service basaran
 
 # Configure environment variables (if needed)
-make scaffold basaran
+make edit-env basaran
 
 # Start the service
-make up
+make start-service basaran
 ```

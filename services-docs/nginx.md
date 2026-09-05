@@ -50,11 +50,11 @@
 
 ```bash
 # Enable the service
-make enable nginx
+make enable-service nginx
 
 # Configure environment variables (if needed)
-make scaffold nginx
+make edit-env nginx
 
 # Start the service
-make up
+make start-service nginx
 ```

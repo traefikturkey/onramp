@@ -54,11 +54,11 @@
 
 ```bash
 # Enable the service
-make enable docling
+make enable-service docling
 
 # Configure environment variables (if needed)
-make scaffold docling
+make edit-env docling
 
 # Start the service
-make up
+make start-service docling
 ```

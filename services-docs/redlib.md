@@ -61,11 +61,11 @@
 
 ```bash
 # Enable the service
-make enable redlib
+make enable-service redlib
 
 # Configure environment variables (if needed)
-make scaffold redlib
+make edit-env redlib
 
 # Start the service
-make up
+make start-service redlib
 ```

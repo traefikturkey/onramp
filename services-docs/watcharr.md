@@ -45,11 +45,11 @@
 
 ```bash
 # Enable the service
-make enable watcharr
+make enable-service watcharr
 
 # Configure environment variables (if needed)
-make scaffold watcharr
+make edit-env watcharr
 
 # Start the service
-make up
+make start-service watcharr
 ```

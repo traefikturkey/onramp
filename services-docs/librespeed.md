@@ -51,11 +51,11 @@
 
 ```bash
 # Enable the service
-make enable librespeed
+make enable-service librespeed
 
 # Configure environment variables (if needed)
-make scaffold librespeed
+make edit-env librespeed
 
 # Start the service
-make up
+make start-service librespeed
 ```

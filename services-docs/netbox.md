@@ -103,13 +103,13 @@ make up
 
 ```bash
 # Enable the service
-make enable netbox
+make enable-service netbox
 
 # Configure environment variables (if needed)
-make scaffold netbox
+make edit-env netbox
 
 # Start the service
-make up
+make start-service netbox
 ```
 
 ## Notes

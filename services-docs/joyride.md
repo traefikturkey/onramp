@@ -66,11 +66,11 @@ make up
 
 ```bash
 # Enable the service
-make enable joyride
+make enable-service joyride
 
 # Configure environment variables (if needed)
-make scaffold joyride
+make edit-env joyride
 
 # Start the service
-make up
+make start-service joyride
 ```

@@ -80,13 +80,13 @@ make up
 
 ```bash
 # Enable the service
-make enable odoo
+make enable-service odoo
 
 # Configure environment variables (if needed)
-make scaffold odoo
+make edit-env odoo
 
 # Start the service
-make up
+make start-service odoo
 ```
 
 ## Notes

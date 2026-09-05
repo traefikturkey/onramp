@@ -64,11 +64,11 @@ make up
 
 ```bash
 # Enable the service
-make enable joplin-api
+make enable-service joplin-api
 
 # Configure environment variables (if needed)
-make scaffold joplin-api
+make edit-env joplin-api
 
 # Start the service
-make up
+make start-service joplin-api
 ```

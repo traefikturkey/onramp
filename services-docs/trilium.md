@@ -69,11 +69,11 @@ make up
 
 ```bash
 # Enable the service
-make enable trilium
+make enable-service trilium
 
 # Configure environment variables (if needed)
-make scaffold trilium
+make edit-env trilium
 
 # Start the service
-make up
+make start-service trilium
 ```

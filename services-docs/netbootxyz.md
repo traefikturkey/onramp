@@ -73,11 +73,11 @@ make up
 
 ```bash
 # Enable the service
-make enable netbootxyz
+make enable-service netbootxyz
 
 # Configure environment variables (if needed)
-make scaffold netbootxyz
+make edit-env netbootxyz
 
 # Start the service
-make up
+make start-service netbootxyz
 ```

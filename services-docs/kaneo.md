@@ -89,13 +89,13 @@ make up
 
 ```bash
 # Enable the service
-make enable kaneo
+make enable-service kaneo
 
 # Configure environment variables (if needed)
-make scaffold kaneo
+make edit-env kaneo
 
 # Start the service
-make up
+make start-service kaneo
 ```
 
 ## Notes

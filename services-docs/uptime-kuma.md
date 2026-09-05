@@ -55,11 +55,11 @@
 
 ```bash
 # Enable the service
-make enable uptime-kuma
+make enable-service uptime-kuma
 
 # Configure environment variables (if needed)
-make scaffold uptime-kuma
+make edit-env uptime-kuma
 
 # Start the service
-make up
+make start-service uptime-kuma
 ```

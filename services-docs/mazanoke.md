@@ -50,11 +50,11 @@
 
 ```bash
 # Enable the service
-make enable mazanoke
+make enable-service mazanoke
 
 # Configure environment variables (if needed)
-make scaffold mazanoke
+make edit-env mazanoke
 
 # Start the service
-make up
+make start-service mazanoke
 ```

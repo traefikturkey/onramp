@@ -49,13 +49,13 @@
 
 ```bash
 # Enable the service
-make enable searxng
+make enable-service searxng
 
 # Configure environment variables (if needed)
-make scaffold searxng
+make edit-env searxng
 
 # Start the service
-make up
+make start-service searxng
 ```
 
 ## Notes

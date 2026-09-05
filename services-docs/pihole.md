@@ -77,11 +77,11 @@ make up
 
 ```bash
 # Enable the service
-make enable pihole
+make enable-service pihole
 
 # Configure environment variables (if needed)
-make scaffold pihole
+make edit-env pihole
 
 # Start the service
-make up
+make start-service pihole
 ```

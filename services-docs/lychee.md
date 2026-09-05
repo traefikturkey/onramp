@@ -67,11 +67,11 @@ make up
 
 ```bash
 # Enable the service
-make enable lychee
+make enable-service lychee
 
 # Configure environment variables (if needed)
-make scaffold lychee
+make edit-env lychee
 
 # Start the service
-make up
+make start-service lychee
 ```

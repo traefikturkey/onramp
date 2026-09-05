@@ -52,11 +52,11 @@
 
 ```bash
 # Enable the service
-make enable ollama-webui
+make enable-service ollama-webui
 
 # Configure environment variables (if needed)
-make scaffold ollama-webui
+make edit-env ollama-webui
 
 # Start the service
-make up
+make start-service ollama-webui
 ```

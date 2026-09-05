@@ -52,11 +52,11 @@
 
 ```bash
 # Enable the service
-make enable overseerr
+make enable-service overseerr
 
 # Configure environment variables (if needed)
-make scaffold overseerr
+make edit-env overseerr
 
 # Start the service
-make up
+make start-service overseerr
 ```

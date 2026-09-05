@@ -46,11 +46,11 @@
 
 ```bash
 # Enable the service
-make enable hypermind
+make enable-service hypermind
 
 # Configure environment variables (if needed)
-make scaffold hypermind
+make edit-env hypermind
 
 # Start the service
-make up
+make start-service hypermind
 ```

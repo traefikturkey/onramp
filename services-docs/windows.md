@@ -53,11 +53,11 @@
 
 ```bash
 # Enable the service
-make enable windows
+make enable-service windows
 
 # Configure environment variables (if needed)
-make scaffold windows
+make edit-env windows
 
 # Start the service
-make up
+make start-service windows
 ```

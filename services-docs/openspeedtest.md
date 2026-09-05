@@ -50,11 +50,11 @@
 
 ```bash
 # Enable the service
-make enable openspeedtest
+make enable-service openspeedtest
 
 # Configure environment variables (if needed)
-make scaffold openspeedtest
+make edit-env openspeedtest
 
 # Start the service
-make up
+make start-service openspeedtest
 ```

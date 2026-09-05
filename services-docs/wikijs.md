@@ -50,11 +50,11 @@
 
 ```bash
 # Enable the service
-make enable wikijs
+make enable-service wikijs
 
 # Configure environment variables (if needed)
-make scaffold wikijs
+make edit-env wikijs
 
 # Start the service
-make up
+make start-service wikijs
 ```

@@ -51,11 +51,11 @@
 
 ```bash
 # Enable the service
-make enable mailrise
+make enable-service mailrise
 
 # Configure environment variables (if needed)
-make scaffold mailrise
+make edit-env mailrise
 
 # Start the service
-make up
+make start-service mailrise
 ```

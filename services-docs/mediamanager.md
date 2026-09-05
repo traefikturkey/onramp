@@ -106,13 +106,13 @@ make up
 
 ```bash
 # Enable the service
-make enable mediamanager
+make enable-service mediamanager
 
 # Configure environment variables (if needed)
-make scaffold mediamanager
+make edit-env mediamanager
 
 # Start the service
-make up
+make start-service mediamanager
 ```
 
 ## Notes

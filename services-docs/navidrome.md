@@ -55,11 +55,11 @@
 
 ```bash
 # Enable the service
-make enable navidrome
+make enable-service navidrome
 
 # Configure environment variables (if needed)
-make scaffold navidrome
+make edit-env navidrome
 
 # Start the service
-make up
+make start-service navidrome
 ```

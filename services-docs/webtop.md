@@ -48,11 +48,11 @@
 
 ```bash
 # Enable the service
-make enable webtop
+make enable-service webtop
 
 # Configure environment variables (if needed)
-make scaffold webtop
+make edit-env webtop
 
 # Start the service
-make up
+make start-service webtop
 ```
