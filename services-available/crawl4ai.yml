@@ -1,0 +1,45 @@
+networks:
+  traefik:
+    external: true
+
+# config_version: 2
+# description: LLM-friendly web crawler and scraper with a Docker API server
+# https://github.com/unclecode/crawl4ai
+# category: ai
+
+services:
+  crawl4ai:
+    image: unclecode/crawl4ai:${CRAWL4AI_DOCKER_TAG:-latest}
+    # No command override: entrypoint.sh auto-binds [::]:11235 when
+    # CRAWL4AI_API_TOKEN is set, loopback only when unset.
+    env_file:
+      - ./services-enabled/crawl4ai.env
+    container_name: ${CRAWL4AI_CONTAINER_NAME:-crawl4ai}
+    restart: ${CRAWL4AI_RESTART:-unless-stopped}
+    networks:
+      traefik:
+        aliases:
+          - crawl4ai
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ}
+      # Auth is on by default in v0.9.x; without a token the server binds
+      # loopback only and Traefik cannot reach it.
+      - CRAWL4AI_API_TOKEN=${CRAWL4AI_API_TOKEN:-}
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:11235/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    labels:
+      - joyride.host.name=${CRAWL4AI_HOST_NAME:-crawl4ai}.${HOST_DOMAIN}
+      - traefik.enable=${CRAWL4AI_TRAEFIK_ENABLE:-true}
+      - traefik.http.routers.crawl4ai.entrypoints=websecure
+      - traefik.http.routers.crawl4ai.rule=Host(`${CRAWL4AI_HOST_NAME:-crawl4ai}.${HOST_DOMAIN}`)
+      - traefik.http.services.crawl4ai.loadbalancer.server.port=11235
+      - com.centurylinklabs.watchtower.enable=${CRAWL4AI_WATCHTOWER_ENABLE:-true}
+      - autoheal=${CRAWL4AI_AUTOHEAL:-true}
