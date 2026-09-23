@@ -13,7 +13,7 @@
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `CRAWL4AI_API_TOKEN` | change-me | Crawl4ai api token |
+| `CRAWL4AI_API_TOKEN` | change-me | **Required** — API authentication token. Without it, the server binds loopback-only and is unreachable via Traefik. Obtain from [crawl4ai](https://github.com/unclecode/crawl4ai).
 | `CRAWL4AI_AUTOHEAL` | true | Enable Autoheal container restart on unhealthy status |
 | `CRAWL4AI_CONTAINER_NAME` | crawl4ai | Container name |
 | `CRAWL4AI_DOCKER_TAG` | latest | Docker image tag/version |
@@ -22,8 +22,6 @@
 | `CRAWL4AI_TRAEFIK_ENABLE` | true | Enable Traefik reverse proxy |
 | `CRAWL4AI_WATCHTOWER_ENABLE` | true | Enable Watchtower auto-updates |
 | `HOST_DOMAIN` |  | Host domain for service access |
-| `PGID` |  | Group ID for file permissions |
-| `PUID` |  | User ID for file permissions |
 | `TZ` |  | Timezone setting |
 
 ## Configuration
@@ -50,12 +48,16 @@
 
 ## Quick Start
 
+Crawl4ai v0.9.x enables authentication by default. You **must** set `CRAWL4AI_API_TOKEN` to a non-empty value for the service to be accessible externally via Traefik. Without a token, the server binds to `127.0.0.1` only.
+
+Generate a token (e.g., `openssl rand -hex 32`) or use your Crawl4.ai cloud token:
 ```bash
 # Enable the service
 make enable crawl4ai
 
-# Configure environment variables (if needed)
-make scaffold crawl4ai
+# Set your API token
+make edit-env crawl4ai
+# Change CRAWL4AI_API_TOKEN=change-me → CRAWL4AI_API_TOKEN=<your-token>
 
 # Start the service
 make up

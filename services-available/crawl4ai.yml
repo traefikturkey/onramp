@@ -28,7 +28,7 @@ services:
       - TZ=${TZ}
       # Auth is on by default in v0.9.x; without a token the server binds
       # loopback only and Traefik cannot reach it.
-      - CRAWL4AI_API_TOKEN=${CRAWL4AI_API_TOKEN:-}
+      - CRAWL4AI_API_TOKEN=${CRAWL4AI_API_TOKEN:-change-me}
     healthcheck:
       test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:11235/health')"]
       interval: 30s
