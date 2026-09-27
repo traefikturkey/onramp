@@ -1,5 +1,5 @@
 # Available Services
-278 services and counting...
+279 services and counting...
 
 [1](#1)
 [A](#A)
@@ -72,6 +72,7 @@
 - [coqui-ai](https://tts.readthedocs.io/en/latest/inference.html) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/coqui-ai.yml)): Collection of ai models for speech recognition and synthesis
 - [coredns](https://coredns.io/) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/coredns.yml)): A fast and flexible DNS server with plugin support
 - [couchdb](https://hub.docker.com/_/couchdb) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/couchdb.yml)): CouchDB is a database that uses JSON for documents, an HTTP API, & JavaScript/declarative indexing
+- [crawl4ai](https://github.com/unclecode/crawl4ai) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/crawl4ai.yml)): LLM-friendly web crawler and scraper with a Docker API server
 - [crowdsec-traefik-bouncer](https://plugins.traefik.io/plugins/6335346ca4caa9ddeffda116/crowdsec-bouncer-traefik-plugin) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/crowdsec-traefik-bouncer.yml)): Traefik Bouncer for CrowdSec
 - [crowdsec](https://github.com/crowdsecurity/crowdsec) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/crowdsec.yml)): Detects and blocks malicious behavior on servers
 - [cup](https://github.com/sergi0g/cup) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/cup.yml)): The easiest way to manage your container updates.
