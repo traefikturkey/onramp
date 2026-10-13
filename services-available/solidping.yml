@@ -1,0 +1,36 @@
+networks:
+  traefik:
+    external: true
+
+# description: Uptime and synthetic monitoring with status pages, incidents and on-call alerts
+# https://github.com/fclairamb/solidping
+# https://docs.solidping.io
+
+services:
+  solidping:
+    image: ghcr.io/fclairamb/solidping:${SOLIDPING_DOCKER_TAG:-latest}
+    env_file:
+      - ./services-enabled/solidping.env
+    container_name: ${SOLIDPING_CONTAINER_NAME:-solidping}
+    hostname: ${SOLIDPING_CONTAINER_NAME:-solidping}
+    restart: ${SOLIDPING_RESTART:-unless-stopped}
+    user: ${PUID:-1000}:${PGID:-1000}
+    networks:
+      - traefik
+    volumes:
+      - ./etc/solidping:/data
+    environment:
+      - TZ=${TZ}
+      - SP_BASE_URL=https://${SOLIDPING_HOST_NAME:-solidping}.${HOST_DOMAIN}
+    labels:
+      - joyride.host.name=${SOLIDPING_HOST_NAME:-solidping}.${HOST_DOMAIN}
+      - traefik.enable=${SOLIDPING_TRAEFIK_ENABLED:-true}
+      - traefik.http.routers.solidping.entrypoints=websecure
+      - traefik.http.routers.solidping.rule=Host(`${SOLIDPING_HOST_NAME:-solidping}.${HOST_DOMAIN}`)
+      - traefik.http.routers.solidping.tls=true
+      - traefik.http.routers.solidping.service=solidping
+      - traefik.http.routers.solidping.middlewares=default-headers@file
+      - traefik.http.services.solidping.loadbalancer.server.port=4000
+      - traefik.docker.network=traefik
+      - com.centurylinklabs.watchtower.enable=${SOLIDPING_WATCHTOWER_ENABLED:-true}
+      - autoheal=${SOLIDPING_AUTOHEAL:-true}
