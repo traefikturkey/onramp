@@ -1,6 +1,6 @@
 After enabling, update the secret key:
 
-1. Edit etc/searxng/settings.yml
+1. Edit etc/searxng/settings.yml (use sudo nano if the container owns the file)
 2. Change secret_key from "CHANGEME!" to a secure random string
 3. Restart the service:
    make restart-service searxng

@@ -108,6 +108,8 @@ The updated service uses a dedicated `searxng-valkey` dependency instead of
 the generic `redis` service, avoiding collisions with other enabled services.
 It persists SearXNG's cache in `media/searxng/cache/` and Valkey data in
 `media/searxng/valkey/`. Redis's old in-memory limiter state is not migrated.
+SearXNG remains routed through Traefik; only its Valkey backend has
+`traefik.enable=false`, with no published host port.
 
 For an existing installation:
 
@@ -152,6 +154,28 @@ Normal scaffolding deliberately preserves existing files; rerunning
 or environment file. Do not force-regenerate customized settings.
 An old `searxng-redis` container may remain as an unused orphan after the
 upgrade; distinguish it from shared Redis containers before any cleanup.
+
+### SearXNG settings appear read-only
+
+With the default `SEARXNG_VOLUME`, `etc/searxng/settings.yml` is the correct
+file to edit. The official image's `FORCE_OWNERSHIP=true` default can change
+the configuration directory's ownership to its internal `searxng` user.
+This can leave your host user without write permission.
+
+Stop SearXNG and edit the file with elevated permissions:
+
+```bash
+make stop-service searxng
+sudo nano etc/searxng/settings.yml
+make start-service searxng
+make logs searxng
+```
+
+Use the configured `SEARXNG_VOLUME` path if customized. Preserve your secret
+key and the `valkey:` settings. Avoid recursively changing ownership; the
+container may change it back at startup. `PUID`/`PGID` do not control ownership
+in the official SearXNG image. If saving still fails under `sudo`, inspect
+the exact error for a read-only filesystem rather than a permissions issue.
 
 ## Traefik Issues
 

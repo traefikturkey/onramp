@@ -23,6 +23,7 @@
 | `SEARXNG_RESTART` | unless-stopped | Container restart policy |
 | `SEARXNG_TRAEFIK_ENABLE` | true | Enable Traefik reverse proxy |
 | `SEARXNG_VALKEY_AUTOHEAL` | false | Enable Autoheal container restart on unhealthy status |
+| `SEARXNG_VALKEY_CONTAINER_NAME` | searxng-valkey | Container name |
 | `SEARXNG_VALKEY_DOCKER_TAG` | 9-alpine | Docker image tag/version |
 | `SEARXNG_VALKEY_RESTART` | unless-stopped | Container restart policy |
 | `SEARXNG_VALKEY_WATCHTOWER_ENABLE` | true | Enable Watchtower auto-updates |
