@@ -306,7 +306,7 @@
 - [samba](https://github.com/ServerContainers/samba) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/samba.yml)): Provides file and print services for windows clients
 - [scrypted](https://github.com/koush/scrypted) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/scrypted.yml)): Home automation platform
 - [sd-web](https://github.com/AUTOMATIC1111/stable-diffusion-webui) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/sd-web.yml)): stable diffusion web interface for ai images
-- [searxng](https://github.com/searxng/searxng-docker) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/searxng.yml)): Self-hosted metasearch engine
+- [searxng](https://docs.searxng.org/admin/installation-docker.html) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/searxng.yml)): Self-hosted metasearch engine
 - [seerr](https://docs.seerr.dev/) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/seerr.yml)): Media request and discovery tool for Plex, Jellyfin, and Emby
 - [semaphore](https://docs.ansible-semaphore.com/) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/semaphore.yml)): UI and API for Ansible,Terraform/OpenTofu/Terragrunt
 - [sftp-server](https://github.com/drakkan/sftpgo) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/sftp-server.yml)): Secure ftp server

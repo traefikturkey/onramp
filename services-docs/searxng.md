@@ -3,47 +3,61 @@
 > Self-hosted metasearch engine
 
 ## Links
-- [Official Repository](https://github.com/searxng/searxng-docker)
+- [Official Documentation](https://docs.searxng.org/admin/installation-docker.html)
 - [Service Configuration](https://github.com/traefikturkey/onramp/tree/main/services-available/searxng.yml)
 
 ## Docker Images
 - `ghcr.io/searxng/searxng:${SEARXNG_DOCKER_TAG:-latest}`
-- `redis:alpine`
+- `valkey/valkey:${SEARXNG_VALKEY_DOCKER_TAG:-9-alpine}`
 
 ## Environment Variables
 
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `HOST_DOMAIN` |  | Host domain for service access |
-| `PGID` |  | Group ID for file permissions |
-| `PUID` |  | User ID for file permissions |
-| `SEARXNG_CONTAINER_NAME` |  | Container name |
-| `SEARXNG_DOCKER_TAG` |  | Docker image tag/version |
-| `SEARXNG_HOSTNAME` |  | Searxng hostname |
-| `SEARXNG_WATCHTOWER_ENABLED` |  | Enable Watchtower auto-updates |
+| `SEARXNG_AUTOHEAL` | false | Enable Autoheal container restart on unhealthy status |
+| `SEARXNG_CACHE_VOLUME` | ./media/searxng/cache | Searxng cache volume |
+| `SEARXNG_CONTAINER_NAME` | searxng | Container name |
+| `SEARXNG_DOCKER_TAG` | latest | Docker image tag/version |
+| `SEARXNG_HOST_NAME` | searxng | Searxng host name |
+| `SEARXNG_RESTART` | unless-stopped | Container restart policy |
+| `SEARXNG_TRAEFIK_ENABLE` | true | Enable Traefik reverse proxy |
+| `SEARXNG_VALKEY_AUTOHEAL` | false | Enable Autoheal container restart on unhealthy status |
+| `SEARXNG_VALKEY_DOCKER_TAG` | 9-alpine | Docker image tag/version |
+| `SEARXNG_VALKEY_RESTART` | unless-stopped | Container restart policy |
+| `SEARXNG_VALKEY_WATCHTOWER_ENABLE` | true | Enable Watchtower auto-updates |
+| `SEARXNG_VOLUME` | ./etc/searxng | Searxng volume |
+| `SEARXNG_WATCHTOWER_ENABLED` | true | Enable Watchtower auto-updates |
 | `TZ` |  | Timezone setting |
 
 ## Configuration
 
 ### Volumes
-- `${SEARXNG_VOLUME-./etc/searxng}:/etc/searxng` - Volume mount
+- `${SEARXNG_VOLUME:-./etc/searxng}` - Volume mount
+- `${SEARXNG_CACHE_VOLUME:-./media/searxng/cache}` - Volume mount
+- `/etc/localtime:/etc/localtime` - Volume mount
+- `./media/searxng/valkey:/data` - Volume mount
 
 ### Networks
 - `traefik`
 
 ### Labels
 **Traefik Configuration:**
-- `traefik.enable=true`
+- `traefik.enable=false`
 - `traefik.http.routers.searxng.entrypoints=websecure`
-- `traefik.http.routers.searxng.rule=Host(`${SEARXNG_CONTAINER_NAME:-searxng}.${HOST_DOMAIN}`)`
+- `traefik.http.routers.searxng.rule=Host(`${SEARXNG_HOST_NAME:-searxng}.${HOST_DOMAIN}`)`
 - `traefik.http.services.searxng.loadbalancer.server.port=8080`
 
 **Watchtower Configuration:**
-- `com.centurylinklabs.watchtower.enable=${SEARXNG_WATCHTOWER_ENABLED:-true}`
+- `com.centurylinklabs.watchtower.enable=${SEARXNG_VALKEY_WATCHTOWER_ENABLE:-true}`
 
 **Other Labels:**
-- `autoheal=true`
-- `joyride.host.name=${SEARXNG_CONTAINER_NAME:-searxng}.${HOST_DOMAIN}`
+- `autoheal=${SEARXNG_VALKEY_AUTOHEAL:-false}`
+- `joyride.host.name=${SEARXNG_HOST_NAME:-searxng}.${HOST_DOMAIN}`
+
+### Dependencies
+This service depends on:
+- `searxng-valkey`
 
 ## Quick Start
 
@@ -60,3 +74,4 @@ make start-service searxng
 
 ## Notes
 - This service consists of 2 containers working together
+- Requires searxng-valkey to be running

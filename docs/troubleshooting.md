@@ -95,6 +95,64 @@ docker ps
 netstat -tlnp | grep :PORT
 ```
 
+## SearXNG: upgrading the container configuration
+
+The [`searxng-docker` repository](https://github.com/searxng/searxng-docker) is
+deprecated. Its replacement is documented in the
+[upstream container installation guide](https://docs.searxng.org/admin/installation-docker.html#migrate-from-searxng-docker).
+OnRamp keeps Traefik routing, the `searxng:8080` address used by Open WebUI,
+and the existing configuration mount; do not replace OnRamp's Compose files
+with the standalone upstream template.
+
+The updated service uses a dedicated `searxng-valkey` dependency instead of
+the generic `redis` service, avoiding collisions with other enabled services.
+It persists SearXNG's cache in `media/searxng/cache/` and Valkey data in
+`media/searxng/valkey/`. Redis's old in-memory limiter state is not migrated.
+
+For an existing installation:
+
+1. Back up the configuration directory and `services-enabled/searxng.env`.
+   The default configuration directory is `etc/searxng/`; use the path set by
+   `SEARXNG_VOLUME` if customized.
+2. Edit `settings.yml` in that directory. Remove the old `redis:` block and
+   replace it with:
+
+   ```yaml
+   valkey:
+     url: valkey://searxng-valkey:6379/0
+   ```
+
+   Preserve other settings, especially your private `server.secret_key`.
+   If it is still `CHANGEME!`, replace it with a secure random value before
+   starting. Keep `json` in `search.formats` for Open WebUI searches.
+3. In `services-enabled/searxng.env`, rename any customized
+   `SEARXNG_REDIS_RESTART`, `SEARXNG_REDIS_WATCHTOWER_ENABLE`, and
+   `SEARXNG_REDIS_AUTOHEAL` variables to their `SEARXNG_VALKEY_*` equivalents.
+   The defaults apply if these variables are absent.
+   `SEARXNG_CACHE_VOLUME` optionally changes the SearXNG cache directory;
+   `SEARXNG_VALKEY_DOCKER_TAG` defaults to `9-alpine`.
+4. Pull and recreate SearXNG; its Valkey dependency starts automatically:
+
+   ```bash
+   make pull-service searxng
+   make restart-service searxng
+   make logs searxng
+   ```
+
+   Check that the logs show Granian listening on port 8080 and no cache
+   connection errors. Open the search page and exercise JSON search using
+   your actual hostname:
+
+   ```bash
+   curl -fsS 'https://searxng.example.com/search?q=test&format=json'
+   ```
+
+Normal scaffolding deliberately preserves existing files; rerunning
+`make scaffold-build searxng` does **not** migrate an existing `settings.yml`
+or environment file. Do not force-regenerate customized settings.
+An old `searxng-redis` container may remain as an unused orphan after the
+upgrade; distinguish it from shared Redis containers before any cleanup.
+
 ## Traefik Issues
 
 ### Dashboard not accessible
