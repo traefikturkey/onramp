@@ -250,6 +250,86 @@ make migrate-service-all
 
 Migrations handle variable renames (e.g., `SAMBA_SHARES` → `SAMBA_SHARES_CONFIG`).
 
+## PHP Container Security Updates
+
+CVE-2026-109618 and CVE-2026-109619 affect the PHP runtime, not just application
+code. Upstream fixes were released on October 21, 2026 in PHP 8.2.35, 8.3.36,
+8.4.27 and 8.5.12. See the [PHP security advisories](https://github.com/php/php-src/security/advisories).
+Pulling an image does not update a running container; recreate the service after
+pulling a patched image. Check any `*_DOCKER_TAG` overrides against the patched
+runtime, and follow the application's supported upgrade path.
+
+### ITFlow
+
+The default image changed from `lued/itflow` (PHP 8.1.2, built in 2023) to
+`itfloworg/itflow`. The replacement's Apache PHP packages were verified at
+8.4.27-r0 on October 26, 2026. Its Docker packaging is community-maintained;
+see the [upstream Docker repository](https://github.com/itflow-org/itflow-docker).
+
+For an existing installation:
+
+- The host application directory stays `./etc/itflow/www`. It is now mounted at
+  `/var/www/localhost/htdocs` instead of `/var/www/html` inside the container.
+  Existing application files and `config.php` stay in place. Custom mounts must
+  use the new container path too.
+- Remove custom `user: "33"` overrides. The image's entrypoint starts as root to
+  set ownership for Alpine's `apache` user, then Apache serves the application.
+  The image does not use `PUID` or `PGID`.
+- Keep your existing database, credentials and `ITFLOW_DB_PASS`. This change does
+  not upgrade MariaDB or update application code stored in the bind mount.
+  Follow ITFlow's application upgrade instructions if that code is too old for
+  PHP 8.4. For a new installation, set `ITFLOW_DB_PASS` explicitly and enter the
+  configured database name and username during setup.
+- Port 8080, the health check and Traefik routing remain unchanged.
+
+After adjusting custom overrides and checking application compatibility:
+
+```bash
+make update-service itflow
+make logs itflow
+```
+
+### PrestaShop ARM64
+
+The official `prestashop/prestashop` image now publishes ARM64 builds with patched
+PHP. The old `prestashop-arm` override selected
+`yobasystems/alpine-prestashop`, whose ARM64 image still contained PHP 8.4.15-r0
+on October 26, 2026. Disable that override on existing hosts:
+
+```bash
+make disable-override prestashop-arm
+```
+
+The base service mounts `./etc/prestashop` at `/var/www/html`. The old override
+also mounted it at `/usr/html`; use the official image's `/var/www/html` path
+for any custom mounts. Review existing store configuration and select a compatible
+PrestaShop release with patched PHP rather than blindly upgrading an older store
+to the current `latest` release. Then update the service:
+
+```bash
+make update-service prestashop
+```
+
+### Full-Text RSS (deprecated)
+
+`heussd/fivefilters-full-text-rss:latest` still contains PHP 5.6.40, even in its
+October 25, 2026 build. Upstream deliberately retains PHP 5 because newer PHP
+versions reportedly cause crashes. Updating application code or pulling `latest`
+does not fix these runtime vulnerabilities, and PHP 5.6 has no upstream fix.
+
+The service definition is retained for existing installations but marked as
+deprecated. Do not enable it for new deployments or expose it to untrusted
+clients. No replacement image is configured. If it is running, stop it until you
+can replace it with a maintained solution:
+
+```bash
+make stop-service fulltext-rss
+make disable-service fulltext-rss
+```
+
+These commands do not delete its data. The repository change does not stop or
+disable existing installations automatically.
+
 ## Cloudflare Configuration
 
 Validate Cloudflare API credentials:

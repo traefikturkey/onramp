@@ -1,9 +1,9 @@
 # Fulltext Rss
 
-> Generates full-text rss feeds from partial feeds
+> DEPRECATED - Full-text RSS uses unpatched PHP 5.6. Do not use for new deployments or expose to untrusted clients.
 
 ## Links
-- [Official Documentation](https://www.youtube.com/watch?v=nxV0CPNeFxY)
+- [Official Repository](https://github.com/heussd/fivefilters-full-text-rss-docker)
 - [Service Configuration](https://github.com/traefikturkey/onramp/tree/main/services-available/fulltext-rss.yml)
 
 ## Docker Images

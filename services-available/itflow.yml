@@ -4,6 +4,8 @@ networks:
 
 # description: IT documentation, ticketing and accounting system.
 # https://itflow.org/
+# Migration notes: docs/troubleshooting.md#php-container-security-updates
+# The upstream image needs its default root entrypoint to set Apache permissions.
 
 services:
   itflow-db:
@@ -24,7 +26,7 @@ services:
       - ./etc/itflow/data:/var/lib/mysql/
 
   itflow:
-    image: lued/itflow:${ITFLOW_DOCKER_TAG:-latest}
+    image: itfloworg/itflow:${ITFLOW_DOCKER_TAG:-latest}
     env_file:
       - ./services-enabled/itflow.env
     container_name: ${ITFLOW_CONTAINER_NAME:-itflow}
@@ -41,12 +43,9 @@ services:
       retries: 3
       start_period: 60s
     volumes:
-      - ./etc/itflow/www:/var/www/html
+      - ./etc/itflow/www:/var/www/localhost/htdocs
       - /etc/localtime:/etc/localtime:ro
-    user: "33"
     environment:
-      - PUID=${PUID:-1000}
-      - PGID=${PGID:-1000}
       - TZ=${TZ}
       - ITFLOW_NAME=ITFlow
       - ITFLOW_URL=${ITFLOW_CONTAINER_NAME:-itflow}.${HOST_DOMAIN}

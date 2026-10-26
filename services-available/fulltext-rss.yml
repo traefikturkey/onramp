@@ -2,9 +2,12 @@ networks:
   traefik:
     external: true
 
-# description: Generates full-text rss feeds from partial feeds
-# https://christitus.com/why-we-dont-browse-the-internet-anymore/
-# https://www.youtube.com/watch?v=nxV0CPNeFxY
+# description: DEPRECATED - Full-text RSS uses unpatched PHP 5.6. Do not use for new deployments or expose to untrusted clients.
+# https://github.com/heussd/fivefilters-full-text-rss-docker
+# PHP 5.6.40 is affected by CVE-2026-109618 and CVE-2026-109619.
+# Pulling latest does not fix this: upstream intentionally retains PHP 5.
+# Retained for existing installations; no replacement image has been selected.
+# See docs/troubleshooting.md#php-container-security-updates
 
 services:
   fulltext-rss:

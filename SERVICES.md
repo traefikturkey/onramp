@@ -122,7 +122,7 @@
 - [frigate-coral](https://docs.frigate.video/frigate/installation/) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/frigate-coral.yml)): Container for running frigate with coral edge tpu support
 - [frigate-cpu](https://docs.frigate.video/frigate/installation/) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/frigate-cpu.yml)): frigate nvr with cpu only
 - [frigate-nvidia](https://docs.frigate.video/frigate/installation/) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/frigate-nvidia.yml)): Container for running frigate with nvidia gpu support
-- [fulltext-rss](https://christitus.com/why-we-dont-browse-the-internet-anymore/) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/fulltext-rss.yml)): Generates full-text rss feeds from partial feeds
+- [fulltext-rss](https://github.com/heussd/fivefilters-full-text-rss-docker) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/fulltext-rss.yml)): DEPRECATED - Full-text RSS uses unpatched PHP 5.6. Do not use for new deployments or expose to untrusted clients.
 
 
 ## G

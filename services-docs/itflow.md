@@ -8,7 +8,7 @@
 
 ## Docker Images
 - `mariadb:10.6.11`
-- `lued/itflow:${ITFLOW_DOCKER_TAG:-latest}`
+- `itfloworg/itflow:${ITFLOW_DOCKER_TAG:-latest}`
 
 ## Environment Variables
 
@@ -23,15 +23,13 @@
 | `ITFLOW_HOSTNAME` |  | Itflow hostname |
 | `ITFLOW_RESTART` |  | Container restart policy |
 | `ITFLOW_WATCHTOWER_ENABLED` |  | Enable Watchtower auto-updates |
-| `PGID` |  | Group ID for file permissions |
-| `PUID` |  | User ID for file permissions |
 | `TZ` |  | Timezone setting |
 
 ## Configuration
 
 ### Volumes
 - `./etc/itflow/data:/var/lib/mysql/` - Data storage
-- `./etc/itflow/www:/var/www/html` - Volume mount
+- `./etc/itflow/www:/var/www/localhost/htdocs` - Volume mount
 - `/etc/localtime:/etc/localtime` - Volume mount
 
 ### Networks

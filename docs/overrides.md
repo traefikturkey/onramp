@@ -212,12 +212,19 @@ Route traffic through VPN:
 | `minecraft-dynmap` | Enable Dynmap web map |
 | `omada-cert` | Custom certificate for Omada |
 | `pihole-admin` | Enable admin interface |
-| `prestashop-arm` | ARM architecture support for PrestaShop |
 | `promtail-syslog` | Enable syslog input for Promtail |
 | `traefik-idrac` | iDRAC proxy via Traefik |
 | `traefik-podman-socket` | Podman socket for Traefik |
 | `ubuntu-smb` | SMB mount in Ubuntu container |
 | `wordpress-upload` | Increase upload limits |
+
+### PrestaShop ARM64
+
+The official `prestashop/prestashop` image now supports ARM64. The former
+`prestashop-arm` override was removed because its alternate image still ships
+unpatched PHP. Existing installations should disable the override before updating
+the service. See [PHP container security updates](troubleshooting.md#php-container-security-updates)
+for migration details.
 
 ## Usage Example
 
