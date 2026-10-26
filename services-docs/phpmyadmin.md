@@ -1,10 +1,10 @@
 # Phpmyadmin
 
-> Web-based mysql and mariadb database management tool
+> Web-based MySQL and MariaDB database management tool
 
 ## Links
 - [Official Repository](https://github.com/phpmyadmin/docker)
-- [Docker Image](https://hub.docker.com/r/phpmyadmin/phpmyadmin)
+- [Docker Image](https://hub.docker.com/_/phpmyadmin)
 - [Service Configuration](https://github.com/traefikturkey/onramp/tree/main/services-available/phpmyadmin.yml)
 
 ## Docker Images
@@ -15,16 +15,14 @@
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `HOST_DOMAIN` |  | Host domain for service access |
-| `PGID` |  | Group ID for file permissions |
 | `PHPMYADMIN_DOCKER_TAG` |  | Docker image tag/version |
 | `PHPMYADMIN_WATCHTOWER_ENABLED` |  | Enable Watchtower auto-updates |
-| `PUID` |  | User ID for file permissions |
 | `TZ` |  | Timezone setting |
 
 ## Configuration
 
 ### Volumes
-- `./etc/phpmyadmin:/data` - Volume mount
+- `./etc/phpmyadmin/sessions:/sessions` - Volume mount
 - `/etc/localtime:/etc/localtime` - Volume mount
 
 ### Networks

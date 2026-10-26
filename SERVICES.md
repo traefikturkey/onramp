@@ -252,7 +252,7 @@
 - [paperless-ngx](https://github.com/paperless-ngx/paperless-ngx) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/paperless-ngx.yml)): Document management system
 - [pgadmin](https://www.pgadmin.org/) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/pgadmin.yml)): Web-based postgresql administration tool
 - [photoprism](https://github.com/photoprism/photoprism) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/photoprism.yml)): Personal photo management software
-- [phpmyadmin](https://hub.docker.com/r/phpmyadmin/phpmyadmin) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/phpmyadmin.yml)): Web-based mysql and mariadb database management tool
+- [phpmyadmin](https://hub.docker.com/_/phpmyadmin) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/phpmyadmin.yml)): Web-based MySQL and MariaDB database management tool
 - [pihole](https://github.com/pi-hole/docker-pi-hole/blob/master/README.md) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/pihole.yml)): Network-wide ad blocker and dns sinkhole
 - [pinchflat](https://github.com/kieraneglin/pinchflat) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/pinchflat.yml)): Pinchflat is a self-hosted app for downloading YouTube content built using yt-dlp
 - [pingvin-share](https://github.com/stautonico/pingvin-share) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/pingvin-share.yml)): File-sharing platform
