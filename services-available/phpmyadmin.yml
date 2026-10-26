@@ -8,7 +8,7 @@ networks:
 
 services:
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin:${PHPMYADMIN_DOCKER_TAG:-latest}
+    image: phpmyadmin:${PHPMYADMIN_DOCKER_TAG:-latest}
     env_file:
       - ./services-enabled/phpmyadmin.env
     container_name: phpmyadmin
