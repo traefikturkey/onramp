@@ -1,6 +1,15 @@
 After enabling, update the secret key:
 
-1. Edit etc/searxng/settings.yml
+1. Edit etc/searxng/settings.yml (use sudo nano if the container owns the file)
 2. Change secret_key from "CHANGEME!" to a secure random string
 3. Restart the service:
    make restart-service searxng
+
+Existing installations are not overwritten by scaffolding.
+When upgrading from Redis, replace the redis: block in settings.yml with:
+
+valkey:
+  url: valkey://searxng-valkey:6379/0
+
+Rename any SEARXNG_REDIS_* overrides in services-enabled/searxng.env to
+SEARXNG_VALKEY_*. See docs/troubleshooting.md for the upgrade procedure.

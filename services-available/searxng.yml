@@ -4,9 +4,8 @@ networks:
 
 # config_version: 2
 # description: Self-hosted metasearch engine
-# https://github.com/searxng/searxng-docker
-# Copy the settings template in etc/searxng and save it as settings.yml in the same directory.
-# Make sure you change the secret key.
+# https://docs.searxng.org/admin/installation-docker.html
+# Scaffold creates etc/searxng/settings.yml; change its secret_key before starting.
 
 services:
   searxng:
@@ -15,19 +14,19 @@ services:
       - ./services-enabled/searxng.env
     container_name: ${SEARXNG_CONTAINER_NAME:-searxng}
     restart: ${SEARXNG_RESTART:-unless-stopped}
+    depends_on:
+      - searxng-valkey
     networks:
       traefik:
         aliases:
           - searxng
     environment:
-      - PUID=${PUID:-1000}
-      - PGID=${PGID:-1000}
       - TZ=${TZ}
-      - UMASK=022
       - SEARXNG_BASE_URL=https://${SEARXNG_HOST_NAME:-searxng}.${HOST_DOMAIN}/
       - GRANIAN_HOST=0.0.0.0
     volumes:
-      - ${SEARXNG_VOLUME-./etc/searxng}:/etc/searxng:rw
+      - ${SEARXNG_VOLUME:-./etc/searxng}:/etc/searxng:rw
+      - ${SEARXNG_CACHE_VOLUME:-./media/searxng/cache}:/var/cache/searxng:rw
       - /etc/localtime:/etc/localtime:ro
     cap_drop:
       - ALL
@@ -51,30 +50,28 @@ services:
       - autoheal=${SEARXNG_AUTOHEAL:-false}
 
 
-  redis:
-    container_name: searxng-redis
-    image: "redis:alpine"
+  searxng-valkey:
+    container_name: ${SEARXNG_VALKEY_CONTAINER_NAME:-searxng-valkey}
+    image: valkey/valkey:${SEARXNG_VALKEY_DOCKER_TAG:-9-alpine}
     env_file:
       - ./services-enabled/searxng.env
-    command: redis-server --save "" --appendonly "no"
+    command: valkey-server --save 300 1 --save 60 1000 --loglevel warning
     environment:
-      - PUID=${PUID:-1000}
-      - PGID=${PGID:-1000}
       - TZ=${TZ}
     volumes:
       - /etc/localtime:/etc/localtime:ro
-    tmpfs:
-      - /var/lib/redis
+      - ./media/searxng/valkey:/data
     cap_drop:
       - ALL
     cap_add:
+      - CHOWN
       - SETGID
       - SETUID
       - DAC_OVERRIDE
-    restart: ${SEARXNG_REDIS_RESTART:-unless-stopped}
+    restart: ${SEARXNG_VALKEY_RESTART:-unless-stopped}
     networks:
       - traefik
     labels:
       - traefik.enable=false
-      - com.centurylinklabs.watchtower.enable=${SEARXNG_REDIS_WATCHTOWER_ENABLE:-true}
-      - autoheal=${SEARXNG_REDIS_AUTOHEAL:-false}
+      - com.centurylinklabs.watchtower.enable=${SEARXNG_VALKEY_WATCHTOWER_ENABLE:-true}
+      - autoheal=${SEARXNG_VALKEY_AUTOHEAL:-false}
