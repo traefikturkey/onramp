@@ -8,7 +8,7 @@
 - [Service Configuration](https://github.com/traefikturkey/onramp/tree/main/services-available/phpmyadmin.yml)
 
 ## Docker Images
-- `phpmyadmin/phpmyadmin:${PHPMYADMIN_DOCKER_TAG:-latest}`
+- `phpmyadmin:${PHPMYADMIN_DOCKER_TAG:-latest}`
 
 ## Environment Variables
 
