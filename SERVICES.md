@@ -1,5 +1,5 @@
 # Available Services
-279 services and counting...
+280 services and counting...
 
 [1](#1)
 [A](#A)
@@ -312,6 +312,7 @@
 - [sftp-server](https://github.com/drakkan/sftpgo) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/sftp-server.yml)): Secure ftp server
 - [shlink](https://shlink.io/documentation/install-docker-image/) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/shlink.yml)): Self-Hosted URL shortener.
 - [snapdrop](https://docs.linuxserver.io/images/docker-pairdrop/) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/snapdrop.yml)): PairDrop - Web-based file sharing tool for local networks (Snapdrop fork with improvements)
+- [solidping](https://github.com/fclairamb/solidping) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/solidping.yml)): Uptime and synthetic monitoring with status pages, incidents and on-call alerts
 - [sonarr](https://hub.docker.com/r/linuxserver/sonarr) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/sonarr.yml)): Manages tv show collections and downloads
 - [spacebin](https://github.com/lukewhrit/spacebin) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/spacebin.yml)): spacebin: text sharing for the final frontier (Pastebin alternative)
 - [speedtest-tracker](https://github.com/alexjustesen/speedtest-tracker) ([yml](https://github.com/traefikturkey/onramp/tree/main/services-available/speedtest-tracker.yml)): Scheduled internet speed testing dashboard
